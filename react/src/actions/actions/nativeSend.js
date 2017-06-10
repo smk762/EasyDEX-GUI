@@ -71,7 +71,7 @@ export function sendNativeTx(coin, _payload) {
       })
       .then(function(response) {
         const _response = response.text().then(function(text) { return text; });
-        return response.json();
+        return _response;
       })
       .then(function(json) {
         dispatch(logGuiHttp({
@@ -80,9 +80,13 @@ export function sendNativeTx(coin, _payload) {
           'response': json,
         }));
 
-        if (json.error &&
-            json.error.toString().indexOf('code:') > -1) {
-          dispatch(triggerToaster(true, 'Send failed', translate('TOASTR.WALLET_NOTIFICATION'), 'error'));
+        if (json.indexOf('"code":') > -1) {
+          const _message = json.substring(json.indexOf('"message":"') + 11, json.indexOf('"},"id":"jl777"'));
+          dispatch(triggerToaster(true, _message, translate('TOASTR.WALLET_NOTIFICATION'), 'error'));
+
+          if (json.indexOf('"code":-4') > -1) {
+            dispatch(triggerToaster(true, 'Your wallet.dat is not matching the blockchain. Please resync from the scratch.', translate('TOASTR.WALLET_NOTIFICATION'), 'info'));
+          }
         } else {
           dispatch(triggerToaster(true, translate('TOASTR.TX_SENT_ALT'), translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
         }
