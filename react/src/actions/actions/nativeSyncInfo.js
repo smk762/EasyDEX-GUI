@@ -67,7 +67,7 @@ function getSyncInfoNativeState(json, coin, skipDebug) {
 }
 
 export function getSyncInfoNative(coin, skipDebug) {
-  const payload = {
+  let payload = {
     'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
     'agent': getPassthruAgent(coin),
     'method': 'passthru',
@@ -75,6 +75,15 @@ export function getSyncInfoNative(coin, skipDebug) {
     'function': 'getinfo',
     'hex': '',
   };
+
+  if (Config.cli.default === true) {
+    console.log('getSyncInfoNativeCLI', true);
+    payload = {
+      mode: null,
+      coin,
+      cmd: 'getinfo'
+    };
+  }
 
   return dispatch => {
     const _timestamp = Date.now();
@@ -86,11 +95,32 @@ export function getSyncInfoNative(coin, skipDebug) {
       'payload': payload,
       'status': 'pending',
     }));
-
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+    let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
+    };
+
+    if (Config.cli.default === true) {
+      _fetchConfig = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'payload': payload }),
+      };
+    }
+
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'payload': payload }),
     })
+    return fetch(
+      Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
     .catch(function(error) {
       console.log(error);
       dispatch(logGuiHttp({
