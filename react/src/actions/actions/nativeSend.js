@@ -67,7 +67,7 @@ export function sendNativeTx(coin, _payload) {
           'status': 'error',
           'response': error,
         }));
-        dispatch(triggerToaster(true, 'sendNativeTx', 'Error', 'error'));
+        dispatch(triggerToaster('sendNativeTx', 'Error', 'error'));
       })
       .then(function(response) {
         const _response = response.text().then(function(text) { return text; });
@@ -88,7 +88,7 @@ export function sendNativeTx(coin, _payload) {
             dispatch(triggerToaster(true, 'Your wallet.dat is not matching the blockchain. Please resync from the scratch.', translate('TOASTR.WALLET_NOTIFICATION'), 'info'));
           }
         } else {
-          dispatch(triggerToaster(true, translate('TOASTR.TX_SENT_ALT'), translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
+          dispatch(triggerToaster(translate('TOASTR.TX_SENT_ALT'), translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
         }
       })
     });
@@ -162,7 +162,7 @@ export function getKMDOPID(opid, coin) {
           'status': 'error',
           'response': error,
         }));
-        dispatch(triggerToaster(true, 'getKMDOPID', 'Error', 'error'));
+        dispatch(triggerToaster('getKMDOPID', 'Error', 'error'));
       })
       .then(response => response.json())
       .then(json => {

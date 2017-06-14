@@ -32,21 +32,44 @@ export function getKMDBalanceTotal(coin) {
     };
   }
 
+  if (Config.cli.default === true) {
+    payload = {
+      mode: null,
+      coin,
+      cmd: 'z_gettotalbalance'
+    };
+  }
+
   return dispatch => {
     const _timestamp = Date.now();
     dispatch(logGuiHttp({
       'timestamp': _timestamp,
       'function': 'getKMDBalanceTotal',
       'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+      'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
       'payload': payload,
       'status': 'pending',
     }));
 
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+    let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
-    })
+    };
+
+    if (Config.cli.default === true) {
+      _fetchConfig = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'payload': payload }),
+      };
+    }
+
+    return fetch(
+      Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
     .catch(function(error) {
       console.log(error);
       dispatch(logGuiHttp({
@@ -54,7 +77,7 @@ export function getKMDBalanceTotal(coin) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster(true, 'getKMDBalanceTotal', 'Error', 'error'));
+      dispatch(triggerToaster('getKMDBalanceTotal', 'Error', 'error'));
     })
     .then(response => response.json())
     .then(function(json) { // TODO: figure out why komodod spits out "parse error"
@@ -74,6 +97,6 @@ export function getKMDBalanceTotal(coin) {
 export function getNativeBalancesState(json) {
   return {
     type: DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE,
-    balance: json && !json.error ? json : 0,
+    balance: json && !json.error ? (Config.cli.default ? json.result : json) : 0,
   }
 }

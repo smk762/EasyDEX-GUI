@@ -12,6 +12,7 @@ front:
 - sort http stack history desc
 - swapped gettotalbalance interest with getinfo interest
 - extended settings / export keys ui
+- added error message if coin is already running in another mode
 
 back:
 - added cli route
