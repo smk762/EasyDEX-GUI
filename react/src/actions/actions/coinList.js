@@ -17,7 +17,13 @@ export function shepherdGetCoinList() {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('shepherdGetCoinList', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'shepherdGetCoinList',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => resolve(json))
@@ -35,7 +41,13 @@ export function shepherdPostCoinList(data) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('shepherdPostCoinList', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'shepherdPostCoinList',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => resolve(json))

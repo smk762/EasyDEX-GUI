@@ -8,11 +8,16 @@ const LoginRender = function () {
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle">
           <div className="brand">
-            <img className="brand-img" src="assets/images/easydex-logo-big.png" alt="SuperNET Iguana" />
+            <img
+              className="brand-img"
+              src="assets/images/easydex-logo-big.png"
+              alt="SuperNET Iguana" />
           </div>
 
           <div className="vertical-padding-20 horizontal-padding-0">
-            <span className="display-sync-only-coins-toggle" onClick={ this.openSyncOnlyModal }>
+            <span
+              className="display-sync-only-coins-toggle"
+              onClick={ this.openSyncOnlyModal }>
               <i className="fa fa-cubes"></i> { translate('LOGIN.DISPLAY_SYNC_ONLY') }
             </span>
           </div>
@@ -56,7 +61,9 @@ const LoginRender = function () {
                 <i
                   className={ this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
                   onClick={ this.toggleSeedInputVisibility }></i>
-                <label className="floating-label" htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
+                <label
+                  className="floating-label"
+                  htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
               </div>
               <button
                 type="button"
@@ -129,13 +136,15 @@ const LoginRender = function () {
                 </div>
               </div>
               <div className="form-group form-material floating">
-                    <textarea
-                      className="form-control placeholder-no-fix height-100"
-                      type="text"
-                      id="walletseed"
-                      value={ this.state.randomSeed }
-                      readOnly="true"></textarea>
-                <label className="floating-label" htmlFor="walletseed">{ translate('INDEX.WALLET_SEED') }</label>
+                <textarea
+                  className="form-control placeholder-no-fix height-100"
+                  type="text"
+                  id="walletseed"
+                  value={ this.state.randomSeed }
+                  readOnly="true"></textarea>
+                <label
+                  className="floating-label"
+                  htmlFor="walletseed">{ translate('INDEX.WALLET_SEED') }</label>
               </div>
               <div className="form-group form-material floating">
                 <textarea
@@ -145,7 +154,9 @@ const LoginRender = function () {
                   onChange={ this.updateInput }
                   id="rwalletseed"></textarea>
                 <span className={ this.state.isSeedConfirmError ? 'help-block' : 'hide' }>{ translate('LOGIN.ENTER_VALUE_AGAIN') }.</span>
-                <label className="floating-label" htmlFor="rwalletseed">{ translate('INDEX.CONFIRM_SEED') }</label>
+                <label
+                  className="floating-label"
+                  htmlFor="rwalletseed">{ translate('INDEX.CONFIRM_SEED') }</label>
               </div>
               <button
                 type="button"

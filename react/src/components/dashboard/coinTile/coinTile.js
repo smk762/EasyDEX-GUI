@@ -52,7 +52,11 @@ class CoinTile extends React.Component {
 
     return (
       items.map((item, i) =>
-        <CoinTileItem key={ i } i={ i } item={ item } {...this.props} />)
+        <CoinTileItem
+          key={ i }
+          i={ i }
+          item={ item }
+          {...this.props} />)
     );
   }
 

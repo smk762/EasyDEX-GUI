@@ -39,7 +39,13 @@ export function edexGetTransaction(data, dispatch) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('edexGetTransaction', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'edexGetTransaction',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {

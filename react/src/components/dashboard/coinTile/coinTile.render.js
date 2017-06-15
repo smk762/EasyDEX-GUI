@@ -13,13 +13,21 @@ const CoinTileRender = function() {
           <div className="panel-heading">
             <div className="panel-actions">
               <div className="input-search input-group-sm">
-                <button type="submit" className="input-search-btn">
+                <button
+                  type="submit"
+                  className="input-search-btn">
                   <i className="icon md-search"></i>
                 </button>
-                <input type="text" className="form-control" placeholder="Search..." disabled />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search..."
+                  disabled />
               </div>
             </div>
-            <h3 className="panel-title">{ translate('INDEX.ACTIVE_COINS') }</h3>
+            <h3 className="panel-title">
+              { translate('INDEX.ACTIVE_COINS') }
+            </h3>
           </div>
         </div>
         <div className="wallet-widgets-list">

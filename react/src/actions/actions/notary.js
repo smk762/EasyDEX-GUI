@@ -44,7 +44,13 @@ function initNotaryNodesConSequence(nodes) {
             'status': 'error',
             'response': error,
           }));
-          dispatch(triggerToaster(`getInfoDexNode+${node}`, 'Error', 'error'));
+          dispatch(
+            triggerToaster(
+              `getInfoDexNode+${node}`,
+              'Error',
+              'error'
+            )
+          );
         })
         .then(response => response.json())
         .then(json => {
@@ -53,7 +59,14 @@ function initNotaryNodesConSequence(nodes) {
             'status': 'success',
             'response': json,
           }));
-          dispatch(updateNotaryNodeConState(json, nodes.length, index, node));
+          dispatch(
+            updateNotaryNodeConState(
+              json,
+              nodes.length,
+              index,
+              node
+            )
+          );
         })
       });
     }));
@@ -114,17 +127,33 @@ export function connectNotaries() {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('connectNotaries', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'connectNotaries',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
-    .then(json => dispatch(connectAllNotaryNodes(json, dispatch)))
+    .then(
+      json => dispatch(
+        connectAllNotaryNodes(json, dispatch)
+      )
+    )
   }
 }
 
 function getDexNotariesState(json) {
   if (json.error === 'less than required responses') {
     return dispatch => {
-      dispatch(triggerToaster(translate('TOASTR.LESS_RESPONSES_REQ'), translate('TOASTR.BASILISK_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.LESS_RESPONSES_REQ'),
+          translate('TOASTR.BASILISK_NOTIFICATION'),
+          'error'
+        )
+      );
     }
   } else {
     return {
@@ -163,7 +192,13 @@ export function getDexNotaries(coin) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('getDexNotaries', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'getDexNotaries',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {

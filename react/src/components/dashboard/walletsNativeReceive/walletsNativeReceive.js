@@ -20,11 +20,19 @@ class WalletsNativeReceive extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener('click', this.handleClickOutside, false);
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside, false);
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   handleClickOutside(e) {
@@ -50,8 +58,13 @@ class WalletsNativeReceive extends React.Component {
     if (this.props.ActiveCoin.addresses &&
         this.props.ActiveCoin.addresses[type] &&
         this.props.ActiveCoin.addresses[type].length) {
-      return this.props.ActiveCoin.addresses[type].map((address) =>
-        AddressListRender.call(this, address, type)
+      return this.props.ActiveCoin.addresses[type].map(
+        (address) =>
+        AddressListRender.call(
+          this,
+          address,
+          type
+        )
       );
     }
 
@@ -59,7 +72,12 @@ class WalletsNativeReceive extends React.Component {
   }
 
   getNewAddress(type) {
-    Store.dispatch(getNewKMDAddresses(this.props.ActiveCoin.coin, type));
+    Store.dispatch(
+      getNewKMDAddresses(
+        this.props.ActiveCoin.coin,
+        type
+      )
+    );
   }
 
   render() {

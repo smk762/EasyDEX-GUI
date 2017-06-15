@@ -9,13 +9,16 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
   return (
     <div className="col-lg-12">
       <hr />
-      { translate('SEND.TOTAL_UTXO_AVAILABLE') }: { refreshCacheData ? refreshCacheData.data && refreshCacheData.data.length : translate('SEND.PRESS_UPDATE_BTN') }<br />
+      { translate('SEND.TOTAL_UTXO_AVAILABLE') }: 
+      { refreshCacheData ? refreshCacheData.data && refreshCacheData.data.length : translate('SEND.PRESS_UPDATE_BTN') }<br />
       <div className={ !timestamp ? 'hide' : '' }>
-        { translate('SEND.LAST_UPDATED') } @ { secondsToString(refreshCacheData ? refreshCacheData.timestamp : 0, true) } | { secondsElapsedToString(timestamp || 0) } { translate('SEND.AGO') }<br />
+        { translate('SEND.LAST_UPDATED') } @ 
+        { secondsToString(refreshCacheData ? refreshCacheData.timestamp : 0, true) } | { secondsElapsedToString(timestamp || 0) } { translate('SEND.AGO') }<br />
       </div>
-      <div className={ isReadyToUpdate ? 'hide' : '' }>{ translate('SEND.NEXT_UPDATE_IN') } { secondsElapsedToString(600 - timestamp) }s</div>
-      <div
-        className={ 'full-width margin-bottom-10 margin-top-10 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
+      <div className={ isReadyToUpdate ? 'hide' : '' }>
+        { translate('SEND.NEXT_UPDATE_IN') } { secondsElapsedToString(600 - timestamp) }s
+      </div>
+      <div className={ 'full-width margin-bottom-10 margin-top-10 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
         <div
           className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
           style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
@@ -133,13 +136,21 @@ export const SendApiTypeSelectorRender = function () {
   return (
     <div className="row">
       <div className="col-lg-10 margin-bottom-10">
-            <span className="pointer">
-              <label className="switch">
-                <input type="checkbox" checked={ this.state.sendApiType } />
-                <div className="slider" onClick={ this.toggleSendAPIType }></div>
-              </label>
-              <div className="toggle-label" onClick={ this.toggleSendAPIType }>{ translate('SEND.SEND_VIA') } (sendtoaddress API)</div>
-            </span>
+        <span className="pointer">
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={ this.state.sendApiType } />
+            <div
+              className="slider"
+              onClick={ this.toggleSendAPIType }></div>
+          </label>
+          <div
+            className="toggle-label"
+            onClick={ this.toggleSendAPIType }>
+            { translate('SEND.SEND_VIA') } (sendtoaddress API)
+          </div>
+        </span>
       </div>
     </div>
   );
@@ -184,14 +195,22 @@ export const SendCoinRender = function () {
               { this.renderSendApiTypeSelector() }
               <div className="row">
                 <div className={ this.props.ActiveCoin.mode === 'basilisk' ? 'col-xlg-12 form-group form-material' : 'hide' }>
-                  <label className="control-label" htmlFor="edexcoinSendFrom">{ translate('INDEX.SEND_FROM') }</label>
+                  <label
+                    className="control-label"
+                    htmlFor="edexcoinSendFrom">
+                      { translate('INDEX.SEND_FROM') }
+                  </label>
                   { this.renderAddressList() }
                 </div>
               </div>
               { this.renderOASendUI() }
               <div className="row">
                 <div className="col-xlg-12 form-group form-material">
-                  <label className="control-label" htmlFor="edexcoinSendTo">{ translate('INDEX.SEND_TO') }</label>
+                  <label
+                    className="control-label"
+                    htmlFor="edexcoinSendTo">
+                      { translate('INDEX.SEND_TO') }
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -204,8 +223,10 @@ export const SendCoinRender = function () {
                     required />
                 </div>
                 <div className="col-lg-6 form-group form-material">
-                  <label className="control-label" htmlFor="edexcoinAmount">
-                    { this.props.ActiveCoin.coin }
+                  <label
+                    className="control-label"
+                    htmlFor="edexcoinAmount">
+                      { this.props.ActiveCoin.coin }
                   </label>
                   <input
                     type="text"
@@ -217,7 +238,11 @@ export const SendCoinRender = function () {
                     onChange={ this.updateInput } />
                 </div>
                 <div className="col-lg-6 form-group form-material">
-                  <label className="control-label" htmlFor="edexcoinFee">{ translate('INDEX.FEE') }</label>
+                  <label
+                    className="control-label"
+                    htmlFor="edexcoinFee">
+                      { translate('INDEX.FEE') }
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -230,18 +255,24 @@ export const SendCoinRender = function () {
                     onChange={ this.updateInput } />
                 </div>
                 <div className="col-lg-12">
-                      <span>
-                        <strong>{ translate('INDEX.TOTAL') } ({ translate('INDEX.AMOUNT_SM') } - txfee):</strong> { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
-                      </span>
+                  <strong>{ translate('INDEX.TOTAL') } ({ translate('INDEX.AMOUNT_SM') } - txfee):</strong> { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
                 </div>
                 <div className={ this.state.sendApiType ? 'hide' : 'col-lg-10 margin-top-30' }>
-                      <span className="pointer">
-                        <label className="switch">
-                          <input type="checkbox" checked={ this.state.sendSig } />
-                          <div className="slider" onClick={ this.toggleSendSig }></div>
-                        </label>
-                        <div className="toggle-label" onClick={ this.toggleSendSig }>{ translate('INDEX.DONT_SEND') }</div>
-                      </span>
+                  <span className="pointer">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={ this.state.sendSig } />
+                      <div
+                        className="slider"
+                        onClick={ this.toggleSendSig }></div>
+                    </label>
+                    <div
+                      className="toggle-label"
+                      onClick={ this.toggleSendSig }>
+                        { translate('INDEX.DONT_SEND') }
+                    </div>
+                  </span>
                 </div>
                 { this.renderUTXOCacheInfo()}
                 <div className="col-lg-12">
@@ -281,7 +312,9 @@ export const SendCoinRender = function () {
               <div className="col-xs-12">
                 <strong>{ translate('INDEX.FROM') }</strong>
               </div>
-              <div className="col-lg-6 col-sm-6 col-xs-12">{ this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] }</div>
+              <div className="col-lg-6 col-sm-6 col-xs-12">
+                { this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] }
+              </div>
               <div className="col-lg-6 col-sm-6 col-xs-6 confirm-currency-send-container">
                 { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
               </div>
@@ -294,7 +327,9 @@ export const SendCoinRender = function () {
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={ () => this.changeSendCoinStep(2) }>{ translate('INDEX.CONFIRM') }</button>
+                  onClick={ () => this.changeSendCoinStep(2) }>
+                    { translate('INDEX.CONFIRM') }
+                </button>
               </div>
             </div>
           </div>
@@ -304,19 +339,21 @@ export const SendCoinRender = function () {
       <div className={ this.state.currentStep === 2 ? 'col-xlg-12 col-md-12 col-sm-12 col-xs-12' : 'col-xlg-12 col-md-12 col-sm-12 col-xs-12 hide' }>
         <div className="panel">
           <div className="panel-heading">
-            <h4 className="panel-title">{ translate('INDEX.TRANSACTION_RESULT') }</h4>
+            <h4 className="panel-title">
+              { translate('INDEX.TRANSACTION_RESULT') }
+            </h4>
             <div className={ !this.state.sendSig ? 'hide' : 'center' }>
               { translate('SEND.YOU_PICKED_OPT') }
             </div>
             <table className="table table-hover table-striped">
               <thead>
-              <tr>
-                <th>{ translate('INDEX.KEY') }</th>
-                <th>{ translate('INDEX.INFO') }</th>
-              </tr>
+                <tr>
+                  <th>{ translate('INDEX.KEY') }</th>
+                  <th>{ translate('INDEX.INFO') }</th>
+                </tr>
               </thead>
               <tbody>
-              { this.renderSendCoinResponse() }
+                { this.renderSendCoinResponse() }
               </tbody>
             </table>
             <div className="widget-body-footer">
@@ -325,7 +362,9 @@ export const SendCoinRender = function () {
                   type="button"
                   className="btn btn-primary"
                   onClick={ () => this.changeSendCoinStep(0) }
-                  disabled={ this.state.utxoMethodInProgress }>{ !this.state.utxoMethodInProgress ? translate('INDEX.MAKE_ANOTHER_TX') : translate('SEND.PLEASE_WAIT') + '...' }</button>
+                  disabled={ this.state.utxoMethodInProgress }>
+                    { !this.state.utxoMethodInProgress ? translate('INDEX.MAKE_ANOTHER_TX') : translate('SEND.PLEASE_WAIT') + '...' }
+                </button>
               </div>
             </div>
           </div>

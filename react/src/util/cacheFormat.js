@@ -9,7 +9,7 @@ export function edexGetTxIDList(getTxData) {
 }
 
 export function edexRemoveTXID(_obj, address, txidArray) {
-  let txidToStr = ':' + txidArray.join(':') + ':';
+  let txidToStr = `:${txidArray.join(':')}:`;
 
   if (_obj, _obj.basilisk) {
     if (Object.keys(_obj.basilisk).length === 0) {
@@ -24,7 +24,6 @@ export function edexRemoveTXID(_obj, address, txidArray) {
                 _obj.basilisk[key][coinAddr].refresh.data.length > 0) {
               for (let i = 0; i < _obj.basilisk[key][coinAddr].refresh.data.length; i++) {
                 if (txidToStr.indexOf(_obj.basilisk[key][coinAddr].refresh.data[i].txid.toString()) > -1) {
-                  console.log('cacheformat remove node', _obj.basilisk[key][coinAddr].refresh.data[i].txid);
                   _obj.basilisk[key][coinAddr].refresh.data.splice(i, 1);
                   _obj.basilisk[key][coinAddr].refresh.timestamp = Date.now();
                 }
@@ -35,7 +34,6 @@ export function edexRemoveTXID(_obj, address, txidArray) {
                 _obj.basilisk[key][coinAddr].listunspent.data.length > 0) {
               for (let i = 0; i < _obj.basilisk[key][coinAddr].listunspent.data.length; i++) {
                 if (txidToStr.indexOf(_obj.basilisk[key][coinAddr].listunspent.data[i].txid.toString()) > -1) {
-                  console.log('cacheformat remove node', _obj.basilisk[key][coinAddr].listunspent.data[i].txid);
                   _obj.basilisk[key][coinAddr].listunspent.data.splice(i, 1);
                   _obj.basilisk[key][coinAddr].listunspent.timestamp = Date.now();
                 }

@@ -53,7 +53,13 @@ export function getNativeTxHistory(coin) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('getNativeTxHistory', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'getNativeTxHistory',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {

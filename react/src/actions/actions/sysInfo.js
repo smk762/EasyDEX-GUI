@@ -17,7 +17,13 @@ export function shepherdGetSysInfo() {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('Failed to get sys info', 'Error', 'error'))
+      dispatch(
+        triggerToaster(
+          'Failed to get sys info',
+          'Error',
+          'error'
+        )
+      )
     })
     .then(response => response.json())
     .then(json => console.log(json));

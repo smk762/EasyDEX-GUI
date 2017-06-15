@@ -3,7 +3,9 @@ import { translate } from '../../../translate/translate';
 
 const WalletsProgressRender = function () {
   return (
-    <div id="edex-footer" className="margin-bottom-20">
+    <div
+      id="edex-footer"
+      className="margin-bottom-20">
       <div className="row no-space">
         <div id="currency-progressbars">
           <div className="progress progress-sm">

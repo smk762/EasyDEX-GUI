@@ -6,12 +6,19 @@ const WalletsHeaderRender = function() {
     <div
       className="page-header page-header-bordered header-easydex margin-bottom-0"
       id="easydex-header-div"
-      style={{ backgroundImage: `url("assets/images/bg/${this.props.activeSection}_transparent_header_bg.png")`, backgroundRepeat: 'no-repeat', backgroundPosition: '0%' }}>
+      style={{
+        backgroundImage: `url("assets/images/bg/${this.props.activeSection}_transparent_header_bg.png")`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: '0%'
+      }}>
       <h1 className={ this.isActiveSectionJumblr() ? 'hide' : 'page-title' }>EasyDEX</h1>
       <ol className="breadcrumb">
-        <li className={ this.isActiveSectionJumblr() ? 'hide' : 'header-easydex-section' }>{ translate('INDEX.DASHBOARD') }</li>
+        <li className={ this.isActiveSectionJumblr() ? 'hide' : 'header-easydex-section' }>
+          { translate('INDEX.DASHBOARD') }
+        </li>
         <li className={ !this.isActiveSectionJumblr() ? 'hide' : 'header-easydex-section' }>
-          <img src="assets/images/native/jumblr_header_title_logo.png" /><br /> { translate('SIDEBAR.JUMBLR_MOTTO') }
+          <img src="assets/images/native/jumblr_header_title_logo.png" /><br />
+          { translate('SIDEBAR.JUMBLR_MOTTO') }
         </li>
       </ol>
       <div className="page-header-actions z-index-1 hide">
@@ -38,7 +45,9 @@ const WalletsHeaderRender = function() {
           </ul>
         </div>
 
-        <div id="zec_header_button" className="hide">
+        <div
+          id="zec_header_button"
+          className="hide">
           <button
             type="button"
             className="bg-yellow-600 btn btn-floating white waves-effect waves-float waves-light">
@@ -69,7 +78,9 @@ const WalletsHeaderRender = function() {
           </button>
         </div>
 
-        <div id="kmd_header_button" className="hide">
+        <div
+          id="kmd_header_button"
+          className="hide">
           <button
             type="button"
             className="bg-teal-500 btn btn-floating white waves-effect waves-float waves-light">

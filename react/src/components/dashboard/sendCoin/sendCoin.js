@@ -68,11 +68,19 @@ class SendCoin extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener('click', this.handleClickOutside, false);
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside, false);
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   handleClickOutside(e) {
@@ -86,7 +94,8 @@ class SendCoin extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (!this.state.sendFrom && this.props.ActiveCoin.activeAddress) {
+    if (!this.state.sendFrom &&
+        this.props.ActiveCoin.activeAddress) {
       this.setState(Object.assign({}, this.state, {
         sendFrom: this.props.ActiveCoin.activeAddress,
       }));
@@ -157,17 +166,16 @@ class SendCoin extends React.Component {
         timestamp = null;
       }
 
-      return UTXOCacheInfoRender.call(this, refreshCacheData, isReadyToUpdate, waitUntilCallIsFinished, timestamp);
+      return UTXOCacheInfoRender.call(
+        this,
+        refreshCacheData,
+        isReadyToUpdate,
+        waitUntilCallIsFinished,  
+        timestamp
+      );
     }
 
     return null;
-    /*
-          <hr />
-          <div>
-            Split funds
-            <hr />
-          </div>
-    */
   }
 
   renderAddressAmount(address) {
@@ -272,7 +280,9 @@ class SendCoin extends React.Component {
           className="btn dropdown-toggle btn-info"
           title={ '-' + translate('SEND.SELECT_T_OR_Z_ADDR') + '-' }
           onClick={ this.openDropMenu }>
-          <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
+          <span className="filter-option pull-left">
+            { this.renderSelectorCurrentLabel() }&nbsp;&nbsp;
+          </span>
           <span className="bs-caret">
             <span className="caret"></span>
           </span>
@@ -345,7 +355,12 @@ class SendCoin extends React.Component {
           this.props.ActiveCoin.mode === 'basilisk') {
         this.handleBasiliskSend();
       } else {
-        Store.dispatch(sendToAddress(this.props.ActiveCoin.coin, this.state));
+        Store.dispatch(
+          sendToAddress(
+            this.props.ActiveCoin.coin,
+            this.state
+          )
+        );
       }
     }
   }
@@ -390,49 +405,69 @@ class SendCoin extends React.Component {
 
     iguanaUTXORawTX(sendData, Store.dispatch)
     .then(function(json) {
-      console.log('sendData', sendData);
-      console.log('iguanaUTXORawTXJSON', json);
       if (json.result === 'success' &&
           json.completed === true) {
-        Store.dispatch(triggerToaster(translate('TOASTR.SIGNED_TX_GENERATED') + '.', translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
+        Store.dispatch(
+          triggerToaster(
+            translate('TOASTR.SIGNED_TX_GENERATED') + '.',
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'success'
+          )
+        );
 
         if (sendData.sendsig === 1) {
           const dexrawtxData = {
             'signedtx': json.signedtx,
             'coin': sendData.coin
           };
-          dexSendRawTX(dexrawtxData, Store.dispatch)
-          .then(function(dexRawTxJSON) {
-            console.log('dexRawTxJSON', dexRawTxJSON);
+          dexSendRawTX(
+            dexrawtxData,
+            Store.dispatch
+          ).then(function(dexRawTxJSON) {
             if (dexRawTxJSON.indexOf('"error":{"code"') > -1) {
-              Store.dispatch(triggerToaster('Transaction failed', translate('TOASTR.WALLET_NOTIFICATION'), 'error'));
+              Store.dispatch(
+                triggerToaster(
+                  'Transaction failed',
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'error'
+                )
+              );
               Store.dispatch(sendToAddressStateAlt(JSON.parse(dexRawTxJSON)));
 
               this.setState(Object.assign({}, this.state, {
                 utxoMethodInProgress: false,
               }));
             } else {
-              Store.dispatch(triggerToaster(translate('TOASTR.SIGNED_TX_SENT'), translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
+              Store.dispatch(
+                triggerToaster(
+                  translate('TOASTR.SIGNED_TX_SENT'),
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'success'
+                )
+              );
               Store.dispatch(sendToAddressStateAlt(json));
 
               let getTxidData = function() {
                 return new Promise(function(resolve, reject) {
-                  Store.dispatch(triggerToaster(translate('TOASTR.GETTING_TXID_INFO') + '.', translate('TOASTR.WALLET_NOTIFICATION'), 'info'));
+                  Store.dispatch(
+                    triggerToaster(
+                      translate('TOASTR.GETTING_TXID_INFO') + '.',
+                      translate('TOASTR.WALLET_NOTIFICATION'),
+                      'info'
+                    )
+                  );
 
                   edexGetTransaction({
                     'coin': sendData.coin,
                     'txid': dexRawTxJSON.txid ? dexRawTxJSON.txid : dexRawTxJSON
                   }, Store.dispatch)
                   .then(function(json) {
-                    console.log('gettx', json);
                     resolve(json);
                   });
                 });
               }
 
               let processRefreshUTXOs = function(vinData) {
-                console.log('vin', vinData);
-
                 return new Promise(function(resolve, reject) {
                   let edexGetTxIDListRes = edexGetTxIDList(vinData);
                   resolve(edexGetTxIDListRes);
@@ -441,14 +476,9 @@ class SendCoin extends React.Component {
 
               let getDataCacheContents = function(txidListToRemove) {
                 return new Promise(function(resolve, reject) {
-                  console.log(txidListToRemove);
-                  console.log(sendData);
-
                   getCacheFile(_pubkey)
                   .then(function(result) {
-                    console.log('got cache file', result);
                     let saveThisData = edexRemoveTXID(result.result, _sendFrom, txidListToRemove);
-                    console.log('saveThisData', saveThisData);
                     resolve(saveThisData);
                   });
                 });
@@ -456,15 +486,19 @@ class SendCoin extends React.Component {
 
               let saveNewCacheData = function(saveThisData) {
                 return new Promise(function(resolve, reject) {
-                  console.log('saveNewCacheData', saveThisData);
-
-                  shepherdGroomPostPromise(_pubkey, saveThisData)
-                  .then(function(result) {
-                    console.log('saveNewCacheData', saveThisData);
-                    console.log(result);
+                  shepherdGroomPostPromise(
+                    _pubkey,
+                    saveThisData
+                  ).then(function(result) {
                     resolve(result);
                     forceUpdateCache();
-                    Store.dispatch(triggerToaster(translate('TOASTR.LOCAL_UTXO_UPDATED'), translate('TOASTR.WALLET_NOTIFICATION'), 'info'));
+                    Store.dispatch(
+                      triggerToaster(
+                        translate('TOASTR.LOCAL_UTXO_UPDATED'),
+                        translate('TOASTR.WALLET_NOTIFICATION'),
+                        'info'
+                      )
+                    );
 
                     this.setState(Object.assign({}, this.state, {
                       utxoMethodInProgress: false,
@@ -473,10 +507,22 @@ class SendCoin extends React.Component {
                 }.bind(this));
               }.bind(this);
 
-              Store.dispatch(triggerToaster(translate('TOASTR.AWAITING_TX_RESP') + '...', translate('TOASTR.WALLET_NOTIFICATION'), 'info'));
+              Store.dispatch(
+                triggerToaster(
+                  translate('TOASTR.AWAITING_TX_RESP') + '...',
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'info'
+                )
+              );
 
               function waterfallUTXOProcess() {
-                Store.dispatch(triggerToaster(translate('TOASTR.PROCESSING_UTXO') + '...', translate('TOASTR.WALLET_NOTIFICATION'), 'info'));
+                Store.dispatch(
+                  triggerToaster(
+                    translate('TOASTR.PROCESSING_UTXO') + '...',
+                    translate('TOASTR.WALLET_NOTIFICATION'),
+                    'info'
+                  )
+                );
 
                 getTxidData()
                 .then(function(gettxdata) {
@@ -493,14 +539,13 @@ class SendCoin extends React.Component {
               let sentTxData = setInterval(function() {
                 getTxidData()
                 .then(function(gettxdata) {
-                  if (gettxdata.vin && gettxdata.vin.length) {
+                  if (gettxdata.vin &&
+                      gettxdata.vin.length) {
                     clearInterval(sentTxData);
                     waterfallUTXOProcess();
                   }
                 })
               }, 1000);
-
-              console.log('utxo remove', true);
             }
           }.bind(this));
         } else {
@@ -512,7 +557,13 @@ class SendCoin extends React.Component {
         }
       } else {
         Store.dispatch(sendToAddressStateAlt(json));
-        Store.dispatch(triggerToaster(translate('TOASTR.SIGNED_TX_GENERATED_FAIL') + '.', translate('TOASTR.WALLET_NOTIFICATION'), 'error'));
+        Store.dispatch(
+          triggerToaster(
+            translate('TOASTR.SIGNED_TX_GENERATED_FAIL') + '.',
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
 
         this.setState(Object.assign({}, this.state, {
           utxoMethodInProgress: false,
@@ -622,10 +673,22 @@ class SendCoin extends React.Component {
         }
 
         if (this.state.sendTo === '') {
-          Store.dispatch(triggerToaster('Couldn\'t find any ' + this.props.ActiveCoin.coin + ' addresses', 'OpenAlias', 'error'));
+          Store.dispatch(
+            triggerToaster(
+              'Couldn\'t find any ' + this.props.ActiveCoin.coin + ' addresses',
+              'OpenAlias',
+              'error'
+            )
+          );
         }
       } else {
-        Store.dispatch(triggerToaster('Couldn\'t find any addresses', 'OpenAlias', 'error'));
+        Store.dispatch(
+          triggerToaster(
+            'Couldn\'t find any addresses',
+            'OpenAlias',
+            'error'
+          )
+        );
       }
     }.bind(this));
   }
