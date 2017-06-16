@@ -14,9 +14,13 @@ const CoinTileItemRender = function() {
               className="img-responsive"
               src={ `assets/images/cryptologo/${item.coinlogo}.png` }
               alt={ item.coinname }/>
-            <span className={ `badge up badge-${item.modecolor}` }>{ item.modecode }</span>
+            <span className={ `badge up badge-${item.modecolor}` }>
+              { item.modecode }
+            </span>
           </a>
-          <div className="coin-name">{ item.coinname } ({ item.coinlogo.toUpperCase() })</div>
+          <div className="coin-name">
+            { item.coinname } ({ item.coinlogo.toUpperCase() })
+          </div>
         </div>
       </div>
     </div>

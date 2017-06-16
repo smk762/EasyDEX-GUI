@@ -89,7 +89,13 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           })
           .catch(function(error) {
             console.log(error);
-            dispatch(triggerToaster('getKMDAddressesNative+addresslist+cache', 'Error', 'error'));
+            dispatch(
+              triggerToaster(
+                'getKMDAddressesNative+addresslist+cache',
+                'Error',
+                'error'
+              )
+            );
           })
           .then(response => response.json())
           .then(function(json) {
@@ -121,7 +127,13 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
               'status': 'error',
               'response': error,
             }));
-            dispatch(triggerToaster('getKMDAddressesNative', 'Error', 'error'));
+            dispatch(
+              triggerToaster(
+                'getKMDAddressesNative',
+                'Error',
+                'error'
+              )
+            );
           })
           .then(response => response.json())
           .then(json => {
@@ -205,13 +217,12 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
               }
             }
 
-            if (isNewAddr) {
-              if (allAddrArray[a].substring(0, 2) === 'zc' ||
-                  allAddrArray[a].substring(0, 2) === 'zt') {
-                result[1][result[1].length] = allAddrArray[a];
-              } else {
-                result[0][result[0].length] = allAddrArray[a];
-              }
+            if (isNewAddr &&
+                (allAddrArray[a].substring(0, 2) === 'zc' ||
+                allAddrArray[a].substring(0, 2) === 'zt')) {
+              result[1][result[1].length] = allAddrArray[a];
+            } else {
+              result[0][result[0].length] = allAddrArray[a];
             }
           }
         }
@@ -235,11 +246,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
               sum += filteredArray[i];
             }
 
-            if (sum === 0 &&
-                a === 1) {
-
-            }
-
             newAddressArray[a][b] = {
               address: result[a][b],
               amount: currentAddress === result[a][b] || mode === 'native' ? sum : 'N/A',
@@ -256,7 +262,8 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
               const _timestamp = Date.now();
               let ajaxDataToHex = `["${_address}"]`;
 
-              iguanaHashHex(ajaxDataToHex, dispatch).then((hashHexJson) => {
+              iguanaHashHex(ajaxDataToHex, dispatch)
+              .then((hashHexJson) => {
                 if (getPassthruAgent(coin) === 'iguana') {
                   payload = {
                     'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
@@ -296,7 +303,13 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                     'status': 'error',
                     'response': error,
                   }));
-                  dispatch(triggerToaster('getKMDAddressesNative+ZBalance', 'Error', 'error'));
+                  dispatch(
+                    triggerToaster(
+                      'getKMDAddressesNative+ZBalance',
+                      'Error',
+                      'error'
+                    )
+                  );
                 })
                 .then(response => response.json())
                 .then(function(json) {
@@ -308,7 +321,13 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                       'status': 'error',
                       'response': json,
                     }));
-                    dispatch(triggerToaster('getKMDAddressesNative+ZBalance', 'Error', 'error'));
+                    dispatch(
+                      triggerToaster(
+                        'getKMDAddressesNative+ZBalance',
+                        'Error',
+                        'error'
+                      )
+                    );
                   } else {
                     resolve(json);
                     newAddressArray[1][index] = {
@@ -351,7 +370,13 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
         })
         .catch(function(error) {
           console.log(error);
-          dispatch(triggerToaster('getKMDAddressesNative+addresslist+cache', 'Error', 'error'));
+          dispatch(
+            triggerToaster(
+              'getKMDAddressesNative+addresslist+cache',
+              'Error',
+              'error'
+            )
+          );
         })
         .then(response => response.json())
         .then(function(json) {
@@ -383,7 +408,13 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                 'status': 'error',
                 'response': error,
               }));
-              dispatch(triggerToaster('getKMDAddressesNative+Balance', 'Error', 'error'));
+              dispatch(
+                triggerToaster(
+                  'getKMDAddressesNative+Balance',
+                  'Error',
+                  'error'
+                )
+              );
             })
             .then(response => response.json())
             .then(function(json) {
@@ -398,7 +429,12 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                 'timestamp': Date.now(),
               };
               dispatch(shepherdGroomPost(pubkey, updatedCache));
-              calcBalance(result, json, dispatch, mode);
+              calcBalance(
+                result,
+                json,
+                dispatch,
+                mode
+              );
             })
           }
         })
@@ -424,7 +460,13 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
             'status': 'error',
             'response': error,
           }));
-          dispatch(triggerToaster('getKMDAddressesNative+Balance', 'Error', 'error'));
+          dispatch(
+            triggerToaster(
+              'getKMDAddressesNative+Balance',
+              'Error',
+              'error'
+            )
+          );
         })
         .then(response => response.json())
         .then(function(json) {
@@ -433,7 +475,12 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
             'status': 'success',
             'response': json,
           }));
-          calcBalance(result, json, dispatch, mode);
+          calcBalance(
+            result,
+            json,
+            dispatch,
+            mode
+          );
         })
       }
     })

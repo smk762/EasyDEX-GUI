@@ -50,7 +50,12 @@ class Login extends React.Component {
     const _iguanaActiveHandle = setInterval(() => {
       Store.dispatch(getSyncOnlyForks());
     }, IGUNA_ACTIVE_HANDLE_TIMEOUT);
-    Store.dispatch(startInterval('syncOnly', _iguanaActiveHandle));
+    Store.dispatch(
+      startInterval(
+        'syncOnly',
+        _iguanaActiveHandle
+      )
+    );
 
     Store.dispatch(toggleSyncOnlyModal(true));
   }
@@ -125,7 +130,9 @@ class Login extends React.Component {
   }
 
   loginSeed() {
-    Store.dispatch(iguanaWalletPassphrase(this.state.loginPassphrase));
+    Store.dispatch(
+      iguanaWalletPassphrase(this.state.loginPassphrase)
+    );
   }
 
   updateActiveLoginSection(name) {
@@ -135,7 +142,12 @@ class Login extends React.Component {
   }
 
   execWalletCreate() {
-    Store.dispatch(createNewWallet(this.state.randomSeedConfirm, this.props.Dashboard.activeHandle));
+    Store.dispatch(
+      createNewWallet(
+        this.state.randomSeedConfirm,
+        this.props.Dashboard.activeHandle
+      )
+    );
 
     this.setState({
       activeLoginSection: 'activateCoin',
@@ -175,7 +187,8 @@ class Login extends React.Component {
   }
 
   render() {
-    if ((this.state && this.state.display) || !this.props.Main) {
+    if ((this.state && this.state.display) ||
+        !this.props.Main) {
       return LoginRender.call(this);
     }
 

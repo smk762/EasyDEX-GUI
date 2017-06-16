@@ -6,7 +6,10 @@ import AddCoinOptionsACFiat from '../../addcoin/addcoinOptionsACFiat';
 
 export const AppInfoTabRender = function() {
   return (
-    <div className="panel" id="AppInfo" onClick={ () => this.openTab('AppInfo', 8) }>
+    <div
+      className="panel"
+      id="AppInfo"
+      onClick={ () => this.openTab('AppInfo', 8) }>
       <div className="panel-heading">
         <a className={ this.state.activeTab === 8 ? 'panel-title' : 'panel-title collapsed' }>
           <i className="icon md-info"></i>{ translate('SETTINGS.APP_INFO') }
@@ -77,6 +80,9 @@ export const AppInfoTabRender = function() {
               <div>
                 Komodo { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.komodoDir }
               </div>
+              <div>
+                Komodo wallet.dat: { this.props.Settings.appInfo.dirs.komodoDir }
+              </div>
             </div>
           </div>
         </div>
@@ -88,13 +94,17 @@ export const AppInfoTabRender = function() {
 export const SettingsRender = function() {
   return (
     <div className="margin-left-0">
-      <div className="page-content" id="section-iguana-wallet-settings">
+      <div
+        className="page-content"
+        id="section-iguana-wallet-settings">
         <div className="row">
           <div className="col-xlg-12 col-md-12">
             <div className="row">
               <div className="col-xlg-12 col-md-12">
                 <h4 className="font-size-14 text-uppercase">{ translate('INDEX.WALLET_SETTINGS') }</h4>
-                <div className="panel-group" id="SettingsAccordion">
+                <div
+                  className="panel-group"
+                  id="SettingsAccordion">
                   <div
                     className="panel"
                     id="WalletInfo"
@@ -110,36 +120,36 @@ export const SettingsRender = function() {
                       <div className="panel-body">
                         <table className="table">
                           <thead>
-                          <tr>
-                            <th width="10%">{ translate('INDEX.KEY') }</th>
-                            <th>{ translate('INDEX.VALUE') }</th>
-                          </tr>
+                            <tr>
+                              <th width="10%">{ translate('INDEX.KEY') }</th>
+                              <th>{ translate('INDEX.VALUE') }</th>
+                            </tr>
                           </thead>
                           <tbody>
-                          <tr>
-                            <td className="wallet-info-key">pubkey</td>
-                            <td>{ this.props.Main.activeHandle.pubkey }</td>
-                          </tr>
-                          <tr>
-                            <td className="wallet-info-key">btcpubkey</td>
-                            <td>{ this.props.Main.activeHandle.btcpubkey }</td>
-                          </tr>
-                          <tr>
-                            <td className="wallet-info-key">rmd160</td>
-                            <td>{ this.props.Main.activeHandle.rmd160 }</td>
-                          </tr>
-                          <tr>
-                            <td className="wallet-info-key">NXT</td>
-                            <td>{ this.props.Main.activeHandle.NXT }</td>
-                          </tr>
-                          <tr>
-                            <td className="wallet-info-key">notary</td>
-                            <td>{ this.props.Main.activeHandle.notary }</td>
-                          </tr>
-                          <tr>
-                            <td className="wallet-info-key">status</td>
-                            <td>{ this.props.Main.activeHandle.status }</td>
-                          </tr>
+                            <tr>
+                              <td className="wallet-info-key">pubkey</td>
+                              <td>{ this.props.Main.activeHandle.pubkey }</td>
+                            </tr>
+                            <tr>
+                              <td className="wallet-info-key">btcpubkey</td>
+                              <td>{ this.props.Main.activeHandle.btcpubkey }</td>
+                            </tr>
+                            <tr>
+                              <td className="wallet-info-key">rmd160</td>
+                              <td>{ this.props.Main.activeHandle.rmd160 }</td>
+                            </tr>
+                            <tr>
+                              <td className="wallet-info-key">NXT</td>
+                              <td>{ this.props.Main.activeHandle.NXT }</td>
+                            </tr>
+                            <tr>
+                              <td className="wallet-info-key">notary</td>
+                              <td>{ this.props.Main.activeHandle.notary }</td>
+                            </tr>
+                            <tr>
+                              <td className="wallet-info-key">status</td>
+                              <td>{ this.props.Main.activeHandle.status }</td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -287,7 +297,11 @@ export const SettingsRender = function() {
                           </strong>
                         </p>
                         <div className="col-sm-12"></div>
-                        <form className="wifkeys-form" method="post" action="javascript:" autoComplete="off">
+                        <form
+                          className="wifkeys-form"
+                          method="post"
+                          action="javascript:"
+                          autoComplete="off">
                           <div className="form-group form-material floating">
                             <input
                               type={ this.state.seedInputVisibility ? 'text' : 'password' }
@@ -298,7 +312,9 @@ export const SettingsRender = function() {
                             <i
                               className={ this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
                               onClick={ this.toggleSeedInputVisibility }></i>
-                            <label className="floating-label" htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') }</label>
+                            <label
+                              className="floating-label"
+                              htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') }</label>
                           </div>
                           <div className="col-sm-12 col-xs-12 text-align-center">
                             <button
@@ -350,7 +366,11 @@ export const SettingsRender = function() {
                           </strong>
                         </p>
                         <div className="col-sm-12"></div>
-                        <form className="wifkeys-import-form" method="post" action="javascript:" autoComplete="off">
+                        <form
+                          className="wifkeys-import-form"
+                          method="post"
+                          action="javascript:"
+                          autoComplete="off">
                           <div className="form-group form-material floating">
                             <input
                               type="text"

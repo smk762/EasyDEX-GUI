@@ -42,7 +42,15 @@ export const PaginationRender = function(paginationFrom, paginationTo) {
   return (
     <div className="row unselectable">
       <div className="col-sm-5">
-        <div className="dataTables_info">{ translate('INDEX.SHOWING') } { paginationFrom } { translate('INDEX.TO_ALT') } { paginationTo } { translate('INDEX.OF') } { this.props.ActiveCoin.txhistory.length } { translate('INDEX.ENTRIES_SM') }</div>
+        <div className="dataTables_info">
+          { translate('INDEX.SHOWING') } 
+          { paginationFrom } 
+          { translate('INDEX.TO_ALT') } 
+          { paginationTo } 
+          { translate('INDEX.OF') } 
+          { this.props.ActiveCoin.txhistory.length } 
+          { translate('INDEX.ENTRIES_SM') }
+        </div>
       </div>
       <div className="col-sm-7">
         <div className="dataTables_paginate paging_simple_numbers">

@@ -65,15 +65,20 @@ class Notifications extends React.Component {
     if (this.state.guiLog &&
         this.state.guiLog.length) {
       let _guiLog = this.state.guiLog;
-      _guiLog = sortByDate(_guiLog);
       let items = [];
+      _guiLog = sortByDate(_guiLog);
 
       for (let i = 0; i < _guiLog.length; i++) {
         if (_guiLog[i].status === type) {
           const _logItem = _guiLog[i];
 
           items.push(
-            NotificationsByTypeRender.call(this, _logItem, type, i)
+            NotificationsByTypeRender.call(
+              this,
+              _logItem,
+              type,
+              i
+            )
           );
         }
       }

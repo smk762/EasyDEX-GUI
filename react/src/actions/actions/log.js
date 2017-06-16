@@ -34,7 +34,13 @@ export function getAgamaLog(type) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('getAgamaLog', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'getAgamaLog',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then()

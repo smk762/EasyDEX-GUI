@@ -53,18 +53,38 @@ export function addCoin(coin, mode, syncOnly, port) {
           .then(function(json) {
             setTimeout(function() {
               console.log(`started ${coin} / ${modeToValue[mode]} fork`, json);
-              dispatch(iguanaAddCoin(coin, mode, _acData, json.result));
+              dispatch(
+                iguanaAddCoin(
+                  coin,
+                  mode,
+                  _acData,
+                  json.result
+                )
+              );
             }, 2000);
           });
         }
       } else {
         if (port) {
           return dispatch => {
-            dispatch(iguanaAddCoin(coin, mode, _acData, port));
+            dispatch(
+              iguanaAddCoin(
+                coin,
+                mode,
+                _acData,
+                port
+              )
+            );
           }
         } else {
           return dispatch => {
-            dispatch(iguanaAddCoin(coin, mode, _acData));
+            dispatch(
+              iguanaAddCoin(
+                coin,
+                mode,
+                _acData
+              )
+            );
           }
         }
       }
@@ -95,7 +115,13 @@ export function iguanaAddCoin(coin, mode, acData, port) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster(translate('TOASTR.FAILED_TO_ADDCOIN'), translate('TOASTR.ACCOUNT_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.FAILED_TO_ADDCOIN'),
+          translate('TOASTR.ACCOUNT_NOTIFICATION'),
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -104,7 +130,13 @@ export function iguanaAddCoin(coin, mode, acData, port) {
         'status': 'success',
         'response': json,
       }));
-      dispatch(addCoinResult(coin, mode, acData));
+      dispatch(
+        addCoinResult(
+          coin,
+          mode,
+          acData
+        )
+      );
     });
   }
 
@@ -152,14 +184,31 @@ export function shepherdHerd(coin, mode, path) {
   }
 
   if (checkCoinType(coin) === 'crypto') {
-    acData = startCrypto(path.result, coin, mode);
+    acData = startCrypto(
+      path.result,
+      coin,
+      mode
+    );
   }
   if (checkCoinType(coin) === 'currency_ac') {
-    acData = startCurrencyAssetChain(path.result, coin, mode);
+    acData = startCurrencyAssetChain(
+      path.result,
+      coin,
+      mode
+    );
   }
   if (checkCoinType(coin) === 'ac') {
-    acData = startAssetChain(path.result, coin, mode);
-    const supply = startAssetChain(path.result, coin, mode, true);
+    const supply = startAssetChain(
+      path.result,
+      coin,
+      mode,
+      true
+    );
+    acData = startAssetChain(
+      path.result,
+      coin,
+      mode
+    );
     herdData.ac_options.push(`-ac_supply=${supply}`);
   }
 
@@ -176,10 +225,24 @@ export function shepherdHerd(coin, mode, path) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster(translate('FAILED_SHEPHERD_HERD'), translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('FAILED_SHEPHERD_HERD'),
+          translate('TOASTR.SERVICE_NOTIFICATION'),
+          'error'
+        )
+      );
     })
     .then(response => response.json())
-    .then(json => dispatch(iguanaAddCoin(coin, mode, acData)));
+    .then(
+      json => dispatch(
+        iguanaAddCoin(
+          coin,
+          mode,
+          acData
+        )
+      )
+    );
   }
 }
 
@@ -191,7 +254,13 @@ export function addCoinResult(coin, mode) {
   };
 
   return dispatch => {
-    dispatch(triggerToaster(`${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode]} ${translate('TOASTR.MODE')}`, translate('TOASTR.COIN_NOTIFICATION'), 'success'));
+    dispatch(
+      triggerToaster(
+        `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode]} ${translate('TOASTR.MODE')}`,
+        translate('TOASTR.COIN_NOTIFICATION'),
+        'success'
+      )
+    );
     dispatch(toggleAddcoinModal(false, false));
     dispatch(getDexCoins());
   }
@@ -208,10 +277,24 @@ export function _shepherdGetConfig(coin, mode) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('Failed to get mode config', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'Failed to get mode config',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
-    .then(json => dispatch(shepherdHerd(coin, mode, json)));
+    .then(
+      json => dispatch(
+        shepherdHerd(
+          coin,
+          mode,
+          json
+        )
+      )
+    );
   }
 }
 
@@ -228,10 +311,24 @@ export function shepherdGetConfig(coin, mode) {
       })
       .catch(function(error) {
         console.log(error);
-        dispatch(triggerToaster('Failed to get KMD config', 'Error', 'error'));
+        dispatch(
+          triggerToaster(
+            'Failed to get KMD config',
+            'Error',
+            'error'
+          )
+        );
       })
       .then(response => response.json())
-      .then(json => dispatch(shepherdHerd(coin, mode, json)))
+      .then(
+        json => dispatch(
+          shepherdHerd(
+            coin,
+            mode,
+            json
+          )
+        )
+      )
     }
   } else {
     return dispatch => {
@@ -244,10 +341,24 @@ export function shepherdGetConfig(coin, mode) {
       })
       .catch(function(error) {
         console.log(error);
-        dispatch(triggerToaster('Failed to get mode config', 'Error', 'error'));
+        dispatch(
+          triggerToaster(
+            'Failed to get mode config',
+            'Error',
+            'error'
+          )
+        );
       })
       .then(response => response.json())
-      .then(json => dispatch(shepherdHerd(coin, mode, json)));
+      .then(
+        json => dispatch(
+          shepherdHerd(
+            coin,
+            mode,
+            json
+          )
+        )
+      );
     }
   }
 }

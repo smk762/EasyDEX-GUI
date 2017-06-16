@@ -39,7 +39,13 @@ export function checkAddressBasilisk(coin, address) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('checkAddressBasilisk', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'checkAddressBasilisk',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -57,7 +63,13 @@ function checkAddressBasiliskHandle(json) {
   if (json &&
       json.error) {
     return dispatch => {
-      dispatch(triggerToaster(json.error, translate('TOASTR.WALLET_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          json.error,
+          translate('TOASTR.WALLET_NOTIFICATION'),
+          'error'
+        )
+      );
     }
   }
 
@@ -65,7 +77,13 @@ function checkAddressBasiliskHandle(json) {
       json.coin &&
       json.randipbits) {
     return dispatch => {
-      dispatch(triggerToaster('Address already registered', translate('TOASTR.WALLET_NOTIFICATION'), 'warning'));
+      dispatch(
+        triggerToaster(
+          'Address already registered',
+          translate('TOASTR.WALLET_NOTIFICATION'),
+          'warning'
+        )
+      );
     }
   }
 }
@@ -101,7 +119,13 @@ export function validateAddressBasilisk(coin, address) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('validateAddressBasilisk', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'validateAddressBasilisk',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -118,16 +142,40 @@ export function validateAddressBasilisk(coin, address) {
 function validateAddressBasiliskHandle(json) {
   return dispatch => {
     if (json.iswatchonly === true) {
-      dispatch(triggerToaster(translate('TOASTR.VALIDATION_SUCCESS'), translate('TOASTR.BASILISK_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.VALIDATION_SUCCESS'),
+          translate('TOASTR.BASILISK_NOTIFICATION'),
+          'error'
+        )
+      );
     }
     if (json.iswatchonly === false) {
-      dispatch(triggerToaster(translate('TOASTR.ADDR_ISNT_REG'), translate('TOASTR.BASILISK_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.ADDR_ISNT_REG'),
+          translate('TOASTR.BASILISK_NOTIFICATION'),
+          'error'
+        )
+      );
     }
     if (json.iswatchonly === undefined) {
-      dispatch(triggerToaster(translate('TOASTR.INVALID_QUERY_ALT'), translate('TOASTR.BASILISK_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.INVALID_QUERY_ALT'),
+          translate('TOASTR.BASILISK_NOTIFICATION'),
+          'error'
+        )
+      );
     }
     if (json.error === 'less than required responses') {
-      dispatch(triggerToaster(translate('TOASTR.LESS_RESPONSES_REQ'), translate('TOASTR.BASILISK_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.LESS_RESPONSES_REQ'),
+          translate('TOASTR.BASILISK_NOTIFICATION'),
+          'error'
+        )
+      );
     }
   }
 }

@@ -22,11 +22,21 @@ class ReceiveCoin extends React.Component {
   }
 
   _checkAddressBasilisk(address) {
-    Store.dispatch(checkAddressBasilisk(this.props.coin, address));
+    Store.dispatch(
+      checkAddressBasilisk(
+        this.props.coin,
+        address
+      )
+    );
   }
 
   _validateAddressBasilisk(address) {
-    Store.dispatch(validateAddressBasilisk(this.props.coin, address));
+    Store.dispatch(
+      validateAddressBasilisk(
+        this.props.coin,
+        address
+      )
+    );
   }
 
   _copyCoinAddress(address) {

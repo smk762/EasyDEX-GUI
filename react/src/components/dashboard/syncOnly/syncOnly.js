@@ -62,7 +62,14 @@ class SyncOnly extends React.Component {
           this.setState({
             autoRestartedForks: _autoRestartedForks,
           });
-          Store.dispatch(addCoin(forkInfo.registry.coin, '1', null, port));
+          Store.dispatch(
+            addCoin(
+              forkInfo.registry.coin,
+              '1',
+              null,
+              port
+            )
+          );
 
           setTimeout(() => {
             let _autoRestartedForks = Object.assign({}, this.state.autoRestartedForks);
@@ -78,7 +85,12 @@ class SyncOnly extends React.Component {
   }
 
   closeSyncOnlyModal() {
-    Store.dispatch(stopInterval('syncOnly', this.props.Interval.interval));
+    Store.dispatch(
+      stopInterval(
+        'syncOnly',
+        this.props.Interval.interval
+      )
+    );
     Store.dispatch(toggleSyncOnlyModal(false));
   }
 
@@ -90,8 +102,14 @@ class SyncOnly extends React.Component {
     restartIguanaInstance(pmid)
     .then(function(json) {
       setTimeout(function() {
-        Store.dispatch(addCoin(coin, '1', null, port));
-        console.log('restartSyncOnlyInstance', json);
+        Store.dispatch(
+          addCoin(
+            coin,
+            '1',
+            null,
+            port
+          )
+        );
       }, 2000);
     });
   }
@@ -110,7 +128,11 @@ class SyncOnly extends React.Component {
           forkInfo.registry &&
           forkInfo.getinfo) {
         items.push(
-          ForkItemRender.call(this, forkInfo, port)
+          ForkItemRender.call(
+            this,
+            forkInfo,
+            port
+          )
         );
       }
     }

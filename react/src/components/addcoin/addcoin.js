@@ -50,9 +50,9 @@ class AddCoin extends React.Component {
 
   saveCoinSelection() {
     shepherdPostCoinList(this.state.coins)
-    .then(function(json) {
+    .then((json) => {
       this.toggleActionsMenu();
-    }.bind(this));
+    });
   }
 
   loadCoinSelection() {
@@ -64,7 +64,13 @@ class AddCoin extends React.Component {
           actionsMenu: false,
         }));
       } else {
-        Store.dispatch(triggerToaster(translate('TOASTR.SELECTION_NOT_FOUND'), translate('TOASTR.COIN_SELECTION'), 'info'));
+        Store.dispatch(
+          triggerToaster(
+            translate('TOASTR.SELECTION_NOT_FOUND'),
+            translate('TOASTR.COIN_SELECTION'),
+            'info'
+          )
+        );
       }
     }.bind(this));
   }
@@ -92,9 +98,12 @@ class AddCoin extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    this.existingCoins = props && props.Main ? props.Main.coins : null;
     const addCoinProps = props ? props.AddCoin : null;
-    if (addCoinProps && addCoinProps.display !== this.state.display) {
+
+    this.existingCoins = props && props.Main ? props.Main.coins : null;
+
+    if (addCoinProps &&
+        addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
         display: addCoinProps.display,
         modalClassName: addCoinProps.display ? 'show fade' : 'show fade',
@@ -222,11 +231,13 @@ class AddCoin extends React.Component {
   activateAllCoins() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
     if (!this.isCoinAlreadyAdded(coin)) {
-      Store.dispatch(addCoin(
-        coin,
-        this.state.coins[0].mode,
-        this.state.coins[0].syncOnly
-      ));
+      Store.dispatch(
+        addCoin(
+          coin,
+          this.state.coins[0].mode,
+          this.state.coins[0].syncOnly
+        )
+      );
     }
 
     for (let i = 1; i < this.state.coins.length; i++) {
@@ -235,11 +246,13 @@ class AddCoin extends React.Component {
 
       setTimeout(() => {
         if (!this.isCoinAlreadyAdded(itemCoin)) {
-          Store.dispatch(addCoin(
-            itemCoin,
-            _item.mode,
-            _item.syncOnly
-          ));
+          Store.dispatch(
+            addCoin(
+              itemCoin,
+              _item.mode,
+              _item.syncOnly
+            )
+          );
         }
 
         if (i === this.state.coins.length - 1) {
@@ -264,7 +277,12 @@ class AddCoin extends React.Component {
       const _coin = _item.selectedCoin || '';
 
       items.push(
-        CoinSelectorsRender.call(this, _item, _coin, i)
+        CoinSelectorsRender.call(
+          this,
+          _item,
+          _coin, 
+          i
+        )
       );
     }
 
@@ -278,12 +296,23 @@ class AddCoin extends React.Component {
   }
 
   isCoinAlreadyAdded(coin) {
-    const modes = ['basilisk', 'full', 'native'];
+    const modes = [
+      'basilisk',
+      'full',
+      'native'
+    ];
 
     for (let mode of modes) {
       if (this.existingCoins[mode].indexOf(coin) !== -1) {
         const message = `${coin} ${translate('ADD_COIN.ALREADY_ADDED')} ${translate('ADD_COIN.IN')} ${mode} ${translate('ADD_COIN.MODE')}`;
-        Store.dispatch(triggerToaster(message, translate('ADD_COIN.COIN_ALREADY_ADDED'), 'error'));
+        
+        Store.dispatch(
+          triggerToaster(
+            message,
+            translate('ADD_COIN.COIN_ALREADY_ADDED'),
+            'error'
+          )
+        );
         return true;
       }
     }

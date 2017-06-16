@@ -13,7 +13,13 @@ export function resolveOpenAliasAddress(email) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('resolveOpenAliasAddress', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'resolveOpenAliasAddress',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => resolve(json))

@@ -68,8 +68,19 @@ class CoinTileItem extends React.Component {
       const useAddress = this.props.ActiveCoin.mainBasiliskAddress ? this.props.ActiveCoin.mainBasiliskAddress : this.props.Dashboard.activeHandle[coin];
 
       Store.dispatch(iguanaActiveHandle(true));
-      Store.dispatch(getKMDAddressesNative(coin, mode, useAddress));
-      Store.dispatch(getShepherdCache(JSON.parse(sessionStorage.getItem('IguanaActiveAccount')).pubkey, coin));
+      Store.dispatch(
+        getKMDAddressesNative(
+          coin,
+          mode,
+          useAddress
+        )
+      );
+      Store.dispatch(
+        getShepherdCache(
+          JSON.parse(sessionStorage.getItem('IguanaActiveAccount')).pubkey,
+          coin
+        )
+      );
 
       if (this.props &&
           this.props.Dashboard &&
@@ -86,8 +97,18 @@ class CoinTileItem extends React.Component {
 
   dashboardChangeActiveCoin(coin, mode) {
     if (coin !== this.props.ActiveCoin.coin) {
-      Store.dispatch(stopInterval('sync', this.props.Interval.interval));
-      Store.dispatch(stopInterval('basilisk', this.props.Interval.interval));
+      Store.dispatch(
+        stopInterval(
+          'sync',
+          this.props.Interval.interval
+        )
+      );
+      Store.dispatch(
+        stopInterval(
+          'basilisk',
+          this.props.Interval.interval
+        )
+      );
       Store.dispatch(dashboardChangeActiveCoin(coin, mode));
 
       this.dispatchCoinActions(coin, mode);
@@ -96,7 +117,12 @@ class CoinTileItem extends React.Component {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
         }, IGUNA_ACTIVE_HANDLE_TIMEOUT);
-        Store.dispatch(startInterval('sync', _iguanaActiveHandle));
+        Store.dispatch(
+          startInterval(
+            'sync',
+            _iguanaActiveHandle
+          )
+        );
       }
       if (mode === 'native') {
         const _iguanaActiveHandle = setInterval(() => {
@@ -130,8 +156,18 @@ class CoinTileItem extends React.Component {
               'address': _basiliskMainAddress,
             }));
           }, BASILISK_CACHE_UPDATE_TIMEOUT);
-          Store.dispatch(startInterval('sync', _iguanaActiveHandle));
-          Store.dispatch(startInterval('basilisk', _basiliskCache));
+          Store.dispatch(
+            startInterval(
+              'sync',
+              _iguanaActiveHandle
+            )
+          );
+          Store.dispatch(
+            startInterval(
+              'basilisk',
+              _basiliskCache
+            )
+          );
         }
       }
     }

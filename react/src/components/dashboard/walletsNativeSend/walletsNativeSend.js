@@ -36,11 +36,19 @@ class WalletsNativeSend extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener('click', this.handleClickOutside, false);
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside, false);
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   handleClickOutside(e) {
@@ -71,7 +79,11 @@ class WalletsNativeSend extends React.Component {
     if (this.state.sendFrom) {
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { this.state.sendFromAmount } { this.props.ActiveCoin.coin } ]  { this.state.sendFrom }</span>
+          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  
+          <span className="text">
+            [ { this.state.sendFromAmount } { this.props.ActiveCoin.coin } ]  
+            { this.state.sendFrom }
+          </span>
         </span>
       );
     } else {
@@ -107,7 +119,8 @@ class WalletsNativeSend extends React.Component {
 
     return (
       <span className={ `label label-${_satatusDef[opid.status].icon}` }>
-        <i className="icon fa-eye"></i> <span>{ translate(`KMD_NATIVE.${_satatusDef[opid.status].label}`) }</span>
+        <i className="icon fa-eye"></i> 
+        <span>{ translate(`KMD_NATIVE.${_satatusDef[opid.status].label}`) }</span>
       </span>
     );
   }
@@ -192,9 +205,19 @@ class WalletsNativeSend extends React.Component {
   }
 
   handleSubmit() {
-    Store.dispatch(sendNativeTx(this.props.ActiveCoin.coin, this.state));
+    Store.dispatch(
+      sendNativeTx(
+        this.props.ActiveCoin.coin,
+        this.state
+      )
+    );
     setTimeout(() => {
-      Store.dispatch(getKMDOPID(null, this.props.ActiveCoin.coin));
+      Store.dispatch(
+        getKMDOPID(
+          null,
+          this.props.ActiveCoin.coin
+        )
+      );
     }, 1000);
   }
 
@@ -218,10 +241,22 @@ class WalletsNativeSend extends React.Component {
         }
 
         if (this.state.sendTo === '') {
-          Store.dispatch(triggerToaster('Couldn\'t find any ' + this.props.ActiveCoin.coin + ' addresses', 'OpenAlias', 'error'));
+          Store.dispatch(
+            triggerToaster(
+              'Couldn\'t find any ' + this.props.ActiveCoin.coin + ' addresses',
+              'OpenAlias',
+              'error'
+            )
+          );
         }
       } else {
-        Store.dispatch(triggerToaster('Couldn\'t find any addresses', 'OpenAlias', 'error'));
+        Store.dispatch(
+          triggerToaster(
+            'Couldn\'t find any addresses',
+            'OpenAlias',
+            'error'
+          )
+        );
       }
     });
   }

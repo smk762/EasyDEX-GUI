@@ -314,7 +314,11 @@ export function setBasiliskMainAddress(json, coin, mode) {
   }
 
   if (mode === 'basilisk') {
-    getDexBalance(coin, mode, json.result);
+    getDexBalance(
+      coin,
+      mode,
+      json.result
+    );
   }
 
   return {
