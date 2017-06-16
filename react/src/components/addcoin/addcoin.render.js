@@ -14,7 +14,9 @@ const AddCoinRender = function() {
                 onClick={ this.dismiss }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white">{ translate('INDEX.SELECT_A_COIN') }</h4>
+              <h4 className="modal-title white">
+                { translate('INDEX.SELECT_A_COIN') }
+              </h4>
             </div>
             <div className="modal-body">
               <button
@@ -28,18 +30,23 @@ const AddCoinRender = function() {
               <span className={ !this.state.actionsMenu ? 'hide' : '' }>
                 <button
                   className="btn btn-outline-primary btn-save-coin-selection"
-                  onClick={ this.saveCoinSelection }>{ translate('ADD_COIN.SAVE_SELECTION') }</button>
+                  onClick={ this.saveCoinSelection }>
+                    { translate('ADD_COIN.SAVE_SELECTION') }
+                </button>
                 <button
                   className="btn btn-outline-primary btn-load-coin-selection"
-                  onClick={ this.loadCoinSelection }>{ translate('ADD_COIN.LOAD_SELECTION') }</button>
+                  onClick={ this.loadCoinSelection }>
+                    { translate('ADD_COIN.LOAD_SELECTION') }
+                </button>
               </span>
               { this.renderCoinSelectors() }
-              <div
-                className={ 'text-align-center vertical-margin-20 horizontal-margin-0 ' + (this.hasMoreThanOneCoin() ? 'col-sm-12' : 'hide') }>
+              <div className={ 'text-align-center vertical-margin-20 horizontal-margin-0 ' + (this.hasMoreThanOneCoin() ? 'col-sm-12' : 'hide') }>
                 <button
                   type="button"
                   className="btn btn-primary col-sm-4 float-none"
-                  onClick={ this.activateAllCoins }>{ translate('ADD_COIN.ACTIVATE_ALL') }</button>
+                  onClick={ this.activateAllCoins }>
+                    { translate('ADD_COIN.ACTIVATE_ALL') }
+                </button>
               </div>
               <div className="col-sm-12">
                 <p>
@@ -49,13 +56,20 @@ const AddCoinRender = function() {
                   <strong>{ translate('INDEX.BASILISK_MODE') }:</strong> { translate('INDEX.BASILISK_MODE_DESC') }
                 </p>
                 <p>
-                  <strong>{ translate('INDEX.NATIVE_MODE') }:</strong> { translate('INDEX.NATIVE_MODE_DESC1') } <strong>Komodo Daemon</strong> { translate('INDEX.NATIVE_MODE_DESC2') } <i>Iguana Daemon</i> { translate('INDEX.NATIVE_MODE_DESC3') }.
+                  <strong>{ translate('INDEX.NATIVE_MODE') }:</strong> { translate('INDEX.NATIVE_MODE_DESC1') } 
+                  <strong>Komodo Daemon</strong> { translate('INDEX.NATIVE_MODE_DESC2') } 
+                  <i>Iguana Daemon</i> { translate('INDEX.NATIVE_MODE_DESC3') }.
                 </p>
                 <div className="alert alert-icon alert-primary">
-                  <button type="button" className="close">
+                  <button
+                    type="button"
+                    className="close">
                     <span>×</span>
                   </button>
-                  <i className="icon md-info-outline"></i> <strong>{ translate('INDEX.NATIVE_MODE') }</strong> { translate('INDEX.NATIVE_MODE_DESC4') } <strong>{ translate('INDEX.NATIVE_MODE_DESC5') }</strong>, <i>{ translate('INDEX.NATIVE_MODE_DESC5') }</i>.
+                  <i className="icon md-info-outline"></i> 
+                  <strong>{ translate('INDEX.NATIVE_MODE') }</strong> { translate('INDEX.NATIVE_MODE_DESC4') } 
+                  <strong>{ translate('INDEX.NATIVE_MODE_DESC5') }</strong>, 
+                  <i>{ translate('INDEX.NATIVE_MODE_DESC5') }</i>.
                 </div>
               </div>
             </div>

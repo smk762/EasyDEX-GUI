@@ -37,7 +37,13 @@ export function getDexCoins() {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('Error getDexCoins', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'Error getDexCoins',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {

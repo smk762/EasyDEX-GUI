@@ -31,7 +31,13 @@ export function atomic(payload) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster(payload.method, 'Atomic Explorer error', 'error'));
+      dispatch(
+        triggerToaster(
+          payload.method,
+          'Atomic Explorer error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {

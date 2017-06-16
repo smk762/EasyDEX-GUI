@@ -82,7 +82,13 @@ class Settings extends React.Component {
   }
 
   execCliCmd() {
-    Store.dispatch(shepherdCli('passthru', this.state.cliCoin, this.state.cliCmd));
+    Store.dispatch(
+      shepherdCli(
+        'passthru',
+        this.state.cliCoin,
+        this.state.cliCmd
+      )
+    );
   }
 
   openTab(elemId, tab) {
@@ -98,7 +104,13 @@ class Settings extends React.Component {
   }
 
   exportWifKeys() {
-    Store.dispatch(encryptWallet(this.state.wifkeysPassphrase, settingsWifkeyState, this.props.ActiveCoin.coin));
+    Store.dispatch(
+      encryptWallet(
+        this.state.wifkeysPassphrase,
+        settingsWifkeyState,
+        this.props.ActiveCoin.coin
+      )
+    );
   }
 
   importWifKey() {
@@ -106,7 +118,12 @@ class Settings extends React.Component {
   }
 
   readDebugLog() {
-    Store.dispatch(getDebugLog(this.state.debugTarget, this.state.debugLinesCount));
+    Store.dispatch(
+      getDebugLog(
+        this.state.debugTarget,
+        this.state.debugLinesCount
+      )
+    );
   }
 
   checkNodes() {
@@ -117,7 +134,12 @@ class Settings extends React.Component {
 
   addNode() {
     if (this.state.addNodeCoin) {
-      Store.dispatch(addPeerNode(this.state.addNodeCoin.split('|')[0], this.state.addPeerIP));
+      Store.dispatch(
+        addPeerNode(
+          this.state.addNodeCoin.split('|')[0],
+          this.state.addPeerIP
+        )
+      );
     }
   }
 
@@ -326,14 +348,22 @@ class Settings extends React.Component {
         modes.map(function(mode) {
           allCoins[mode].map(function(coin) {
             items.push(
-              <option value={ coin } key={ coin }>{ coin } ({ mode })</option>
+              <option
+                value={ coin }
+                key={ coin }>
+                { coin } ({ mode })
+              </option>
             );
           });
         });
       } else {
         allCoins[mode].map(function(coin) {
           items.push(
-            <option value={ coin } key={ coin }>{ coin } ({ mode })</option>
+            <option
+              value={ coin }
+              key={ coin }>
+              { coin } ({ mode })
+            </option>
           );
         });
       }
@@ -350,7 +380,9 @@ class Settings extends React.Component {
     if (_wifKeysResponse &&
         this.state.exportWifKeysRaw) {
       return (
-        <div className="padding-bottom-30 padding-top-30">{ JSON.stringify(_wifKeysResponse, null, '\t') }</div>
+        <div className="padding-bottom-30 padding-top-30">
+          { JSON.stringify(_wifKeysResponse, null, '\t') }
+        </div>
       );
     } else {
       return null;

@@ -67,7 +67,13 @@ export function sendNativeTx(coin, _payload) {
           'status': 'error',
           'response': error,
         }));
-        dispatch(triggerToaster('sendNativeTx', 'Error', 'error'));
+        dispatch(
+          triggerToaster(
+            'sendNativeTx',
+            'Error',
+            'error'
+          )
+        );
       })
       .then(function(response) {
         const _response = response.text().then(function(text) { return text; });
@@ -82,13 +88,34 @@ export function sendNativeTx(coin, _payload) {
 
         if (json.indexOf('"code":') > -1) {
           const _message = json.substring(json.indexOf('"message":"') + 11, json.indexOf('"},"id":"jl777"'));
-          dispatch(triggerToaster(true, _message, translate('TOASTR.WALLET_NOTIFICATION'), 'error'));
+
+          dispatch(
+            triggerToaster(
+              true,
+              _message,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
 
           if (json.indexOf('"code":-4') > -1) {
-            dispatch(triggerToaster(true, 'Your wallet.dat is not matching the blockchain. Please resync from the scratch.', translate('TOASTR.WALLET_NOTIFICATION'), 'info'));
+            dispatch(
+              triggerToaster(
+                true,
+                'Your wallet.dat is not matching the blockchain. Please resync from the scratch.',
+                translate('TOASTR.WALLET_NOTIFICATION'),
+                'info'
+              )
+            );
           }
         } else {
-          dispatch(triggerToaster(translate('TOASTR.TX_SENT_ALT'), translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
+          dispatch(
+            triggerToaster(
+              translate('TOASTR.TX_SENT_ALT'),
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'success'
+            )
+          );
         }
       })
     });
@@ -162,7 +189,13 @@ export function getKMDOPID(opid, coin) {
           'status': 'error',
           'response': error,
         }));
-        dispatch(triggerToaster('getKMDOPID', 'Error', 'error'));
+        dispatch(
+          triggerToaster(
+            'getKMDOPID',
+            'Error',
+            'error'
+          )
+        );
       })
       .then(response => response.json())
       .then(json => {

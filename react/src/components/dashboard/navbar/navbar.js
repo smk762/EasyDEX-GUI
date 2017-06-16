@@ -24,11 +24,19 @@ class Navbar extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener('click', this.handleClickOutside, false);
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside, false);
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   handleClickOutside(e) {
@@ -58,18 +66,33 @@ class Navbar extends React.Component {
   }
 
   logout() {
-    Store.dispatch(stopInterval('sync', this.props.Interval.interval));
-    Store.dispatch(stopInterval('basilisk', this.props.Interval.interval));
+    Store.dispatch(
+      stopInterval(
+        'sync',
+        this.props.Interval.interval
+      )
+    );
+    Store.dispatch(
+      stopInterval(
+        'basilisk',
+        this.props.Interval.interval
+      )
+    );
     Store.dispatch(logout());
   }
 
   openSyncOnlyModal() {
     Store.dispatch(getSyncOnlyForks());
 
-    const _iguanaActiveHandle = setInterval(function() {
+    const _iguanaActiveHandle = setInterval(() => {
       Store.dispatch(getSyncOnlyForks());
-    }.bind(this), 3000);
-    Store.dispatch(startInterval('syncOnly', _iguanaActiveHandle));
+    }, 3000);
+    Store.dispatch(
+      startInterval(
+        'syncOnly',
+        _iguanaActiveHandle
+      )
+    );
 
     Store.dispatch(toggleSyncOnlyModal(true));
   }

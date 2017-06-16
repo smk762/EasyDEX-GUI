@@ -40,8 +40,8 @@ class WalletsNotariesList extends React.Component {
     if (this.props.ActiveCoin.notaries &&
         this.props.ActiveCoin.notaries.notaries &&
         this.props.ActiveCoin.notaries.notaries.length) {
-      return this.props.ActiveCoin.notaries.notaries.map((node, index) =>
-        NotariesListRender.call(this, node, index)
+      return this.props.ActiveCoin.notaries.notaries.map(
+        (node, index) => NotariesListRender.call(this, node, index)
       );
     } else {
       return null;

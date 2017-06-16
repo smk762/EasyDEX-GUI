@@ -11,7 +11,9 @@ const AtomicRender = function () {
       <div className="page-content">
         <div className="row">
           <div className="col-xlg-12 col-md-12">
-            <h4 className="font-size-14 text-uppercase">Atomic Explorer</h4>
+            <h4 className="font-size-14 text-uppercase">
+              Atomic Explorer
+            </h4>
             <div className="panel panel-bordered">
               <div className="panel-body">
                 <div className="col-sm-4 col-xs-12">
@@ -46,7 +48,9 @@ const AtomicRender = function () {
                   <button
                     type="button"
                     className="btn btn-primary waves-effect waves-light"
-                    onClick={ this.getAtomicData }>{ translate('ATOMIC.SUBMIT') }</button>
+                    onClick={ this.getAtomicData }>
+                      { translate('ATOMIC.SUBMIT') }
+                  </button>
                 </div>
               </div>
             </div>
@@ -54,11 +58,15 @@ const AtomicRender = function () {
           <div className="col-xlg-4 col-md-12">
             <div className="panel">
               <div className="panel-heading">
-                <h3 className="panel-title">{ translate('ATOMIC.RAW_OUTPUT') }</h3>
+                <h3 className="panel-title">
+                  { translate('ATOMIC.RAW_OUTPUT') }
+                </h3>
               </div>
               <div className="panel-body">
                 <div className="tab-content">
-                  <pre>{ this.state.output }</pre>
+                  <pre>
+                    { this.state.output }
+                  </pre>
                 </div>
               </div>
             </div>

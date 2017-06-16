@@ -15,7 +15,9 @@ const WalletsCacheDataRender = function() {
                   <div className="tab-content">
                     <div className="tab-pane active">
                       { this.renderNotariesFetching() }
-                      <Tree defaultExpandAll={ false } openAnimation={ animation }>
+                      <Tree
+                        defaultExpandAll={ false }
+                        openAnimation={ animation }>
                         { this.renderCoinRootNodes() }
                       </Tree>
                     </div>

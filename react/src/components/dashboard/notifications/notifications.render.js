@@ -41,36 +41,30 @@ export const NotificationsModalRender = function() {
               <div className="panel nav-tabs-horizontal">
                 <ul className="nav nav-tabs nav-tabs-line">
                   <li className={ this.state.activeTab === 0 ? 'active' : 'pointer' }>
-                    <a
-                      onClick={ () => this.openTab(0) }>
+                    <a onClick={ () => this.openTab(0) }>
                       <i className="icon fa fa-thumbs-o-up"></i> Success ({ this.state.calls.success })
                     </a>
                   </li>
                   <li className={ this.state.activeTab === 1 ? 'active' : 'pointer' }>
-                    <a
-                      onClick={ () => this.openTab(1) }>
+                    <a onClick={ () => this.openTab(1) }>
                       <i className="icon fa fa-exclamation-triangle"></i> Error ({ this.state.calls.error })
                     </a>
                   </li>
                   <li className={ this.state.activeTab === 2 ? 'active' : 'pointer' }>
-                    <a
-                      onClick={ () => this.openTab(2) }>
+                    <a onClick={ () => this.openTab(2) }>
                       <i className="icon fa fa-clock-o"></i> Pending ({ this.state.calls.pending })
                     </a>
                   </li>
                 </ul>
                 <div className="panel-body panel-body-container">
                   <div className="tab-content">
-                    <div
-                      className={ this.state.activeTab === 0 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ this.state.activeTab === 0 ? 'tab-pane active' : 'tab-pane' }>
                       { this.renderNotificationsByType('success') }
                     </div>
-                    <div
-                      className={ this.state.activeTab === 1 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ this.state.activeTab === 1 ? 'tab-pane active' : 'tab-pane' }>
                       { this.renderNotificationsByType('error') }
                     </div>
-                    <div
-                      className={ this.state.activeTab === 2 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ this.state.activeTab === 2 ? 'tab-pane active' : 'tab-pane' }>
                       { this.renderNotificationsByType('pending') }
                     </div>
                   </div>
@@ -81,7 +75,9 @@ export const NotificationsModalRender = function() {
               <button
                 type="button"
                 className="btn btn-default"
-                onClick={ this.toggleNotificationsModal }>{ translate('INDEX.CLOSE') }</button>
+                onClick={ this.toggleNotificationsModal }>
+                  { translate('INDEX.CLOSE') }
+              </button>
             </div>
           </div>
         </div>
@@ -97,9 +93,15 @@ export const NotificationsRender = function() {
       <div
         className={ this.props.Dashboard.activeHandle && this.props.Dashboard.activeHandle.status === 'unlocked' ? 'notifications-badge stick-to-top' : 'notifications-badge' }
         onClick={ this.toggleNotificationsModal }>
-        <span className="badge success">{ this.state.calls.success }</span>
-        <span className="badge error">{ this.state.calls.error }</span>
-        <span className="badge pending">{ this.state.calls.pending }</span>
+        <span className="badge success">
+          { this.state.calls.success }
+        </span>
+        <span className="badge error">
+          { this.state.calls.error }
+        </span>
+        <span className="badge pending">
+          { this.state.calls.pending }
+        </span>
         <div className={ this.state.calls.pending === 0 ? 'spinner spinner-hide' : 'spinner' }>
           <div className="rect1"></div>
           <div className="rect2"></div>

@@ -4,7 +4,9 @@ import { translate } from '../../../translate/translate';
 export const ChainActivationNotificationRender = function() {
   return (
     <div className="alert alert-info alert-dismissible margin-bottom-40">
-      <button className="close" type="button">
+      <button
+        className="close"
+        type="button">
         <span>×</span>
       </button>
       <h4>

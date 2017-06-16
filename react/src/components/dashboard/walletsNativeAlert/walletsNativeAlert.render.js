@@ -4,7 +4,9 @@ import { translate } from '../../../translate/translate';
 const WalletsNativeAlertRender = function() {
   return (
     <div className="alert alert-danger alert-dismissible">
-      <button className="close" type="button">
+      <button
+        className="close"
+        type="button">
         <span>×</span>
       </button>
       <h4>{ translate('INDEX.OOPS_ERROR') }</h4>
