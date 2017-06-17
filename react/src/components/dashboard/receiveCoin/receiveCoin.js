@@ -28,11 +28,19 @@ class ReceiveCoin extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener('click', this.handleClickOutside, false);
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside, false);
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   handleClickOutside(e) {
@@ -134,7 +142,6 @@ class ReceiveCoin extends React.Component {
   }
 
   render() {
-    console.log('RENDER11', this.props.receive, this.isNativeMode(), this.props.nativeActiveSection);
     // TODO nativeActiveSection === 'receive' should be removed when native mode is fully merged
     // into the rest of the components
     if (this.props &&
