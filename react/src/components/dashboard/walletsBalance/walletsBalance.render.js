@@ -1,7 +1,7 @@
-import React from "react";
-import {translate} from "../../../translate/translate";
+import React from 'react';
+import { translate } from '../../../translate/translate';
 
-const WalletsBalanceRender = function () {
+const WalletsBalanceRender = function() {
   return (
     <div id="wallet-widgets">
       <div className="col-xs-12">

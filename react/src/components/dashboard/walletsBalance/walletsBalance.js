@@ -78,6 +78,10 @@ class WalletsBalance extends React.Component {
     return this.isActiveCoinMode('basilisk');
   }
 
+  isNativeMode() {
+    return this.isActiveCoinMode('native');
+  }
+
   isFullMode() {
     return this.isActiveCoinMode('full');
   }
@@ -91,10 +95,6 @@ class WalletsBalance extends React.Component {
         <br />
       </span>
     );
-  }
-
-  isNativeMode() {
-    return this.isActiveCoinMode('native');
   }
 
   isNativeBalanceActive() {
