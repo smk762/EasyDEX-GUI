@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
   copyCoinAddress,
   checkAddressBasilisk,
   validateAddressBasilisk,
   getNewKMDAddresses
-} from "../../../actions/actionCreators";
-import Store from "../../../store";
+} from '../../../actions/actionCreators';
+import Store from '../../../store';
 import {
   AddressActionsBasiliskModeRender,
   AddressActionsNonBasiliskModeRender,
   AddressItemRender,
   ReceiveCoinRender
-} from "./receiveCoin.render";
+} from './receiveCoin.render';
 
 // TODO: implement sorting
 // TODO: fallback to localstorage/stores data in case iguana is taking too long to respond
