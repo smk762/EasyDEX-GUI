@@ -1,17 +1,17 @@
-import React from 'react';
+import React from "react";
 import {
   copyCoinAddress,
   checkAddressBasilisk,
-  validateAddressBasilisk
-} from '../../../actions/actionCreators';
-import Store from '../../../store';
-
+  validateAddressBasilisk,
+  getNewKMDAddresses
+} from "../../../actions/actionCreators";
+import Store from "../../../store";
 import {
   AddressActionsBasiliskModeRender,
   AddressActionsNonBasiliskModeRender,
   AddressItemRender,
   ReceiveCoinRender
-} from './receiveCoin.render';
+} from "./receiveCoin.render";
 
 // TODO: implement sorting
 // TODO: fallback to localstorage/stores data in case iguana is taking too long to respond
@@ -19,6 +19,35 @@ import {
 class ReceiveCoin extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      openDropMenu: false,
+    };
+    this.openDropMenu = this.openDropMenu.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentWillMount() {
+    document.addEventListener('click', this.handleClickOutside, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside, false);
+  }
+
+  handleClickOutside(e) {
+    if (e.srcElement.className.indexOf('dropdown') === -1 &&
+      (e.srcElement.offsetParent && e.srcElement.offsetParent.className.indexOf('dropdown') === -1)) {
+      this.setState({
+        openDropMenu: false,
+      });
+    }
+  }
+
+  openDropMenu() {
+    this.setState(Object.assign({}, this.state, {
+      openDropMenu: !this.state.openDropMenu,
+    }));
   }
 
   _checkAddressBasilisk(address) {
@@ -37,12 +66,16 @@ class ReceiveCoin extends React.Component {
     return this.props.mode === 'basilisk';
   }
 
-  renderAddressActions(address) {
+  isNativeMode() {
+    return this.props.mode == 'native';
+  }
+
+  renderAddressActions(address, type) {
     if (this.isBasiliskMode()) {
       return AddressActionsBasiliskModeRender.call(this, address);
     }
 
-    return AddressActionsNonBasiliskModeRender.call(this, address);
+    return AddressActionsNonBasiliskModeRender.call(this, address, type);
   }
 
   hasNoAmount(address) {
@@ -53,26 +86,34 @@ class ReceiveCoin extends React.Component {
     return address.interest === 'N/A' || address.interest === 0 || !address.interest;
   }
 
-  renderAddressList() {
+  getNewAddress(type) {
+    Store.dispatch(getNewKMDAddresses(this.props.coin, type));
+  }
+
+  renderAddressList(type) {
     if (this.props.addresses &&
-        this.props.addresses.public &&
-        this.props.addresses.public.length) {
+      this.props.addresses[type] &&
+      this.props.addresses[type].length) {
       let items = [];
 
-      for (let i = 0; i < this.props.addresses.public.length; i++) {
-        let address = this.props.addresses.public[i];
+      for (let i = 0; i < this.props.addresses[type].length; i++) {
+        let address = this.props.addresses[type][i];
 
         if (this.isBasiliskMode() &&
-            this.hasNoAmount(address)) {
-          address.amount = this.props.cache && this.props.cache[this.props.coin][address.address] && this.props.cache[this.props.coin][address.address].getbalance.data && this.props.cache[this.props.coin][address.address].getbalance.data.balance ? this.props.cache[this.props.coin][address.address].getbalance.data.balance : 'N/A';
+          this.hasNoAmount(address)) {
+          address.amount = this.props.cache && this.props.cache[this.props.coin][address.address]
+          && this.props.cache[this.props.coin][address.address].getbalance.data
+          && this.props.cache[this.props.coin][address.address].getbalance.data.balance ? this.props.cache[this.props.coin][address.address].getbalance.data.balance : 'N/A';
         }
         if (this.isBasiliskMode() &&
-            this.hasNoInterest(address)) {
-          address.interest = this.props.cache && this.props.cache[this.props.coin][address.address] && this.props.cache[this.props.coin][address.address].getbalance.data && this.props.cache[this.props.coin][address.address].getbalance.data.interest ? this.props.cache[this.props.coin][address.address].getbalance.data.interest : 'N/A';
+          this.hasNoInterest(address)) {
+          address.interest = this.props.cache && this.props.cache[this.props.coin][address.address]
+          && this.props.cache[this.props.coin][address.address].getbalance.data
+          && this.props.cache[this.props.coin][address.address].getbalance.data.interest ? this.props.cache[this.props.coin][address.address].getbalance.data.interest : 'N/A';
         }
 
         items.push(
-          AddressItemRender.call(this, address)
+          AddressItemRender.call(this, address, type)
         );
       }
 
@@ -83,9 +124,11 @@ class ReceiveCoin extends React.Component {
   }
 
   render() {
+    console.log('RENDER11', this.props.receive, this.isNativeMode(), this.props.nativeActiveSection);
+    // TODO nativeActiveSection === 'receive' should be removed when native mode is fully merged
+    // into the rest of the components
     if (this.props &&
-        this.props.receive &&
-        this.props.mode !== 'native') {
+       (this.props.receive || (this.isNativeMode() && this.props.nativeActiveSection === 'receive'))) {
       return ReceiveCoinRender.call(this);
     }
 

@@ -63,6 +63,7 @@ class WalletsNativeSyncProgress extends React.Component {
         }
       } else if (this.props.Settings.debugLog.indexOf('Still rescanning') > -1) {
         const temp = this.props.Settings.debugLog.split(' ');
+        let currentProgress;
 
         for (let i = 0; i < temp.length; i++) {
           if (temp[i].indexOf('Progress=') > -1) {
