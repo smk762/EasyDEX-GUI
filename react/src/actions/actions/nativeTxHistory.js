@@ -34,7 +34,7 @@ export function getNativeTxHistory(coin) {
   if (Config.cli.default === true) {
     payload = {
       mode: null,
-      coin,
+      chain: coin,
       cmd: 'listtransactions'
     };
   }

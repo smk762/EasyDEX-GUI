@@ -35,7 +35,7 @@ export function getKMDBalanceTotal(coin) {
   if (Config.cli.default === true) {
     payload = {
       mode: null,
-      coin,
+      chain: coin,
       cmd: 'z_gettotalbalance'
     };
   }
@@ -103,6 +103,6 @@ export function getKMDBalanceTotal(coin) {
 export function getNativeBalancesState(json) {
   return {
     type: DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE,
-    balance: json && !json.error ? (Config.cli.default ? json.result : json) : 0,
+    balance: json && !json.error ? (Config.cli.default === true ? json.result : json) : 0,
   }
 }

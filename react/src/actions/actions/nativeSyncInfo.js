@@ -85,7 +85,7 @@ export function getSyncInfoNative(coin, skipDebug) {
   if (Config.cli.default === true) {
     payload = {
       mode: null,
-      coin,
+      chain: coin,
       cmd: 'getinfo'
     };
   }
