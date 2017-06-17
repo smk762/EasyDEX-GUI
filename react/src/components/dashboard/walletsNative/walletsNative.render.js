@@ -27,7 +27,6 @@ const WalletsNativeRender = function() {
           <WalletsNativeSyncProgress {...this.props} />
           <div className="row">
             <WalletsBalance {...this.props} />
-            {/*<WalletsNativeBalance {...this.props} />*/}
             <WalletsNativeTxHistory {...this.props} />
             <WalletsNativeReceive {...this.props} />
             <WalletsNativeSend {...this.props} />

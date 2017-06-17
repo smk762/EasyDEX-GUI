@@ -109,7 +109,7 @@ class WalletsBalance extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        // TODO the conditions below should be merged when native mode is fully merge into the rest of the components
+        // TODO the conditions below should be merged when native mode is fully merged into the rest of the components
       (this.isNativeBalanceActive() || this.isNonNativeBalanceActive()))
     {
       return WalletsBalanceRender.call(this);
