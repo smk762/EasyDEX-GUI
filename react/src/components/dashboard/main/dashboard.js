@@ -26,6 +26,10 @@ class Dashboard extends React.Component {
       this.props.Main.isLoggedIn;
   }
 
+  isNativeMode() {
+    return this.props.ActiveCoin.mode === 'native';
+  }
+
   render() {
     if (this.isLoggedIn()) {
       return this.renderDashboard();

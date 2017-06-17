@@ -3,8 +3,9 @@ import WalletsNativeBalanceRender from './walletsNativeBalance.render';
 
 class WalletsNativeBalance extends React.Component {
   render() {
-    if (this.props &&
-        this.props.ActiveCoin.nativeActiveSection === 'default') {
+    if (false) {
+    // if (this.props &&
+    //     this.props.ActiveCoin.nativeActiveSection === 'default') {
       return WalletsNativeBalanceRender.call(this);
     }
 

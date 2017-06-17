@@ -4,7 +4,7 @@ import { translate } from '../../../translate/translate';
 const WalletsBalanceRender = function() {
   return (
     <div id="wallet-widgets">
-      <div className="col-xs-12">
+      <div className="col-xs-12 teztt z-index-1">
         <div className={ this.isActiveCoinMode('native') || (this.isActiveCoinMode('full') && !this.isFullySynced()) ? 'col-xs-12' : 'col-xs-12 hide' }>
           <div className="alert alert-info alert-dismissible">
             <button
@@ -32,6 +32,7 @@ const WalletsBalanceRender = function() {
         </div>
 
         <div className={ this.isNativeOrBasiliskCoinMode() ? 'col-lg-4 col-xs-12' : 'col-lg-12 col-xs-12' }>
+
           <div className="widget widget-shadow">
             <div className="widget-content">
               <div className="padding-20 padding-top-10">

@@ -89,13 +89,22 @@ class WalletsBalance extends React.Component {
     );
   }
 
+  isNativeMode() {
+    return this.isActiveCoinMode('native');
+  }
+
   render() {
+    console.log('wallets balance', this.props.ActiveCoin.nativeActiveSection,
+      (this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default'));
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        this.props.ActiveCoin.mode !== 'native' &&
-        !this.props.ActiveCoin.send &&
-        !this.props.ActiveCoin.receive) {
+        // this.props.ActiveCoin.mode !== 'native' &&
+      ((this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default')
+        ||
+      (!this.isNativeMode() && !this.props.ActiveCoin.send &&!this.props.ActiveCoin.receive))
+      )
+    {
       return WalletsBalanceRender.call(this);
     }
 

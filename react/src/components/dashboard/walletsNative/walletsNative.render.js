@@ -1,5 +1,5 @@
 import React from 'react';
-import WalletsNativeBalance from '../walletsNativeBalance/walletsNativeBalance';
+import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsNativeInfo from '../walletsNativeInfo/walletsNativeInfo';
 import WalletsNativeReceive from '../walletsNativeReceive/walletsNativeReceive';
 import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
@@ -26,7 +26,8 @@ const WalletsNativeRender = function() {
         <div className="page-content">
           <WalletsNativeSyncProgress {...this.props} />
           <div className="row">
-            <WalletsNativeBalance {...this.props} />
+            <WalletsBalance {...this.props} />
+            {/*<WalletsNativeBalance {...this.props} />*/}
             <WalletsNativeTxHistory {...this.props} />
             <WalletsNativeReceive {...this.props} />
             <WalletsNativeSend {...this.props} />
