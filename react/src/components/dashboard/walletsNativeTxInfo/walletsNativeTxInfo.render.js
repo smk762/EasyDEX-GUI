@@ -5,7 +5,9 @@ import { secondsToString } from '../../../util/time';
 const WalletsNativeTxInfoRender = function(txInfo) {
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
-      <div className="modal show" id="kmd_txid_info_mdl">
+      <div
+        className="modal show"
+        id="kmd_txid_info_mdl">
         <div className="modal-dialog modal-center modal-lg">
           <div className="modal-content">
             <div className="modal-body modal-body-container">
@@ -64,7 +66,7 @@ const WalletsNativeTxInfoRender = function(txInfo) {
                         <tr>
                           <td>blockindex</td>
                           <td>
-                            {txInfo.blockindex}
+                            { txInfo.blockindex }
                           </td>
                         </tr>
                         <tr>

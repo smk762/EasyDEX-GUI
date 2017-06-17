@@ -26,8 +26,15 @@ export const PaginationRender = function(paginationStart, paginationEnd, paginat
   return (
     <div className="row unselectable">
       <div className="col-sm-5">
-        <div
-          className="dataTables_info">{ translate('INDEX.SHOWING') } { paginationStart } { translate('INDEX.TO') } { paginationEnd } { translate('INDEX.OF') } { this.props.ActiveCoin.txhistory.length } { translate('INDEX.ENTRIES_SM') }</div>
+        <div className="dataTables_info">
+          { translate('INDEX.SHOWING') } 
+          { paginationStart } 
+          { translate('INDEX.TO') } 
+          { paginationEnd } 
+          { translate('INDEX.OF') } 
+          { this.props.ActiveCoin.txhistory.length } 
+          { translate('INDEX.ENTRIES_SM') }
+        </div>
       </div>
       <div className="col-sm-7">
         <div className="dataTables_paginate paging_simple_numbers">
@@ -36,7 +43,7 @@ export const PaginationRender = function(paginationStart, paginationEnd, paginat
             === 1 ? 'paginate_button previous disabled' : 'paginate_button previous' }>
               <a onClick={ () => this.updateCurrentPage(this.state.activePage - 1) }>{ translate('INDEX.PREVIOUS') }</a>
             </li>
-            {this.renderPaginationItems()}
+            { this.renderPaginationItems() }
             <li className={ paginationNextState ? 'paginate_button next disabled' : 'paginate_button next' }>
               <a onClick={ () => this.updateCurrentPage(this.state.activePage + 1) }>{ translate('INDEX.NEXT') }</a>
             </li>
@@ -64,7 +71,9 @@ export const TxHistoryListRender = function() {
         <button
           type="button"
           className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
-          onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, index) }><i className="icon fa-search"></i></button>
+          onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, index) }>
+          <i className="icon fa-search"></i>
+        </button>
       </td>
     </tr>
   );
@@ -90,13 +99,19 @@ export const WalletsNativeTxHistoryRender = function() {
                       <div className="col-sm-6">
                         <div className="dataTables_filter">
                           <label>
-                            { translate('INDEX.SEARCH') }: <input type="search" className="form-control input-sm" disabled="true" />
+                            { translate('INDEX.SEARCH') }: 
+                            <input
+                              type="search"
+                              className="form-control input-sm"
+                              disabled="true" />
                           </label>
                         </div>
                       </div>
                     </div>
                     <div className="row">
-                      <table className="table table-hover dataTable table-striped" width="100%">
+                      <table
+                        className="table table-hover dataTable table-striped"
+                        width="100%">
                         <thead>
                         <tr>
                           <th>{ translate('INDEX.TYPE') }</th>

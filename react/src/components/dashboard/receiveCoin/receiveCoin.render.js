@@ -1,7 +1,7 @@
-import React from "react";
-import {translate} from "../../../translate/translate";
+import React from 'react';
+import { translate } from '../../../translate/translate';
 
-export const AddressActionsBasiliskModeRender = function (address) {
+export const AddressActionsBasiliskModeRender = function(address) {
   return (
     <td>
       <span className="label label-default">
@@ -10,25 +10,26 @@ export const AddressActionsBasiliskModeRender = function (address) {
       <button
         className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
         title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-        onClick={ () => this._copyCoinAddress(address) }><i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+        onClick={ () => this._copyCoinAddress(address) }>
+          <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
       </button>
       <span
         className="label label-default margin-left-10 action"
         title={ translate('INDEX.CHECK') }
         onClick={ () => this._checkAddressBasilisk(address) }>
-        <i className="icon fa-database"></i>
+          <i className="icon fa-database"></i>
       </span>
       <span
         className="label label-default margin-left-10 action"
         title={ translate('INDEX.VALIDATE') }
         onClick={ () => this._validateAddressBasilisk(address) }>
-        <i className="icon fa-info-circle"></i>
+          <i className="icon fa-info-circle"></i>
       </span>
     </td>
   );
 };
 
-export const AddressActionsNonBasiliskModeRender = function (address, type) {
+export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
     <td>
       <span className={ type === 'public' ? 'label label-default' : 'label label-dark' }>
@@ -37,26 +38,27 @@ export const AddressActionsNonBasiliskModeRender = function (address, type) {
       </span>
       <button
         className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
-        onClick={ () => this._copyCoinAddress(address) }><i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+        onClick={ () => this._copyCoinAddress(address) }>
+          <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
       </button>
     </td>
   );
 };
 
-export const AddressItemRender = function (address, type) {
+export const AddressItemRender = function(address, type) {
   return (
     <tr key={ address.address }>
       { this.renderAddressActions(address.address, type) }
       <td>{ type === 'public' ? address.address : address.address.substring(0, 34) + '...' }</td>
       <td>{ address.amount }</td>
       {!this.isNativeMode() &&
-      <td>{ address.interest ? address.interest : 'N/A' }</td>
+        <td>{ address.interest ? address.interest : 'N/A' }</td>
       }
     </tr>
   );
 };
 
-export const ReceiveCoinRender = function () {
+export const ReceiveCoinRender = function() {
   return (
     <div>
       <div className="col-xs-12 margin-top-20">

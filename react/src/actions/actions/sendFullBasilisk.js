@@ -45,7 +45,13 @@ export function sendToAddress(coin, _payload) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('sendToAddress', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'sendToAddress',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -95,7 +101,13 @@ export function sendFromAddress(coin, _payload) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('sendFromAddress', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'sendFromAddress',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -148,7 +160,13 @@ export function iguanaUTXORawTX(data, dispatch) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('iguanaUTXORawTX', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'iguanaUTXORawTX',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -193,7 +211,13 @@ export function dexSendRawTX(data, dispatch) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('dexSendRawTX', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'dexSendRawTX',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(function(response) {
       const _response = response.text().then(function(text) { return text; });
@@ -221,7 +245,13 @@ function sendToAddressState(json, dispatch) {
       lastSendToResponse: json,
     }
   } else if (json && json.result && json.complete) {
-    dispatch(triggerToaster(translate('TOASTR.TX_SENT_ALT'), translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
+    dispatch(
+      triggerToaster(
+        translate('TOASTR.TX_SENT_ALT'),
+        translate('TOASTR.WALLET_NOTIFICATION'),
+        'success'
+      )
+    );
 
     return {
       type: DASHBOARD_ACTIVE_COIN_SENDTO,

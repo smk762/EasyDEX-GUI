@@ -17,7 +17,8 @@ export const AddressListRender = function() {
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
           <li className="selected">
-            <a><span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+            <a><span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span>
+            <span className="glyphicon glyphicon-ok check-mark"></span></a>
           </li>
           { this.renderAddressByType('public') }
           { this.renderAddressByType('private') }
@@ -60,14 +61,19 @@ export const WalletsNativeSendRender = function() {
   return (
     <div id="kmd_wallet_send">
       <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
-        <div className="panel" id="projects">
+        <div
+          className="panel"
+          id="projects">
           <div className="panel-heading">
             <h3 className="panel-title">
               { translate('INDEX.SEND') } { this.props.ActiveCoin.coin }
             </h3>
           </div>
           <div className="panel-body container-fluid">
-            <form className="extcoin-send-form" method="post" autoComplete="off">
+            <form
+              className="extcoin-send-form"
+              method="post"
+              autoComplete="off">
               <div className="row">
                 <div className="col-xlg-12 form-group form-material">
                   <label className="control-label">{ translate('INDEX.SEND_FROM') }</label>
@@ -77,7 +83,9 @@ export const WalletsNativeSendRender = function() {
               { this.renderOASendUI() }
               <div className="row">
                 <div className="col-xlg-12 form-group form-material">
-                  <label className="control-label" htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
+                  <label
+                    className="control-label"
+                    htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
                   <input
                     type="text"
                     className="form-control"
@@ -90,7 +98,9 @@ export const WalletsNativeSendRender = function() {
                     required />
                 </div>
                 <div className="col-lg-6 form-group form-material">
-                  <label className="control-label" htmlFor="kmdWalletAmount">
+                  <label
+                    className="control-label"
+                    htmlFor="kmdWalletAmount">
                     { this.props.ActiveCoin.coin }
                   </label>
                   <input
@@ -103,7 +113,9 @@ export const WalletsNativeSendRender = function() {
                     autoComplete="off" />
                 </div>
                 <div className="col-lg-6 form-group form-material">
-                  <label className="control-label" htmlFor="kmdWalletFee">{ translate('INDEX.FEE') }</label>
+                  <label
+                    className="control-label"
+                    htmlFor="kmdWalletFee">{ translate('INDEX.FEE') }</label>
                   <input
                     type="text"
                     className="form-control"
@@ -116,7 +128,9 @@ export const WalletsNativeSendRender = function() {
                 </div>
                 <div className="col-lg-12">
                   <span>
-                    <strong>{ translate('INDEX.TOTAL') }:</strong> { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
+                    <strong>{ translate('INDEX.TOTAL') }:</strong> 
+                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) } 
+                    { this.props.ActiveCoin.coin }
                   </span>
                 </div>
                 <div className="col-lg-12">

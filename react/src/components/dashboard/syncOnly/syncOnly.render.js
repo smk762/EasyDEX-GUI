@@ -17,7 +17,9 @@ export const ProgressRender = function (fork) {
           </div>
         </div>
       </div>
-      <div id="additional-progress-bars" className={ this.isFullySynced(fork) ? 'hide' : '' }>
+      <div
+        id="additional-progress-bars"
+        className={ this.isFullySynced(fork) ? 'hide' : '' }>
         <div className="progress progress-sm">
           <div
             className="progress-bar progress-bar-warning progress-bar-striped active font-size-80-percent"
@@ -46,7 +48,9 @@ export const ProgressRender = function (fork) {
 
 export const ForkItemRender = function (forkInfo, port) {
   return (
-    <div key={ port } className="padding-bottom-60 full-width">
+    <div
+      key={ port }
+      className="padding-bottom-60 full-width">
       <div className="avatar">
         <img
           className="img-responsive margin-bottom-5"

@@ -27,7 +27,12 @@ class WalletsNativeTxHistory extends React.Component {
   //       filter based on addr
 
   toggleTxInfoModal(display, txIndex) {
-    Store.dispatch(toggleDashboardTxInfoModal(display, txIndex));
+    Store.dispatch(
+      toggleDashboardTxInfoModal(
+        display,
+        txIndex
+      )
+    );
   }
 
   isFullySynced() {
@@ -102,9 +107,14 @@ class WalletsNativeTxHistory extends React.Component {
     if (!this.state.itemsList ||
         (this.state.itemsList && !this.state.itemsList.length) ||
         (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
-      if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data') {
+      if (this.props.ActiveCoin.txhistory &&
+          this.props.ActiveCoin.txhistory !== 'loading' &&
+          this.props.ActiveCoin.txhistory !== 'no data') {
         let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-        historyToSplit = historyToSplit.slice((this.state.activePage - 1) * this.state.itemsPerPage, this.state.activePage * this.state.itemsPerPage);
+        historyToSplit = historyToSplit.slice(
+          (this.state.activePage - 1) * this.state.itemsPerPage,
+          this.state.activePage * this.state.itemsPerPage
+        );
 
         this.setState(Object.assign({}, this.state, {
           itemsList: historyToSplit,
@@ -115,7 +125,10 @@ class WalletsNativeTxHistory extends React.Component {
 
   updateCurrentPage(page) {
     let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-    historyToSplit = historyToSplit.slice((page - 1) * this.state.itemsPerPage, page * this.state.itemsPerPage);
+    historyToSplit = historyToSplit.slice(
+      (page - 1) * this.state.itemsPerPage,
+      page * this.state.itemsPerPage
+    );
 
     this.setState(Object.assign({}, this.state, {
       activePage: page,
@@ -157,7 +170,12 @@ class WalletsNativeTxHistory extends React.Component {
       const _paginationEnd = this.state.activePage * this.state.itemsPerPage;
       const _paginationNextState = this.state.activePage > Math.floor(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage);
 
-      return PaginationRender.call(this, _paginationStart, _paginationEnd, _paginationNextState);
+      return PaginationRender.call(
+        this,
+        _paginationStart,
+        _paginationEnd,
+        _paginationNextState
+      );
     }
 
     return null;

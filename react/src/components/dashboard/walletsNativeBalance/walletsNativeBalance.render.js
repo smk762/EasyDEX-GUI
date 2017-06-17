@@ -10,9 +10,12 @@ const WalletsNativeBalanceRender = function() {
             <div className="padding-20 padding-top-10">
               <div className="clearfix">
                 <div className="pull-left padding-vertical-10">
-                  <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>{ translate('INDEX.TRANSPARENT_BALANCE') }
+                  <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
+                  { translate('INDEX.TRANSPARENT_BALANCE') }
                 </div>
-                <span className="pull-right padding-top-10 font-size-22">{ this.props.ActiveCoin.balance.transparent ? this.props.ActiveCoin.balance.transparent : '-' }</span>
+                <span className="pull-right padding-top-10 font-size-22">
+                  { this.props.ActiveCoin.balance.transparent ? this.props.ActiveCoin.balance.transparent : '-' }
+                </span>
               </div>
             </div>
           </div>
@@ -25,9 +28,12 @@ const WalletsNativeBalanceRender = function() {
             <div className="padding-20 padding-top-10">
               <div className="clearfix">
                 <div className="pull-left padding-vertical-10">
-                  <i className="icon fa-eye-slash font-size-24 vertical-align-bottom margin-right-5"></i>{ translate('INDEX.Z_BALANCE') }
+                  <i className="icon fa-eye-slash font-size-24 vertical-align-bottom margin-right-5"></i>
+                  { translate('INDEX.Z_BALANCE') }
                 </div>
-                <span className="pull-right padding-top-10 font-size-22">{ this.props.ActiveCoin.balance.private ? this.props.ActiveCoin.balance.private : '-' }</span>
+                <span className="pull-right padding-top-10 font-size-22">
+                  { this.props.ActiveCoin.balance.private ? this.props.ActiveCoin.balance.private : '-' }
+                </span>
               </div>
             </div>
           </div>
@@ -40,9 +46,12 @@ const WalletsNativeBalanceRender = function() {
             <div className="padding-20 padding-top-10">
               <div className="clearfix">
                 <div className="pull-left padding-vertical-10">
-                  <i className="icon fa-money font-size-24 vertical-align-bottom margin-right-5"></i>{ translate('INDEX.INTEREST_EARNED') }
+                  <i className="icon fa-money font-size-24 vertical-align-bottom margin-right-5"></i>
+                  { translate('INDEX.INTEREST_EARNED') }
                 </div>
-                <span className="pull-right padding-top-10 font-size-22">{ this.props.Dashboard.progress && this.props.Dashboard.progress.interest ? this.props.Dashboard.progress.interest : '-' }</span>
+                <span className="pull-right padding-top-10 font-size-22">
+                  { this.props.Dashboard.progress && this.props.Dashboard.progress.interest ? this.props.Dashboard.progress.interest : '-' }
+                </span>
               </div>
             </div>
           </div>
@@ -55,9 +64,12 @@ const WalletsNativeBalanceRender = function() {
             <div className="padding-20 padding-top-10">
               <div className="clearfix">
                 <div className="pull-left padding-vertical-10">
-                  <i className="icon fa-bullseye font-size-24 vertical-align-bottom margin-right-5"></i>{ translate('INDEX.ZT_BALANCE') }
+                  <i className="icon fa-bullseye font-size-24 vertical-align-bottom margin-right-5"></i>
+                  { translate('INDEX.ZT_BALANCE') }
                 </div>
-                <span className="pull-right padding-top-10 font-size-22">{ this.props.ActiveCoin.balance.total ? this.props.ActiveCoin.balance.total : '-' }</span>
+                <span className="pull-right padding-top-10 font-size-22">
+                  { this.props.ActiveCoin.balance.total ? this.props.ActiveCoin.balance.total : '-' }
+                </span>
               </div>
             </div>
           </div>

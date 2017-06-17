@@ -12,30 +12,30 @@ const WalletsNativeInfoRender = function() {
           <div className="table-responsive">
             <table className="table table-striped">
               <tbody>
-              <tr>
-                <td>{ translate('INDEX.WALLET_VERSION') }</td>
-                <td>
-                  { this.props.Dashboard.progress.walletversion }
-                </td>
-              </tr>
-              <tr>
-                <td>{ translate('INDEX.BALANCE') }</td>
-                <td>
-                  { this.props.Dashboard.progress.balance }
-                </td>
-              </tr>
-              <tr>
-                <td>{ translate('INDEX.UNCONFIRMED_BALANCE') }</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>{ translate('INDEX.IMMATURE_BALANCE') }</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>{ translate('INDEX.TOTAL_TX_COUNT') }</td>
-                <td></td>
-              </tr>
+                <tr>
+                  <td>{ translate('INDEX.WALLET_VERSION') }</td>
+                  <td>
+                    { this.props.Dashboard.progress.walletversion }
+                  </td>
+                </tr>
+                <tr>
+                  <td>{ translate('INDEX.BALANCE') }</td>
+                  <td>
+                    { this.props.Dashboard.progress.balance }
+                  </td>
+                </tr>
+                <tr>
+                  <td>{ translate('INDEX.UNCONFIRMED_BALANCE') }</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>{ translate('INDEX.IMMATURE_BALANCE') }</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>{ translate('INDEX.TOTAL_TX_COUNT') }</td>
+                  <td></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -76,9 +76,15 @@ const WalletsNativeInfoRender = function() {
                 </td>
                 <td>
                   { this.props.Dashboard.progress.notarizedhash ?
-                    this.props.Dashboard.progress.notarizedhash.substring(0, Math.floor(this.props.Dashboard.progress.notarizedhash.length / 2)) +
+                    this.props.Dashboard.progress.notarizedhash.substring(
+                      0,
+                      Math.floor(this.props.Dashboard.progress.notarizedhash.length / 2)
+                    ) +
                     '\t' +
-                    this.props.Dashboard.progress.notarizedhash.substring(Math.floor(this.props.Dashboard.progress.notarizedhash.length / 2), this.props.Dashboard.progress.notarizedhash.length)
+                    this.props.Dashboard.progress.notarizedhash.substring(
+                      Math.floor(this.props.Dashboard.progress.notarizedhash.length / 2),
+                      this.props.Dashboard.progress.notarizedhash.length
+                    )
                     : ''
                   }
                 </td>

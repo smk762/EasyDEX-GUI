@@ -11,7 +11,13 @@ import {
 } from './log';
 
 function handleGetNewKMDAddresses(pubpriv, coin, dispatch) {
-  dispatch(triggerToaster(translate('KMD_NATIVE.NEW_ADDR_GENERATED'), translate('TOASTR.WALLET_NOTIFICATION'), 'success'));
+  dispatch(
+    triggerToaster(
+      translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
+      translate('TOASTR.WALLET_NOTIFICATION'),
+      'success'
+    )
+  );
   dispatch(getKMDAddressesNative(coin));
 
   return {};
@@ -69,7 +75,13 @@ export function getNewKMDAddresses(coin, pubpriv) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('getNewKMDAddresses', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'getNewKMDAddresses',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -78,10 +90,22 @@ export function getNewKMDAddresses(coin, pubpriv) {
         'status': 'success',
         'response': json,
       }));
-      dispatch(handleGetNewKMDAddresses(pubpriv, coin, dispatch));
+      dispatch(
+        handleGetNewKMDAddresses(
+          pubpriv,
+          coin,
+          dispatch
+        )
+      );
     })
     .catch(function(ex) {
-      dispatch(handleGetNewKMDAddresses(pubpriv, coin, dispatch))
-    })
+      dispatch(
+        handleGetNewKMDAddresses(
+          pubpriv,
+          coin,
+          dispatch
+        )
+      );
+    });
   }
 }

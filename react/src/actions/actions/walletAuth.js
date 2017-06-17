@@ -44,7 +44,13 @@ export function encryptWallet(_passphrase, cb, coin) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('encryptWallet', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'encryptWallet',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(dispatch(walletPassphrase(_passphrase)))
     .then(response => response.json())
@@ -54,7 +60,13 @@ export function encryptWallet(_passphrase, cb, coin) {
         'status': 'success',
         'response': json,
       }));
-      dispatch(cb.call(this, json, coin));
+      dispatch(
+        cb.call(
+          this,
+          json,
+          coin
+        )
+      );
     });
   }
 }
@@ -90,7 +102,13 @@ export function walletPassphrase(_passphrase) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('walletPassphrase', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'walletPassphrase',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(json => {
       dispatch(logGuiHttp({
@@ -134,7 +152,13 @@ export function iguanaWalletPassphrase(_passphrase) {
         'status': 'error',
         'response': error,
       }));
-      dispatch(triggerToaster('Error iguanaWalletPassphrase', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'Error iguanaWalletPassphrase',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -178,7 +202,13 @@ export function iguanaActiveHandle(getMainAddress) {
         'response': error,
       }));
       dispatch(updateErrosStack('activeHandle'));
-      dispatch(triggerToaster(translate('TOASTR.IGUANA_ARE_YOU_SURE'), translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.IGUANA_ARE_YOU_SURE'),
+          translate('TOASTR.SERVICE_NOTIFICATION'),
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -194,7 +224,13 @@ export function iguanaActiveHandle(getMainAddress) {
 
 function iguanaWalletPassphraseState(json, dispatch) {
   sessionStorage.setItem('IguanaActiveAccount', JSON.stringify(json));
-  dispatch(triggerToaster(translate('TOASTR.LOGIN_SUCCESSFULL'), translate('TOASTR.ACCOUNT_NOTIFICATION'), 'success'));
+  dispatch(
+    triggerToaster(
+      translate('TOASTR.LOGIN_SUCCESSFULL'),
+      translate('TOASTR.ACCOUNT_NOTIFICATION'),
+      'success'
+    )
+  );
   dispatch(getMainAddressState(json));
   dispatch(iguanaActiveHandleState(json));
 

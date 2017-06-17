@@ -25,7 +25,13 @@ export function shepherdCliPromise(mode, chain, cmd) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('shepherdCli', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'shepherdCli',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => resolve(json))
@@ -49,7 +55,13 @@ export function shepherdCli(mode, chain, cmd) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('shepherdCli', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'shepherdCli',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => dispatch(cliResponseState(json)))

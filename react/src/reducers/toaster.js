@@ -6,12 +6,15 @@ import {
 export function toaster(state = {
   toasts: [],
 }, action) {
-  if (state === null) state = {toasts: []};
+  if (state === null) state = { toasts: [] };
   switch (action.type) {
     case ADD_TOASTER_MESSAGE:
       return {
         ...state,
-        toasts: [...state.toasts, action]
+        toasts: [
+          ...state.toasts,
+          action
+        ]
       };
     case REMOVE_TOASTER_MESSAGE:
       // filter out the toastId that should be removed

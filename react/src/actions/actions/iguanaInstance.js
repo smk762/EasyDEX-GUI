@@ -17,7 +17,13 @@ export function restartIguanaInstance(pmid) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('restartIguanaInstance', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'restartIguanaInstance',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => resolve(json))
@@ -54,7 +60,13 @@ export function startIguanaInstance(mode, coin) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('startIguanaInstance', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'startIguanaInstance',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => resolve(json))
@@ -71,7 +83,13 @@ export function getIguanaInstancesList() {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(triggerToaster('getIguanaInstanceList', 'Error', 'error'));
+      dispatch(
+        triggerToaster(
+          'getIguanaInstanceList',
+          'Error',
+          'error'
+        )
+      );
     })
     .then(response => response.json())
     .then(json => resolve(json))

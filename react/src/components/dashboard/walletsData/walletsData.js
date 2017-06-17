@@ -65,11 +65,19 @@ class WalletsData extends React.Component {
   }
 
   componentWillMount() {
-    document.addEventListener('click', this.handleClickOutside, false);
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside, false);
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   handleClickOutside(e) {
@@ -217,7 +225,10 @@ class WalletsData extends React.Component {
           (this.state.itemsList && !this.state.itemsList.length) ||
           (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
         let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-        historyToSplit = historyToSplit.slice((this.state.activePage - 1) * this.state.itemsPerPage, this.state.activePage * this.state.itemsPerPage);
+        historyToSplit = historyToSplit.slice(
+          (this.state.activePage - 1) * this.state.itemsPerPage,
+          this.state.activePage * this.state.itemsPerPage
+        );
 
         this.setState(Object.assign({}, this.state, {
           itemsList: historyToSplit,
@@ -239,7 +250,10 @@ class WalletsData extends React.Component {
 
   updateCurrentPage(page) {
     let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-    historyToSplit = historyToSplit.slice((page - 1) * this.state.itemsPerPage, page * this.state.itemsPerPage);
+    historyToSplit = historyToSplit.slice(
+      (page - 1) * this.state.itemsPerPage,
+      page * this.state.itemsPerPage
+    );
 
     this.setState(Object.assign({}, this.state, {
       activePage: page,
@@ -250,7 +264,7 @@ class WalletsData extends React.Component {
   renderPaginationItems() {
     let items = [];
 
-    for (let i=0; i < Math.ceil(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage); i++) {
+    for (let i = 0; i < Math.ceil(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage); i++) {
       items.push(
         PaginationItemRender.call(this, i)
       );
@@ -276,7 +290,11 @@ class WalletsData extends React.Component {
       const _paginationFrom = ((this.state.activePage - 1) * this.state.itemsPerPage) + 1;
       const _paginationTo = this.state.activePage * this.state.itemsPerPage;
 
-      return PaginationRender.call(this, _paginationFrom, _paginationTo);
+      return PaginationRender.call(
+        this,
+        _paginationFrom,
+        _paginationTo
+      );
     } else {
       return null;
     }
@@ -336,7 +354,11 @@ class WalletsData extends React.Component {
           this.state.itemsList.length &&
           this.state.itemsList !== 'no data') {
         return this.state.itemsList.map((tx, index) =>
-          TxHistoryListRender.call(this, tx, index)
+          TxHistoryListRender.call(
+            this,
+            tx,
+            index
+          )
         );
       }
     }
@@ -354,7 +376,12 @@ class WalletsData extends React.Component {
     if (this.props.ActiveCoin.mode === 'basilisk') {
       setTimeout(() => {
         Store.dispatch(changeMainBasiliskAddress(address));
-        Store.dispatch(getBasiliskTransactionsList(this.props.ActiveCoin.coin, address));
+        Store.dispatch(
+          getBasiliskTransactionsList(
+            this.props.ActiveCoin.coin,
+            address
+          )
+        );
       }, 100);
 
       Store.dispatch(fetchNewCacheData({
@@ -371,38 +398,6 @@ class WalletsData extends React.Component {
     this.setState(Object.assign({}, this.state, {
       addressSelectorOpen: !this.state.addressSelectorOpen,
     }));
-  }
-
-  /*filterTable() {
-    function myFunction() {
-      // Declare variables
-      var input, filter, table, tr, td, i;
-      input = document.getElementById("myInput");
-      filter = input.value.toUpperCase();
-      table = document.getElementById("myTable");
-      tr = table.getElementsByTagName("tr");
-
-      // Loop through all table rows, and hide those who don't match the search query
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
-          }
-        }
-      }
-    }
-  }*/
-
-  // deprecated
-  renderUseCacheToggle() {
-    if (this.props.ActiveCoin.mode === 'basilisk') {
-      return UseCacheToggleRender.call(this);
-    }
-
-    return null;
   }
 
   renderAddressByType(type) {

@@ -340,7 +340,13 @@ class Atomic extends React.Component {
       }
 
       if (props.Atomic.response.error === 'less than required responses') {
-        Store.dispatch(triggerToaster('Basilisk connection error', translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
+        Store.dispatch(
+          triggerToaster(
+            'Basilisk connection error',
+            translate('TOASTR.SERVICE_NOTIFICATION'),
+            'error'
+          )
+        );
       }
     }
   }
@@ -469,7 +475,11 @@ class Atomic extends React.Component {
 
     for (let i = 0; i < _options.length; i++) {
       items.push(
-        <option key={ _options[i].method } value={ _options[i].method }>{ _options[i].name }</option>
+        <option
+          key={ _options[i].method }
+          value={ _options[i].method }>
+            { _options[i].name }
+        </option>
       );
     }
 

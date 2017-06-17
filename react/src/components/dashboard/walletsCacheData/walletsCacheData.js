@@ -43,21 +43,29 @@ class WalletsCacheData extends React.Component {
     if (_sourceObj.data[0] &&
         Object.keys(_sourceObj.data[0]).length) {
       return _sourceObj.data.map((key, value) =>
-        <TreeNode title={ key.txid ? key.txid : `${pre}-array-${value}` } key={ `{$pre}-${value}-array` }>
+        <TreeNode
+          title={ key.txid ? key.txid : `${pre}-array-${value}` }
+          key={ `{$pre}-${value}-array` }>
           { this.renderArrayNode(`${pre}-array-${value}`, key) }
         </TreeNode>);
     } else {
-      return Object.keys(_sourceObj.data).map((key, value) => this.renderKeyValue(pre, key, _sourceObj.data[key]));
+      return Object.keys(_sourceObj.data).map(
+        (key, value) => this.renderKeyValue(pre, key, _sourceObj.data[key])
+      );
     }
   }
 
   renderArrayNode(pre, obj) {
-    return Object.keys(obj).map((key, value) => this.renderKeyValue(`${pre}-${key}`, key, obj[key]));
+    return Object.keys(obj).map(
+      (key, value) => this.renderKeyValue(`${pre}-${key}`, key, obj[key])
+    );
   }
 
   renderKeyValue(pre, key, value) {
     return (
-      <TreeNode title={ `${key}: ${value}` } key={ `{$pre}-${key}` } />
+      <TreeNode
+        title={ `${key}: ${value}` }
+        key={ `{$pre}-${key}` } />
     );
   }
 
@@ -67,17 +75,27 @@ class WalletsCacheData extends React.Component {
     if (sourceObj[call].data &&
         (sourceObj[call].data.length || Object.keys(sourceObj[call].data).length)) {
       return (
-        <TreeNode title={ `${call}`} key={`${coin}-${address}-${call}` }>
-          <TreeNode title={ `status: ${sourceObj[call].status}` } key={ `${coin}-${address}-${call}-status` } />
-          <TreeNode title={ `updated @: ${secondsToString(sourceObj[call].timestamp, true)}` } key={ `${coin}-${address}-${call}-timestamp` } />
-          <TreeNode title="data" key={ `${coin}-${address}-${call}-data` }>
+        <TreeNode
+          title={ `${call}`}
+          key={`${coin}-${address}-${call}` }>
+          <TreeNode
+            title={ `status: ${sourceObj[call].status}` }
+            key={ `${coin}-${address}-${call}-status` } />
+          <TreeNode
+            title={ `updated @: ${secondsToString(sourceObj[call].timestamp, true)}` }
+            key={ `${coin}-${address}-${call}-timestamp` } />
+          <TreeNode
+            title="data"
+            key={ `${coin}-${address}-${call}-data` }>
           { this.renderKeyValueParent(`${coin}-${address}-${call}`, sourceObj[call]) }
           </TreeNode>
         </TreeNode>
       );
     } else {
       return (
-        <TreeNode title={ `${call} (no data)` } key={ `${coin}-${address}-${call}` } />
+        <TreeNode
+          title={ `${call} (no data)` }
+          key={ `${coin}-${address}-${call}` } />
       );
     }
   }

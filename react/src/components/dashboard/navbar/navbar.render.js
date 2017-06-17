@@ -5,16 +5,21 @@ const NavbarRender = function() {
   return (
     <nav className="site-navbar navbar navbar-default navbar-fixed-top navbar-mega">
       <div className="navbar-header">
-        <button type="button" className="navbar-toggle hamburger hamburger-close navbar-toggle-left hided">
+        <button
+          type="button"
+          className="navbar-toggle hamburger hamburger-close navbar-toggle-left hided">
           <span className="sr-only">{ translate('INDEX.TOGGLE_NAV') }</span>
           <span className="hamburger-bar"></span>
         </button>
-        <button type="button" className="navbar-toggle collapsed">
+        <button
+          type="button"
+          className="navbar-toggle collapsed">
           <i className="icon md-more"></i>
         </button>
         <div className="navbar-brand navbar-brand-center site-gridmenu-toggle">
           <img
-            className="navbar-brand-logo hidden-xs" src="assets/images/easydex-logo-dashboard.png"
+            className="navbar-brand-logo hidden-xs"
+            src="assets/images/easydex-logo-dashboard.png"
             title="SuperNET Iguana" />
           <img
             className="navbar-brand-logo hidden-md hidden-sm hidden-lg"
@@ -22,7 +27,9 @@ const NavbarRender = function() {
             title="SuperNET Iguana white" />
           <span className="navbar-brand-text hidden-xs"></span>
         </div>
-        <button type="button" className="navbar-toggle collapsed">
+        <button
+          type="button"
+          className="navbar-toggle collapsed">
           <span className="sr-only">{ translate('INDEX.TOGGLE_SEARCH') }</span>
           <i className="icon md-search"></i>
         </button>
@@ -65,7 +72,9 @@ const NavbarRender = function() {
                 className="pointer padding-bottom-10 padding-top-16"
                 onClick={ this.toggleAddCoinModal }>
                 <span>
-                  <img src="assets/images/icons/activatecoin.png" alt={ translate('INDEX.ADD_COIN') } />
+                  <img
+                    src="assets/images/icons/activatecoin.png"
+                    alt={ translate('INDEX.ADD_COIN') } />
                 </span>
               </a>
             </li>
@@ -74,7 +83,9 @@ const NavbarRender = function() {
               onClick={ this.openDropMenu }>
               <a className="navbar-avatar dropdown-toggle">
                 <span className="avatar avatar-online">
-                  <img src="assets/images/iguana_profile_02.jpg" alt="iguana profile pic" />
+                  <img
+                    src="assets/images/iguana_profile_02.jpg"
+                    alt="iguana profile pic" />
                   <i></i>
                 </span>
               </a>

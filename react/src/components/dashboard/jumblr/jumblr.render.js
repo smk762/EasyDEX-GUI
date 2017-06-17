@@ -11,12 +11,14 @@ const JumblrRender = function() {
         <div className="row">
           <div className="col-xs-12">
             <div className="alert alert-danger">
-              <button type="button" className="close">
+              <button
+                type="button"
+                className="close">
                 <span>×</span>
               </button>
               <span className="jumblr-header">
-                  <i className="icon fa-paw"></i> { translate('JUMBLR.NOTICE') }
-                </span>
+                <i className="icon fa-paw"></i> { translate('JUMBLR.NOTICE') }
+              </span>
               <br />
               { translate('JUMBLR.DESCRIPTION') }
             </div>
@@ -24,12 +26,14 @@ const JumblrRender = function() {
 
           <div className="col-xs-12">
             <div className="alert alert-info alert-dismissible">
-              <button type="button" className="close">
+              <button
+                type="button"
+                className="close">
                 <span>×</span>
               </button>
               <span className="jumblr-header">
-                  <i className="icon fa-paw"></i> { translate('JUMBLR.NEED_NATIVE') }
-                </span>
+                <i className="icon fa-paw"></i> { translate('JUMBLR.NEED_NATIVE') }
+              </span>
               <br />
               { translate('JUMBLR.TO_USE_JUMBLR') }
               <br />
@@ -96,7 +100,9 @@ const JumblrRender = function() {
                 </div>
               </div>
               <div className="panel">
-                <div className="panel-heading" onClick={ () => this.openTab(2) }>
+                <div
+                  className="panel-heading"
+                  onClick={ () => this.openTab(2) }>
                   <a className={ this.state.activeTab === 2 ? 'panel-title' : 'panel-title collapsed' }>{ translate('JUMBLR.USING_JUMBLR') }</a>
                 </div>
                 <div className={ this.state.activeTab === 2 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }>
@@ -127,44 +133,46 @@ const JumblrRender = function() {
               <div className="table-responsive">
                 <table className="table table-striped">
                   <tbody>
-                  <tr>
-                    <td width="20%">{ translate('JUMBLR.BTC_DEPOSIT') }</td>
-                    <td>
-                      <span></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>BTC Jumblr</td>
-                    <td>
-                      <button type="button" className="btn btn-animate btn-animate-side btn-default btn-sm waves-effect waves-light">
-                        <span>
-                          <i className="icon fa-eye"></i> { translate('JUMBLR.SHOW_HIDE') }
+                    <tr>
+                      <td width="20%">{ translate('JUMBLR.BTC_DEPOSIT') }</td>
+                      <td>
+                        <span></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BTC Jumblr</td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-animate btn-animate-side btn-default btn-sm waves-effect waves-light">
+                          <span>
+                            <i className="icon fa-eye"></i> { translate('JUMBLR.SHOW_HIDE') }
+                          </span>
+                        </button>
+                        <span className="label label-lg label-outline label-success hide"></span>
+                        <span className="label label-lg label-outline label-default">{ translate('JUMBLR.HIDDEN') }</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{ translate('JUMBLR.KMD_DEPOSIT') }</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>KMD Jumblr</td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-animate btn-animate-side btn-default btn-sm waves-effect waves-light">
+                          <span>
+                            <i className="icon fa-eye"></i> { translate('JUMBLR.SHOW_HIDE') }
+                          </span>
+                        </button>
+                        <span className="label label-lg label-outline label-success hide"></span>
+                        <span className="label label-lg label-outline label-default">
+                          { translate('JUMBLR.HIDDEN') }
                         </span>
-                      </button>
-                      <span
-                        className="label label-lg label-outline label-success"
-                        style={{ display: 'none' }}></span>
-                      <span className="label label-lg label-outline label-default">{ translate('JUMBLR.HIDDEN') }</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{ translate('JUMBLR.KMD_DEPOSIT') }</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>KMD Jumblr</td>
-                    <td>
-                      <button type="button" className="btn btn-animate btn-animate-side btn-default btn-sm waves-effect waves-light">
-                        <span>
-                          <i className="icon fa-eye"></i> { translate('JUMBLR.SHOW_HIDE') }
-                        </span>
-                      </button>
-                      <span
-                        className="label label-lg label-outline label-success"
-                        style={{ display: 'none' }}></span>
-                      <span className="label label-lg label-outline label-default">{ translate('JUMBLR.HIDDEN') }</span>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -172,41 +180,43 @@ const JumblrRender = function() {
           </div>
 
           <div className="col-xlg-12 col-md-12">
-            <h4 className="font-size-14 text-uppercase">{ translate('JUMBLR.JSTATUS') }</h4>
+            <h4 className="font-size-14 text-uppercase">
+              { translate('JUMBLR.JSTATUS') }
+            </h4>
             <div className="panel">
               <div className="table-responsive">
                 <table className="table table-striped">
                   <tbody>
-                  <tr>
-                    <td width="20%">{ translate('JUMBLR.RESULT') }</td>
-                    <td>
-                      <span className="label label-success"></span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{ translate('JUMBLR.DEPOSITED') }</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>{ translate('JUMBLR.PUB_TO_PRIV') }</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>{ translate('JUMBLR.PRIV_TO_PRIV') }</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>{ translate('JUMBLR.PRIV_TO_PUB') }</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>{ translate('JUMBLR.FINISHED') }</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>{ translate('JUMBLR.PENDING') }</td>
-                    <td></td>
-                  </tr>
+                    <tr>
+                      <td width="20%">{ translate('JUMBLR.RESULT') }</td>
+                      <td>
+                        <span className="label label-success"></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{ translate('JUMBLR.DEPOSITED') }</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>{ translate('JUMBLR.PUB_TO_PRIV') }</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>{ translate('JUMBLR.PRIV_TO_PRIV') }</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>{ translate('JUMBLR.PRIV_TO_PUB') }</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>{ translate('JUMBLR.FINISHED') }</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>{ translate('JUMBLR.PENDING') }</td>
+                      <td></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

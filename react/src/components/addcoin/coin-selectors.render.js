@@ -4,7 +4,6 @@ import AddCoinOptionsCrypto from '../addcoin/addcoinOptionsCrypto';
 import AddCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
 
-
 const CoinSelectorsRender = function(item, coin, i) {
   return (
     <div
@@ -30,7 +29,9 @@ const CoinSelectorsRender = function(item, coin, i) {
           type="button"
           className="btn btn-primary"
           onClick={ () => this.activateCoin(i) }
-          disabled={ item.mode === -2 }>{ translate('INDEX.ACTIVATE_COIN') }</button>
+          disabled={ item.mode === -2 }>
+            { translate('INDEX.ACTIVATE_COIN') }
+        </button>
       </div>
       <div className="col-sm-12 text-center">
         <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
@@ -50,13 +51,17 @@ const CoinSelectorsRender = function(item, coin, i) {
               style={{ display: item.fullMode.checked ? 'none' : 'inline-block' }}></span>
             <span
               className="labelauty-unchecked"
-              style={{ display: item.fullMode.checked ? 'none' : 'inline-block' }}>{ translate('INDEX.FULL_MODE') }</span>
+              style={{ display: item.fullMode.checked ? 'none' : 'inline-block' }}>
+                { translate('INDEX.FULL_MODE') }
+            </span>
             <span
               className="labelauty-checked-image"
               style={{ display: item.fullMode.checked ? 'inline-block' : 'none' }}></span>
             <span
               className="labelauty-checked"
-              style={{ display: item.fullMode.checked ? 'inline-block' : 'none' }}>{ translate('INDEX.FULL_MODE') }</span>
+              style={{ display: item.fullMode.checked ? 'inline-block' : 'none' }}>
+                { translate('INDEX.FULL_MODE') }
+            </span>
           </label>
         </div>
         <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
@@ -76,13 +81,17 @@ const CoinSelectorsRender = function(item, coin, i) {
               style={{ display: item.basiliskMode.checked ? 'none' : 'inline-block' }}></span>
             <span
               className="labelauty-unchecked"
-              style={{ display: item.basiliskMode.checked ? 'none' : 'inline-block' }}>{ translate('INDEX.BASILISK_MODE') }</span>
+              style={{ display: item.basiliskMode.checked ? 'none' : 'inline-block' }}>
+                { translate('INDEX.BASILISK_MODE') }
+            </span>
             <span
               className="labelauty-checked-image"
               style={{ display: item.basiliskMode.checked ? 'inline-block' : 'none' }}></span>
             <span
               className="labelauty-checked"
-              style={{ display: item.basiliskMode.checked ? 'inline-block' : 'none' }}>{ translate('INDEX.BASILISK_MODE') }</span>
+              style={{ display: item.basiliskMode.checked ? 'inline-block' : 'none' }}>
+                { translate('INDEX.BASILISK_MODE') }
+            </span>
           </label>
         </div>
         <div className="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 style-addcoin-lbl-mdl-login">
@@ -102,13 +111,17 @@ const CoinSelectorsRender = function(item, coin, i) {
               style={{ display: item.nativeMode.checked ? 'none' : 'inline-block' }}></span>
             <span
               className="labelauty-unchecked"
-              style={{ display: item.nativeMode.checked ? 'none' : 'inline-block' }}>{ translate('INDEX.NATIVE_MODE') }</span>
+              style={{ display: item.nativeMode.checked ? 'none' : 'inline-block' }}>
+                { translate('INDEX.NATIVE_MODE') }
+            </span>
             <span
               className="labelauty-checked-image"
               style={{ display: item.nativeMode.checked ? 'inline-block' : 'none' }}></span>
             <span
               className="labelauty-checked"
-              style={{ display: item.nativeMode.checked ? 'inline-block' : 'none' }}>{ translate('INDEX.NATIVE_MODE') }</span>
+              style={{ display: item.nativeMode.checked ? 'inline-block' : 'none' }}>
+                { translate('INDEX.NATIVE_MODE') }
+            </span>
           </label>
         </div>
       </div>
@@ -117,19 +130,25 @@ const CoinSelectorsRender = function(item, coin, i) {
           type="button"
           className="btn btn-primary"
           onClick={ () => this.removeCoin(i) }>
-          <i className="fa fa-trash-o"></i>
+            <i className="fa fa-trash-o"></i>
         </button>
       </div>
       <div className={ item.mode === '1' || item.mode === 1 ? 'col-sm-12' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">
           <span className="pointer">
             <label className="switch">
-              <input type="checkbox" checked={ item.syncOnly } />
-              <div className="slider" onClick={ () => this.toggleSyncOnlyMode(i) }></div>
+              <input
+                type="checkbox"
+                checked={ item.syncOnly } />
+              <div
+                className="slider"
+                onClick={ () => this.toggleSyncOnlyMode(i) }></div>
             </label>
             <div 
               className="toggle-label"
-              onClick={ () => this.toggleSyncOnlyMode(i) }>{ translate('ADD_COIN.SYNC_ONLY') }</div>
+              onClick={ () => this.toggleSyncOnlyMode(i) }>
+                { translate('ADD_COIN.SYNC_ONLY') }
+            </div>
           </span>
         </div>
       </div>
