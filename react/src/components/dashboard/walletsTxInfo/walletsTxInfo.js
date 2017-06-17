@@ -28,6 +28,10 @@ class WalletsTxInfo extends React.Component {
     }
   }
 
+  isNativeMode() {
+    return this.props.ActiveCoin.mode === 'native';
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin.showTransactionInfo &&
