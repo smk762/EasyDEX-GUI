@@ -74,8 +74,12 @@ class WalletsBalance extends React.Component {
     return this.props.ActiveCoin.mode === coinMode;
   }
 
-  isNativeOrBasiliskCoinMode() {
-    return this.isActiveCoinMode('native') || this.isActiveCoinMode('basilisk');
+  isBasiliskMode() {
+    return this.isActiveCoinMode('basilisk');
+  }
+
+  isFullMode() {
+    return this.isActiveCoinMode('full');
   }
 
   renderLB(_translationID) {
@@ -93,17 +97,20 @@ class WalletsBalance extends React.Component {
     return this.isActiveCoinMode('native');
   }
 
+  isNativeBalanceActive() {
+    return this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default';
+  }
+
+  isNonNativeBalanceActive() {
+    return !this.isNativeMode() && !this.props.ActiveCoin.send && !this.props.ActiveCoin.receive;
+  }
+
   render() {
-    console.log('wallets balance', this.props.ActiveCoin.nativeActiveSection,
-      (this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default'));
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        // this.props.ActiveCoin.mode !== 'native' &&
-      ((this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default')
-        ||
-      (!this.isNativeMode() && !this.props.ActiveCoin.send &&!this.props.ActiveCoin.receive))
-      )
+        // TODO the conditions below should be merged when native mode is fully merge into the rest of the components
+      (this.isNativeBalanceActive() || this.isNonNativeBalanceActive()))
     {
       return WalletsBalanceRender.call(this);
     }
