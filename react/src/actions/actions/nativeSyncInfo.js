@@ -67,7 +67,7 @@ function getSyncInfoNativeState(json, coin, skipDebug) {
   } else {
     return {
       type: SYNCING_NATIVE_MODE,
-      progress: Config.cli.default === true ? json.result : json,
+      progress: Config.cli.default ? json.result : json,
     }
   }
 }
@@ -82,7 +82,7 @@ export function getSyncInfoNative(coin, skipDebug) {
     'hex': '',
   };
 
-  if (Config.cli.default === true) {
+  if (Config.cli.default) {
     payload = {
       mode: null,
       chain: coin,
@@ -105,7 +105,7 @@ export function getSyncInfoNative(coin, skipDebug) {
       body: JSON.stringify(payload),
     };
 
-    if (Config.cli.default === true) {
+    if (Config.cli.default) {
       _fetchConfig = {
         method: 'POST',
         headers: {

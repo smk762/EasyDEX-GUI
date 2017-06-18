@@ -28,6 +28,7 @@ export function iguanaHashHex(data, dispatch) {
   };
 
   return new Promise((resolve, reject) => {
+    // skip iguana hashing in cli mode
     if (Config.cli.default) {
       resolve(true);
     } else {

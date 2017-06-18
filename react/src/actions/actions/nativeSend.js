@@ -51,15 +51,50 @@ export function sendNativeTx(coin, _payload) {
         'timestamp': _timestamp,
         'function': 'sendNativeTx',
         'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
         'payload': payload,
         'status': 'pending',
       }));
 
-      fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+      let _fetchConfig = {
         method: 'POST',
         body: JSON.stringify(payload),
-      })
+      };
+
+      if (Config.cli.default) {
+        payload = {
+          mode: null,
+          chain: coin,
+          cmd: payload.function,
+          params:
+            _payload.addressType === 'public' && _payload.sendTo.length !== 95 ?
+            [
+              _payload.sendTo,
+              _payload.amount
+            ]
+            :
+            [
+              _payload.sendFrom,
+              [{
+                address: _payload.sendTo,
+                amount: _payload.amount
+              }]
+            ]
+        };
+
+        _fetchConfig = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 'payload': payload }),
+        };
+      }
+
+      fetch(
+        Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        _fetchConfig
+      )
       .catch(function(error) {
         console.log(error);
         dispatch(logGuiHttp({
@@ -102,9 +137,10 @@ export function sendNativeTx(coin, _payload) {
             dispatch(
               triggerToaster(
                 true,
-                'Your wallet.dat is not matching the blockchain. Please resync from the scratch.',
                 translate('TOASTR.WALLET_NOTIFICATION'),
-                'info'
+                'Your wallet.dat is not matching the blockchain. Please resync from the scratch.',
+                'info',
+                false
               )
             );
           }
@@ -173,15 +209,36 @@ export function getKMDOPID(opid, coin) {
         'timestamp': _timestamp,
         'function': 'getKMDOPID',
         'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
         'payload': payload,
         'status': 'pending',
       }));
 
-      fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+      let _fetchConfig = {
         method: 'POST',
         body: JSON.stringify(payload),
-      })
+      };
+
+      if (Config.cli.default) {
+        payload = {
+          mode: null,
+          chain: coin,
+          cmd: 'z_getoperationstatus'
+        };
+
+        _fetchConfig = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 'payload': payload }),
+        };
+      }
+
+      fetch(
+        Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        _fetchConfig
+      )
       .catch(function(error) {
         console.log(error);
         dispatch(logGuiHttp({
@@ -199,6 +256,9 @@ export function getKMDOPID(opid, coin) {
       })
       .then(response => response.json())
       .then(json => {
+        if (Config.cli.default) {
+          json = json.result;
+        }
         dispatch(logGuiHttp({
           'timestamp': _timestamp,
           'status': 'success',

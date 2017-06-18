@@ -11,8 +11,8 @@ export const AddressListRender = function() {
         onClick={ this.openDropMenu }>
         <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>
         <span className="bs-caret">
-            <span className="caret"></span>
-          </span>
+          <span className="caret"></span>
+        </span>
       </button>
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
@@ -115,7 +115,9 @@ export const WalletsNativeSendRender = function() {
                 <div className="col-lg-6 form-group form-material">
                   <label
                     className="control-label"
-                    htmlFor="kmdWalletFee">{ translate('INDEX.FEE') }</label>
+                    htmlFor="kmdWalletFee">
+                    { translate('INDEX.FEE') }
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -128,8 +130,8 @@ export const WalletsNativeSendRender = function() {
                 </div>
                 <div className="col-lg-12">
                   <span>
-                    <strong>{ translate('INDEX.TOTAL') }:</strong> 
-                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) } 
+                    <strong>{ translate('INDEX.TOTAL') }:</strong>
+                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }
                     { this.props.ActiveCoin.coin }
                   </span>
                 </div>
@@ -155,30 +157,32 @@ export const WalletsNativeSendRender = function() {
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                 <div className="panel">
                   <header className="panel-heading">
-                    <h3 className="panel-title">{ translate('INDEX.OPERATIONS_STATUSES') }</h3>
+                    <h3 className="panel-title">
+                      { translate('INDEX.OPERATIONS_STATUSES') }
+                    </h3>
                   </header>
                   <div className="panel-body">
                     <table
                       className="table table-hover dataTable table-striped"
                       width="100%">
                       <thead>
-                      <tr>
-                        <th>{ translate('INDEX.STATUS') }</th>
-                        <th>ID</th>
-                        <th>{ translate('INDEX.TIME') }</th>
-                        <th>{ translate('INDEX.RESULT') }</th>
-                      </tr>
-                      </thead>
+                        <tr>
+                          <th>{ translate('INDEX.STATUS') }</th>
+                          <th>ID</th>
+                          <th>{ translate('INDEX.TIME') }</th>
+                          <th>{ translate('INDEX.RESULT') }</th>
+                        </tr>
+                        </thead>
                       <tbody>
-                      { this.renderOPIDList() }
+                        { this.renderOPIDList() }
                       </tbody>
                       <tfoot>
-                      <tr>
-                        <th>{ translate('INDEX.STATUS') }</th>
-                        <th>ID</th>
-                        <th>{ translate('INDEX.TIME') }</th>
-                        <th>{ translate('INDEX.RESULT') }</th>
-                      </tr>
+                        <tr>
+                          <th>{ translate('INDEX.STATUS') }</th>
+                          <th>ID</th>
+                          <th>{ translate('INDEX.TIME') }</th>
+                          <th>{ translate('INDEX.RESULT') }</th>
+                        </tr>
                       </tfoot>
                     </table>
                   </div>

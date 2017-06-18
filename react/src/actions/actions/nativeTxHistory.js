@@ -31,14 +31,6 @@ export function getNativeTxHistory(coin) {
     };
   }
 
-  if (Config.cli.default === true) {
-    payload = {
-      mode: null,
-      chain: coin,
-      cmd: 'listtransactions'
-    };
-  }
-
   return dispatch => {
     const _timestamp = Date.now();
     dispatch(logGuiHttp({
@@ -55,7 +47,13 @@ export function getNativeTxHistory(coin) {
       body: JSON.stringify(payload),
     };
 
-    if (Config.cli.default === true) {
+    if (Config.cli.default) {
+      payload = {
+        mode: null,
+        chain: coin,
+        cmd: 'listtransactions'
+      };
+
       _fetchConfig = {
         method: 'POST',
         headers: {

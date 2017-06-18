@@ -32,7 +32,7 @@ export function getKMDBalanceTotal(coin) {
     };
   }
 
-  if (Config.cli.default === true) {
+  if (Config.cli.default) {
     payload = {
       mode: null,
       chain: coin,
@@ -56,7 +56,7 @@ export function getKMDBalanceTotal(coin) {
       body: JSON.stringify(payload),
     };
 
-    if (Config.cli.default === true) {
+    if (Config.cli.default) {
       _fetchConfig = {
         method: 'POST',
         headers: {
@@ -103,6 +103,6 @@ export function getKMDBalanceTotal(coin) {
 export function getNativeBalancesState(json) {
   return {
     type: DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE,
-    balance: json && !json.error ? (Config.cli.default === true ? json.result : json) : 0,
+    balance: json && !json.error ? (Config.cli.default ? json.result : json) : 0,
   }
 }

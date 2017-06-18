@@ -131,7 +131,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
             body: JSON.stringify(payload),
           };
 
-          if (Config.cli.default === true &&
+          if (Config.cli.default &&
               mode === 'native') {
             _fetchConfig = {
               method: 'POST',
@@ -253,8 +253,19 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           }
         }
 
-        let newAddressArray = [];
+        // remove addr duplicates
+        if (result[0]) {
+          result[0] = result[0].filter(function(elem, pos) {
+            return result[0].indexOf(elem) === pos;
+          });
+        }
+        if (result[1]) {
+          result[1] = result[1].filter(function(elem, pos) {
+            return result[1].indexOf(elem) === pos;
+          });
+        }
 
+        let newAddressArray = [];
         for (let a = 0; a < result.length; a++) {
           newAddressArray[a] = [];
 
@@ -286,7 +297,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           Promise.all(result[1].map((_address, index) => {
             return new Promise((resolve, reject) => {
               const _timestamp = Date.now();
-              let ajaxDataToHex = `["${_address}"]`;
+              let ajaxDataToHex = `[\"${_address}\"]`;
 
               iguanaHashHex(ajaxDataToHex, dispatch)
               .then((hashHexJson) => {
@@ -322,7 +333,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                   body: JSON.stringify(payload),
                 };
 
-                if (Config.cli.default === true &&
+                if (Config.cli.default &&
                     mode === 'native') {
                   payload = {
                     mode: null,
@@ -508,7 +519,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           body: JSON.stringify(payload),
         };
 
-        if (Config.cli.default === true &&
+        if (Config.cli.default &&
             mode === 'native') {
           payload = {
             mode: null,
