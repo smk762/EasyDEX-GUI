@@ -37,15 +37,36 @@ export function getNativeTxHistory(coin) {
       'timestamp': _timestamp,
       'function': 'getNativeTxHistory',
       'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+      'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
       'payload': payload,
       'status': 'pending',
     }));
 
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+    let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
-    })
+    };
+
+    if (Config.cli.default) {
+      payload = {
+        mode: null,
+        chain: coin,
+        cmd: 'listtransactions'
+      };
+
+      _fetchConfig = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'payload': payload }),
+      };
+    }
+
+    return fetch(
+      Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
     .catch(function(error) {
       console.log(error);
       dispatch(logGuiHttp({
