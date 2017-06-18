@@ -3,7 +3,7 @@ import WalletsNativeBalance from '../walletsNativeBalance/walletsNativeBalance';
 import WalletsNativeInfo from '../walletsNativeInfo/walletsNativeInfo';
 import WalletsNativeReceive from '../walletsNativeReceive/walletsNativeReceive';
 import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
-import WalletsNativeSyncProgress from '../walletsNativeSyncProgress/walletsNativeSyncProgress';
+import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNativeTxHistory from '../walletsNativeTxHistory/walletsNativeTxHistory';
 
 const WalletsNativeRender = function() {
@@ -24,7 +24,7 @@ const WalletsNativeRender = function() {
           </ol>
         </div>
         <div className="page-content">
-          <WalletsNativeSyncProgress {...this.props} />
+          <WalletsProgress {...this.props} />
           <div className="row">
             <WalletsNativeBalance {...this.props} />
             <WalletsNativeTxHistory {...this.props} />
