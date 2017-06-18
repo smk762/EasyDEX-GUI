@@ -30,6 +30,7 @@ const WalletsNativeRender = function() {
             <WalletsNativeTxHistory {...this.props} />
             <WalletsNativeReceive {...this.props} />
             <WalletsNativeSend {...this.props} />
+            <WalletsNativeInfo {...this.props} />
           </div>
         </div>
       </div>
