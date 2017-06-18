@@ -88,24 +88,33 @@ const WalletsTxInfoRender = function(txInfo) {
                             { txInfo.txid }
                           </td>
                         </tr>
+
+                        { this.isNativeMode() &&
                         <tr>
                           <td>walletconflicts</td>
                           <td>
                             { txInfo.walletconflicts.length }
                           </td>
                         </tr>
+                        }
+
+                        { this.isNativeMode() &&
                         <tr>
                           <td>time</td>
                           <td>
                             { secondsToString(txInfo.time) }
                           </td>
                         </tr>
+                        }
+
+                        { this.isNativeMode() &&
                         <tr>
                           <td>timereceived</td>
                           <td>
                             { secondsToString(txInfo.timereceived) }
                           </td>
                         </tr>
+                        }
                         </tbody>
                       </table>
                     </div>
