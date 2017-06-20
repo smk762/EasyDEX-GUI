@@ -79,7 +79,7 @@ class WalletsNativeSend extends React.Component {
     if (this.state.sendFrom) {
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  
+          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>
           <span className="text">
             [ { this.state.sendFromAmount } { this.props.ActiveCoin.coin } ]  
             { this.state.sendFrom }
@@ -119,7 +119,7 @@ class WalletsNativeSend extends React.Component {
 
     return (
       <span className={ `label label-${_satatusDef[opid.status].icon}` }>
-        <i className="icon fa-eye"></i> 
+        <i className="icon fa-eye"></i>&nbsp;
         <span>{ translate(`KMD_NATIVE.${_satatusDef[opid.status].label}`) }</span>
       </span>
     );

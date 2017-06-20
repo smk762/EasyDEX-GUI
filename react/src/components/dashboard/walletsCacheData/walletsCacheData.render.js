@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import { animation } from '../../../util/rc-tree-animate';
-import { TreeNode } from 'rc-tree';
+import Tree, { TreeNode } from 'rc-tree';
 
 const WalletsCacheDataRender = function() {
   return (

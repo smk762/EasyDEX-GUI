@@ -6,4 +6,8 @@ module.exports = {
   openAlias: false,
   debug: true,
   defaultLang: 'EN',
+  cli: {
+    passthru: true,
+    default: true
+  }
 };

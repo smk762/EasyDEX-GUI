@@ -10,12 +10,20 @@ import {
   guiLogState
 } from './log';
 
-function handleGetNewKMDAddresses(pubpriv, coin, dispatch) {
-  dispatch(
+function handleGetNewKMDAddresses(pubpriv, coin, dispatch, json) {
+  /*dispatch(
     triggerToaster(
       translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
       translate('TOASTR.WALLET_NOTIFICATION'),
       'success'
+    )
+  );*/
+  dispatch(
+    triggerToaster(
+      json.result ? json.result : json,
+      translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
+      'info',
+      false
     )
   );
   dispatch(getKMDAddressesNative(coin));
@@ -45,7 +53,7 @@ export function getNewKMDAddresses(coin, pubpriv) {
     };
   } else {
     payload = {
-      'userpass': 'tmpIgRPCUser@' + sessionStorage.getItem('IguanaRPCAuth'),
+      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
       'agent': coin,
       'method': 'passthru',
       'function': ajaxFunctionInput,
@@ -59,15 +67,36 @@ export function getNewKMDAddresses(coin, pubpriv) {
       'timestamp': _timestamp,
       'function': 'getNewKMDAddresses',
       'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+      'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
       'payload': payload,
       'status': 'pending',
     }));
 
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+    let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
-    })
+    };
+
+    if (Config.cli.default) {
+      payload = {
+        mode: null,
+        chain: coin,
+        cmd: payload.function
+      };
+
+      _fetchConfig = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'payload': payload }),
+      };
+    }
+
+    return fetch(
+      Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
     .catch(function(error) {
       console.log(error);
       dispatch(logGuiHttp({
@@ -85,6 +114,9 @@ export function getNewKMDAddresses(coin, pubpriv) {
     })
     .then(response => response.json())
     .then(json => {
+      if (Config.cli.default) {
+        json = json.result;
+      }
       dispatch(logGuiHttp({
         'timestamp': _timestamp,
         'status': 'success',
@@ -94,7 +126,8 @@ export function getNewKMDAddresses(coin, pubpriv) {
         handleGetNewKMDAddresses(
           pubpriv,
           coin,
-          dispatch
+          dispatch,
+          json
         )
       );
     })

@@ -12,6 +12,10 @@ front:
 - sort http stack history desc
 - swapped gettotalbalance interest with getinfo interest
 - extended settings / export keys ui
+- added error message if coin is already running in another mode
+- added explicit "new address generated" message
+- added cli / rpc passphru
 
 back:
 - added cli route
+- rpc passphru
