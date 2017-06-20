@@ -48,7 +48,9 @@ class WalletsNativeSyncProgress extends React.Component {
   renderActivatingBestChainProgress() {
     if (this.props.Settings &&
         this.props.Settings.debugLog) {
-      if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1) {
+      if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1 &&
+          !this.props.Dashboard.progress &&
+          !this.props.Dashboard.progress.blocks) {
         const temp = this.props.Settings.debugLog.split(' ');
         let currentBestChain;
         let currentProgress;
@@ -66,7 +68,7 @@ class WalletsNativeSyncProgress extends React.Component {
         if (this.props.Dashboard.progress.remoteKMDNode &&
             !this.props.Dashboard.progress.remoteKMDNode.blocks) {
           return (
-            `: ${currentProgress}%`
+            `: ${currentProgress}% (activating)`
           );
         } else {
           if (this.props.Dashboard.progress.remoteKMDNode &&
@@ -76,7 +78,11 @@ class WalletsNativeSyncProgress extends React.Component {
             );
           }
         }
-      } else if (this.props.Settings.debugLog.indexOf('Still rescanning') > -1) {
+      } else if (
+          this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
+          !this.props.Dashboard.progress &&
+          !this.props.Dashboard.progress.blocks
+        ) {
         const temp = this.props.Settings.debugLog.split(' ');
         let currentProgress;
 
@@ -87,11 +93,11 @@ class WalletsNativeSyncProgress extends React.Component {
         }
 
         return (
-          `: ${currentProgress}%`
+          `: ${currentProgress}% (rescanning blocks)`
         );
       } else {
         return (
-          <span>...</span>
+          <span> (downloading blocks)</span>
         );
       }
     }
