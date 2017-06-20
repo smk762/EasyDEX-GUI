@@ -22,7 +22,8 @@ class WalletsNativeSyncProgress extends React.Component {
         </div>
       );
     } else {
-      if (this.props.Dashboard.progress && this.props.Dashboard.progress.block) {
+      if (this.props.Dashboard.progress &&
+          this.props.Dashboard.progress.blocks) {
         const syncPercentage = (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2) + '%').replace('NaN', 0);
 
         return (
@@ -37,7 +38,7 @@ class WalletsNativeSyncProgress extends React.Component {
           <div
             className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
             style={{ width: '100%' }}>
-            <span style={{ width: '100%' }}>Loading blocks...</span>
+            <span style={{ width: '100%' }}>Loading blocks...it can take up to 15 min to load blocks</span>
           </div>
         );
       }

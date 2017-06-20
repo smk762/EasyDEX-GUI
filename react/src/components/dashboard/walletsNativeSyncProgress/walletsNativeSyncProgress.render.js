@@ -10,7 +10,8 @@ export const ChainActivationNotificationRender = function() {
         <span>×</span>
       </button>
       <h4>
-        { translate('INDEX.ACTIVATING_CHAIN') }{ this.renderActivatingBestChainProgress() }
+        { translate('INDEX.ACTIVATING_CHAIN') }
+        { this.renderActivatingBestChainProgress() }
       </h4>
       <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
     </div>
