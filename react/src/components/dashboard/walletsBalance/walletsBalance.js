@@ -74,8 +74,16 @@ class WalletsBalance extends React.Component {
     return this.props.ActiveCoin.mode === coinMode;
   }
 
-  isNativeOrBasiliskCoinMode() {
-    return this.isActiveCoinMode('native') || this.isActiveCoinMode('basilisk');
+  isBasiliskMode() {
+    return this.isActiveCoinMode('basilisk');
+  }
+
+  isNativeMode() {
+    return this.isActiveCoinMode('native');
+  }
+
+  isFullMode() {
+    return this.isActiveCoinMode('full');
   }
 
   renderLB(_translationID) {
@@ -89,13 +97,21 @@ class WalletsBalance extends React.Component {
     );
   }
 
+  isNativeBalanceActive() {
+    return this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default';
+  }
+
+  isNonNativeBalanceActive() {
+    return !this.isNativeMode() && !this.props.ActiveCoin.send && !this.props.ActiveCoin.receive;
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        this.props.ActiveCoin.mode !== 'native' &&
-        !this.props.ActiveCoin.send &&
-        !this.props.ActiveCoin.receive) {
+        // TODO the conditions below should be merged when native mode is fully merged into the rest of the components
+      (this.isNativeBalanceActive() || this.isNonNativeBalanceActive()))
+    {
       return WalletsBalanceRender.call(this);
     }
 
