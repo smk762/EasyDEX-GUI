@@ -106,42 +106,73 @@ const LoginRender = function () {
               <h4 className="hint color-white">
                 { translate('INDEX.SELECT_SEED_TYPE') }:
               </h4>
-              <div className="form-group form-material floating">
-                <div
-                  className="radio-custom radio-default radio-inline"
-                  onClick={ () => this.generateNewSeed(256) }>
-                  <input
-                    type="radio"
-                    name="PassPhraseOptions"
-                    checked={ this.state.bitsOption === 256 ? true : false } />
-                  <label htmlFor="PassPhraseOptionsIguana">Iguana (256 bits)</label>
+
+              <div className="row">
+                <div className="col-sm-5 horizontal-padding-0">
+                  <div className="toggle-box vertical-padding-20">
+                    <span className="pointer">
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={ this.isCustomWalletSeed() } />
+                        <div
+                          className="slider"
+                          onClick={ () => this.toggleCustomWalletSeed() }></div>
+                      </label>
+                      <div
+                        className="toggle-label"
+                        onClick={ () => this.toggleCustomWalletSeed() }>
+                          { translate('LOGIN.CUSTOM_WALLET_SEED') }
+                      </div>
+                    </span>
+                  </div>
                 </div>
-                <div
-                  className="radio-custom radio-default radio-inline"
-                  onClick={ () => this.generateNewSeed(160) }>
-                  <input
-                    type="radio"
-                    name="PassPhraseOptions"
-                    checked={ this.state.bitsOption === 160 ? true : false } />
-                  <label htmlFor="PassPhraseOptionsWaves">Waves</label>
-                </div>
-                <div
-                  className="radio-custom radio-default radio-inline"
-                  onClick={ () => this.generateNewSeed(128) }>
-                  <input
-                    type="radio"
-                    name="PassPhraseOptions"
-                    checked={ this.state.bitsOption === 128 ? true : false } />
-                  <label htmlFor="PassPhraseOptionsNXT">NXT</label>
+                <div className="col-sm-7 horizontal-padding-0">
+                { !this.isCustomWalletSeed() &&
+                  <div>
+                    <div className="form-group form-material floating">
+                      <div
+                        className="radio-custom radio-default radio-inline"
+                        onClick={ () => this.generateNewSeed(256) }>
+                        <input
+                          type="radio"
+                          name="PassPhraseOptions"
+                          checked={ this.state.bitsOption === 256 ? true : false }/>
+                        <label htmlFor="PassPhraseOptionsIguana">Iguana (256 bits)</label>
+                      </div>
+                      <div
+                        className="radio-custom radio-default radio-inline"
+                        onClick={ () => this.generateNewSeed(160) }>
+                        <input
+                          type="radio"
+                          name="PassPhraseOptions"
+                          checked={ this.state.bitsOption === 160 ? true : false }/>
+                        <label htmlFor="PassPhraseOptionsWaves">Waves</label>
+                      </div>
+                      <div
+                        className="radio-custom radio-default radio-inline"
+                        onClick={ () => this.generateNewSeed(128) }>
+                        <input
+                          type="radio"
+                          name="PassPhraseOptions"
+                          checked={ this.state.bitsOption === 128 ? true : false }/>
+                        <label htmlFor="PassPhraseOptionsNXT">NXT</label>
+                      </div>
+                    </div>
+                  </div>
+                }
                 </div>
               </div>
+
               <div className="form-group form-material floating">
                 <textarea
                   className="form-control placeholder-no-fix height-100"
                   type="text"
                   id="walletseed"
                   value={ this.state.randomSeed }
-                  readOnly="true"></textarea>
+                  onChange={ (e) => this.updateWalletSeed(e) }
+                  readOnly={ !this.isCustomWalletSeed() }
+                ></textarea>
                 <label
                   className="floating-label"
                   htmlFor="walletseed">{ translate('INDEX.WALLET_SEED') }</label>
@@ -151,8 +182,10 @@ const LoginRender = function () {
                   className="form-control placeholder-no-fix height-100"
                   type="text"
                   name="randomSeedConfirm"
+                  value={ this.state.randomSeedConfirm }
                   onChange={ this.updateInput }
                   id="rwalletseed"></textarea>
+                <span className={ this.state.isSeedBlank ? 'help-block' : 'hide' }>{ translate('LOGIN.MUST_ENTER_SEED') }.</span>
                 <span className={ this.state.isSeedConfirmError ? 'help-block' : 'hide' }>{ translate('LOGIN.ENTER_VALUE_AGAIN') }.</span>
                 <label
                   className="floating-label"

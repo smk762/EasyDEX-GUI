@@ -32,7 +32,9 @@ class Login extends React.Component {
       randomSeed: PassPhraseGenerator.generatePassPhrase(256),
       randomSeedConfirm: '',
       isSeedConfirmError: false,
+      isSeedBlank: false,
       displaySeedBackupModal: false,
+      customWalletSeed: false
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -42,6 +44,31 @@ class Login extends React.Component {
     this.openSyncOnlyModal = this.openSyncOnlyModal.bind(this);
     this.toggleSeedBackupModal = this.toggleSeedBackupModal.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
+  }
+
+  isCustomWalletSeed() {
+    return this.state.customWalletSeed;
+  }
+
+  toggleCustomWalletSeed() {
+    this.setState({
+      customWalletSeed: !this.state.customWalletSeed
+    }, () => {
+      // if customWalletSeed is set to false, regenerate the seed
+      if (!this.state.customWalletSeed) {
+        this.setState({
+          randomSeed: PassPhraseGenerator.generatePassPhrase(this.state.bitsOption),
+          isSeedConfirmError: false,
+          isSeedBlank: false
+        });
+      } else {
+        // if customWalletSeed is set to true, reset to seed to an empty string
+        this.setState({
+          randomSeed: '',
+          randomSeedConfirm: ''
+        });
+      }
+    });
   }
 
   openSyncOnlyModal() {
@@ -74,6 +101,7 @@ class Login extends React.Component {
     this.setState(Object.assign({}, this.state, {
       randomSeed: PassPhraseGenerator.generatePassPhrase(bits),
       bitsOption: bits,
+      isSeedBlank: false
     }));
   }
 
@@ -126,6 +154,15 @@ class Login extends React.Component {
     this.setState({
       [e.target.name]: e.target.value,
       isSeedConfirmError: false,
+      isSeedBlank: this.isBlank(e.target.value)
+    });
+  }
+
+  updateWalletSeed(e) {
+    this.setState({
+      randomSeed: e.target.value,
+      isSeedConfirmError: false,
+      isSeedBlank: this.isBlank(e.target.value)
     });
   }
 
@@ -157,13 +194,24 @@ class Login extends React.Component {
   }
 
   handleRegisterWallet() {
-    if (this.state.randomSeed === this.state.randomSeedConfirm) {
+    const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
+    const isSeedBlank = this.isBlank(this.state.randomSeed);
+
+    if (enteredSeedsMatch && !isSeedBlank) {
       this.toggleSeedBackupModal();
-    } else {
+    } else if (!enteredSeedsMatch) {
       this.setState({
         isSeedConfirmError: true,
       });
+    } else if (isSeedBlank) {
+      this.setState({
+        isSeedBlank: true
+      });
     }
+  }
+
+  isBlank(str) {
+    return (!str || /^\s*$/.test(str));
   }
 
   handleKeydown(e) {
