@@ -120,7 +120,7 @@ const LoginRender = function () {
                           onClick={ () => this.toggleCustomWalletSeed() }></div>
                       </label>
                       <div
-                        className="toggle-label"
+                        className="toggle-label white"
                         onClick={ () => this.toggleCustomWalletSeed() }>
                           { translate('LOGIN.CUSTOM_WALLET_SEED') }
                       </div>

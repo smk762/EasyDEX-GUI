@@ -173,9 +173,19 @@ class Login extends React.Component {
   }
 
   updateActiveLoginSection(name) {
+    // reset login/create form
     this.setState({
       activeLoginSection: name,
-    });
+      loginPassphrase: null,
+      seedInputVisibility: false,
+      bitsOption: 256,
+      randomSeed: PassPhraseGenerator.generatePassPhrase(256),
+      randomSeedConfirm: '',
+      isSeedConfirmError: false,
+      isSeedBlank: false,
+      displaySeedBackupModal: false,
+      customWalletSeed: false 
+   });
   }
 
   execWalletCreate() {
