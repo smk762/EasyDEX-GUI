@@ -80,6 +80,15 @@ export const PassPhraseGenerator = {
 		return this.passPhrase;
 	},
 
+  // checks if it's possible that the pass phrase supplied as the first parameter
+  // was generated with the number of bits supplied as the second parameter
+  isPassPhraseValid: function (passPhrase, bits) {
+	  // the required number of words based on the number of bits
+    // mirrors the generatePassPhrase function above
+	  const wordsCount = bits / 32 * 3;
+	  return passPhrase && passPhrase.split(" ").length === wordsCount;
+  },
+
 	reset: function() {
 		this.passPhrase = "";
 		this.seeds = 0;

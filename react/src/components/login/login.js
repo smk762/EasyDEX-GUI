@@ -1,21 +1,20 @@
 import React from 'react';
-import { translate } from '../../translate/translate';
 import {
   toggleAddcoinModal,
   iguanaWalletPassphrase,
   iguanaActiveHandle,
   startInterval,
-  stopInterval,
   getDexCoins,
   toggleSyncOnlyModal,
   getSyncOnlyForks,
-  createNewWallet
+  createNewWallet,
+  triggerToaster
 } from '../../actions/actionCreators';
 import Store from '../../store';
-import { PassPhraseGenerator } from '../../util/crypto/passphrasegenerator';
-
+import {PassPhraseGenerator} from '../../util/crypto/passphrasegenerator';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
+import {translate} from '../../translate/translate';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
@@ -28,6 +27,7 @@ class Login extends React.Component {
       activeLoginSection: 'activateCoin',
       loginPassphrase: null,
       seedInputVisibility: false,
+      loginPassPhraseBitsOption: 256,
       bitsOption: 256,
       randomSeed: PassPhraseGenerator.generatePassPhrase(256),
       randomSeedConfirm: '',
@@ -107,16 +107,16 @@ class Login extends React.Component {
 
   componentWillReceiveProps(props) {
     if (props &&
-        props.Main &&
-        props.Main.isLoggedIn) {
+      props.Main &&
+      props.Main.isLoggedIn) {
       this.setState({
         display: false,
       });
     }
 
     if (props &&
-        props.Main &&
-        !props.Main.isLoggedIn) {
+      props.Main &&
+      !props.Main.isLoggedIn) {
       this.setState({
         display: true,
       });
@@ -133,8 +133,8 @@ class Login extends React.Component {
 
     if (this.state.activeLoginSection !== 'signup') {
       if (props &&
-          props.Main &&
-          props.Main.activeCoins) {
+        props.Main &&
+        props.Main.activeCoins) {
         this.setState({
           activeLoginSection: 'login',
         });
@@ -167,9 +167,39 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    if (!PassPhraseGenerator.isPassPhraseValid(this.state.loginPassphrase,
+        this.state.loginPassPhraseBitsOption)) {
+      Store.dispatch(triggerToaster(
+        `${translate('LOGIN.SEED_NOT_OF_TYPE')} ${this.selectedLoginSeedTypeLabel()}`,
+        translate('LOGIN.INVALID_SEED'),
+        'error',
+        false
+      ));
+      return;
+    }
     Store.dispatch(
       iguanaWalletPassphrase(this.state.loginPassphrase)
     );
+  }
+
+  selectedLoginSeedTypeLabel() {
+    if (this.state.loginPassPhraseBitsOption === 256) {
+      return translate('LOGIN.IGUANA_SEED');
+    }
+
+    if (this.state.loginPassPhraseBitsOption === 160) {
+      return translate('LOGIN.WAVES_SEED');
+    }
+
+    if (this.state.loginPassPhraseBitsOption === 128) {
+      return translate('LOGIN.NXT_SEED');
+    }
+  }
+
+  onLoginPassPhraseBitsOptionChange(bitsOption) {
+    this.setState({
+      loginPassPhraseBitsOption: +bitsOption
+    });
   }
 
   updateActiveLoginSection(name) {
@@ -184,8 +214,8 @@ class Login extends React.Component {
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
-      customWalletSeed: false 
-   });
+      customWalletSeed: false
+    });
   }
 
   execWalletCreate() {
@@ -245,8 +275,7 @@ class Login extends React.Component {
   }
 
   render() {
-    if ((this.state && this.state.display) ||
-        !this.props.Main) {
+    if ((this.state && this.state.display) || !this.props.Main) {
       return LoginRender.call(this);
     }
 

@@ -51,41 +51,88 @@ const LoginRender = function () {
           <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
             <h4 className="color-white">{translate('INDEX.WELCOME_LOGIN')}</h4>
             <div className="login-form">
-              <div className="form-group form-material floating">
-                <input
-                  type={ this.state.seedInputVisibility ? 'text' : 'password' }
-                  className="form-control"
-                  name="loginPassphrase"
-                  onChange={ this.updateInput }
-                  onKeyDown={ (event) => this.handleKeydown(event) } />
-                <i
-                  className={ this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
-                  onClick={ this.toggleSeedInputVisibility }></i>
-                <label
-                  className="floating-label"
-                  htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
+              <div>
+                <h4 className="hint color-white">
+                  { translate('INDEX.SELECT_SEED_TYPE') }:
+                </h4>
+                <div className="form-group form-material floating">
+                  <div className="radio-custom radio-default radio-inline">
+                    <input
+                      id="loginPassPhraseOptionsIguana"
+                      type="radio"
+                      name="loginPassPhraseOptions"
+                      value="256"
+                      checked={ this.state.loginPassPhraseBitsOption === 256 }
+                      onChange={ (e) => this.onLoginPassPhraseBitsOptionChange(e.target.value) }
+                    />
+                    <label htmlFor="loginPassPhraseOptionsIguana">
+                      { translate('LOGIN.IGUANA_SEED') }
+                    </label>
+                  </div>
+                  <div className="radio-custom radio-default radio-inline">
+                    <input
+                      id="loginPassPhraseOptionsWaves"
+                      type="radio"
+                      name="loginPassPhraseOptions"
+                      value="160"
+                      checked={ this.state.loginPassPhraseBitsOption === 160 }
+                      onChange={ (e) => this.onLoginPassPhraseBitsOptionChange(e.target.value) }
+                    />
+                    <label htmlFor="loginPassPhraseOptionsWaves">
+                      { translate('LOGIN.WAVES_SEED') }
+                    </label>
+                  </div>
+                  <div className="radio-custom radio-default radio-inline">
+                    <input
+                      id="loginPassPhraseOptionsNXT"
+                      type="radio"
+                      name="loginPassPhraseOptions"
+                      value="128"
+                      checked={ this.state.loginPassPhraseBitsOption === 128 }
+                      onChange={ (e) => this.onLoginPassPhraseBitsOptionChange(e.target.value) }
+                    />
+                    <label htmlFor="loginPassPhraseOptionsNXT">
+                      { translate('LOGIN.NXT_SEED') }
+                    </label>
+                  </div>
+                </div>
               </div>
+            </div>
+            <div className="form-group form-material floating">
+              <input
+                type={ this.state.seedInputVisibility ? 'text' : 'password' }
+                className="form-control"
+                name="loginPassphrase"
+                onChange={ this.updateInput }
+                onKeyDown={ (event) => this.handleKeydown(event) }/>
+              <i
+                className={ this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                onClick={ this.toggleSeedInputVisibility }></i>
+              <label
+                className="floating-label"
+                htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
+            </div>
+            <button
+              type="button"
+              className="btn btn-primary btn-block"
+              onClick={ this.loginSeed }
+              disabled={ !this.state.loginPassphrase
+              || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
+            <div className="form-group form-material floating">
               <button
-                type="button"
-                className="btn btn-primary btn-block"
-                onClick={ this.loginSeed }
-                disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
-              <div className="form-group form-material floating">
-                <button
-                  className="btn btn-lg btn-flat btn-block waves-effect"
-                  id="register-btn"
-                  onClick={ () => this.updateActiveLoginSection('signup') }>{ translate('INDEX.CREATE_WALLET') }</button>
-                <button
-                  className="btn btn-lg btn-flat btn-block waves-effect hide"
-                  id="logint-another-wallet">{ translate('INDEX.LOGIN_ANOTHER_WALLET') }</button>
-                <button
-                  className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
-                  id="register-btn"
-                  onClick={ this.toggleActivateCoinForm }
-                  disabled={ !this.props.Main }>
-                  <span className="ladda-label">{ translate('ADD_COIN.ADD_ANOTHER_COIN') }</span>
-                </button>
-              </div>
+                className="btn btn-lg btn-flat btn-block waves-effect"
+                id="register-btn"
+                onClick={ () => this.updateActiveLoginSection('signup') }>{ translate('INDEX.CREATE_WALLET') }</button>
+              <button
+                className="btn btn-lg btn-flat btn-block waves-effect hide"
+                id="logint-another-wallet">{ translate('INDEX.LOGIN_ANOTHER_WALLET') }</button>
+              <button
+                className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
+                id="register-btn"
+                onClick={ this.toggleActivateCoinForm }
+                disabled={ !this.props.Main }>
+                <span className="ladda-label">{ translate('ADD_COIN.ADD_ANOTHER_COIN') }</span>
+              </button>
             </div>
           </div>
 
@@ -137,8 +184,10 @@ const LoginRender = function () {
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 256 ? true : false }/>
-                        <label htmlFor="PassPhraseOptionsIguana">Iguana (256 bits)</label>
+                          checked={ this.state.bitsOption === 256 }/>
+                        <label htmlFor="PassPhraseOptionsIguana">
+                          { translate('LOGIN.IGUANA_SEED') }
+                        </label>
                       </div>
                       <div
                         className="radio-custom radio-default radio-inline"
@@ -146,8 +195,10 @@ const LoginRender = function () {
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 160 ? true : false }/>
-                        <label htmlFor="PassPhraseOptionsWaves">Waves</label>
+                          checked={ this.state.bitsOption === 160 }/>
+                        <label htmlFor="PassPhraseOptionsWaves">
+                          { translate('LOGIN.WAVES_SEED') }
+                        </label>
                       </div>
                       <div
                         className="radio-custom radio-default radio-inline"
@@ -155,8 +206,10 @@ const LoginRender = function () {
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 128 ? true : false }/>
-                        <label htmlFor="PassPhraseOptionsNXT">NXT</label>
+                          checked={ this.state.bitsOption === 128 }/>
+                        <label htmlFor="PassPhraseOptionsNXT">
+                          { translate('LOGIN.NXT_SEED') }
+                        </label>
                       </div>
                     </div>
                   </div>
