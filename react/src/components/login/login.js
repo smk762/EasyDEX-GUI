@@ -27,7 +27,7 @@ class Login extends React.Component {
       activeLoginSection: 'activateCoin',
       loginPassphrase: null,
       seedInputVisibility: false,
-      loginPassPhraseBitsOption: 256,
+      loginPassPhraseSeedType: null,
       bitsOption: 256,
       randomSeed: PassPhraseGenerator.generatePassPhrase(256),
       randomSeedConfirm: '',
@@ -154,7 +154,8 @@ class Login extends React.Component {
     this.setState({
       [e.target.name]: e.target.value,
       isSeedConfirmError: false,
-      isSeedBlank: this.isBlank(e.target.value)
+      isSeedBlank: this.isBlank(e.target.value),
+      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(e.target.value)
     });
   }
 
@@ -167,39 +168,33 @@ class Login extends React.Component {
   }
 
   loginSeed() {
-    if (!PassPhraseGenerator.isPassPhraseValid(this.state.loginPassphrase,
-        this.state.loginPassPhraseBitsOption)) {
-      Store.dispatch(triggerToaster(
-        `${translate('LOGIN.SEED_NOT_OF_TYPE')} ${this.selectedLoginSeedTypeLabel()}`,
-        translate('LOGIN.INVALID_SEED'),
-        'error',
-        false
-      ));
-      return;
-    }
     Store.dispatch(
       iguanaWalletPassphrase(this.state.loginPassphrase)
     );
   }
 
-  selectedLoginSeedTypeLabel() {
-    if (this.state.loginPassPhraseBitsOption === 256) {
+  getLoginPassPhraseSeedType(passPhrase) {
+    if (!passPhrase) {
+      return null;
+    }
+
+    const passPhraseWords = passPhrase.split(" ");
+    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhraseWords))
+      return null;
+
+    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
       return translate('LOGIN.IGUANA_SEED');
     }
 
-    if (this.state.loginPassPhraseBitsOption === 160) {
+    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 160)) {
       return translate('LOGIN.WAVES_SEED');
     }
 
-    if (this.state.loginPassPhraseBitsOption === 128) {
+    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 128)) {
       return translate('LOGIN.NXT_SEED');
     }
-  }
 
-  onLoginPassPhraseBitsOptionChange(bitsOption) {
-    this.setState({
-      loginPassPhraseBitsOption: +bitsOption
-    });
+    return null;
   }
 
   updateActiveLoginSection(name) {

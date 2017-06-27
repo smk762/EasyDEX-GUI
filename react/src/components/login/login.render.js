@@ -6,7 +6,7 @@ const LoginRender = function () {
     <div>
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
-        <div className="page-content vertical-align-middle">
+        <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
           <div className="brand">
             <img
               className="brand-img"
@@ -50,55 +50,7 @@ const LoginRender = function () {
 
           <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
             <h4 className="color-white">{translate('INDEX.WELCOME_LOGIN')}</h4>
-            <div className="login-form">
-              <div>
-                <h4 className="hint color-white">
-                  { translate('INDEX.SELECT_SEED_TYPE') }:
-                </h4>
-                <div className="form-group form-material floating">
-                  <div className="radio-custom radio-default radio-inline">
-                    <input
-                      id="loginPassPhraseOptionsIguana"
-                      type="radio"
-                      name="loginPassPhraseOptions"
-                      value="256"
-                      checked={ this.state.loginPassPhraseBitsOption === 256 }
-                      onChange={ (e) => this.onLoginPassPhraseBitsOptionChange(e.target.value) }
-                    />
-                    <label htmlFor="loginPassPhraseOptionsIguana">
-                      { translate('LOGIN.IGUANA_SEED') }
-                    </label>
-                  </div>
-                  <div className="radio-custom radio-default radio-inline">
-                    <input
-                      id="loginPassPhraseOptionsWaves"
-                      type="radio"
-                      name="loginPassPhraseOptions"
-                      value="160"
-                      checked={ this.state.loginPassPhraseBitsOption === 160 }
-                      onChange={ (e) => this.onLoginPassPhraseBitsOptionChange(e.target.value) }
-                    />
-                    <label htmlFor="loginPassPhraseOptionsWaves">
-                      { translate('LOGIN.WAVES_SEED') }
-                    </label>
-                  </div>
-                  <div className="radio-custom radio-default radio-inline">
-                    <input
-                      id="loginPassPhraseOptionsNXT"
-                      type="radio"
-                      name="loginPassPhraseOptions"
-                      value="128"
-                      checked={ this.state.loginPassPhraseBitsOption === 128 }
-                      onChange={ (e) => this.onLoginPassPhraseBitsOptionChange(e.target.value) }
-                    />
-                    <label htmlFor="loginPassPhraseOptionsNXT">
-                      { translate('LOGIN.NXT_SEED') }
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="form-group form-material floating">
+            <div className="form-group form-material floating col-sm-9 horizontal-padding-0">
               <input
                 type={ this.state.seedInputVisibility ? 'text' : 'password' }
                 className="form-control"
@@ -112,12 +64,21 @@ const LoginRender = function () {
                 className="floating-label"
                 htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
             </div>
+            <div className="form-group form-material floating col-sm-3 horizontal-padding-0 margin-top-20">
+              { this.state.loginPassPhraseSeedType
+                ?
+                  this.state.loginPassPhraseSeedType
+                :
+                <div className="placeholder-label">Seed Type</div>
+              }
+            </div>
             <button
               type="button"
               className="btn btn-primary btn-block"
               onClick={ this.loginSeed }
               disabled={ !this.state.loginPassphrase
-              || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
+              || !this.state.loginPassphrase.length
+              || !this.state.loginPassPhraseSeedType }>{ translate('INDEX.SIGN_IN') }</button>
             <div className="form-group form-material floating">
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect"
