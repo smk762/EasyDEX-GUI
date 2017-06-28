@@ -64,7 +64,7 @@ const LoginRender = function () {
                 onChange={ this.updateInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }/>
               <i
-                className={ this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
                 onClick={ this.toggleSeedInputVisibility }></i>
               <label
                 className="floating-label"
