@@ -34,7 +34,8 @@ class Login extends React.Component {
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
-      customWalletSeed: false
+      customWalletSeed: false,
+      isCustomSeedWeak: false,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -209,8 +210,9 @@ class Login extends React.Component {
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
-      customWalletSeed: false
-    });
+      customWalletSeed: false,
+      isCustomSeedWeak: false,
+   });
   }
 
   execWalletCreate() {
@@ -228,20 +230,29 @@ class Login extends React.Component {
     });
   }
 
+  // TODO: 
+  //    1) disable register btn if seed or seed conf is incorrect
+  //    2) display explicit custom seed validation message
   handleRegisterWallet() {
     const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
     const isSeedBlank = this.isBlank(this.state.randomSeed);
 
+    // if custom seed check for string strength
+    // at least 1 letter in upper case
+    // at least 1 digit
+    // at least one special char
+    // min length 10 chars
+
+    const _customSeed = this.state.customWalletSeed ? this.state.randomSeed.match('^(?=.*[A-Z])(?=.*[^<>{}\"/|;:.,~!?@#$%^=&*\\]\\\\()\\[_+]*$)(?=.*[0-9])(?=.*[a-z]).{10,99}$') : false;
+
+    this.setState({
+      isCustomSeedWeak: _customSeed === null ? true : false,
+      isSeedConfirmError: !enteredSeedsMatch ? true : false,
+      isSeedBlank: isSeedBlank ? true : false,
+    });
+    
     if (enteredSeedsMatch && !isSeedBlank) {
       this.toggleSeedBackupModal();
-    } else if (!enteredSeedsMatch) {
-      this.setState({
-        isSeedConfirmError: true,
-      });
-    } else if (isSeedBlank) {
-      this.setState({
-        isSeedBlank: true
-      });
     }
   }
 

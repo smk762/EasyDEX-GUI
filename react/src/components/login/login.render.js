@@ -25,12 +25,16 @@ const LoginRender = function () {
           <div className={ this.state.activeLoginSection === 'ieWarning' ? 'show' : 'hide' }>
             <div className="panel">
               <div className="panel-heading">
-                <h3 className="panel-title">{ translate('INDEX.UNSUPPORTED_BROWSER') }</h3>
+                <h3 className="panel-title">
+                  { translate('INDEX.UNSUPPORTED_BROWSER') }
+                </h3>
               </div>
               <div className="alert alert-danger alert-dismissible">
                 <button type="button">
                   <span>&times;</span>
-                  <span className="sr-only">{ translate('INDEX.CLOSE') }</span>
+                  <span className="sr-only">
+                    { translate('INDEX.CLOSE') }
+                  </span>
                 </button>
                 { translate('INDEX.IE_UNSUPPORTED') }
               </div>
@@ -49,7 +53,9 @@ const LoginRender = function () {
           </div>
 
           <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
-            <h4 className="color-white">{translate('INDEX.WELCOME_LOGIN')}</h4>
+            <h4 className="color-white">
+              {translate('INDEX.WELCOME_LOGIN')}
+            </h4>
             <div className="form-group form-material floating col-sm-9 horizontal-padding-0">
               <input
                 type={ this.state.seedInputVisibility ? 'text' : 'password' }
@@ -77,8 +83,7 @@ const LoginRender = function () {
               className="btn btn-primary btn-block"
               onClick={ this.loginSeed }
               disabled={ !this.state.loginPassphrase
-              || !this.state.loginPassphrase.length
-              || !this.state.loginPassPhraseSeedType }>{ translate('INDEX.SIGN_IN') }</button>
+              || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
             <div className="form-group form-material floating">
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect"
@@ -92,19 +97,25 @@ const LoginRender = function () {
                 id="register-btn"
                 onClick={ this.toggleActivateCoinForm }
                 disabled={ !this.props.Main }>
-                <span className="ladda-label">{ translate('ADD_COIN.ADD_ANOTHER_COIN') }</span>
+                <span className="ladda-label">
+                  { translate('ADD_COIN.ADD_ANOTHER_COIN') }
+                </span>
               </button>
             </div>
           </div>
 
           <div className={ this.state.activeLoginSection === 'activateCoin' ? 'show' : 'hide' }>
-            <h4 className="color-white">{ translate('INDEX.WELCOME_PLEASE_ADD') }</h4>
+            <h4 className="color-white">
+              { translate('INDEX.WELCOME_PLEASE_ADD') }
+            </h4>
             <div className="form-group form-material floating width-540 vertical-margin-30 horizontal-margin-0">
               <button
                 className="btn btn-lg btn-primary btn-block ladda-button"
                 onClick={ this.toggleActivateCoinForm }
                 disabled={ !this.props.Main }>
-                <span className="ladda-label">{ translate('INDEX.ACTIVATE_COIN') }</span>
+                <span className="ladda-label">
+                  { translate('INDEX.ACTIVATE_COIN') }
+                </span>
               </button>
             </div>
           </div>
@@ -114,7 +125,6 @@ const LoginRender = function () {
               <h4 className="hint color-white">
                 { translate('INDEX.SELECT_SEED_TYPE') }:
               </h4>
-
               <div className="row">
                 <div className="col-sm-5 horizontal-padding-0">
                   <div className="toggle-box vertical-padding-20">
@@ -178,7 +188,7 @@ const LoginRender = function () {
                 </div>
               </div>
 
-              <div className="form-group form-material floating">
+              <div className="form-group form-material floating seed-tooltip">
                 <textarea
                   className="form-control placeholder-no-fix height-100"
                   type="text"
@@ -187,6 +197,14 @@ const LoginRender = function () {
                   onChange={ (e) => this.updateWalletSeed(e) }
                   readOnly={ !this.isCustomWalletSeed() }
                 ></textarea>
+                <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
+                  <strong>Weak seed!</strong><br /><br />
+                  Your seed must contain:<br />
+                  - at least 1 upper case letter<br />
+                  - at least 1 digit<br />
+                  - at least 1 special character<br />
+                  - minimum 10 characters long
+                </span>
                 <label
                   className="floating-label"
                   htmlFor="walletseed">{ translate('INDEX.WALLET_SEED') }</label>
@@ -199,8 +217,12 @@ const LoginRender = function () {
                   value={ this.state.randomSeedConfirm }
                   onChange={ this.updateInput }
                   id="rwalletseed"></textarea>
-                <span className={ this.state.isSeedBlank ? 'help-block' : 'hide' }>{ translate('LOGIN.MUST_ENTER_SEED') }.</span>
-                <span className={ this.state.isSeedConfirmError ? 'help-block' : 'hide' }>{ translate('LOGIN.ENTER_VALUE_AGAIN') }.</span>
+                <span className={ this.state.isSeedBlank ? 'help-block' : 'hide' }>
+                  { translate('LOGIN.MUST_ENTER_SEED') }.
+                </span>
+                <span className={ this.state.isSeedConfirmError ? 'help-block' : 'hide' }>
+                  { translate('LOGIN.ENTER_VALUE_AGAIN') }.
+                </span>
                 <label
                   className="floating-label"
                   htmlFor="rwalletseed">{ translate('INDEX.CONFIRM_SEED') }</label>

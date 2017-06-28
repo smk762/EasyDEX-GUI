@@ -48,6 +48,7 @@ class WalletsNativeSyncProgress extends React.Component {
   renderActivatingBestChainProgress() {
     if (this.props.Settings &&
         this.props.Settings.debugLog) {
+          console.log('debugLog');
       if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1 &&
           !this.props.Dashboard.progress &&
           !this.props.Dashboard.progress.blocks) {
@@ -80,7 +81,7 @@ class WalletsNativeSyncProgress extends React.Component {
         }
       } else if (
           this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
-          !this.props.Dashboard.progress &&
+          !this.props.Dashboard.progress ||
           !this.props.Dashboard.progress.blocks
         ) {
         const temp = this.props.Settings.debugLog.split(' ');

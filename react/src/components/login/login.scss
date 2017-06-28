@@ -59,3 +59,29 @@ textarea {
 .placeholder-label {
   color: #808080;
 }
+
+.seed-tooltip {
+  .tooltiptext {
+    width: 230px;
+    padding: 10px 20px;
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 105%;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 100%;
+      margin-top: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent black transparent transparent;
+    }
+  }
+}
