@@ -61,7 +61,7 @@ const LoginRender = function () {
                 type={ this.state.seedInputVisibility ? 'text' : 'password' }
                 className="form-control"
                 name="loginPassphrase"
-                onChange={ this.updateInput }
+                onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }/>
               <i
                 className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
@@ -215,7 +215,7 @@ const LoginRender = function () {
                   type="text"
                   name="randomSeedConfirm"
                   value={ this.state.randomSeedConfirm }
-                  onChange={ this.updateInput }
+                  onChange={ this.updateRegisterConfirmPassPhraseInput }
                   id="rwalletseed"></textarea>
                 <span className={ this.state.isSeedBlank ? 'help-block' : 'hide' }>
                   { translate('LOGIN.MUST_ENTER_SEED') }.

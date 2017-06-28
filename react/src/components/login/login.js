@@ -38,7 +38,8 @@ class Login extends React.Component {
       isCustomSeedWeak: false,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
-    this.updateInput = this.updateInput.bind(this);
+    this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
+    this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
     this.loginSeed = this.loginSeed.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this.handleRegisterWallet = this.handleRegisterWallet.bind(this);
@@ -151,12 +152,18 @@ class Login extends React.Component {
     Store.dispatch(toggleAddcoinModal(true, false));
   }
 
-  updateInput(e) {
+  updateLoginPassPhraseInput(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(e.target.value)
+    });
+  }
+
+  updateRegisterConfirmPassPhraseInput(e) {
     this.setState({
       [e.target.name]: e.target.value,
       isSeedConfirmError: false,
-      isSeedBlank: this.isBlank(e.target.value),
-      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(e.target.value)
+      isSeedBlank: this.isBlank(e.target.value)
     });
   }
 
