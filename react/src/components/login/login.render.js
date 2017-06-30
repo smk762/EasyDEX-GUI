@@ -108,7 +108,7 @@ const LoginRender = function () {
             <h4 className="color-white">
               { translate('INDEX.WELCOME_PLEASE_ADD') }
             </h4>
-            <div className="form-group form-material floating width-540 vertical-margin-30 horizontal-margin-0">
+            <div className="form-group form-material floating width-540 vertical-margin-30 auto-side-margin">
               <button
                 className="btn btn-lg btn-primary btn-block ladda-button"
                 onClick={ this.toggleActivateCoinForm }

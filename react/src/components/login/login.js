@@ -7,8 +7,7 @@ import {
   getDexCoins,
   toggleSyncOnlyModal,
   getSyncOnlyForks,
-  createNewWallet,
-  triggerToaster
+  createNewWallet
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import {PassPhraseGenerator} from '../../util/crypto/passphrasegenerator';
@@ -153,10 +152,13 @@ class Login extends React.Component {
   }
 
   updateLoginPassPhraseInput(e) {
+    // remove any empty chars from the start/end of the string
+    const newValue = e.target.value ? e.target.value.trim() : null;
+
     this.setState({
-      [e.target.name]: e.target.value,
-      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(e.target.value)
-    });
+      [e.target.name]: newValue,
+      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue)
+  });
   }
 
   updateRegisterConfirmPassPhraseInput(e) {
@@ -176,6 +178,12 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    // reset the login pass phrase values so that when the user logs out, the values are clear
+    this.setState({
+      loginPassphrase: null,
+      loginPassPhraseSeedType: null,
+    });
+
     Store.dispatch(
       iguanaWalletPassphrase(this.state.loginPassphrase)
     );
@@ -210,6 +218,7 @@ class Login extends React.Component {
     this.setState({
       activeLoginSection: name,
       loginPassphrase: null,
+      loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
       randomSeed: PassPhraseGenerator.generatePassPhrase(256),
@@ -258,7 +267,7 @@ class Login extends React.Component {
       isSeedBlank: isSeedBlank ? true : false,
     });
     
-    if (enteredSeedsMatch && !isSeedBlank) {
+    if (enteredSeedsMatch && !isSeedBlank && _customSeed !== null) {
       this.toggleSeedBackupModal();
     }
   }
