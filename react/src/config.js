@@ -9,5 +9,6 @@ module.exports = {
   cli: {
     passthru: true,
     default: true
-  }
+  },
+  iguanaLessMode: true,
 };

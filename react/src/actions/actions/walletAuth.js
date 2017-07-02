@@ -185,15 +185,29 @@ export function iguanaActiveHandle(getMainAddress) {
       'timestamp': _timestamp,
       'function': 'iguanaActiveHandle',
       'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+      'url': Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle` : `http://127.0.0.1:${Config.iguanaCorePort}`,
       'payload': _payload,
       'status': 'pending',
     }));
 
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+    let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(_payload),
-    })
+    };
+
+    if (Config.iguanaLessMode) {
+      _fetchConfig = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+    }
+
+    return fetch(
+      Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
     .catch(function(error) {
       console.log(error);
       dispatch(logGuiHttp({
@@ -222,7 +236,7 @@ export function iguanaActiveHandle(getMainAddress) {
   }
 }
 
-function iguanaWalletPassphraseState(json, dispatch) {
+export function iguanaWalletPassphraseState(json, dispatch) {
   sessionStorage.setItem('IguanaActiveAccount', JSON.stringify(json));
   dispatch(
     triggerToaster(

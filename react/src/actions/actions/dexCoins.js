@@ -21,15 +21,29 @@ export function getDexCoins() {
       'timestamp': _timestamp,
       'function': 'getDexCoins',
       'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+      'url': Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/InstantDEX/allcoins` : `http://127.0.0.1:${Config.iguanaCorePort}`,
       'payload': _payload,
       'status': 'pending',
     }));
 
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+    let _fetchConfig = {
       method: 'POST',
-      body: JSON.stringify(_payload)
-    })
+      body: JSON.stringify(_payload),
+    };
+
+    if (Config.iguanaLessMode) {
+      _fetchConfig = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+    }
+
+    return fetch(
+      Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/InstantDEX/allcoins` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
     .catch(function(error) {
       console.log(error);
       dispatch(logGuiHttp({

@@ -4,7 +4,8 @@ import {
   Config,
   toggleAddcoinModal,
   getDexCoins,
-  startIguanaInstance
+  startIguanaInstance,
+  iguanaWalletPassphraseState
 } from '../actionCreators';
 import {
   logGuiHttp,
@@ -234,15 +235,24 @@ export function shepherdHerd(coin, mode, path) {
       );
     })
     .then(response => response.json())
-    .then(
-      json => dispatch(
-        iguanaAddCoin(
-          coin,
-          mode,
-          acData
-        )
-      )
-    );
+    .then(function(json) {
+      if (Config.iguanaLessMode) {
+        dispatch(
+          addCoinResult(coin, mode)
+        );
+        dispatch(
+          iguanaActiveHandleBypass()
+        );
+      } else {
+        dispatch(
+          iguanaAddCoin(
+            coin,
+            mode,
+            acData
+          )
+        );
+      }
+    });
   }
 }
 
@@ -295,6 +305,33 @@ export function _shepherdGetConfig(coin, mode) {
         )
       )
     );
+  }
+}
+
+export function iguanaActiveHandleBypass() {
+  return dispatch => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'Failed to iguanaActiveHandleBypass',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(
+      json => dispatch(
+        iguanaWalletPassphraseState(json, dispatch)
+      )
+    )
   }
 }
 

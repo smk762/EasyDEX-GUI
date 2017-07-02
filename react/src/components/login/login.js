@@ -194,7 +194,7 @@ class Login extends React.Component {
       return null;
     }
 
-    const passPhraseWords = passPhrase.split(" ");
+    const passPhraseWords = passPhrase.split(' ');
     if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhraseWords))
       return null;
 
@@ -246,7 +246,7 @@ class Login extends React.Component {
     });
   }
 
-  // TODO: 
+  // TODO:
   //    1) disable register btn if seed or seed conf is incorrect
   //    2) display explicit custom seed validation message
   handleRegisterWallet() {
@@ -266,7 +266,7 @@ class Login extends React.Component {
       isSeedConfirmError: !enteredSeedsMatch ? true : false,
       isSeedBlank: isSeedBlank ? true : false,
     });
-    
+
     if (enteredSeedsMatch && !isSeedBlank && _customSeed !== null) {
       this.toggleSeedBackupModal();
     }
