@@ -315,7 +315,7 @@ class Settings extends React.Component {
       let _cliResponseParsed;
 
       try {
-        _cliResponseParsed = JSON.parse(_cliResponse.result)
+        _cliResponseParsed = JSON.parse(_cliResponse.result);
       } catch(e) {
         _cliResponseParsed = _cliResponse.result;
       }

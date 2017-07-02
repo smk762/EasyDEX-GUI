@@ -60,20 +60,31 @@ export function getSyncInfoNativeKMD(skipDebug) {
 }
 
 function getSyncInfoNativeState(json, coin, skipDebug) {
+  console.log('getSyncInfoNativeState', json);
   if (coin === 'KMD' &&
       json &&
       json.error) {
     return getSyncInfoNativeKMD(skipDebug);
   } else {
-    return {
-      type: SYNCING_NATIVE_MODE,
-      progress: json,
+    if (json &&
+        json.error &&
+        Config.cli.default) {
+      console.log('getSyncInfoNativeState', 'error');
+      return {
+        type: SYNCING_NATIVE_MODE,
+        progress: Config.cli.default ? json.error : json,
+      }
+    } else {
+      return {
+        type: SYNCING_NATIVE_MODE,
+        progress: Config.cli.default ? json.result : json,
+      }
     }
   }
 }
 
 export function getSyncInfoNative(coin, skipDebug) {
-  const payload = {
+  let payload = {
     'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
     'agent': getPassthruAgent(coin),
     'method': 'passthru',
@@ -82,21 +93,43 @@ export function getSyncInfoNative(coin, skipDebug) {
     'hex': '',
   };
 
+  if (Config.cli.default) {
+    payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'getinfo'
+    };
+  }
+
   return dispatch => {
     const _timestamp = Date.now();
     dispatch(logGuiHttp({
       'timestamp': _timestamp,
       'function': 'getSyncInfo',
       'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+      'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
       'payload': payload,
       'status': 'pending',
     }));
-
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+    let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
-    })
+    };
+
+    if (Config.cli.default) {
+      _fetchConfig = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'payload': payload }),
+      };
+    }
+
+    return fetch(
+      Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
     .catch(function(error) {
       console.log(error);
       dispatch(logGuiHttp({
@@ -112,8 +145,26 @@ export function getSyncInfoNative(coin, skipDebug) {
         )
       );
     })
-    .then(response => response.json())
+    .then(function(response) {
+      const _response = response.text().then(function(text) { return text; });
+      return _response;
+    })
+    //.then(response => response.json())
     .then(json => {
+      if (!json &&
+        Config.cli.default) {
+        dispatch(
+          triggerToaster(
+            'Komodod is down',
+            'Critical Error',
+            'error',
+            false
+          )
+        );
+      } else {
+        json = JSON.parse(json);
+      }
+
       dispatch(logGuiHttp({
         'timestamp': _timestamp,
         'status': 'success',

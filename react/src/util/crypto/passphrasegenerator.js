@@ -80,6 +80,30 @@ export const PassPhraseGenerator = {
 		return this.passPhrase;
 	},
 
+  // checks if it's possible that the pass phrase words supplied as the first parameter
+  // were generated with the number of bits supplied as the second parameter
+  isPassPhraseValid: function (passPhraseWords, bits) {
+    // the required number of words based on the number of bits
+    // mirrors the generatePassPhrase function above
+    const wordsCount = bits / 32 * 3;
+    return passPhraseWords && passPhraseWords.length === wordsCount;
+  },
+
+  // checks if all pass phrase words are valid
+  // i.e. checks if all words are contained in ClientWordList
+  arePassPhraseWordsValid: function(passPhraseWords) {
+	  if (!passPhraseWords) {
+	    return false;
+    }
+
+    for (let word of passPhraseWords) {
+	    if (this.words.indexOf(word) === -1)
+	      return false;
+    }
+
+    return true;
+  },
+
 	reset: function() {
 		this.passPhrase = "";
 		this.seeds = 0;

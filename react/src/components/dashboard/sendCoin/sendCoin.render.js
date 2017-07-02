@@ -235,6 +235,8 @@ export const SendCoinRender = function () {
                     name="amount"
                     placeholder="0.000"
                     autoComplete="off"
+                    defaultValue={ this.state.amount }
+                    value={ this.state.amount }
                     onChange={ this.updateInput } />
                 </div>
                 <div className="col-lg-6 form-group form-material">

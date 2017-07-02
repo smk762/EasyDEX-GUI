@@ -4,19 +4,21 @@ import Tree, { TreeNode } from 'rc-tree';
 import { animation } from '../../../util/rc-tree-animate';
 
 export const NotariesListRender = function (node, index) {
-  <TreeNode
-    title={ `Node ${index}` }
-    key={ `node-${index}` }>
+  return (
     <TreeNode
-      key={ `node-${index}-btc` }
-      title={ `BTC: ${node.BTCaddress}` } />
-    <TreeNode
-      key={ `node-${index}-kmd` }
-      title={ `KMD: ${node.KMDaddress}` } />
-    <TreeNode
-      key={ `node-${index}-pubkey` }
-      title={ `Pubkey: ${node.pubkey}` } />
-  </TreeNode>
+      title={ `Node ${index}` }
+      key={ `node-${index}` }>
+      <TreeNode
+        key={ `node-${index}-btc` }
+        title={ `BTC: ${node.BTCaddress}` } />
+      <TreeNode
+        key={ `node-${index}-kmd` }
+        title={ `KMD: ${node.KMDaddress}` } />
+      <TreeNode
+        key={ `node-${index}-pubkey` }
+        title={ `Pubkey: ${node.pubkey}` } />
+    </TreeNode>
+  );
 };
 
 export const WalletsNotariesListRender = function () {

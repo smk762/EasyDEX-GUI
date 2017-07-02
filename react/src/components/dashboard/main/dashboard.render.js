@@ -28,12 +28,12 @@ const DashboardRender = function() {
           <CoinTile {...this.props} />
           <WalletsNav {...this.props} />
           { !this.isNativeMode() && <WalletsProgress {...this.props} /> }
-          <WalletsBalance {...this.props} />
+          { !this.isNativeMode() && <WalletsBalance {...this.props} />}
           <SendCoin {...this.props} />
-          <ReceiveCoin {...this.props.ActiveCoin} />
           <WalletsData {...this.props} />
           <WalletsTxInfo {...this.props} />
           <WalletsNative {...this.props} />
+          <ReceiveCoin {...this.props.ActiveCoin} />
           <WalletsNativeTxInfo {...this.props} />
         </div>
         <div className={ this.isSectionActive('edex') ? 'show' : 'hide' }>

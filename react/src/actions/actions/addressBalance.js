@@ -106,20 +106,46 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
             }
           })
         } else {
+          if (Config.cli.default &&
+              mode === 'native') {
+            payload = {
+              mode: null,
+              chain: coin,
+              cmd: payload.function,
+              params: [""]
+            };
+          }
+
           const _timestamp = Date.now();
           dispatch(logGuiHttp({
             'timestamp': _timestamp,
             'function': 'getKMDAddressesNative',
             'type': 'post',
-            'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+            'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
             'payload': payload,
             'status': 'pending',
           }));
 
-          fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
+          let _fetchConfig = {
             method: 'POST',
             body: JSON.stringify(payload),
-          })
+          };
+
+          if (Config.cli.default &&
+              mode === 'native') {
+            _fetchConfig = {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 'payload': payload }),
+            };
+          }
+
+          fetch(
+            Config.cli.default && mode === 'native' ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+            _fetchConfig
+          )
           .catch(function(error) {
             console.log(error);
             dispatch(logGuiHttp({
@@ -142,7 +168,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
               'status': 'success',
               'response': json,
             }));
-            resolve(json);
+            resolve(Config.cli.default && mode === 'native' ? json.result : json);
           })
         }
       });
@@ -227,8 +253,19 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           }
         }
 
-        let newAddressArray = [];
+        // remove addr duplicates
+        if (result[0]) {
+          result[0] = result[0].filter(function(elem, pos) {
+            return result[0].indexOf(elem) === pos;
+          });
+        }
+        if (result[1]) {
+          result[1] = result[1].filter(function(elem, pos) {
+            return result[1].indexOf(elem) === pos;
+          });
+        }
 
+        let newAddressArray = [];
         for (let a = 0; a < result.length; a++) {
           newAddressArray[a] = [];
 
@@ -260,7 +297,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           Promise.all(result[1].map((_address, index) => {
             return new Promise((resolve, reject) => {
               const _timestamp = Date.now();
-              let ajaxDataToHex = `["${_address}"]`;
+              let ajaxDataToHex = `[\"${_address}\"]`;
 
               iguanaHashHex(ajaxDataToHex, dispatch)
               .then((hashHexJson) => {
@@ -286,16 +323,40 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                   'timestamp': _timestamp,
                   'function': 'getKMDAddressesNative+ZBalance',
                   'type': 'post',
-                  'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+                  'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
                   'payload': payload,
                   'status': 'pending',
                 }));
 
-                fetch(`http://127.0.0.1:${Config.iguanaCorePort}`,
-                {
+                let _fetchConfig = {
                   method: 'POST',
                   body: JSON.stringify(payload),
-                })
+                };
+
+                if (Config.cli.default &&
+                    mode === 'native') {
+                  payload = {
+                    mode: null,
+                    chain: coin,
+                    cmd: 'z_getbalance',
+                    params: [
+                      _address
+                    ]
+                  };
+
+                  _fetchConfig = {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 'payload': payload }),
+                  };
+                }
+
+                fetch(
+                  Config.cli.default && mode === 'native' ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+                  _fetchConfig
+                )
                 .catch(function(error) {
                   console.log(error);
                   dispatch(logGuiHttp({
@@ -329,6 +390,10 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                       )
                     );
                   } else {
+                    if (Config.cli.default &&
+                        mode === 'native') {
+                      json = json.result;
+                    }
                     resolve(json);
                     newAddressArray[1][index] = {
                       address: _address,
@@ -449,10 +514,33 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           'status': 'pending',
         }));
 
-        fetch(`http://127.0.0.1:${(Config.useBasiliskInstance && mode === 'basilisk' ? Config.iguanaCorePort + 1 : Config.iguanaCorePort)}`, {
+        let _fetchConfig = {
           method: 'POST',
           body: JSON.stringify(payload),
-        })
+        };
+
+        if (Config.cli.default &&
+            mode === 'native') {
+          payload = {
+            mode: null,
+            chain: coin,
+            cmd: payload.function,
+            params: payload.params
+          };
+
+          _fetchConfig = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 'payload': payload }),
+          };
+        }
+
+        fetch(
+          Config.cli.default && mode === 'native' ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${(Config.useBasiliskInstance && mode === 'basilisk' ? Config.iguanaCorePort + 1 : Config.iguanaCorePort)}`,
+          _fetchConfig
+        )
         .catch(function(error) {
           console.log(error);
           dispatch(logGuiHttp({
@@ -470,6 +558,10 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
         })
         .then(response => response.json())
         .then(function(json) {
+          if (Config.cli.default &&
+              mode === 'native') {
+            json = json.result;
+          }
           dispatch(logGuiHttp({
             'timestamp': _timestamp,
             'status': 'success',
