@@ -401,7 +401,14 @@ export const _lang = {
       'SIGN_IN': 'Sign In',
       'WELCOME': 'Welcome',
       'DISPLAY_SYNC_ONLY': 'Display sync only coins progress',
-      'ENTER_VALUE_AGAIN': 'Please enter the same value again'
+      'ENTER_VALUE_AGAIN': 'Please enter the same value again',
+      'CUSTOM_WALLET_SEED': 'Custom wallet seed',
+      'MUST_ENTER_SEED': 'You must enter a seed',
+      'INVALID_SEED': 'Invalid Seed',
+      'SEED_NOT_OF_TYPE': 'The inserted seed is not of type',
+      'IGUANA_SEED': 'Iguana (256 bits)',
+      'WAVES_SEED': 'Waves',
+      'NXT_SEED': 'NXT'
     },
     'SIDEBAR': {
       'EDEX_MOTTO': 'Most Secure, Easy and Native Decentralised Exchange',

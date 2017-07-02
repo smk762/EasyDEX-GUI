@@ -310,7 +310,7 @@ export const SettingsRender = function() {
                               id="wifkeysPassphrase"
                               onChange={ this.updateInput } />
                             <i
-                              className={ this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                              className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
                               onClick={ this.toggleSeedInputVisibility }></i>
                             <label
                               className="floating-label"

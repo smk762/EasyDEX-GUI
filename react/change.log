@@ -15,6 +15,9 @@ front:
 - added error message if coin is already running in another mode
 - added explicit "new address generated" message
 - added cli / rpc passphru
+- seed type check
+- seed extra space(s) check
+- custom seed option
 
 back:
 - added cli route
