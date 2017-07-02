@@ -3,6 +3,7 @@ import {
   SyncErrorLongestChainRender,
   SyncErrorBlocksRender,
   SyncPercentageRender,
+  LoadingBlocksRender,
   TranslationComponentsRender,
   CoinIsBusyRender,
   ChainActivationNotificationRender,
@@ -35,26 +36,35 @@ class WalletsProgress extends React.Component {
   }
 
   renderChainActivationNotification() {
-    if ((!this.props.Dashboard.progress.blocks && !this.props.Dashboard.progress.longestchain) ||
-      (this.props.Dashboard.progress.blocks < this.props.Dashboard.progress.longestchain)) {
-      return ChainActivationNotificationRender.call(this);
+    if (this.props.Dashboard.progress) {
+      if ((!this.props.Dashboard.progress.blocks && !this.props.Dashboard.progress.longestchain) ||
+        (this.props.Dashboard.progress.blocks < this.props.Dashboard.progress.longestchain)) {
+        return ChainActivationNotificationRender.call(this);
+      }
+    } else {
+      return null;
     }
-
-    return null;
   }
 
   renderSyncPercentagePlaceholder() {
-    if (this.props.Dashboard.progress.blocks > 0 &&
+    if (this.props.Dashboard.progress &&
+      this.props.Dashboard.progress.blocks > 0 &&
       this.props.Dashboard.progress.longestchain === 0) {
       return SyncErrorLongestChainRender.call(this);
     }
 
-    if (this.props.Dashboard.progress.blocks === 0) {
+    if (this.props.Dashboard.progress && this.props.Dashboard.progress.blocks === 0) {
       return SyncErrorBlocksRender.call(this);
     }
 
-    const syncPercentage = (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2) + '%').replace('NaN', 0);
-    return SyncPercentageRender.call(this, syncPercentage);
+    if (this.props.Dashboard.progress &&
+      this.props.Dashboard.progress.blocks) {
+      const syncPercentage = (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100
+        / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2) + '%').replace('NaN', 0);
+      return SyncPercentageRender.call(this, syncPercentage);
+    }
+
+    return LoadingBlocksRender.call(this);
   }
 
   renderLB(translationID) {
@@ -63,8 +73,10 @@ class WalletsProgress extends React.Component {
 
   renderActivatingBestChainProgress() {
     if (this.props.Settings &&
-      this.props.Settings.debugLog) {
-      if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1) {
+        this.props.Settings.debugLog) {
+      if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1 &&
+        !this.props.Dashboard.progress &&
+        !this.props.Dashboard.progress.blocks) {
         const temp = this.props.Settings.debugLog.split(' ');
         let currentBestChain;
         let currentProgress;
@@ -80,16 +92,23 @@ class WalletsProgress extends React.Component {
 
         // fallback to local data if remote node is inaccessible
         if (this.props.Dashboard.progress.remoteKMDNode &&
-          !this.props.Dashboard.progress.remoteKMDNode.blocks) {
+            !this.props.Dashboard.progress.remoteKMDNode.blocks) {
           return (
-            `: ${currentProgress}%`
+            `: ${currentProgress}% (activating)`
           );
         } else {
-          return(
-            `: ${Math.floor(currentBestChain * 100 / this.props.Dashboard.progress.remoteKMDNode.blocks)}% (blocks ${currentBestChain} / ${this.props.Dashboard.progress.remoteKMDNode.blocks})`
-          );
+          if (this.props.Dashboard.progress.remoteKMDNode &&
+              this.props.Dashboard.progress.remoteKMDNode.blocks) {
+            return(
+              `: ${Math.floor(currentBestChain * 100 / this.props.Dashboard.progress.remoteKMDNode.blocks)}% (blocks ${currentBestChain} / ${this.props.Dashboard.progress.remoteKMDNode.blocks})`
+            );
+          }
         }
-      } else if (this.props.Settings.debugLog.indexOf('Still rescanning') > -1) {
+      } else if (
+          this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
+          !this.props.Dashboard.progress ||
+          !this.props.Dashboard.progress.blocks
+        ) {
         const temp = this.props.Settings.debugLog.split(' ');
         let currentProgress;
 
@@ -100,11 +119,11 @@ class WalletsProgress extends React.Component {
         }
 
         return (
-          `: ${currentProgress}%`
+          `: ${currentProgress}% (rescanning blocks)`
         );
       } else {
         return (
-          <span>...</span>
+          <span> (downloading blocks)</span>
         );
       }
     }
@@ -113,8 +132,7 @@ class WalletsProgress extends React.Component {
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
-        (this.isFullMode() || this.isNativeMode()) &&
-        this.props.Dashboard.progress) {
+        (this.isFullMode() || this.isNativeMode())) {
       if (this.props.Dashboard.progress &&
           this.props.Dashboard.progress.error) {
         return CoinIsBusyRender.call(this);

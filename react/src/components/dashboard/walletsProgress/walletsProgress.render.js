@@ -17,12 +17,22 @@ export const SyncErrorBlocksRender = function() {
   );
 };
 
-export const SyncPercentageRender =  function(syncPercentage) {
+export const SyncPercentageRender = function(syncPercentage) {
   return (
     <div
       className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
       style={{ width: syncPercentage }}>
       <span style={{ width: syncPercentage }}>{ syncPercentage }</span> | { this.props.Dashboard.progress.blocks } / { this.props.Dashboard.progress.longestchain } | { translate('INDEX.CONNECTIONS') }: { this.props.Dashboard.progress.connections }
+    </div>
+  );
+};
+
+export const LoadingBlocksRender = function() {
+  return (
+    <div
+      className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
+      style={{ width: '100%' }}>
+      <span style={{ width: '100%' }}>Loading blocks...it can take up to 15 min to load blocks</span>
     </div>
   );
 };
@@ -41,7 +51,7 @@ export const CoinIsBusyRender = function() {
   return (
     <div className="text-align-center padding-10">{ translate('INDEX.COIN_IS_BUSY') }</div>
   );
-}
+};
 
 export const ChainActivationNotificationRender = function() {
   return (
@@ -52,7 +62,8 @@ export const ChainActivationNotificationRender = function() {
         <span>×</span>
       </button>
       <h4>
-        { translate('INDEX.ACTIVATING_CHAIN') }{ this.renderActivatingBestChainProgress() }
+        { translate('INDEX.ACTIVATING_CHAIN') }
+        { this.renderActivatingBestChainProgress() }
       </h4>
       <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
     </div>
