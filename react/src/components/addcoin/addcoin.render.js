@@ -49,10 +49,10 @@ const AddCoinRender = function() {
                 </button>
               </div>
               <div className="col-sm-12">
-                <p>
+                <p className={ this.state.nativeOnly ? 'hide' : '' }>
                   <strong>{ translate('INDEX.FULL_MODE') }:</strong> { translate('INDEX.FULL_MODE_DESC') }
                 </p>
-                <p>
+                <p className={ this.state.nativeOnly ? 'hide' : '' }>
                   <strong>{ translate('INDEX.BASILISK_MODE') }:</strong> { translate('INDEX.BASILISK_MODE_DESC') }
                 </p>
                 <p>

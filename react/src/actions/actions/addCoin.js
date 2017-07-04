@@ -240,9 +240,11 @@ export function shepherdHerd(coin, mode, path) {
         dispatch(
           addCoinResult(coin, mode)
         );
-        dispatch(
-          iguanaActiveHandleBypass()
-        );
+        setTimeout(() => {
+          dispatch(
+            iguanaActiveHandleBypass()
+          );
+        }, 1000);
       } else {
         dispatch(
           iguanaAddCoin(

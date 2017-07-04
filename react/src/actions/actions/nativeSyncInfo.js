@@ -19,12 +19,13 @@ export function getSyncInfoNativeKMD(skipDebug) {
       'timestamp': _timestamp,
       'function': 'getSyncInfoNativeKMD',
       'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`,
+      'url': Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`,
       'payload': '',
       'status': 'pending',
     }));
 
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
+    return fetch(
+      Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
       method: 'GET',
     })
     .catch(function(error) {
@@ -47,9 +48,9 @@ export function getSyncInfoNativeKMD(skipDebug) {
       dispatch(logGuiHttp({
         'timestamp': _timestamp,
         'status': 'success',
-        'response': json,
+        'response': Config.iguanaLessMode ? json.info : json,
       }));
-      dispatch(getSyncInfoNativeState({ 'remoteKMDNode': json }));
+      dispatch(getSyncInfoNativeState({ 'remoteKMDNode': Config.iguanaLessMode ? json.info : json }));
     })
     .then(function() {
       if (!skipDebug) {
