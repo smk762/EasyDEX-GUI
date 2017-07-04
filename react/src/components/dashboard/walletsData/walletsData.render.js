@@ -43,12 +43,12 @@ export const PaginationRender = function(paginationFrom, paginationTo) {
     <div className="row unselectable">
       <div className="col-sm-5">
         <div className="dataTables_info">
-          { translate('INDEX.SHOWING') } 
-          { paginationFrom } 
-          { translate('INDEX.TO_ALT') } 
-          { paginationTo } 
-          { translate('INDEX.OF') } 
-          { this.props.ActiveCoin.txhistory.length } 
+          { translate('INDEX.SHOWING') }&nbsp;
+          { paginationFrom }&nbsp;
+          { translate('INDEX.TO_ALT') }&nbsp;
+          { paginationTo }&nbsp;
+          { translate('INDEX.OF') }&nbsp;
+          { this.props.ActiveCoin.txhistory.length }&nbsp;
           { translate('INDEX.ENTRIES_SM') }
         </div>
       </div>
@@ -143,7 +143,7 @@ export const WalletsDataRender = function() {
                       <div className={ 'margin-bottom-3 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
                         <div
                           className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-                          style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%'}}>
+                          style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
                           { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
                         </div>
                       </div>

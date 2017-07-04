@@ -30,7 +30,6 @@ const LoginModalRender = function () {
                     <div className="brand">
                       <img className="brand-img" src="assets/images/easydex-logo-big.png" alt="SuperNET Iguana" />
                     </div>
-
                     <div id="section-login" className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
                       <h4 className="color-white" id="login-welcome">{ translate('INDEX.WELCOME_LOGIN') }</h4>
                       <div className="login-form">

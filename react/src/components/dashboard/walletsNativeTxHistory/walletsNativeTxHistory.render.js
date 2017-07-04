@@ -27,12 +27,12 @@ export const PaginationRender = function(paginationStart, paginationEnd, paginat
     <div className="row unselectable">
       <div className="col-sm-5">
         <div className="dataTables_info">
-          { translate('INDEX.SHOWING') } 
-          { paginationStart } 
-          { translate('INDEX.TO') } 
-          { paginationEnd } 
-          { translate('INDEX.OF') } 
-          { this.props.ActiveCoin.txhistory.length } 
+          { translate('INDEX.SHOWING') }&nbsp;
+          { paginationStart }&nbsp;
+          { translate('INDEX.TO') }&nbsp;
+          { paginationEnd }&nbsp;
+          { translate('INDEX.OF') }&nbsp;
+          { this.props.ActiveCoin.txhistory.length }&nbsp;
           { translate('INDEX.ENTRIES_SM') }
         </div>
       </div>

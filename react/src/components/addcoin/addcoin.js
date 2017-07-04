@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
 import {
+  Config,
   addCoin,
   toggleAddcoinModal,
   triggerToaster,
@@ -16,6 +17,7 @@ class AddCoin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      nativeOnly: Config.iguanaLessMode,
       coins: [],
       defaultCoinState: {
         selectedCoin: null,
