@@ -20,90 +20,72 @@ import {
 } from '../../components/addcoin/payload';
 
 export function addCoin(coin, mode, syncOnly, port) {
-  if (Config &&
-      Config.iguanaLessMode &&
-      mode !== '-1') {
+  if (mode === '-1') {
     return dispatch => {
-      startIguanaInstance('main', coin)
-      .then(function(json) {
-        setTimeout(function() {
-          console.log(`started ${coin} / main`, json);
-          _addCoin();
-        }, 2000);
-      });
+      dispatch(shepherdGetConfig(coin, mode));
     }
   } else {
-    _addCoin();
-  }
+    if (checkCoinType(coin) === 'currency_ac') {
+      const _acData = startCurrencyAssetChain('', coin, mode);
 
-  function _addCoin() {
-    if (mode === '-1') {
       return dispatch => {
-        dispatch(shepherdGetConfig(coin, mode));
+        dispatch(iguanaAddCoin(coin, mode, _acData));
       }
-    } else {
-      if (checkCoinType(coin) === 'currency_ac') {
-        const _acData = startCurrencyAssetChain('', coin, mode);
+    }
+    if (checkCoinType(coin) === 'ac') {
+      const _acData = startAssetChain('', coin, mode);
+
+      return dispatch => {
+        dispatch(iguanaAddCoin(coin, mode, _acData));
+      }
+    }
+    if (checkCoinType(coin) === 'crypto') {
+      const _acData = startCrypto('', coin, mode);
+
+      if (syncOnly) {
+        const modeToValue = {
+          '1': 'full',
+          '0': 'basilisk',
+          '-1': 'native'
+        };
 
         return dispatch => {
-          dispatch(iguanaAddCoin(coin, mode, _acData));
-        }
-      }
-      if (checkCoinType(coin) === 'ac') {
-        const _acData = startAssetChain('', coin, mode);
-
-        return dispatch => {
-          dispatch(iguanaAddCoin(coin, mode, _acData));
-        }
-      }
-      if (checkCoinType(coin) === 'crypto') {
-        const _acData = startCrypto('', coin, mode);
-
-        if (syncOnly) {
-          const modeToValue = {
-            '1': 'full',
-            '0': 'basilisk',
-            '-1': 'native'
-          };
-
-          return dispatch => {
-            startIguanaInstance(`${modeToValue[mode]}/sync`, coin)
-            .then(function(json) {
-              setTimeout(function() {
-                console.log(`started ${coin} / ${modeToValue[mode]} fork`, json);
-                dispatch(
-                  iguanaAddCoin(
-                    coin,
-                    mode,
-                    _acData,
-                    json.result
-                  )
-                );
-              }, 2000);
-            });
-          }
-        } else {
-          if (port) {
-            return dispatch => {
+          startIguanaInstance(`${modeToValue[mode]}/sync`, coin)
+          .then(function(json) {
+            setTimeout(function() {
+              console.log(`started ${coin} / ${modeToValue[mode]} fork`, json);
               dispatch(
                 iguanaAddCoin(
                   coin,
                   mode,
                   _acData,
-                  port
+                  json.result
                 )
               );
-            }
-          } else {
-            return dispatch => {
-              dispatch(
-                iguanaAddCoin(
-                  coin,
-                  mode,
-                  _acData
-                )
-              );
-            }
+            }, 2000);
+          });
+        }
+      } else {
+        if (port) {
+          return dispatch => {
+            dispatch(
+              iguanaAddCoin(
+                coin,
+                mode,
+                _acData,
+                port
+              )
+            );
+          }
+        } else {
+          return dispatch => {
+            dispatch(
+              iguanaAddCoin(
+                coin,
+                mode,
+                _acData
+              )
+            );
           }
         }
       }

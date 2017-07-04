@@ -187,6 +187,7 @@ class AddCoin extends React.Component {
 
   activateCoin() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
+    
     if (this.isCoinAlreadyAdded(coin)) {
       this.dismiss();
       return;
