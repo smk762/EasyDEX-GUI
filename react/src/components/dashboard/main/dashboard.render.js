@@ -14,7 +14,6 @@ import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
 import WalletsNative from '../walletsNative/walletsNative';
-import WalletsNativeTxInfo from '../walletsNativeTxInfo/walletsNativeTxInfo';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 
 const DashboardRender = function() {
@@ -28,13 +27,14 @@ const DashboardRender = function() {
           <CoinTile {...this.props} />
           <WalletsNav {...this.props} />
           <WalletsProgress {...this.props} />
-          { !this.isNativeMode() && <WalletsBalance {...this.props} />}
+          <span className={ this.props.ActiveCoin.mode !== 'native' ? 'show' : 'hide' }>
+            <WalletsBalance {...this.props} />
+          </span>
           <SendCoin {...this.props} />
+          <ReceiveCoin {...this.props.ActiveCoin} />
           <WalletsData {...this.props} />
           <WalletsTxInfo {...this.props} />
           <WalletsNative {...this.props} />
-          <ReceiveCoin {...this.props.ActiveCoin} />
-          <WalletsNativeTxInfo {...this.props} />
         </div>
         <div className={ this.isSectionActive('edex') ? 'show' : 'hide' }>
           <EDEX {...this.props} />

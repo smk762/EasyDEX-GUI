@@ -28,10 +28,17 @@ class WalletsTxInfo extends React.Component {
     }
   }
 
+  isNativeMode() {
+    return this.props.ActiveCoin.mode === 'native';
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin.showTransactionInfo &&
-        this.props.ActiveCoin.mode !== 'native') {
+        // TODO the conditions below should be merged once the native mode components are fully merged
+        // into the rest of the components
+        (!this.isNativeMode() ||
+        (this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default'))) {
       const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
       return WalletsTxInfoRender.call(this, txInfo);
     }
