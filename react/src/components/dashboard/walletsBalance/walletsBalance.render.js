@@ -5,8 +5,7 @@ const WalletsBalanceRender = function() {
   return (
     <div id="wallet-widgets">
       <div className="col-xs-12">
-        <div className={ this.isNativeMode() || (this.isFullMode()
-        && !this.isFullySynced()) ? 'col-xs-12' : 'col-xs-12 hide' }>
+        <div className={ this.isFullMode() && !this.isFullySynced() ? 'col-xs-12' : 'col-xs-12 hide' }>
           <div className="alert alert-info alert-dismissible">
             <button
               className="close"
@@ -32,8 +31,7 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
 
-        <div className={ this.isNativeMode() ? 'col-lg-3 col-xs-12' :
-          this.isBasiliskMode() ? 'col-lg-4 col-xs-12' : 'col-lg-12 col-xs-12'}>
+        <div className={ this.isNativeMode() ? 'col-lg-3 col-xs-12' : this.isBasiliskMode() ? 'col-lg-4 col-xs-12' : 'col-lg-12 col-xs-12'}>
 
           <div className="widget widget-shadow">
             <div className="widget-content">
