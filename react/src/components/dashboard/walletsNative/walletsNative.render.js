@@ -2,7 +2,7 @@ import React from 'react';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsNativeInfo from '../walletsNativeInfo/walletsNativeInfo';
 import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
-import WalletsNativeSyncProgress from '../walletsNativeSyncProgress/walletsNativeSyncProgress';
+import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNativeTxHistory from '../walletsNativeTxHistory/walletsNativeTxHistory';
 
 const WalletsNativeRender = function() {
@@ -25,7 +25,7 @@ const WalletsNativeRender = function() {
           </ol>
         </div>
         <div className="page-content">
-          <WalletsNativeSyncProgress {...this.props} />
+          <WalletsProgress {...this.props} />
           <div className="row">
             <WalletsBalance {...this.props} />
             <WalletsNativeTxHistory {...this.props} />
