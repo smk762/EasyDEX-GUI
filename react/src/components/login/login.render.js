@@ -197,6 +197,9 @@ const LoginRender = function () {
                   onChange={ (e) => this.updateWalletSeed(e) }
                   readOnly={ !this.isCustomWalletSeed() }
                 ></textarea>
+                <button className="copy-floating-label"
+                  htmlFor="walletseed"
+                  onClick={ () => this.copyPassPhraseToClipboard() }>Copy</button>
                 <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
                   <strong>Weak seed!</strong><br /><br />
                   Your seed must contain:<br />
