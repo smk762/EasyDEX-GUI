@@ -7,7 +7,8 @@ import {
   getDexCoins,
   toggleSyncOnlyModal,
   getSyncOnlyForks,
-  createNewWallet
+  createNewWallet,
+  triggerToaster
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import {PassPhraseGenerator} from '../../util/crypto/passphrasegenerator';
@@ -44,6 +45,7 @@ class Login extends React.Component {
     this.handleRegisterWallet = this.handleRegisterWallet.bind(this);
     this.openSyncOnlyModal = this.openSyncOnlyModal.bind(this);
     this.toggleSeedBackupModal = this.toggleSeedBackupModal.bind(this);
+    this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
   }
 
@@ -266,7 +268,7 @@ class Login extends React.Component {
       isSeedConfirmError: !enteredSeedsMatch ? true : false,
       isSeedBlank: isSeedBlank ? true : false,
     });
-    
+
     if (enteredSeedsMatch && !isSeedBlank && _customSeed !== null) {
       this.toggleSeedBackupModal();
     }
@@ -286,6 +288,24 @@ class Login extends React.Component {
     this.setState(Object.assign({}, this.state, {
       displaySeedBackupModal: !this.state.displaySeedBackupModal,
     }));
+  }
+
+  copyPassPhraseToClipboard() {
+    const passPhrase = this.state.randomSeed;
+    const textField = document.createElement('textarea');
+    textField.innerText = passPhrase;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+
+    Store.dispatch(
+      triggerToaster(
+        translate('LOGIN.SEED_SUCCESSFULLY_COPIED'),
+        translate('LOGIN.SEED_COPIED'),
+        'success'
+      )
+    );
   }
 
   renderSwallModal() {
