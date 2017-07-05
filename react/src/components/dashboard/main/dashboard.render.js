@@ -27,7 +27,9 @@ const DashboardRender = function() {
           <CoinTile {...this.props} />
           <WalletsNav {...this.props} />
           <WalletsProgress {...this.props} />
-          <WalletsBalance {...this.props} />
+          <span className={ this.props.ActiveCoin.mode !== 'native' ? 'show' : 'hide' }>
+            <WalletsBalance {...this.props} />
+          </span>
           <SendCoin {...this.props} />
           <ReceiveCoin {...this.props.ActiveCoin} />
           <WalletsData {...this.props} />
