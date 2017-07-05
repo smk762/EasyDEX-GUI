@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Config,
   dashboardChangeActiveCoin,
   iguanaActiveHandle,
   getAddressesByAccount,
@@ -47,7 +48,7 @@ class CoinTileItem extends React.Component {
           this.props.Dashboard.progress.blocks &&
           this.props.Dashboard.progress.longestchain &&
           syncPercentage &&
-          syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD) {
+          (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
         Store.dispatch(getSyncInfoNative(coin, true));
         Store.dispatch(getKMDBalanceTotal(coin));
         Store.dispatch(getNativeTxHistory(coin));

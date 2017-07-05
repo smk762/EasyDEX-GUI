@@ -52,7 +52,7 @@ const NavbarRender = function() {
             </li>
             <li className={ this.isSectionActive('edex') ? 'active nav-top-menu' : 'nav-top-menu' }>
               <a onClick={ () => this.dashboardChangeSection('edex') }>
-                <i className="site-menu-icon"></i> EasyDEX
+                <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
             <li className={ 'hide ' + (this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu') }>

@@ -94,7 +94,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </span>
           </label>
         </div>
-        <div className="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 style-addcoin-lbl-mdl-login">
+        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6" style={{ paddingLeft: this.state.nativeOnly ? '0' : 'inherit' }}>
           <input
             type="radio"
             className="to-labelauty labelauty"

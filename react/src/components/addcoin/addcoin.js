@@ -59,7 +59,7 @@ class AddCoin extends React.Component {
 
   loadCoinSelection() {
     shepherdGetCoinList()
-    .then(function(json) {
+    .then((json) => {
       if (json.msg !== 'error') {
         this.setState(Object.assign({}, this.state, {
           coins: json.result,
@@ -74,7 +74,7 @@ class AddCoin extends React.Component {
           )
         );
       }
-    }.bind(this));
+    });
   }
 
   toggleSyncOnlyMode(index) {
@@ -122,7 +122,7 @@ class AddCoin extends React.Component {
 
   updateSelectedCoin(e, index) {
     const coin = e.target.value.split('|');
-    const defaultMode = coin[1];
+    const defaultMode = Config.iguanaLessMode ? 'native' : coin[1];
     const modeToValue = {
       'full': 1,
       'basilisk': 0,
@@ -147,6 +147,8 @@ class AddCoin extends React.Component {
       mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
       syncOnly: this.state.coins[index].syncOnly,
     }
+
+    console.log('coin', _coins);
 
     this.setState(Object.assign({}, this.state, {
       coins: _coins,
