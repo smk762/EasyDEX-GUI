@@ -18,6 +18,7 @@ front:
 - seed type check
 - seed extra space(s) check
 - custom seed option
+- copy seed button
 
 back:
 - added cli route
