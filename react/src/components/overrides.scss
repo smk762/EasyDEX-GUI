@@ -417,7 +417,7 @@ input:checked + .slider:before {
 
   .warning {
     border-color: #FFDC00;
-  
+
     &:before {
       content: '!';
       background-color: #FFDC00;
@@ -581,4 +581,15 @@ select{
       color: #757575;
     }
   }
+}
+
+.site-navbar {
+  .navbar-brand-logo {
+    height: 32px;
+    width: 110px;
+  }
+}
+
+.navbar-brand {
+  padding: 22px 15px;
 }

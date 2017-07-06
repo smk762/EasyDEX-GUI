@@ -10,7 +10,9 @@ const LoginRender = function () {
           <div className="brand">
             <img
               className="brand-img"
-              src="assets/images/easydex-logo-big.png"
+              src="assets/images/agama-login-logo.svg"
+              width="200"
+              height="160"
               alt="SuperNET Iguana" />
           </div>
 
