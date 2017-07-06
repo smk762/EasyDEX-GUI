@@ -19,12 +19,14 @@ const NavbarRender = function() {
         <div className="navbar-brand navbar-brand-center site-gridmenu-toggle">
           <img
             className="navbar-brand-logo hidden-xs"
-            src="assets/images/easydex-logo-dashboard.png"
-            title="SuperNET Iguana" />
+            src="assets/images/agama-logo-side.svg"
+            height="100"
+            width="100"
+            title="Agama Wallet" />
           <img
             className="navbar-brand-logo hidden-md hidden-sm hidden-lg"
-            src="assets/images/easydex-logo-dashboard-white.png"
-            title="SuperNET Iguana white" />
+            src="assets/images/agama-icon.svg"
+            title="Agama Wallet white" />
           <span className="navbar-brand-text hidden-xs"></span>
         </div>
         <button
@@ -50,7 +52,7 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
             </li>
-            <li className={ this.isSectionActive('edex') ? 'active nav-top-menu' : 'nav-top-menu' }>
+            <li className={ 'hide ' + (this.isSectionActive('edex') ? 'active nav-top-menu' : 'nav-top-menu') }>
               <a onClick={ () => this.dashboardChangeSection('edex') }>
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
