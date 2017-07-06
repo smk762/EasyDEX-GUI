@@ -55,7 +55,7 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> EasyDEX
               </a>
             </li>
-            <li className={ 'hide ' + (this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu') }>
+            <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
               <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                 <i className="site-menu-icon"></i> Jumblr
               </a>
