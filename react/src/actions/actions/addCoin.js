@@ -20,7 +20,9 @@ import {
 } from '../../components/addcoin/payload';
 
 export function addCoin(coin, mode, syncOnly, port) {
-  if (mode === '-1') {
+  if (mode === '-1' ||
+      mode === -1) {
+    mode = '-1';
     return dispatch => {
       dispatch(shepherdGetConfig(coin, mode));
     }

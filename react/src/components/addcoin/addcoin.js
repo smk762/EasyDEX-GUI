@@ -148,8 +148,6 @@ class AddCoin extends React.Component {
       syncOnly: this.state.coins[index].syncOnly,
     }
 
-    console.log('coin', _coins);
-
     this.setState(Object.assign({}, this.state, {
       coins: _coins,
     }));
@@ -189,7 +187,7 @@ class AddCoin extends React.Component {
 
   activateCoin() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
-    
+
     if (this.isCoinAlreadyAdded(coin)) {
       this.dismiss();
       return;
@@ -235,6 +233,7 @@ class AddCoin extends React.Component {
 
   activateAllCoins() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
+
     if (!this.isCoinAlreadyAdded(coin)) {
       Store.dispatch(
         addCoin(
@@ -285,7 +284,7 @@ class AddCoin extends React.Component {
         CoinSelectorsRender.call(
           this,
           _item,
-          _coin, 
+          _coin,
           i
         )
       );
@@ -310,7 +309,7 @@ class AddCoin extends React.Component {
     for (let mode of modes) {
       if (this.existingCoins[mode].indexOf(coin) !== -1) {
         const message = `${coin} ${translate('ADD_COIN.ALREADY_ADDED')} ${translate('ADD_COIN.IN')} ${mode} ${translate('ADD_COIN.MODE')}`;
-        
+
         Store.dispatch(
           triggerToaster(
             message,
