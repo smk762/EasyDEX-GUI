@@ -106,9 +106,9 @@ export const SettingsRender = function() {
                   className="panel-group"
                   id="SettingsAccordion">
                   <div
-                    className="panel"
                     id="WalletInfo"
-                    onClick={ () => this.openTab('WalletInfo', 0) }>
+                    onClick={ () => this.openTab('WalletInfo', 0) }
+                    className={ this.state.nativeOnly ? 'hide' : 'panel' }>
                     <div className="panel-heading">
                       <a className={ this.state.activeTab === 0 ? 'panel-title' : 'panel-title collapsed' }>
                         <i className="icon md-balance-wallet"></i>{ translate('INDEX.WALLET_INFO') }
@@ -157,9 +157,9 @@ export const SettingsRender = function() {
                   </div>
 
                   <div
-                    className="panel"
                     id="AddNodeforCoin"
-                    onClick={ () => this.openTab('AddNodeforCoin', 1) }>
+                    onClick={ () => this.openTab('AddNodeforCoin', 1) }
+                    className={ this.state.nativeOnly ? 'hide' : 'panel' }>
                     <div className="panel-heading">
                       <a className={ this.state.activeTab === 1 ? 'panel-title' : 'panel-title collapsed' }>
                         <i className="icon md-plus-square"></i>{ translate('INDEX.ADD_NODE') }
@@ -243,9 +243,9 @@ export const SettingsRender = function() {
                   </div>
 
                   <div
-                    className="panel"
                     id="DumpWallet"
-                    onClick={ () => this.openTab('DumpWallet', 2) }>
+                    onClick={ () => this.openTab('DumpWallet', 2) }
+                    className={ this.state.nativeOnly ? 'hide' : 'panel' }>
                     <div className="panel-heading">
                       <a className={ this.state.activeTab === 2 ? 'panel-title' : 'panel-title collapsed' }>
                         <i className="icon wb-briefcase"></i>{ translate('INDEX.WALLET_BACKUP') }
@@ -259,9 +259,9 @@ export const SettingsRender = function() {
                   </div>
 
                   <div
-                    className="panel"
                     id="FiatCurrencySettings"
-                    onClick={ () => this.openTab('FiatCurrencySettings', 3) }>
+                    onClick={ () => this.openTab('FiatCurrencySettings', 3) }
+                    className={ this.state.nativeOnly ? 'hide' : 'panel' }>
                     <div className="panel-heading">
                       <a className={ this.state.activeTab === 3 ? 'panel-title' : 'panel-title collapsed' }>
                         <i className="icon fa-money"></i>{ translate('INDEX.FIAT_CURRENCY') }
@@ -275,9 +275,9 @@ export const SettingsRender = function() {
                   </div>
 
                   <div
-                    className="panel"
                     id="ExportKeys"
-                    onClick={ () => this.openTab('ExportKeys', 4) }>
+                    onClick={ () => this.openTab('ExportKeys', 4) }
+                    className={ this.state.nativeOnly ? 'hide' : 'panel' }>
                     <div className="panel-heading">
                       <a className={ this.state.activeTab === 4 ? 'panel-title' : 'panel-title collapsed' }>
                         <i className="icon md-key"></i>{ translate('INDEX.EXPORT_KEYS') }
@@ -345,9 +345,9 @@ export const SettingsRender = function() {
                   </div>
 
                   <div
-                    className="panel"
                     id="ImportKeys"
-                    onClick={ () => this.openTab('ImportKeys', 5) }>
+                    onClick={ () => this.openTab('ImportKeys', 5) }
+                    className={ this.state.nativeOnly ? 'hide' : 'panel' }>
                     <div className="panel-heading">
                       <a className={ this.state.activeTab === 5 ? 'panel-title' : 'panel-title collapsed' }>
                         <i className="icon md-key"></i>{ translate('INDEX.IMPORT_KEYS') }
@@ -431,7 +431,7 @@ export const SettingsRender = function() {
                               name="debugTarget"
                               id="settingsDelectDebugLogOptions"
                               onChange={ this.updateInput }>
-                              <option value="iguana">Iguana</option>
+                              <option value="iguana" className={ this.state.nativeOnly ? 'hide' : '' }>Iguana</option>
                               <option value="komodo">Komodo</option>
                             </select>
                             <label
@@ -487,9 +487,9 @@ export const SettingsRender = function() {
                   { this.renderAppInfoTab() }
 
                   <div
-                    className="panel"
                     id="Cli"
-                    onClick={ () => this.openTab('Cli', 9) }>
+                    onClick={ () => this.openTab('Cli', 9) }
+                    className={ !this.props.Main.coins.native.length ? 'hide' : 'panel' }>
                     <div className="panel-heading">
                       <a className={ this.state.activeTab === 9 ? 'panel-title' : 'panel-title collapsed' }>
                         <i className="icon fa-code"></i> CLI

@@ -88,29 +88,33 @@ export const NotificationsModalRender = function() {
 };
 
 export const NotificationsRender = function() {
-  return (
-    <div>
-      <div
-        className={ this.props.Dashboard.activeHandle && this.props.Dashboard.activeHandle.status === 'unlocked' ? 'notifications-badge stick-to-top' : 'notifications-badge' }
-        onClick={ this.toggleNotificationsModal }>
-        <span className="badge success">
-          { this.state.calls.success }
-        </span>
-        <span className="badge error">
-          { this.state.calls.error }
-        </span>
-        <span className="badge pending">
-          { this.state.calls.pending }
-        </span>
-        <div className={ this.state.calls.pending === 0 ? 'spinner spinner-hide' : 'spinner' }>
-          <div className="rect1"></div>
-          <div className="rect2"></div>
-          <div className="rect3"></div>
-          <div className="rect4"></div>
-          <div className="rect5"></div>
+  if (this.state.debug) {
+    return (
+      <div>
+        <div
+          className={ this.props.Dashboard.activeHandle && this.props.Dashboard.activeHandle.status === 'unlocked' ? 'notifications-badge stick-to-top' : 'notifications-badge' }
+          onClick={ this.toggleNotificationsModal }>
+          <span className="badge success">
+            { this.state.calls.success }
+          </span>
+          <span className="badge error">
+            { this.state.calls.error }
+          </span>
+          <span className="badge pending">
+            { this.state.calls.pending }
+          </span>
+          <div className={ this.state.calls.pending === 0 ? 'spinner spinner-hide' : 'spinner' }>
+            <div className="rect1"></div>
+            <div className="rect2"></div>
+            <div className="rect3"></div>
+            <div className="rect4"></div>
+            <div className="rect5"></div>
+          </div>
         </div>
+        { this.renderNotificationsModal() }
       </div>
-      { this.renderNotificationsModal() }
-    </div>
-  );
+    );
+  } else {
+    return null;
+  }
 };

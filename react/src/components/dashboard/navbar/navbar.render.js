@@ -62,7 +62,7 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> Jumblr
               </a>
             </li>
-            <li className={ this.isSectionActive('atomic') ? 'active nav-top-menu' : 'nav-top-menu' }>
+            <li className={ this.state.nativeOnly ? 'hide' : (this.isSectionActive('atomic') ? 'active nav-top-menu' : 'nav-top-menu') }>
               <a onClick={ () => this.dashboardChangeSection('atomic') }>
                 <i className="site-menu-icon"></i> Atomic Explorer
               </a>
@@ -97,7 +97,7 @@ const NavbarRender = function() {
                     <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
                   </a>
                 </li>
-                <li>
+                <li className={ this.state.nativeOnly ? 'hide' : '' }>
                   <a onClick={ () => this.openSyncOnlyModal() }>
                     <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
                   </a>

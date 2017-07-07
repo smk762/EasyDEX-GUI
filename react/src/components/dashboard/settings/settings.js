@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import {
+  Config,
   iguanaActiveHandle,
   encryptWallet,
   settingsWifkeyState,
@@ -42,6 +43,7 @@ class Settings extends React.Component {
       cliResponse: null,
       exportWifKeysRaw: false,
       seedInputVisibility: false,
+      nativeOnly: Config.iguanaLessMode,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
