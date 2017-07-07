@@ -28,7 +28,7 @@ const DashboardRender = function() {
           <CoinTile {...this.props} />
           <WalletsNav {...this.props} />
           <WalletsProgress {...this.props} />
-          { !this.isNativeMode() && <WalletsBalance {...this.props} />}
+          { !this.isNativeMode() && <WalletsBalance {...this.props} /> }
           <SendCoin {...this.props} />
           <WalletsData {...this.props} />
           <WalletsTxInfo {...this.props} />

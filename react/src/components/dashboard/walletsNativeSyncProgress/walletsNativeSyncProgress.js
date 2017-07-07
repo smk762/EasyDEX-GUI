@@ -89,7 +89,7 @@ class WalletsNativeSyncProgress extends React.Component {
 
         for (let i = 0; i < temp.length; i++) {
           if (temp[i].indexOf('Progress=') > -1) {
-            currentProgress = Number(temp[i].replace('Progress=', '')) * 100;
+            currentProgress = (Number(temp[i].replace('Progress=', '')) * 100).toFixed(2);
           }
         }
 
@@ -116,14 +116,16 @@ class WalletsNativeSyncProgress extends React.Component {
   }
 
   renderChainActivationNotification() {
-    if (this.props.Dashboard.progress) {
+    return ChainActivationNotificationRender.call(this);
+
+    /* if (this.props.Dashboard.progress) {
       if ((!this.props.Dashboard.progress.blocks && !this.props.Dashboard.progress.longestchain) ||
           (this.props.Dashboard.progress.blocks < this.props.Dashboard.progress.longestchain)) {
         return ChainActivationNotificationRender.call(this);
       }
     } else {
       return null;
-    }
+    } */
   }
 
   render() {
