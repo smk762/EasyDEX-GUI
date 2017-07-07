@@ -408,7 +408,9 @@ export const _lang = {
       'SEED_NOT_OF_TYPE': 'The inserted seed is not of type',
       'IGUANA_SEED': 'Iguana (256 bits)',
       'WAVES_SEED': 'Waves',
-      'NXT_SEED': 'NXT'
+      'NXT_SEED': 'NXT',
+      'SEED_COPIED': 'Seed copied',
+      'SEED_SUCCESSFULLY_COPIED': 'The seed was successfully copied'
     },
     'SIDEBAR': {
       'EDEX_MOTTO': 'Most Secure, Easy and Native Decentralised Exchange',

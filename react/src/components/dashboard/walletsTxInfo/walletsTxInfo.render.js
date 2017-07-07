@@ -18,8 +18,25 @@ const WalletsTxInfoRender = function(txInfo) {
                       <i className="icon md-balance-wallet"></i>TxID Info
                     </a>
                   </li>
-                  <li className={ this.state.activeTab === 1 ? 'active' : '' }>
-                    <a onClick={ () => this.openTab(1) }>
+
+                  { this.isNativeMode() &&
+                    <li className={ this.state.activeTab === 1 ? 'active' : '' }>
+                      <a onClick={ () => this.openTab(1) }>
+                        <i className="icon md-plus-square"></i>Vjointsplits, Details
+                      </a>
+                    </li>
+                  }
+
+                  { this.isNativeMode() &&
+                    <li className={ this.state.activeTab === 2 ? 'active' : '' }>
+                      <a onClick={ () => this.openTab(2) }>
+                        <i className="icon wb-briefcase"></i>Hex
+                      </a>
+                    </li>
+                  }
+
+                  <li className={ this.state.activeTab === 3 ? 'active' : '' }>
+                    <a onClick={ () => this.openTab(3) }>
                       <i className="icon wb-file"></i>Raw info
                     </a>
                   </li>
@@ -71,10 +88,64 @@ const WalletsTxInfoRender = function(txInfo) {
                             { txInfo.txid }
                           </td>
                         </tr>
+
+                        { this.isNativeMode() &&
+                        <tr>
+                          <td>walletconflicts</td>
+                          <td>
+                            { txInfo.walletconflicts.length }
+                          </td>
+                        </tr>
+                        }
+
+                        { this.isNativeMode() &&
+                        <tr>
+                          <td>time</td>
+                          <td>
+                            { secondsToString(txInfo.time) }
+                          </td>
+                        </tr>
+                        }
+
+                        { this.isNativeMode() &&
+                        <tr>
+                          <td>timereceived</td>
+                          <td>
+                            { secondsToString(txInfo.timereceived) }
+                          </td>
+                        </tr>
+                        }
                         </tbody>
                       </table>
                     </div>
+
                     <div className={ this.state.activeTab === 1 ? 'tab-pane active' : 'tab-pane' }>
+                      <table className="table table-striped">
+                        <tbody>
+                        <tr>
+                          <td>vjoinsplit</td>
+                          <td>
+                            { txInfo.vjoinsplit }
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>details</td>
+                          <td>
+                            { txInfo.details }
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className={ this.state.activeTab === 2 ? 'tab-pane active' : 'tab-pane' }>
+                      <textarea
+                        className="full-width height-170"
+                        rows="10"
+                        cols="80"
+                        defaultValue={ txInfo.hex } disabled></textarea>
+                    </div>
+
+                    <div className={ this.state.activeTab === 3 ? 'tab-pane active' : 'tab-pane' }>
                       <textarea
                         className="full-width height-400"
                         rows="40"
