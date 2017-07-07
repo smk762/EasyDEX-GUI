@@ -322,12 +322,21 @@ class Settings extends React.Component {
         _cliResponseParsed = _cliResponse.result;
       }
 
+      const __cliResponseParsed = _cliResponseParsed.split('\r\n')
+      let _items = [];
+
+      for (let i = 0; i < __cliResponseParsed.length; i++) {
+        _items.push(
+          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed[i] }</div>
+        );
+      }
+
       return (
         <div>
           <div>
             <strong>CLI response:</strong>
           </div>
-          { JSON.stringify(_cliResponseParsed, null, '\t') }
+          { _items }
         </div>
       );
     } else {
