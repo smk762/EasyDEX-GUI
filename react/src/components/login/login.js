@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Config,
   toggleAddcoinModal,
   iguanaWalletPassphrase,
   iguanaActiveHandle,
@@ -36,6 +37,7 @@ class Login extends React.Component {
       displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
+      nativeOnly: Config.iguanaLessMode,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);

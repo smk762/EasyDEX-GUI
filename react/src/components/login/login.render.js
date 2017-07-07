@@ -16,7 +16,7 @@ const LoginRender = function () {
               alt="SuperNET Iguana" />
           </div>
 
-          <div className="vertical-padding-20 horizontal-padding-0">
+          <div className={ this.state.nativeOnly ? 'hide' : 'vertical-padding-20 horizontal-padding-0' }>
             <span
               className="display-sync-only-coins-toggle"
               onClick={ this.openSyncOnlyModal }>
@@ -54,7 +54,7 @@ const LoginRender = function () {
             </div>
           </div>
 
-          <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
+          <div className={ this.state.activeLoginSection === 'login' && !this.state.nativeOnly ? 'show' : 'hide' }>
             <h4 className="color-white">
               {translate('INDEX.WELCOME_LOGIN')}
             </h4>
@@ -84,8 +84,7 @@ const LoginRender = function () {
               type="button"
               className="btn btn-primary btn-block"
               onClick={ this.loginSeed }
-              disabled={ !this.state.loginPassphrase
-              || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
+              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
             <div className="form-group form-material floating">
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect"
