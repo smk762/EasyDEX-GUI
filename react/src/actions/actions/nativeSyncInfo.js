@@ -61,7 +61,6 @@ export function getSyncInfoNativeKMD(skipDebug) {
 }
 
 function getSyncInfoNativeState(json, coin, skipDebug) {
-  console.log('getSyncInfoNativeState', json);
   if (coin === 'KMD' &&
       json &&
       json.error) {
@@ -70,7 +69,6 @@ function getSyncInfoNativeState(json, coin, skipDebug) {
     if (json &&
         json.error &&
         Config.cli.default) {
-      console.log('getSyncInfoNativeState', 'error');
       return {
         type: SYNCING_NATIVE_MODE,
         progress: Config.cli.default ? json.error : json,

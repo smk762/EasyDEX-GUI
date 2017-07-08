@@ -121,6 +121,13 @@ class WalletsProgress extends React.Component {
         return (
           `: ${currentProgress}% (rescanning blocks)`
         );
+      } else if (
+          this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
+          this.props.Settings.debugLog.indexOf('Reindexing block file') > -1 
+        ) {
+        return (
+          `: (reindexing blocks from disk)`
+        );
       } else {
         return (
           <span> (downloading blocks)</span>

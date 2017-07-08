@@ -17,7 +17,8 @@ import {
   getKMDOPID,
   getNativeTxHistory,
   getKMDBalanceTotal,
-  getSyncInfoNative
+  getSyncInfoNative,
+  getDebugLog
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -44,6 +45,9 @@ class CoinTileItem extends React.Component {
       Store.dispatch(iguanaActiveHandle(true));
       const syncPercentage = this.props.Dashboard && this.props.Dashboard.progress && (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
+      if (syncPercentage < 100) {
+        Store.dispatch(getDebugLog('komodo', 10));
+      }
       if (this.props.Dashboard.progress &&
           this.props.Dashboard.progress.blocks &&
           this.props.Dashboard.progress.longestchain &&

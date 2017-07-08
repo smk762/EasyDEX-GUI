@@ -322,7 +322,7 @@ class Settings extends React.Component {
         _cliResponseParsed = _cliResponse.result;
       }
 
-      const __cliResponseParsed = _cliResponseParsed.split('\r\n')
+      const __cliResponseParsed = _cliResponseParsed.split('\r\n');
       let _items = [];
 
       for (let i = 0; i < __cliResponseParsed.length; i++) {
