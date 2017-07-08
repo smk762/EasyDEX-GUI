@@ -4,6 +4,7 @@ import WalletsNativeInfo from '../walletsNativeInfo/walletsNativeInfo';
 import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNativeTxHistory from '../walletsNativeTxHistory/walletsNativeTxHistory';
+import ReceiveCoin from '../receiveCoin/receiveCoin';
 
 const WalletsNativeRender = function() {
   return (
@@ -28,6 +29,7 @@ const WalletsNativeRender = function() {
           <WalletsProgress {...this.props} />
           <div className="row">
             <WalletsBalance {...this.props} />
+            <ReceiveCoin {...this.props.ActiveCoin} />
             <WalletsNativeTxHistory {...this.props} />
             <WalletsNativeSend {...this.props} />
             <WalletsNativeInfo {...this.props} />

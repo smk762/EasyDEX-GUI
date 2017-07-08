@@ -92,14 +92,14 @@ export const NotificationsRender = function() {
     <div>
       <div
         className={ this.props.Dashboard.activeHandle && this.props.Dashboard.activeHandle.status === 'unlocked' ? 'notifications-badge stick-to-top' : 'notifications-badge' }
-        onClick={ this.toggleNotificationsModal }>
-        <span className="badge success">
+        onClick={ this.state.debug ? this.toggleNotificationsModal : null }>
+        <span className={ this.state.debug ? 'badge success' : 'hide' }>
           { this.state.calls.success }
         </span>
-        <span className="badge error">
+        <span className={ this.state.debug ? 'badge error' : 'hide' }>
           { this.state.calls.error }
         </span>
-        <span className="badge pending">
+        <span className={ this.state.debug ? 'badge pending' : 'hide' }>
           { this.state.calls.pending }
         </span>
         <div className={ this.state.calls.pending === 0 ? 'spinner spinner-hide' : 'spinner' }>

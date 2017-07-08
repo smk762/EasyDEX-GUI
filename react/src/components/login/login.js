@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Config,
   toggleAddcoinModal,
   iguanaWalletPassphrase,
   iguanaActiveHandle,
@@ -36,6 +37,7 @@ class Login extends React.Component {
       displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
+      nativeOnly: Config.iguanaLessMode,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -196,7 +198,7 @@ class Login extends React.Component {
       return null;
     }
 
-    const passPhraseWords = passPhrase.split(" ");
+    const passPhraseWords = passPhrase.split(' ');
     if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhraseWords))
       return null;
 
@@ -248,7 +250,7 @@ class Login extends React.Component {
     });
   }
 
-  // TODO: 
+  // TODO:
   //    1) disable register btn if seed or seed conf is incorrect
   //    2) display explicit custom seed validation message
   handleRegisterWallet() {

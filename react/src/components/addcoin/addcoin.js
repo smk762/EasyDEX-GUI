@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
 import {
+  Config,
   addCoin,
   toggleAddcoinModal,
   triggerToaster,
@@ -16,6 +17,7 @@ class AddCoin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      nativeOnly: Config.iguanaLessMode,
       coins: [],
       defaultCoinState: {
         selectedCoin: null,
@@ -33,6 +35,7 @@ class AddCoin extends React.Component {
         },
         mode: -2,
         syncOnly: false,
+        daemonParam: null,
       },
       display: false,
       actionsMenu: false,
@@ -57,7 +60,7 @@ class AddCoin extends React.Component {
 
   loadCoinSelection() {
     shepherdGetCoinList()
-    .then(function(json) {
+    .then((json) => {
       if (json.msg !== 'error') {
         this.setState(Object.assign({}, this.state, {
           coins: json.result,
@@ -72,7 +75,7 @@ class AddCoin extends React.Component {
           )
         );
       }
-    }.bind(this));
+    });
   }
 
   toggleSyncOnlyMode(index) {
@@ -80,6 +83,18 @@ class AddCoin extends React.Component {
 
     _coins[index] = Object.assign({}, _coins[index], {
       syncOnly: !this.state.coins[index].syncOnly,
+    });
+
+    this.setState(Object.assign({}, this.state, {
+      coins: _coins,
+    }));
+  }
+
+  updateDaemonParam(e, index) {
+    let _coins = this.state.coins;
+
+    _coins[index] = Object.assign({}, _coins[index], {
+      [e.target.name]: e.target.value,
     });
 
     this.setState(Object.assign({}, this.state, {
@@ -120,7 +135,7 @@ class AddCoin extends React.Component {
 
   updateSelectedCoin(e, index) {
     const coin = e.target.value.split('|');
-    const defaultMode = coin[1];
+    const defaultMode = Config.iguanaLessMode ? 'native' : coin[1];
     const modeToValue = {
       'full': 1,
       'basilisk': 0,
@@ -185,16 +200,27 @@ class AddCoin extends React.Component {
 
   activateCoin() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
+
     if (this.isCoinAlreadyAdded(coin)) {
       this.dismiss();
       return;
     }
 
-    Store.dispatch(addCoin(
-      coin,
-      this.state.coins[0].mode,
-      this.state.coins[0].syncOnly
-    ));
+    if (!this.state.coins[0].daemonParam) {
+      Store.dispatch(addCoin(
+        coin,
+        this.state.coins[0].mode,
+        this.state.coins[0].syncOnly,
+      ));
+    } else {
+      Store.dispatch(addCoin(
+        coin,
+        this.state.coins[0].mode,
+        this.state.coins[0].syncOnly,
+        null,
+        { type: this.state.coins[0].daemonParam }
+      ));
+    }
 
     this.removeCoin();
     this.addNewItem();
@@ -230,6 +256,7 @@ class AddCoin extends React.Component {
 
   activateAllCoins() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
+
     if (!this.isCoinAlreadyAdded(coin)) {
       Store.dispatch(
         addCoin(
@@ -280,7 +307,7 @@ class AddCoin extends React.Component {
         CoinSelectorsRender.call(
           this,
           _item,
-          _coin, 
+          _coin,
           i
         )
       );
@@ -305,7 +332,7 @@ class AddCoin extends React.Component {
     for (let mode of modes) {
       if (this.existingCoins[mode].indexOf(coin) !== -1) {
         const message = `${coin} ${translate('ADD_COIN.ALREADY_ADDED')} ${translate('ADD_COIN.IN')} ${mode} ${translate('ADD_COIN.MODE')}`;
-        
+
         Store.dispatch(
           triggerToaster(
             message,

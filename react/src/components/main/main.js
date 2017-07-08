@@ -1,9 +1,9 @@
 import React from 'react';
-import Config from '../../config';
 import WalletMain from './walletMain';
 import { iguanaSetRPCAuth } from '../../util/auth';
 import Store from '../../store';
 import {
+  Config,
   getDexCoins,
   iguanaActiveHandle
 } from '../../actions/actionCreators';

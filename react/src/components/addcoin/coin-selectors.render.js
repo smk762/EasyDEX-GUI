@@ -34,7 +34,7 @@ const CoinSelectorsRender = function(item, coin, i) {
         </button>
       </div>
       <div className="col-sm-12 text-center">
-        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
+        <div className={ this.state.nativeOnly ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -64,7 +64,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </span>
           </label>
         </div>
-        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
+        <div className={ this.state.nativeOnly ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -94,7 +94,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </span>
           </label>
         </div>
-        <div className="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 style-addcoin-lbl-mdl-login">
+        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6" style={{ paddingLeft: this.state.nativeOnly ? '0' : 'inherit' }}>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -132,6 +132,20 @@ const CoinSelectorsRender = function(item, coin, i) {
           onClick={ () => this.removeCoin(i) }>
             <i className="fa fa-trash-o"></i>
         </button>
+      </div>
+      <div className={ item.mode === '-1' || item.mode === -1 ? 'col-sm-5' : 'hide' }>
+        <div className="toggle-box padding-top-3 padding-bottom-10">
+          <select
+            className="form-control form-material"
+            name="daemonParam"
+            onChange={ (event) => this.updateDaemonParam(event, i) }
+            autoFocus>
+            <option>Daemon param: none</option>
+            <option value="silent">Daemon param: background process</option>
+            <option value="reindex">Daemon param: reindex</option>
+            <option value="rescan">Daemon param: rescan</option>
+          </select>
+        </div>
       </div>
       <div className={ item.mode === '1' || item.mode === 1 ? 'col-sm-12' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">

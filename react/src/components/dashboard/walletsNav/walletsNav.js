@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Config,
   copyCoinAddress,
   iguanaEdexBalance,
   toggleSendCoinForm,
@@ -16,6 +17,9 @@ import {
 class WalletsNav extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      nativeOnly: Config.iguanaLessMode,
+    };
     this.toggleSendReceiveCoinForms = this.toggleSendReceiveCoinForms.bind(this);
   }
 

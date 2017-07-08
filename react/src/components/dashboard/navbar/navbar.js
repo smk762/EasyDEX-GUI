@@ -6,7 +6,8 @@ import {
   startInterval,
   toggleSyncOnlyModal,
   getSyncOnlyForks,
-  logout
+  logout,
+  Config
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -17,6 +18,7 @@ class Navbar extends React.Component {
     super(props);
     this.state = {
       openDropMenu: false,
+      nativeOnly: Config.iguanaLessMode,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.logout = this.logout.bind(this);
