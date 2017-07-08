@@ -133,6 +133,20 @@ const CoinSelectorsRender = function(item, coin, i) {
             <i className="fa fa-trash-o"></i>
         </button>
       </div>
+      <div className={ item.mode === '-1' || item.mode === -1 ? 'col-sm-5' : 'hide' }>
+        <div className="toggle-box padding-top-3 padding-bottom-10">
+          <select
+            className="form-control form-material"
+            name="daemonParam"
+            onChange={ (event) => this.updateDaemonParam(event, i) }
+            autoFocus>
+            <option>Daemon param: none</option>
+            <option value="silent">Daemon param: background process</option>
+            <option value="reindex">Daemon param: reindex</option>
+            <option value="rescan">Daemon param: rescan</option>
+          </select>
+        </div>
+      </div>
       <div className={ item.mode === '1' || item.mode === 1 ? 'col-sm-12' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">
           <span className="pointer">

@@ -35,6 +35,7 @@ class AddCoin extends React.Component {
         },
         mode: -2,
         syncOnly: false,
+        daemonParam: null,
       },
       display: false,
       actionsMenu: false,
@@ -82,6 +83,18 @@ class AddCoin extends React.Component {
 
     _coins[index] = Object.assign({}, _coins[index], {
       syncOnly: !this.state.coins[index].syncOnly,
+    });
+
+    this.setState(Object.assign({}, this.state, {
+      coins: _coins,
+    }));
+  }
+
+  updateDaemonParam(e, index) {
+    let _coins = this.state.coins;
+
+    _coins[index] = Object.assign({}, _coins[index], {
+      [e.target.name]: e.target.value,
     });
 
     this.setState(Object.assign({}, this.state, {
@@ -193,11 +206,21 @@ class AddCoin extends React.Component {
       return;
     }
 
-    Store.dispatch(addCoin(
-      coin,
-      this.state.coins[0].mode,
-      this.state.coins[0].syncOnly
-    ));
+    if (!this.state.coins[0].daemonParam) {
+      Store.dispatch(addCoin(
+        coin,
+        this.state.coins[0].mode,
+        this.state.coins[0].syncOnly,
+      ));
+    } else {
+      Store.dispatch(addCoin(
+        coin,
+        this.state.coins[0].mode,
+        this.state.coins[0].syncOnly,
+        null,
+        { type: this.state.coins[0].daemonParam }
+      ));
+    }
 
     this.removeCoin();
     this.addNewItem();

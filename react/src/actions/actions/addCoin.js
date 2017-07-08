@@ -19,12 +19,11 @@ import {
   checkAC
 } from '../../components/addcoin/payload';
 
-export function addCoin(coin, mode, syncOnly, port) {
+export function addCoin(coin, mode, syncOnly, port, startupParams) {
   if (mode === '-1' ||
       mode === -1) {
-    mode = '-1';
     return dispatch => {
-      dispatch(shepherdGetConfig(coin, mode));
+      dispatch(shepherdGetConfig(coin, '-1', startupParams));
     }
   } else {
     if (checkCoinType(coin) === 'currency_ac') {
@@ -154,7 +153,7 @@ export function iguanaAddCoin(coin, mode, acData, port) {
   }
 }
 
-export function shepherdHerd(coin, mode, path) {
+export function shepherdHerd(coin, mode, path, startupParams) {
   let acData;
   let herdData = {
     'ac_name': coin,
@@ -186,6 +185,15 @@ export function shepherdHerd(coin, mode, path) {
     };
   }
 
+  if (startupParams) {
+    herdData['ac_custom_param'] = startupParams.type;
+
+    if (startupParams.value) {
+      herdData['ac_custom_param_value'] = startupParams.value;
+    }
+  }
+
+  // TODO: switch statement
   if (checkCoinType(coin) === 'crypto') {
     acData = startCrypto(
       path.result,
@@ -193,6 +201,7 @@ export function shepherdHerd(coin, mode, path) {
       mode
     );
   }
+
   if (checkCoinType(coin) === 'currency_ac') {
     acData = startCurrencyAssetChain(
       path.result,
@@ -280,7 +289,7 @@ export function addCoinResult(coin, mode) {
   }
 }
 
-export function _shepherdGetConfig(coin, mode) {
+export function _shepherdGetConfig(coin, mode, startupParams) {
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/getconf`, {
       method: 'POST',
@@ -305,7 +314,8 @@ export function _shepherdGetConfig(coin, mode) {
         shepherdHerd(
           coin,
           mode,
-          json
+          json,
+          startupParams
         )
       )
     );
@@ -339,7 +349,7 @@ export function iguanaActiveHandleBypass() {
   }
 }
 
-export function shepherdGetConfig(coin, mode) {
+export function shepherdGetConfig(coin, mode, startupParams) {
   if (coin === 'KMD' &&
       mode === '-1') {
     return dispatch => {
@@ -366,7 +376,8 @@ export function shepherdGetConfig(coin, mode) {
           shepherdHerd(
             coin,
             mode,
-            json
+            json,
+            startupParams
           )
         )
       )
@@ -396,7 +407,8 @@ export function shepherdGetConfig(coin, mode) {
           shepherdHerd(
             coin,
             mode,
-            json
+            json,
+            startupParams
           )
         )
       );
