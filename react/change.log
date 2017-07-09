@@ -19,6 +19,8 @@ front:
 - seed extra space(s) check
 - custom seed option
 - copy seed button
+- native only mode
+- app update
 
 back:
 - added cli route

@@ -29,7 +29,7 @@ const plugins = [
   new webpack.optimize.CommonsChunkPlugin({
     name: 'vendor',
     minChunks: Infinity,
-    filename: 'vendor-[hash].js',
+    filename: 'vendor.js',
   }),
   /*
   * The DefinePlugin allows you to create global constants which can be configured at compile time.
@@ -84,7 +84,7 @@ const rules = [
   {
     test: /\.(png|gif|jpg|svg)$/,
     include: imgPath,
-    use: 'url-loader?limit=20480&name=assets/[name]-[hash].[ext]',
+    use: 'url-loader?limit=20480&name=assets/[name].[ext]',
   },
 ];
 
@@ -113,7 +113,7 @@ if (isProduction) {
         comments: false,
       },
     }),
-    new ExtractTextPlugin('style-[hash].css')
+    new ExtractTextPlugin('style.css')
   );
 
   // Production rules
@@ -168,7 +168,7 @@ module.exports = {
   output: {
     path: buildPath,
     publicPath: '',
-    filename: 'app-[hash].js',
+    filename: 'app.js',
   },
   module: {
     rules,
