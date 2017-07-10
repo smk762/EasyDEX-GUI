@@ -12,14 +12,25 @@ import {
   getAppConfig,
   saveAppConfig,
   getAppInfo,
-  shepherdCli
+  shepherdCli,
+  checkForUpdateUIPromise,
+  updateUIPromise
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 import {
   AppInfoTabRender,
-  SettingsRender
+  SettingsRender,
+  AppUpdateTabRender,
 } from './settings.render';
+
+import { SocketProvider } from 'socket.io-react';
+import io from 'socket.io-client';
+
+const socket = io.connect('http://127.0.0.1:' + Config.agamaPort);
+let updateProgressBar = {
+  patch: -1,
+};
 
 /*
   TODO:
@@ -44,6 +55,10 @@ class Settings extends React.Component {
       exportWifKeysRaw: false,
       seedInputVisibility: false,
       nativeOnly: Config.iguanaLessMode,
+      updatePatch: null,
+      updateBins: null,
+      updateLog: [],
+      updateProgressPatch: null,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -57,6 +72,9 @@ class Settings extends React.Component {
     this._saveAppConfig = this._saveAppConfig.bind(this);
     this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
+    this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
+    this._updateUIPromise = this._updateUIPromise.bind(this);
+    socket.on('patch', msg => this.updateSocketsData(msg));
   }
 
   componentDidMount() {
@@ -75,6 +93,115 @@ class Settings extends React.Component {
         tabElId: this.state.tabElId,
       }));
     }
+  }
+
+  updateSocketsData(data) {
+    if (data &&
+        data.msg &&
+        data.msg.type === 'ui') {
+
+      if (data.msg.status === 'progress' &&
+          data.msg.progress &&
+          data.msg.progress < 100) {
+        this.setState(Object.assign({}, this.state, {
+          updateProgressPatch: data.msg.progress,
+        }));
+        updateProgressBar.patch = data.msg.progress;
+      } else {
+        if (data.msg.status === 'progress' &&
+            data.msg.progress &&
+            data.msg.progress === 100) {
+          let _updateLog = [];
+          _updateLog.push('UI update downloaded. Verifying...');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = 100;
+        }
+
+        if (data.msg.status === 'done') {
+          let _updateLog = [];
+          _updateLog.push('UI is updated!');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+            updatePatch: null,
+          }));
+          updateProgressBar.patch = -1;
+        }
+
+        if (data.msg.status === 'error') {
+          let _updateLog = [];
+          _updateLog.push('Error while verifying update file! Please retry again.');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = -1;
+        }
+      }
+    } else {
+      if (data &&
+          data.msg) {
+        let _updateLog = this.state.updateLog;
+        _updateLog.push(data.msg);
+        this.setState(Object.assign({}, this.state, {
+          updateLog: _updateLog,
+        }));
+      }
+    }
+  }
+
+  _checkForUpdateUIPromise() {
+    let _updateLog = [];
+    _updateLog.push('Checking for UI update...');
+    this.setState(Object.assign({}, this.state, {
+      updateLog: _updateLog,
+    }));
+
+    checkForUpdateUIPromise()
+    .then((res) => {
+      let _updateLog = this.state.updateLog;
+      _updateLog.push(res.result === 'update' ? ('New UI update available ' + res.version.remote) : 'You have the lastest UI version');
+      this.setState(Object.assign({}, this.state, {
+        updatePatch: res.result,
+        updateLog: _updateLog,
+      }));
+    });
+  }
+
+  _updateUIPromise() {
+    updateProgressBar.patch = 0;
+    let _updateLog = [];
+    _updateLog.push('Downloading UI update...');
+    this.setState(Object.assign({}, this.state, {
+      updateLog: _updateLog,
+    }));
+
+    updateUIPromise();
+  }
+
+  renderUpdateStatus() {
+    let items = [];
+    let patchProgressBar = null;
+
+    for (let i = 0; i < this.state.updateLog.length; i++) {
+      items.push(
+        <div>{ this.state.updateLog[i] }</div>
+      );
+    }
+
+    return (
+      <div style={{ minHeight: '200px' }}>
+        <hr />
+        <h5>Progress:</h5>
+        <div className="padding-bottom-15">{ items }</div>
+        <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
+          <div
+            className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+            style={{ width: updateProgressBar.patch + '%' }}>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   toggleSeedInputVisibility() {
@@ -173,6 +300,10 @@ class Settings extends React.Component {
     }
 
     return null;
+  }
+
+  renderAppUpdateTab() {
+    return AppUpdateTabRender.call(this);
   }
 
   renderSNPeersList() {

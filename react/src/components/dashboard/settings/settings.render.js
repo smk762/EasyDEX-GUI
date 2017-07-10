@@ -4,6 +4,57 @@ import AddCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import AddCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../../addcoin/addcoinOptionsACFiat';
 
+export const AppUpdateTabRender = function() {
+  return (
+    <div
+      className="panel"
+      id="AppUpdate"
+      onClick={ () => this.openTab('AppUpdate', 10) }>
+      <div className="panel-heading">
+        <a className={ this.state.activeTab === 10 ? 'panel-title' : 'panel-title collapsed' }>
+          <i className="icon fa fa-life-ring"></i> Update
+        </a>
+      </div>
+      <div
+        className={ this.state.activeTab === 10 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+        style={{ height: this.state.activeTab === 10 ? this.state.activeTabHeight + 'px' : '0' }}>
+        <div className="panel-body">
+          <div className="col-sm-4 padding-top-15">
+            <h5>UI update</h5>
+            <div className="padding-top-15">
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light"
+                onClick={ this._checkForUpdateUIPromise }>Check for update</button>
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light margin-left-20"
+                onClick={ this._updateUIPromise }
+                disabled={ !this.state.updatePatch }>Update UI now</button>
+            </div>
+          </div>
+          <div className="col-sm-4 padding-top-15 hide">
+            <h5>Binaries update</h5>
+            <div className="padding-top-15">
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light"
+                onClick={ this._checkForUpdateUIPromise }>Check for updates</button>
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light margin-left-20"
+                onClick={ this.checkNodes }>Update bins now</button>
+            </div>
+          </div>
+          <div className="col-sm-12 padding-top-15">
+            { this.renderUpdateStatus() }
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const AppInfoTabRender = function() {
   return (
     <div
@@ -547,6 +598,8 @@ export const SettingsRender = function() {
                       </div>
                     </div>
                   </div>
+
+                  { this.renderAppUpdateTab() }
                 </div>
               </div>
             </div>
