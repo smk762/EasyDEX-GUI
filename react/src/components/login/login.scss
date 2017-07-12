@@ -56,8 +56,28 @@ textarea {
   }
 }
 
-.placeholder-label {
-  color: #808080;
+.seed-type-block {
+  position: absolute;
+  left: 100%;
+  min-width: 50px;
+
+  .placeholder-label {
+    border-radius: 4px;
+    padding: 3px;
+    background: #61BD4F;
+    color: #fff;
+  }
+}
+
+#loginPassphrase,
+#wifkeysPassphraseTextarea,
+input[type="password"] {
+  width: calc(100% - 35px);
+}
+#wifkeysPassphraseTextarea,
+#loginPassphrase {
+  overflow: hidden;
+  margin-top: 5px;
 }
 
 .seed-tooltip {

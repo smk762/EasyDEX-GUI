@@ -12,10 +12,10 @@ import {
   triggerToaster
 } from '../../actions/actionCreators';
 import Store from '../../store';
-import {PassPhraseGenerator} from '../../util/crypto/passphrasegenerator';
+import { PassPhraseGenerator } from '../../util/crypto/passphrasegenerator';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
-import {translate} from '../../translate/translate';
+import { translate } from '../../translate/translate';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
@@ -26,7 +26,7 @@ class Login extends React.Component {
     this.state = {
       display: false,
       activeLoginSection: 'activateCoin',
-      loginPassphrase: null,
+      loginPassphrase: '',
       seedInputVisibility: false,
       loginPassPhraseSeedType: null,
       bitsOption: 256,
@@ -38,6 +38,7 @@ class Login extends React.Component {
       customWalletSeed: false,
       isCustomSeedWeak: false,
       nativeOnly: Config.iguanaLessMode,
+      trimPassphraseTimer: null,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -49,6 +50,7 @@ class Login extends React.Component {
     this.toggleSeedBackupModal = this.toggleSeedBackupModal.bind(this);
     this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
+    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
   }
 
   isCustomWalletSeed() {
@@ -64,13 +66,13 @@ class Login extends React.Component {
         this.setState({
           randomSeed: PassPhraseGenerator.generatePassPhrase(this.state.bitsOption),
           isSeedConfirmError: false,
-          isSeedBlank: false
+          isSeedBlank: false,
         });
       } else {
         // if customWalletSeed is set to true, reset to seed to an empty string
         this.setState({
           randomSeed: '',
-          randomSeedConfirm: ''
+          randomSeedConfirm: '',
         });
       }
     });
@@ -100,13 +102,15 @@ class Login extends React.Component {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
     });
+
+    this.resizeLoginTextarea();
   }
 
   generateNewSeed(bits) {
     this.setState(Object.assign({}, this.state, {
       randomSeed: PassPhraseGenerator.generatePassPhrase(bits),
       bitsOption: bits,
-      isSeedBlank: false
+      isSeedBlank: false,
     }));
   }
 
@@ -138,8 +142,8 @@ class Login extends React.Component {
 
     if (this.state.activeLoginSection !== 'signup') {
       if (props &&
-        props.Main &&
-        props.Main.activeCoins) {
+          props.Main &&
+          props.Main.activeCoins) {
         this.setState({
           activeLoginSection: 'login',
         });
@@ -155,21 +159,43 @@ class Login extends React.Component {
     Store.dispatch(toggleAddcoinModal(true, false));
   }
 
+  resizeLoginTextarea() {
+    // auto-size textarea
+    setTimeout(() => {
+      if (this.state.seedInputVisibility) {
+          document.querySelector('#loginPassphrase').style.height = '1px';
+          document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
+      }    
+    }, 100);
+  }
+
   updateLoginPassPhraseInput(e) {
     // remove any empty chars from the start/end of the string
-    const newValue = e.target.value ? e.target.value.trim() : null;
+    const newValue = e.target.value;
+    
+    clearTimeout(this.state.trimPassphraseTimer);
 
+    const _trimPassphraseTimer = setTimeout(() => {
+      this.setState({
+        loginPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
+        loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
+      });
+    }, 2000);
+
+    this.resizeLoginTextarea();
+    
     this.setState({
+      trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name]: newValue,
-      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue)
-  });
+      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
+    });
   }
 
   updateRegisterConfirmPassPhraseInput(e) {
     this.setState({
       [e.target.name]: e.target.value,
       isSeedConfirmError: false,
-      isSeedBlank: this.isBlank(e.target.value)
+      isSeedBlank: this.isBlank(e.target.value),
     });
   }
 
@@ -177,7 +203,7 @@ class Login extends React.Component {
     this.setState({
       randomSeed: e.target.value,
       isSeedConfirmError: false,
-      isSeedBlank: this.isBlank(e.target.value)
+      isSeedBlank: this.isBlank(e.target.value),
     });
   }
 
@@ -199,8 +225,9 @@ class Login extends React.Component {
     }
 
     const passPhraseWords = passPhrase.split(' ');
-    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhraseWords))
+    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhraseWords)) {
       return null;
+    }
 
     if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
       return translate('LOGIN.IGUANA_SEED');
@@ -250,9 +277,7 @@ class Login extends React.Component {
     });
   }
 
-  // TODO:
-  //    1) disable register btn if seed or seed conf is incorrect
-  //    2) display explicit custom seed validation message
+  // TODO: disable register btn if seed or seed conf is incorrect
   handleRegisterWallet() {
     const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
     const isSeedBlank = this.isBlank(this.state.randomSeed);
@@ -281,6 +306,8 @@ class Login extends React.Component {
   }
 
   handleKeydown(e) {
+    this.updateLoginPassPhraseInput(e);
+
     if (e.key === 'Enter') {
       this.loginSeed();
     }
@@ -295,6 +322,7 @@ class Login extends React.Component {
   copyPassPhraseToClipboard() {
     const passPhrase = this.state.randomSeed;
     const textField = document.createElement('textarea');
+    
     textField.innerText = passPhrase;
     document.body.appendChild(textField);
     textField.select();
@@ -319,7 +347,8 @@ class Login extends React.Component {
   }
 
   render() {
-    if ((this.state && this.state.display) || !this.props.Main) {
+    if ((this.state && this.state.display) ||
+        !this.props.Main) {
       return LoginRender.call(this);
     }
 

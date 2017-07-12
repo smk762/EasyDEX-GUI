@@ -58,13 +58,21 @@ const LoginRender = function () {
             <h4 className="color-white">
               {translate('INDEX.WELCOME_LOGIN')}
             </h4>
-            <div className="form-group form-material floating col-sm-9 horizontal-padding-0">
+            <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
-                type={ this.state.seedInputVisibility ? 'text' : 'password' }
-                className="form-control"
+                type="password"
+                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
-                onKeyDown={ (event) => this.handleKeydown(event) }/>
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                value={ this.state.loginPassphrase } />
+              <textarea
+                className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                id="loginPassphrase"
+                name="loginPassphrase"
+                onChange={ this.updateLoginPassPhraseInput }
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                value={ this.state.loginPassphrase }></textarea>
               <i
                 className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
                 onClick={ this.toggleSeedInputVisibility }></i>
@@ -72,14 +80,13 @@ const LoginRender = function () {
                 className="floating-label"
                 htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
             </div>
-            <div className="form-group form-material floating col-sm-3 horizontal-padding-0 margin-top-20">
-              { this.state.loginPassPhraseSeedType
-                ?
-                  this.state.loginPassPhraseSeedType
-                :
-                <div className="placeholder-label">Seed Type</div>
-              }
-            </div>
+            { this.state.loginPassPhraseSeedType &&
+              <div
+                className="form-group form-material floating horizontal-padding-0 margin-top-20 seed-type-block"
+                style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
+                <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
+              </div>
+            }
             <button
               type="button"
               className="btn btn-primary btn-block"
