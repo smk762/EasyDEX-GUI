@@ -11,30 +11,35 @@ class About extends React.Component {
 
             <ul>
               <li>
-                <span className="font-weight-600">Basilisk Mode</span>: Doesn't download the blockchain. Slightly slower
+                <span className="font-weight-600">Basilisk Mode</span>:&nbsp;
+                Doesn't download the blockchain. Slightly slower
                 transaction performance.
               </li>
               <li>
-                <span className="font-weight-600">Full Mode</span>: Downloads the full blockchain, which can take a
+                <span className="font-weight-600">Full Mode</span>:&nbsp;
+                Downloads the full blockchain, which can take a
                 while. Good transaction performance.
               </li>
               <li>
-                <span className="font-weight-600">Native Mode</span>: Only available for a few currencies. Like 'Full
+                <span className="font-weight-600">Native Mode</span>:&nbsp;
+                Only available for a few currencies. Like 'Full
                 Mode' but provides advanced functionality.
               </li>
             </ul>
-            Agama includes the following capabilities:
 
+            Agama includes the following capabilities:
             <ul>
               <li>
-                <span className="font-weight-600">InstantDEX</span>: Easily exchange cryptocurrencies via a
+                <span className="font-weight-600">BarterDEX</span>:&nbsp;
+                Easily exchange cryptocurrencies via a
                 shapeshift-like service.
                 <a href="https://supernet.org/en/technology/whitepapers/easydex-a-practical-native-dex" target="_blank">
-                  (EasyDEX – A Practical Native DEX)
+                  (BarterDEX – A Practical Native DEX)
                 </a>
               </li>
               <li>
-                <span className="font-weight-600">Atomic Exporer</span>: A universal local explorer ensures you don't
+                <span className="font-weight-600">Atomic Exporer</span>:&nbsp;
+                A universal local explorer ensures you don't
                 have query information from a centralized
                 server.
               </li>
@@ -47,7 +52,7 @@ class About extends React.Component {
 
             <br/>
 
-            <span className="font-weight-600">Testers</span>:
+            <span className="font-weight-600">Testers</span>:&nbsp;
             You can help us test Agama. Just <a target="_blank" href="https://supernet.org/en/products/agama-wallet">download and install the latest release</a>.
             Then, report any bugs you encounter to our developers on the #testing-agama Slack channel.
             Your help is greatly appreciated!
@@ -59,7 +64,7 @@ class About extends React.Component {
                 and lower fees.
               </li>
               <li>
-                <span className="font-weight-600">NativeDEX</span>
+                <span className="font-weight-600">BarterDEX</span>
               </li>
             </ul>
           </p>

@@ -56,7 +56,7 @@ const LoginRender = function () {
 
           <div className={ this.state.activeLoginSection === 'login' && !this.state.nativeOnly ? 'show' : 'hide' }>
             <h4 className="color-white">
-              {translate('INDEX.WELCOME_LOGIN')}
+              { translate('INDEX.WELCOME_LOGIN') }
             </h4>
             <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
@@ -207,14 +207,14 @@ const LoginRender = function () {
                 ></textarea>
                 <button className="copy-floating-label"
                   htmlFor="walletseed"
-                  onClick={ () => this.copyPassPhraseToClipboard() }>Copy</button>
+                  onClick={ () => this.copyPassPhraseToClipboard() }>{ translate('INDEX.COPY') }</button>
                 <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
-                  <strong>Weak seed!</strong><br /><br />
-                  Your seed must contain:<br />
-                  - at least 1 upper case letter<br />
-                  - at least 1 digit<br />
-                  - at least 1 special character<br />
-                  - minimum 10 characters long
+                  <strong>{ translate('INDEX.WEAK_SEED') }</strong><br /><br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN1') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN2') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN3') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }
                 </span>
                 <label
                   className="floating-label"

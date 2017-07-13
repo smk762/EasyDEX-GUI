@@ -34,8 +34,8 @@ export function atomic(payload) {
       dispatch(
         triggerToaster(
           payload.method,
-          'Atomic Explorer error',
-          'error'
+          translate('API.ATOMIC_EXPLORER_ERR'),
+          translate('API.ERROR_SM')
         )
       );
     })

@@ -33,20 +33,11 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
   return dispatch => {
     Promise.all(type.map((_type, index) => {
       return new Promise((resolve, reject) => {
-        let payload,
-            ajaxFunctionInput = '',
-            tmplistaddrHexInput = '',
-            passthruAgent = getPassthruAgent(coin),
-            tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
-
-        if (_type === 'public') {
-          ajaxFunctionInput = 'getaddressesbyaccount';
-          tmplistaddrHexInput = '222200';
-        }
-        if (_type === 'private') {
-          ajaxFunctionInput = 'z_listaddresses';
-          tmplistaddrHexInput = '';
-        }
+        let payload;
+        let ajaxFunctionInput = _type === 'public' ? 'getaddressesbyaccount' : 'z_listaddresses';
+        let tmplistaddrHexInput = _type === 'public' ? '222200' : '';
+        let passthruAgent = getPassthruAgent(coin);
+        let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
 
         if (passthruAgent === 'iguana') {
           payload = {
@@ -112,7 +103,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
               mode: null,
               chain: coin,
               cmd: payload.function,
-              params: [""]
+              params: [''],
             };
           }
 
@@ -175,27 +166,18 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
     }))
     .then(result => {
       // TODO: split into 2 functions
-      const passthruAgent = getPassthruAgent(coin),
-            tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
-      let payload;
+      const passthruAgent = getPassthruAgent(coin);
+      const tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+      let payload = {
+        'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+        'agent': passthruAgent,
+        'method': 'passthru',
+        'function': 'listunspent',
+        'hex': '',
+      };
 
       if (passthruAgent === 'iguana') {
-        payload = {
-          'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-          'agent': passthruAgent,
-          'method': 'passthru',
-          'asset': coin,
-          'function': 'listunspent',
-          'hex': '',
-        };
-      } else {
-        payload = {
-          'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-          'agent': passthruAgent,
-          'method': 'passthru',
-          'function': 'listunspent',
-          'hex': '',
-        };
+        payload.asset = coin;
       }
 
       if (mode === 'full') {
@@ -341,7 +323,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                     cmd: 'z_getbalance',
                     params: [
                       _address
-                    ]
+                    ],
                   };
 
                   _fetchConfig = {
@@ -375,7 +357,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                 .then(response => response.json())
                 .then(function(json) {
                   if (json &&
-                    json.error) {
+                      json.error) {
                     resolve(0);
                     dispatch(logGuiHttp({
                       'timestamp': _timestamp,
@@ -525,7 +507,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
             mode: null,
             chain: coin,
             cmd: payload.function,
-            params: payload.params
+            params: payload.params,
           };
 
           _fetchConfig = {

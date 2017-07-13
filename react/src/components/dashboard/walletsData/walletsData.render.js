@@ -6,6 +6,8 @@ import WalletsNotariesList from '../walletsNotariesList/walletsNotariesList';
 import WalletsCacheData from '../walletsCacheData/walletsCacheData';
 import { secondsToString } from '../../../util/time';
 
+// TODO: clean basilisk dropdown menu
+
 export const PaginationItemRender = function(i) {
   return (
     <li

@@ -13,7 +13,7 @@ import {
   ReceiveCoinRender
 } from './receiveCoin.render';
 
-// TODO: implement sorting
+// TODO: implement balance/interest sorting
 // TODO: fallback to localstorage/stores data in case iguana is taking too long to respond
 
 class ReceiveCoin extends React.Component {
@@ -109,25 +109,29 @@ class ReceiveCoin extends React.Component {
   }
 
   renderAddressList(type) {
-    if (this.props.addresses &&
-      this.props.addresses[type] &&
-      this.props.addresses[type].length) {
+    const _addresses = this.props.addresses;
+    const _cache = this.props.cache;
+    const _coin = this.props.coin;
+
+    if (_addresses &&
+        _addresses[type] &&
+        _addresses[type].length) {
       let items = [];
 
-      for (let i = 0; i < this.props.addresses[type].length; i++) {
-        let address = this.props.addresses[type][i];
+      for (let i = 0; i < _addresses[type].length; i++) {
+        let address = _addresses[type][i];
 
         if (this.isBasiliskMode() &&
-          this.hasNoAmount(address)) {
-          address.amount = this.props.cache && this.props.cache[this.props.coin][address.address]
-          && this.props.cache[this.props.coin][address.address].getbalance.data
-          && this.props.cache[this.props.coin][address.address].getbalance.data.balance ? this.props.cache[this.props.coin][address.address].getbalance.data.balance : 'N/A';
+            this.hasNoAmount(address)) {
+          address.amount = _cache && _cache[_coin][address.address]
+          && _cache[_coin][address.address].getbalance.data
+          && _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
         }
         if (this.isBasiliskMode() &&
-          this.hasNoInterest(address)) {
-          address.interest = this.props.cache && this.props.cache[this.props.coin][address.address]
-          && this.props.cache[this.props.coin][address.address].getbalance.data
-          && this.props.cache[this.props.coin][address.address].getbalance.data.interest ? this.props.cache[this.props.coin][address.address].getbalance.data.interest : 'N/A';
+            this.hasNoInterest(address)) {
+          address.interest = _cache && _cache[_coin][address.address]
+          && _cache[_coin][address.address].getbalance.data
+          && _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
         }
 
         items.push(

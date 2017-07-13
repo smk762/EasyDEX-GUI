@@ -16,11 +16,11 @@ export function sendNativeTx(coin, _payload) {
   let payload;
   let _apiMethod;
 
-  if (_payload.addressType === 'public' &&
+  if (_payload.addressType === 'public' && // transparent
       _payload.sendTo.length !== 95) {
     _apiMethod = 'sendtoaddress';
     ajaxDataToHex = `["${_payload.sendTo}", ${Number(_payload.amount) - Number(_payload.fee)}]`;
-  } else {
+  } else { // private
     _apiMethod = 'z_sendmany';
     ajaxDataToHex = `["${_payload.sendFrom}", [{"address": "${_payload.sendTo}", "amount": ${Number(_payload.amount) - Number(_payload.fee)}}]]`;
   }
@@ -122,7 +122,10 @@ export function sendNativeTx(coin, _payload) {
         }));
 
         if (json.indexOf('"code":') > -1) {
-          const _message = json.substring(json.indexOf('"message":"') + 11, json.indexOf('"},"id":"jl777"'));
+          const _message = json.substring(
+            `${json.indexOf('"message":"')}11`, 
+            json.indexOf('"},"id":"jl777"')
+          );
 
           dispatch(
             triggerToaster(
@@ -138,7 +141,7 @@ export function sendNativeTx(coin, _payload) {
               triggerToaster(
                 true,
                 translate('TOASTR.WALLET_NOTIFICATION'),
-                'Your wallet.dat is not matching the blockchain. Please resync from the scratch.',
+                translate('API.WALLETDAT_MISMATCH'),
                 'info',
                 false
               )

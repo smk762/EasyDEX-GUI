@@ -148,7 +148,6 @@ export function getSyncInfoNative(coin, skipDebug) {
       const _response = response.text().then(function(text) { return text; });
       return _response;
     })
-    //.then(response => response.json())
     .then(json => {
       if (!json &&
         Config.cli.default) {

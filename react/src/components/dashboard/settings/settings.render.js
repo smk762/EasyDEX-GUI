@@ -12,7 +12,7 @@ export const AppUpdateTabRender = function() {
       onClick={ () => this.openTab('AppUpdate', 10) }>
       <div className="panel-heading">
         <a className={ this.state.activeTab === 10 ? 'panel-title' : 'panel-title collapsed' }>
-          <i className="icon fa fa-life-ring"></i> Update
+          <i className="icon fa fa-life-ring"></i> { translate('INDEX.UPDATE') }
         </a>
       </div>
       <div
@@ -20,30 +20,30 @@ export const AppUpdateTabRender = function() {
         style={{ height: this.state.activeTab === 10 ? `${this.state.activeTabHeight}px` : '0' }}>
         <div className="panel-body">
           <div className="col-sm-4 padding-top-15">
-            <h5>UI update</h5>
+            <h5>{ translate('INDEX.UI_UPDATE') }</h5>
             <div className="padding-top-15">
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light"
-                onClick={ this._checkForUpdateUIPromise }>Check for update</button>
+                onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light margin-left-20"
                 onClick={ this._updateUIPromise }
-                disabled={ !this.state.updatePatch }>Update UI now</button>
+                disabled={ !this.state.updatePatch }>{ translate('INDEX.UPDATE_UI_NOW') }</button>
             </div>
           </div>
           <div className="col-sm-4 padding-top-15 hide">
-            <h5>Binaries update</h5>
+            <h5>{ translate('INDEX.BINS_UPDATE') }</h5>
             <div className="padding-top-15">
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light"
-                onClick={ this._checkForUpdateUIPromise }>Check for updates</button>
+                onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light margin-left-20"
-                onClick={ this.checkNodes }>Update bins now</button>
+                onClick={ this.checkNodes }>{ translate('INDEX.UPDATE_BINS_NOW') }</button>
             </div>
           </div>
           <div className="col-sm-12 padding-top-15">
@@ -557,7 +557,7 @@ export const SettingsRender = function() {
                       className={ this.state.activeTab === 9 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
                       style={{ height: this.state.activeTab === 9 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
-                        <p>Select a coin and type in CLI compatible command</p>
+                        <p>{ translate('INDEX.CLI_SELECT_A_COIN') }</p>
                         <div className="col-sm-12"></div>
                         <form
                           className="execute-cli-cmd-form"
@@ -570,12 +570,12 @@ export const SettingsRender = function() {
                               name="cliCoin"
                               id="settingsCliOptions"
                               onChange={ this.updateInput }>
-                              <option value="">Select coin</option>
+                              <option value="">{ translate('INDEX.CLI_SELECT_A_COIN') }</option>
                               { this.renderActiveCoinsList('native') }
                             </select>
                             <label
                               className="floating-label"
-                              htmlFor="settingsDelectDebugLogOptions">Coin</label>
+                              htmlFor="settingsDelectDebugLogOptions">{ translate('INDEX.COIN') }</label>
                           </div>
                           <div className="form-group form-material floating">
                             <textarea
@@ -587,14 +587,14 @@ export const SettingsRender = function() {
                               onChange={ this.updateInput }></textarea>
                             <label
                               className="floating-label"
-                              htmlFor="readDebugLogLines">Type in CLI compatible cmd</label>
+                              htmlFor="readDebugLogLines">{ translate('INDEX.TYPE_CLI_CMD') }</label>
                           </div>
                           <div className="col-sm-12 col-xs-12 text-align-center">
                             <button
                               type="button"
                               className="btn btn-primary waves-effect waves-light"
                               disabled={ !this.state.cliCoin || !this.state.cliCmd }
-                              onClick={ () => this.execCliCmd() }>Execute</button>
+                              onClick={ () => this.execCliCmd() }>{ translate('INDEX.EXECUTE') }</button>
                           </div>
                           <div className="col-sm-12 col-xs-12 text-align-left">
                             <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">

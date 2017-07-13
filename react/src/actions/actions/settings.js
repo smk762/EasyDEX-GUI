@@ -58,7 +58,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Illegal privkey',
+          transalte('API.ILLEGAL_PRIVKEY'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'error'
         )
@@ -69,7 +69,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Privkey already in wallet',
+          transalte('API.PRIVKEY_IN_WALLET'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
@@ -265,7 +265,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Addnode needs active coin',
+          translate('API.ADDNODE_NEEDS_COIN'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'error'
         )
@@ -276,7 +276,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Peer was already connected',
+          translate('API.PEER_ALREADY_CONN'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
@@ -287,7 +287,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Addnode connection was already pending',
+          translate('API.ADDNODE_ALREADY_PENDING'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
@@ -298,7 +298,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Peer is added',
+          translate('API.PEER_ADDED'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'success'
         )

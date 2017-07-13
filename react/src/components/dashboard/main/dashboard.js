@@ -1,5 +1,4 @@
 import React from 'react';
-
 import DashboardRender from './dashboard.render';
 
 class Dashboard extends React.Component {

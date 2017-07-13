@@ -1,6 +1,8 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
 
+// TODO: add modal close on modal overlay click evt
+
 const AddCoinRender = function() {
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
@@ -25,7 +27,7 @@ const AddCoinRender = function() {
               <button
                 className="btn btn-outline-primary btn-add-coin-item-options"
                 onClick={ this.toggleActionsMenu }>
-                <i className={ this.state.actionsMenu ? 'fa-chevron-up' : 'fa-chevron-down' }></i>
+                <i className={ 'fa-chevron-' + (this.state.actionsMenu ? 'up' : 'down') }></i>
               </button>
               <span className={ !this.state.actionsMenu ? 'hide' : '' }>
                 <button

@@ -32,7 +32,7 @@ export const LoadingBlocksRender = function() {
     <div
       className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
       style={{ width: '100%' }}>
-      <span style={{ width: '100%' }}>Loading blocks...it can take up to 15 min to load blocks</span>
+      <span style={{ width: '100%' }}>{ translate('INDEX.LOADING_BLOCKS') }</span>
     </div>
   );
 };
@@ -92,7 +92,7 @@ export const WalletsProgressRender = function () {
               <div
                 className={ 'font-size-80-percent '
                 + (this.isFullySynced() ? 'hide' : 'progress-bar progress-bar-info progress-bar-striped active') }
-                style={{ width: this.props.Dashboard.progress.bundles + '%'}}>
+                style={{ width: `${this.props.Dashboard.progress.bundles}%` }}>
                 { translate('INDEX.BUNDLES') } { this.props.Dashboard.progress.bundles }%
               </div>
             </div>
@@ -101,21 +101,21 @@ export const WalletsProgressRender = function () {
             <div className="progress progress-sm">
               <div
                 className="progress-bar progress-bar-warning progress-bar-striped active font-size-80-percent"
-                style={{ width: this.props.Dashboard.progress.utxo + '%' }}>
+                style={{ width: `${this.props.Dashboard.progress.utxo}%` }}>
                 utxo { this.props.Dashboard.progress.utxo }%
               </div>
             </div>
             <div className="progress progress-sm">
               <div
                 className="progress-bar progress-bar-danger progress-bar-striped active font-size-80-percent"
-                style={{ width: this.props.Dashboard.progress.balances + '%' }}>
+                style={{ width: `${this.props.Dashboard.progress.balances}%` }}>
                 { translate('INDEX.BALANCES') } { this.props.Dashboard.progress.balances }%
               </div>
             </div>
             <div className="progress progress-sm">
               <div
                 className="progress-bar progress-bar-success progress-bar-striped active font-size-80-percent"
-                style={ {width: this.props.Dashboard.progress.validated + '%' }}>
+                style={{ width: `${this.props.Dashboard.progress.validated}%` }}>
                 { translate('INDEX.VALIDATED') } { this.props.Dashboard.progress.validated }%
               </div>
             </div>

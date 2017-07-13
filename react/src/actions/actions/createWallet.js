@@ -25,7 +25,7 @@ function createNewWalletState(json) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Couldn\'t create new wallet seed',
+          translate('API.COULDNT_CREATE_SEED'),
           translate('TOASTR.ACCOUNT_NOTIFICATION'),
           'error'
         )

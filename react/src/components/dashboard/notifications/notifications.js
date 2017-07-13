@@ -42,7 +42,6 @@ class Notifications extends React.Component {
         success: 0,
         pending: 0,
       }
-
       let guiLogToArray = [];
 
       for (let timestamp in _guiLog) {

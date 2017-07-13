@@ -38,7 +38,7 @@ class WalletsTxInfo extends React.Component {
         // TODO the conditions below should be merged once the native mode components are fully merged
         // into the rest of the components
         (!this.isNativeMode() ||
-        (this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default'))) {
+         (this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default'))) {
       const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
       return WalletsTxInfoRender.call(this, txInfo);
     }

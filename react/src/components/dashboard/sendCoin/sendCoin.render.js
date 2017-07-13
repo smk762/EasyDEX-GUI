@@ -13,7 +13,9 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
       { refreshCacheData ? refreshCacheData.data && refreshCacheData.data.length : translate('SEND.PRESS_UPDATE_BTN') }<br />
       <div className={ !timestamp ? 'hide' : '' }>
         { translate('SEND.LAST_UPDATED') } @ 
-        { secondsToString(refreshCacheData ? refreshCacheData.timestamp : 0, true) } | { secondsElapsedToString(timestamp || 0) } { translate('SEND.AGO') }<br />
+        { secondsToString(refreshCacheData ? refreshCacheData.timestamp : 0, true) }&nbsp;|&nbsp;
+        { secondsElapsedToString(timestamp || 0) }&nbps;
+        { translate('SEND.AGO') }<br />
       </div>
       <div className={ isReadyToUpdate ? 'hide' : '' }>
         { translate('SEND.NEXT_UPDATE_IN') } { secondsElapsedToString(600 - timestamp) }s
@@ -21,7 +23,7 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
       <div className={ 'full-width margin-bottom-10 margin-top-10 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
         <div
           className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-          style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
+          style={{ width: 100 - `${(this.state.currentStackLength * 100 / this.state.totalStackLength)}%` }}>
           { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
         </div>
       </div>
@@ -30,7 +32,7 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
         className={ 'margin-top-10 ' + (isReadyToUpdate ? 'btn btn-primary waves-effect waves-light' : 'hide') }
         onClick={ this._fetchNewUTXOData }
         disabled={ waitUntilCallIsFinished }>
-        { waitUntilCallIsFinished ? translate('SEND.LOCKED_PLEASE_WAIT') + '...' : translate('SEND.UPDATE') }
+        { waitUntilCallIsFinished ? `${translate('SEND.LOCKED_PLEASE_WAIT')}...` : translate('SEND.UPDATE') }
       </button>
     </div>
   );
@@ -257,7 +259,11 @@ export const SendCoinRender = function () {
                     onChange={ this.updateInput } />
                 </div>
                 <div className="col-lg-12">
-                  <strong>{ translate('INDEX.TOTAL') } ({ translate('INDEX.AMOUNT_SM') } - txfee):</strong> { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
+                  <strong>
+                    { translate('INDEX.TOTAL') }&nbsp;
+                    ({ translate('INDEX.AMOUNT_SM') } - txfee):
+                  </strong>&nbsp;
+                  { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
                 </div>
                 <div className={ this.state.sendApiType ? 'hide' : 'col-lg-10 margin-top-30' }>
                   <span className="pointer">
@@ -283,7 +289,8 @@ export const SendCoinRender = function () {
                     className="btn btn-primary waves-effect waves-light pull-right"
                     onClick={ () => this.changeSendCoinStep(1) }
                     disabled={ !this.state.sendFrom || !this.state.sendTo || !this.state.amount }>
-                    { translate('INDEX.SEND') } { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
+                    { translate('INDEX.SEND') }&nbsp;
+                    { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
                   </button>
                 </div>
               </div>
@@ -365,7 +372,7 @@ export const SendCoinRender = function () {
                   className="btn btn-primary"
                   onClick={ () => this.changeSendCoinStep(0) }
                   disabled={ this.state.utxoMethodInProgress }>
-                    { !this.state.utxoMethodInProgress ? translate('INDEX.MAKE_ANOTHER_TX') : translate('SEND.PLEASE_WAIT') + '...' }
+                    { !this.state.utxoMethodInProgress ? translate('INDEX.MAKE_ANOTHER_TX') : `${translate('SEND.PLEASE_WAIT')}...` }
                 </button>
               </div>
             </div>

@@ -79,7 +79,7 @@ function checkAddressBasiliskHandle(json) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Address already registered',
+          translate('API.ADDRESS_ALREADY_REG'),
           translate('TOASTR.WALLET_NOTIFICATION'),
           'warning'
         )

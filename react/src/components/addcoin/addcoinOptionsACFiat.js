@@ -4,7 +4,7 @@ import { translate } from '../../translate/translate';
 class AddCoinOptionsACFiat extends React.Component {
   render() {
     return (
-      <optgroup label="Fiat Currencies">
+      <optgroup label={ translate('ADD_COIN.FIAT_CURRENCIES') }>
         <option value="AUD|basilisk|native">Australian Dollar (AUD)</option>
         <option value="BRL|basilisk|native">Brazilian Real (BRL)</option>
         <option value="GBP|basilisk|native">British Pound (GBP)</option>
