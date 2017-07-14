@@ -2,8 +2,13 @@
   height: 100%;
 }
 
-.text-align-center {
-  text-align: center;
+.text {
+  &-align-center {
+    text-align: center;
+  }
+  &-align-left {
+    text-align: left;
+  }
 }
 
 .margin-top-30 {
@@ -22,8 +27,14 @@
 }
 
 // navbar.js
-.navbar-toolbar > li > a.padding-top-16 {
-  padding-top: 16px;
+.navbar-toolbar {
+  > li {
+    > a {
+      &.padding-top-16 {
+        padding-top: 16px;
+      }
+    }
+  }
 }
 
 // notifications.js
@@ -60,17 +71,17 @@
   width: 5%;
 }
 
-.text-align-left {
-  text-align: left;
-}
-
 // walletsBalance.js
-.font-weight-600 {
-  font-weight: 600;
-}
-
-.font-size-22 {
-  font-size: 22px;
+.font {
+  &-weight-600 {
+    font-weight: 600;
+  }
+  &-size-22 {
+    font-size: 22px;
+  }
+  &-size-80-percent {
+    font-size: 80%;
+  }
 }
 
 // walletBasiliskConnection.js
@@ -86,13 +97,14 @@
   padding: 0 !important;
 }
 
-.font-size-80-percent {
-  font-size: 80%;
-}
-
 // walletsData.js
 .z-index-10 {
   z-index: 10;
+}
+
+// walletsHeader.js
+.z-index-1 {
+  z-index: 1;
 }
 
 .full-width {
@@ -101,11 +113,6 @@
 
 .pagination-container {
   padding: 20px 0 10px 0;
-}
-
-// walletsHeader.js
-.z-index-1 {
-  z-index: 1;
 }
 
 // walletsNative.js

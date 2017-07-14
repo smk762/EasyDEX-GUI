@@ -11,13 +11,6 @@ import {
 } from './log';
 
 function handleGetNewKMDAddresses(pubpriv, coin, dispatch, json) {
-  /*dispatch(
-    triggerToaster(
-      translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
-      translate('TOASTR.WALLET_NOTIFICATION'),
-      'success'
-    )
-  );*/
   dispatch(
     triggerToaster(
       json.result ? json.result : json,
@@ -32,15 +25,8 @@ function handleGetNewKMDAddresses(pubpriv, coin, dispatch, json) {
 }
 
 export function getNewKMDAddresses(coin, pubpriv) {
-  let payload,
-      ajaxFunctionInput = '';
-
-  if (pubpriv === 'public') {
-    ajaxFunctionInput = 'getnewaddress';
-  }
-  if (pubpriv === 'private') {
-    ajaxFunctionInput = 'z_getnewaddress';
-  }
+  let payload;
+  let ajaxFunctionInput = pubpriv === 'public' ? 'getnewaddress' : 'z_getnewaddress';
 
   if (getPassthruAgent(coin) === 'iguana') {
     payload = {

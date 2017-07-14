@@ -6,6 +6,8 @@ import WalletsNotariesList from '../walletsNotariesList/walletsNotariesList';
 import WalletsCacheData from '../walletsCacheData/walletsCacheData';
 import { secondsToString } from '../../../util/time';
 
+// TODO: clean basilisk dropdown menu
+
 export const PaginationItemRender = function(i) {
   return (
     <li
@@ -81,7 +83,7 @@ export const TxHistoryListRender = function(tx, index) {
         <button
           type="button"
           className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
-          onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, index) }>
+          onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, ((this.state.activePage - 1) * this.state.itemsPerPage) + index) }>
           <i className="icon fa-search"></i>
         </button>
       </td>

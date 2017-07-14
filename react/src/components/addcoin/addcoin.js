@@ -10,6 +10,8 @@ import {
 } from '../../actions/actionCreators';
 import Store from '../../store';
 
+// TODO: refactor coin selector options renders
+
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
 
@@ -136,25 +138,26 @@ class AddCoin extends React.Component {
   updateSelectedCoin(e, index) {
     const coin = e.target.value.split('|');
     const defaultMode = Config.iguanaLessMode ? 'native' : coin[1];
-    const modeToValue = {
+    const modeToValue = { // TODO: move to utils
       'full': 1,
       'basilisk': 0,
       'native': -1,
     };
     let _coins = this.state.coins;
+    const _value = e.target.value;
 
     _coins[index] = {
-      [e.target.name]: e.target.value,
+      [e.target.name]: _value,
       fullMode: {
-        disabled: e.target.value.indexOf('full') > -1 ? false : true,
+        disabled: _value.indexOf('full') > -1 ? false : true,
         checked: defaultMode === 'full' ? true : false,
       },
       basiliskMode: {
-        disabled: e.target.value.indexOf('basilisk') > -1 ? false : true,
+        disabled: _value.indexOf('basilisk') > -1 ? false : true,
         checked: defaultMode === 'basilisk' ? true : false,
       },
       nativeMode: {
-        disabled: e.target.value.indexOf('native') > -1 ? false : true,
+        disabled: _value.indexOf('native') > -1 ? false : true,
         checked: defaultMode === 'native' ? true : false,
       },
       mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
@@ -168,23 +171,24 @@ class AddCoin extends React.Component {
 
   updateSelectedMode(_value, index) {
     let _coins = this.state.coins;
+    const _selectedCoin = _coins[index].selectedCoin;
 
     _coins[index] = {
-      selectedCoin: _coins[index].selectedCoin,
+      selectedCoin: _selectedCoin,
       fullMode: {
-        disabled: _coins[index].selectedCoin.indexOf('full') > -1 ? false : true,
+        disabled: _selectedCoin.indexOf('full') > -1 ? false : true,
         checked: _value === '1' ? true : false,
       },
       basiliskMode: {
-        disabled: _coins[index].selectedCoin.indexOf('basilisk') > -1 ? false : true,
+        disabled: _selectedCoin.indexOf('basilisk') > -1 ? false : true,
         checked: _value === '0' ? true : false,
       },
       nativeMode: {
-        disabled: _coins[index].selectedCoin.indexOf('native') > -1 ? false : true,
+        disabled: _selectedCoin.indexOf('native') > -1 ? false : true,
         checked: _value === '-1' ? true : false,
       },
       mode: _value,
-      syncOnly: this.state.coins[index].syncOnly,
+      syncOnly: _coins[index].syncOnly,
     };
 
     this.setState(Object.assign({}, this.state, {
@@ -200,25 +204,26 @@ class AddCoin extends React.Component {
 
   activateCoin() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
+    const _coin = this.state.coins[0];
 
     if (this.isCoinAlreadyAdded(coin)) {
       this.dismiss();
       return;
     }
 
-    if (!this.state.coins[0].daemonParam) {
+    if (!_coin.daemonParam) {
       Store.dispatch(addCoin(
         coin,
-        this.state.coins[0].mode,
-        this.state.coins[0].syncOnly,
+        _coin.mode,
+        _coin.syncOnly,
       ));
     } else {
       Store.dispatch(addCoin(
         coin,
-        this.state.coins[0].mode,
-        this.state.coins[0].syncOnly,
+        _coin.mode,
+        _coin.syncOnly,
         null,
-        { type: this.state.coins[0].daemonParam }
+        { type: _coin.daemonParam } // TODO: custom param value
       ));
     }
 
@@ -298,9 +303,10 @@ class AddCoin extends React.Component {
 
   renderCoinSelectors() {
     let items = [];
+    const _coins = this.state.coins;
 
-    for (let i = 0; i < this.state.coins.length; i++) {
-      const _item = this.state.coins[i];
+    for (let i = 0; i < _coins.length; i++) {
+      const _item = _coins[i];
       const _coin = _item.selectedCoin || '';
 
       items.push(

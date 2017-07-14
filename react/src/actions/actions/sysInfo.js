@@ -19,7 +19,7 @@ export function shepherdGetSysInfo() {
       console.log(error);
       dispatch(
         triggerToaster(
-          'Failed to get sys info',
+          'shepherdGetSysInfo',
           'Error',
           'error'
         )

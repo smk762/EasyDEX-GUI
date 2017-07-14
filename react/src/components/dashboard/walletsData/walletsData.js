@@ -32,7 +32,7 @@ import {
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://127.0.0.1:' + Config.agamaPort);
+const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 class WalletsData extends React.Component {
   constructor(props) {
@@ -401,22 +401,30 @@ class WalletsData extends React.Component {
   }
 
   renderAddressByType(type) {
-    if (this.props.ActiveCoin.addresses &&
-        this.props.ActiveCoin.addresses[type] &&
-        this.props.ActiveCoin.addresses[type].length) {
-        let items = [];
+    const _addresses = this.props.ActiveCoin.addresses;
 
-        for (let i = 0; i < this.props.ActiveCoin.addresses[type].length; i++) {
-          const address = this.props.ActiveCoin.addresses[type][i];
+    if (_addresses &&
+        _addresses[type] &&
+        _addresses[type].length) {
+        let items = [];
+        const _cache = this.props.ActiveCoin.cache;
+        const _coin = this.props.ActiveCoin.coin;
+
+        for (let i = 0; i < _addresses[type].length; i++) {
+          const address = _addresses[type][i].address;
           let _amount = address.amount;
 
           if (this.props.ActiveCoin.mode === 'basilisk') {
-            _amount = this.props.ActiveCoin.cache && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin] && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address] && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address].getbalance.data && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address].getbalance.data.balance ? this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address].getbalance.data.balance : 'N/A';
+            _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
 
           items.push(
-            <li key={address.address}>
-              <a onClick={ () => this.updateAddressSelection(address.address, type, _amount) }><i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { _amount } { this.props.ActiveCoin.coin } ]  { address.address }</span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+            <li key={address}>
+              <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
+                <i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>&nbsp;&nbsp;
+                <span className="text">[ { _amount } { _coin } ]  { address }</span>
+                <span className="glyphicon glyphicon-ok check-mark"></span>
+              </a>
             </li>
           );
         }
@@ -435,14 +443,19 @@ class WalletsData extends React.Component {
 
   renderAddressAmount() {
     if (this.hasPublicAdresses()) {
-      for (let i = 0; i < this.props.ActiveCoin.addresses.public.length; i++) {
-        if (this.props.ActiveCoin.addresses.public[i].address === this.state.currentAddress) {
-          if (this.props.ActiveCoin.addresses.public[i].amount &&
-              this.props.ActiveCoin.addresses.public[i].amount !== 'N/A') {
-            return this.props.ActiveCoin.addresses.public[i].amount;
+      const _addresses = this.props.ActiveCoin.addresses;
+      const _cache = this.props.ActiveCoin.cache;
+      const _coin = this.props.ActiveCoin.coin;
+
+      for (let i = 0; i < _addresses.public.length; i++) {
+        if (_addresses.public[i].address === this.state.currentAddress) {
+          if (_addresses.public[i].amount &&
+              _addresses.public[i].amount !== 'N/A') {
+            return _addresses.public[i].amount;
           } else {
-            const address = this.props.ActiveCoin.addresses.public[i].address;
-            const _amount = this.props.ActiveCoin.cache[this.props.ActiveCoin.coin] && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address] && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address].getbalance.data && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address].getbalance.data.balance ? this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address].getbalance.data.balance : 'N/A';
+            const address = _addresses.public[i].address;
+            const _amount = _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+            
             return _amount;
           }
         }
@@ -456,7 +469,8 @@ class WalletsData extends React.Component {
     if (this.state.currentAddress) {
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { this.renderAddressAmount() } { this.props.ActiveCoin.coin } ]  { this.state.currentAddress }</span>
+          <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+          <span className="text">[ { this.renderAddressAmount() } { this.props.ActiveCoin.coin } ]  { this.state.currentAddress }</span>
         </span>
       );
     } else {

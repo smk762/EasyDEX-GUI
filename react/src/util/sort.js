@@ -1,5 +1,10 @@
 export function sortByDate(data) {
-  return data.sort(function(a, b){
-    return new Date(b.blocktime || b.timestamp) - new Date(a.blocktime || a.timestamp);
+  return data.sort(function(a, b) {
+    if (a.timestamp &&
+        b.timestamp) {
+      return b.timestamp - a.timestamp;
+    } else {
+      return b.blocktime - a.blocktime;
+    }
   });
 }

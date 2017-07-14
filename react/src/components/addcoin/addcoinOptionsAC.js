@@ -4,7 +4,7 @@ import { translate } from '../../translate/translate';
 class AddCoinOptionsAC extends React.Component {
   render() {
     return (
-      <optgroup label="Assetchains">
+      <optgroup label={ translate('ADD_COIN.ASSETCHAINS') }>
         <option value="BET|basilisk|native">BET (BET)</option>
         <option value="BOTS|basilisk|native">BOTS (BOTS)</option>
         <option value="CEAL|basilisk|native">CEAL NET (CEAL)</option>

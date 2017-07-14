@@ -59,6 +59,8 @@ class Settings extends React.Component {
       updateBins: null,
       updateLog: [],
       updateProgressPatch: null,
+      wifkeysPassphrase: '',
+      trimPassphraseTimer: null,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -93,6 +95,16 @@ class Settings extends React.Component {
         tabElId: this.state.tabElId,
       }));
     }
+  }
+
+  resizeLoginTextarea() {
+    // auto-size textarea
+    setTimeout(() => {
+      if (this.state.seedInputVisibility) {
+          document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
+          document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+      }    
+    }, 100);
   }
 
   updateSocketsData(data) {
@@ -404,9 +416,30 @@ class Settings extends React.Component {
   }
 
   updateInput(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+    console.log(e.target.name);
+    if (e.target.name === 'wifkeysPassphrase') {
+      // remove any empty chars from the start/end of the string
+      const newValue = e.target.value;
+      
+      clearTimeout(this.state.trimPassphraseTimer);
+
+      const _trimPassphraseTimer = setTimeout(() => {
+        this.setState({
+          wifkeysPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
+        });
+      }, 2000);
+
+      this.resizeLoginTextarea();
+      
+      this.setState({
+        trimPassphraseTimer: _trimPassphraseTimer,
+        [e.target.name]: newValue,
+      });
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value,
+      });
+    }
   }
 
   renderDebugLogData() {

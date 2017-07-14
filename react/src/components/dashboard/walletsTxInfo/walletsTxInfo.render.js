@@ -90,30 +90,30 @@ const WalletsTxInfoRender = function(txInfo) {
                         </tr>
 
                         { this.isNativeMode() &&
-                        <tr>
-                          <td>walletconflicts</td>
-                          <td>
-                            { txInfo.walletconflicts.length }
-                          </td>
-                        </tr>
+                          <tr>
+                            <td>walletconflicts</td>
+                            <td>
+                              { txInfo.walletconflicts.length }
+                            </td>
+                          </tr>
                         }
 
                         { this.isNativeMode() &&
-                        <tr>
-                          <td>time</td>
-                          <td>
-                            { secondsToString(txInfo.time) }
-                          </td>
-                        </tr>
+                          <tr>
+                            <td>time</td>
+                            <td>
+                              { secondsToString(txInfo.time) }
+                            </td>
+                          </tr>
                         }
 
                         { this.isNativeMode() &&
-                        <tr>
-                          <td>timereceived</td>
-                          <td>
-                            { secondsToString(txInfo.timereceived) }
-                          </td>
-                        </tr>
+                          <tr>
+                            <td>timereceived</td>
+                            <td>
+                              { secondsToString(txInfo.timereceived) }
+                            </td>
+                          </tr>
                         }
                         </tbody>
                       </table>
@@ -142,7 +142,8 @@ const WalletsTxInfoRender = function(txInfo) {
                         className="full-width height-170"
                         rows="10"
                         cols="80"
-                        defaultValue={ txInfo.hex } disabled></textarea>
+                        defaultValue={ txInfo.hex }
+                        disabled></textarea>
                     </div>
 
                     <div className={ this.state.activeTab === 3 ? 'tab-pane active' : 'tab-pane' }>
@@ -150,7 +151,8 @@ const WalletsTxInfoRender = function(txInfo) {
                         className="full-width height-400"
                         rows="40"
                         cols="80"
-                        defaultValue={ JSON.stringify(txInfo, null, '\t') } disabled></textarea>
+                        defaultValue={ JSON.stringify(txInfo, null, '\t') }
+                        disabled></textarea>
                     </div>
                   </div>
                 </div>

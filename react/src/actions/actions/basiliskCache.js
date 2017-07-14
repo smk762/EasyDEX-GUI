@@ -8,6 +8,8 @@ import {
   guiLogState
 } from './log';
 
+// TODO: rewrite cache API to use POST
+
 export function deleteCacheFile(_payload) {
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/groom`, {

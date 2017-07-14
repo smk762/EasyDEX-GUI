@@ -12,7 +12,7 @@ export const ProgressRender = function (fork) {
           </div>
           <div
             className={ 'font-size-80-percent ' + (this.isFullySynced(fork) ? 'hide' : 'progress-bar progress-bar-info progress-bar-striped active') }
-            style={{ width: fork.bundles + '%' }}>
+            style={{ width: `${fork.bundles}%` }}>
             { translate('INDEX.BUNDLES') } { fork.bundles }%
           </div>
         </div>
@@ -23,21 +23,21 @@ export const ProgressRender = function (fork) {
         <div className="progress progress-sm">
           <div
             className="progress-bar progress-bar-warning progress-bar-striped active font-size-80-percent"
-            style={{ width: fork.utxo + '%' }}>
+            style={{ width: `${fork.utxo}%` }}>
             utxo { fork.utxo }%
           </div>
         </div>
         <div className="progress progress-sm">
           <div
             className="progress-bar progress-bar-danger progress-bar-striped active font-size-80-percent"
-            style={{ width: fork.balances + '%' }}>
+            style={{ width: `${fork.balances}%` }}>
             { translate('INDEX.BALANCES') } { fork.balances }%
           </div>
         </div>
         <div className="progress progress-sm">
           <div
             className="progress-bar progress-bar-success progress-bar-striped active font-size-80-percent"
-            style={{ width: fork.validated + '%' }}>
+            style={{ width: `${fork.validated}%` }}>
             { translate('INDEX.VALIDATED') } { fork.validated }%
           </div>
         </div>
@@ -57,7 +57,9 @@ export const ForkItemRender = function (forkInfo, port) {
           src={ `assets/images/cryptologo/${this.renderCoinName(forkInfo.registry.coin).logo}.png` }
           alt={ forkInfo.registry.coin }/>
         <span className="badge up badge-success margin-bottom-5">Full</span>
-        <div className="coin-name">{ this.renderCoinName(forkInfo.registry.coin).name } ({ forkInfo.registry.coin.toUpperCase() })</div>
+        <div className="coin-name">
+          { this.renderCoinName(forkInfo.registry.coin).name } ({ forkInfo.registry.coin.toUpperCase() })
+        </div>
         <div className="margin-top-10">
           <span
             className="btn btn-primary"

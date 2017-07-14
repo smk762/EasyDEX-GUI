@@ -5,6 +5,8 @@ import AddCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
 
 const CoinSelectorsRender = function(item, coin, i) {
+  const isWindows = this.props.Settings && this.props.Settings.appInfo && this.props.Settings.appInfo.sysInfo && this.props.Settings.appInfo.sysInfo.platform === 'win32';
+
   return (
     <div
       className={ this.hasMoreThanOneCoin() ? 'multi' : 'single' }
@@ -18,9 +20,9 @@ const CoinSelectorsRender = function(item, coin, i) {
             onChange={ (event) => this.updateSelectedCoin(event, i) }
             autoFocus>
             <option>{ translate('INDEX.SELECT') }</option>
-            <AddCoinOptionsCrypto />
-            <AddCoinOptionsAC />
-            <AddCoinOptionsACFiat />
+            <AddCoinOptionsCrypto appSettings={ this.props.Settings } />
+            <AddCoinOptionsAC appSettings={ this.props.Settings } />
+            <AddCoinOptionsACFiat appSettings={ this.props.Settings } />
           </select>
         </div>
       </div>
@@ -33,8 +35,8 @@ const CoinSelectorsRender = function(item, coin, i) {
             { translate('INDEX.ACTIVATE_COIN') }
         </button>
       </div>
-      <div className="col-sm-12 text-center">
-        <div className={ this.state.nativeOnly ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
+      <div className="col-sm-11 text-center add-coin-modes">
+        <div className={ this.state.nativeOnly || isWindows ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -94,7 +96,9 @@ const CoinSelectorsRender = function(item, coin, i) {
             </span>
           </label>
         </div>
-        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6" style={{ paddingLeft: this.state.nativeOnly ? '0' : 'inherit' }}>
+        <div
+          className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6"
+          style={{ paddingLeft: this.state.nativeOnly ? '0' : 'inherit' }}>
           <input
             type="radio"
             className="to-labelauty labelauty"

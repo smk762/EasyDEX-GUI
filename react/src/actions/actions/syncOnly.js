@@ -71,7 +71,7 @@ export function stopIguanaFork(pmid) {
     .then(
       json => dispatch(
         triggerToaster(
-          'Iguana instance is stopped',
+          translate('API.IGUANA_INSTANCE_STOP'),
           translate('TOASTR.SERVICE_NOTIFICATION'),
           'success'
         )

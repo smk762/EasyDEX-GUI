@@ -47,7 +47,7 @@ export function addCoin(coin, mode, syncOnly, port, startupParams) {
         const modeToValue = {
           '1': 'full',
           '0': 'basilisk',
-          '-1': 'native'
+          '-1': 'native',
         };
 
         return dispatch => {
@@ -161,7 +161,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       '-daemon=0',
       '-server',
       `-ac_name=${coin}`,
-      '-addnode=78.47.196.146'
+      '-addnode=78.47.196.146',
     ]
   };
 
@@ -170,7 +170,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       'ac_name': 'zcashd',
       'ac_options': [
         '-daemon=0',
-        '-server=1'
+        '-server=1',
       ]
     };
   }
@@ -180,7 +180,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       'ac_name': 'komodod',
       'ac_options': [
         '-daemon=0',
-        '-addnode=78.47.196.146'
+        '-addnode=78.47.196.146',
       ]
     };
   }
@@ -302,7 +302,7 @@ export function _shepherdGetConfig(coin, mode, startupParams) {
       console.log(error);
       dispatch(
         triggerToaster(
-          'Failed to get mode config',
+          '_shepherdGetConfig',
           'Error',
           'error'
         )
@@ -334,7 +334,7 @@ export function iguanaActiveHandleBypass() {
       console.log(error);
       dispatch(
         triggerToaster(
-          'Failed to iguanaActiveHandleBypass',
+          'iguanaActiveHandleBypass',
           'Error',
           'error'
         )
@@ -364,7 +364,7 @@ export function shepherdGetConfig(coin, mode, startupParams) {
         console.log(error);
         dispatch(
           triggerToaster(
-            'Failed to get KMD config',
+            'shepherdGetConfig',
             'Error',
             'error'
           )
@@ -395,7 +395,7 @@ export function shepherdGetConfig(coin, mode, startupParams) {
         console.log(error);
         dispatch(
           triggerToaster(
-            'Failed to get mode config',
+            'shepherdGetConfig',
             'Error',
             'error'
           )

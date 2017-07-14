@@ -295,7 +295,7 @@ export function rpcErrorHandler(json, dispatch) {
   if (json &&
       json.error) {
     if (json.error === 'bitcoinrpc needs coin that is active') {
-      dispatch(triggerToaster('No active coin', translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
+      dispatch(triggerToaster(translate('API.NO_ACTIVE_COIN'), translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
     }
   }
 }

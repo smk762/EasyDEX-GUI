@@ -6,7 +6,8 @@ import AtomicRender from './atomic.render';
 
 /*
   TODO:
-  pre-select active coin
+    1) pre-select active coin
+    2) validation
 */
 class Atomic extends React.Component {
   constructor(props) {
@@ -44,6 +45,8 @@ class Atomic extends React.Component {
   getAtomicData() {
     const tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
     let ExplorerInputData;
+    const _coin = this.state.coin;
+    const _input = this.state.input;
 
     switch (this.state.api) {
       case 'history':
@@ -53,70 +56,70 @@ class Atomic extends React.Component {
           'agent': 'basilisk',
           'method': 'history',
           'vals': {
-            'coin': this.state.coin,
-            'addresses': [ this.state.input ]
+            'coin': _coin,
+            'addresses': [ _input ],
           }
         };
         break;
       case 'getbalance':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
-          'coin': this.state.coin,
+          'coin': _coin,
           'method': 'getbalance',
-          'params': [ this.state.input ]
+          'params': [ _input ],
         };
         break;
       case 'listunspent':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
-          'coin': this.state.coin,
+          'coin': _coin,
           'method': 'listunspent',
           'params': [
             1,
             9999999,
-            [ this.state.input ]
+            [ _input ],
           ]
         };
         break;
       case 'txid':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
-          'coin': this.state.coin,
+          'coin': _coin,
           'method': 'getrawtransaction',
-          'params': [ this.state.input ]
+          'params': [ _input ],
         };
         break;
       case 'blockash':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
-          'coin': this.state.coin,
+          'coin': _coin,
           'agent': 'bitcoinrpc',
           'method': 'getblockhash',
-          'height': this.state.input
+          'height': _input,
         };
         break;
       case 'chaintip':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
-          'coin': this.state.coin,
+          'coin': _coin,
           'agent': 'bitcoinrpc',
-          'method': 'getbestblockhash'
+          'method': 'getbestblockhash',
         };
         break;
       case 'activehandle':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'SuperNET',
-          'method': 'activehandle'
+          'method': 'activehandle',
         };
         break;
       case 'gettransaction':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
-          'coin': this.state.coin,
+          'coin': _coin,
           'agent': 'bitcoinrpc',
           'method': 'gettransaction',
-          'txid': this.state.input
+          'txid': _input,
         };
         break;
       case 'dex_getinfo':
@@ -124,7 +127,7 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'getinfo',
-          'symbol': this.state.coin
+          'symbol': _coin,
         };
         break;
       case 'dex_getnotaries':
@@ -132,7 +135,7 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'getnotaries',
-          'symbol': this.state.coin
+          'symbol': _coin,
         };
         break;
       case 'dex_alladdresses':
@@ -140,7 +143,7 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'alladdresses',
-          'symbol': this.state.coin
+          'symbol': _coin,
         };
         break;
       case 'dex_importaddress':
@@ -148,8 +151,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'importaddress',
-          'address': this.state.input,
-          'symbol': this.state.coin
+          'address': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_checkaddress':
@@ -157,8 +160,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'checkaddress',
-          'ddress': this.state.input,
-          'symbol': this.state.coin
+          'ddress': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_validateaddress':
@@ -166,8 +169,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'validateaddress',
-          'address': this.state.input,
-          'symbol': this.state.coin
+          'address': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_getbestblockhash':
@@ -175,7 +178,7 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'getbestblockhash',
-          'symbol': this.state.coin
+          'symbol': _coin,
         };
         break;
       case 'dex_listtransactions':
@@ -183,10 +186,10 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'listtransactions',
-          'address': this.state.input,
+          'address': _input,
           'count': 100,
           'skip': 0,
-          'symbol': this.state.coin
+          'symbol': _coin,
         };
         break;
       case 'dex_listtransactions2':
@@ -194,10 +197,10 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'listtransactions2',
-          'address': this.state.input,
+          'address': _input,
           'count': 100,
           'skip': 0,
-          'symbol': this.state.coin
+          'symbol': _coin,
         };
         break;
       case 'dex_listunspent':
@@ -205,8 +208,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'listunspent',
-          'address': this.state.input,
-          'symbol': this.state.coin
+          'address': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_listspent':
@@ -214,8 +217,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'listspent',
-          'address': this.state.input,
-          'symbol': this.state.coin
+          'address': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_listunspent2':
@@ -223,8 +226,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'listunspent2',
-          'address': this.state.input,
-          'symbol': this.state.coin
+          'address': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_getblockhash':
@@ -233,7 +236,7 @@ class Atomic extends React.Component {
           'agent': 'dex',
           'method': 'getblockhash',
           'height': 100,
-          'symbol': this.state.coin
+          'symbol': _coin,
         };
         break;
       case 'dex_getblock':
@@ -241,8 +244,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'getblock',
-          'hash': this.state.input,
-          'symbol': this.state.coin
+          'hash': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_gettxin':
@@ -251,8 +254,8 @@ class Atomic extends React.Component {
           'agent': 'dex',
           'method': 'gettxin',
           'vout': 0,
-          'txid': this.state.input,
-          'symbol': this.state.coin
+          'txid': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_gettxout':
@@ -261,8 +264,8 @@ class Atomic extends React.Component {
           'agent': 'dex',
           'method': 'gettxout',
           'vout': 0,
-          'txid': this.state.input,
-          'symbol': this.state.coin
+          'txid': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_gettransaction':
@@ -270,8 +273,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'gettransaction',
-          'txid': this.state.input,
-          'symbol': this.state.coin
+          'txid': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_getbalance':
@@ -279,8 +282,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'getbalance',
-          'address': this.state.input,
-          'symbol': this.state.coin
+          'address': _input,
+          'symbol': _coin,
         };
         break;
       case 'dex_getsupply':
@@ -289,8 +292,8 @@ class Atomic extends React.Component {
           'agent': 'dex',
           'method': 'getbalance',
           'address': '*',
-          'symbol': this.state.coin,
-          'timeout': 600000
+          'symbol': _coin,
+          'timeout': 600000,
         };
         break;
       case 'dex_sendrawtransaction':
@@ -298,8 +301,8 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'dex',
           'method': 'sendrawtransaction',
-          'signedtx': this.state.input,
-          'symbol': this.state.coin
+          'signedtx': _input,
+          'symbol': _coin,
         };
         break;
       case 'basilisk_refresh':
@@ -307,16 +310,16 @@ class Atomic extends React.Component {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'basilisk',
           'method': 'refresh',
-          'address': this.state.input,
-          'symbol': this.state.coin,
-          'timeout': 600000
+          'address': _input,
+          'symbol': _coin,
+          'timeout': 600000,
         };
         break;
       case 'jumblr_status':
         ExplorerInputData = {
           'userpass': tmpIguanaRPCAuth,
           'agent': 'jumblr',
-          'method': 'status'
+          'method': 'status',
         };
         break;
     }
@@ -326,20 +329,23 @@ class Atomic extends React.Component {
 
   componentWillReceiveProps(props) {
     if (props && props.Atomic.response) {
-      if (this.state.api === 'txid' ||
-          this.state.api === 'dex_getbestblockhash' ||
-          this.state.api === 'dex_sendrawtransaction' ||
-          this.state.api === 'dex_getblockhash') {
+      const _api = this.state.api;
+      const _propsAtomicRes = props.Atomic.response;
+
+      if (_api === 'txid' ||
+          _api === 'dex_getbestblockhash' ||
+          _api === 'dex_sendrawtransaction' ||
+          _api === 'dex_getblockhash') {
         this.setState(Object.assign({}, this.state, {
-          'output': props.Atomic.response,
+          'output': _propsAtomicRes,
         }));
       } else {
         this.setState(Object.assign({}, this.state, {
-          'output': JSON.stringify(props.Atomic.response, null, '\t'),
+          'output': JSON.stringify(_propsAtomicRes, null, '\t'),
         }));
       }
 
-      if (props.Atomic.response.error === 'less than required responses') {
+      if (_propsAtomicRes.error === 'less than required responses') {
         Store.dispatch(
           triggerToaster(
             'Basilisk connection error',
