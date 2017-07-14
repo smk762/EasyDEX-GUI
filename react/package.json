@@ -1,10 +1,10 @@
 {
-  "name": "EDEX-ReactJS",
+  "name": "AgamaGUI",
   "version": "0.0.1",
-  "description": "EDEX Wallet ReactJS",
+  "description": "Agama Wallet GUI",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack-dashboard -t 'EDEX-ReactJS' -- webpack-dev-server --colors --no-info",
+    "start": "webpack-dashboard -t 'AgamaGUI' -- webpack-dev-server --colors --no-info",
     "build": "rm -rf ./build && mkdir build && mkdir build/assets && cp -R src/assets build/ && NODE_ENV=\"production\" webpack",
     "lint-break-on-errors": "eslint ./src ./webpack.config.js -f table --ext .js --ext .jsx",
     "lint": "eslint ./src ./webpack.config.js -f table --ext .js --ext .jsx || true",
