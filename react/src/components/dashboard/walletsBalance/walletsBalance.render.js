@@ -22,7 +22,6 @@ const WalletsBalanceRender = function() {
         </div>
 
         <div className={ this.isNativeMode() ? 'col-lg-3 col-xs-12' : this.isBasiliskMode() ? 'col-lg-4 col-xs-12' : 'col-lg-12 col-xs-12'}>
-
           <div className="widget widget-shadow">
             <div className="widget-content">
               <div className="padding-20 padding-top-10">
