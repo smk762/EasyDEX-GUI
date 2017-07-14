@@ -63,12 +63,7 @@ const AddCoinRender = function() {
                   <i>Iguana Daemon</i> { translate('INDEX.NATIVE_MODE_DESC3') }.
                 </p>
                 <div className="alert alert-icon alert-primary">
-                  <button
-                    type="button"
-                    className="close">
-                    <span>×</span>
-                  </button>
-                  <i className="icon md-info-outline"></i> 
+                  <i className="icon md-info-outline"></i>
                   <strong>{ translate('INDEX.NATIVE_MODE') }</strong> { translate('INDEX.NATIVE_MODE_DESC4') }&nbsp;
                   <strong>{ translate('INDEX.NATIVE_MODE_DESC5') }</strong>,&nbsp;
                   <i>{ translate('INDEX.NATIVE_MODE_DESC5') }</i>.

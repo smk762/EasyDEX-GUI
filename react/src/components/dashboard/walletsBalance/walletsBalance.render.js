@@ -7,23 +7,13 @@ const WalletsBalanceRender = function() {
       <div className="col-xs-12">
         <div className={ this.isFullMode() && !this.isFullySynced() ? 'col-xs-12' : 'col-xs-12 hide' }>
           <div className="alert alert-info alert-dismissible">
-            <button
-              className="close"
-              type="button">
-              <span>×</span>
-            </button>
             <h4>{ translate('INDEX.ACTIVATING_WALLET_RT') }</h4>
             <p>{ translate('INDEX.IGUANA_FULL_MODE_SYNC_P1') }</p>
             <p>{ translate('INDEX.IGUANA_FULL_MODE_SYNC_P2') }</p>
             <p className="font-weight-600">{ this.renderLB('INDEX.IGUANA_FULL_MODE_SYNC_P3') }</p>
           </div>
 
-          <div className="alert alert-info alert-dismissible">
-            <button
-              className="close"
-              type="button">
-              <span>×</span>
-            </button>
+          <div className="alert alert-info alert-dismissible hide">
             <h4>{ translate('INDEX.FETCHING_COIN_DATA') }</h4>
             <p>{ translate('INDEX.IGUANA_FULL_MODE_SYNC_P1') }</p>
             <p>{ translate('INDEX.IGUANA_FULL_MODE_SYNC_P2') }</p>
