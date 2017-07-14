@@ -107,8 +107,8 @@ const NavbarRender = function() {
                     <i className="icon fa-users"></i> { translate('INDEX.ABOUT_IGUANA') }
                   </a>
                 </li>
-                <li className="divider"></li>
-                <li>
+                <li className={ this.state.nativeOnly ? 'hide' : 'divider' }></li>
+                <li className={ this.state.nativeOnly ? 'hide' : '' }>
                   <a onClick={ this.logout }>
                     <i className="icon md-power"></i> { translate('INDEX.LOGOUT') }
                   </a>
