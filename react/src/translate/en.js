@@ -17,6 +17,7 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'NO_DATA_AVAILABLE': 'No data available',
       'LOADING': 'Loading',
       'ACTIVATING_SM': 'activating',
       'DL_BLOCKS': 'downloading blocks',
@@ -40,6 +41,7 @@ export const _lang = {
       'BINS_UPDATE': 'Binaries update',
       'UPDATE_BINS_NOW': 'Update binaries now',
       'CLI_SELECT_A_COIN': 'Select a coin and type in CLI compatible command',
+      'CLI_NATIVE_COIN': 'Select native coin',
       'IMPORT': 'Import',
       'CHECK': 'Check',
       'VALIDATE': 'Validate',

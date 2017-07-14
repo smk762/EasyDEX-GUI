@@ -570,7 +570,7 @@ export const SettingsRender = function() {
                               name="cliCoin"
                               id="settingsCliOptions"
                               onChange={ this.updateInput }>
-                              <option value="">{ translate('INDEX.CLI_SELECT_A_COIN') }</option>
+                              <option value="">{ translate('INDEX.CLI_NATIVE_COIN') }</option>
                               { this.renderActiveCoinsList('native') }
                             </select>
                             <label

@@ -1,4 +1,5 @@
 import React from 'react';
+import { translate } from '../../../translate/translate';
 import {
   SyncErrorLongestChainRender,
   SyncErrorBlocksRender,
@@ -124,7 +125,7 @@ class WalletsProgress extends React.Component {
         );
       } else if (
           this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
-          this.props.Settings.debugLog.indexOf('Reindexing block file') > -1 
+          this.props.Settings.debugLog.indexOf('Reindexing block file') > -1
         ) {
         return (
           `: ({ translate('INDEX.REINDEX') })`

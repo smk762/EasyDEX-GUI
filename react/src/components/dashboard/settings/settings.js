@@ -103,7 +103,7 @@ class Settings extends React.Component {
       if (this.state.seedInputVisibility) {
           document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
           document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
-      }    
+      }
     }, 100);
   }
 
@@ -416,11 +416,10 @@ class Settings extends React.Component {
   }
 
   updateInput(e) {
-    console.log(e.target.name);
     if (e.target.name === 'wifkeysPassphrase') {
       // remove any empty chars from the start/end of the string
       const newValue = e.target.value;
-      
+
       clearTimeout(this.state.trimPassphraseTimer);
 
       const _trimPassphraseTimer = setTimeout(() => {
@@ -430,7 +429,7 @@ class Settings extends React.Component {
       }, 2000);
 
       this.resizeLoginTextarea();
-      
+
       this.setState({
         trimPassphraseTimer: _trimPassphraseTimer,
         [e.target.name]: newValue,
@@ -486,12 +485,26 @@ class Settings extends React.Component {
         _cliResponseParsed = _cliResponse.result;
       }
 
-      const __cliResponseParsed = _cliResponseParsed.split('\r\n');
+      let __cliResponseParsed;
+      if (_cliResponseParsed.indexOf('\r\n') > -1) {
+        _cliResponseParsed = _cliResponseParsed.split('\r\n') ;
+      } else if (_cliResponseParsed.indexOf('\n') > -1) {
+        __cliResponseParsed = _cliResponseParsed.split('\n') ;
+      } else {
+        __cliResponseParsed = _cliResponseParsed;
+      }
+
       let _items = [];
 
-      for (let i = 0; i < __cliResponseParsed.length; i++) {
+      if (__cliResponseParsed.length) {
+        for (let i = 0; i < __cliResponseParsed.length; i++) {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ typeof __cliResponseParsed[i] === 'object' ? JSON.stringify(__cliResponseParsed[i], null, '\t') : __cliResponseParsed[i] }</div>
+          );
+        }
+      } else {
         _items.push(
-          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed[i] }</div>
+          translate('INDEX.NO_DATA_AVAILABLE')
         );
       }
 
