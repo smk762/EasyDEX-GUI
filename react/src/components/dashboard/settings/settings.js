@@ -486,9 +486,10 @@ class Settings extends React.Component {
       }
 
       let __cliResponseParsed;
-      if (_cliResponseParsed.indexOf('\r\n') > -1) {
+      if (typeof _cliResponseParsed !== 'object' &&
+          _cliResponseParsed.indexOf('\r\n') > -1) {
         _cliResponseParsed = _cliResponseParsed.split('\r\n') ;
-      } else if (_cliResponseParsed.indexOf('\n') > -1) {
+      } else if (typeof _cliResponseParsed !== 'object' && _cliResponseParsed.indexOf('\n') > -1) {
         __cliResponseParsed = _cliResponseParsed.split('\n') ;
       } else {
         __cliResponseParsed = _cliResponseParsed;
@@ -503,9 +504,15 @@ class Settings extends React.Component {
           );
         }
       } else {
-        _items.push(
-          translate('INDEX.NO_DATA_AVAILABLE')
-        );
+        if (typeof _cliResponseParsed === 'object') {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(__cliResponseParsed, null, '\t') }</div>
+          );
+        } else {
+          _items.push(
+            translate('INDEX.NO_DATA_AVAILABLE')
+          );
+        }
       }
 
       return (
