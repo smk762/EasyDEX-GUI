@@ -172,9 +172,9 @@ class Settings extends React.Component {
     checkForUpdateUIPromise()
     .then((res) => {
       let _updateLog = this.state.updateLog;
-      _updateLog.push(res.result === 'update' ? ('New UI update available ' + res.version.remote) : 'You have the lastest UI version');
+      _updateLog.push(res.result === 'update' ? (`New UI update available ${res.version.remote}`) : 'You have the lastest UI version');
       this.setState(Object.assign({}, this.state, {
-        updatePatch: res.result,
+        updatePatch: res.result === 'update' ? true : false,
         updateLog: _updateLog,
       }));
     });
