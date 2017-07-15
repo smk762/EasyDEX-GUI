@@ -487,9 +487,16 @@ class Settings extends React.Component {
 
       let __cliResponseParsed;
       if (typeof _cliResponseParsed !== 'object' &&
+          typeof _cliResponseParsed !== 'number' &&
+          _cliResponseParsed !== 'wrong cli string format' &&
           _cliResponseParsed.indexOf('\r\n') > -1) {
         _cliResponseParsed = _cliResponseParsed.split('\r\n') ;
-      } else if (typeof _cliResponseParsed !== 'object' && _cliResponseParsed.indexOf('\n') > -1) {
+      } else if (
+        typeof _cliResponseParsed !== 'object' &&
+        typeof _cliResponseParsed !== 'number' &&
+        _cliResponseParsed !== 'wrong cli string format' &&
+        _cliResponseParsed.indexOf('\n') > -1
+        ) {
         __cliResponseParsed = _cliResponseParsed.split('\n') ;
       } else {
         __cliResponseParsed = _cliResponseParsed;
@@ -497,7 +504,8 @@ class Settings extends React.Component {
 
       let _items = [];
 
-      if (__cliResponseParsed.length) {
+      if (__cliResponseParsed.length &&
+          __cliResponseParsed !== 'wrong cli string format') {
         for (let i = 0; i < __cliResponseParsed.length; i++) {
           _items.push(
             <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ typeof __cliResponseParsed[i] === 'object' ? JSON.stringify(__cliResponseParsed[i], null, '\t') : __cliResponseParsed[i] }</div>
@@ -508,9 +516,13 @@ class Settings extends React.Component {
           _items.push(
             <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(__cliResponseParsed, null, '\t') }</div>
           );
+        } else if (typeof _cliResponseParsed === 'string' || typeof _cliResponseParsed === 'number' || _cliResponseParsed === 'wrong cli string format') {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed }</div>
+          );
         } else {
           _items.push(
-            translate('INDEX.NO_DATA_AVAILABLE')
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ translate('INDEX.NO_DATA_AVAILABLE') }</div>
           );
         }
       }
