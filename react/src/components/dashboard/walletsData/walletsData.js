@@ -24,7 +24,6 @@ import {
   PaginationItemsPerPageSelectorRender,
   PaginationRender,
   TxHistoryListRender,
-  UseCacheToggleRender,
   AddressListRender,
   WalletsDataRender
 } from  './walletsData.render';
@@ -342,9 +341,11 @@ class WalletsData extends React.Component {
 
   renderTxHistoryList() {
     if (this.state.itemsList === 'loading') {
-      return (
-        <div>{ translate('INDEX.LOADING_HISTORY') }...</div>
-      );
+      if (!this.isNativeMode() || this.isFullySynced()) {
+        return (
+          <div>{ translate('INDEX.LOADING_HISTORY') }...</div>
+        );
+      }
     } else if (this.state.itemsList === 'no data') {
       return (
         <div>{ translate('INDEX.NO_DATA') }</div>
@@ -400,6 +401,18 @@ class WalletsData extends React.Component {
     }));
   }
 
+  renderAddress(tx) {
+    if (!tx.address) {
+      return (
+        <span>
+          <i className="icon fa-bullseye"></i> <span className="label label-dark">{ translate('DASHBOARD.ZADDR_NOT_LISTED') }</span>
+        </span>
+      );
+    }
+
+    return tx.address;
+  }
+
   renderAddressByType(type) {
     const _addresses = this.props.ActiveCoin.addresses;
 
@@ -422,7 +435,7 @@ class WalletsData extends React.Component {
             <li key={address}>
               <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
                 <i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>&nbsp;&nbsp;
-                <span className="text">[ { _amount } { _coin } ]  { address }</span>
+                <span className="text">[ { _amount } { _coin } ] { address }</span>
                 <span className="glyphicon glyphicon-ok check-mark"></span>
               </a>
             </li>
@@ -454,8 +467,8 @@ class WalletsData extends React.Component {
             return _addresses.public[i].amount;
           } else {
             const address = _addresses.public[i].address;
-            const _amount = _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
-            
+            const _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+
             return _amount;
           }
         }
@@ -491,11 +504,26 @@ class WalletsData extends React.Component {
     }
   }
 
+  isActiveCoinMode(coinMode) {
+    return this.props.ActiveCoin.mode === coinMode;
+  }
+
+  isNativeMode() {
+    return this.isActiveCoinMode('native');
+  }
+
+  isFullMode() {
+    return this.isActiveCoinMode('full');
+  }
+
+  isBasiliskMode() {
+    return this.isActiveCoinMode('basilisk');
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        this.props.ActiveCoin.mode !== 'native' &&
         !this.props.ActiveCoin.send &&
         !this.props.ActiveCoin.receive) {
       return WalletsDataRender.call(this);

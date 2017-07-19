@@ -74,12 +74,22 @@ export const PaginationRender = function(paginationFrom, paginationTo) {
 export const TxHistoryListRender = function(tx, index) {
   return (
     <tr key={ tx.txid + tx.amount }>
+      { this.isNativeMode() ?
+          <td>
+            <span className="label label-default">
+              <i className="icon fa-eye"></i> { translate('IAPI.PUBLIC_SM') }
+            </span>
+          </td>
+        :
+        null
+      }
       <td>{ this.renderTxType(tx.category || tx.type) }</td>
       <td>{ tx.confirmations }</td>
       <td>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</td>
-      <td>{ secondsToString(tx.blocktime || tx.timestamp) }</td>
-      <td className={ this.props.ActiveCoin.mode === 'basilisk' ? 'hide' : '' }>{ tx.address }</td>
-      <td className={ this.props.ActiveCoin.mode === 'basilisk' ? 'text-center' : '' }>
+      <td>{ secondsToString(tx.blocktime || tx.timestamp || tx.time) }</td>
+      <td className={ this.isFullMode() ? '' : 'hide' }>{ tx.address }</td>
+      <td className={ this.isNativeMode() ? '' : 'hide' }>{ this.renderAddress(tx) }</td>
+      <td className={ this.isBasiliskMode() ? 'text-center' : '' }>
         <button
           type="button"
           className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
@@ -88,17 +98,6 @@ export const TxHistoryListRender = function(tx, index) {
         </button>
       </td>
     </tr>
-  );
-};
-
-export const UseCacheToggleRender = function() {
-  return (
-    <div className="col-sm-2">
-      <div className="pull-left margin-right-10">
-        <input type="checkbox" id="edexcoin_cache_api" checked={this.state.useCache} />
-      </div>
-      <label className="padding-top-3" htmlFor="edexcoin_cache_api" onClick={this.toggleCacheApi}>Use cache</label>
-    </div>
   );
 };
 
@@ -149,50 +148,57 @@ export const WalletsDataRender = function() {
                           { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
                         </div>
                       </div>
-                      <div
-                        className={ this.state.basiliskActionsMenu ? 'dropdown open' : 'dropdown' }
-                        onClick={ this.toggleBasiliskActionsMenu }>
-                        <a className="dropdown-toggle btn-xs btn-default">
-                          <i className="icon fa-magic margin-right-10"></i> { translate('INDEX.BASILISK_ACTIONS') } <span className="caret"></span>
-                        </a>
-                        <ul className="dropdown-menu dropdown-menu-right">
-                          <li>
-                            <a onClick={ this.getDexNotariesAction }>
-                              <i className="icon fa-sitemap"></i> { translate('INDEX.GET_NOTARY_NODES_LIST') }
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={ this.basiliskConnectionAction }>
-                              <i className="icon wb-refresh"></i> { translate('INDEX.REFRESH_BASILISK_CONNECTIONS') }
-                            </a>
-                          </li>
-                          <li className={ !this.state.useCache ? 'hide' : '' }>
-                            <a onClick={ this.basiliskRefreshActionOne }>
-                              <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') } ({ translate('INDEX.ACTIVE_ADDRESS') })
-                            </a>
-                          </li>
-                          <li className={ !this.state.useCache || this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.public.length === 1 ? 'hide' : '' }>
-                            <a onClick={ this.basiliskRefreshAction }>
-                              <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_ALL_ADDR') }
-                            </a>
-                          </li>
-                          <li className={ !this.state.useCache ? 'hide' : '' }>
-                            <a onClick={ this.removeAndFetchNewCache }>
-                              <i className="icon fa-history"></i> { translate('INDEX.REFETCH_WALLET_DATA') }
-                            </a>
-                          </li>
-                          <li className={ 'hide ' + (!this.state.useCache ? 'hide' : '') }>
-                            <a onClick={ this.restartBasiliskInstance }>
-                              <i className="icon fa-refresh"></i> Restart Basilisk Instance (unsafe!)
-                            </a>
-                          </li>
-                          <li className={ !this.state.useCache ? 'hide' : '' }>
-                            <a onClick={ this._toggleViewCacheModal }>
-                              <i className="icon fa-list-alt"></i> { translate('INDEX.VIEW_CACHE_DATA') }
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
+                      { !this.isNativeMode() ?
+                        <div
+                          className={ this.state.basiliskActionsMenu ? 'dropdown open' : 'dropdown' }
+                          onClick={ this.toggleBasiliskActionsMenu }>
+                          <a className="dropdown-toggle btn-xs btn-default">
+                            <i className="icon fa-magic margin-right-10"></i> { translate('INDEX.BASILISK_ACTIONS') }
+                            <span className="caret"></span>
+                          </a>
+                          <ul className="dropdown-menu dropdown-menu-right">
+                            <li>
+                              <a onClick={ this.getDexNotariesAction }>
+                                <i className="icon fa-sitemap"></i> { translate('INDEX.GET_NOTARY_NODES_LIST') }
+                              </a>
+                            </li>
+                            <li>
+                              <a onClick={ this.basiliskConnectionAction }>
+                                <i className="icon wb-refresh"></i> { translate('INDEX.REFRESH_BASILISK_CONNECTIONS') }
+                              </a>
+                            </li>
+                            <li className={ !this.state.useCache ? 'hide' : '' }>
+                              <a onClick={ this.basiliskRefreshActionOne }>
+                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') }
+                                ({ translate('INDEX.ACTIVE_ADDRESS') })
+                              </a>
+                            </li>
+                            <li className={ !this.state.useCache || this.props.ActiveCoin.addresses
+                            && this.props.ActiveCoin.addresses.public.length === 1 ? 'hide' : '' }>
+                              <a onClick={ this.basiliskRefreshAction }>
+                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_ALL_ADDR') }
+                              </a>
+                            </li>
+                            <li className={ !this.state.useCache ? 'hide' : '' }>
+                              <a onClick={ this.removeAndFetchNewCache }>
+                                <i className="icon fa-history"></i> { translate('INDEX.REFETCH_WALLET_DATA') }
+                              </a>
+                            </li>
+                            <li className={ 'hide ' + (!this.state.useCache ? 'hide' : '') }>
+                              <a onClick={ this.restartBasiliskInstance }>
+                                <i className="icon fa-refresh"></i> Restart Basilisk Instance (unsafe!)
+                              </a>
+                            </li>
+                            <li className={ !this.state.useCache ? 'hide' : '' }>
+                              <a onClick={ this._toggleViewCacheModal }>
+                                <i className="icon fa-list-alt"></i> { translate('INDEX.VIEW_CACHE_DATA') }
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        :
+                        null
+                      }
                     </div>
                     <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
@@ -201,7 +207,6 @@ export const WalletsDataRender = function() {
                       <div className="col-sm-8">
                         { this.renderAddressList() }
                       </div>
-                      { this.renderUseCacheToggle }
                     </div>
                     <div className="row pagination-container">
                       <div className="col-sm-6">
@@ -219,12 +224,17 @@ export const WalletsDataRender = function() {
                       <table className="table table-hover dataTable table-striped" width="100%">
                         <thead>
                           <tr>
+                            { this.isNativeMode() ?
+                              <th>{ translate('INDEX.TYPE') }</th>
+                              :
+                              null
+                            }
                             <th>{ translate('INDEX.DIRECTION') }</th>
                             <th className="hidden-xs hidden-sm">{ translate('INDEX.CONFIRMATIONS') }</th>
                             <th>{ translate('INDEX.AMOUNT') }</th>
                             <th>{ translate('INDEX.TIME') }</th>
-                            <th className={ this.props.ActiveCoin.mode === 'basilisk' ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
-                            <th className={ this.props.ActiveCoin.mode === 'basilisk' ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm' }>{ translate('INDEX.TX_DETAIL') }</th>
+                            <th className={ this.isBasiliskMode() ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
+                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm' }>{ translate('INDEX.TX_DETAIL') }</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -232,12 +242,17 @@ export const WalletsDataRender = function() {
                         </tbody>
                         <tfoot>
                           <tr>
+                             { this.isNativeMode() ?
+                               <th>{ translate('INDEX.TYPE') }</th>
+                               :
+                               null
+                             }
                             <th>{ translate('INDEX.DIRECTION') }</th>
                             <th>{ translate('INDEX.CONFIRMATIONS') }</th>
                             <th>{ translate('INDEX.AMOUNT') }</th>
                             <th>{ translate('INDEX.TIME') }</th>
-                            <th className={ this.props.ActiveCoin.mode === 'basilisk' ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
-                            <th className={ this.props.ActiveCoin.mode === 'basilisk' ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm' }>{ translate('INDEX.TX_DETAIL') }</th>
+                            <th className={ this.isBasiliskMode() ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
+                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm' }>{ translate('INDEX.TX_DETAIL') }</th>
                           </tr>
                         </tfoot>
                       </table>
