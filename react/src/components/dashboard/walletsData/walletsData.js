@@ -339,11 +339,25 @@ class WalletsData extends React.Component {
     }
   }
 
+  isFullySynced() {
+    if (this.props.Dashboard.progress &&
+        (Number(this.props.Dashboard.progress.balances) +
+        Number(this.props.Dashboard.progress.validated) +
+        Number(this.props.Dashboard.progress.bundles) +
+        Number(this.props.Dashboard.progress.utxo)) / 4 === 100) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   renderTxHistoryList() {
     if (this.state.itemsList === 'loading') {
-      return (
-        <div>{ translate('INDEX.LOADING_HISTORY') }...</div>
-      );
+      if (!this.isNativeMode() || this.isFullySynced()) {
+        return (
+          <div>{ translate('INDEX.LOADING_HISTORY') }...</div>
+        );
+      }
     } else if (this.state.itemsList === 'no data') {
       return (
         <div>{ translate('INDEX.NO_DATA') }</div>
@@ -397,6 +411,18 @@ class WalletsData extends React.Component {
     this.setState(Object.assign({}, this.state, {
       addressSelectorOpen: !this.state.addressSelectorOpen,
     }));
+  }
+
+  renderAddress(tx) {
+    if (!tx.address) {
+      return (
+        <span>
+          <i className="icon fa-bullseye"></i> <span className="label label-dark">{ translate('DASHBOARD.ZADDR_NOT_LISTED') }</span>
+        </span>
+      );
+    }
+
+    return tx.address;
   }
 
   renderAddressByType(type) {
@@ -453,8 +479,8 @@ class WalletsData extends React.Component {
             return _addresses.public[i].amount;
           } else {
             const address = _addresses.public[i].address;
-            const _amount = _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
-            
+            const _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+
             return _amount;
           }
         }
@@ -493,11 +519,26 @@ class WalletsData extends React.Component {
     }
   }
 
+  isActiveCoinMode(coinMode) {
+    return this.props.ActiveCoin.mode === coinMode;
+  }
+
+  isNativeMode() {
+    return this.isActiveCoinMode('native');
+  }
+
+  isFullMode() {
+    return this.isActiveCoinMode('full');
+  }
+
+  isBasiliskMode() {
+    return this.isActiveCoinMode('basilisk');
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        this.props.ActiveCoin.mode !== 'native' &&
         !this.props.ActiveCoin.send &&
         !this.props.ActiveCoin.receive) {
       return WalletsDataRender.call(this);
