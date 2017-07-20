@@ -27,7 +27,7 @@ import {
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://127.0.0.1:' + Config.agamaPort);
+const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 let updateProgressBar = {
   patch: -1,
 };

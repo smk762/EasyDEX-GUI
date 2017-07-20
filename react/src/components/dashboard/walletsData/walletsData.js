@@ -339,6 +339,18 @@ class WalletsData extends React.Component {
     }
   }
 
+  isFullySynced() {
+    if (this.props.Dashboard.progress &&
+        (Number(this.props.Dashboard.progress.balances) +
+        Number(this.props.Dashboard.progress.validated) +
+        Number(this.props.Dashboard.progress.bundles) +
+        Number(this.props.Dashboard.progress.utxo)) / 4 === 100) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   renderTxHistoryList() {
     if (this.state.itemsList === 'loading') {
       if (!this.isNativeMode() || this.isFullySynced()) {
@@ -434,8 +446,8 @@ class WalletsData extends React.Component {
           items.push(
             <li key={address}>
               <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
-                <i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>&nbsp;&nbsp;
-                <span className="text">[ { _amount } { _coin } ] { address }</span>
+                <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+                <span className="text">[ { _amount } { _coin } ]  { address }</span>
                 <span className="glyphicon glyphicon-ok check-mark"></span>
               </a>
             </li>
@@ -483,7 +495,10 @@ class WalletsData extends React.Component {
       return (
         <span>
           <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-          <span className="text">[ { this.renderAddressAmount() } { this.props.ActiveCoin.coin } ]  { this.state.currentAddress }</span>
+          <span className="text">
+            [ { this.renderAddressAmount() } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
+            { this.state.currentAddress }
+          </span>
         </span>
       );
     } else {

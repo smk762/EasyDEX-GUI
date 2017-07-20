@@ -116,19 +116,19 @@ class Login extends React.Component {
 
   componentWillReceiveProps(props) {
     if (props &&
-      props.Main &&
-      props.Main.isLoggedIn) {
-      this.setState({
-        display: false,
-      });
+        props.Main &&
+        props.Main.isLoggedIn) {
+        this.setState({
+          display: false,
+        });
     }
 
     if (props &&
-      props.Main &&
-      !props.Main.isLoggedIn) {
-      this.setState({
-        display: true,
-      });
+        props.Main &&
+        !props.Main.isLoggedIn) {
+        this.setState({
+          display: true,
+        });
 
       if (!this.props.Interval.interval.activeCoins) {
         const _iguanaActiveCoins = setInterval(() => {

@@ -74,7 +74,7 @@ const LoginRender = function () {
                 onKeyDown={ (event) => this.handleKeydown(event) }
                 value={ this.state.loginPassphrase }></textarea>
               <i
-                className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                className={ 'seed-toggle fa fa-eye' +  (!this.state.seedInputVisibility ? '-slash' : '') }
                 onClick={ this.toggleSeedInputVisibility }></i>
               <label
                 className="floating-label"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-export const WalletsNavNoWalletRender = function () {
+export const WalletsNavNoWalletRender = function() {
   return (
     <div>
       <div className="col-xs-12 padding-top-20">
@@ -20,11 +20,11 @@ export const WalletsNavNoWalletRender = function () {
   );
 };
 
-export const WalletsNavWithWalletRender = function () {
+export const WalletsNavWithWalletRender = function() {
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex ' + (this.state.nativeOnly ? 'padding-bottom-40' : 'padding-bottom-20') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-' + (this.state.nativeOnly ? '40' : '20') }
         id="header-dashboard"
         style={{ marginBottom: this.props.ActiveCoin.mode === 'basilisk' ? '30px' : '0' }}>
         <ol className={ this.state.nativeOnly ? 'hide' : 'breadcrumb' }>

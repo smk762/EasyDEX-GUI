@@ -12,7 +12,7 @@ export const PaginationItemRender = function(i) {
   return (
     <li
       key={ `${i}-pagination-link` }
-      className={ this.state.activePage === i + 1 ? 'paginate_button active' : 'paginate_button' }>
+      className={ 'paginate_button' + (this.state.activePage === i + 1 ? ' active' : '') }>
       <a
         key={ `${i}-pagination` }
         onClick={ this.state.activePage !== (i + 1) ? () => this.updateCurrentPage(i + 1) : null }>{ i + 1 }</a>
@@ -41,6 +41,8 @@ export const PaginationItemsPerPageSelectorRender = function() {
 };
 
 export const PaginationRender = function(paginationFrom, paginationTo) {
+  const disableNextBtn = this.state.activePage >= Math.floor(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage);
+
   return (
     <div className="row unselectable">
       <div className="col-sm-5">
@@ -57,11 +59,11 @@ export const PaginationRender = function(paginationFrom, paginationTo) {
       <div className="col-sm-7">
         <div className="dataTables_paginate paging_simple_numbers">
           <ul className="pagination">
-            <li className={ this.state.activePage === 1 ? 'paginate_button previous disabled' : 'paginate_button previous' }>
+            <li className={ 'paginate_button previous' + (this.state.activePage === 1 ? ' disabled' : '') }>
               <a onClick={ () => this.updateCurrentPage(this.state.activePage - 1) }>{ translate('INDEX.PREVIOUS') }</a>
             </li>
             { this.renderPaginationItems() }
-            <li className={ this.state.activePage > Math.floor(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage) ? 'paginate_button next disabled' : 'paginate_button next' }>
+            <li className={ 'paginate_button next' + (disableNextBtn ? ' disabled' : '') }>
               <a onClick={ () => this.updateCurrentPage(this.state.activePage + 1) }>{ translate('INDEX.NEXT') }</a>
             </li>
           </ul>
@@ -140,7 +142,7 @@ export const WalletsDataRender = function() {
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                 <div className="panel">
                   <header className="panel-heading z-index-10">
-                    <div className={ this.props.ActiveCoin.mode === 'basilisk' ? 'panel-actions' : 'panel-actions hide' }>
+                    <div className={ 'panel-actions' + (this.props.ActiveCoin.mode === 'basilisk' ? '' : ' hide') }>
                       <div className={ 'margin-bottom-3 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
                         <div
                           className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
@@ -150,7 +152,7 @@ export const WalletsDataRender = function() {
                       </div>
                       { !this.isNativeMode() ?
                         <div
-                          className={ this.state.basiliskActionsMenu ? 'dropdown open' : 'dropdown' }
+                          className={ 'dropdown' + (this.state.basiliskActionsMenu ? ' open' : '') }
                           onClick={ this.toggleBasiliskActionsMenu }>
                           <a className="dropdown-toggle btn-xs btn-default">
                             <i className="icon fa-magic margin-right-10"></i> { translate('INDEX.BASILISK_ACTIONS') }
@@ -221,7 +223,9 @@ export const WalletsDataRender = function() {
                       </div>
                     </div>
                     <div className="row">
-                      <table className="table table-hover dataTable table-striped" width="100%">
+                      <table
+                        className="table table-hover dataTable table-striped"
+                        width="100%">
                         <thead>
                           <tr>
                             { this.isNativeMode() ?
@@ -238,7 +242,7 @@ export const WalletsDataRender = function() {
                           </tr>
                         </thead>
                         <tbody>
-                        { this.renderTxHistoryList() }
+                          { this.renderTxHistoryList() }
                         </tbody>
                         <tfoot>
                           <tr>
@@ -252,7 +256,7 @@ export const WalletsDataRender = function() {
                             <th>{ translate('INDEX.AMOUNT') }</th>
                             <th>{ translate('INDEX.TIME') }</th>
                             <th className={ this.isBasiliskMode() ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm' }>{ translate('INDEX.TX_DETAIL') }</th>
+                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : '' }>{ translate('INDEX.TX_DETAIL') }</th>
                           </tr>
                         </tfoot>
                       </table>

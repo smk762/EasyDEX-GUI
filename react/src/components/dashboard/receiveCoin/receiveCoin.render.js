@@ -32,8 +32,8 @@ export const AddressActionsBasiliskModeRender = function(address) {
 export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
     <td>
-      <span className={ type === 'public' ? 'label label-default' : 'label label-dark' }>
-        <i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>
+      <span className={ 'label label-' + (type === 'public' ? 'default' : 'dark') }>
+        <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>
         { type === 'public' ? translate('IAPI.PUBLIC_SM') : translate('KMD_NATIVE.PRIVATE') }
       </span>
       <button

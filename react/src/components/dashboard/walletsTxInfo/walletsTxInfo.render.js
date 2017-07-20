@@ -43,7 +43,7 @@ const WalletsTxInfoRender = function(txInfo) {
                 </ul>
                 <div className="panel-body">
                   <div className="tab-content">
-                    <div className={ this.state.activeTab === 0 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ 'tab-pane' + (this.state.activeTab === 0 ? ' active' : '') }>
                       <table className="table table-striped">
                         <tbody>
                         <tr>
@@ -119,7 +119,7 @@ const WalletsTxInfoRender = function(txInfo) {
                       </table>
                     </div>
 
-                    <div className={ this.state.activeTab === 1 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ 'tab-pane' + (this.state.activeTab === 1 ? ' active' : '') }>
                       <table className="table table-striped">
                         <tbody>
                         <tr>
@@ -137,7 +137,7 @@ const WalletsTxInfoRender = function(txInfo) {
                         </tbody>
                       </table>
                     </div>
-                    <div className={ this.state.activeTab === 2 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ 'tab-pane' + (this.state.activeTab === 2 ? ' active' : '') }>
                       <textarea
                         className="full-width height-170"
                         rows="10"
@@ -146,7 +146,7 @@ const WalletsTxInfoRender = function(txInfo) {
                         disabled></textarea>
                     </div>
 
-                    <div className={ this.state.activeTab === 3 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ 'tab-pane' + (this.state.activeTab === 3 ? ' active' : '') }>
                       <textarea
                         className="full-width height-400"
                         rows="40"
