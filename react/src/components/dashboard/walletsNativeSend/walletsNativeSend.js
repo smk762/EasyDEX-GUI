@@ -67,7 +67,14 @@ class WalletsNativeSend extends React.Component {
         this.props.ActiveCoin.addresses[type].length) {
       return this.props.ActiveCoin.addresses[type].map((address) =>
         <li key={ address.address } className={ address.amount <= 0 ? 'hide' : '' }>
-          <a onClick={ () => this.updateAddressSelection(address.address, type, address.amount) }><i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { address.amount } { this.props.ActiveCoin.coin } ]  { type === 'public' ? address.address : address.address.substring(0, 34) + '...' }</span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+          <a onClick={ () => this.updateAddressSelection(address.address, type, address.amount) }>
+            <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+            <span className="text">
+              [ { address.amount } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
+              { type === 'public' ? address.address : address.address.substring(0, 34) + '...' }
+            </span>
+            <span className="glyphicon glyphicon-ok check-mark"></span>
+          </a>
         </li>
       );
     } else {
@@ -79,7 +86,7 @@ class WalletsNativeSend extends React.Component {
     if (this.state.sendFrom) {
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>
+          <i className={ 'icon fa-eye' + this.state.addressType === 'public' ? '' : '-slash' }></i>
           <span className="text">
             [ { this.state.sendFromAmount } { this.props.ActiveCoin.coin } ]  
             { this.state.sendFrom }

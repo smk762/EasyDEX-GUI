@@ -33,7 +33,7 @@ import {
 
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
-const socket = io.connect('http://127.0.0.1:' + Config.agamaPort);
+const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 // TODO: prevent any cache updates rather than utxo while on send coin form
 //       fix a bug - total amount is incorrect when switching between steps
@@ -213,7 +213,7 @@ class SendCoin extends React.Component {
             key={ mainAddress }
             className={ mainAddressAmount <= 0 ? 'hide' : '' }>
             <a onClick={ () => this.updateAddressSelection(mainAddress, type, mainAddressAmount) }>
-              <i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>&nbsp;&nbsp;
+              <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
               <span className="text">
                 [ { mainAddressAmount } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
                 { mainAddress }
@@ -243,7 +243,7 @@ class SendCoin extends React.Component {
                 key={ address }
                 className={ _amount <= 0 ? 'hide' : '' }>
                 <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
-                  <i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>&nbsp;&nbsp;
+                  <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
                   <span className="text">[ { _amount } { _coin } ]  { address }</span>
                   <span className="glyphicon glyphicon-ok check-mark"></span>
                 </a>
@@ -276,7 +276,7 @@ class SendCoin extends React.Component {
 
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>&nbsp;&nbsp;
+          <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
           <span className="text">[ { _amount } { _coin } ]  { _sendFrom }</span>
         </span>
       );
@@ -286,7 +286,7 @@ class SendCoin extends React.Component {
 
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>&nbsp;&nbsp;
+          <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
           <span className="text">[ { mainAddressAmount } { this.props.ActiveCoin.coin } ]  { mainAddress }</span>
         </span>
       );

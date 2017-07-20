@@ -11,12 +11,12 @@ export const AppUpdateTabRender = function() {
       id="AppUpdate"
       onClick={ () => this.openTab('AppUpdate', 10) }>
       <div className="panel-heading">
-        <a className={ this.state.activeTab === 10 ? 'panel-title' : 'panel-title collapsed' }>
+        <a className={ 'panel-title' + (this.state.activeTab === 10 ? '' : ' collapsed') }>
           <i className="icon fa fa-life-ring"></i> { translate('INDEX.UPDATE') }
         </a>
       </div>
       <div
-        className={ this.state.activeTab === 10 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+        className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }
         style={{ height: this.state.activeTab === 10 ? `${this.state.activeTabHeight}px` : '0' }}>
         <div className="panel-body">
           <div className="col-sm-4 padding-top-15">
@@ -62,12 +62,12 @@ export const AppInfoTabRender = function() {
       id="AppInfo"
       onClick={ () => this.openTab('AppInfo', 8) }>
       <div className="panel-heading">
-        <a className={ this.state.activeTab === 8 ? 'panel-title' : 'panel-title collapsed' }>
+        <a className={ 'panel-title' + (this.state.activeTab === 8 ? '' : ' collapsed') }>
           <i className="icon md-info"></i>{ translate('SETTINGS.APP_INFO') }
         </a>
       </div>
       <div
-        className={ this.state.activeTab === 8 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+        className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }
         style={{ height: this.state.activeTab === 8 ? `${this.state.activeTabHeight}px` : '0' }}>
         <div className="panel-body">
           <div className="col-sm-12 padding-top-15">
@@ -159,14 +159,14 @@ export const SettingsRender = function() {
                   <div
                     id="WalletInfo"
                     onClick={ () => this.openTab('WalletInfo', 0) }
-                    className={ this.state.nativeOnly ? 'panel hide' : 'panel' }>
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 0 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 0 ? '' : ' collapsed') }>
                         <i className="icon md-balance-wallet"></i>{ translate('INDEX.WALLET_INFO') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 0 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 0 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 0 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <table className="table">
@@ -210,14 +210,14 @@ export const SettingsRender = function() {
                   <div
                     id="AddNodeforCoin"
                     onClick={ () => this.openTab('AddNodeforCoin', 1) }
-                    className={ this.state.nativeOnly ? 'panel hide' : 'panel' }>
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 1 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 1 ? '' : ' collapsed') }>
                         <i className="icon md-plus-square"></i>{ translate('INDEX.ADD_NODE') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 1 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 1 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 1 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <div className="row">
@@ -296,14 +296,14 @@ export const SettingsRender = function() {
                   <div
                     id="DumpWallet"
                     onClick={ () => this.openTab('DumpWallet', 2) }
-                    className={ this.state.nativeOnly ? 'panel hide' : 'panel' }>
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 2 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 2 ? '' : ' collapsed') }>
                         <i className="icon wb-briefcase"></i>{ translate('INDEX.WALLET_BACKUP') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 2 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 2 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 2 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">Wallet Backup section to be updated soon.</div>
                     </div>
@@ -312,14 +312,14 @@ export const SettingsRender = function() {
                   <div
                     id="FiatCurrencySettings"
                     onClick={ () => this.openTab('FiatCurrencySettings', 3) }
-                    className={ this.state.nativeOnly ? 'panel hide' : 'panel' }>
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 3 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 3 ? '' : ' collapsed') }>
                         <i className="icon fa-money"></i>{ translate('INDEX.FIAT_CURRENCY') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 3 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 3 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 3 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">Fiat currency settings section to be updated soon.</div>
                     </div>
@@ -328,14 +328,14 @@ export const SettingsRender = function() {
                   <div
                     id="ExportKeys"
                     onClick={ () => this.openTab('ExportKeys', 4) }
-                    className={ this.state.nativeOnly ? 'panel hide' : 'panel' }>
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 4 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 4 ? '' : ' collapsed') }>
                         <i className="icon md-key"></i>{ translate('INDEX.EXPORT_KEYS') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 4 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 4 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <p>
@@ -368,7 +368,7 @@ export const SettingsRender = function() {
                               onChange={ this.updateInput }
                               value={ this.state.wifkeysPassphrase }></textarea>
                             <i
-                              className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                              className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                               onClick={ this.toggleSeedInputVisibility }></i>
                             <label
                               className="floating-label"
@@ -405,14 +405,14 @@ export const SettingsRender = function() {
                   <div
                     id="ImportKeys"
                     onClick={ () => this.openTab('ImportKeys', 5) }
-                    className={ this.state.nativeOnly ? 'panel hide' : 'panel' }>
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 5 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 5 ? '' : ' collapsed') }>
                         <i className="icon md-key"></i>{ translate('INDEX.IMPORT_KEYS') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 5 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 5 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 5 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <div>{ translate('INDEX.IMPORT_KEYS_DESC_P1') }</div><br/>
@@ -456,12 +456,12 @@ export const SettingsRender = function() {
                     id="DebugLog"
                     onClick={ () => this.openTab('DebugLog', 6) }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 6 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 6 ? '' : ' collapsed') }>
                         <i className="icon fa-bug"></i>{ translate('INDEX.DEBUG_LOG') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 6 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 6 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 6 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
@@ -515,12 +515,12 @@ export const SettingsRender = function() {
                     id="AppSettings"
                     onClick={ () => this.openTab('AppSettings', 7) }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 7 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 7 ? '' : ' collapsed') }>
                         <i className="icon fa-wrench"></i>{ translate('SETTINGS.APP_CONFIG') } (config.json)
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 7 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 7 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 7 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <p>
@@ -547,14 +547,14 @@ export const SettingsRender = function() {
                   <div
                     id="Cli"
                     onClick={ () => this.openTab('Cli', 9) }
-                    className={ !this.props.Main.coins.native.length ? 'panel hide' : 'panel' }>
+                    className={ 'panel' + (!this.props.Main.coins.native.length ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 9 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 9 ? '' : ' collapsed') }>
                         <i className="icon fa-code"></i> CLI
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 9 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 9 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 9 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <p>{ translate('INDEX.CLI_SELECT_A_COIN') }</p>

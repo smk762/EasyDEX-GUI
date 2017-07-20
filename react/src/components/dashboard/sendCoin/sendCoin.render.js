@@ -163,21 +163,21 @@ export const SendCoinRender = function () {
     <div className="col-sm-12 padding-top-10">
       <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
         <div className="steps row margin-top-10">
-          <div className={ this.state.currentStep === 0 ? 'step col-md-4 current' : 'step col-md-4' }>
+          <div className={ 'step col-md-4' + (this.state.currentStep === 0 ? ' current' : '') }>
             <span className="step-number">1</span>
             <div className="step-desc">
               <span className="step-title">{ translate('INDEX.FILL_SEND_FORM') }</span>
               <p>{ translate('INDEX.FILL_SEND_DETAILS') }</p>
             </div>
           </div>
-          <div className={ this.state.currentStep === 1 ? 'step col-md-4 current' : 'step col-md-4' }>
+          <div className={ 'step col-md-4' + (this.state.currentStep === 1 ? ' current' : '') }>
             <span className="step-number">2</span>
             <div className="step-desc">
               <span className="step-title">{ translate('INDEX.CONFIRMING') }</span>
               <p>{ translate('INDEX.CONFIRM_DETAILS') }</p>
             </div>
           </div>
-          <div className={ this.state.currentStep === 2 ? 'step col-md-4 current' : 'step col-md-4' }>
+          <div className={ 'step col-md-4' + (this.state.currentStep === 2 ? ' current' : '') }>
             <span className="step-number">3</span>
             <div className="step-desc">
               <span className="step-title">{ translate('INDEX.PROCESSING_TX') }</span>
@@ -186,14 +186,17 @@ export const SendCoinRender = function () {
           </div>
         </div>
 
-        <div className={ this.state.currentStep === 0 ? 'panel' : 'panel hide' }>
+        <div className={ 'panel' + (this.state.currentStep === 0 ? '' : ' hide') }>
           <div className="panel-heading">
             <h3 className="panel-title">
               { translate('INDEX.SEND') } { this.props.ActiveCoin.coin }
             </h3>
           </div>
           <div className="panel-body container-fluid">
-            <form className="edexcoin-send-form" method="post" autoComplete="off">
+            <form
+              className="edexcoin-send-form"
+              method="post"
+              autoComplete="off">
               { this.renderSendApiTypeSelector() }
               <div className="row">
                 <div className={ this.props.ActiveCoin.mode === 'basilisk' ? 'col-xlg-12 form-group form-material' : 'hide' }>
@@ -299,7 +302,7 @@ export const SendCoinRender = function () {
         </div>
       </div>
 
-      <div className={ this.state.currentStep === 1 ? 'col-xlg-12 col-md-12 col-sm-12 col-xs-12' : 'col-xlg-12 col-md-12 col-sm-12 col-xs-12 hide' }>
+      <div className={ 'col-xlg-12 col-md-12 col-sm-12 col-xs-12' + (this.state.currentStep === 1 ? '' : ' hide') }>
         <div className="panel">
           <div className="panel-body">
             <div className="row">
@@ -345,7 +348,7 @@ export const SendCoinRender = function () {
         </div>
       </div>
 
-      <div className={ this.state.currentStep === 2 ? 'col-xlg-12 col-md-12 col-sm-12 col-xs-12' : 'col-xlg-12 col-md-12 col-sm-12 col-xs-12 hide' }>
+      <div className={ 'col-xlg-12 col-md-12 col-sm-12 col-xs-12' + (this.state.currentStep === 2 ? '' : ' hide') }>
         <div className="panel">
           <div className="panel-heading">
             <h4 className="panel-title">
