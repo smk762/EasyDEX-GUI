@@ -141,7 +141,7 @@ class WalletsNativeTxHistory extends React.Component {
 
     for (let i = 0; i < Math.floor(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage); i++) {
       items.push(
-        <li className={ this.state.activePage === i + 1 ? 'paginate_button active' : 'paginate_button' }>
+        <li className={ 'paginate_button' + this.state.activePage === i + 1 ? ' active' : '' }>
           <a
             key={ `${i}-pagination` }
             onClick={ this.state.activePage !== (i + 1) ? () => this.updateCurrentPage(i + 1) : null }>{ i + 1 }</a>

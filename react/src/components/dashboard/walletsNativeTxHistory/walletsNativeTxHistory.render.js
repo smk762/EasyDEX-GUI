@@ -39,12 +39,11 @@ export const PaginationRender = function(paginationStart, paginationEnd, paginat
       <div className="col-sm-7">
         <div className="dataTables_paginate paging_simple_numbers">
           <ul className="pagination">
-            <li className={ this.state.activePage
-            === 1 ? 'paginate_button previous disabled' : 'paginate_button previous' }>
+            <li className={ 'paginate_button previous' + (this.state.activePage === 1 ? ' disabled' : '') }>
               <a onClick={ () => this.updateCurrentPage(this.state.activePage - 1) }>{ translate('INDEX.PREVIOUS') }</a>
             </li>
             { this.renderPaginationItems() }
-            <li className={ paginationNextState ? 'paginate_button next disabled' : 'paginate_button next' }>
+            <li className={ 'paginate_button next' + (paginationNextState ? ' disabled' : '') }>
               <a onClick={ () => this.updateCurrentPage(this.state.activePage + 1) }>{ translate('INDEX.NEXT') }</a>
             </li>
           </ul>

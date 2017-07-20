@@ -3,7 +3,7 @@ import { translate } from '../../../translate/translate';
 import Tree, { TreeNode } from 'rc-tree';
 import { animation } from '../../../util/rc-tree-animate';
 
-export const NotariesListRender = function (node, index) {
+export const NotariesListRender = function(node, index) {
   return (
     <TreeNode
       title={ `Node ${index}` }
@@ -21,7 +21,7 @@ export const NotariesListRender = function (node, index) {
   );
 };
 
-export const WalletsNotariesListRender = function () {
+export const WalletsNotariesListRender = function() {
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
       <div

@@ -11,7 +11,7 @@ import Store from '../../../store';
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://127.0.0.1:' + Config.agamaPort);
+const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 class WalletsNative extends React.Component {
   constructor(props) {
