@@ -62,23 +62,25 @@ class WalletsProgress extends React.Component {
       _debugLogLine = this.props.Settings.debugLog;
     }
     
-    const temp = _debugLogLine.split(' ');
-    let currentBestChain;
-    let currentProgress;
+    if (_debugLogLine) {
+      const temp = _debugLogLine.split(' ');
+      let currentBestChain;
+      let currentProgress;
 
-    for (let i = 0; i < temp.length; i++) {
-      if (temp[i].indexOf('height=') > -1) {
-        currentBestChain = temp[i].replace('height=', '');
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i].indexOf('height=') > -1) {
+          currentBestChain = temp[i].replace('height=', '');
+        }
+        if (temp[i].indexOf('progress=') > -1) {
+          currentProgress = Number(temp[i].replace('progress=', '')) * 1000;
+        }
       }
-      if (temp[i].indexOf('progress=') > -1) {
-        currentProgress = Number(temp[i].replace('progress=', '')) * 1000;
-      }
+
+      return [
+        currentBestChain,
+        currentProgress
+      ];
     }
-
-    return [
-      currentBestChain,
-      currentProgress
-    ];
   }
 
   renderSyncPercentagePlaceholder() {
@@ -87,7 +89,14 @@ class WalletsProgress extends React.Component {
         this.props.Dashboard.progress.code &&
         this.props.Dashboard.progress.code === -28 &&
         this.props.Settings.debugLog) {
-      return SyncPercentageRender.call(this, this.parseActivatingBestChainProgress()[1].toFixed(2));
+      const _progress = this.parseActivatingBestChainProgress();
+  
+      if (_progress &&
+          _progress[1]) {
+        return SyncPercentageRender.call(this, _progress[1].toFixed(2));
+      } else {
+        return LoadingBlocksRender.call(this);
+      }
     }
 
     if (this.props.Dashboard.progress &&
@@ -167,9 +176,16 @@ class WalletsProgress extends React.Component {
             this.props.Dashboard.progress.code &&
             this.props.Dashboard.progress.code === -28 &&
             this.props.Settings.debugLog) {
-          return (
-            `: ${this.parseActivatingBestChainProgress()[0]} (current block)`
-          );
+          const _blocks = this.parseActivatingBestChainProgress();
+
+          if (_blocks &&
+              _blocks[0]) {
+            return (
+              `: ${_blocks[0]} (current block)`
+            );
+          } else {
+            return null;
+          }
         } else {
           if (currentProgress) {
             return (
