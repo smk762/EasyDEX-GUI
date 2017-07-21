@@ -480,7 +480,7 @@ class Settings extends React.Component {
       let _cliResponseParsed;
 
       try {
-        _cliResponseParsed = JSON.parse(_cliResponse.result);
+        _cliResponseParsed = JSON.parse(_cliResponse);
       } catch(e) {
         _cliResponseParsed = _cliResponse.result;
       }
@@ -502,9 +502,14 @@ class Settings extends React.Component {
         __cliResponseParsed = _cliResponseParsed;
       }
 
+      if (!__cliResponseParsed) {
+        __cliResponseParsed = _cliResponseParsed;
+      }
+
       let _items = [];
 
-      if (__cliResponseParsed.length &&
+      if (__cliResponseParsed &&
+          __cliResponseParsed.length &&
           __cliResponseParsed !== 'wrong cli string format') {
         for (let i = 0; i < __cliResponseParsed.length; i++) {
           _items.push(
@@ -512,11 +517,11 @@ class Settings extends React.Component {
           );
         }
       } else {
-        if (typeof _cliResponseParsed === 'object') {
+        if (typeof __cliResponseParsed === 'object') {
           _items.push(
             <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(__cliResponseParsed, null, '\t') }</div>
           );
-        } else if (typeof _cliResponseParsed === 'string' || typeof _cliResponseParsed === 'number' || _cliResponseParsed === 'wrong cli string format') {
+        } else if (typeof __cliResponseParsed === 'string' || typeof __cliResponseParsed === 'number' || __cliResponseParsed === 'wrong cli string format') {
           _items.push(
             <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed }</div>
           );
