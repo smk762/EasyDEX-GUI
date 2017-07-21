@@ -171,9 +171,13 @@ class WalletsProgress extends React.Component {
             `: ${this.parseActivatingBestChainProgress()[0]} (current block)`
           );
         } else {
-          return (
-            `: ${currentProgress}% (${ translate('INDEX.RESCAN_SM') })`
-          );
+          if (currentProgress) {
+            return (
+              `: ${currentProgress}% (${ translate('INDEX.RESCAN_SM') })`
+            );
+          } else {
+            return null;
+          }
         }
       } else if (
           this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
