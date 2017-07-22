@@ -6,6 +6,13 @@
     window.hide();
   }
 
+  function quitApp() {
+    const remote = require('electron').remote;
+    const window = remote.getCurrentWindow();
+
+    window.forseCloseApp();
+  }
+
   function normalStart() {
     const remote = require('electron').remote;
     let appConf = remote.getCurrentWindow().appConfig;
