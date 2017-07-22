@@ -41,7 +41,7 @@ class WalletsData extends React.Component {
       basiliskActionsMenu: false,
       itemsPerPage: 10,
       activePage: 1,
-      itemsList: null,
+      itemsList: [],
       currentAddress: null,
       addressSelectorOpen: false,
       currentStackLength: 0,
