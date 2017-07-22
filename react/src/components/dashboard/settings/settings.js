@@ -473,107 +473,14 @@ class Settings extends React.Component {
     );
   }
 
-/*
-    if (_cliResponse) {
-      let _cliResponseParsed;
-      let __cliResponseParsed;
-      let errorObj = {
-        code: null,
-        message: null,
-      };
-
-      if (_cliResponse.result.indexOf('"code":')) {
-        errorObj.code = _cliResponse.result.match(/"code":(.*?),/i)[1];
-        errorObj.message = _cliResponse.result.substr(_cliResponse.result.indexOf('"message":') + 11, _cliResponse.result.length - _cliResponse.result.indexOf('"message":') - 15);
-        if (errorObj.message.indexOf('\n') > -1) {
-          errorObj.message.replace('\n', '----');
-        }
-        console.log(errorObj.message.toString().match(/\n/g));
-      }
-
-      // console.log(errorObj);
-      if (errorObj.code &&
-          errorObj.message) {
-        _cliResponseParsed = 'error code: '+ errorObj.code + ' message: ' + errorObj.message;
-        if (_cliResponseParsed.indexOf('\n') > -1) {
-          __cliResponseParsed = _cliResponseParsed.split('\n');
-          console.log(__cliResponseParsed);
-        }
-        if (_cliResponseParsed.indexOf('\r\n') > -1) {
-          __cliResponseParsed = _cliResponseParsed.split('\r\n');
-          console.log(__cliResponseParsed);
-        }
-      } else {
-        try {
-          _cliResponseParsed = JSON.parse(_cliResponse);
-        } catch(e) {
-          _cliResponseParsed = _cliResponse.result;
-        }
-      }
-
-      if (!__cliResponseParsed) {
-        if (typeof _cliResponseParsed !== 'object' &&
-            typeof _cliResponseParsed !== 'number' &&
-            _cliResponseParsed !== 'wrong cli string format' &&
-            _cliResponseParsed.indexOf('\r\n') > -1) {
-          _cliResponseParsed = _cliResponseParsed.split('\r\n') ;
-        } else if (
-          typeof _cliResponseParsed !== 'object' &&
-          typeof _cliResponseParsed !== 'number' &&
-          _cliResponseParsed !== 'wrong cli string format' &&
-          _cliResponseParsed.indexOf('\n') > -1
-          ) {
-          __cliResponseParsed = _cliResponseParsed.split('\n');
-        } else {
-          __cliResponseParsed = _cliResponseParsed;
-        }
-      }
-
-      let _items = [];
-
-      if (__cliResponseParsed &&
-          __cliResponseParsed.length &&
-          __cliResponseParsed !== 'wrong cli string format') {
-        for (let i = 0; i < __cliResponseParsed.length; i++) {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ typeof __cliResponseParsed[i] === 'object' ? JSON.stringify(__cliResponseParsed[i], null, '\t') : __cliResponseParsed[i] }</div>
-          );
-        }
-      } else {
-        if (typeof __cliResponseParsed === 'object') {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(__cliResponseParsed, null, '\t') }</div>
-          );
-        } else if (typeof __cliResponseParsed === 'string' || typeof __cliResponseParsed === 'number' || __cliResponseParsed === 'wrong cli string format') {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed }</div>
-          );
-        } else {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ translate('INDEX.NO_DATA_AVAILABLE') }</div>
-          );
-        }
-      }
-
-      return (
-        <div>
-          <div>
-            <strong>CLI response:</strong>
-          </div>
-          { _items }
-        </div>
-      );
-    } else {
-      return null;
-    }
-*/
-
+  // TODO: rerender only if prop is changed
   renderCliResponse() {
     const _cliResponse = this.props.Settings.cli;
     let _items = [];
 
     if (_cliResponse) {
       let _cliResponseParsed;
+      let responseType;
 
       try {
         _cliResponseParsed = JSON.parse(_cliResponse.result);
@@ -582,62 +489,44 @@ class Settings extends React.Component {
       }
 
       if (Object.prototype.toString.call(_cliResponseParsed) === '[object Array]') {
+        responseType = 'array';
+
         for (let i = 0; i < _cliResponseParsed.length; i++) {
           _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ _cliResponseParsed[i] }</div>
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed[i], null, '\t') }</div>
           );
         }
       }
-      if (_cliResponseParsed.indexOf('\n') > -1) {
+      if (Object.prototype.toString.call(_cliResponseParsed) === '[object]' ||
+          typeof _cliResponseParsed === 'object') {
+        responseType = 'object';
+
+        _items.push(
+          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed, null, '\t') }</div>
+        );
+      }
+      if (Object.prototype.toString.call(_cliResponseParsed) === 'number' ||
+          typeof _cliResponseParsed === 'boolean' ||
+          _cliResponseParsed === 'wrong cli string format') {
+        responseType = 'number';
+
+        _items.push(
+          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ _cliResponseParsed.toString() }</div>
+        );
+      }
+
+      if (responseType !== 'number' &&
+          responseType !== 'array' &&
+          responseType !== 'object' &&
+          _cliResponseParsed.indexOf('\n') > -1) {
         _cliResponseParsed = _cliResponseParsed.split('\n');
-        console.log( _cliResponseParsed.split('\n'));
+
         for (let i = 0; i < _cliResponseParsed.length; i++) {
           _items.push(
             <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{  _cliResponseParsed[i] }</div>
           );
         }
       }
-      /*let __cliResponseParsed;
-      if (typeof _cliResponseParsed !== 'object' &&
-          typeof _cliResponseParsed !== 'number' &&
-          _cliResponseParsed !== 'wrong cli string format' &&
-          _cliResponseParsed.indexOf('\r\n') > -1) {
-        _cliResponseParsed = _cliResponseParsed.split('\r\n') ;
-      } else if (
-        typeof _cliResponseParsed !== 'object' &&
-        typeof _cliResponseParsed !== 'number' &&
-        _cliResponseParsed !== 'wrong cli string format' &&
-        _cliResponseParsed.indexOf('\n') > -1
-        ) {
-        __cliResponseParsed = _cliResponseParsed.split('\n') ;
-      } else {
-        __cliResponseParsed = _cliResponseParsed;
-      }
-
-      let _items = [];
-
-      if (__cliResponseParsed.length &&
-          __cliResponseParsed !== 'wrong cli string format') {
-        for (let i = 0; i < __cliResponseParsed.length; i++) {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ typeof __cliResponseParsed[i] === 'object' ? JSON.stringify(__cliResponseParsed[i], null, '\t') : __cliResponseParsed[i] }</div>
-          );
-        }
-      } else {
-        if (typeof _cliResponseParsed === 'object') {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(__cliResponseParsed, null, '\t') }</div>
-          );
-        } else if (typeof _cliResponseParsed === 'string' || typeof _cliResponseParsed === 'number' || _cliResponseParsed === 'wrong cli string format') {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed }</div>
-          );
-        } else {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ translate('INDEX.NO_DATA_AVAILABLE') }</div>
-          );
-        }*/
-      //}
 
       return (
         <div>
