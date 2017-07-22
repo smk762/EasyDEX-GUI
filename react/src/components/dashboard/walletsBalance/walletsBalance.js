@@ -95,7 +95,7 @@ class WalletsBalance extends React.Component {
     const _translationComponents = translate(_translationID).split('<br>');
 
     return _translationComponents.map((_translation) =>
-      <span>
+      <span key={_translation}>
         {_translation}
         <br />
       </span>

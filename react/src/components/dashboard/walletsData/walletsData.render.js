@@ -4,102 +4,41 @@ import WalletsBasiliskRefresh from '../walletsBasiliskRefresh/walletsBasiliskRef
 import WalletsBasiliskConnection from '../walletsBasiliskConnection/walletsBasiliskConnection';
 import WalletsNotariesList from '../walletsNotariesList/walletsNotariesList';
 import WalletsCacheData from '../walletsCacheData/walletsCacheData';
-import { secondsToString } from '../../../util/time';
+import ReactTable from 'react-table';
+import TablePaginationRenderer from './pagination';
 
 // TODO: clean basilisk dropdown menu
 
-export const PaginationItemRender = function(i) {
+export const AddressTypeRender = function() {
   return (
-    <li
-      key={ `${i}-pagination-link` }
-      className={ 'paginate_button' + (this.state.activePage === i + 1 ? ' active' : '') }>
-      <a
-        key={ `${i}-pagination` }
-        onClick={ this.state.activePage !== (i + 1) ? () => this.updateCurrentPage(i + 1) : null }>{ i + 1 }</a>
+    <td>
+      <span className="label label-default">
+        <i className="icon fa-eye"></i> { translate('IAPI.PUBLIC_SM') }
+      </span>
+    </td>
+  );
+};
+
+export const TransactionDetailRender = function(transactionIndex) {
+  return (
+    <button
+      type="button"
+      className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
+      onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, transactionIndex) }>
+      <i className="icon fa-search"></i>
+    </button>
+  );
+};
+
+export const AddressItemRender = function(address, type, amount, coin) {
+  return (
+    <li key={address}>
+      <a onClick={ () => this.updateAddressSelection(address, type, amount) }>
+        <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+        <span className="text">[ { amount } { coin } ]  { address }</span>
+        <span className="glyphicon glyphicon-ok check-mark"></span>
+      </a>
     </li>
-  );
-};
-
-export const PaginationItemsPerPageSelectorRender = function() {
-  return (
-    <div className="dataTables_length">
-      <label>
-        { translate('INDEX.SHOW') }&nbsp;
-        <select
-          name="itemsPerPage"
-          className="form-control input-sm"
-          onChange={ this.updateInput }>
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>&nbsp;
-        { translate('INDEX.ENTRIES_SM') }
-      </label>
-    </div>
-  );
-};
-
-export const PaginationRender = function(paginationFrom, paginationTo) {
-  const disableNextBtn = this.state.activePage >= Math.floor(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage);
-
-  return (
-    <div className="row unselectable">
-      <div className="col-sm-5">
-        <div className="dataTables_info">
-          { translate('INDEX.SHOWING') }&nbsp;
-          { paginationFrom }&nbsp;
-          { translate('INDEX.TO_ALT') }&nbsp;
-          { paginationTo }&nbsp;
-          { translate('INDEX.OF') }&nbsp;
-          { this.props.ActiveCoin.txhistory.length }&nbsp;
-          { translate('INDEX.ENTRIES_SM') }
-        </div>
-      </div>
-      <div className="col-sm-7">
-        <div className="dataTables_paginate paging_simple_numbers">
-          <ul className="pagination">
-            <li className={ 'paginate_button previous' + (this.state.activePage === 1 ? ' disabled' : '') }>
-              <a onClick={ () => this.updateCurrentPage(this.state.activePage - 1) }>{ translate('INDEX.PREVIOUS') }</a>
-            </li>
-            { this.renderPaginationItems() }
-            <li className={ 'paginate_button next' + (disableNextBtn ? ' disabled' : '') }>
-              <a onClick={ () => this.updateCurrentPage(this.state.activePage + 1) }>{ translate('INDEX.NEXT') }</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const TxHistoryListRender = function(tx, index) {
-  return (
-    <tr key={ tx.txid + tx.amount }>
-      { this.isNativeMode() ?
-          <td>
-            <span className="label label-default">
-              <i className="icon fa-eye"></i> { translate('IAPI.PUBLIC_SM') }
-            </span>
-          </td>
-        :
-        null
-      }
-      <td>{ this.renderTxType(tx.category || tx.type) }</td>
-      <td>{ tx.confirmations }</td>
-      <td>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</td>
-      <td>{ secondsToString(tx.blocktime || tx.timestamp || tx.time) }</td>
-      <td className={ this.isFullMode() ? '' : 'hide' }>{ tx.address }</td>
-      <td className={ this.isNativeMode() ? '' : 'hide' }>{ this.renderAddress(tx) }</td>
-      <td className={ this.isBasiliskMode() ? 'text-center' : '' }>
-        <button
-          type="button"
-          className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
-          onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, ((this.state.activePage - 1) * this.state.itemsPerPage) + index) }>
-          <i className="icon fa-search"></i>
-        </button>
-      </td>
-    </tr>
   );
 };
 
@@ -125,6 +64,21 @@ export const AddressListRender = function() {
         </ul>
       </div>
     </div>
+  );
+};
+
+export const TxHistoryListRender = function() {
+  return (
+    <ReactTable
+      data={this.state.itemsList}
+      columns={this.state.itemsListColumns}
+      sortable={true}
+      filterable={true}
+      className='-striped -highlight'
+      PaginationComponent={TablePaginationRenderer}
+      nextText={translate('INDEX.NEXT_PAGE')}
+      previousText={translate('INDEX.PREVIOUS_PAGE')}
+    />
   );
 };
 
@@ -210,58 +164,9 @@ export const WalletsDataRender = function() {
                         { this.renderAddressList() }
                       </div>
                     </div>
-                    <div className="row pagination-container">
-                      <div className="col-sm-6">
-                        { this.renderPaginationItemsPerPageSelector() }
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="dataTables_filter">
-                          <label>
-                            { translate('INDEX.SEARCH') }: <input type="search" className="form-control input-sm" disabled="true" />
-                          </label>
-                        </div>
-                      </div>
-                    </div>
                     <div className="row">
-                      <table
-                        className="table table-hover dataTable table-striped"
-                        width="100%">
-                        <thead>
-                          <tr>
-                            { this.isNativeMode() ?
-                              <th>{ translate('INDEX.TYPE') }</th>
-                              :
-                              null
-                            }
-                            <th>{ translate('INDEX.DIRECTION') }</th>
-                            <th className="hidden-xs hidden-sm">{ translate('INDEX.CONFIRMATIONS') }</th>
-                            <th>{ translate('INDEX.AMOUNT') }</th>
-                            <th>{ translate('INDEX.TIME') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm' }>{ translate('INDEX.TX_DETAIL') }</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          { this.renderTxHistoryList() }
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                             { this.isNativeMode() ?
-                               <th>{ translate('INDEX.TYPE') }</th>
-                               :
-                               null
-                             }
-                            <th>{ translate('INDEX.DIRECTION') }</th>
-                            <th>{ translate('INDEX.CONFIRMATIONS') }</th>
-                            <th>{ translate('INDEX.AMOUNT') }</th>
-                            <th>{ translate('INDEX.TIME') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : '' }>{ translate('INDEX.TX_DETAIL') }</th>
-                          </tr>
-                        </tfoot>
-                      </table>
+                      { this.renderTxHistoryList() }
                     </div>
-                    { this.renderPagination() }
                   </div>
                 </div>
               </div>

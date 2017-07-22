@@ -134,3 +134,17 @@
 .height-170 {
   height: 170px;
 }
+
+.rt-tr.-odd div,
+.rt-tr.-even div {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.rt-tr-group.-odd .-padRow {
+  display: none;
+}
+
+.ReactTable .rt-tfoot .rt-td {
+  text-align: center;
+}

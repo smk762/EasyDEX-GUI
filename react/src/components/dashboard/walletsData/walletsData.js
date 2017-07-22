@@ -20,13 +20,14 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
-  PaginationItemRender,
-  PaginationItemsPerPageSelectorRender,
-  PaginationRender,
+  AddressTypeRender,
+  TransactionDetailRender,
+  AddressItemRender,
   TxHistoryListRender,
   AddressListRender,
   WalletsDataRender
 } from  './walletsData.render';
+import { secondsToString } from '../../../util/time';
 
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -46,8 +47,9 @@ class WalletsData extends React.Component {
       currentStackLength: 0,
       totalStackLength: 0,
       useCache: true,
+      itemsListColumns: this.generateItemsListColumns()
     };
-    this.updateInput = this.updateInput.bind(this);
+
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
     this.basiliskRefreshAction = this.basiliskRefreshAction.bind(this);
     this.basiliskConnectionAction = this.basiliskConnectionAction.bind(this);
@@ -77,6 +79,78 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  generateItemsListColumns() {
+    let columns = [];
+
+    if (this.isNativeMode()) {
+      columns.push({
+        Header: translate('INDEX.TYPE'),
+        Footer: translate('INDEX.TYPE'),
+        Cell: AddressTypeRender()
+      });
+    }
+
+    columns.push(...[
+      {
+        id: 'direction',
+        Header: translate('INDEX.DIRECTION'),
+        Footer: translate('INDEX.DIRECTION'),
+        accessor: (tx) => this.renderTxType(tx.category || tx.type)
+      },
+      {
+        Header: translate('INDEX.CONFIRMATIONS'),
+        Footer: translate('INDEX.CONFIRMATIONS'),
+        headerClassName: 'hidden-xs hidden-sm',
+        footerClassName: 'hidden-xs hidden-sm',
+        className: 'hidden-xs hidden-sm',
+        accessor: 'confirmations'
+      },
+      {
+        id: 'amount',
+        Header: translate('INDEX.AMOUNT'),
+        Footer: translate('INDEX.AMOUNT'),
+        accessor: (tx) => tx.amount || translate('DASHBOARD.UNKNOWN')
+      },
+      {
+        id: 'timestamp',
+        Header: translate('INDEX.TIME'),
+        Footer: translate('INDEX.TIME'),
+        accessor: (tx) => secondsToString(tx.blocktime || tx.timestamp || tx.time)
+      }
+    ]);
+
+    if (this.isFullMode()) {
+      columns.push({
+        Header: translate('INDEX.DEST_ADDRESS'),
+        Footer: translate('INDEX.DEST_ADDRESS'),
+        accessor: 'address'
+      });
+    }
+
+    if (this.isNativeMode()) {
+      columns.push({
+        id: 'destination-address',
+        Header: translate('INDEX.DEST_ADDRESS'),
+        Footer: translate('INDEX.DEST_ADDRESS'),
+        accessor: (tx) => this.renderAddress(tx)
+      });
+    }
+
+    const txDetailColumnCssClasses = this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm';
+
+    columns.push({
+      id: 'tx-detail',
+      Header: translate('INDEX.TX_DETAIL'),
+      Footer: translate('INDEX.TX_DETAIL'),
+      headerClassName: txDetailColumnCssClasses,
+      footerClassName: txDetailColumnCssClasses,
+      className: txDetailColumnCssClasses,
+      Cell: props => TransactionDetailRender.call(this, props.index)
+    });
+
+    return columns;
   }
 
   handleClickOutside(e) {
@@ -193,17 +267,6 @@ class WalletsData extends React.Component {
     Store.dispatch(displayNotariesModal(true));
   }
 
-  updateInput(e) {
-    let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-    historyToSplit = historyToSplit.slice(0, e.target.value);
-
-    this.setState({
-      [e.target.name]: e.target.value,
-      activePage: 1,
-      itemsList: historyToSplit,
-    });
-  }
-
   toggleTxInfoModal(display, txIndex) {
     Store.dispatch(toggleDashboardTxInfoModal(display, txIndex));
   }
@@ -223,14 +286,8 @@ class WalletsData extends React.Component {
       if (!this.state.itemsList ||
           (this.state.itemsList && !this.state.itemsList.length) ||
           (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
-        let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-        historyToSplit = historyToSplit.slice(
-          (this.state.activePage - 1) * this.state.itemsPerPage,
-          this.state.activePage * this.state.itemsPerPage
-        );
-
         this.setState(Object.assign({}, this.state, {
-          itemsList: historyToSplit,
+          itemsList: sortByDate(this.props.ActiveCoin.txhistory),
         }));
       }
     }
@@ -245,58 +302,10 @@ class WalletsData extends React.Component {
         itemsList: 'loading',
       }));
     }
-  }
 
-  updateCurrentPage(page) {
-    let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-    historyToSplit = historyToSplit.slice(
-      (page - 1) * this.state.itemsPerPage,
-      page * this.state.itemsPerPage
-    );
-
-    this.setState(Object.assign({}, this.state, {
-      activePage: page,
-      itemsList: historyToSplit,
-    }));
-  }
-
-  renderPaginationItems() {
-    let items = [];
-
-    for (let i = 0; i < Math.ceil(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage); i++) {
-      items.push(
-        PaginationItemRender.call(this, i)
-      );
-    }
-
-    return items;
-  }
-
-  renderPaginationItemsPerPageSelector() {
-    if (this.props.ActiveCoin.txhistory &&
-        this.state.itemsList !== 'loading' &&
-        this.props.ActiveCoin.txhistory.length > 10) {
-      return PaginationItemsPerPageSelectorRender.call(this);
-    } else {
-      return null;
-    }
-  }
-
-  renderPagination() {
-    if (this.props.ActiveCoin.txhistory &&
-        this.state.itemsList !== 'loading' &&
-        this.props.ActiveCoin.txhistory.length > 10) {
-      const _paginationFrom = ((this.state.activePage - 1) * this.state.itemsPerPage) + 1;
-      const _paginationTo = this.state.activePage * this.state.itemsPerPage;
-
-      return PaginationRender.call(
-        this,
-        _paginationFrom,
-        _paginationTo
-      );
-    } else {
-      return null;
-    }
+    this.setState({
+      itemsListColumns: this.generateItemsListColumns()
+    });
   }
 
   renderTxType(category) {
@@ -362,19 +371,9 @@ class WalletsData extends React.Component {
       return (
         <div>{ translate('INDEX.NO_DATA') }</div>
       );
-    } else {
-      if (this.state.itemsList &&
-          this.state.itemsList.length &&
-          this.state.itemsList !== 'no data') {
-        return this.state.itemsList.map((tx, index) =>
-          TxHistoryListRender.call(
-            this,
-            tx,
-            index
-          )
-        );
-      }
     }
+
+    return TxHistoryListRender.call(this);
   }
 
   updateAddressSelection(address, type, amount) {
@@ -444,13 +443,7 @@ class WalletsData extends React.Component {
           }
 
           items.push(
-            <li key={address}>
-              <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
-                <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-                <span className="text">[ { _amount } { _coin } ]  { address }</span>
-                <span className="glyphicon glyphicon-ok check-mark"></span>
-              </a>
-            </li>
+            AddressItemRender.call(this, address, type, _amount, _coin)
           );
         }
 
@@ -479,9 +472,7 @@ class WalletsData extends React.Component {
             return _addresses.public[i].amount;
           } else {
             const address = _addresses.public[i].address;
-            const _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
-
-            return _amount;
+            return _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
         }
       }

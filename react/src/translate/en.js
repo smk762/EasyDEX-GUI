@@ -249,7 +249,9 @@ export const _lang = {
       'INFO': 'Info',
       'ENTER': 'Enter',
       'ADDR_SM': 'address',
-      'ACTIVATING': 'Activating'
+      'ACTIVATING': 'Activating',
+      'NEXT_PAGE': 'Next Page',
+      'PREVIOUS_PAGE': 'Previous Page'
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',
