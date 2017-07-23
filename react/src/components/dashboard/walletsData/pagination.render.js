@@ -50,7 +50,6 @@ const PaginationRender = function() {
                   type={this.state.page === '' ? 'text' : 'number'}
                   onChange={e => {
                     const val = e.target.value;
-                    console.error('onchange', val);
                     this.changePage(val - 1);
                   }}
                   value={this.state.page === '' ? '' : this.state.page + 1}

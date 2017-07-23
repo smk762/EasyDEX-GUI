@@ -67,6 +67,46 @@ export const AddressListRender = function() {
   );
 };
 
+export const TxTypeRender = function(category) {
+  if (category === 'send' ||
+    category === 'sent') {
+    return (
+      <span className="label label-danger">
+          <i className="icon fa-arrow-circle-left"></i> <span>{ translate('DASHBOARD.OUT') }</span>
+        </span>
+    );
+  }
+  if (category === 'receive' ||
+    category === 'received') {
+    return (
+      <span className="label label-success">
+          <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') }</span>
+        </span>
+    );
+  }
+  if (category === 'generate') {
+    return (
+      <span>
+          <i className="icon fa-cogs"></i> <span>{ translate('DASHBOARD.MINED') }</span>
+        </span>
+    );
+  }
+  if (category === 'immature') {
+    return (
+      <span>
+          <i className="icon fa-clock-o"></i> <span>{ translate('DASHBOARD.IMMATURE') }</span>
+        </span>
+    );
+  }
+  if (category === 'unknown') {
+    return (
+      <span>
+          <i className="icon fa-meh-o"></i> <span>{ translate('DASHBOARD.UNKNOWN') }</span>
+        </span>
+    );
+  }
+};
+
 export const TxHistoryListRender = function() {
   return (
     <ReactTable
@@ -76,6 +116,7 @@ export const TxHistoryListRender = function() {
       filterable={true}
       className='-striped -highlight'
       PaginationComponent={TablePaginationRenderer}
+      showPaginationTop={true}
       nextText={translate('INDEX.NEXT_PAGE')}
       previousText={translate('INDEX.PREVIOUS_PAGE')}
     />
