@@ -53,6 +53,9 @@ class Login extends React.Component {
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
   }
 
+  // the setInterval handler for 'activeCoins'
+  _iguanaActiveCoins = null;
+
   isCustomWalletSeed() {
     return this.state.customWalletSeed;
   }
@@ -131,10 +134,13 @@ class Login extends React.Component {
         });
 
       if (!this.props.Interval.interval.activeCoins) {
-        const _iguanaActiveCoins = setInterval(() => {
-          Store.dispatch(getDexCoins());
-        }, IGUNA_ACTIVE_COINS_TIMEOUT);
-        Store.dispatch(startInterval('activeCoins', _iguanaActiveCoins));
+        // only start a new 'activeCoins' interval if a previous one doesn't exist
+        if (!this._iguanaActiveCoins) {
+          this._iguanaActiveCoins = setInterval(() => {
+            Store.dispatch(getDexCoins());
+          }, IGUNA_ACTIVE_COINS_TIMEOUT);
+          Store.dispatch(startInterval('activeCoins', this._iguanaActiveCoins));
+        }
       }
 
       document.body.className = 'page-login layout-full page-dark';
