@@ -332,7 +332,7 @@ class WalletsData extends React.Component {
       return (
         <div>{ translate('INDEX.NO_DATA') }</div>
       );
-    } else if (this.state.itemsList) {
+    } else if (this.state.itemsList && this.state.itemsList.length) {
       return TxHistoryListRender.call(this);
     }
 
