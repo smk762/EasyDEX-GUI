@@ -152,7 +152,7 @@ export const WalletsDataRender = function() {
                       </div>
                       { !this.isNativeMode() ?
                         <div
-                          className={ 'dropdown' + (this.state.basiliskActionsMenu ? ' open' : '') }
+                          className={ 'dropdown basilisk-actions' + (this.state.basiliskActionsMenu ? ' open' : '') }
                           onClick={ this.toggleBasiliskActionsMenu }>
                           <a className="dropdown-toggle btn-xs btn-default">
                             <i className="icon fa-magic margin-right-10"></i> { translate('INDEX.BASILISK_ACTIONS') }
