@@ -22,6 +22,7 @@ import Store from '../../../store';
 import {
   AddressTypeRender,
   TransactionDetailRender,
+  AddressRender,
   AddressItemRender,
   TxTypeRender,
   TxHistoryListRender,
@@ -40,8 +41,6 @@ class WalletsData extends React.Component {
     super(props);
     this.state = {
       basiliskActionsMenu: false,
-      itemsPerPage: 10,
-      activePage: 1,
       itemsList: [],
       currentAddress: null,
       addressSelectorOpen: false,
@@ -80,6 +79,7 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+    socket.off('messages');
   }
 
   generateItemsListColumns() {
@@ -135,7 +135,7 @@ class WalletsData extends React.Component {
         id: 'destination-address',
         Header: translate('INDEX.DEST_ADDRESS'),
         Footer: translate('INDEX.DEST_ADDRESS'),
-        accessor: (tx) => this.renderAddress(tx)
+        accessor: (tx) => AddressRender.call(this, tx)
       });
     }
 
@@ -332,18 +332,19 @@ class WalletsData extends React.Component {
       return (
         <div>{ translate('INDEX.NO_DATA') }</div>
       );
+    } else if (this.state.itemsList) {
+      return TxHistoryListRender.call(this);
     }
 
-    return TxHistoryListRender.call(this);
+    return null;
   }
 
-  updateAddressSelection(address, type, amount) {
+  updateAddressSelection(address) {
     Store.dispatch(changeActiveAddress(address));
 
     this.setState(Object.assign({}, this.state, {
       currentAddress: address,
       addressSelectorOpen: false,
-      activePage: 1,
     }));
 
     if (this.props.ActiveCoin.mode === 'basilisk') {
@@ -373,27 +374,15 @@ class WalletsData extends React.Component {
     }));
   }
 
-  renderAddress(tx) {
-    if (!tx.address) {
-      return (
-        <span>
-          <i className="icon fa-bullseye"></i> <span className="label label-dark">{ translate('DASHBOARD.ZADDR_NOT_LISTED') }</span>
-        </span>
-      );
-    }
-
-    return tx.address;
-  }
-
   renderAddressByType(type) {
     const _addresses = this.props.ActiveCoin.addresses;
+    const _coin = this.props.ActiveCoin.coin;
 
     if (_addresses &&
         _addresses[type] &&
         _addresses[type].length) {
         let items = [];
         const _cache = this.props.ActiveCoin.cache;
-        const _coin = this.props.ActiveCoin.coin;
 
         for (let i = 0; i < _addresses[type].length; i++) {
           const address = _addresses[type][i].address;
@@ -409,19 +398,22 @@ class WalletsData extends React.Component {
         }
 
         return items;
-    } else {
-      return null;
+    } else if (this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) {
+      const address = this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
+      return AddressItemRender.call(this, address, type, null, _coin);
     }
+
+    return null;
   }
 
-  hasPublicAdresses() {
+  hasPublicAddresses() {
     return this.props.ActiveCoin.addresses &&
       this.props.ActiveCoin.addresses.public &&
       this.props.ActiveCoin.addresses.public.length;
   }
 
   renderAddressAmount() {
-    if (this.hasPublicAdresses()) {
+    if (this.hasPublicAddresses()) {
       const _addresses = this.props.ActiveCoin.addresses;
       const _cache = this.props.ActiveCoin.cache;
       const _coin = this.props.ActiveCoin.coin;
@@ -463,8 +455,7 @@ class WalletsData extends React.Component {
   renderAddressList() {
     if (this.props.Dashboard &&
         this.props.Dashboard.activeHandle &&
-        this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] &&
-        this.props.ActiveCoin.mode === 'basilisk') {
+        this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) {
       return AddressListRender.call(this);
     } else {
       return null;

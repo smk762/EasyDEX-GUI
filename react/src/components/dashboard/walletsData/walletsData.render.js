@@ -30,10 +30,25 @@ export const TransactionDetailRender = function(transactionIndex) {
   );
 };
 
+export const AddressRender = function(tx) {
+  if (!tx.address) {
+    return (
+      <span>
+        <i className="icon fa-bullseye"></i>
+        <span className="label label-dark">
+          { translate('DASHBOARD.ZADDR_NOT_LISTED') }
+        </span>
+      </span>
+    );
+  }
+
+  return tx.address;
+};
+
 export const AddressItemRender = function(address, type, amount, coin) {
   return (
     <li key={address}>
-      <a onClick={ () => this.updateAddressSelection(address, type, amount) }>
+      <a onClick={ () => this.updateAddressSelection(address) }>
         <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
         <span className="text">[ { amount } { coin } ]  { address }</span>
         <span className="glyphicon glyphicon-ok check-mark"></span>
