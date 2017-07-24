@@ -94,7 +94,8 @@ class SendCoin extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (!this.state.sendFrom &&
+    if (this.state &&
+        !this.state.sendFrom &&
         this.props.ActiveCoin.activeAddress) {
       this.setState(Object.assign({}, this.state, {
         sendFrom: this.props.ActiveCoin.activeAddress,

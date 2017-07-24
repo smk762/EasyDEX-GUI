@@ -1,4 +1,7 @@
-import { LOGIN } from '../storeType';
+import {
+  LOGIN,
+  LOGOUT
+} from '../storeType';
 import {
   triggerToaster,
   Config
@@ -8,12 +11,18 @@ import {
   guiLogState
 } from './log';
 
-function logoutState(json, dispatch) {
+function logoutState(json) {
   sessionStorage.removeItem('IguanaActiveAccount');
 
   return {
     type: LOGIN,
     isLoggedIn: false,
+  }
+}
+
+function logoutResetAppState() {
+  return {
+    type: LOGOUT,
   }
 }
 
@@ -68,6 +77,7 @@ function walletLock() {
         'response': json,
       }));
       dispatch(logoutState(json));
+      dispatch(logoutResetAppState());
     })
   }
 }

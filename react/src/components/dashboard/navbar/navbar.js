@@ -81,6 +81,7 @@ class Navbar extends React.Component {
       )
     );
     Store.dispatch(logout());
+    location.reload();
   }
 
   openSyncOnlyModal() {

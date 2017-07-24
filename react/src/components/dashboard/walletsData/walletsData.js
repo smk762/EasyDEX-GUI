@@ -351,16 +351,21 @@ class WalletsData extends React.Component {
     }
   }
 
+  // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
     if (this.state.itemsList === 'loading') {
       if (!this.isNativeMode() || this.isFullySynced()) {
         return (
-          <div>{ translate('INDEX.LOADING_HISTORY') }...</div>
+          <tr>
+            <td>{ translate('INDEX.LOADING_HISTORY') }...</td>
+          </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
-        <div>{ translate('INDEX.NO_DATA') }</div>
+        <tr>
+          <td>{ translate('INDEX.NO_DATA') }</td>
+        </tr>
       );
     } else {
       if (this.state.itemsList &&
