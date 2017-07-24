@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Config,
   copyCoinAddress,
   iguanaEdexBalance,
   toggleSendCoinForm,
@@ -9,6 +8,7 @@ import {
   toggleDashboardActiveSection
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import Config from '../../../config';
 import {
   WalletsNavNoWalletRender,
   WalletsNavWithWalletRender

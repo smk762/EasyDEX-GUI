@@ -104,8 +104,8 @@ export const TxHistoryListRender = function(tx, index) {
 };
 
 export const AddressListRender = function() {
-  const isMultiPublicAddress = this.props.ActiveCoin.addresses.public && this.props.ActiveCoin.addresses.public.length > 1;
-  const isMultiPrivateAddress = this.props.ActiveCoin.addresses.private && this.props.ActiveCoin.addresses.private.length > 1;
+  const isMultiPublicAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.public && this.props.ActiveCoin.addresses.public.length > 1;
+  const isMultiPrivateAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.private && this.props.ActiveCoin.addresses.private.length > 1;
 
   if (isMultiPublicAddress ||
       isMultiPrivateAddress) {

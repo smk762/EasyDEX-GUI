@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
+import Config from '../../config';
 import {
-  Config,
   addCoin,
   toggleAddcoinModal,
   triggerToaster,

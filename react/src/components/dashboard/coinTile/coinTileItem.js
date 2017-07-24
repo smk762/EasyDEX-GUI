@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Config,
   dashboardChangeActiveCoin,
   iguanaActiveHandle,
   getAddressesByAccount,
@@ -21,6 +20,7 @@ import {
   getDebugLog
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import Config from '../../../config';
 
 import CoinTileItemRender from './coinTileItem.render';
 

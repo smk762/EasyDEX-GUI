@@ -1,4 +1,5 @@
-module.exports = {
+let Config;
+let _config = {
   iguanaCorePort: 7778,
   agamaPort: 17777,
   enableCacheApi: true,
@@ -12,3 +13,11 @@ module.exports = {
   },
   iguanaLessMode: true,
 };
+
+try {
+  Config = window.require('electron').remote.getCurrentWindow().appConfig;
+} catch (e) {
+  Config = _config;
+}
+
+export default Config;

@@ -1,12 +1,10 @@
 import { DASHBOARD_ACTIVE_COIN_BALANCE } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function iguanaEdexBalance(coin) {
   const _payload = {

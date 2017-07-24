@@ -1,15 +1,12 @@
 import { DASHBOARD_ACTIVE_COIN_GET_CACHE } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 // TODO: rewrite cache API to use POST
-
 export function deleteCacheFile(_payload) {
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/groom`, {

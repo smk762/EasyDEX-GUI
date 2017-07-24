@@ -1,8 +1,8 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
+import Config from '../../../config';
 import {
-  Config,
   basiliskRefresh,
   basiliskConnection,
   toggleDashboardTxInfoModal,

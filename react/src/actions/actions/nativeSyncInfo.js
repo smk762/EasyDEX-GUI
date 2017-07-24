@@ -1,7 +1,6 @@
 import { SYNCING_NATIVE_MODE } from '../storeType';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
   getDebugLog
 } from '../actionCreators';
@@ -9,6 +8,7 @@ import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function getSyncInfoNativeKMD(skipDebug) {
   const coin = 'KMD';

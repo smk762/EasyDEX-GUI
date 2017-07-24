@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Config,
   toggleAddcoinModal,
   iguanaWalletPassphrase,
   iguanaActiveHandle,
@@ -11,6 +10,7 @@ import {
   createNewWallet,
   triggerToaster
 } from '../../actions/actionCreators';
+import Config from '../../config';
 import Store from '../../store';
 import { PassPhraseGenerator } from '../../util/crypto/passphrasegenerator';
 import SwallModalRender from './swall-modal.render';

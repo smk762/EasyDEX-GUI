@@ -1,6 +1,6 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
-import { Config } from '../../actions/actionCreators';
+import Config from '../../config';
 
 class AddCoinOptionsCrypto extends React.Component {
   constructor(props) {

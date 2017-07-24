@@ -1,6 +1,6 @@
 import React from 'react';
 import { sortByDate } from '../../../util/sort';
-import { Config } from '../../../actions/actionCreators';
+import Config from '../../../config';
 import {
   NotificationsByTypeRender,
   NotificationsModalRender,

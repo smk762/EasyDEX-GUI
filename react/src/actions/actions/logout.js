@@ -2,10 +2,8 @@ import {
   LOGIN,
   LOGOUT
 } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState

@@ -1,9 +1,9 @@
 import { DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE } from '../storeType';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent
 } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState
