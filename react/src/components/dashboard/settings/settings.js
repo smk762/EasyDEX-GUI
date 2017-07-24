@@ -49,7 +49,7 @@ class Settings extends React.Component {
       activeTabHeight: '0',
       appSettings: {},
       tabElId: null,
-      cliCmdString: null,
+      cliCmdString: '',
       cliCoin: null,
       cliResponse: null,
       exportWifKeysRaw: false,
