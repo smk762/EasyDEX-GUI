@@ -47,7 +47,58 @@ class WalletsProgress extends React.Component {
     }
   }
 
+  parseActivatingBestChainProgress() {
+    let _debugLogLine;
+
+    if (this.props.Settings.debugLog.indexOf('\n') > -1) {
+      const _debugLogMulti = this.props.Settings.debugLog.split('\n');
+
+      for (let i = 0; i < _debugLogMulti.length; i++) {
+        if (_debugLogMulti[i].indexOf('progress=') > -1) {
+          _debugLogLine = _debugLogMulti[i];
+        }
+      }        
+    } else {
+      _debugLogLine = this.props.Settings.debugLog;
+    }
+    
+    if (_debugLogLine) {
+      const temp = _debugLogLine.split(' ');
+      let currentBestChain;
+      let currentProgress;
+
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i].indexOf('height=') > -1) {
+          currentBestChain = temp[i].replace('height=', '');
+        }
+        if (temp[i].indexOf('progress=') > -1) {
+          currentProgress = Number(temp[i].replace('progress=', '')) * 1000;
+        }
+      }
+
+      return [
+        currentBestChain,
+        currentProgress
+      ];
+    }
+  }
+
   renderSyncPercentagePlaceholder() {
+    // activating best chain
+    if (this.props.Dashboard.progress &&
+        this.props.Dashboard.progress.code &&
+        this.props.Dashboard.progress.code === -28 &&
+        this.props.Settings.debugLog) {
+      const _progress = this.parseActivatingBestChainProgress();
+  
+      if (_progress &&
+          _progress[1]) {
+        return SyncPercentageRender.call(this, _progress[1].toFixed(2));
+      } else {
+        return LoadingBlocksRender.call(this);
+      }
+    }
+
     if (this.props.Dashboard.progress &&
         this.props.Dashboard.progress.blocks > 0 &&
         this.props.Dashboard.progress.longestchain === 0) {
@@ -120,9 +171,30 @@ class WalletsProgress extends React.Component {
           }
         }
 
-        return (
-          `: ${currentProgress}% (${ translate('INDEX.RESCAN_SM') })`
-        );
+        // activating best chain
+        if (this.props.Dashboard.progress &&
+            this.props.Dashboard.progress.code &&
+            this.props.Dashboard.progress.code === -28 &&
+            this.props.Settings.debugLog) {
+          const _blocks = this.parseActivatingBestChainProgress();
+
+          if (_blocks &&
+              _blocks[0]) {
+            return (
+              `: ${_blocks[0]} (current block)`
+            );
+          } else {
+            return null;
+          }
+        } else {
+          if (currentProgress) {
+            return (
+              `: ${currentProgress}% (${ translate('INDEX.RESCAN_SM') })`
+            );
+          } else {
+            return null;
+          }
+        }
       } else if (
           this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
           this.props.Settings.debugLog.indexOf('Reindexing block file') > -1

@@ -1,9 +1,6 @@
-import {
-  ACTIVE_COIN_GET_ADDRESSES
-} from '../storeType';
+import { ACTIVE_COIN_GET_ADDRESSES } from '../storeType';
 import {
   triggerToaster,
-  Config,
   shepherdGroomPost,
   getPassthruAgent,
   iguanaHashHex
@@ -12,6 +9,7 @@ import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 function getKMDAddressesNativeState(json) {
   return {

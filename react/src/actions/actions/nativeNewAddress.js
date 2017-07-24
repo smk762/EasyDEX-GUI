@@ -1,10 +1,10 @@
 import { translate } from '../../translate/translate';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
   getKMDAddressesNative
 } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState

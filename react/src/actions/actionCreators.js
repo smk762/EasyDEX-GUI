@@ -1,7 +1,6 @@
 import 'whatwg-fetch';
 import 'bluebird';
 
-import _config from '../config';
 import { translate } from '../translate/translate';
 import {
   GET_ACTIVE_COINS,
@@ -67,14 +66,6 @@ export * from './actions/basiliskTxHistory';
 export * from './actions/iguanaHelpers';
 export * from './actions/cli';
 export * from './actions/update';
-
-export let Config;
-
-try {
-  Config = window.require('electron').remote.getCurrentWindow().appConfig;
-} catch (e) {
-  Config = _config;
-}
 
 export function changeActiveAddress(address) {
   return {

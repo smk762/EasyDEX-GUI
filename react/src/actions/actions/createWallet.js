@@ -1,12 +1,10 @@
 import { translate } from '../../translate/translate';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 function createNewWalletState(json) {
   if (json &&

@@ -1,7 +1,7 @@
 import { translate } from '../../translate/translate';
+import Config from '../../config';
 import {
   triggerToaster,
-  Config,
   toggleAddcoinModal,
   getDexCoins,
   startIguanaInstance,

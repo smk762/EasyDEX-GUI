@@ -6,10 +6,8 @@ import {
   LOAD_APP_CONFIG
 } from '../storeType';
 import { translate } from '../../translate/translate';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState

@@ -1,8 +1,8 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
+import Config from '../../../config';
 import {
-  Config,
   basiliskRefresh,
   basiliskConnection,
   toggleDashboardTxInfoModal,
@@ -351,16 +351,21 @@ class WalletsData extends React.Component {
     }
   }
 
+  // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
     if (this.state.itemsList === 'loading') {
       if (!this.isNativeMode() || this.isFullySynced()) {
         return (
-          <div>{ translate('INDEX.LOADING_HISTORY') }...</div>
+          <tr>
+            <td colSpan="6">{ translate('INDEX.LOADING_HISTORY') }...</td>
+          </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
-        <div>{ translate('INDEX.NO_DATA') }</div>
+        <tr>
+          <td colSpan="6">{ translate('INDEX.NO_DATA') }</td>
+        </tr>
       );
     } else {
       if (this.state.itemsList &&

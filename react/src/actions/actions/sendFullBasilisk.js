@@ -2,9 +2,9 @@ import { DASHBOARD_ACTIVE_COIN_SENDTO } from '../storeType';
 import { translate } from '../../translate/translate';
 import {
   triggerToaster,
-  Config,
   getDispatch
 } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState

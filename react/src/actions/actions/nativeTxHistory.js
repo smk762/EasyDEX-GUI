@@ -1,9 +1,9 @@
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
   getNativeTxHistoryState
 } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState

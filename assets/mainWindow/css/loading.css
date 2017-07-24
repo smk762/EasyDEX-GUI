@@ -106,3 +106,7 @@ body.agamaMode {
 .btn:last-child {
   margin-left: 20px;
 }
+
+.btn.btn-primary.btn-close-app {
+  margin: 0;
+}

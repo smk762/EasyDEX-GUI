@@ -159,33 +159,36 @@ const LoginRender = function () {
                     <div className="form-group form-material floating">
                       <div
                         className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.generateNewSeed(256) }>
+                        onClick={ () =>this.state.bitsOption !== 256 && this.generateNewSeed(256) }>
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 256 }/>
+                          checked={ this.state.bitsOption === 256 }
+                          readOnly />
                         <label htmlFor="PassPhraseOptionsIguana">
                           { translate('LOGIN.IGUANA_SEED') }
                         </label>
                       </div>
                       <div
                         className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.generateNewSeed(160) }>
+                        onClick={ () => this.state.bitsOption !== 160 && this.generateNewSeed(160) }>
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 160 }/>
+                          checked={ this.state.bitsOption === 160 }
+                          readOnly />
                         <label htmlFor="PassPhraseOptionsWaves">
                           { translate('LOGIN.WAVES_SEED') }
                         </label>
                       </div>
                       <div
                         className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.generateNewSeed(128) }>
+                        onClick={ () => this.state.bitsOption !== 128 && this.generateNewSeed(128) }>
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 128 }/>
+                          checked={ this.state.bitsOption === 128 }
+                          readOnly />
                         <label htmlFor="PassPhraseOptionsNXT">
                           { translate('LOGIN.NXT_SEED') }
                         </label>

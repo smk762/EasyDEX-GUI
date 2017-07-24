@@ -1,11 +1,8 @@
 import React from 'react';
 import WalletsNativeRender from './walletsNative.render';
 import { translate } from '../../../translate/translate';
-
-import {
-  Config,
-  triggerToaster
-} from '../../../actions/actionCreators';
+import { triggerToaster } from '../../../actions/actionCreators';
+import Config from '../../../config';
 import Store from '../../../store';
 
 import { SocketProvider } from 'socket.io-react';
