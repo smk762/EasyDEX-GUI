@@ -357,14 +357,14 @@ class WalletsData extends React.Component {
       if (!this.isNativeMode() || this.isFullySynced()) {
         return (
           <tr>
-            <td>{ translate('INDEX.LOADING_HISTORY') }...</td>
+            <td colSpan="6">{ translate('INDEX.LOADING_HISTORY') }...</td>
           </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
         <tr>
-          <td>{ translate('INDEX.NO_DATA') }</td>
+          <td colSpan="6">{ translate('INDEX.NO_DATA') }</td>
         </tr>
       );
     } else {

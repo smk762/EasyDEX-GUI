@@ -441,7 +441,7 @@ class SendCoin extends React.Component {
           json.completed === true) {
         Store.dispatch(
           triggerToaster(
-            translate('TOASTR.SIGNED_TX_GENERATED') + '.',
+            translate('TOASTR.SIGNED_TX_GENERATED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success'
           )
@@ -483,7 +483,7 @@ class SendCoin extends React.Component {
                 return new Promise(function(resolve, reject) {
                   Store.dispatch(
                     triggerToaster(
-                      translate('TOASTR.GETTING_TXID_INFO') + '.',
+                      translate('TOASTR.GETTING_TXID_INFO'),
                       translate('TOASTR.WALLET_NOTIFICATION'),
                       'info'
                     )
@@ -541,7 +541,7 @@ class SendCoin extends React.Component {
 
               Store.dispatch(
                 triggerToaster(
-                  translate('TOASTR.AWAITING_TX_RESP') + '...',
+                  `${translate('TOASTR.AWAITING_TX_RESP')}...`,
                   translate('TOASTR.WALLET_NOTIFICATION'),
                   'info'
                 )
@@ -550,7 +550,7 @@ class SendCoin extends React.Component {
               function waterfallUTXOProcess() {
                 Store.dispatch(
                   triggerToaster(
-                    translate('TOASTR.PROCESSING_UTXO') + '...',
+                    `${translate('TOASTR.PROCESSING_UTXO')}...`,
                     translate('TOASTR.WALLET_NOTIFICATION'),
                     'info'
                   )
@@ -591,7 +591,7 @@ class SendCoin extends React.Component {
         Store.dispatch(sendToAddressStateAlt(json));
         Store.dispatch(
           triggerToaster(
-            `${translate('TOASTR.SIGNED_TX_GENERATED_FAIL')}.`,
+            `${translate('TOASTR.SIGNED_TX_GENERATED_FAIL')}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
