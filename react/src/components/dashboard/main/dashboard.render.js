@@ -39,7 +39,7 @@ const DashboardRender = function() {
         <div className={ this.isSectionActive('edex') ? 'show' : 'hide' }>
           <EDEX {...this.props} />
         </div>
-        <div className={ this.isSectionActive('atomic') ? 'show' : 'hide' }>
+        <div className={ this.isSectionActive('atomic') ? 'show full-height' : 'hide' }>
           <Atomic {...this.props} />
         </div>
         <div className={ this.isSectionActive('jumblr') ? 'show' : 'hide' }>

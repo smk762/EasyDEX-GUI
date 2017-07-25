@@ -144,7 +144,7 @@ export const WalletsDataRender = function() {
       <WalletsNotariesList {...this.props} />
       <WalletsCacheData {...this.props} />
       <div id="edexcoin_dashboardinfo">
-        <div className="col-xs-12 margin-top-20">
+        <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">
             <div>
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
