@@ -42,7 +42,7 @@ const AddCoinRender = function() {
                 </button>
               </span>
               { this.renderCoinSelectors() }
-              <div className={ 'text-align-center vertical-margin-20 horizontal-margin-0 ' + (this.hasMoreThanOneCoin() ? 'col-sm-12' : 'hide') }>
+              <div className={ 'text-align-center vertical-margin-20 horizontal-margin-0 padding-bottom-20 ' + (this.hasMoreThanOneCoin() ? 'col-sm-12' : 'hide') }>
                 <button
                   type="button"
                   className="btn btn-primary col-sm-4 float-none"
@@ -62,7 +62,7 @@ const AddCoinRender = function() {
                   <strong>Komodo Daemon</strong> { translate('INDEX.NATIVE_MODE_DESC2') }&nbsp;
                   <i>Iguana Daemon</i> { translate('INDEX.NATIVE_MODE_DESC3') }.
                 </p>
-                <div className="alert alert-icon alert-primary">
+                <div className="alert alert-icon alert-primary margin-top-20">
                   <i className="icon md-info-outline"></i>
                   <strong>{ translate('INDEX.NATIVE_MODE') }</strong> { translate('INDEX.NATIVE_MODE_DESC4') }&nbsp;
                   <strong>{ translate('INDEX.NATIVE_MODE_DESC5') }</strong>,&nbsp;
