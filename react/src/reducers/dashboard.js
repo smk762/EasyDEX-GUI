@@ -8,7 +8,8 @@ import {
   DASHBOARD_CONNECT_NOTARIES,
   VIEW_CACHE_DATA,
   LOG_GUI_HTTP,
-  TOGGLE_NOTIFICATIONS_MODAL
+  TOGGLE_NOTIFICATIONS_MODAL,
+  DISPLAY_COIND_DOWN_MODAL
 } from '../actions/storeType';
 
 const HTTP_STACK_MAX_ENTRIES = 150; // limit stack mem length to N records per type
@@ -36,6 +37,7 @@ export function Dashboard(state = {
     failedToConnectNodes: null,
   },
   guiLog: {},
+  displayCoindDownModal: false,
 }, action) {
   switch (action.type) {
     case DASHBOARD_SECTION_CHANGE:
@@ -97,6 +99,11 @@ export function Dashboard(state = {
       return Object.assign({}, state, {
         guiLog: newLogState,
       });
+    case DISPLAY_COIND_DOWN_MODAL:
+      return Object.assign({}, state, {
+        displayCoindDownModal: action.displayCoindDownModal,
+      });
+      break;
     default:
       return state;
   }

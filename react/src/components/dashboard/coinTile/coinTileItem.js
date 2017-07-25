@@ -46,7 +46,8 @@ class CoinTileItem extends React.Component {
       const _propsDashboard = this.props.Dashboard;
       const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
-      if (syncPercentage < 100) {
+      if (syncPercentage < 100 &&
+          !this.props.Dashboard.displayCoindDownModal) {
         Store.dispatch(getDebugLog('komodo', 10));
       }
       if (_propsDashboard.progress &&
