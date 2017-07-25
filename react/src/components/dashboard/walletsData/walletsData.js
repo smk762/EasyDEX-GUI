@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
+import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
 import {
   basiliskRefresh,
@@ -448,6 +449,8 @@ class WalletsData extends React.Component {
             _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
 
+          _amount = formatValue('round', _amount, -6);
+
           items.push(
             <li key={address}>
               <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
@@ -484,7 +487,9 @@ class WalletsData extends React.Component {
             return _addresses.public[i].amount;
           } else {
             const address = _addresses.public[i].address;
-            const _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+            let _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+
+            _amount = formatValue('round', _amount, -6);
 
             return _amount;
           }

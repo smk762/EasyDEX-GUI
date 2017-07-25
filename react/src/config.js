@@ -12,6 +12,7 @@ let _config = {
     default: true
   },
   iguanaLessMode: true,
+  roundValues: true,
 };
 
 try {
