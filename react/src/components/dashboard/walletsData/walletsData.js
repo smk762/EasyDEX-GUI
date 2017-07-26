@@ -26,6 +26,7 @@ import {
   AddressRender,
   AddressItemRender,
   TxTypeRender,
+  TxAmountRender,
   TxHistoryListRender,
   AddressListRender,
   WalletsDataRender
@@ -113,7 +114,7 @@ class WalletsData extends React.Component {
         id: 'amount',
         Header: translate('INDEX.AMOUNT'),
         Footer: translate('INDEX.AMOUNT'),
-        accessor: (tx) => tx.amount || translate('DASHBOARD.UNKNOWN')
+        accessor: (tx) => TxAmountRender.call(this, tx)
       },
       {
         id: 'timestamp',

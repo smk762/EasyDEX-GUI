@@ -132,6 +132,18 @@ export const TxTypeRender = function(category) {
   }
 };
 
+export const TxAmountRender = function (tx) {
+  if (Config.roundValues) {
+    return (
+      <td title={ tx.amount }>{ formatValue('round', tx.amount, -6) || translate('DASHBOARD.UNKNOWN') }</td>
+    );
+  }
+
+  return (
+    <td>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</td>
+  );
+};
+
 export const TxHistoryListRender = function() {
   return (
     <ReactTable
