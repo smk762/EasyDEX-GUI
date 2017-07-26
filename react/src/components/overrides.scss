@@ -616,3 +616,29 @@ select{
     margin-top: -2px;
   }
 }
+
+.clipboard-edexaddr {
+  margin-left: 10px;
+}
+
+.coind-down-modal {
+  .modal-body {
+    height: 60vh;
+
+    > div {
+      height: 100%;
+    }
+    .page-content {
+      width: 90%;
+      height: 100%;
+
+      textarea {
+        min-height: 200px;
+      }
+    }
+  }
+}
+
+.backround-gray {
+  background: #f3f4f5;
+}

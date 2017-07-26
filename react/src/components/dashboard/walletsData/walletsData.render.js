@@ -5,6 +5,8 @@ import WalletsBasiliskConnection from '../walletsBasiliskConnection/walletsBasil
 import WalletsNotariesList from '../walletsNotariesList/walletsNotariesList';
 import WalletsCacheData from '../walletsCacheData/walletsCacheData';
 import { secondsToString } from '../../../util/time';
+import { formatValue } from '../../../util/formatValue';
+import Config from '../../../config';
 
 // TODO: clean basilisk dropdown menu
 
@@ -87,7 +89,12 @@ export const TxHistoryListRender = function(tx, index) {
       }
       <td>{ this.renderTxType(tx.category || tx.type) }</td>
       <td>{ tx.confirmations }</td>
-      <td>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</td>
+      { Config.roundValues &&
+        <td title={ tx.amount }>{ formatValue('round', tx.amount, -6) || translate('DASHBOARD.UNKNOWN') }</td>
+      }
+      { !Config.roundValues &&
+        <td>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</td>
+      }
       <td>{ secondsToString(tx.blocktime || tx.timestamp || tx.time) }</td>
       <td className={ this.isFullMode() ? '' : 'hide' }>{ tx.address }</td>
       <td className={ this.isNativeMode() ? '' : 'hide' }>{ this.renderAddress(tx) }</td>
@@ -144,7 +151,7 @@ export const WalletsDataRender = function() {
       <WalletsNotariesList {...this.props} />
       <WalletsCacheData {...this.props} />
       <div id="edexcoin_dashboardinfo">
-        <div className="col-xs-12 margin-top-20">
+        <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">
             <div>
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">

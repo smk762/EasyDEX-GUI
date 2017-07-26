@@ -11,8 +11,12 @@ const CoinSelectorsRender = function(item, coin, i) {
     <div
       className={ this.hasMoreThanOneCoin() ? 'multi' : 'single' }
       key={ `add-coin-${i}` }>
-      <div className="col-sm-8">
-        <div className="form-group">
+      <div
+        className={ this.hasMoreThanOneCoin() ? 'col-sm-10' : 'col-sm-8' }
+        style={{ paddingLeft: !this.hasMoreThanOneCoin() ? '0' : '15px' }}>
+        <div
+          className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6 form-group' : 'form-group' }
+          style={{ paddingLeft: this.hasMoreThanOneCoin() ? '0' : '15px' }}>
           <select
             className="form-control form-material"
             name="selectedCoin"
@@ -24,6 +28,20 @@ const CoinSelectorsRender = function(item, coin, i) {
             <AddCoinOptionsAC appSettings={ this.props.Settings } />
             <AddCoinOptionsACFiat appSettings={ this.props.Settings } />
           </select>
+        </div>
+        <div className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6' : 'hide' }>
+          <div className="toggle-box padding-bottom-10">
+            <select
+              className="form-control form-material"
+              name="daemonParam"
+              onChange={ (event) => this.updateDaemonParam(event, i) }
+              autoFocus>
+              <option>Daemon param: none</option>
+              <option value="silent">Daemon param: background process</option>
+              <option value="reindex">Daemon param: reindex</option>
+              <option value="rescan">Daemon param: rescan</option>
+            </select>
+          </div>
         </div>
       </div>
       <div className={ this.hasMoreThanOneCoin() ? 'hide' : 'col-sm-4' }>
@@ -137,7 +155,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             <i className="fa fa-trash-o"></i>
         </button>
       </div>
-      <div className={ item.mode === '-1' || item.mode === -1 ? 'col-sm-5' : 'hide' }>
+      <div className={ !this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-5 padding-bottom-30' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">
           <select
             className="form-control form-material"

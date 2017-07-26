@@ -538,6 +538,10 @@ export const SettingsRender = function() {
                             type="button"
                             className="btn btn-primary waves-effect waves-light"
                             onClick={ this._saveAppConfig }>{ translate('SETTINGS.SAVE_APP_CONFIG') }</button>
+                          <button
+                            type="button"
+                            className="btn btn-primary waves-effect waves-light margin-left-30"
+                            onClick={ this._resetAppConfig }>Reset to default</button>
                         </div>
                       </div>
                     </div>
@@ -570,7 +574,7 @@ export const SettingsRender = function() {
                               name="cliCoin"
                               id="settingsCliOptions"
                               onChange={ this.updateInput }>
-                              <option value="">{ translate('INDEX.CLI_NATIVE_COIN') }</option>
+                              <option>{ translate('INDEX.CLI_NATIVE_COIN') }</option>
                               { this.renderActiveCoinsList('native') }
                             </select>
                             <label

@@ -2,7 +2,8 @@ import { SYNCING_NATIVE_MODE } from '../storeType';
 import {
   triggerToaster,
   getPassthruAgent,
-  getDebugLog
+  getDebugLog,
+  toggleCoindDownModal
 } from '../actionCreators';
 import {
   logGuiHttp,
@@ -157,9 +158,11 @@ export function getSyncInfoNative(coin, skipDebug) {
             'Komodod is down',
             'Critical Error',
             'error',
-            false
+            true
           )
         );
+        dispatch(getDebugLog('komodo', 50));
+        dispatch(toggleCoindDownModal(true));
       } else {
         json = JSON.parse(json);
       }

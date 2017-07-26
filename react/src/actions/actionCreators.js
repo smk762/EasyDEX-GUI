@@ -25,6 +25,7 @@ import {
   DASHBOARD_ACTIVE_COIN_CHANGE,
   ACTIVE_COIN_GET_ADDRESSES,
   DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,
+  DISPLAY_COIND_DOWN_MODAL,
   START_INTERVAL,
   STOP_INTERVAL
 } from './storeType';
@@ -349,5 +350,12 @@ export function stopInterval(name, intervals) {
   return {
     type: STOP_INTERVAL,
     name,
+  }
+}
+
+export function toggleCoindDownModal(display) {
+  return {
+    type: DISPLAY_COIND_DOWN_MODAL,
+    displayCoindDownModal: display,
   }
 }

@@ -11,10 +11,11 @@ import {
   addPeerNode,
   getAppConfig,
   saveAppConfig,
+  resetAppConfig,
   getAppInfo,
   shepherdCli,
   checkForUpdateUIPromise,
-  updateUIPromise
+  updateUIPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -72,6 +73,7 @@ class Settings extends React.Component {
     this.renderPeersList = this.renderPeersList.bind(this);
     this.renderSNPeersList = this.renderSNPeersList.bind(this);
     this._saveAppConfig = this._saveAppConfig.bind(this);
+    this._resetAppConfig = this._resetAppConfig.bind(this);
     this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
@@ -97,12 +99,16 @@ class Settings extends React.Component {
     }
   }
 
+  _resetAppConfig() {
+    Store.dispatch(resetAppConfig());
+  }
+
   resizeLoginTextarea() {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-          document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-          document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
+        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
       }
     }, 100);
   }
