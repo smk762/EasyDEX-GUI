@@ -2,7 +2,6 @@ import { DASHBOARD_ACTIVE_COIN_NATIVE_OPIDS } from '../storeType';
 import { translate } from '../../translate/translate';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
   iguanaHashHex
 } from '../actionCreators';
@@ -10,6 +9,7 @@ import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function sendNativeTx(coin, _payload) {
   let ajaxDataToHex;

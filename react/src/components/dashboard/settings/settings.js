@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import Config from '../../../config';
 import {
-  Config,
   iguanaActiveHandle,
   encryptWallet,
   settingsWifkeyState,
@@ -11,10 +11,11 @@ import {
   addPeerNode,
   getAppConfig,
   saveAppConfig,
+  resetAppConfig,
   getAppInfo,
   shepherdCli,
   checkForUpdateUIPromise,
-  updateUIPromise
+  updateUIPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -49,7 +50,7 @@ class Settings extends React.Component {
       activeTabHeight: '0',
       appSettings: {},
       tabElId: null,
-      cliCmdString: null,
+      cliCmdString: '',
       cliCoin: null,
       cliResponse: null,
       exportWifKeysRaw: false,
@@ -72,6 +73,7 @@ class Settings extends React.Component {
     this.renderPeersList = this.renderPeersList.bind(this);
     this.renderSNPeersList = this.renderSNPeersList.bind(this);
     this._saveAppConfig = this._saveAppConfig.bind(this);
+    this._resetAppConfig = this._resetAppConfig.bind(this);
     this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
@@ -97,12 +99,16 @@ class Settings extends React.Component {
     }
   }
 
+  _resetAppConfig() {
+    Store.dispatch(resetAppConfig());
+  }
+
   resizeLoginTextarea() {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-          document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-          document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
+        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
       }
     }, 100);
   }
@@ -473,11 +479,14 @@ class Settings extends React.Component {
     );
   }
 
+  // TODO: rerender only if prop is changed
   renderCliResponse() {
     const _cliResponse = this.props.Settings.cli;
+    let _items = [];
 
     if (_cliResponse) {
       let _cliResponseParsed;
+      let responseType;
 
       try {
         _cliResponseParsed = JSON.parse(_cliResponse.result);
@@ -485,44 +494,42 @@ class Settings extends React.Component {
         _cliResponseParsed = _cliResponse.result;
       }
 
-      let __cliResponseParsed;
-      if (typeof _cliResponseParsed !== 'object' &&
-          typeof _cliResponseParsed !== 'number' &&
-          _cliResponseParsed !== 'wrong cli string format' &&
-          _cliResponseParsed.indexOf('\r\n') > -1) {
-        _cliResponseParsed = _cliResponseParsed.split('\r\n') ;
-      } else if (
-        typeof _cliResponseParsed !== 'object' &&
-        typeof _cliResponseParsed !== 'number' &&
-        _cliResponseParsed !== 'wrong cli string format' &&
-        _cliResponseParsed.indexOf('\n') > -1
-        ) {
-        __cliResponseParsed = _cliResponseParsed.split('\n') ;
-      } else {
-        __cliResponseParsed = _cliResponseParsed;
-      }
+      if (Object.prototype.toString.call(_cliResponseParsed) === '[object Array]') {
+        responseType = 'array';
 
-      let _items = [];
-
-      if (__cliResponseParsed.length &&
-          __cliResponseParsed !== 'wrong cli string format') {
-        for (let i = 0; i < __cliResponseParsed.length; i++) {
+        for (let i = 0; i < _cliResponseParsed.length; i++) {
           _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ typeof __cliResponseParsed[i] === 'object' ? JSON.stringify(__cliResponseParsed[i], null, '\t') : __cliResponseParsed[i] }</div>
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed[i], null, '\t') }</div>
           );
         }
-      } else {
-        if (typeof _cliResponseParsed === 'object') {
+      }
+      if (Object.prototype.toString.call(_cliResponseParsed) === '[object]' ||
+          typeof _cliResponseParsed === 'object') {
+        responseType = 'object';
+
+        _items.push(
+          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed, null, '\t') }</div>
+        );
+      }
+      if (Object.prototype.toString.call(_cliResponseParsed) === 'number' ||
+          typeof _cliResponseParsed === 'boolean' ||
+          _cliResponseParsed === 'wrong cli string format') {
+        responseType = 'number';
+
+        _items.push(
+          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ _cliResponseParsed.toString() }</div>
+        );
+      }
+
+      if (responseType !== 'number' &&
+          responseType !== 'array' &&
+          responseType !== 'object' &&
+          _cliResponseParsed.indexOf('\n') > -1) {
+        _cliResponseParsed = _cliResponseParsed.split('\n');
+
+        for (let i = 0; i < _cliResponseParsed.length; i++) {
           _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(__cliResponseParsed, null, '\t') }</div>
-          );
-        } else if (typeof _cliResponseParsed === 'string' || typeof _cliResponseParsed === 'number' || _cliResponseParsed === 'wrong cli string format') {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ __cliResponseParsed }</div>
-          );
-        } else {
-          _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ translate('INDEX.NO_DATA_AVAILABLE') }</div>
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{  _cliResponseParsed[i] }</div>
           );
         }
       }

@@ -40,12 +40,15 @@ body {
   .panel-title {
     cursor: pointer;
     cursor: hand;
-  }
-  .panel-title:before {
-    content: '\F273';
-  }
-  .panel-title.collapsed:before {
-    content: '\F278';
+
+    &:before {
+      content: '\F273';
+    }
+    &.collapsed {
+      &:before {
+        content: '\F278';
+      }
+    }
   }
 }
 
@@ -145,9 +148,10 @@ body {
 
 .display-sync-only-coins-toggle {
   cursor: pointer;
-}
-.display-sync-only-coins-toggle:hover {
-  color: #ffa726;
+
+  &:hover {
+    color: #ffa726;
+  }
 }
 
 .btn-add-coin-item,
@@ -197,12 +201,16 @@ body {
           margin-right: 8%;
           padding: 0;
 
-          .input.to-labelauty+label {
-            max-width: 136px;
+          .input{
+            &.to-labelauty+label {
+              max-width: 136px;
+            }
           }
         }
-        .col-lg-4:last-child {
-          margin-right: 0;
+        .col-lg-4 {
+          &:last-child {
+            margin-right: 0;
+          }
         }
         .col-sm-1 {
           width: 44px;
@@ -244,8 +252,10 @@ body {
     width: 80%;
     margin: 0 auto;
   }
-  .padding-bottom-60:last-child {
-    padding-bottom: 0 !important;
+  .padding-bottom-60 {
+    &:last-child {
+      padding-bottom: 0 !important;
+    }
   }
 }
 
@@ -592,4 +602,43 @@ select{
 
 .navbar-brand {
   padding: 22px 15px;
+}
+
+.panel-actions {
+  .progress {
+    width: inherit;
+  }
+}
+
+.basilisk-actions {
+  .caret {
+    margin-left: 10px;
+    margin-top: -2px;
+  }
+}
+
+.clipboard-edexaddr {
+  margin-left: 10px;
+}
+
+.coind-down-modal {
+  .modal-body {
+    height: 60vh;
+
+    > div {
+      height: 100%;
+    }
+    .page-content {
+      width: 90%;
+      height: 100%;
+
+      textarea {
+        min-height: 200px;
+      }
+    }
+  }
+}
+
+.backround-gray {
+  background: #f3f4f5;
 }

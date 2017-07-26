@@ -7,9 +7,9 @@ import {
   toggleSyncOnlyModal,
   getSyncOnlyForks,
   logout,
-  Config
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import Config from '../../../config';
 
 import NavbarRender from './navbar.render';
 
@@ -81,6 +81,7 @@ class Navbar extends React.Component {
       )
     );
     Store.dispatch(logout());
+    location.reload();
   }
 
   openSyncOnlyModal() {

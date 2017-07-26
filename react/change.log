@@ -1,3 +1,16 @@
+v0.2.0.22a-beta
+--------------
+UI:
+- fixed activating best chain progress update
+- prevent running two agama instances
+- cli passphru fix
+- fixed logout bug
+- minor placeholders fixes
+- hide address dropdown if wallet has only one address
+- komodod crash report modal
+- values rounding (up to 6 decimals)
+- add coin multi ui reflow fix
+
 v0.2.0.21a-beta
 --------------
 UI:

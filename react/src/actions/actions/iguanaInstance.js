@@ -1,11 +1,9 @@
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function restartIguanaInstance(pmid) {
   return new Promise((resolve, reject) => {

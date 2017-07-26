@@ -16,6 +16,17 @@
 }
 
 button {
+  &.copy-floating-label {
+    position: absolute;
+    font-weight: 500;
+    font-size: 14px;
+    top: -22px;
+    right: 0;
+    background-color: #757575;
+    border: 0;
+    cursor: pointer;
+    z-index: 1000;
+  }
   &.swal2-confirm-container {
     background-color: rgb(48, 133, 214);
     border-left-color: rgb(48, 133, 214);
@@ -111,14 +122,8 @@ input[type="password"] {
   margin-right: auto;
 }
 
-button.copy-floating-label {
-  position: absolute;
-  font-weight: 500;
-  font-size: 11.2px;
-  top: -11px;
-  right: 0;
-  background-color: #757575;
-  border: 0;
-  cursor: pointer;
-  z-index: 1000;
+.register-form {
+  .floating-label {
+    font-size: 13px;
+  }
 }

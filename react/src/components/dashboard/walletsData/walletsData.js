@@ -1,8 +1,9 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
+import { formatValue } from '../../../util/formatValue';
+import Config from '../../../config';
 import {
-  Config,
   basiliskRefresh,
   basiliskConnection,
   toggleDashboardTxInfoModal,
@@ -321,16 +322,21 @@ class WalletsData extends React.Component {
     }
   }
 
+  // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
     if (this.state.itemsList === 'loading') {
       if (!this.isNativeMode() || this.isFullySynced()) {
         return (
-          <div>{ translate('INDEX.LOADING_HISTORY') }...</div>
+          <tr>
+            <td colSpan="6">{ translate('INDEX.LOADING_HISTORY') }...</td>
+          </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
-        <div>{ translate('INDEX.NO_DATA') }</div>
+        <tr>
+          <td colSpan="6">{ translate('INDEX.NO_DATA') }</td>
+        </tr>
       );
     } else if (this.state.itemsList && this.state.itemsList.length) {
       return TxHistoryListRender.call(this);
@@ -392,6 +398,8 @@ class WalletsData extends React.Component {
             _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
 
+          _amount = formatValue('round', _amount, -6);
+
           items.push(
             AddressItemRender.call(this, address, type, _amount, _coin)
           );
@@ -425,7 +433,11 @@ class WalletsData extends React.Component {
             return _addresses.public[i].amount;
           } else {
             const address = _addresses.public[i].address;
-            return _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+            let _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+
+            _amount = formatValue('round', _amount, -6);
+
+            return _amount;
           }
         }
       }

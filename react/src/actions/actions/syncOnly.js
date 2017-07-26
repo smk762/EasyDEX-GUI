@@ -3,10 +3,8 @@ import {
   SYNC_ONLY_DATA
 } from '../storeType';
 import { translate } from '../../translate/translate';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import Config from '../../config';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState

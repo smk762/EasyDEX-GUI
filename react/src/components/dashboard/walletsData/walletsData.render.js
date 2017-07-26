@@ -6,6 +6,8 @@ import WalletsNotariesList from '../walletsNotariesList/walletsNotariesList';
 import WalletsCacheData from '../walletsCacheData/walletsCacheData';
 import ReactTable from 'react-table';
 import TablePaginationRenderer from './pagination';
+import { formatValue } from '../../../util/formatValue';
+import Config from '../../../config';
 
 // TODO: clean basilisk dropdown menu
 
@@ -58,28 +60,36 @@ export const AddressItemRender = function(address, type, amount, coin) {
 };
 
 export const AddressListRender = function() {
-  return (
-    <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
-      <button
-        type="button"
-        className="btn dropdown-toggle btn-info"
-        title={ `-${translate('KMD_NATIVE.SELECT_ADDRESS')}-` }
-        onClick={ this.openDropMenu }>
-        <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
-        <span className="bs-caret">
-          <span className="caret"></span>
-        </span>
-      </button>
-      <div className="dropdown-menu open">
-        <ul className="dropdown-menu inner">
-          <li className="selected">
-            <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span><span className="glyphicon glyphicon-ok check-mark"></span></a>
-          </li>
-          { this.renderAddressByType('public') }
-        </ul>
+  const isMultiPublicAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.public && this.props.ActiveCoin.addresses.public.length > 1;
+  const isMultiPrivateAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.private && this.props.ActiveCoin.addresses.private.length > 1;
+
+  if (isMultiPublicAddress ||
+      isMultiPrivateAddress) {
+    return (
+      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
+        <button
+          type="button"
+          className="btn dropdown-toggle btn-info"
+          title={ `-${translate('KMD_NATIVE.SELECT_ADDRESS')}-` }
+          onClick={ this.openDropMenu }>
+          <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
+          <span className="bs-caret">
+            <span className="caret"></span>
+          </span>
+        </button>
+        <div className="dropdown-menu open">
+          <ul className="dropdown-menu inner">
+            <li className="selected">
+              <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+            </li>
+            { this.renderAddressByType('public') }
+          </ul>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return null;
+  }
 };
 
 export const TxTypeRender = function(category) {
@@ -146,7 +156,7 @@ export const WalletsDataRender = function() {
       <WalletsNotariesList {...this.props} />
       <WalletsCacheData {...this.props} />
       <div id="edexcoin_dashboardinfo">
-        <div className="col-xs-12 margin-top-20">
+        <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">
             <div>
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
@@ -162,7 +172,7 @@ export const WalletsDataRender = function() {
                       </div>
                       { !this.isNativeMode() ?
                         <div
-                          className={ 'dropdown' + (this.state.basiliskActionsMenu ? ' open' : '') }
+                          className={ 'dropdown basilisk-actions' + (this.state.basiliskActionsMenu ? ' open' : '') }
                           onClick={ this.toggleBasiliskActionsMenu }>
                           <a className="dropdown-toggle btn-xs btn-default">
                             <i className="icon fa-magic margin-right-10"></i> { translate('INDEX.BASILISK_ACTIONS') }

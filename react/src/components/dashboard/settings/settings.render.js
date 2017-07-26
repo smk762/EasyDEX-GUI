@@ -338,7 +338,7 @@ export const SettingsRender = function() {
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 4 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
-                        <p>
+                        <div>
                           <div className="padding-bottom-20">{ this.renderLB('INDEX.ONLY_ACTIVE_WIF_KEYS') }</div>
                           <div className="padding-bottom-20">
                             <i>{ this.renderLB('SETTINGS.EXPORT_KEYS_NOTE') }</i>
@@ -346,7 +346,7 @@ export const SettingsRender = function() {
                           <strong>
                             <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
                           </strong>
-                        </p>
+                        </div>
                         <div className="col-sm-12"></div>
                         <form
                           className="wifkeys-form"
@@ -538,6 +538,10 @@ export const SettingsRender = function() {
                             type="button"
                             className="btn btn-primary waves-effect waves-light"
                             onClick={ this._saveAppConfig }>{ translate('SETTINGS.SAVE_APP_CONFIG') }</button>
+                          <button
+                            type="button"
+                            className="btn btn-primary waves-effect waves-light margin-left-30"
+                            onClick={ this._resetAppConfig }>Reset to default</button>
                         </div>
                       </div>
                     </div>
@@ -570,7 +574,7 @@ export const SettingsRender = function() {
                               name="cliCoin"
                               id="settingsCliOptions"
                               onChange={ this.updateInput }>
-                              <option value="">{ translate('INDEX.CLI_NATIVE_COIN') }</option>
+                              <option>{ translate('INDEX.CLI_NATIVE_COIN') }</option>
                               { this.renderActiveCoinsList('native') }
                             </select>
                             <label

@@ -1,14 +1,15 @@
 import { SYNCING_NATIVE_MODE } from '../storeType';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
-  getDebugLog
+  getDebugLog,
+  toggleCoindDownModal
 } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function getSyncInfoNativeKMD(skipDebug) {
   const coin = 'KMD';
@@ -63,7 +64,8 @@ export function getSyncInfoNativeKMD(skipDebug) {
 function getSyncInfoNativeState(json, coin, skipDebug) {
   if (coin === 'KMD' &&
       json &&
-      json.error) {
+      json.error &&
+      json.error.message.indexOf('Activating best') === -1) {
     return getSyncInfoNativeKMD(skipDebug);
   } else {
     if (json &&
@@ -71,12 +73,12 @@ function getSyncInfoNativeState(json, coin, skipDebug) {
         Config.cli.default) {
       return {
         type: SYNCING_NATIVE_MODE,
-        progress: Config.cli.default ? json.error : json,
+        progress: json.error,
       }
     } else {
       return {
         type: SYNCING_NATIVE_MODE,
-        progress: Config.cli.default ? json.result : json,
+        progress: json.result ? json.result : json,
       }
     }
   }
@@ -156,11 +158,18 @@ export function getSyncInfoNative(coin, skipDebug) {
             'Komodod is down',
             'Critical Error',
             'error',
-            false
+            true
           )
         );
+        dispatch(getDebugLog('komodo', 50));
+        dispatch(toggleCoindDownModal(true));
       } else {
         json = JSON.parse(json);
+      }
+
+      if (json.error &&
+          json.error.message.indexOf('Activating best') === -1) {
+        dispatch(getDebugLog('komodo', 1));
       }
 
       dispatch(logGuiHttp({

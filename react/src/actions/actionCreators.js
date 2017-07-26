@@ -1,7 +1,6 @@
 import 'whatwg-fetch';
 import 'bluebird';
 
-import _config from '../config';
 import { translate } from '../translate/translate';
 import {
   GET_ACTIVE_COINS,
@@ -26,6 +25,7 @@ import {
   DASHBOARD_ACTIVE_COIN_CHANGE,
   ACTIVE_COIN_GET_ADDRESSES,
   DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,
+  DISPLAY_COIND_DOWN_MODAL,
   START_INTERVAL,
   STOP_INTERVAL
 } from './storeType';
@@ -67,14 +67,6 @@ export * from './actions/basiliskTxHistory';
 export * from './actions/iguanaHelpers';
 export * from './actions/cli';
 export * from './actions/update';
-
-export let Config;
-
-try {
-  Config = window.require('electron').remote.getCurrentWindow().appConfig;
-} catch (e) {
-  Config = _config;
-}
 
 export function changeActiveAddress(address) {
   return {
@@ -358,5 +350,12 @@ export function stopInterval(name, intervals) {
   return {
     type: STOP_INTERVAL,
     name,
+  }
+}
+
+export function toggleCoindDownModal(display) {
+  return {
+    type: DISPLAY_COIND_DOWN_MODAL,
+    displayCoindDownModal: display,
   }
 }

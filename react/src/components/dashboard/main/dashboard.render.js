@@ -15,6 +15,7 @@ import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
 import WalletsNative from '../walletsNative/walletsNative';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
+import CoindDownModal from '../coindDownModal/coindDownModal';
 
 const DashboardRender = function() {
   return (
@@ -23,6 +24,7 @@ const DashboardRender = function() {
         className={ this.isSectionActive('wallets') ? 'page-main' : '' }
         id="section-dashboard">
         <Navbar {...this.props} />
+        <CoindDownModal {...this.props} />
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile {...this.props} />
           <WalletsNav {...this.props} />
@@ -37,7 +39,7 @@ const DashboardRender = function() {
         <div className={ this.isSectionActive('edex') ? 'show' : 'hide' }>
           <EDEX {...this.props} />
         </div>
-        <div className={ this.isSectionActive('atomic') ? 'show' : 'hide' }>
+        <div className={ this.isSectionActive('atomic') ? 'show full-height' : 'hide' }>
           <Atomic {...this.props} />
         </div>
         <div className={ this.isSectionActive('jumblr') ? 'show' : 'hide' }>
