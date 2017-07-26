@@ -376,7 +376,16 @@ export function saveAppConfig(_payload) {
       );
     })
     .then(response => response.json())
-    .then(json => dispatch(getAppConfig()))
+    .then(json => {
+      dispatch(getAppConfig());
+      dispatch(
+        triggerToaster(
+          'Settings are saved',
+          translate('TOASTR.SETTINGS_NOTIFICATION'),
+          'success'
+        )
+      );
+    })
   }
 }
 
@@ -407,5 +416,37 @@ export function getAppConfig() {
     })
     .then(response => response.json())
     .then(json => dispatch(getAppConfigState(json)))
+  }
+}
+
+export function resetAppConfig() {
+  return dispatch => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/appconf/reset`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'resetAppConfig',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(getAppConfig());
+      dispatch(
+        triggerToaster(
+          'Settings are reset to default',
+          translate('TOASTR.SETTINGS_NOTIFICATION'),
+          'success'
+        )
+      );
+    })
   }
 }
