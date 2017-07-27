@@ -1,9 +1,13 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
+import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
 
 const LoginRender = function () {
   return (
     <div>
+      <LoginSettingsModal
+        {...this.props}
+        section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
@@ -16,12 +20,34 @@ const LoginRender = function () {
               alt="SuperNET Iguana" />
           </div>
 
-          <div className={ this.state.nativeOnly ? 'hide' : 'vertical-padding-20 horizontal-padding-0' }>
-            <span
-              className="display-sync-only-coins-toggle"
-              onClick={ this.openSyncOnlyModal }>
-              <i className="fa fa-cubes"></i> { translate('LOGIN.DISPLAY_SYNC_ONLY') }
-            </span>
+          <div className="login-settings-dropdown margin-bottom-30">
+            <div>
+              <span
+                className="login-settings-dropdown-trigger"
+                onClick={ this.toggleLoginSettingsDropdown }>
+                <i className="icon fa-cogs"></i>&nbsp;
+                <span className="login-settings-dropdown-label">Settings</span>
+              </span>
+            </div>
+            <div>
+              <ul className={ this.state.displayLoginSettingsDropdown ? 'dropdown-menu show' : 'hide' }>
+                <li>
+                  <a onClick={ () => this.toggleLoginSettingsDropdownSection('settings') }>
+                    <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
+                  </a>
+                </li>
+                <li className={ this.state.nativeOnly ? 'hide' : '' }>
+                  <a onClick={ this.openSyncOnlyModal }>
+                    <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
+                  </a>
+                </li>
+                <li>
+                  <a onClick={ () => this.toggleLoginSettingsDropdownSection('about') }>
+                    <i className="icon fa-users"></i> { translate('INDEX.ABOUT_IGUANA') }
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div className={ this.state.activeLoginSection === 'ieWarning' ? 'show' : 'hide' }>
