@@ -64,7 +64,15 @@ class SendCoin extends React.Component {
     this.toggleSendAPIType = this.toggleSendAPIType.bind(this);
     this._fetchNewUTXOData = this._fetchNewUTXOData.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
     socket.on('messages', msg => this.updateSocketsData(msg));
+  }
+
+  setRecieverFromScan(receiver) {
+    this.setState({
+      sendTo: receiver
+    });
+    document.getElementById('edexcoinSendTo').focus()
   }
 
   componentWillMount() {
@@ -745,7 +753,6 @@ class SendCoin extends React.Component {
 
     return null;
   }
-
   render() {
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.send &&
