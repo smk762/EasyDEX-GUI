@@ -1,12 +1,27 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import { fetchNewCacheData } from '../../../actions/actionCreators';
+import Store from '../../../store';
 
 import WalletsBalanceRender from './walletsBalance.render';
 
 class WalletsBalance extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      currentAddress: null,
+    };
     this.isFullySynced = this.isFullySynced.bind(this);
+    this.refreshBalance = this.refreshBalance.bind(this);
+  }
+
+  componentWillReceiveProps(props) {
+    if (!this.state.currentAddress &&
+        this.props.ActiveCoin.activeAddress) {
+      this.setState(Object.assign({}, this.state, {
+        currentAddress: this.props.ActiveCoin.activeAddress,
+      }));
+    }
   }
 
   isFullySynced() {
@@ -18,6 +33,19 @@ class WalletsBalance extends React.Component {
       return true;
     } else {
       return false;
+    }
+  }
+
+  refreshBalance() {
+    if (this.props.ActiveCoin.mode === 'basilisk') {
+      Store.dispatch(fetchNewCacheData({
+        'pubkey': this.props.Dashboard.activeHandle.pubkey,
+        'allcoins': false,
+        'coin': this.props.ActiveCoin.coin,
+        'calls': 'getbalance',
+        'skip': true,
+        'address': this.state.currentAddress,
+      }));
     }
   }
 
