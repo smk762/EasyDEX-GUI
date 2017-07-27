@@ -146,10 +146,10 @@ class ReceiveCoin extends React.Component {
   }
 
   render() {
-    // TODO nativeActiveSection === 'receive' should be removed when native mode is fully merged
+    // TODO activeSection === 'receive' should be removed when native mode is fully merged
     // into the rest of the components
     if (this.props &&
-       (this.props.receive || (this.isNativeMode() && this.props.nativeActiveSection === 'receive'))) {
+       (this.props.receive || (this.isNativeMode() && this.props.activeSection === 'receive'))) {
       return ReceiveCoinRender.call(this);
     }
 

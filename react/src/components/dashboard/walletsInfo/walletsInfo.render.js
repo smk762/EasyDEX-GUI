@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-const WalletsNativeInfoRender = function() {
+const WalletsInfoRender = function() {
   return (
     <div>
       <div className="col-xlg-6 col-md-4">
@@ -146,4 +146,4 @@ const WalletsNativeInfoRender = function() {
   );
 };
 
-export default WalletsNativeInfoRender;
+export default WalletsInfoRender;
