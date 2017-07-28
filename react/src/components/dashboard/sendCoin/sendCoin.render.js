@@ -139,7 +139,7 @@ export const OASendUIRender = function () {
 export const SendApiTypeSelectorRender = function () {
   return (
     <div className="row">
-      <div className="col-lg-9 margin-bottom-10">
+      <div className="col-lg-8 margin-bottom-10">
         <span className="pointer">
           <label className="switch">
             <input
@@ -156,11 +156,11 @@ export const SendApiTypeSelectorRender = function () {
           </div>
         </span>
       </div>
-      <div className="col-lg-3 text-right">
-          <QRModal
-              mode="scan"
-              setRecieverFromScan={this.setRecieverFromScan}
-          />
+      <div className="col-lg-4 text-right">
+        <QRModal
+          mode="scan"
+          setRecieverFromScan={this.setRecieverFromScan}
+        />
       </div>
     </div>
   );
