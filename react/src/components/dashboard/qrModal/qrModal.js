@@ -23,8 +23,8 @@ class QRModal extends React.Component {
   }
   
   handleScan(data) {
-    if(data !== null) {
-      if(this.props.mode === 'scan') {
+    if (data !== null) {
+      if (this.props.mode === 'scan') {
         this.props.setRecieverFromScan(data)
       }
       this.closeModal();
@@ -37,7 +37,7 @@ class QRModal extends React.Component {
 
   openModal() {
     this.setState({modalIsOpen: true});
-    if(this.props.mode === 'scan') {
+    if (this.props.mode === 'scan') {
       ReactDOM.render(
         <QrReader 
           delay={50} 
@@ -49,13 +49,13 @@ class QRModal extends React.Component {
 
   closeModal() {
     this.setState({modalIsOpen: false});
-    if(this.props.mode === 'scan') {
+    if (this.props.mode === 'scan') {
       ReactDOM.unmountComponentAtNode(document.getElementById('webcam'));
     }
   }
 
   render() {
-    if(this.props.mode === 'scan') {
+    if (this.props.mode === 'scan') {
       return QRModalReaderRender.call(this);
     } else {
       return QRModalRender.call(this);
