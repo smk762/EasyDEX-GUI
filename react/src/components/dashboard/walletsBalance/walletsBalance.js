@@ -1,12 +1,31 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import {
+  fetchNewCacheData,
+  getKMDBalanceTotal,
+  iguanaEdexBalance
+} from '../../../actions/actionCreators';
+import Store from '../../../store';
 
 import WalletsBalanceRender from './walletsBalance.render';
 
 class WalletsBalance extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      currentAddress: null,
+    };
     this.isFullySynced = this.isFullySynced.bind(this);
+    this.refreshBalance = this.refreshBalance.bind(this);
+  }
+
+  componentWillReceiveProps(props) {
+    if (!this.state.currentAddress &&
+        this.props.ActiveCoin.activeAddress) {
+      this.setState(Object.assign({}, this.state, {
+        currentAddress: this.props.ActiveCoin.activeAddress,
+      }));
+    }
   }
 
   isFullySynced() {
@@ -18,6 +37,30 @@ class WalletsBalance extends React.Component {
       return true;
     } else {
       return false;
+    }
+  }
+
+  refreshBalance() {
+    const _mode = this.props.ActiveCoin.mode;
+    const _coin = this.props.ActiveCoin.coin;
+
+    switch(_mode) {
+      case 'basilisk':
+        Store.dispatch(fetchNewCacheData({
+          'pubkey': this.props.Dashboard.activeHandle.pubkey,
+          'allcoins': false,
+          'coin': this.props.ActiveCoin.coin,
+          'calls': 'getbalance',
+          'skip': true,
+          'address': this.state.currentAddress,
+        }));
+        break;
+      case 'native':
+        Store.dispatch(getKMDBalanceTotal(_coin));
+        break;
+      case 'full':
+        Store.dispatch(iguanaEdexBalance(_coin));
+        break;
     }
   }
 

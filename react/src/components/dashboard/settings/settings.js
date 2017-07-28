@@ -62,6 +62,7 @@ class Settings extends React.Component {
       updateProgressPatch: null,
       wifkeysPassphrase: '',
       trimPassphraseTimer: null,
+      disableWalletSpecificUI: null,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -82,7 +83,9 @@ class Settings extends React.Component {
   }
 
   componentDidMount() {
-    Store.dispatch(iguanaActiveHandle());
+    if (!this.props.disableWalletSpecificUI) {
+      Store.dispatch(iguanaActiveHandle());
+    }
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
   }
@@ -95,6 +98,7 @@ class Settings extends React.Component {
         activeTab: this.state.activeTab,
         activeTabHeight: _height,
         tabElId: this.state.tabElId,
+        disableWalletSpecificUI: props.disableWalletSpecificUI,
       }));
     }
   }

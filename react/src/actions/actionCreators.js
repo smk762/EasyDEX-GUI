@@ -25,6 +25,7 @@ import {
   DASHBOARD_ACTIVE_COIN_CHANGE,
   ACTIVE_COIN_GET_ADDRESSES,
   DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,
+  DISPLAY_LOGIN_SETTINGS_MODAL,
   DISPLAY_COIND_DOWN_MODAL,
   START_INTERVAL,
   STOP_INTERVAL
@@ -357,5 +358,12 @@ export function toggleCoindDownModal(display) {
   return {
     type: DISPLAY_COIND_DOWN_MODAL,
     displayCoindDownModal: display,
+  }
+}
+
+export function toggleLoginSettingsModal(display) {
+  return {
+    type: DISPLAY_LOGIN_SETTINGS_MODAL,
+    displayLoginSettingsModal: display,
   }
 }
