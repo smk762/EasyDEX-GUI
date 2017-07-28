@@ -156,7 +156,6 @@ class WalletsData extends React.Component {
         }));
         break;
       case 'native':
-        console.log('refresh');
         Store.dispatch(getNativeTxHistory(_coin));
         break;
       case 'full':

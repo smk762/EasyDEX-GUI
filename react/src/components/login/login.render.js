@@ -26,7 +26,7 @@ const LoginRender = function () {
                 className="login-settings-dropdown-trigger"
                 onClick={ this.toggleLoginSettingsDropdown }>
                 <i className="icon fa-cogs"></i>&nbsp;
-                <span className="login-settings-dropdown-label">Settings</span>
+                <span className="login-settings-dropdown-label">Quick access</span>
               </span>
             </div>
             <div>
