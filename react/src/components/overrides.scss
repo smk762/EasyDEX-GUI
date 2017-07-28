@@ -643,7 +643,8 @@ select{
   background: #f3f4f5;
 }
 
-.manual-balance-refresh {
+.manual-balance-refresh,
+.manual-txhistory-refresh {
   position: absolute;
   right: 4px;
   top: 3px;

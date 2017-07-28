@@ -27,7 +27,7 @@ const WalletsBalanceRender = function() {
           <div className="widget widget-shadow">
             <div className="widget-content">
               <i
-                className="icon fa-refresh manual-balance-refresh"
+                className="icon fa-refresh manual-balance-refresh pointer"
                 onClick={ this.refreshBalance }></i>
               <div className="padding-20 padding-top-10">
                 <div className="clearfix">

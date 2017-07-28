@@ -4,8 +4,6 @@ import About from '../about/about';
 import Settings from '../settings/settings';
 
 export const LoginSettingsModalRender = function() {
-  console.log(this.props);
-
   return (
     <div>
       <div className="modal show login-settings-modal">
