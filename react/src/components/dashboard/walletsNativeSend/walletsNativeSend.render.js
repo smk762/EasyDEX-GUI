@@ -75,7 +75,7 @@ export const WalletsNativeSendRender = function() {
               className="extcoin-send-form"
               method="post"
               autoComplete="off">
-              { this.zAddressCount &&
+              { this.state.renderAddressDropdown &&
                 <div className="row">
                   <div className="col-xlg-12 form-group form-material">
                     <label className="control-label">{ translate('INDEX.SEND_FROM') }</label>
@@ -104,7 +104,7 @@ export const WalletsNativeSendRender = function() {
                   <label
                     className="control-label"
                     htmlFor="kmdWalletAmount">
-                    { this.props.ActiveCoin.coin }
+                    { translate('INDEX.AMOUNT') }
                   </label>
                   <input
                     type="text"
@@ -133,8 +133,8 @@ export const WalletsNativeSendRender = function() {
                 </div>
                 <div className="col-lg-12">
                   <span>
-                    <strong>{ translate('INDEX.TOTAL') }:</strong>
-                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }
+                    <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
+                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }&nbsp;
                     { this.props.ActiveCoin.coin }
                   </span>
                 </div>

@@ -27,12 +27,14 @@ class WalletsNativeSend extends React.Component {
       amount: 0,
       fee: 0.0001,
       addressSelectorOpen: false,
+      renderAddressDropdown: true,
     };
     this.updateInput = this.updateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.openDropMenu = this.openDropMenu.bind(this);
     this.getOAdress = this.getOAdress.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.checkZAddressCount = this.checkZAddressCount.bind(this);
   }
 
   componentWillMount() {
@@ -51,6 +53,10 @@ class WalletsNativeSend extends React.Component {
     );
   }
 
+  componentWillReceiveProps() {
+    this.checkZAddressCount();
+  }
+
   handleClickOutside(e) {
     if (e.srcElement.className !== 'btn dropdown-toggle btn-info' &&
         (e.srcElement.offsetParent && e.srcElement.offsetParent.className !== 'btn dropdown-toggle btn-info') &&
@@ -61,13 +67,14 @@ class WalletsNativeSend extends React.Component {
     }
   }
 
-  zAddressCount() {
-    return this.props.ActiveCoin.addresses &&
-          this.props.ActiveCoin.addresses.private &&
-          this.props.ActiveCoin.addresses.private.length;
-          console.log(this.props.ActiveCoin.addresses &&
-          this.props.ActiveCoin.addresses.private &&
-          this.props.ActiveCoin.addresses.private.length);
+  checkZAddressCount() {
+    if (this.props.ActiveCoin.addresses &&
+        (!this.props.ActiveCoin.addresses.private ||
+        this.props.ActiveCoin.addresses.private.length === 0)) {
+      this.setState({
+        renderAddressDropdown: false,
+      });
+    }
   }
 
   renderAddressByType(type) {
