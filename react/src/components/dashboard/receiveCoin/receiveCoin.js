@@ -123,15 +123,15 @@ class ReceiveCoin extends React.Component {
 
         if (this.isBasiliskMode() &&
             this.hasNoAmount(address)) {
-          address.amount = _cache && _cache[_coin][address.address]
-          && _cache[_coin][address.address].getbalance.data
-          && _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
+          address.amount = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
         }
         if (this.isBasiliskMode() &&
             this.hasNoInterest(address)) {
-          address.interest = _cache && _cache[_coin][address.address]
-          && _cache[_coin][address.address].getbalance.data
-          && _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
+          address.interest = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
         }
 
         items.push(

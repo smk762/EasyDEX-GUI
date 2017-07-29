@@ -9,10 +9,10 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
   return (
     <div className="col-lg-12">
       <hr />
-      { translate('SEND.TOTAL_UTXO_AVAILABLE') }: 
+      { translate('SEND.TOTAL_UTXO_AVAILABLE') }:
       { refreshCacheData ? refreshCacheData.data && refreshCacheData.data.length : translate('SEND.PRESS_UPDATE_BTN') }<br />
       <div className={ !timestamp ? 'hide' : '' }>
-        { translate('SEND.LAST_UPDATED') } @ 
+        { translate('SEND.LAST_UPDATED') } @
         { secondsToString(refreshCacheData ? refreshCacheData.timestamp : 0, true) }&nbsp;|&nbsp;
         { secondsElapsedToString(timestamp || 0) }&nbps;
         { translate('SEND.AGO') }<br />
@@ -38,7 +38,7 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
   );
 };
 
-export const SendCoinResponseRender = function () {
+export const SendCoinResponseRender = function() {
   if (this.props.ActiveCoin.lastSendToResponse) {
     let items = [];
     const _response = this.props.ActiveCoin.lastSendToResponse;
@@ -105,7 +105,7 @@ export const SendCoinResponseRender = function () {
   }
 }
 
-export const OASendUIRender = function () {
+export const OASendUIRender = function() {
   return (
     <div className="row">
       <div className="col-lg-6 form-group form-material">
@@ -134,7 +134,7 @@ export const OASendUIRender = function () {
   );
 };
 
-export const SendApiTypeSelectorRender = function () {
+export const SendApiTypeSelectorRender = function() {
   return (
     <div className="row">
       <div className="col-lg-10 margin-bottom-10">
@@ -158,7 +158,7 @@ export const SendApiTypeSelectorRender = function () {
   );
 };
 
-export const SendCoinRender = function () {
+export const SendCoinRender = function() {
   return (
     <div className="col-sm-12 padding-top-10">
       <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">

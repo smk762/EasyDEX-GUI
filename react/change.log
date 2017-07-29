@@ -13,6 +13,7 @@ UI:
 - reset app setting to default
 - manual balance / transactions list refresh
 - quick access dropdown on login to open settings / about / sync only modals
+- qr code
 
 v0.2.0.21a-beta
 --------------
