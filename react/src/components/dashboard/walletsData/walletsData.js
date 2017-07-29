@@ -64,7 +64,6 @@ class WalletsData extends React.Component {
     this.basiliskRefreshActionOne = this.basiliskRefreshActionOne.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
-    socket.on('messages', msg => this.updateSocketsData(msg));
   }
 
   componentWillMount() {
@@ -73,6 +72,14 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+
+    setTimeout(() => {
+      if (this.props.ActiveCoin.mode === 'basilisk') {
+        socket.on('messages', msg => this.updateSocketsData(msg));
+      } else {
+        socket.removeAllListeners('messages');
+      }
+    }, 100);
   }
 
   componentWillUnmount() {
@@ -81,6 +88,8 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+
+    socket.removeAllListeners('messages');
   }
 
   handleClickOutside(e) {
@@ -576,8 +585,14 @@ class WalletsData extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        !this.props.ActiveCoin.send &&
-        !this.props.ActiveCoin.receive) {
+        (
+          this.props.ActiveCoin.mode !== 'native' &&
+          !this.props.ActiveCoin.send &&
+          !this.props.ActiveCoin.receive
+        ) || (
+          this.props.ActiveCoin.mode === 'native' &&
+          this.props.ActiveCoin.nativeActiveSection === 'default'
+        )) {
       return WalletsDataRender.call(this);
     } else {
       return null;

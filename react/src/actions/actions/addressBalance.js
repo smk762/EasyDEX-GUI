@@ -249,25 +249,27 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
         for (let a = 0; a < result.length; a++) {
           newAddressArray[a] = [];
 
-          for (let b = 0; b < result[a].length; b++) {
-            let filteredArray;
+          if (result[a]) {
+            for (let b = 0; b < result[a].length; b++) {
+              let filteredArray;
 
-            if (mode === 'basilisk') {
-              filteredArray = json.map(res => res.amount);
-            } else {
-              filteredArray = json.filter(res => res.address === result[a][b]).map(res => res.amount);
+              if (mode === 'basilisk') {
+                filteredArray = json.map(res => res.amount);
+              } else {
+                filteredArray = json.filter(res => res.address === result[a][b]).map(res => res.amount);
+              }
+
+              let sum = 0;
+              for (let i = 0; i < filteredArray.length; i++) {
+                sum += filteredArray[i];
+              }
+
+              newAddressArray[a][b] = {
+                address: result[a][b],
+                amount: currentAddress === result[a][b] || mode === 'native' ? sum : 'N/A',
+                type: a === 0 ? 'public': 'private',
+              };
             }
-
-            let sum = 0;
-            for (let i = 0; i < filteredArray.length; i++) {
-              sum += filteredArray[i];
-            }
-
-            newAddressArray[a][b] = {
-              address: result[a][b],
-              amount: currentAddress === result[a][b] || mode === 'native' ? sum : 'N/A',
-              type: a === 0 ? 'public': 'private',
-            };
           }
         }
 

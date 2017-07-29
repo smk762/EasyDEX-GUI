@@ -322,7 +322,6 @@ export function setBasiliskMainAddress(json, coin, mode) {
 }
 
 export function getNativeTxHistoryState(json) {
-  console.log('getNativeTxHistoryState', json.result.length);
   if (json &&
       json.error) {
     json = null;
@@ -331,8 +330,6 @@ export function getNativeTxHistoryState(json) {
   } else if (!json || !json.result.length) {
     json = 'no data';
   }
-
-  console.log('getNativeTxHistoryState', json);
 
   return {
     type: DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,

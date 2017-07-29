@@ -593,7 +593,7 @@ export const SettingsRender = function() {
                               <textarea
                                 type="text"
                                 className="form-control"
-                                name="cliCmd"
+                                name="cliCmdString"
                                 id="cliCmd"
                                 value={ this.state.cliCmdString }
                                 onChange={ this.updateInput }></textarea>
