@@ -20,13 +20,14 @@ export const AddressListRender = function() {
             <a><span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span>
             <span className="glyphicon glyphicon-ok check-mark"></span></a>
           </li>
-          { this.renderAddressByType('public') }
           { this.renderAddressByType('private') }
         </ul>
       </div>
     </div>
   );
 };
+
+// { this.renderAddressByType('public') }
 
 export const OASendUIRender = function() {
   return (
@@ -74,12 +75,14 @@ export const WalletsNativeSendRender = function() {
               className="extcoin-send-form"
               method="post"
               autoComplete="off">
-              <div className="row">
-                <div className="col-xlg-12 form-group form-material">
-                  <label className="control-label">{ translate('INDEX.SEND_FROM') }</label>
-                  { this.renderAddressList() }
+              { this.zAddressCount &&
+                <div className="row">
+                  <div className="col-xlg-12 form-group form-material">
+                    <label className="control-label">{ translate('INDEX.SEND_FROM') }</label>
+                    { this.renderAddressList() }
+                  </div>
                 </div>
-              </div>
+              }
               { this.renderOASendUI() }
               <div className="row">
                 <div className="col-xlg-12 form-group form-material">

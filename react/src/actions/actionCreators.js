@@ -322,14 +322,17 @@ export function setBasiliskMainAddress(json, coin, mode) {
 }
 
 export function getNativeTxHistoryState(json) {
+  console.log('getNativeTxHistoryState', json.result.length);
   if (json &&
       json.error) {
     json = null;
-  } else if (json && json.result) {
+  } else if (json && json.result && json.result.length) {
     json = json.result;
-  } else if (!json.length) {
+  } else if (!json || !json.result.length) {
     json = 'no data';
   }
+
+  console.log('getNativeTxHistoryState', json);
 
   return {
     type: DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,

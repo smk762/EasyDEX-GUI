@@ -61,6 +61,15 @@ class WalletsNativeSend extends React.Component {
     }
   }
 
+  zAddressCount() {
+    return this.props.ActiveCoin.addresses &&
+          this.props.ActiveCoin.addresses.private &&
+          this.props.ActiveCoin.addresses.private.length;
+          console.log(this.props.ActiveCoin.addresses &&
+          this.props.ActiveCoin.addresses.private &&
+          this.props.ActiveCoin.addresses.private.length);
+  }
+
   renderAddressByType(type) {
     if (this.props.ActiveCoin.addresses &&
         this.props.ActiveCoin.addresses[type] &&
