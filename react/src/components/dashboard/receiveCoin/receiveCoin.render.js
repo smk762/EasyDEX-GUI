@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import QRModal from '../qrModal/qrModal';
 
 export const AddressActionsBasiliskModeRender = function(address) {
   return (
@@ -25,6 +26,9 @@ export const AddressActionsBasiliskModeRender = function(address) {
         onClick={ () => this._validateAddressBasilisk(address) }>
           <i className="icon fa-info-circle"></i>
       </span>
+      <QRModal
+        content={address}
+      />
     </td>
   );
 };
@@ -41,6 +45,9 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
         onClick={ () => this._copyCoinAddress(address) }>
           <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
       </button>
+      <QRModal
+        content={address}
+      />
     </td>
   );
 };
@@ -141,3 +148,4 @@ export const ReceiveCoinRender = function() {
     </div>
   );
 };
+
