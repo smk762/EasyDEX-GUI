@@ -249,7 +249,10 @@ export const _lang = {
       'INFO': 'Info',
       'ENTER': 'Enter',
       'ADDR_SM': 'address',
-      'ACTIVATING': 'Activating'
+      'ACTIVATING': 'Activating',
+      'QRCODE': 'Show QR code',
+      'SCAN_QR_CODE': 'Scan QR Code',
+      'SCAN_QRCODE_WEBCAM': 'Scan QR Code with webcam'
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',
