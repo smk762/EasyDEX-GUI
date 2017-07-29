@@ -177,19 +177,19 @@ export const WalletsDataRender = function() {
                             <span className="caret"></span>
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
-                            <li>
+                            <li className="hide">
                               <a onClick={ this.getDexNotariesAction }>
                                 <i className="icon fa-sitemap"></i> { translate('INDEX.GET_NOTARY_NODES_LIST') }
                               </a>
                             </li>
-                            <li>
+                            <li className="hide">
                               <a onClick={ this.basiliskConnectionAction }>
                                 <i className="icon wb-refresh"></i> { translate('INDEX.REFRESH_BASILISK_CONNECTIONS') }
                               </a>
                             </li>
                             <li className={ !this.state.useCache ? 'hide' : '' }>
                               <a onClick={ this.basiliskRefreshActionOne }>
-                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') }
+                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') }&nbsp;
                                 ({ translate('INDEX.ACTIVE_ADDRESS') })
                               </a>
                             </li>
@@ -209,7 +209,7 @@ export const WalletsDataRender = function() {
                                 <i className="icon fa-refresh"></i> Restart Basilisk Instance (unsafe!)
                               </a>
                             </li>
-                            <li className={ !this.state.useCache ? 'hide' : '' }>
+                            <li className="hide">
                               <a onClick={ this._toggleViewCacheModal }>
                                 <i className="icon fa-list-alt"></i> { translate('INDEX.VIEW_CACHE_DATA') }
                               </a>

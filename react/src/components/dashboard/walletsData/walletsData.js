@@ -485,7 +485,9 @@ class WalletsData extends React.Component {
             _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
 
-          _amount = formatValue('round', _amount, -6);
+          if (_amount !== 'N/A') {
+            _amount = formatValue('round', _amount, -6);
+          }
 
           items.push(
             <li key={address}>

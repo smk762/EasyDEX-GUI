@@ -16,8 +16,9 @@ export function sendNativeTx(coin, _payload) {
   let payload;
   let _apiMethod;
 
-  if (_payload.addressType === 'public' && // transparent
-      _payload.sendTo.length !== 95) {
+  // iguana core
+  if ((_payload.addressType === 'public' && // transparent
+      _payload.sendTo.length !== 95) || !_payload.sendFrom) {
     _apiMethod = 'sendtoaddress';
     ajaxDataToHex = `["${_payload.sendTo}", ${Number(_payload.amount) - Number(_payload.fee)}]`;
   } else { // private
@@ -61,13 +62,13 @@ export function sendNativeTx(coin, _payload) {
         body: JSON.stringify(payload),
       };
 
-      if (Config.cli.default) {
+      if (Config.cli.default) { // rpc
         payload = {
           mode: null,
           chain: coin,
           cmd: payload.function,
           params:
-            _payload.addressType === 'public' && _payload.sendTo.length !== 95 ?
+            (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
             [
               _payload.sendTo,
               _payload.amount
@@ -123,7 +124,7 @@ export function sendNativeTx(coin, _payload) {
 
         if (json.indexOf('"code":') > -1) {
           const _message = json.substring(
-            `${json.indexOf('"message":"')}11`, 
+            `${json.indexOf('"message":"')}11`,
             json.indexOf('"},"id":"jl777"')
           );
 
