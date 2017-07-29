@@ -13,7 +13,7 @@ class QRModal extends React.Component {
     super(props);
     this.state = {
       modalIsOpen: false,
-      error: ''
+      error: null,
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -21,7 +21,7 @@ class QRModal extends React.Component {
     this.handleError = this.handleError.bind(this);
     document.body.addEventListener('click', this.closeModal);
   }
-  
+
   handleScan(data) {
     if (data !== null) {
       if (this.props.mode === 'scan') {
@@ -32,23 +32,35 @@ class QRModal extends React.Component {
   }
 
   handleError(err) {
-    this.setState({error: err});
+    this.setState({
+      error: err,
+    });
   }
 
   openModal() {
-    this.setState({modalIsOpen: true});
+    this.setState({
+      modalIsOpen: true
+    });
+
     if (this.props.mode === 'scan') {
       ReactDOM.render(
-        <QrReader 
-          delay={50} 
-          style={{ height: 281, width: 500, transform: 'scaleX(-1)' }} 
-          onError={this.handleError} 
-          onScan={this.handleScan} />, document.getElementById('webcam'));
+        <QrReader
+          delay={50}
+          style={{
+            height: 281,
+            width: 500,
+            transform: 'scaleX(-1)'
+          }}
+          onError={ this.handleError }
+          onScan={ this.handleScan } />, document.getElementById('webcam'));
     }
   }
 
   closeModal() {
-    this.setState({modalIsOpen: false});
+    this.setState({
+      modalIsOpen: false,
+    });
+
     if (this.props.mode === 'scan') {
       ReactDOM.unmountComponentAtNode(document.getElementById('webcam'));
     }

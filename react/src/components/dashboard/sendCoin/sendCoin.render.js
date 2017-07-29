@@ -11,10 +11,10 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
   return (
     <div className="col-lg-12">
       <hr />
-      { translate('SEND.TOTAL_UTXO_AVAILABLE') }: 
+      { translate('SEND.TOTAL_UTXO_AVAILABLE') }:
       { refreshCacheData ? refreshCacheData.data && refreshCacheData.data.length : translate('SEND.PRESS_UPDATE_BTN') }<br />
       <div className={ !timestamp ? 'hide' : '' }>
-        { translate('SEND.LAST_UPDATED') } @ 
+        { translate('SEND.LAST_UPDATED') } @
         { secondsToString(refreshCacheData ? refreshCacheData.timestamp : 0, true) }&nbsp;|&nbsp;
         { secondsElapsedToString(timestamp || 0) }&nbps;
         { translate('SEND.AGO') }<br />
@@ -156,12 +156,13 @@ export const SendApiTypeSelectorRender = function () {
           </div>
         </span>
       </div>
-      <div className="col-lg-4 text-right">
-        <QRModal
-          mode="scan"
-          setRecieverFromScan={this.setRecieverFromScan}
-        />
-      </div>
+      { this.stateisCameraFeatureDetected &&
+        <div className="col-lg-4 text-right">
+          <QRModal
+            mode="scan"
+            setRecieverFromScan={this.setRecieverFromScan} />
+        </div>
+      }
     </div>
   );
 };
