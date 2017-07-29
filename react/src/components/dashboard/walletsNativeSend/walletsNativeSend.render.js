@@ -100,7 +100,7 @@ export const WalletsNativeSendRender = function() {
                     autoComplete="off"
                     required />
                 </div>
-                <div className="col-lg-6 form-group form-material">
+                <div className="col-lg-12 form-group form-material">
                   <label
                     className="control-label"
                     htmlFor="kmdWalletAmount">
@@ -115,7 +115,7 @@ export const WalletsNativeSendRender = function() {
                     placeholder="0.000"
                     autoComplete="off" />
                 </div>
-                <div className="col-lg-6 form-group form-material">
+                <div className="col-lg-6 form-group form-material hide">
                   <label
                     className="control-label"
                     htmlFor="kmdWalletFee">
@@ -131,7 +131,7 @@ export const WalletsNativeSendRender = function() {
                     value={ this.state.fee }
                     autoComplete="off" />
                 </div>
-                <div className="col-lg-12">
+                <div className="col-lg-12 hide">
                   <span>
                     <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
                     { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }&nbsp;
@@ -143,7 +143,7 @@ export const WalletsNativeSendRender = function() {
                     type="button"
                     className="btn btn-primary waves-effect waves-light pull-right"
                     onClick={ this.handleSubmit }
-                    disabled={ !this.state.sendFrom || !this.state.sendTo || !this.state.amount }>
+                    disabled={ (!this.state.sendFrom && this.state.renderAddressDropdown) || !this.state.sendTo || !this.state.amount }>
                     { translate('INDEX.SEND') } { this.state.amount } { this.props.ActiveCoin.coin }
                   </button>
                 </div>
@@ -153,48 +153,50 @@ export const WalletsNativeSendRender = function() {
         </div>
       </div>
 
-      <div className="col-xs-12">
-        <div className="row">
-          <div className="panel nav-tabs-horizontal">
-            <div>
-              <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
-                <div className="panel">
-                  <header className="panel-heading">
-                    <h3 className="panel-title">
-                      { translate('INDEX.OPERATIONS_STATUSES') }
-                    </h3>
-                  </header>
-                  <div className="panel-body">
-                    <table
-                      className="table table-hover dataTable table-striped"
-                      width="100%">
-                      <thead>
-                        <tr>
-                          <th>{ translate('INDEX.STATUS') }</th>
-                          <th>ID</th>
-                          <th>{ translate('INDEX.TIME') }</th>
-                          <th>{ translate('INDEX.RESULT') }</th>
-                        </tr>
-                        </thead>
-                      <tbody>
-                        { this.renderOPIDList() }
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th>{ translate('INDEX.STATUS') }</th>
-                          <th>ID</th>
-                          <th>{ translate('INDEX.TIME') }</th>
-                          <th>{ translate('INDEX.RESULT') }</th>
-                        </tr>
-                      </tfoot>
-                    </table>
+      { this.state.renderAddressDropdown &&
+        <div className="col-xs-12">
+          <div className="row">
+            <div className="panel nav-tabs-horizontal">
+              <div>
+                <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
+                  <div className="panel">
+                    <header className="panel-heading">
+                      <h3 className="panel-title">
+                        { translate('INDEX.OPERATIONS_STATUSES') }
+                      </h3>
+                    </header>
+                    <div className="panel-body">
+                      <table
+                        className="table table-hover dataTable table-striped"
+                        width="100%">
+                        <thead>
+                          <tr>
+                            <th>{ translate('INDEX.STATUS') }</th>
+                            <th>ID</th>
+                            <th>{ translate('INDEX.TIME') }</th>
+                            <th>{ translate('INDEX.RESULT') }</th>
+                          </tr>
+                          </thead>
+                        <tbody>
+                          { this.renderOPIDList() }
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th>{ translate('INDEX.STATUS') }</th>
+                            <th>ID</th>
+                            <th>{ translate('INDEX.TIME') }</th>
+                            <th>{ translate('INDEX.RESULT') }</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   );
 };

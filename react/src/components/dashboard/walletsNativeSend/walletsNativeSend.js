@@ -25,7 +25,7 @@ class WalletsNativeSend extends React.Component {
       sendTo: '',
       sendToOA: null,
       amount: 0,
-      fee: 0.0001,
+      fee: 0,
       addressSelectorOpen: false,
       renderAddressDropdown: true,
     };
