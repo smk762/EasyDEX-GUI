@@ -174,6 +174,9 @@ export const WalletsDataRender = function() {
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                 <div className="panel">
                   <header className="panel-heading z-index-10">
+                  <i
+                    className="icon fa-refresh manual-txhistory-refresh pointer"
+                    onClick={ this.refreshTxHistory }></i>
                     <div className={ 'panel-actions' + (this.props.ActiveCoin.mode === 'basilisk' ? '' : ' hide') }>
                       <div className={ 'margin-bottom-3 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
                         <div

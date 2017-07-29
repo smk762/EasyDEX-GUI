@@ -250,6 +250,9 @@ export const _lang = {
       'ENTER': 'Enter',
       'ADDR_SM': 'address',
       'ACTIVATING': 'Activating',
+      'QRCODE': 'Show QR code',
+      'SCAN_QR_CODE': 'Scan QR Code',
+      'SCAN_QRCODE_WEBCAM': 'Scan QR Code with webcam',
       'NEXT_PAGE': 'Next Page',
       'PREVIOUS_PAGE': 'Previous Page'
     },

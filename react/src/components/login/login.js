@@ -8,7 +8,8 @@ import {
   toggleSyncOnlyModal,
   getSyncOnlyForks,
   createNewWallet,
-  triggerToaster
+  triggerToaster,
+  toggleLoginSettingsModal
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -39,6 +40,8 @@ class Login extends React.Component {
       isCustomSeedWeak: false,
       nativeOnly: Config.iguanaLessMode,
       trimPassphraseTimer: null,
+      displayLoginSettingsDropdown: false,
+      displayLoginSettingsDropdownSection: null,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -51,10 +54,20 @@ class Login extends React.Component {
     this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
+    this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
   }
 
   // the setInterval handler for 'activeCoins'
   _iguanaActiveCoins = null;
+
+  toggleLoginSettingsDropdownSection(sectionName) {
+    Store.dispatch(toggleLoginSettingsModal(true));
+    
+    this.setState({
+      displayLoginSettingsDropdown: false,
+      displayLoginSettingsDropdownSection: sectionName,
+    });
+  }
 
   isCustomWalletSeed() {
     return this.state.customWalletSeed;
@@ -95,6 +108,9 @@ class Login extends React.Component {
     );
 
     Store.dispatch(toggleSyncOnlyModal(true));
+    this.setState({
+      displayLoginSettingsDropdown: false,
+    });
   }
 
   componentDidMount() {
@@ -114,6 +130,12 @@ class Login extends React.Component {
       randomSeed: PassPhraseGenerator.generatePassPhrase(bits),
       bitsOption: bits,
       isSeedBlank: false,
+    }));
+  }
+
+  toggleLoginSettingsDropdown() {
+    this.setState(Object.assign({}, this.state, {
+      displayLoginSettingsDropdown: !this.state.displayLoginSettingsDropdown,
     }));
   }
 

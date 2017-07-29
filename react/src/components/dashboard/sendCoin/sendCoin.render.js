@@ -5,14 +5,16 @@ import {
   secondsToString
 } from '../../../util/time';
 
+import QRModal from '../qrModal/qrModal';
+
 export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, waitUntilCallIsFinished, timestamp) {
   return (
     <div className="col-lg-12">
       <hr />
-      { translate('SEND.TOTAL_UTXO_AVAILABLE') }: 
+      { translate('SEND.TOTAL_UTXO_AVAILABLE') }:
       { refreshCacheData ? refreshCacheData.data && refreshCacheData.data.length : translate('SEND.PRESS_UPDATE_BTN') }<br />
       <div className={ !timestamp ? 'hide' : '' }>
-        { translate('SEND.LAST_UPDATED') } @ 
+        { translate('SEND.LAST_UPDATED') } @
         { secondsToString(refreshCacheData ? refreshCacheData.timestamp : 0, true) }&nbsp;|&nbsp;
         { secondsElapsedToString(timestamp || 0) }&nbps;
         { translate('SEND.AGO') }<br />
@@ -137,7 +139,7 @@ export const OASendUIRender = function () {
 export const SendApiTypeSelectorRender = function () {
   return (
     <div className="row">
-      <div className="col-lg-10 margin-bottom-10">
+      <div className="col-lg-8 margin-bottom-10">
         <span className="pointer">
           <label className="switch">
             <input
@@ -154,6 +156,13 @@ export const SendApiTypeSelectorRender = function () {
           </div>
         </span>
       </div>
+      { this.stateisCameraFeatureDetected &&
+        <div className="col-lg-4 text-right">
+          <QRModal
+            mode="scan"
+            setRecieverFromScan={this.setRecieverFromScan} />
+        </div>
+      }
     </div>
   );
 };

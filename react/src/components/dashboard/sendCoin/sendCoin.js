@@ -55,6 +55,7 @@ class SendCoin extends React.Component {
       currentStackLength: 0,
       totalStackLength: 0,
       utxoMethodInProgress: false,
+      isCameraFeatureDetected: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.handleBasiliskSend = this.handleBasiliskSend.bind(this);
@@ -64,7 +65,34 @@ class SendCoin extends React.Component {
     this.toggleSendAPIType = this.toggleSendAPIType.bind(this);
     this._fetchNewUTXOData = this._fetchNewUTXOData.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
+    this.detectCamera = this.detectCamera.bind(this);
     socket.on('messages', msg => this.updateSocketsData(msg));
+  }
+
+  // test device camera capabilities
+  detectCamera() {
+    const _getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+    _getUserMedia(
+      { 'video': true },
+      function() {
+        this.setState({
+          isCameraFeatureDetected: true,
+        });
+      },
+      function() {
+        console.warn('this device doesn\'t have camera!');
+      }
+    );
+  }
+
+  setRecieverFromScan(receiver) {
+    this.setState({
+      sendTo: receiver
+    });
+
+    document.getElementById('edexcoinSendTo').focus();
   }
 
   componentWillMount() {
@@ -73,6 +101,8 @@ class SendCoin extends React.Component {
       this.handleClickOutside,
       false
     );
+
+    this.detectCamera();
   }
 
   componentWillUnmount() {
@@ -173,7 +203,7 @@ class SendCoin extends React.Component {
         this,
         refreshCacheData,
         isReadyToUpdate,
-        waitUntilCallIsFinished,  
+        waitUntilCallIsFinished,
         timestamp
       );
     }
@@ -745,7 +775,6 @@ class SendCoin extends React.Component {
 
     return null;
   }
-
   render() {
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.send &&

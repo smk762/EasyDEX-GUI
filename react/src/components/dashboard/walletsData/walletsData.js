@@ -17,7 +17,9 @@ import {
   getDexNotaries,
   deleteCacheFile,
   fetchNewCacheData,
-  fetchUtxoCache
+  fetchUtxoCache,
+  getNativeTxHistory,
+  getFullTransactionsList
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -64,6 +66,7 @@ class WalletsData extends React.Component {
     this.restartBasiliskInstance = this.restartBasiliskInstance.bind(this);
     this.basiliskRefreshActionOne = this.basiliskRefreshActionOne.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.refreshTxHistory = this.refreshTxHistory.bind(this);
     socket.on('messages', msg => this.updateSocketsData(msg));
   }
 
@@ -210,6 +213,30 @@ class WalletsData extends React.Component {
         data.message.shepherd.method === 'cache-one' &&
         data.message.shepherd.status === 'done') {
       Store.dispatch(basiliskRefresh(false));
+    }
+  }
+
+  refreshTxHistory() {
+    const _mode = this.props.ActiveCoin.mode;
+    const _coin = this.props.ActiveCoin.coin;
+
+    switch(_mode) {
+      case 'basilisk':
+        Store.dispatch(fetchNewCacheData({
+          'pubkey': this.props.Dashboard.activeHandle.pubkey,
+          'allcoins': false,
+          'coin': _coin,
+          'calls': 'listtransactions',
+          'skip': true,
+          'address': this.state.currentAddress,
+        }));
+        break;
+      case 'native':
+        Store.dispatch(getNativeTxHistory(_coin));
+        break;
+      case 'full':
+        Store.dispatch(getFullTransactionsList(_coin));
+        break;
     }
   }
 
