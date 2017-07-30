@@ -697,6 +697,8 @@ class SendCoin extends React.Component {
         );
       }
     } else if (key === 'sendrawtransaction') {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
       if (_lastSendToResponse[key] === 'success') {
         return (
           <span className="label label-success">true</span>
@@ -707,6 +709,8 @@ class SendCoin extends React.Component {
         );
       }
     } else if (key === 'txid' || key === 'sent') {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
       return (
         <span>{ _lastSendToResponse[key] }</span>
       );
