@@ -8,6 +8,8 @@ import {
 import QRModal from '../qrModal/qrModal';
 
 export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, waitUntilCallIsFinished, timestamp) {
+  const _progress = 100 - this.state.currentStackLength * 100 / this.state.totalStackLength;
+
   return (
     <div className="col-lg-12">
       <hr />
@@ -25,7 +27,7 @@ export const UTXOCacheInfoRender = function(refreshCacheData, isReadyToUpdate, w
       <div className={ 'full-width margin-bottom-10 margin-top-10 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
         <div
           className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-          style={{ width: 100 - `${(this.state.currentStackLength * 100 / this.state.totalStackLength)}%` }}>
+          style={{ width:  `${_progress}%` }}>
           { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
         </div>
       </div>
@@ -59,50 +61,54 @@ export const SendCoinResponseRender = function() {
     return items;
   } else {
     return (
-      <div className="padding-20 text-align-center">
-        <div className="vertical-padding-10 horizontal-padding-0">
-          { translate('SEND.PROCESSING_TRANSACTION') }...<br />
-          { translate('SEND.NOTE_IT_WILL_TAKE') }.
-        </div>
-        <div className="loader-wrapper active">
-          <div className="loader-layer loader-blue">
-            <div className="loader-circle-left">
-              <div className="circle"></div>
+      <tr className="hover--none">
+        <td colSpan="2">
+          <div className="padding-20 text-align-center">
+            <div className="vertical-padding-10 horizontal-padding-0">
+              { translate('SEND.PROCESSING_TRANSACTION') }...<br />
+              { translate('SEND.NOTE_IT_WILL_TAKE') }.
             </div>
-            <div className="loader-circle-gap"></div>
-            <div className="loader-circle-right">
-              <div className="circle"></div>
+            <div className="loader-wrapper active">
+              <div className="loader-layer loader-blue">
+                <div className="loader-circle-left">
+                  <div className="circle"></div>
+                </div>
+                <div className="loader-circle-gap"></div>
+                <div className="loader-circle-right">
+                  <div className="circle"></div>
+                </div>
+              </div>
+              <div className="loader-layer loader-red">
+                <div className="loader-circle-left">
+                  <div className="circle"></div>
+                </div>
+                <div className="loader-circle-gap"></div>
+                <div className="loader-circle-right">
+                  <div className="circle"></div>
+                </div>
+              </div>
+              <div className="loader-layer loader-green">
+                <div className="loader-circle-left">
+                  <div className="circle"></div>
+                </div>
+                <div className="loader-circle-gap"></div>
+                <div className="loader-circle-right">
+                  <div className="circle"></div>
+                </div>
+              </div>
+              <div className="loader-layer loader-yellow">
+                <div className="loader-circle-left">
+                  <div className="circle"></div>
+                </div>
+                <div className="loader-circle-gap"></div>
+                <div className="loader-circle-right">
+                  <div className="circle"></div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="loader-layer loader-red">
-            <div className="loader-circle-left">
-              <div className="circle"></div>
-            </div>
-            <div className="loader-circle-gap"></div>
-            <div className="loader-circle-right">
-              <div className="circle"></div>
-            </div>
-          </div>
-          <div className="loader-layer loader-green">
-            <div className="loader-circle-left">
-              <div className="circle"></div>
-            </div>
-            <div className="loader-circle-gap"></div>
-            <div className="loader-circle-right">
-              <div className="circle"></div>
-            </div>
-          </div>
-          <div className="loader-layer loader-yellow">
-            <div className="loader-circle-left">
-              <div className="circle"></div>
-            </div>
-            <div className="loader-circle-gap"></div>
-            <div className="loader-circle-right">
-              <div className="circle"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </td>
+      </tr>
     );
   }
 }
@@ -144,7 +150,8 @@ export const SendApiTypeSelectorRender = function() {
           <label className="switch">
             <input
               type="checkbox"
-              checked={ this.state.sendApiType } />
+              checked={ this.state.sendApiType }
+              readOnly />
             <div
               className="slider"
               onClick={ this.toggleSendAPIType }></div>
@@ -160,7 +167,7 @@ export const SendApiTypeSelectorRender = function() {
         <div className="col-lg-4 text-right">
           <QRModal
             mode="scan"
-            setRecieverFromScan={this.setRecieverFromScan} />
+            setRecieverFromScan={ this.setRecieverFromScan } />
         </div>
       }
     </div>
@@ -247,9 +254,8 @@ export const SendCoinRender = function() {
                     className="form-control"
                     id="edexcoinAmount"
                     name="amount"
-                    placeholder="0.000"
+                    placeholder="0.001"
                     autoComplete="off"
-                    defaultValue={ this.state.amount }
                     value={ this.state.amount }
                     onChange={ this.updateInput } />
                 </div>
@@ -264,16 +270,15 @@ export const SendCoinRender = function() {
                     className="form-control"
                     id="edexcoinFee"
                     name="fee"
-                    defaultValue={ this.state.fee }
                     value={ this.state.fee }
-                    placeholder="0.000"
+                    placeholder="0.001"
                     autoComplete="off"
                     onChange={ this.updateInput } />
                 </div>
                 <div className="col-lg-12">
                   <strong>
                     { translate('INDEX.TOTAL') }&nbsp;
-                    ({ translate('INDEX.AMOUNT_SM') } - txfee):
+                    ({ translate('INDEX.AMOUNT_SM') } - fee):
                   </strong>&nbsp;
                   { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
                 </div>
@@ -282,7 +287,8 @@ export const SendCoinRender = function() {
                     <label className="switch">
                       <input
                         type="checkbox"
-                        checked={ this.state.sendSig } />
+                        checked={ this.state.sendSig }
+                        readOnly />
                       <div
                         className="slider"
                         onClick={ this.toggleSendSig }></div>

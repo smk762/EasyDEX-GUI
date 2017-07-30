@@ -395,7 +395,7 @@ class SendCoin extends React.Component {
         amount: 0,
         fee: 0.0001,
         sendSig: false,
-        sendApiType: false,
+        sendApiType: true,
         addressSelectorOpen: false,
         currentStackLength: 0,
         totalStackLength: 0,

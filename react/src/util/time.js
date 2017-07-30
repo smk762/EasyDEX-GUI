@@ -37,9 +37,9 @@ export function secondsElapsedToString(timestamp) { // in seconds
   const hours = Math.floor(timestamp / 3600);
   const minutes = Math.floor((timestamp - (hours * 3600)) / 60);
   const seconds = timestamp - (hours * 3600) - (minutes * 60);
-  const returnTimeVal = (hours > 0 ? hours + ' hour(s) ' : '') +
-                        (minutes > 0 ? minutes + ' minute(s) ' : '') +
-                        (seconds > 0 ? seconds + ' second(s) ' : '');
+  const returnTimeVal = (hours > 0 ? `${hours} hour(s) ` : '') +
+                        (minutes > 0 ? `${minutes} minute(s) ` : '') +
+                        (seconds > 0 ? `${seconds} second(s) ` : '');
 
   return returnTimeVal;
 }

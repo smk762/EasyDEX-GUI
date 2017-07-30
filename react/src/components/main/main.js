@@ -30,7 +30,7 @@ class Main extends React.Component {
     } catch (e) {}
 
     if (appVersion) {
-      document.title = `${appVersion.name} (v${appVersion.version})`;
+      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
     }
 
     Store.dispatch(iguanaActiveHandle());

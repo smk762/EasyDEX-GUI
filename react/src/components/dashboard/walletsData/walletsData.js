@@ -74,7 +74,7 @@ class WalletsData extends React.Component {
     );
 
     setTimeout(() => {
-      if (this.props.ActiveCoin.mode === 'basilisk') {
+      if (this.props.ActiveCoin.mode === 'basilisk' || (Object.keys(this.props.Main.coins.basilisk).length && (Object.keys(this.props.Main.coins.native).length || Object.keys(this.props.Main.coins.full).length)) || Object.keys(this.props.Main.coins.basilisk).length) {
         socket.on('messages', msg => this.updateSocketsData(msg));
       } else {
         socket.removeAllListeners('messages');
@@ -124,28 +124,30 @@ class WalletsData extends React.Component {
   }
 
   updateSocketsData(data) {
-    if (data &&
-        data.message &&
-        data.message.shepherd.iguanaAPI &&
-        data.message.shepherd.iguanaAPI.totalStackLength) {
-      this.setState(Object.assign({}, this.state, {
-        totalStackLength: data.message.shepherd.iguanaAPI.totalStackLength,
-      }));
-    }
-    if (data &&
-        data.message &&
-        data.message.shepherd.iguanaAPI &&
-        data.message.shepherd.iguanaAPI.currentStackLength) {
-      this.setState(Object.assign({}, this.state, {
-        currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
-      }));
-    }
-    if (data &&
-        data.message &&
-        data.message.shepherd.method &&
-        data.message.shepherd.method === 'cache-one' &&
-        data.message.shepherd.status === 'done') {
-      Store.dispatch(basiliskRefresh(false));
+    if (this.props.ActiveCoin.mode === 'basilisk') {
+      if (data &&
+          data.message &&
+          data.message.shepherd.iguanaAPI &&
+          data.message.shepherd.iguanaAPI.totalStackLength) {
+        this.setState(Object.assign({}, this.state, {
+          totalStackLength: data.message.shepherd.iguanaAPI.totalStackLength,
+        }));
+      }
+      if (data &&
+          data.message &&
+          data.message.shepherd.iguanaAPI &&
+          data.message.shepherd.iguanaAPI.currentStackLength) {
+        this.setState(Object.assign({}, this.state, {
+          currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
+        }));
+      }
+      if (data &&
+          data.message &&
+          data.message.shepherd.method &&
+          data.message.shepherd.method === 'cache-one' &&
+          data.message.shepherd.status === 'done') {
+        Store.dispatch(basiliskRefresh(false));
+      }
     }
   }
 
