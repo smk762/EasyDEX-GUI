@@ -87,6 +87,11 @@ class Settings extends React.Component {
 
   componentWillUnmount() {
     socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
+
+    if (!this.state.disableWalletSpecificUI) {
+      document.documentElement.style.height = '100%';
+      document.body.style.height = '100%';
+    }
   }
 
   componentDidMount() {
@@ -262,6 +267,17 @@ class Settings extends React.Component {
         activeTabHeight: _height,
         tabElId: elemId,
       }));
+
+      // body size hack
+      if (!this.state.disableWalletSpecificUI) {
+        document.documentElement.style.height = '100%';
+        document.body.style.height = '100%';
+
+        setTimeout(() => {
+          document.documentElement.style.height = _height <= 200 ? '100%' : 'inherit';
+          document.body.style.height = _height <= 200 ? '100%' : 'inherit';
+        }, 100);
+      }
     }, 100);
   }
 
