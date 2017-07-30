@@ -79,7 +79,14 @@ class Settings extends React.Component {
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
+  }
+
+  componentWillMount() {
     socket.on('patch', msg => this.updateSocketsData(msg));
+  }
+
+  componentWillUnmount() {
+    socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
   }
 
   componentDidMount() {
