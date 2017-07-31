@@ -112,7 +112,7 @@ class ReceiveCoin extends React.Component {
 
   toggleVisibleAddress() {
     this.setState(Object.assign({}, this.state, {
-      hideZeroAdresses: !this.state.hideZeroAdresses,
+      hideZeroAddresses: !this.state.hideZeroAddresses,
     }));
   }
   
@@ -142,7 +142,7 @@ class ReceiveCoin extends React.Component {
           && _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
         }
 
-        if (this.state.hideZeroAdresses) {
+        if (this.state.hideZeroAddresses) {
           if (!this.hasNoAmount) {
             items.push(
               AddressItemRender.call(this, address, type)

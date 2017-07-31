@@ -110,7 +110,7 @@ export const ReceiveCoinRender = function() {
                     <label className="switch">
                       <input
                         type="checkbox"
-                        checked={ this.state.hideZeroAdresses } />
+                        checked={ this.state.hideZeroAddresses } />
                       <div
                         className="slider"
                         onClick={ this.toggleVisibleAddress }></div>
