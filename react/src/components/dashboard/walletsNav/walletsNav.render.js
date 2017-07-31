@@ -41,7 +41,7 @@ export const WalletsNavWithWalletRender = function() {
             { this.props.ActiveCoin.mode === 'native' &&
               <button
                 type="button"
-                className="btn btn-success waves-effect waves-light"
+                className="btn btn-info waves-effect waves-light"
                 onClick={ this.toggleNativeWalletInfo }>
                 <i className="icon fa-info"></i>
               </button>
@@ -60,7 +60,7 @@ export const WalletsNavWithWalletRender = function() {
             </button>
             <button
               type="button"
-              className="btn btn-info waves-effect waves-light"
+              className="btn btn-success waves-effect waves-light"
               onClick={ () => this.toggleReceiveCoinForm(!this.props.ActiveCoin.receive) }>
               <i className="icon fa-inbox"></i> { translate('INDEX.RECEIVE') }
             </button>

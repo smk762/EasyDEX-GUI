@@ -163,13 +163,11 @@ export const SendApiTypeSelectorRender = function() {
           </div>
         </span>
       </div>
-      { this.state.isCameraFeatureDetected &&
-        <div className="col-lg-4 text-right">
-          <QRModal
-            mode="scan"
-            setRecieverFromScan={ this.setRecieverFromScan } />
-        </div>
-      }
+      <div className="col-lg-4 text-right">
+        <QRModal
+          mode="scan"
+          setRecieverFromScan={ this.setRecieverFromScan } />
+      </div>
     </div>
   );
 };
