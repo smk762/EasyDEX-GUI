@@ -74,6 +74,10 @@ class WalletsNativeSend extends React.Component {
       this.setState({
         renderAddressDropdown: false,
       });
+    } else {
+      this.setState({
+        renderAddressDropdown: true,
+      });
     }
   }
 

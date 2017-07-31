@@ -7,7 +7,7 @@ export const AddressListRender = function() {
       <button
         type="button"
         className="btn dropdown-toggle btn-info"
-        title="- { translate('SEND.SELECT_T_OR_Z_ADDR') } -"
+        title="Select private address"
         onClick={ this.openDropMenu }>
         <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>
         <span className="bs-caret">
@@ -17,7 +17,7 @@ export const AddressListRender = function() {
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
           <li className="selected">
-            <a><span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span>
+            <a><span className="text">Select private address</span>
             <span className="glyphicon glyphicon-ok check-mark"></span></a>
           </li>
           { this.renderAddressByType('private') }
