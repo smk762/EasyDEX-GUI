@@ -248,21 +248,55 @@ class WalletsData extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (!this.state.currentAddress &&
-        this.props.ActiveCoin.activeAddress) {
-      this.setState(Object.assign({}, this.state, {
-        currentAddress: this.props.ActiveCoin.activeAddress,
-      }));
-    }
+    let historyToSplit;
 
-    if (this.props.ActiveCoin.txhistory &&
+    if (this.props &&
+            this.props.ActiveCoin &&
+            this.props.ActiveCoin.coin) {
+      if (!this.state.currentAddress &&
+          this.props.ActiveCoin.activeAddress) {
+        this.setState(Object.assign({}, this.state, {
+          currentAddress: this.props.ActiveCoin.activeAddress,
+        }));
+      }
+
+      if (this.props.ActiveCoin.txhistory &&
+          this.props.ActiveCoin.txhistory !== 'loading' &&
+          this.props.ActiveCoin.txhistory !== 'no data' &&
+          this.props.ActiveCoin.txhistory.length) {
+        if (!this.state.itemsList ||
+            (this.state.itemsList && !this.state.itemsList.length) ||
+            (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
+          historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
+          historyToSplit = historyToSplit.slice(
+            (this.state.activePage - 1) * this.state.itemsPerPage,
+            this.state.activePage * this.state.itemsPerPage
+          );
+
+          this.setState(Object.assign({}, this.state, {
+            itemsList: historyToSplit,
+          }));
+        }
+      }
+
+      if (!historyToSplit &&
+          this.props.ActiveCoin.txhistory &&
+          this.props.ActiveCoin.txhistory === 'no data') {
+        this.setState(Object.assign({}, this.state, {
+          itemsList: 'no data',
+        }));
+      } else if (!historyToSplit && this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
+        this.setState(Object.assign({}, this.state, {
+          itemsList: 'loading',
+        }));
+      } else if ( // dirty first txhistory load workaround
+        !historyToSplit &&
+        this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
-        this.props.ActiveCoin.txhistory.length) {
-      if (!this.state.itemsList ||
-          (this.state.itemsList && !this.state.itemsList.length) ||
-          (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
-        let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
+        this.props.ActiveCoin.txhistory.length
+        ) {
+        historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
         historyToSplit = historyToSplit.slice(
           (this.state.activePage - 1) * this.state.itemsPerPage,
           this.state.activePage * this.state.itemsPerPage
@@ -272,17 +306,6 @@ class WalletsData extends React.Component {
           itemsList: historyToSplit,
         }));
       }
-    }
-
-    if (this.props.ActiveCoin.txhistory &&
-        this.props.ActiveCoin.txhistory === 'no data') {
-      this.setState(Object.assign({}, this.state, {
-        itemsList: 'no data',
-      }));
-    } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
-      this.setState(Object.assign({}, this.state, {
-        itemsList: 'loading',
-      }));
     }
   }
 
@@ -395,15 +418,15 @@ class WalletsData extends React.Component {
     if (this.state.itemsList === 'loading') {
       if (!this.isNativeMode() || this.isFullySynced()) {
         return (
-          <tr>
-            <td colSpan="6">{ translate('INDEX.LOADING_HISTORY') }...</td>
+          <tr className="hover--none">
+            <td colSpan="7">{ translate('INDEX.LOADING_HISTORY') }...</td>
           </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
-        <tr>
-          <td colSpan="6">{ translate('INDEX.NO_DATA') }</td>
+        <tr className="hover--none">
+          <td colSpan="7">{ translate('INDEX.NO_DATA') }</td>
         </tr>
       );
     } else {
@@ -484,7 +507,7 @@ class WalletsData extends React.Component {
           let _amount = address.amount;
 
           if (this.props.ActiveCoin.mode === 'basilisk') {
-            _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+            _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
 
           if (_amount !== 'N/A') {
