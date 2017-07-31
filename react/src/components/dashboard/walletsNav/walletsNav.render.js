@@ -28,8 +28,8 @@ export const WalletsNavWithWalletRender = function() {
         id="header-dashboard"
         style={{ marginBottom: this.props.ActiveCoin.mode === 'basilisk' ? '30px' : '0' }}>
         <ol className={ this.state.nativeOnly ? 'hide' : 'breadcrumb' }>
-          <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong> 
-          { this.props && this.props.Dashboard && this.props.Dashboard.activeHandle ? this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] : '-' } 
+          <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+          { this.props && this.props.Dashboard && this.props.Dashboard.activeHandle ? this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] : '-' }
           <button
             className="btn btn-default btn-xs clipboard-edexaddr"
             onClick={ () => this.copyMyAddress(this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) }>
@@ -38,11 +38,19 @@ export const WalletsNavWithWalletRender = function() {
         </ol>
         <div className="page-header-actions">
           <div id="kmd_header_button">
+            { this.props.ActiveCoin.mode === 'native' &&
+              <button
+                type="button"
+                className="btn btn-success waves-effect waves-light"
+                onClick={ this.toggleNativeWalletInfo }>
+                <i className="icon fa-info"></i>
+              </button>
+            }
             <button
               type="button"
               className="btn btn-dark waves-effect waves-light"
-              onClick={ this.toggleSendReceiveCoinForms }>
-              <i className="icon md-view-dashboard"></i> { this.props.ActiveCoin.mode !== 'native' ? translate('INDEX.DASHBOARD') : translate('INDEX.WALLET_INFO') }
+              onClick={ this.props.ActiveCoin.mode !== 'native' ? this.toggleSendReceiveCoinForms : this.toggleNativeWalletTransactions }>
+              <i className="icon md-view-dashboard"></i> { translate('INDEX.TRANSACTIONS') }
             </button>
             <button
               type="button"

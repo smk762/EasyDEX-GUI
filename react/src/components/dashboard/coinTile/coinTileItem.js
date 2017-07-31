@@ -110,16 +110,13 @@ class CoinTileItem extends React.Component {
     if (coin !== this.props.ActiveCoin.coin) {
       if (!this.props.ActiveCoin.coins[this.props.ActiveCoin.coin]) {
         coinInitDataFetchInterval = setInterval(() => {
-          console.warn('dispatch', 'coinInitDataFetchInterval');
           this.dispatchCoinActions(coin, mode);
 
-          if (mode === 'native' && this.props.Dashboard.progress) {
-            console.warn('clearInterval', 'native');
+          if ((mode === 'native' || mode === 'full') && this.props.Dashboard.progress) {
             clearInterval(coinInitDataFetchInterval);
           }
 
           if (mode === 'basilisk' && (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory !== 'loading') && this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] && JSON.parse(sessionStorage.getItem('IguanaActiveAccount'))[this.props.ActiveCoin.coin]) {
-            console.warn('clearInterval', 'basilisk');
             clearInterval(coinInitDataFetchInterval);
           }
         }, 500);
@@ -141,8 +138,6 @@ class CoinTileItem extends React.Component {
 
       Store.dispatch(dashboardChangeActiveCoin(coin, mode));
 
-      console.warn('first load');
-
       if (mode === 'full') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
@@ -160,31 +155,11 @@ class CoinTileItem extends React.Component {
           this.dispatchCoinActions(coin, mode);
         }, coin === 'KMD' ? IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE : IGUNA_ACTIVE_HANDLE_TIMEOUT);
 
-        /*if (!this.props.Dashboard.progress) {
-          Store.dispatch(getSyncInfoNative(coin, true));
-          Store.dispatch(getKMDBalanceTotal(coin));
-          Store.dispatch(getNativeTxHistory(coin));
-          Store.dispatch(getKMDAddressesNative(coin, mode));
-          Store.dispatch(getKMDOPID(null, coin));
-
-          setTimeout(() => {
-            Store.dispatch(getSyncInfoNative(coin, true));
-            Store.dispatch(getKMDBalanceTotal(coin));
-            Store.dispatch(getNativeTxHistory(coin));
-            Store.dispatch(getKMDAddressesNative(coin, mode));
-            Store.dispatch(getKMDOPID(null, coin));
-          }, 100);
-        }*/
-
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       }
       if (mode === 'basilisk') {
         const _activeHandle = this.props.Dashboard.activeHandle;
         const _basiliskMainAddress = _activeHandle[coin] || JSON.parse(sessionStorage.getItem('IguanaActiveAccount'))[coin];
-
-        /*setTimeout(() => {
-          this.dispatchCoinActions(coin, mode);
-        }, 100);*/
 
         Store.dispatch(changeActiveAddress(_basiliskMainAddress));
 

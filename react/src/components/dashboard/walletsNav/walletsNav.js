@@ -21,6 +21,8 @@ class WalletsNav extends React.Component {
       nativeOnly: Config.iguanaLessMode,
     };
     this.toggleSendReceiveCoinForms = this.toggleSendReceiveCoinForms.bind(this);
+    this.toggleNativeWalletInfo = this.toggleNativeWalletInfo.bind(this);
+    this.toggleNativeWalletTransactions = this.toggleNativeWalletTransactions.bind(this);
   }
 
   componentWillMount() {
@@ -41,6 +43,14 @@ class WalletsNav extends React.Component {
     } else {
       Store.dispatch(toggleSendReceiveCoinForms());
     }
+  }
+
+  toggleNativeWalletInfo() {
+    Store.dispatch(toggleDashboardActiveSection('settings'));
+  }
+
+  toggleNativeWalletTransactions() {
+    Store.dispatch(toggleDashboardActiveSection('default'));
   }
 
   toggleSendCoinForm(display) {
