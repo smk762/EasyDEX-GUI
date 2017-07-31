@@ -101,6 +101,21 @@ export const ReceiveCoinRender = function() {
                   <h4 className="panel-title">{ translate('INDEX.RECEIVING_ADDRESS') }</h4>
                 </header>
                 <div className="panel-body">
+                  <div className="text-right">
+                    <div
+                      className="toggle-label margin-right-15 pointer"
+                      onClick={ this.toggleVisibleAddress }>
+                      { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
+                    </div>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={ this.state.hideZeroAdresses } />
+                      <div
+                        className="slider"
+                        onClick={ this.toggleVisibleAddress }></div>
+                    </label>
+                  </div>
                   <table className="table table-hover dataTable table-striped">
                     <thead>
                     { this.isNativeMode() ?

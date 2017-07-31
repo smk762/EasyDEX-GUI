@@ -22,9 +22,11 @@ class ReceiveCoin extends React.Component {
 
     this.state = {
       openDropMenu: false,
+      hideZeroAdresses: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.toggleVisibleAddress = this.toggleVisibleAddress.bind(this);
   }
 
   componentWillMount() {
@@ -108,6 +110,12 @@ class ReceiveCoin extends React.Component {
     Store.dispatch(getNewKMDAddresses(this.props.coin, type));
   }
 
+  toggleVisibleAddress() {
+    this.setState(Object.assign({}, this.state, {
+      hideZeroAdresses: !this.state.hideZeroAdresses,
+    }));
+  }
+  
   renderAddressList(type) {
     const _addresses = this.props.addresses;
     const _cache = this.props.cache;
@@ -134,9 +142,17 @@ class ReceiveCoin extends React.Component {
           && _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
         }
 
-        items.push(
-          AddressItemRender.call(this, address, type)
-        );
+        if (this.state.hideZeroAdresses) {
+          if (!this.hasNoAmount) {
+            items.push(
+              AddressItemRender.call(this, address, type)
+            );
+          }
+        } else {
+          items.push(
+            AddressItemRender.call(this, address, type)
+          );
+        }
       }
 
       return items;
