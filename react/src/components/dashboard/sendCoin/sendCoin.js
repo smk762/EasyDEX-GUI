@@ -1,9 +1,7 @@
 import React from 'react';
 import Config from '../../../config';
 import { translate } from '../../../translate/translate';
-import {
-  checkTimestamp
-} from '../../../util/time';
+import { checkTimestamp } from '../../../util/time';
 import {
   edexGetTxIDList,
   edexRemoveTXID
@@ -302,7 +300,7 @@ class SendCoin extends React.Component {
       );
     } else {
       return (
-        <span>- { translate('SEND.SELECT_T_OR_Z_ADDR') } -</span>
+        <span>{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
       );
     }
   }
@@ -326,7 +324,7 @@ class SendCoin extends React.Component {
           <ul className="dropdown-menu inner">
             <li className="selected">
               <a>
-                <span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span>
+                <span className="text">{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
                 <span className="glyphicon glyphicon-ok check-mark"></span>
               </a>
             </li>
@@ -758,6 +756,7 @@ class SendCoin extends React.Component {
 
     return null;
   }
+
   render() {
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.send &&

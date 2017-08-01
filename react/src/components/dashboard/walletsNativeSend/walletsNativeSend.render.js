@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import QRModal from '../qrModal/qrModal';
 
 export const AddressListRender = function() {
   return (
@@ -69,6 +70,11 @@ export const WalletsNativeSendRender = function() {
             <h3 className="panel-title">
               { translate('INDEX.SEND') } { this.props.ActiveCoin.coin }
             </h3>
+          </div>
+          <div className="qr-modal-send-block">
+            <QRModal
+              mode="scan"
+              setRecieverFromScan={ this.setRecieverFromScan } />
           </div>
           <div className="panel-body container-fluid">
             <form

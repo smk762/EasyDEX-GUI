@@ -15,6 +15,7 @@ UI:
 - quick access dropdown on login to open settings / about / sync only modals
 - qr code generator / scan
 - basilisk send form reset fix
+- added native wallet info button
 
 v0.2.0.21a-beta
 --------------

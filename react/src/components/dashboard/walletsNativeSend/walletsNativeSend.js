@@ -35,6 +35,7 @@ class WalletsNativeSend extends React.Component {
     this.getOAdress = this.getOAdress.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.checkZAddressCount = this.checkZAddressCount.bind(this);
+    this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
   }
 
   componentWillMount() {
@@ -55,6 +56,14 @@ class WalletsNativeSend extends React.Component {
 
   componentWillReceiveProps() {
     this.checkZAddressCount();
+  }
+
+  setRecieverFromScan(receiver) {
+    this.setState({
+      sendTo: receiver
+    });
+
+    document.getElementById('kmdWalletSendTo').focus();
   }
 
   handleClickOutside(e) {

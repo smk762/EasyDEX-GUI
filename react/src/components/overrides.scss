@@ -658,6 +658,12 @@ select{
   }
 }
 
+.qr-modal-send-block {
+  position: absolute;
+  top: 15px;
+  right: 30px;
+}
+
 @media only screen and (min-width : 1201px) {
   .wallet-widgets {
     .flex {
