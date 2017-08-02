@@ -17,9 +17,15 @@ export const AddressListRender = function() {
       </button>
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
-          <li className="selected">
-            <a><span className="text">Select private address</span>
-            <span className="glyphicon glyphicon-ok check-mark"></span></a>
+          <li
+            className="selected"
+            onClick={ () => this.updateAddressSelection(null, 'public', null) }>
+            <a>
+              <span className="text">Transparent funds</span>
+              <span
+                className="glyphicon glyphicon-ok check-mark pull-right"
+                style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
+            </a>
           </li>
           { this.renderAddressByType('private') }
         </ul>
@@ -116,6 +122,7 @@ export const WalletsNativeSendRender = function() {
                     type="text"
                     className="form-control"
                     name="amount"
+                    value={ this.state.amount !== 0 ? this.state.amount : '' }
                     onChange={ this.updateInput }
                     id="kmdWalletAmount"
                     placeholder="0.000"
@@ -134,7 +141,7 @@ export const WalletsNativeSendRender = function() {
                     onChange={ this.updateInput }
                     id="kmdWalletFee"
                     placeholder="0.000"
-                    value={ this.state.fee }
+                    value={ this.state.fee !== 0 ? this.state.fee : '' }
                     autoComplete="off" />
                 </div>
                 <div className="col-lg-12 hide">
@@ -149,7 +156,7 @@ export const WalletsNativeSendRender = function() {
                     type="button"
                     className="btn btn-primary waves-effect waves-light pull-right"
                     onClick={ this.handleSubmit }
-                    disabled={ (!this.state.sendFrom && this.state.renderAddressDropdown) || !this.state.sendTo || !this.state.amount }>
+                    disabled={ !this.state.sendTo || !this.state.amount }>
                     { translate('INDEX.SEND') } { this.state.amount } { this.props.ActiveCoin.coin }
                   </button>
                 </div>
@@ -159,7 +166,7 @@ export const WalletsNativeSendRender = function() {
         </div>
       </div>
 
-      { this.state.renderAddressDropdown &&
+      { this.renderOPIDListCheck() &&
         <div className="col-xs-12">
           <div className="row">
             <div className="panel nav-tabs-horizontal">
@@ -182,7 +189,7 @@ export const WalletsNativeSendRender = function() {
                             <th>{ translate('INDEX.TIME') }</th>
                             <th>{ translate('INDEX.RESULT') }</th>
                           </tr>
-                          </thead>
+                        </thead>
                         <tbody>
                           { this.renderOPIDList() }
                         </tbody>

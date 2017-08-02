@@ -112,8 +112,7 @@ class WalletsProgress extends React.Component {
 
     if (this.props.Dashboard.progress &&
         this.props.Dashboard.progress.blocks) {
-      const syncPercentage = (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100
-        / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2) + '%').replace('NaN', 0);
+      const syncPercentage = (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2) + '%').replace('NaN', 0);
       return SyncPercentageRender.call(this, syncPercentage);
     }
 

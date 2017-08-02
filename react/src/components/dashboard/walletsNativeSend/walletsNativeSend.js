@@ -36,6 +36,7 @@ class WalletsNativeSend extends React.Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.checkZAddressCount = this.checkZAddressCount.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
+    this.renderOPIDListCheck = this.renderOPIDListCheck.bind(this);
   }
 
   componentWillMount() {
@@ -91,23 +92,43 @@ class WalletsNativeSend extends React.Component {
   }
 
   renderAddressByType(type) {
+    let _items = [];
+
     if (this.props.ActiveCoin.addresses &&
         this.props.ActiveCoin.addresses[type] &&
         this.props.ActiveCoin.addresses[type].length) {
-      return this.props.ActiveCoin.addresses[type].map((address) =>
-        <li key={ address.address } className={ address.amount <= 0 ? 'hide' : '' }>
-          <a onClick={ () => this.updateAddressSelection(address.address, type, address.amount) }>
-            <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-            <span className="text">
-              [ { address.amount } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
-              { type === 'public' ? address.address : address.address.substring(0, 34) + '...' }
-            </span>
-            <span className="glyphicon glyphicon-ok check-mark"></span>
-          </a>
-        </li>
-      );
+      this.props.ActiveCoin.addresses[type].map((address) => {
+        if (address.amount > 0) {
+          _items.push(
+            <li
+              className="selected"
+              key={ address.address }>
+              <a onClick={ () => this.updateAddressSelection(address.address, type, address.amount) }>
+                <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+                <span className="text">
+                  [ { address.amount } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
+                  { type === 'public' ? address.address : address.address.substring(0, 34) + '...' }
+                </span>
+                <span
+                  className="glyphicon glyphicon-ok check-mark pull-right"
+                  style={{ display: this.state.sendFrom === address.address ? 'inline-block' : 'none' }}></span>
+              </a>
+            </li>
+          );
+        }
+      });
+
+      return _items;
     } else {
       return null;
+    }
+  }
+
+  renderOPIDListCheck() {
+    if (this.state.renderAddressDropdown &&
+        this.props.ActiveCoin.opids &&
+        this.props.ActiveCoin.opids.length) {
+      return true;
     }
   }
 
@@ -118,13 +139,13 @@ class WalletsNativeSend extends React.Component {
           <i className={ 'icon fa-eye' + this.state.addressType === 'public' ? '' : '-slash' }></i>
           <span className="text">
             [ { this.state.sendFromAmount } { this.props.ActiveCoin.coin } ]  
-            { this.state.sendFrom }
+            { this.state.addressType === 'public' ? this.state.sendFrom : this.state.sendFrom.substring(0, 34) + '...' }
           </span>
         </span>
       );
     } else {
       return (
-        <span>- { translate('SEND.SELECT_T_OR_Z_ADDR') } -</span>
+        <span>Transparent funds</span>
       );
     }
   }
@@ -247,14 +268,29 @@ class WalletsNativeSend extends React.Component {
         this.state
       )
     );
-    setTimeout(() => {
-      Store.dispatch(
-        getKMDOPID(
-          null,
-          this.props.ActiveCoin.coin
-        )
-      );
-    }, 1000);
+
+    if (this.state.addressType === 'private') {
+      setTimeout(() => {
+        Store.dispatch(
+          getKMDOPID(
+            null,
+            this.props.ActiveCoin.coin
+          )
+        );
+      }, 1000);
+    }
+
+    this.setState({
+      addressType: null,
+      sendFrom: null,
+      sendFromAmount: 0,
+      sendTo: '',
+      sendToOA: null,
+      amount: 0,
+      fee: 0,
+      addressSelectorOpen: false,
+      renderAddressDropdown: true,
+    });
   }
 
   getOAdress() {
