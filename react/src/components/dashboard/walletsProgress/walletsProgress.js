@@ -57,11 +57,11 @@ class WalletsProgress extends React.Component {
         if (_debugLogMulti[i].indexOf('progress=') > -1) {
           _debugLogLine = _debugLogMulti[i];
         }
-      }        
+      }
     } else {
       _debugLogLine = this.props.Settings.debugLog;
     }
-    
+
     if (_debugLogLine) {
       const temp = _debugLogLine.split(' ');
       let currentBestChain;
@@ -90,7 +90,7 @@ class WalletsProgress extends React.Component {
         this.props.Dashboard.progress.code === -28 &&
         this.props.Settings.debugLog) {
       const _progress = this.parseActivatingBestChainProgress();
-  
+
       if (_progress &&
           _progress[1]) {
         return SyncPercentageRender.call(this, _progress[1].toFixed(2));
@@ -189,12 +189,16 @@ class WalletsProgress extends React.Component {
         } else {
           if (currentProgress) {
             return (
-              `: ${currentProgress}% (${ translate('INDEX.RESCAN_SM') })`
+              `: ${currentProgress.toFixed(2)}% (${ translate('INDEX.RESCAN_SM') })`
             );
           } else {
             return null;
           }
         }
+      } else if (this.props.Settings.debugLog.indexOf('Rescanning last') > -1) {
+        return (
+          `: ({ translate('INDEX.RESCANNING_LAST_BLOCKS') })`
+        );
       } else if (
           this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
           this.props.Settings.debugLog.indexOf('Reindexing block file') > -1
