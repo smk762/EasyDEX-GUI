@@ -37,14 +37,8 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? this.renderBalance('main') : null }>
-                    { this.isNativeMode() ?
-                      this.props.ActiveCoin.balance.transparent ? this.props.ActiveCoin.balance.transparent : '-'
-                      :
-                      <span>
-                        { Config.roundValues ? formatValue('round', this.renderBalance('main'), -6) : this.renderBalance('main') } { this.props.ActiveCoin.coin }
-                      </span>
-                    }
+                    title={ Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') }>
+                    { Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') } { this.props.ActiveCoin.coin }
                   </span>
                 </div>
               </div>
@@ -63,8 +57,8 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? this.props.ActiveCoin.balance.private : null }>
-                    { this.props.ActiveCoin.balance.private ? (Config.roundValues ? formatValue('round', this.props.ActiveCoin.balance.private, -6) : this.props.ActiveCoin.balance.private) : '-' }
+                    title={ Config.roundValues ? formatValue('round', this.renderBalance('private'), -6) : this.renderBalance('private') }>
+                    { Config.roundValues ? formatValue('round', this.renderBalance('private'), -6) : this.renderBalance('private') }
                   </span>
                 </div>
               </div>
@@ -84,15 +78,8 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? this.renderBalance('interest') : null }>
-                    { this.isNativeMode() ?
-                      this.props.Dashboard.progress
-                      && this.props.Dashboard.progress.interest ? this.props.Dashboard.progress.interest : '-'
-                      :
-                      <span>
-                        { Config.roundValues ? formatValue('round', this.renderBalance('interest'), -6) : this.renderBalance('interest') } { this.props.ActiveCoin.coin }
-                      </span>
-                    }
+                    title={ Config.roundValues ? formatValue('round', this.renderBalance('interest'), -6) : this.renderBalance('interest') }>
+                    { Config.roundValues ? formatValue('round', this.renderBalance('interest'), -6) : this.renderBalance('interest') }
                   </span>
                 </div>
               </div>
@@ -112,14 +99,8 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? this.renderBalance('total') : null }>
-                    { this.isNativeMode() ?
-                      this.props.ActiveCoin.balance.total ? this.props.ActiveCoin.balance.total : '-'
-                      :
-                      <span>
-                        { Config.roundValues ? formatValue('round', this.renderBalance('total'), -6) : this.renderBalance('total') } { this.props.ActiveCoin.coin }
-                      </span>
-                    }
+                    title={ Config.roundValues ? formatValue('round', this.renderBalance('total'), -6) : this.renderBalance('total') }>
+                    { Config.roundValues ? formatValue('round', this.renderBalance('total'), -6) : this.renderBalance('total') }
                   </span>
                 </div>
               </div>
