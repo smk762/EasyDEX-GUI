@@ -38,7 +38,7 @@ const WalletsBalanceRender = function() {
                   <span
                     className="pull-right padding-top-10 font-size-22"
                     title={ Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') }>
-                    { Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') } { this.props.ActiveCoin.coin }
+                    { Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') }
                   </span>
                 </div>
               </div>

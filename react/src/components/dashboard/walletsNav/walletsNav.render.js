@@ -52,12 +52,14 @@ export const WalletsNavWithWalletRender = function() {
               onClick={ this.props.ActiveCoin.mode !== 'native' ? this.toggleSendReceiveCoinForms : this.toggleNativeWalletTransactions }>
               <i className="icon md-view-dashboard"></i> { translate('INDEX.TRANSACTIONS') }
             </button>
-            <button
-              type="button"
-              className="btn btn-primary waves-effect waves-light"
-              onClick={ () => this.toggleSendCoinForm(!this.props.ActiveCoin.send) }>
-              <i className="icon fa-send"></i> { translate('INDEX.SEND') }
-            </button>
+            { this.checkTotalBalance() > 0 &&
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light"
+                onClick={ () => this.toggleSendCoinForm(!this.props.ActiveCoin.send) }>
+                <i className="icon fa-send"></i> { translate('INDEX.SEND') }
+              </button>
+            }
             <button
               type="button"
               className="btn btn-success waves-effect waves-light"
