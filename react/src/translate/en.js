@@ -253,6 +253,7 @@ export const _lang = {
       'QRCODE': 'Show QR code',
       'SCAN_QR_CODE': 'Scan QR Code',
       'SCAN_QRCODE_WEBCAM': 'Scan QR Code with webcam',
+      'TOGGLE_ZERO_ADDRESSES': 'Toggle empty addresses',
       'NEXT_PAGE': 'Next Page',
       'PREVIOUS_PAGE': 'Previous Page'
     },
