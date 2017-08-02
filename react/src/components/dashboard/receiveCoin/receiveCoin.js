@@ -27,6 +27,7 @@ class ReceiveCoin extends React.Component {
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.toggleVisibleAddress = this.toggleVisibleAddress.bind(this);
+    this.checkTotalBalance = this.checkTotalBalance.bind(this);
   }
 
   componentWillMount() {
@@ -115,7 +116,42 @@ class ReceiveCoin extends React.Component {
       hideZeroAddresses: !this.state.hideZeroAddresses,
     }));
   }
-  
+
+  checkTotalBalance() {
+    let _balance = '0';
+    const _mode = this.props.mode;
+
+    if (_mode === 'full') {
+      _balance = this.props.balance || 0;
+    } else if (_mode === 'basilisk') {
+      if (this.props.cache) {
+        const _cache = this.props.cache;
+        const _coin = this.props.coin;
+        const _address = this.props.activeAddress;
+
+        if (_address &&
+            _cache[_coin] &&
+            _cache[_coin][_address] &&
+            _cache[_coin][_address].getbalance &&
+            _cache[_coin][_address].getbalance.data &&
+            (_cache[_coin][_address].getbalance.data.balance ||
+             _cache[_coin][_address].getbalance.data.interest)) {
+          const _regBalance = _cache[_coin][_address].getbalance.data.balance ? _cache[_coin][_address].getbalance.data.balance : 0;
+          const _regInterest = _cache[_coin][_address].getbalance.data.interest ? _cache[_coin][_address].getbalance.data.interest : 0;
+
+          _balance = _regBalance + _regInterest;
+        }
+      }
+    } else if (_mode === 'native') {
+      if (this.props.balance &&
+          this.props.balance.total) {
+        _balance = this.props.balance.total;
+      }
+    }
+
+    return _balance;
+  }
+
   renderAddressList(type) {
     const _addresses = this.props.addresses;
     const _cache = this.props.cache;

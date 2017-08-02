@@ -16,7 +16,7 @@ const WalletsNativeRender = function() {
           style={{ 'backgroundImage': `url("assets/images/bg/${this.defaultBG()}_transparent_header_bg.png")` }}>
           <ol className="breadcrumb">
             <li className="header-easydex-section">
-              <img src={ `assets/images/native/${this.defaultBG()}_header_title_logo.png` } /> 
+              <img src={ `assets/images/native/${this.defaultBG()}_header_title_logo.png` } />
               <span
                 className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' ? 'hide' : '')}` }
                 style={{ marginLeft: '20px' }}>
