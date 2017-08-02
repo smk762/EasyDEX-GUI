@@ -166,3 +166,13 @@
   padding-left: 5px;
   content: "\f107";
 }
+
+.rt-tr.-padRow {
+  display: none;
+}
+
+.ReactTable .-pagination,
+.ReactTable .rt-thead.-header,
+.ReactTable .rt-tfoot{
+  box-shadow: none;
+}

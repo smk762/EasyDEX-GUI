@@ -51,7 +51,9 @@ class WalletsData extends React.Component {
       currentStackLength: 0,
       totalStackLength: 0,
       useCache: true,
-      itemsListColumns: this.generateItemsListColumns()
+      itemsListColumns: this.generateItemsListColumns(),
+      pageSize: 20,
+      showPagination: false
     };
 
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
@@ -317,7 +319,8 @@ class WalletsData extends React.Component {
           (this.state.itemsList && !this.state.itemsList.length) ||
           (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
         this.setState(Object.assign({}, this.state, {
-          itemsList: sortByDate(this.props.ActiveCoin.txhistory),
+          itemsList: sortByDate(this.props.ActiveCoin.txhistory.slice(0, 30)),
+          showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.pageSize
         }));
       }
     }
@@ -360,17 +363,24 @@ class WalletsData extends React.Component {
           </tr>
         );
       }
-    } else if (this.state.itemsList === 'no data') {
+    } else if (this.state.itemsList === 'no data' || this.state.itemsList.length == 0) {
       return (
         <tr>
           <td colSpan="6">{ translate('INDEX.NO_DATA') }</td>
         </tr>
       );
-    } else if (this.state.itemsList && this.state.itemsList.length) {
+    } else if (this.state.itemsList) {
       return TxHistoryListRender.call(this);
     }
 
     return null;
+  }
+
+  onPageSizeChange(pageSize, pageIndex) {
+    this.setState(Object.assign({}, this.state, {
+      pageSize: pageSize,
+      showPagination: this.state.itemsList && this.state.itemsList.length >= pageSize
+    }))
   }
 
   updateAddressSelection(address) {

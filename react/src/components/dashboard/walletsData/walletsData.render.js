@@ -150,12 +150,14 @@ export const TxHistoryListRender = function() {
       data={this.state.itemsList}
       columns={this.state.itemsListColumns}
       sortable={true}
-      filterable={true}
       className='-striped -highlight'
       PaginationComponent={TablePaginationRenderer}
-      showPaginationTop={true}
       nextText={translate('INDEX.NEXT_PAGE')}
       previousText={translate('INDEX.PREVIOUS_PAGE')}
+      showPaginationBottom={this.state.showPagination}
+      showPaginationTop={this.state.showPagination}
+      pageSize={this.pageSize}
+      onPageSizeChange={(pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex)}
     />
   );
 };
