@@ -253,7 +253,8 @@ export const _lang = {
       'ACTIVATING': 'Activating',
       'QRCODE': 'Show QR code',
       'SCAN_QR_CODE': 'Scan QR Code',
-      'SCAN_QRCODE_WEBCAM': 'Scan QR Code with webcam'
+      'SCAN_QRCODE_WEBCAM': 'Scan QR Code with webcam',
+      'TOGGLE_ZERO_ADDRESSES': 'Toggle empty addresses'
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',
