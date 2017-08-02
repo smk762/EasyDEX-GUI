@@ -76,8 +76,9 @@ export const ReceiveCoinRender = function() {
                 <header className="panel-heading">
                   {this.isNativeMode() &&
                     <div className="panel-actions">
-                      <div className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
-                           onClick={ this.openDropMenu }>
+                      <div
+                        className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
+                        onClick={ this.openDropMenu }>
                         <a className="dropdown-toggle white btn btn-warning">
                           <i className="icon md-arrows margin-right-10"></i> { translate('INDEX.GET_NEW_ADDRESS') }
                           <span className="caret"></span>
@@ -101,6 +102,23 @@ export const ReceiveCoinRender = function() {
                   <h4 className="panel-title">{ translate('INDEX.RECEIVING_ADDRESS') }</h4>
                 </header>
                 <div className="panel-body">
+                  { this.checkTotalBalance() === 0 &&
+                    <div className="text-left padding-top-10 padding-bottom-10">
+                      <div
+                        className="toggle-label margin-right-15 pointer"
+                        onClick={ this.toggleVisibleAddress }>
+                        { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
+                      </div>
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={ this.state.hideZeroAddresses } />
+                        <div
+                          className="slider"
+                          onClick={ this.toggleVisibleAddress }></div>
+                      </label>
+                    </div>
+                  }
                   <table className="table table-hover dataTable table-striped">
                     <thead>
                     { this.isNativeMode() ?
