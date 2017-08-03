@@ -249,15 +249,16 @@ class WalletsData extends React.Component {
 
   componentWillReceiveProps(props) {
     let historyToSplit;
+    let stateObj = {};
 
     if (this.props &&
-            this.props.ActiveCoin &&
-            this.props.ActiveCoin.coin) {
+        this.props.ActiveCoin &&
+        this.props.ActiveCoin.coin) {
       if (!this.state.currentAddress &&
           this.props.ActiveCoin.activeAddress) {
-        this.setState(Object.assign({}, this.state, {
+        stateObj = Object.assign(stateObj, {
           currentAddress: this.props.ActiveCoin.activeAddress,
-        }));
+        });
       }
 
       if (this.props.ActiveCoin.txhistory &&
@@ -273,22 +274,22 @@ class WalletsData extends React.Component {
             this.state.activePage * this.state.itemsPerPage
           );
 
-          this.setState(Object.assign({}, this.state, {
+          stateObj = Object.assign(stateObj, {
             itemsList: historyToSplit,
-          }));
+          });
         }
       }
 
       if (!historyToSplit &&
           this.props.ActiveCoin.txhistory &&
           this.props.ActiveCoin.txhistory === 'no data') {
-        this.setState(Object.assign({}, this.state, {
+        stateObj = Object.assign(stateObj, {
           itemsList: 'no data',
-        }));
+        });
       } else if (!historyToSplit && this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
-        this.setState(Object.assign({}, this.state, {
+        stateObj = Object.assign(stateObj, {
           itemsList: 'loading',
-        }));
+        });
       } else if ( // dirty first txhistory load workaround
         !historyToSplit &&
         this.props.ActiveCoin.txhistory &&
@@ -302,11 +303,13 @@ class WalletsData extends React.Component {
           this.state.activePage * this.state.itemsPerPage
         );
 
-        this.setState(Object.assign({}, this.state, {
+        stateObj = Object.assign(stateObj, {
           itemsList: historyToSplit,
-        }));
+        });
       }
     }
+
+    this.setState(Object.assign({}, this.state, stateObj));
   }
 
   updateCurrentPage(page) {
