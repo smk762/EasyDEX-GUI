@@ -124,22 +124,24 @@ class WalletsData extends React.Component {
   }
 
   updateSocketsData(data) {
+    let stateObj = {};
+
     if (this.props.ActiveCoin.mode === 'basilisk') {
       if (data &&
           data.message &&
           data.message.shepherd.iguanaAPI &&
           data.message.shepherd.iguanaAPI.totalStackLength) {
-        this.setState(Object.assign({}, this.state, {
+        stateObj = Object.assign(stateObj, {
           totalStackLength: data.message.shepherd.iguanaAPI.totalStackLength,
-        }));
+        });
       }
       if (data &&
           data.message &&
           data.message.shepherd.iguanaAPI &&
           data.message.shepherd.iguanaAPI.currentStackLength) {
-        this.setState(Object.assign({}, this.state, {
+        stateObj = Object.assign(stateObj, {
           currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
-        }));
+        });
       }
       if (data &&
           data.message &&
@@ -148,6 +150,8 @@ class WalletsData extends React.Component {
           data.message.shepherd.status === 'done') {
         Store.dispatch(basiliskRefresh(false));
       }
+
+      this.setState(Object.assign({}, this.state, stateObj));
     }
   }
 
@@ -254,8 +258,8 @@ class WalletsData extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin) {
-      if (!this.state.currentAddress &&
-          this.props.ActiveCoin.activeAddress) {
+      if ((!this.state.currentAddress && this.props.ActiveCoin.activeAddress) ||
+          (this.state.currentAddress !== this.props.ActiveCoin.activeAddress)) {
         stateObj = Object.assign(stateObj, {
           currentAddress: this.props.ActiveCoin.activeAddress,
         });
@@ -307,9 +311,9 @@ class WalletsData extends React.Component {
           itemsList: historyToSplit,
         });
       }
-    }
 
-    this.setState(Object.assign({}, this.state, stateObj));
+      this.setState(Object.assign({}, this.state, stateObj));
+    }
   }
 
   updateCurrentPage(page) {
@@ -518,7 +522,9 @@ class WalletsData extends React.Component {
           }
 
           items.push(
-            <li key={address}>
+            <li
+              key={address}
+              className={ address === this.state.currentAddress ? 'selected' : '' }>
               <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
                 <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
                 <span className="text">[ { _amount } { _coin } ]  { address }</span>

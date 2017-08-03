@@ -131,7 +131,7 @@ export const AddressListRender = function() {
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
             <li className="selected">
-              <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+              <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span></a>
             </li>
             { this.renderAddressByType('public') }
           </ul>

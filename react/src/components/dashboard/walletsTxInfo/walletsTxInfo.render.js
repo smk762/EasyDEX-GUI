@@ -51,7 +51,7 @@ const WalletsTxInfoRender = function(txInfo) {
                         <tr>
                           <td>{ translate('TX_INFO.ADDRESS') }</td>
                           <td>
-                            { txInfo.address }
+                            { this.props.ActiveCoin.mode === 'basilisk' ? this.props.ActiveCoin.activeAddress : txInfo.address }
                           </td>
                         </tr>
                         <tr>
