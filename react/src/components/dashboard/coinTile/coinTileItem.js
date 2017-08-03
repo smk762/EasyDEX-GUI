@@ -25,10 +25,9 @@ import Config from '../../../config';
 import CoinTileItemRender from './coinTileItem.render';
 
 const BASILISK_CACHE_UPDATE_TIMEOUT = 240000;
-const IGUNA_ACTIVE_HANDLE_TIMEOUT = 30000;
-const IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE = 30000;
+const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
+const IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE = 15000;
 const NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD = 90;
-let coinInitDataFetchInterval;
 
 class CoinTileItem extends React.Component {
   constructor(props) {
@@ -108,20 +107,6 @@ class CoinTileItem extends React.Component {
 
   dashboardChangeActiveCoin(coin, mode) {
     if (coin !== this.props.ActiveCoin.coin) {
-      if (!this.props.ActiveCoin.coins[this.props.ActiveCoin.coin]) {
-        coinInitDataFetchInterval = setInterval(() => {
-          this.dispatchCoinActions(coin, mode);
-
-          if ((mode === 'native' || mode === 'full') && this.props.Dashboard.progress) {
-            clearInterval(coinInitDataFetchInterval);
-          }
-
-          if (mode === 'basilisk' && (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory !== 'loading') && this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] && JSON.parse(sessionStorage.getItem('IguanaActiveAccount'))[this.props.ActiveCoin.coin]) {
-            clearInterval(coinInitDataFetchInterval);
-          }
-        }, 500);
-      }
-
       Store.dispatch(
         stopInterval(
           'sync',

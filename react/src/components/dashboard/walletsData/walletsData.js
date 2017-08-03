@@ -49,6 +49,7 @@ class WalletsData extends React.Component {
       currentStackLength: 0,
       totalStackLength: 0,
       useCache: true,
+      coin: null,
     };
     this.updateInput = this.updateInput.bind(this);
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
@@ -278,9 +279,16 @@ class WalletsData extends React.Component {
             this.state.activePage * this.state.itemsPerPage
           );
 
-          stateObj = Object.assign(stateObj, {
-            itemsList: historyToSplit,
-          });
+          if (!this.state.itemsList || (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) || (historyToSplit &&
+              historyToSplit.length &&
+              this.state.itemsList &&
+              this.state.itemsList.length &&
+              historyToSplit[0].txid !== this.state.itemsList[0].txid &&
+              historyToSplit[historyToSplit.length - 1].txid !== this.state.itemsList[this.state.itemsList.length - 1].txid)) {
+            stateObj = Object.assign(stateObj, {
+              itemsList: historyToSplit,
+            });
+          }
         }
       }
 
@@ -307,12 +315,24 @@ class WalletsData extends React.Component {
           this.state.activePage * this.state.itemsPerPage
         );
 
-        stateObj = Object.assign(stateObj, {
-          itemsList: historyToSplit,
-        });
+        if (!this.state.itemsList || (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) || (historyToSplit &&
+            historyToSplit.length &&
+            this.state.itemsList &&
+            this.state.itemsList.length &&
+            historyToSplit[0].txid !== this.state.itemsList[0].txid &&
+            historyToSplit[historyToSplit.length - 1].txid !== this.state.itemsList[this.state.itemsList.length - 1].txid)) {
+          stateObj = Object.assign(stateObj, {
+            itemsList: historyToSplit,
+          });
+        }
       }
 
-      this.setState(Object.assign({}, this.state, stateObj));
+      stateObj = Object.assign(stateObj, {
+        coin: this.props.ActiveCoin.coin,
+      });
+      if (Object.keys(stateObj).length) {
+        this.setState(Object.assign({}, this.state, stateObj));
+      }
     }
   }
 

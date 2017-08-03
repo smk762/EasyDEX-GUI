@@ -93,7 +93,7 @@ class WalletsProgress extends React.Component {
 
       if (_progress &&
           _progress[1]) {
-        return SyncPercentageRender.call(this, _progress[1].toFixed(2));
+        return SyncPercentageRender.call(this, _progress[1] === 1000 ? 100 : _progress[1].toFixed(2));
       } else {
         return LoadingBlocksRender.call(this);
       }
@@ -113,7 +113,7 @@ class WalletsProgress extends React.Component {
     if (this.props.Dashboard.progress &&
         this.props.Dashboard.progress.blocks) {
       const syncPercentage = (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2) + '%').replace('NaN', 0);
-      return SyncPercentageRender.call(this, syncPercentage);
+      return SyncPercentageRender.call(this, syncPercentage === 1000 ? 100 : syncPercentage);
     }
 
     return LoadingBlocksRender.call(this);

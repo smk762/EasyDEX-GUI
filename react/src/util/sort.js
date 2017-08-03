@@ -1,9 +1,10 @@
 export function sortByDate(data) {
   return data.sort(function(a, b) {
-    if (a.txid === b.txid) {
-      return 1;
-    } else {
+    if (a.confirmations &&
+        b.confirmations) {
       return a.confirmations - b.confirmations;
+    } else {
+      return 1;
     }
   });
 }

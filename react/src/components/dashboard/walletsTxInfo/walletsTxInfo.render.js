@@ -20,7 +20,6 @@ const WalletsTxInfoRender = function(txInfo) {
                       <i className="icon md-balance-wallet"></i>TxID Info
                     </a>
                   </li>
-
                   { this.isNativeMode() &&
                     <li className={ this.state.activeTab === 1 ? 'hide active' : 'hide' }>
                       <a onClick={ () => this.openTab(1) }>
@@ -28,7 +27,6 @@ const WalletsTxInfoRender = function(txInfo) {
                       </a>
                     </li>
                   }
-
                   { this.isNativeMode() &&
                     <li className={ this.state.activeTab === 2 ? 'hide active' : 'hide' }>
                       <a onClick={ () => this.openTab(2) }>
@@ -36,7 +34,6 @@ const WalletsTxInfoRender = function(txInfo) {
                       </a>
                     </li>
                   }
-
                   <li className={ this.state.activeTab === 3 ? 'active' : '' }>
                     <a onClick={ () => this.openTab(3) }>
                       <i className="icon wb-file"></i>Raw info
