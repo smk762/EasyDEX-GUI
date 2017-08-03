@@ -550,12 +550,20 @@ class WalletsData extends React.Component {
         if (_addresses.public[i].address === this.state.currentAddress) {
           if (_addresses.public[i].amount &&
               _addresses.public[i].amount !== 'N/A') {
-            return _addresses.public[i].amount;
+            let _amount = _addresses.public[i].amount;
+
+            if (_amount !== 'N/A') {
+              _amount = formatValue('round', _amount, -6);
+            }
+
+            return _amount;
           } else {
             const address = _addresses.public[i].address;
             let _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
 
-            _amount = formatValue('round', _amount, -6);
+            if (_amount !== 'N/A') {
+              _amount = formatValue('round', _amount, -6);
+            }
 
             return _amount;
           }

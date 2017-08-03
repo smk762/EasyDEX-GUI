@@ -37,7 +37,7 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') }>
+                    title={ this.renderBalance('transparent') }>
                     { Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') }
                   </span>
                 </div>
@@ -57,7 +57,7 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? formatValue('round', this.renderBalance('private'), -6) : this.renderBalance('private') }>
+                    title={ this.renderBalance('private') }>
                     { Config.roundValues ? formatValue('round', this.renderBalance('private'), -6) : this.renderBalance('private') }
                   </span>
                 </div>
@@ -78,7 +78,7 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? formatValue('round', this.renderBalance('interest'), -6) : this.renderBalance('interest') }>
+                    title={ this.renderBalance('interest') }>
                     { Config.roundValues ? formatValue('round', this.renderBalance('interest'), -6) : this.renderBalance('interest') }
                   </span>
                 </div>
@@ -99,7 +99,7 @@ const WalletsBalanceRender = function() {
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
-                    title={ Config.roundValues ? formatValue('round', this.renderBalance('total'), -6) : this.renderBalance('total') }>
+                    title={ this.renderBalance('total') }>
                     { Config.roundValues ? formatValue('round', this.renderBalance('total'), -6) : this.renderBalance('total') }
                   </span>
                 </div>
