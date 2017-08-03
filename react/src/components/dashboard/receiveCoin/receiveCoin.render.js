@@ -102,7 +102,7 @@ export const ReceiveCoinRender = function() {
                   <h4 className="panel-title">{ translate('INDEX.RECEIVING_ADDRESS') }</h4>
                 </header>
                 <div className="panel-body">
-                  { this.checkTotalBalance() === 0 &&
+                  { this.checkTotalBalance() !== 0 &&
                     <div className="text-left padding-top-10 padding-bottom-10">
                       <div
                         className="toggle-label margin-right-15 pointer"
