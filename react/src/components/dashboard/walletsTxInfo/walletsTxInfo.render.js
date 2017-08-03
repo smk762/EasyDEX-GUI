@@ -22,7 +22,7 @@ const WalletsTxInfoRender = function(txInfo) {
                   </li>
 
                   { this.isNativeMode() &&
-                    <li className={ this.state.activeTab === 1 ? 'hide active' : '' }>
+                    <li className={ this.state.activeTab === 1 ? 'hide active' : 'hide' }>
                       <a onClick={ () => this.openTab(1) }>
                         <i className="icon md-plus-square"></i>Vjointsplits, Details
                       </a>
@@ -30,7 +30,7 @@ const WalletsTxInfoRender = function(txInfo) {
                   }
 
                   { this.isNativeMode() &&
-                    <li className={ this.state.activeTab === 2 ? 'hide active' : '' }>
+                    <li className={ this.state.activeTab === 2 ? 'hide active' : 'hide' }>
                       <a onClick={ () => this.openTab(2) }>
                         <i className="icon wb-briefcase"></i>Hex
                       </a>
@@ -45,117 +45,124 @@ const WalletsTxInfoRender = function(txInfo) {
                 </ul>
                 <div className="panel-body">
                   <div className="tab-content">
-                    <div className={ 'tab-pane' + (this.state.activeTab === 0 ? ' active' : '') }>
-                      <table className="table table-striped">
-                        <tbody>
-                        <tr>
-                          <td>{ translate('TX_INFO.ADDRESS') }</td>
-                          <td>
-                            { this.props.ActiveCoin.mode === 'basilisk' ? this.props.ActiveCoin.activeAddress : txInfo.address }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{ translate('TX_INFO.AMOUNT') }</td>
-                          <td>
-                            { Config.roundValues ? formatValue('round', txInfo.amount, -10) : txInfo.amount }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{ translate('TX_INFO.CATEGORY') }</td>
-                          <td>
-                            { txInfo.category || txInfo.type }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{ translate('TX_INFO.CONFIRMATIONS') }</td>
-                          <td>
-                            { txInfo.confirmations }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>blockhash</td>
-                          <td>
-                            { txInfo.blockhash }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>blocktime</td>
-                          <td>
-                            { secondsToString(txInfo.blocktime || txInfo.timestamp) }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>txid</td>
-                          <td>
-                            { txInfo.txid }
-                          </td>
-                        </tr>
-
-                        { this.isNativeMode() &&
+                    { this.state.activeTab === 0 &&
+                      <div className="tab-pane active">
+                        <table className="table table-striped">
+                          <tbody>
+                            <tr>
+                              <td>{ translate('TX_INFO.ADDRESS') }</td>
+                              <td>
+                                { this.props.ActiveCoin.mode === 'basilisk' ? this.props.ActiveCoin.activeAddress : txInfo.address }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>{ translate('TX_INFO.AMOUNT') }</td>
+                              <td>
+                                { Config.roundValues ? formatValue('round', txInfo.amount, -10) : txInfo.amount }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>{ translate('TX_INFO.CATEGORY') }</td>
+                              <td>
+                                { txInfo.category || txInfo.type }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>{ translate('TX_INFO.CONFIRMATIONS') }</td>
+                              <td>
+                                { txInfo.confirmations }
+                              </td>
+                            </tr>
+                            { txInfo.blockhash &&
+                              <tr>
+                                <td>blockhash</td>
+                                <td>
+                                  { txInfo.blockhash }
+                                </td>
+                              </tr>
+                            }
+                            { (txInfo.blocktime || txInfo.timestamp) &&
+                              <tr>
+                                <td>blocktime</td>
+                                <td>
+                                  { secondsToString(txInfo.blocktime || txInfo.timestamp) }
+                                </td>
+                              </tr>
+                            }
+                            <tr>
+                              <td>txid</td>
+                              <td>
+                                { txInfo.txid }
+                              </td>
+                            </tr>
+                            { this.isNativeMode() &&
+                              <tr>
+                                <td>walletconflicts</td>
+                                <td>
+                                  { txInfo.walletconflicts.length }
+                                </td>
+                              </tr>
+                            }
+                            { this.isNativeMode() &&
+                              <tr>
+                                <td>time</td>
+                                <td>
+                                  { secondsToString(txInfo.time) }
+                                </td>
+                              </tr>
+                            }
+                            { this.isNativeMode() &&
+                              <tr>
+                                <td>timereceived</td>
+                                <td>
+                                  { secondsToString(txInfo.timereceived) }
+                                </td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    }
+                    { this.state.activeTab === 1 &&
+                      <div className="tab-pane active">
+                        <table className="table table-striped">
+                          <tbody>
                           <tr>
-                            <td>walletconflicts</td>
+                            <td>vjoinsplit</td>
                             <td>
-                              { txInfo.walletconflicts.length }
+                              { txInfo.vjoinsplit }
                             </td>
                           </tr>
-                        }
-
-                        { this.isNativeMode() &&
                           <tr>
-                            <td>time</td>
+                            <td>details</td>
                             <td>
-                              { secondsToString(txInfo.time) }
+                              { txInfo.details }
                             </td>
                           </tr>
-                        }
-
-                        { this.isNativeMode() &&
-                          <tr>
-                            <td>timereceived</td>
-                            <td>
-                              { secondsToString(txInfo.timereceived) }
-                            </td>
-                          </tr>
-                        }
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div className={ 'tab-pane' + (this.state.activeTab === 1 ? ' active' : '') }>
-                      <table className="table table-striped">
-                        <tbody>
-                        <tr>
-                          <td>vjoinsplit</td>
-                          <td>
-                            { txInfo.vjoinsplit }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>details</td>
-                          <td>
-                            { txInfo.details }
-                          </td>
-                        </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className={ 'tab-pane' + (this.state.activeTab === 2 ? ' active' : '') }>
-                      <textarea
-                        className="full-width height-170"
-                        rows="10"
-                        cols="80"
-                        defaultValue={ txInfo.hex }
-                        disabled></textarea>
-                    </div>
-
-                    <div className={ 'tab-pane' + (this.state.activeTab === 3 ? ' active' : '') }>
-                      <textarea
-                        className="full-width height-400"
-                        rows="40"
-                        cols="80"
-                        defaultValue={ JSON.stringify(txInfo, null, '\t') }
-                        disabled></textarea>
-                    </div>
+                          </tbody>
+                        </table>
+                      </div>
+                    }
+                    { this.state.activeTab === 2 &&
+                      <div className="tab-pane active">
+                        <textarea
+                          className="full-width height-170"
+                          rows="10"
+                          cols="80"
+                          defaultValue={ txInfo.hex }
+                          disabled></textarea>
+                      </div>
+                    }
+                    { this.state.activeTab === 3 &&
+                      <div className="tab-pane active">
+                        <textarea
+                          className="full-width height-400"
+                          rows="40"
+                          cols="80"
+                          defaultValue={ JSON.stringify(txInfo, null, '\t') }
+                          disabled></textarea>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
