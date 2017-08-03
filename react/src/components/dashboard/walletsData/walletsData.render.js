@@ -243,7 +243,7 @@ export const WalletsDataRender = function() {
                   </header>
                   <div className="panel-body">
                     <div className="row">
-                      <div className="col-sm-8">
+                      <div className="col-sm-8 padding-bottom-20">
                         { this.renderAddressList() }
                       </div>
                     </div>
