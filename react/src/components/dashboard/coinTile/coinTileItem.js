@@ -108,7 +108,9 @@ class CoinTileItem extends React.Component {
   dashboardChangeActiveCoin(coin, mode) {
     if (coin !== this.props.ActiveCoin.coin) {
       Store.dispatch(dashboardChangeActiveCoin(coin, mode));
-      this.dispatchCoinActions(coin, mode); // triggers fetch coin data from store if available
+      setTimeout(() => {
+        this.dispatchCoinActions(coin, mode);
+      }, 100);
 
       Store.dispatch(
         stopInterval(

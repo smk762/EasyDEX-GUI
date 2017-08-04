@@ -77,7 +77,7 @@ export const AppInfoTabRender = function() {
                 { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
               </div>
               <div>
-                { translate('SETTINGS.VERSION') }: { this.props.Settings.appInfo.releaseInfo.version }
+                { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}-beta` }
               </div>
               <div>
                 { translate('SETTINGS.APP_SESSION') }: { this.props.Settings.appInfo.appSession }

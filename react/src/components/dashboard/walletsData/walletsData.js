@@ -50,6 +50,7 @@ class WalletsData extends React.Component {
       totalStackLength: 0,
       useCache: true,
       coin: null,
+      txhistory: null,
     };
     this.updateInput = this.updateInput.bind(this);
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
@@ -152,7 +153,9 @@ class WalletsData extends React.Component {
         Store.dispatch(basiliskRefresh(false));
       }
 
-      this.setState(Object.assign({}, this.state, stateObj));
+      if (Object.keys(stateObj).length) {
+        this.setState(Object.assign({}, this.state, stateObj));
+      }
     }
   }
 
@@ -238,7 +241,7 @@ class WalletsData extends React.Component {
   }
 
   updateInput(e) {
-    let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
+    let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory, this.props.ActiveCoin.mode);
     historyToSplit = historyToSplit.slice(0, e.target.value);
 
     this.setState({
@@ -250,6 +253,16 @@ class WalletsData extends React.Component {
 
   toggleTxInfoModal(display, txIndex) {
     Store.dispatch(toggleDashboardTxInfoModal(display, txIndex));
+  }
+
+  indexTxHistory(txhistoryArr) {
+    if (txhistoryArr.length > 1) {
+      for (let i = 0; i < txhistoryArr.length; i++) {
+        this.props.ActiveCoin.txhistory[i]['index'] = i + 1;
+      }
+    }
+
+    return this.props.ActiveCoin.txhistory;
   }
 
   componentWillReceiveProps(props) {
@@ -270,26 +283,21 @@ class WalletsData extends React.Component {
           this.props.ActiveCoin.txhistory !== 'loading' &&
           this.props.ActiveCoin.txhistory !== 'no data' &&
           this.props.ActiveCoin.txhistory.length) {
-        if (!this.state.itemsList ||
-            (this.state.itemsList && !this.state.itemsList.length) ||
-            (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
-          historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
+
+          historyToSplit = sortByDate(this.indexTxHistory(this.props.ActiveCoin.txhistory), this.props.ActiveCoin.mode === 'basilisk' ? 'index' : 'confirmations');
           historyToSplit = historyToSplit.slice(
             (this.state.activePage - 1) * this.state.itemsPerPage,
             this.state.activePage * this.state.itemsPerPage
           );
 
-          if (!this.state.itemsList || (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) || (historyToSplit &&
-              historyToSplit.length &&
-              this.state.itemsList &&
-              this.state.itemsList.length &&
-              historyToSplit[0].txid !== this.state.itemsList[0].txid &&
-              historyToSplit[historyToSplit.length - 1].txid !== this.state.itemsList[this.state.itemsList.length - 1].txid)) {
+          if (!this.state.itemsList || (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) || (
+            JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {
+
             stateObj = Object.assign(stateObj, {
               itemsList: historyToSplit,
+              txhistory: this.props.ActiveCoin.txhistory,
             });
           }
-        }
       }
 
       if (!historyToSplit &&
@@ -302,29 +310,6 @@ class WalletsData extends React.Component {
         stateObj = Object.assign(stateObj, {
           itemsList: 'loading',
         });
-      } else if ( // dirty first txhistory load workaround
-        !historyToSplit &&
-        this.props.ActiveCoin.txhistory &&
-        this.props.ActiveCoin.txhistory !== 'loading' &&
-        this.props.ActiveCoin.txhistory !== 'no data' &&
-        this.props.ActiveCoin.txhistory.length
-        ) {
-        historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
-        historyToSplit = historyToSplit.slice(
-          (this.state.activePage - 1) * this.state.itemsPerPage,
-          this.state.activePage * this.state.itemsPerPage
-        );
-
-        if (!this.state.itemsList || (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) || (historyToSplit &&
-            historyToSplit.length &&
-            this.state.itemsList &&
-            this.state.itemsList.length &&
-            historyToSplit[0].txid !== this.state.itemsList[0].txid &&
-            historyToSplit[historyToSplit.length - 1].txid !== this.state.itemsList[this.state.itemsList.length - 1].txid)) {
-          stateObj = Object.assign(stateObj, {
-            itemsList: historyToSplit,
-          });
-        }
       }
 
       stateObj = Object.assign(stateObj, {
@@ -337,7 +322,7 @@ class WalletsData extends React.Component {
   }
 
   updateCurrentPage(page) {
-    let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
+    let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory, this.props.ActiveCoin.mode);
     historyToSplit = historyToSplit.slice(
       (page - 1) * this.state.itemsPerPage,
       page * this.state.itemsPerPage

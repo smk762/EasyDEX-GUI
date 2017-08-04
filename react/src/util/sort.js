@@ -1,10 +1,13 @@
-export function sortByDate(data) {
+export function sortByDate(data, sortKey) {
   return data.sort(function(a, b) {
-    if (a.confirmations &&
-        b.confirmations) {
-      return a.confirmations - b.confirmations;
-    } else {
+    if (a[sortKey] < b[sortKey]) {
+      return -1;
+    }
+
+    if (a[sortKey] > b[sortKey]) {
       return 1;
     }
+
+    return 0;
   });
 }
