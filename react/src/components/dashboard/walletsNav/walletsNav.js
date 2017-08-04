@@ -13,18 +13,17 @@ import {
   WalletsNavNoWalletRender,
   WalletsNavWithWalletRender
 } from './walletsNav.render';
+import { connect } from 'react-redux';
 
 class WalletsNav extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      nativeOnly: Config.iguanaLessMode,
-    };
+  constructor() {
+    super();
     this.toggleSendReceiveCoinForms = this.toggleSendReceiveCoinForms.bind(this);
+
   }
 
   componentWillMount() {
-    Store.dispatch(iguanaEdexBalance(this.props.ActiveCoin.coin));
+    Store.dispatch(iguanaEdexBalance(this.props.activeCoin.coin));
   }
 
   copyMyAddress(address) {
@@ -32,10 +31,10 @@ class WalletsNav extends React.Component {
   }
 
   toggleSendReceiveCoinForms() {
-    if (this.props.ActiveCoin.mode === 'native') {
+    if (this.props.activeCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
-          this.props.ActiveCoin.nativeActiveSection === 'settings' ? 'default' : 'settings'
+          this.props.activeCoin.nativeActiveSection === 'settings' ? 'default' : 'settings'
         )
       );
     } else {
@@ -44,10 +43,10 @@ class WalletsNav extends React.Component {
   }
 
   toggleSendCoinForm(display) {
-    if (this.props.ActiveCoin.mode === 'native') {
+    if (this.props.activeCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
-          this.props.ActiveCoin.nativeActiveSection === 'send' ? 'default' : 'send'
+          this.props.activeCoin.nativeActiveSection === 'send' ? 'default' : 'send'
         )
       );
     } else {
@@ -56,10 +55,10 @@ class WalletsNav extends React.Component {
   }
 
   toggleReceiveCoinForm(display) {
-    if (this.props.ActiveCoin.mode === 'native') {
+    if (this.props.activeCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
-          this.props.ActiveCoin.nativeActiveSection === 'receive' ? 'default' : 'receive'
+          this.props.activeCoin.nativeActiveSection === 'receive' ? 'default' : 'receive'
         )
       );
     } else {
@@ -69,8 +68,8 @@ class WalletsNav extends React.Component {
 
   render() {
     if (this.props &&
-        this.props.ActiveCoin &&
-        !this.props.ActiveCoin.coin) {
+        this.props.activeCoin &&
+        !this.props.activeCoin.coin) {
       return WalletsNavNoWalletRender.call(this);
     }
 
@@ -78,4 +77,14 @@ class WalletsNav extends React.Component {
   }
 }
 
-export default WalletsNav;
+const mapStateToProps = (state) => {
+  return {
+    activeCoin: state.ActiveCoin,
+    activeHandle: state.Dashboard.activeHandle,
+    activeSection: state.Dashboard.activeSection,
+    appSettings: state.Settings.appSettings
+  };
+};
+
+export default connect(mapStateToProps)(WalletsNav);
+
