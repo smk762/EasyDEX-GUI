@@ -3,6 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
+import Config from './config';
 
 import rootReducer from './reducers/index';
 
@@ -19,7 +20,7 @@ const defaultState = {
 /* eslint-disable no-underscore-dangle */
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const enhancers = composeEnhancers(applyMiddleware(thunkMiddleware, loggerMiddleware));
+const enhancers = Config.debug || Config.dev ? composeEnhancers(applyMiddleware(thunkMiddleware, loggerMiddleware)) : composeEnhancers(applyMiddleware(thunkMiddleware));
 const store = createStore(
   rootReducer,
   defaultState,

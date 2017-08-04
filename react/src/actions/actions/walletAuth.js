@@ -3,9 +3,9 @@ import {
   ACTIVE_HANDLE
 } from '../storeType';
 import { translate } from '../../translate/translate';
+import Config from '../../config';
 import {
   triggerToaster,
-  Config,
   getMainAddressState,
   updateErrosStack
 } from '../actionCreators';
@@ -24,14 +24,16 @@ export function encryptWallet(_passphrase, cb, coin) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'encryptWallet',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'encryptWallet',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -39,11 +41,13 @@ export function encryptWallet(_passphrase, cb, coin) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'encryptWallet',
@@ -55,11 +59,13 @@ export function encryptWallet(_passphrase, cb, coin) {
     .then(dispatch(walletPassphrase(_passphrase)))
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(
         cb.call(
           this,
@@ -82,14 +88,16 @@ export function walletPassphrase(_passphrase) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'walletpassphrase',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'walletpassphrase',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -97,11 +105,13 @@ export function walletPassphrase(_passphrase) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'walletPassphrase',
@@ -111,11 +121,13 @@ export function walletPassphrase(_passphrase) {
       );
     })
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
     })
   }
 }
@@ -132,14 +144,16 @@ export function iguanaWalletPassphrase(_passphrase) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'iguanaWalletPassphrase',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': _payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'iguanaWalletPassphrase',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': _payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -147,11 +161,13 @@ export function iguanaWalletPassphrase(_passphrase) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'Error iguanaWalletPassphrase',
@@ -162,11 +178,13 @@ export function iguanaWalletPassphrase(_passphrase) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(iguanaWalletPassphraseState(json, dispatch));
     });
   }
@@ -181,26 +199,44 @@ export function iguanaActiveHandle(getMainAddress) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'iguanaActiveHandle',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': _payload,
-      'status': 'pending',
-    }));
-
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
-      method: 'POST',
-      body: JSON.stringify(_payload),
-    })
-    .catch(function(error) {
-      console.log(error);
+    if (Config.debug) {
       dispatch(logGuiHttp({
         'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
+        'function': 'iguanaActiveHandle',
+        'type': 'post',
+        'url': Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': _payload,
+        'status': 'pending',
       }));
+    }
+
+    let _fetchConfig = {
+      method: 'POST',
+      body: JSON.stringify(_payload),
+    };
+
+    if (Config.iguanaLessMode) {
+      _fetchConfig = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+    }
+
+    return fetch(
+      Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      _fetchConfig
+    )
+    .catch(function(error) {
+      console.log(error);
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(updateErrosStack('activeHandle'));
       dispatch(
         triggerToaster(
@@ -212,17 +248,19 @@ export function iguanaActiveHandle(getMainAddress) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(getMainAddress ? getMainAddressState(json) : iguanaActiveHandleState(json));
     });
   }
 }
 
-function iguanaWalletPassphraseState(json, dispatch) {
+export function iguanaWalletPassphraseState(json, dispatch) {
   sessionStorage.setItem('IguanaActiveAccount', JSON.stringify(json));
   dispatch(
     triggerToaster(

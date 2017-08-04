@@ -2,7 +2,6 @@ import { DASHBOARD_ACTIVE_COIN_NATIVE_OPIDS } from '../storeType';
 import { translate } from '../../translate/translate';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
   iguanaHashHex
 } from '../actionCreators';
@@ -10,17 +9,19 @@ import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function sendNativeTx(coin, _payload) {
   let ajaxDataToHex;
   let payload;
   let _apiMethod;
 
-  if (_payload.addressType === 'public' &&
-      _payload.sendTo.length !== 95) {
+  // iguana core
+  if ((_payload.addressType === 'public' && // transparent
+      _payload.sendTo.length !== 95) || !_payload.sendFrom) {
     _apiMethod = 'sendtoaddress';
     ajaxDataToHex = `["${_payload.sendTo}", ${Number(_payload.amount) - Number(_payload.fee)}]`;
-  } else {
+  } else { // private
     _apiMethod = 'z_sendmany';
     ajaxDataToHex = `["${_payload.sendFrom}", [{"address": "${_payload.sendTo}", "amount": ${Number(_payload.amount) - Number(_payload.fee)}}]]`;
   }
@@ -47,27 +48,29 @@ export function sendNativeTx(coin, _payload) {
       }
 
       const _timestamp = Date.now();
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'sendNativeTx',
-        'type': 'post',
-        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'function': 'sendNativeTx',
+          'type': 'post',
+          'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+          'payload': payload,
+          'status': 'pending',
+        }));
+      }
 
       let _fetchConfig = {
         method: 'POST',
         body: JSON.stringify(payload),
       };
 
-      if (Config.cli.default) {
+      if (Config.cli.default) { // rpc
         payload = {
           mode: null,
           chain: coin,
           cmd: payload.function,
           params:
-            _payload.addressType === 'public' && _payload.sendTo.length !== 95 ?
+            (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
             [
               _payload.sendTo,
               _payload.amount
@@ -97,11 +100,13 @@ export function sendNativeTx(coin, _payload) {
       )
       .catch(function(error) {
         console.log(error);
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'error',
+            'response': error,
+          }));
+        }
         dispatch(
           triggerToaster(
             'sendNativeTx',
@@ -115,14 +120,19 @@ export function sendNativeTx(coin, _payload) {
         return _response;
       })
       .then(function(json) {
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'success',
+            'response': json,
+          }));
+        }
 
         if (json.indexOf('"code":') > -1) {
-          const _message = json.substring(json.indexOf('"message":"') + 11, json.indexOf('"},"id":"jl777"'));
+          const _message = json.substring(
+            `${json.indexOf('"message":"')}11`,
+            json.indexOf('"},"id":"jl777"')
+          );
 
           dispatch(
             triggerToaster(
@@ -138,7 +148,7 @@ export function sendNativeTx(coin, _payload) {
               triggerToaster(
                 true,
                 translate('TOASTR.WALLET_NOTIFICATION'),
-                'Your wallet.dat is not matching the blockchain. Please resync from the scratch.',
+                translate('API.WALLETDAT_MISMATCH'),
                 'info',
                 false
               )
@@ -205,14 +215,16 @@ export function getKMDOPID(opid, coin) {
       }
 
       const _timestamp = Date.now();
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getKMDOPID',
-        'type': 'post',
-        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'function': 'getKMDOPID',
+          'type': 'post',
+          'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+          'payload': payload,
+          'status': 'pending',
+        }));
+      }
 
       let _fetchConfig = {
         method: 'POST',
@@ -241,11 +253,13 @@ export function getKMDOPID(opid, coin) {
       )
       .catch(function(error) {
         console.log(error);
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'error',
+            'response': error,
+          }));
+        }
         dispatch(
           triggerToaster(
             'getKMDOPID',
@@ -259,11 +273,13 @@ export function getKMDOPID(opid, coin) {
         if (Config.cli.default) {
           json = json.result;
         }
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'success',
+            'response': json,
+          }));
+        }
         dispatch(getKMDOPIDState(json));
       })
     })

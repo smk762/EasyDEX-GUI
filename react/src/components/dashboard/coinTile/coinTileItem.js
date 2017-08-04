@@ -16,9 +16,11 @@ import {
   getKMDOPID,
   getNativeTxHistory,
   getKMDBalanceTotal,
-  getSyncInfoNative
+  getSyncInfoNative,
+  getDebugLog
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import Config from '../../../config';
 
 import CoinTileItemRender from './coinTileItem.render';
 
@@ -41,13 +43,19 @@ class CoinTileItem extends React.Component {
   dispatchCoinActions(coin, mode) {
     if (mode === 'native') {
       Store.dispatch(iguanaActiveHandle(true));
-      const syncPercentage = this.props.Dashboard && this.props.Dashboard.progress && (parseFloat(parseInt(this.props.Dashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
+      const _propsDashboard = this.props.Dashboard;
+      const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
-      if (this.props.Dashboard.progress &&
-          this.props.Dashboard.progress.blocks &&
-          this.props.Dashboard.progress.longestchain &&
+      if (syncPercentage < 100 &&
+          !this.props.Dashboard.displayCoindDownModal) {
+        Store.dispatch(getDebugLog('komodo', 10));
+      }
+      if (!this.props.Dashboard.displayCoindDownModal &&
+          _propsDashboard.progress &&
+          _propsDashboard.progress.blocks &&
+          _propsDashboard.progress.longestchain &&
           syncPercentage &&
-          syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD) {
+          (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
         Store.dispatch(getSyncInfoNative(coin, true));
         Store.dispatch(getKMDBalanceTotal(coin));
         Store.dispatch(getNativeTxHistory(coin));
@@ -68,6 +76,7 @@ class CoinTileItem extends React.Component {
       const useAddress = this.props.ActiveCoin.mainBasiliskAddress ? this.props.ActiveCoin.mainBasiliskAddress : this.props.Dashboard.activeHandle[coin];
 
       Store.dispatch(iguanaActiveHandle(true));
+
       Store.dispatch(
         getKMDAddressesNative(
           coin,
@@ -75,6 +84,7 @@ class CoinTileItem extends React.Component {
           useAddress
         )
       );
+
       Store.dispatch(
         getShepherdCache(
           JSON.parse(sessionStorage.getItem('IguanaActiveAccount')).pubkey,
@@ -97,26 +107,30 @@ class CoinTileItem extends React.Component {
 
   dashboardChangeActiveCoin(coin, mode) {
     if (coin !== this.props.ActiveCoin.coin) {
+      Store.dispatch(dashboardChangeActiveCoin(coin, mode));
+      setTimeout(() => {
+        this.dispatchCoinActions(coin, mode);
+      }, 100);
+
       Store.dispatch(
         stopInterval(
           'sync',
           this.props.Interval.interval
         )
       );
+
       Store.dispatch(
         stopInterval(
           'basilisk',
           this.props.Interval.interval
         )
       );
-      Store.dispatch(dashboardChangeActiveCoin(coin, mode));
-
-      this.dispatchCoinActions(coin, mode);
 
       if (mode === 'full') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
         }, IGUNA_ACTIVE_HANDLE_TIMEOUT);
+
         Store.dispatch(
           startInterval(
             'sync',
@@ -128,15 +142,18 @@ class CoinTileItem extends React.Component {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
         }, coin === 'KMD' ? IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE : IGUNA_ACTIVE_HANDLE_TIMEOUT);
+
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       }
       if (mode === 'basilisk') {
-        const _basiliskMainAddress = this.props.Dashboard.activeHandle[coin] || JSON.parse(sessionStorage.getItem('IguanaActiveAccount'))[coin];
+        const _activeHandle = this.props.Dashboard.activeHandle;
+        const _basiliskMainAddress = _activeHandle[coin] || JSON.parse(sessionStorage.getItem('IguanaActiveAccount'))[coin];
+
         Store.dispatch(changeActiveAddress(_basiliskMainAddress));
 
         if (_basiliskMainAddress) {
           Store.dispatch(fetchNewCacheData({
-            'pubkey': this.props.Dashboard.activeHandle.pubkey,
+            'pubkey': _activeHandle.pubkey,
             'allcoins': false,
             'coin': coin,
             'calls': 'listtransactions:getbalance',
@@ -149,19 +166,21 @@ class CoinTileItem extends React.Component {
 
           const _basiliskCache = setInterval(() => {
             Store.dispatch(fetchNewCacheData({
-              'pubkey': this.props.Dashboard.activeHandle.pubkey,
+              'pubkey': _activeHandle.pubkey,
               'allcoins': false,
               'coin': this.props.ActiveCoin.coin,
               'calls': 'listtransactions:getbalance',
               'address': _basiliskMainAddress,
             }));
           }, BASILISK_CACHE_UPDATE_TIMEOUT);
+
           Store.dispatch(
             startInterval(
               'sync',
               _iguanaActiveHandle
             )
           );
+
           Store.dispatch(
             startInterval(
               'basilisk',

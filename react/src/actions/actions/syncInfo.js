@@ -1,8 +1,6 @@
 import { SYNCING_FULL_MODE } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState
@@ -33,14 +31,16 @@ export function getSyncInfo(coin) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'getSyncInfo',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'getSyncInfo',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -48,11 +48,13 @@ export function getSyncInfo(coin) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'getSyncInfo',
@@ -67,11 +69,13 @@ export function getSyncInfo(coin) {
       return _response;
     })
     .then(function(json) {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       if (json.indexOf('coin is busy processing') === -1) {
         dispatch(getSyncInfoState(json, dispatch));
       }

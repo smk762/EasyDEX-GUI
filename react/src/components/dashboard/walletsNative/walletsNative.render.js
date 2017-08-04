@@ -3,7 +3,8 @@ import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsNativeInfo from '../walletsNativeInfo/walletsNativeInfo';
 import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
 import WalletsProgress from '../walletsProgress/walletsProgress';
-import WalletsNativeTxHistory from '../walletsNativeTxHistory/walletsNativeTxHistory';
+import WalletsData from '../walletsData/walletsData';
+import ReceiveCoin from '../receiveCoin/receiveCoin';
 
 const WalletsNativeRender = function() {
   return (
@@ -15,7 +16,7 @@ const WalletsNativeRender = function() {
           style={{ 'backgroundImage': `url("assets/images/bg/${this.defaultBG()}_transparent_header_bg.png")` }}>
           <ol className="breadcrumb">
             <li className="header-easydex-section">
-              <img src={ `assets/images/native/${this.defaultBG()}_header_title_logo.png` } /> 
+              <img src={ `assets/images/native/${this.defaultBG()}_header_title_logo.png` } />
               <span
                 className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' ? 'hide' : '')}` }
                 style={{ marginLeft: '20px' }}>
@@ -28,7 +29,8 @@ const WalletsNativeRender = function() {
           <WalletsProgress {...this.props} />
           <div className="row">
             <WalletsBalance {...this.props} />
-            <WalletsNativeTxHistory {...this.props} />
+            <ReceiveCoin {...this.props.ActiveCoin} />
+            <WalletsData {...this.props} />
             <WalletsNativeSend {...this.props} />
             <WalletsNativeInfo {...this.props} />
           </div>

@@ -1,7 +1,5 @@
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState
@@ -19,7 +17,7 @@ export function shepherdGetSysInfo() {
       console.log(error);
       dispatch(
         triggerToaster(
-          'Failed to get sys info',
+          'shepherdGetSysInfo',
           'Error',
           'error'
         )

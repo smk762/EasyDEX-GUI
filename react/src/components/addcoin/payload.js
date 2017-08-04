@@ -1,53 +1,54 @@
+// TODO: merge check functions
+
 export function checkAC(coinVal) {
-	if (coinVal == 'SUPERNET' ||
-			coinVal == 'REVS' ||
-			coinVal == 'WLC' ||
-			coinVal == 'DEX' ||
-			coinVal == 'PANGEA' ||
-			coinVal == 'JUMBLR' ||
-			coinVal == 'BET' ||
-			coinVal == 'CRYPTO' ||
-			coinVal == 'HODL' ||
-			coinVal == 'SHARK' ||
-			coinVal == 'BOTS' ||
-			coinVal == 'MGW' ||
-			coinVal == 'MVP' ||
-			coinVal == 'KV' ||
-			coinVal == 'CEAL' ||
-			coinVal == 'MESH' ||
-			coinVal == 'BTC' ||
-			coinVal == 'USD' ||
-			coinVal == 'RON' ||
-			coinVal == 'EUR' ||
-			coinVal == 'JPY' ||
-			coinVal == 'GBP' ||
-			coinVal == 'AUD' ||
-			coinVal == 'CAD' ||
-			coinVal == 'CHF' ||
-			coinVal == 'NZD' ||
-			coinVal == 'CNY' ||
-			coinVal == 'RUB' ||
-			coinVal == 'MXN' ||
-			coinVal == 'BRL' ||
-			coinVal == 'INR' ||
-			coinVal == 'HKD' ||
-			coinVal == 'TRY' ||
-			coinVal == 'ZAR' ||
-			coinVal == 'PLN' ||
-			coinVal == 'NOK' ||
-			coinVal == 'SEK' ||
-			coinVal == 'DKK' ||
-			coinVal == 'CZK' ||
-			coinVal == 'HUF' ||
-			coinVal == 'ILS' ||
-			coinVal == 'KRW' ||
-			coinVal == 'MYR' ||
-			coinVal == 'PHP' ||
-			coinVal == 'SGD' ||
-			coinVal == 'THB' ||
-			coinVal == 'BGN' ||
-			coinVal == 'IDR' ||
-			coinVal == 'HRK')	{
+	if (coinVal === 'SUPERNET' ||
+			coinVal === 'REVS' ||
+			coinVal === 'WLC' ||
+			coinVal === 'DEX' ||
+			coinVal === 'PANGEA' ||
+			coinVal === 'JUMBLR' ||
+			coinVal === 'BET' ||
+			coinVal === 'CRYPTO' ||
+			coinVal === 'HODL' ||
+			coinVal === 'SHARK' ||
+			coinVal === 'BOTS' ||
+			coinVal === 'MGW' ||
+			coinVal === 'MVP' ||
+			coinVal === 'KV' ||
+			coinVal === 'CEAL' ||
+			coinVal === 'MESH' ||
+			coinVal === 'USD' ||
+			coinVal === 'RON' ||
+			coinVal === 'EUR' ||
+			coinVal === 'JPY' ||
+			coinVal === 'GBP' ||
+			coinVal === 'AUD' ||
+			coinVal === 'CAD' ||
+			coinVal === 'CHF' ||
+			coinVal === 'NZD' ||
+			coinVal === 'CNY' ||
+			coinVal === 'RUB' ||
+			coinVal === 'MXN' ||
+			coinVal === 'BRL' ||
+			coinVal === 'INR' ||
+			coinVal === 'HKD' ||
+			coinVal === 'TRY' ||
+			coinVal === 'ZAR' ||
+			coinVal === 'PLN' ||
+			coinVal === 'NOK' ||
+			coinVal === 'SEK' ||
+			coinVal === 'DKK' ||
+			coinVal === 'CZK' ||
+			coinVal === 'HUF' ||
+			coinVal === 'ILS' ||
+			coinVal === 'KRW' ||
+			coinVal === 'MYR' ||
+			coinVal === 'PHP' ||
+			coinVal === 'SGD' ||
+			coinVal === 'THB' ||
+			coinVal === 'BGN' ||
+			coinVal === 'IDR' ||
+			coinVal === 'HRK')	{
 		return true;
 	} else {
 		return false;
@@ -130,7 +131,7 @@ export function checkCoinType(coin) {
 }
 
 export function startCrypto(confpath, coin, mode) {
-	var tmpinternval = 0,
+	let tmpinternval = 0,
 			AddCoinData = {},
 			tmpPendValue = 1, // TODO: hook up to shepherd sysinfo
 			tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
@@ -141,7 +142,8 @@ export function startCrypto(confpath, coin, mode) {
 		tmpPendValue = parseInt(tmpPendValue) * 4;
 	}
 
-	AddCoinData.BTCD = {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"prefetchlag":-1,"poll":50,"active":1,"agent":"iguana","method":"addcoin","newcoin":"BTCD","startpend":tmpPendValue,"endpend":tmpPendValue,"services":129,"maxpeers":64,"portp2p":14631,"rpc":14632}
+	AddCoinData.BTC = {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"prefetchlag":5,"poll":1,"active":1,"agent":"iguana","method":"addcoin","newcoin":"BTC","services":128,"maxpeers":512,"portp2p":8333};
+	AddCoinData.BTCD = {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"prefetchlag":-1,"poll":50,"active":1,"agent":"iguana","method":"addcoin","newcoin":"BTCD","startpend":tmpPendValue,"endpend":tmpPendValue,"services":129,"maxpeers":64,"portp2p":14631,"rpc":14632};
 	AddCoinData.LTC = {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"prefetchlag":-1,"poll":10,"active":1,"agent":"iguana","method":"addcoin","startpend":tmpPendValue,"endpend":tmpPendValue,"services":129,"maxpeers":256,"newcoin":"LTC","name":"Litecoin","hasheaders":1,"useaddmultisig":0,"netmagic":"fbc0b6db","p2p":9333,"rpc":9332,"pubval":48,"p2shval":5,"wifval":176,"txfee_satoshis":"100000","isPoS":0,"minoutput":10000,"minconfirms":2,"genesishash":"12a765e31ffd4059bada1e25190f6e98c99d9714d334efa41a195a7e7e04bfe2","genesis":{"hashalgo":"scrypt","version":1,"timestamp":1317972665,"nBits":"1e0ffff0","nonce":2084524493,"merkle_root":"97ddfbbae6be97fd6cdf3e7ca13232a3afff2353e29badfab7f73011edd4ced9"},"alertpubkey":"040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9","protover":70002};
 	AddCoinData.DOGE = {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"services":129,"auxpow":1,"prefetchlag":-1,"poll":10,"active":1,"agent":"iguana","method":"addcoin","maxpeers":256,"newcoin":"DOGE","name":"Dogecoin","netmagic":"C0C0C0C0","p2p":22556,"rpc":22555,"pubval":30,"p2shval":5,"wifval":128,"txfee_satoshis":"100000000","minconfirms":2,"genesishash":"1a91e3dace36e2be3bf030a65679fe821aa1d6ef92e7c9902eb318182c355691","genesis":{"hashalgo": "scrypt","version":1,"timestamp":1386325540,"nBits":"1e0ffff0","nonce":99943,"merkle_root":"5b2a3f53f605d62c53e62932dac6925e3d74afa5a4b459745c36d42d0ed26a69"},"alertpubkey":"04d4da7a5dae4db797d9b0644d57a5cd50e05a70f36091cd62e2fc41c98ded06340be5a43a35e185690cd9cde5d72da8f6d065b499b06f51dcfba14aad859f443a"};
 	AddCoinData.DGB = {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"services":129,"prefetchlag":-1,"poll":10,"active":1,"agent":"iguana","method":"addcoin","maxpeers":256,"newcoin":"DGB","name":"Digibyte","netmagic":"FAC3B6DA","p2p":12024,"rpc":14022,"pubval":30,"p2shval":5,"wifval":128,"txfee_satoshis":"10000","minconfirms":2,"genesishash":"7497ea1b465eb39f1c8f507bc877078fe016d6fcb6dfad3a64c98dcc6e1e8496","genesis":{"version":1,"timestamp":1389388394,"nBits":"1e0ffff0","nonce":2447652,"merkle_root":"72ddd9496b004221ed0557358846d9248ecd4c440ebd28ed901efc18757d0fad"},"alertpubkey":"04F04441C4757F356290A37C313C3772C5BC5003E898EB2E0CF365795543A7BF690C8BBBFA32EE3A3325477CE2000B7D0453EFBB203329D0F9DF34D5927D022BC9"};
@@ -174,7 +176,7 @@ export function startCrypto(confpath, coin, mode) {
 }
 
 export function startCurrencyAssetChain(confpath, coin, mode) {
-	var AddCoinDataPayload = {},
+	let AddCoinDataPayload = {},
 			tmpPendValue = 1,
 			tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
 
@@ -184,7 +186,7 @@ export function startCurrencyAssetChain(confpath, coin, mode) {
 		tmpPendValue = parseInt(tmpPendValue) * 4;
 	}
 
-	var _payloadVar = {
+	let _payloadVar = {
 		'userpass': tmpIguanaRPCAuth,
 		'unitval': '20',
 		'zcash': 1,
@@ -221,7 +223,7 @@ export function startCurrencyAssetChain(confpath, coin, mode) {
 	};
 
 	if (mode === '-1') {
-		var _payloadVarRegular = Object.assign({}, _payloadVar);
+		let _payloadVarRegular = Object.assign({}, _payloadVar);
 		delete _payloadVarRegular.userpass;
 		_payloadVarRegular.RELAY = -1;
 		_payloadVarRegular.VALIDATE = 1;
@@ -639,8 +641,8 @@ export function startCurrencyAssetChain(confpath, coin, mode) {
 }
 
 export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
-	var tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
-	var tmpPendValue;
+	let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+	let tmpPendValue;
 
 	if (coin !== 'BTC' &&
       coin !== 'LTC' &&

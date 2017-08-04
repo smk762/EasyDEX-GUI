@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import QRModal from '../qrModal/qrModal';
 
 export const AddressListRender = function() {
   return (
@@ -7,7 +8,7 @@ export const AddressListRender = function() {
       <button
         type="button"
         className="btn dropdown-toggle btn-info"
-        title="- { translate('SEND.SELECT_T_OR_Z_ADDR') } -"
+        title="Select private address"
         onClick={ this.openDropMenu }>
         <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>
         <span className="bs-caret">
@@ -16,17 +17,24 @@ export const AddressListRender = function() {
       </button>
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
-          <li className="selected">
-            <a><span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span>
-            <span className="glyphicon glyphicon-ok check-mark"></span></a>
+          <li
+            className="selected"
+            onClick={ () => this.updateAddressSelection(null, 'public', null) }>
+            <a>
+              <span className="text">Transparent funds</span>
+              <span
+                className="glyphicon glyphicon-ok check-mark pull-right"
+                style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
+            </a>
           </li>
-          { this.renderAddressByType('public') }
           { this.renderAddressByType('private') }
         </ul>
       </div>
     </div>
   );
 };
+
+// { this.renderAddressByType('public') }
 
 export const OASendUIRender = function() {
   return (
@@ -69,17 +77,24 @@ export const WalletsNativeSendRender = function() {
               { translate('INDEX.SEND') } { this.props.ActiveCoin.coin }
             </h3>
           </div>
+          <div className="qr-modal-send-block">
+            <QRModal
+              mode="scan"
+              setRecieverFromScan={ this.setRecieverFromScan } />
+          </div>
           <div className="panel-body container-fluid">
             <form
               className="extcoin-send-form"
               method="post"
               autoComplete="off">
-              <div className="row">
-                <div className="col-xlg-12 form-group form-material">
-                  <label className="control-label">{ translate('INDEX.SEND_FROM') }</label>
-                  { this.renderAddressList() }
+              { this.state.renderAddressDropdown &&
+                <div className="row">
+                  <div className="col-xlg-12 form-group form-material">
+                    <label className="control-label">{ translate('INDEX.SEND_FROM') }</label>
+                    { this.renderAddressList() }
+                  </div>
                 </div>
-              </div>
+              }
               { this.renderOASendUI() }
               <div className="row">
                 <div className="col-xlg-12 form-group form-material">
@@ -97,22 +112,23 @@ export const WalletsNativeSendRender = function() {
                     autoComplete="off"
                     required />
                 </div>
-                <div className="col-lg-6 form-group form-material">
+                <div className="col-lg-12 form-group form-material">
                   <label
                     className="control-label"
                     htmlFor="kmdWalletAmount">
-                    { this.props.ActiveCoin.coin }
+                    { translate('INDEX.AMOUNT') }
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     name="amount"
+                    value={ this.state.amount !== 0 ? this.state.amount : '' }
                     onChange={ this.updateInput }
                     id="kmdWalletAmount"
                     placeholder="0.000"
                     autoComplete="off" />
                 </div>
-                <div className="col-lg-6 form-group form-material">
+                <div className="col-lg-6 form-group form-material hide">
                   <label
                     className="control-label"
                     htmlFor="kmdWalletFee">
@@ -125,13 +141,13 @@ export const WalletsNativeSendRender = function() {
                     onChange={ this.updateInput }
                     id="kmdWalletFee"
                     placeholder="0.000"
-                    value={ this.state.fee }
+                    value={ this.state.fee !== 0 ? this.state.fee : '' }
                     autoComplete="off" />
                 </div>
-                <div className="col-lg-12">
+                <div className="col-lg-12 hide">
                   <span>
-                    <strong>{ translate('INDEX.TOTAL') }:</strong>
-                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }
+                    <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
+                    { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }&nbsp;
                     { this.props.ActiveCoin.coin }
                   </span>
                 </div>
@@ -140,7 +156,7 @@ export const WalletsNativeSendRender = function() {
                     type="button"
                     className="btn btn-primary waves-effect waves-light pull-right"
                     onClick={ this.handleSubmit }
-                    disabled={ !this.state.sendFrom || !this.state.sendTo || !this.state.amount }>
+                    disabled={ !this.state.sendTo || !this.state.amount }>
                     { translate('INDEX.SEND') } { this.state.amount } { this.props.ActiveCoin.coin }
                   </button>
                 </div>
@@ -150,48 +166,50 @@ export const WalletsNativeSendRender = function() {
         </div>
       </div>
 
-      <div className="col-xs-12">
-        <div className="row">
-          <div className="panel nav-tabs-horizontal">
-            <div>
-              <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
-                <div className="panel">
-                  <header className="panel-heading">
-                    <h3 className="panel-title">
-                      { translate('INDEX.OPERATIONS_STATUSES') }
-                    </h3>
-                  </header>
-                  <div className="panel-body">
-                    <table
-                      className="table table-hover dataTable table-striped"
-                      width="100%">
-                      <thead>
-                        <tr>
-                          <th>{ translate('INDEX.STATUS') }</th>
-                          <th>ID</th>
-                          <th>{ translate('INDEX.TIME') }</th>
-                          <th>{ translate('INDEX.RESULT') }</th>
-                        </tr>
+      { this.renderOPIDListCheck() &&
+        <div className="col-xs-12">
+          <div className="row">
+            <div className="panel nav-tabs-horizontal">
+              <div>
+                <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
+                  <div className="panel">
+                    <header className="panel-heading">
+                      <h3 className="panel-title">
+                        { translate('INDEX.OPERATIONS_STATUSES') }
+                      </h3>
+                    </header>
+                    <div className="panel-body">
+                      <table
+                        className="table table-hover dataTable table-striped"
+                        width="100%">
+                        <thead>
+                          <tr>
+                            <th>{ translate('INDEX.STATUS') }</th>
+                            <th>ID</th>
+                            <th>{ translate('INDEX.TIME') }</th>
+                            <th>{ translate('INDEX.RESULT') }</th>
+                          </tr>
                         </thead>
-                      <tbody>
-                        { this.renderOPIDList() }
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <th>{ translate('INDEX.STATUS') }</th>
-                          <th>ID</th>
-                          <th>{ translate('INDEX.TIME') }</th>
-                          <th>{ translate('INDEX.RESULT') }</th>
-                        </tr>
-                      </tfoot>
-                    </table>
+                        <tbody>
+                          { this.renderOPIDList() }
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th>{ translate('INDEX.STATUS') }</th>
+                            <th>ID</th>
+                            <th>{ translate('INDEX.TIME') }</th>
+                            <th>{ translate('INDEX.RESULT') }</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   );
 };

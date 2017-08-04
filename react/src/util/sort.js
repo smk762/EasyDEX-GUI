@@ -1,5 +1,13 @@
-export function sortByDate(data) {
-  return data.sort(function(a, b){
-    return new Date(b.blocktime || b.timestamp) - new Date(a.blocktime || a.timestamp);
+export function sortByDate(data, sortKey) {
+  return data.sort(function(a, b) {
+    if (a[sortKey] < b[sortKey]) {
+      return -1;
+    }
+
+    if (a[sortKey] > b[sortKey]) {
+      return 1;
+    }
+
+    return 0;
   });
 }

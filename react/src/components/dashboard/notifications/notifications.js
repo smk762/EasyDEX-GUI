@@ -1,5 +1,6 @@
 import React from 'react';
 import { sortByDate } from '../../../util/sort';
+import Config from '../../../config';
 import {
   NotificationsByTypeRender,
   NotificationsModalRender,
@@ -19,6 +20,7 @@ class Notifications extends React.Component {
       },
       activeTab: 2,
       guiLog: null,
+      debug: Config.debug,
     };
     this.toggleNotificationsModal = this.toggleNotificationsModal.bind(this);
   }
@@ -40,7 +42,6 @@ class Notifications extends React.Component {
         success: 0,
         pending: 0,
       }
-
       let guiLogToArray = [];
 
       for (let timestamp in _guiLog) {

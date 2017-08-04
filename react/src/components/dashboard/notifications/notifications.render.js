@@ -58,13 +58,13 @@ export const NotificationsModalRender = function() {
                 </ul>
                 <div className="panel-body panel-body-container">
                   <div className="tab-content">
-                    <div className={ this.state.activeTab === 0 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ 'tab-pane' + (this.state.activeTab === 0 ? ' active' : '') }>
                       { this.renderNotificationsByType('success') }
                     </div>
-                    <div className={ this.state.activeTab === 1 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ 'tab-pane' + (this.state.activeTab === 1 ? ' active' : '') }>
                       { this.renderNotificationsByType('error') }
                     </div>
-                    <div className={ this.state.activeTab === 2 ? 'tab-pane active' : 'tab-pane' }>
+                    <div className={ 'tab-pane' + (this.state.activeTab === 2 ? ' active' : '') }>
                       { this.renderNotificationsByType('pending') }
                     </div>
                   </div>
@@ -91,18 +91,18 @@ export const NotificationsRender = function() {
   return (
     <div>
       <div
-        className={ this.props.Dashboard.activeHandle && this.props.Dashboard.activeHandle.status === 'unlocked' ? 'notifications-badge stick-to-top' : 'notifications-badge' }
-        onClick={ this.toggleNotificationsModal }>
-        <span className="badge success">
+        className={ 'notifications-badge' + (this.props.Dashboard.activeHandle && this.props.Dashboard.activeHandle.status === 'unlocked' ? ' stick-to-top' : '') }
+        onClick={ this.state.debug ? this.toggleNotificationsModal : null }>
+        <span className={ this.state.debug ? 'badge success' : 'hide' }>
           { this.state.calls.success }
         </span>
-        <span className="badge error">
+        <span className={ this.state.debug ? 'badge error' : 'hide' }>
           { this.state.calls.error }
         </span>
-        <span className="badge pending">
+        <span className={ this.state.debug ? 'badge pending' : 'hide' }>
           { this.state.calls.pending }
         </span>
-        <div className={ this.state.calls.pending === 0 ? 'spinner spinner-hide' : 'spinner' }>
+        <div className={ 'spinner' + (this.state.calls.pending === 0 ? ' spinner-hide' : '') }>
           <div className="rect1"></div>
           <div className="rect2"></div>
           <div className="rect3"></div>

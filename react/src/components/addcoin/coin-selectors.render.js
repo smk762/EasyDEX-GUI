@@ -5,12 +5,18 @@ import AddCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
 
 const CoinSelectorsRender = function(item, coin, i) {
+  const isWindows = this.props.Settings && this.props.Settings.appInfo && this.props.Settings.appInfo.sysInfo && this.props.Settings.appInfo.sysInfo.platform === 'win32';
+
   return (
     <div
       className={ this.hasMoreThanOneCoin() ? 'multi' : 'single' }
       key={ `add-coin-${i}` }>
-      <div className="col-sm-8">
-        <div className="form-group">
+      <div
+        className={ this.hasMoreThanOneCoin() ? 'col-sm-10' : 'col-sm-8' }
+        style={{ paddingLeft: !this.hasMoreThanOneCoin() ? '0' : '15px' }}>
+        <div
+          className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6 form-group' : 'form-group' }
+          style={{ paddingLeft: this.hasMoreThanOneCoin() ? '0' : '15px' }}>
           <select
             className="form-control form-material"
             name="selectedCoin"
@@ -18,10 +24,24 @@ const CoinSelectorsRender = function(item, coin, i) {
             onChange={ (event) => this.updateSelectedCoin(event, i) }
             autoFocus>
             <option>{ translate('INDEX.SELECT') }</option>
-            <AddCoinOptionsCrypto />
-            <AddCoinOptionsAC />
-            <AddCoinOptionsACFiat />
+            <AddCoinOptionsCrypto appSettings={ this.props.Settings } />
+            <AddCoinOptionsAC appSettings={ this.props.Settings } />
+            <AddCoinOptionsACFiat appSettings={ this.props.Settings } />
           </select>
+        </div>
+        <div className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6' : 'hide' }>
+          <div className="toggle-box padding-bottom-10">
+            <select
+              className="form-control form-material"
+              name="daemonParam"
+              onChange={ (event) => this.updateDaemonParam(event, i) }
+              autoFocus>
+              <option>Daemon param: none</option>
+              <option value="silent">Daemon param: background process</option>
+              <option value="reindex">Daemon param: reindex</option>
+              <option value="rescan">Daemon param: rescan</option>
+            </select>
+          </div>
         </div>
       </div>
       <div className={ this.hasMoreThanOneCoin() ? 'hide' : 'col-sm-4' }>
@@ -33,8 +53,8 @@ const CoinSelectorsRender = function(item, coin, i) {
             { translate('INDEX.ACTIVATE_COIN') }
         </button>
       </div>
-      <div className="col-sm-12 text-center">
-        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
+      <div className="col-sm-11 text-center add-coin-modes">
+        <div className={ this.state.nativeOnly || isWindows ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -64,7 +84,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </span>
           </label>
         </div>
-        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
+        <div className={ this.state.nativeOnly ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -94,7 +114,9 @@ const CoinSelectorsRender = function(item, coin, i) {
             </span>
           </label>
         </div>
-        <div className="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12 style-addcoin-lbl-mdl-login">
+        <div
+          className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6"
+          style={{ paddingLeft: this.state.nativeOnly ? '0' : 'inherit' }}>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -132,6 +154,20 @@ const CoinSelectorsRender = function(item, coin, i) {
           onClick={ () => this.removeCoin(i) }>
             <i className="fa fa-trash-o"></i>
         </button>
+      </div>
+      <div className={ !this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-5 padding-bottom-30' : 'hide' }>
+        <div className="toggle-box padding-top-3 padding-bottom-10">
+          <select
+            className="form-control form-material"
+            name="daemonParam"
+            onChange={ (event) => this.updateDaemonParam(event, i) }
+            autoFocus>
+            <option>Daemon param: none</option>
+            <option value="silent">Daemon param: background process</option>
+            <option value="reindex">Daemon param: reindex</option>
+            <option value="rescan">Daemon param: rescan</option>
+          </select>
+        </div>
       </div>
       <div className={ item.mode === '1' || item.mode === 1 ? 'col-sm-12' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">

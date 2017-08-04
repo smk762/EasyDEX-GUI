@@ -1,9 +1,9 @@
 import React from 'react';
-import Config from '../../config';
 import WalletMain from './walletMain';
 import { iguanaSetRPCAuth } from '../../util/auth';
 import Store from '../../store';
 import {
+  Config,
   getDexCoins,
   iguanaActiveHandle
 } from '../../actions/actionCreators';
@@ -23,6 +23,16 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
+    let appVersion;
+
+    try {
+      appVersion = window.require('electron').remote.getCurrentWindow().appBasicInfo;
+    } catch (e) {}
+
+    if (appVersion) {
+      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
+    }
+
     Store.dispatch(iguanaActiveHandle());
     const _iguanaActiveHandle = setInterval(function() {
       Store.dispatch(iguanaActiveHandle());

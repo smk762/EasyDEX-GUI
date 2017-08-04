@@ -1,24 +1,24 @@
 import { ATOMIC } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function atomic(payload) {
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'atomic',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'atomic',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -26,26 +26,30 @@ export function atomic(payload) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           payload.method,
-          'Atomic Explorer error',
-          'error'
+          translate('API.ATOMIC_EXPLORER_ERR'),
+          translate('API.ERROR_SM')
         )
       );
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(atomicState(json));
     });
   }

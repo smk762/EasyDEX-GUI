@@ -1,23 +1,16 @@
 import { translate } from '../../translate/translate';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
   getKMDAddressesNative
 } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
 
 function handleGetNewKMDAddresses(pubpriv, coin, dispatch, json) {
-  /*dispatch(
-    triggerToaster(
-      translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
-      translate('TOASTR.WALLET_NOTIFICATION'),
-      'success'
-    )
-  );*/
   dispatch(
     triggerToaster(
       json.result ? json.result : json,
@@ -32,15 +25,8 @@ function handleGetNewKMDAddresses(pubpriv, coin, dispatch, json) {
 }
 
 export function getNewKMDAddresses(coin, pubpriv) {
-  let payload,
-      ajaxFunctionInput = '';
-
-  if (pubpriv === 'public') {
-    ajaxFunctionInput = 'getnewaddress';
-  }
-  if (pubpriv === 'private') {
-    ajaxFunctionInput = 'z_getnewaddress';
-  }
+  let payload;
+  let ajaxFunctionInput = pubpriv === 'public' ? 'getnewaddress' : 'z_getnewaddress';
 
   if (getPassthruAgent(coin) === 'iguana') {
     payload = {
@@ -63,14 +49,16 @@ export function getNewKMDAddresses(coin, pubpriv) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'getNewKMDAddresses',
-      'type': 'post',
-      'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'getNewKMDAddresses',
+        'type': 'post',
+        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     let _fetchConfig = {
       method: 'POST',
@@ -99,11 +87,13 @@ export function getNewKMDAddresses(coin, pubpriv) {
     )
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'getNewKMDAddresses',
@@ -117,11 +107,13 @@ export function getNewKMDAddresses(coin, pubpriv) {
       if (Config.cli.default) {
         json = json.result;
       }
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(
         handleGetNewKMDAddresses(
           pubpriv,

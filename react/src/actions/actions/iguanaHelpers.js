@@ -1,11 +1,8 @@
 import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
-import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 import { checkAC } from '../../components/addcoin/payload';
 
 export function getPassthruAgent(coin) {
@@ -33,14 +30,16 @@ export function iguanaHashHex(data, dispatch) {
       resolve(true);
     } else {
       const _timestamp = Date.now();
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'iguanaHashHex',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'function': 'iguanaHashHex',
+          'type': 'post',
+          'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+          'payload': payload,
+          'status': 'pending',
+        }));
+      }
 
       fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
         method: 'POST',
@@ -48,11 +47,13 @@ export function iguanaHashHex(data, dispatch) {
       })
       .catch(function(error) {
         console.log(error);
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'error',
+            'response': error,
+          }));
+        }
         dispatch(
           triggerToaster(
             'iguanaHashHex',
@@ -63,11 +64,13 @@ export function iguanaHashHex(data, dispatch) {
       })
       .then(response => response.json())
       .then(json => {
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'success',
+            'response': json,
+          }));
+        }
         resolve(json.hex);
       })
     }

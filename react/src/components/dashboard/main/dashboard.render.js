@@ -15,6 +15,7 @@ import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
 import WalletsNative from '../walletsNative/walletsNative';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
+import CoindDownModal from '../coindDownModal/coindDownModal';
 
 const DashboardRender = function() {
   return (
@@ -23,32 +24,33 @@ const DashboardRender = function() {
         className={ this.isSectionActive('wallets') ? 'page-main' : '' }
         id="section-dashboard">
         <Navbar {...this.props} />
+        <CoindDownModal {...this.props} />
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile {...this.props} />
           <WalletsNav {...this.props} />
           { !this.isNativeMode() && <WalletsProgress {...this.props} /> }
           { !this.isNativeMode() && <WalletsBalance {...this.props} />}
           <SendCoin {...this.props} />
-          <ReceiveCoin {...this.props.ActiveCoin} />
-          <WalletsData {...this.props} />
+          { !this.isNativeMode() && <ReceiveCoin {...this.props.ActiveCoin} /> }
+          { !this.isNativeMode() && <WalletsData {...this.props} /> }
           <WalletsTxInfo {...this.props} />
           <WalletsNative {...this.props} />
         </div>
-        <div className={ this.isSectionActive('edex') ? 'show' : 'hide' }>
+        { this.isSectionActive('edex') &&
           <EDEX {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('atomic') ? 'show' : 'hide' }>
+        }
+        { this.isSectionActive('atomic') &&
           <Atomic {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('jumblr') ? 'show' : 'hide' }>
+        }
+        { this.isSectionActive('jumblr') &&
           <Jumblr {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('settings') ? 'show' : 'hide' }>
+        }
+        { this.isSectionActive('settings') &&
           <Settings {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('about') ? 'show' : 'hide' }>
+        }
+        { this.isSectionActive('about') &&
           <About {...this.props} />
-        </div>
+        }
       </div>
     </div>
   );

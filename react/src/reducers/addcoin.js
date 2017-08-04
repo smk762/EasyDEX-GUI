@@ -10,7 +10,7 @@ export function AddCoin(state = {
     case DISPLAY_ADDCOIN_MODAL:
       return Object.assign({}, state, {
         display: action.display,
-        isLogin: action.isLogin
+        isLogin: action.isLogin,
       });
     default:
       return state;

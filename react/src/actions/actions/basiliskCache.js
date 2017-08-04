@@ -1,13 +1,12 @@
 import { DASHBOARD_ACTIVE_COIN_GET_CACHE } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
+// TODO: rewrite cache API to use POST
 export function deleteCacheFile(_payload) {
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/groom`, {
@@ -68,10 +67,11 @@ export function fetchNewCacheData(_payload) {
         _coin = `&coin=${_payload.coin}`,
         _calls = `&calls=${_payload.calls}`,
         _address = _payload.address ? (`&address=${_payload.address}`) : '',
+        _skip = _payload.skip ? (`&skip=${_payload.skip}`) : '',
         _iguanaInstancePort = Config.useBasiliskInstance ? `&port=${Config.iguanaCorePort + 1}` : '';
 
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/${_route}${_userpass}${_pubkey}${_coin}${_calls}${_address}${_iguanaInstancePort}`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/${_route}${_userpass}${_pubkey}${_coin}${_calls}${_address}${_skip}${_iguanaInstancePort}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

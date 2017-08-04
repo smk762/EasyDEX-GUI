@@ -13,7 +13,7 @@ import {
   ReceiveCoinRender
 } from './receiveCoin.render';
 
-// TODO: implement sorting
+// TODO: implement balance/interest sorting
 // TODO: fallback to localstorage/stores data in case iguana is taking too long to respond
 
 class ReceiveCoin extends React.Component {
@@ -22,9 +22,12 @@ class ReceiveCoin extends React.Component {
 
     this.state = {
       openDropMenu: false,
+      hideZeroAdresses: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.toggleVisibleAddress = this.toggleVisibleAddress.bind(this);
+    this.checkTotalBalance = this.checkTotalBalance.bind(this);
   }
 
   componentWillMount() {
@@ -108,31 +111,86 @@ class ReceiveCoin extends React.Component {
     Store.dispatch(getNewKMDAddresses(this.props.coin, type));
   }
 
+  toggleVisibleAddress() {
+    this.setState(Object.assign({}, this.state, {
+      hideZeroAddresses: !this.state.hideZeroAddresses,
+    }));
+  }
+
+  checkTotalBalance() {
+    let _balance = '0';
+    const _mode = this.props.mode;
+
+    if (_mode === 'full') {
+      _balance = this.props.balance || 0;
+    } else if (_mode === 'basilisk') {
+      if (this.props.cache) {
+        const _cache = this.props.cache;
+        const _coin = this.props.coin;
+        const _address = this.props.activeAddress;
+
+        if (_address &&
+            _cache[_coin] &&
+            _cache[_coin][_address] &&
+            _cache[_coin][_address].getbalance &&
+            _cache[_coin][_address].getbalance.data &&
+            (_cache[_coin][_address].getbalance.data.balance ||
+             _cache[_coin][_address].getbalance.data.interest)) {
+          const _regBalance = _cache[_coin][_address].getbalance.data.balance ? _cache[_coin][_address].getbalance.data.balance : 0;
+          const _regInterest = _cache[_coin][_address].getbalance.data.interest ? _cache[_coin][_address].getbalance.data.interest : 0;
+
+          _balance = _regBalance + _regInterest;
+        }
+      }
+    } else if (_mode === 'native') {
+      if (this.props.balance &&
+          this.props.balance.total) {
+        _balance = this.props.balance.total;
+      }
+    }
+
+    return _balance;
+  }
+
   renderAddressList(type) {
-    if (this.props.addresses &&
-      this.props.addresses[type] &&
-      this.props.addresses[type].length) {
+    const _addresses = this.props.addresses;
+    const _cache = this.props.cache;
+    const _coin = this.props.coin;
+
+    if (_addresses &&
+        _addresses[type] &&
+        _addresses[type].length) {
       let items = [];
 
-      for (let i = 0; i < this.props.addresses[type].length; i++) {
-        let address = this.props.addresses[type][i];
+      for (let i = 0; i < _addresses[type].length; i++) {
+        let address = _addresses[type][i];
 
         if (this.isBasiliskMode() &&
-          this.hasNoAmount(address)) {
-          address.amount = this.props.cache && this.props.cache[this.props.coin][address.address]
-          && this.props.cache[this.props.coin][address.address].getbalance.data
-          && this.props.cache[this.props.coin][address.address].getbalance.data.balance ? this.props.cache[this.props.coin][address.address].getbalance.data.balance : 'N/A';
+            this.hasNoAmount(address)) {
+          address.amount = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
         }
         if (this.isBasiliskMode() &&
-          this.hasNoInterest(address)) {
-          address.interest = this.props.cache && this.props.cache[this.props.coin][address.address]
-          && this.props.cache[this.props.coin][address.address].getbalance.data
-          && this.props.cache[this.props.coin][address.address].getbalance.data.interest ? this.props.cache[this.props.coin][address.address].getbalance.data.interest : 'N/A';
+            this.hasNoInterest(address)) {
+          address.interest = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
         }
 
-        items.push(
-          AddressItemRender.call(this, address, type)
-        );
+        if (this.state.hideZeroAddresses) {
+          if (!this.hasNoAmount) {
+            items.push(
+              AddressItemRender.call(this, address, type)
+            );
+          }
+        } else {
+          items.push(
+            AddressItemRender.call(this, address, type)
+          );
+        }
       }
 
       return items;

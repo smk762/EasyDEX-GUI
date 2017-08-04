@@ -12,7 +12,7 @@ import { Interval } from './interval';
 import { SyncOnly } from './syncOnly';
 import { Errors } from './errors';
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   AddCoin,
   toaster,
   Main,
@@ -25,5 +25,15 @@ const rootReducer = combineReducers({
   Errors,
   routing: routerReducer,
 });
+
+// reset app state on logout
+const initialState = appReducer({}, {});
+const rootReducer = (state, action) => {
+  if (action.type === 'LOGOUT') {
+    state = initialState;
+  }
+
+  return appReducer(state, action);
+}
 
 export default rootReducer;

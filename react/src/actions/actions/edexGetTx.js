@@ -1,11 +1,9 @@
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function edexGetTransaction(data, dispatch) {
   const payload = {
@@ -19,14 +17,16 @@ export function edexGetTransaction(data, dispatch) {
 
   return new Promise((resolve, reject) => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'edexGetTransaction',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'edexGetTransaction',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -34,11 +34,13 @@ export function edexGetTransaction(data, dispatch) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'edexGetTransaction',
@@ -49,11 +51,13 @@ export function edexGetTransaction(data, dispatch) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       resolve(json);
     })
   });

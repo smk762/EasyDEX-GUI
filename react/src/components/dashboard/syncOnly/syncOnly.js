@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCoinTitle } from '../../../util/coinHelper';
+import { translate } from '../../../translate/translate';
 import {
   stopInterval,
   addCoin,
@@ -19,7 +20,7 @@ class SyncOnly extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      autoRestartedForks: {}
+      autoRestartedForks: {},
     };
     this.closeSyncOnlyModal = this.closeSyncOnlyModal.bind(this);
   }
@@ -141,7 +142,7 @@ class SyncOnly extends React.Component {
       return items;
     } else {
       return (
-        <div>Loading...</div>
+        <div>{ translate('INDEX.LOADING') }...</div>
       );
     }
   }

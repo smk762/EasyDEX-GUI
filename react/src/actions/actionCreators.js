@@ -1,7 +1,6 @@
 import 'whatwg-fetch';
 import 'bluebird';
 
-import _config from '../config';
 import { translate } from '../translate/translate';
 import {
   GET_ACTIVE_COINS,
@@ -26,6 +25,8 @@ import {
   DASHBOARD_ACTIVE_COIN_CHANGE,
   ACTIVE_COIN_GET_ADDRESSES,
   DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,
+  DISPLAY_LOGIN_SETTINGS_MODAL,
+  DISPLAY_COIND_DOWN_MODAL,
   START_INTERVAL,
   STOP_INTERVAL
 } from './storeType';
@@ -66,14 +67,7 @@ export * from './actions/fullTxHistory';
 export * from './actions/basiliskTxHistory';
 export * from './actions/iguanaHelpers';
 export * from './actions/cli';
-
-export let Config;
-
-try {
-  Config = window.require('electron').remote.getCurrentWindow().appConfig;
-} catch (e) {
-  Config = _config;
-}
+export * from './actions/update';
 
 export function changeActiveAddress(address) {
   return {
@@ -294,7 +288,7 @@ export function rpcErrorHandler(json, dispatch) {
   if (json &&
       json.error) {
     if (json.error === 'bitcoinrpc needs coin that is active') {
-      dispatch(triggerToaster('No active coin', translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
+      dispatch(triggerToaster(translate('API.NO_ACTIVE_COIN'), translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
     }
   }
 }
@@ -331,9 +325,9 @@ export function getNativeTxHistoryState(json) {
   if (json &&
       json.error) {
     json = null;
-  } else if (json && json.result) {
+  } else if (json && json.result && json.result.length) {
     json = json.result;
-  } else if (!json.length) {
+  } else if (!json || !json.result.length) {
     json = 'no data';
   }
 
@@ -357,5 +351,19 @@ export function stopInterval(name, intervals) {
   return {
     type: STOP_INTERVAL,
     name,
+  }
+}
+
+export function toggleCoindDownModal(display) {
+  return {
+    type: DISPLAY_COIND_DOWN_MODAL,
+    displayCoindDownModal: display,
+  }
+}
+
+export function toggleLoginSettingsModal(display) {
+  return {
+    type: DISPLAY_LOGIN_SETTINGS_MODAL,
+    displayLoginSettingsModal: display,
   }
 }

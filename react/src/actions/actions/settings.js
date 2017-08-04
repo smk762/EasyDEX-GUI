@@ -6,10 +6,8 @@ import {
   LOAD_APP_CONFIG
 } from '../storeType';
 import { translate } from '../../translate/translate';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
+import Config from '../../config';
 import {
   logGuiHttp,
   guiLogState
@@ -58,7 +56,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Illegal privkey',
+          transalte('API.ILLEGAL_PRIVKEY'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'error'
         )
@@ -69,7 +67,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Privkey already in wallet',
+          transalte('API.PRIVKEY_IN_WALLET'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
@@ -103,14 +101,16 @@ export function importPrivKey(wifKey) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'importPrivKey',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'importPrivKey',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -118,11 +118,13 @@ export function importPrivKey(wifKey) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'importPrivKey',
@@ -133,11 +135,13 @@ export function importPrivKey(wifKey) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(
         parseImportPrivKeyResponse(
           json,
@@ -202,14 +206,16 @@ export function getPeersList(coin) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'getPeersList',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'getPeersList',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -217,11 +223,13 @@ export function getPeersList(coin) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'getPeersList',
@@ -232,11 +240,13 @@ export function getPeersList(coin) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(getPeersListState(json, dispatch));
     })
   }
@@ -265,7 +275,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Addnode needs active coin',
+          translate('API.ADDNODE_NEEDS_COIN'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'error'
         )
@@ -276,7 +286,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Peer was already connected',
+          translate('API.PEER_ALREADY_CONN'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
@@ -287,7 +297,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Addnode connection was already pending',
+          translate('API.ADDNODE_ALREADY_PENDING'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
@@ -298,7 +308,7 @@ function addPeerNodeState(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          'Peer is added',
+          translate('API.PEER_ADDED'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'success'
         )
@@ -318,14 +328,16 @@ export function addPeerNode(coin, ip) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'addPeerNode',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'addPeerNode',
+        'type': 'post',
+        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
 
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
@@ -333,11 +345,13 @@ export function addPeerNode(coin, ip) {
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'addPeerNode',
@@ -348,11 +362,13 @@ export function addPeerNode(coin, ip) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(addPeerNodeState(json, dispatch));
     })
   }
@@ -378,7 +394,16 @@ export function saveAppConfig(_payload) {
       );
     })
     .then(response => response.json())
-    .then(json => dispatch(getAppConfig()))
+    .then(json => {
+      dispatch(getAppConfig());
+      dispatch(
+        triggerToaster(
+          'Settings are saved',
+          translate('TOASTR.SETTINGS_NOTIFICATION'),
+          'success'
+        )
+      );
+    })
   }
 }
 
@@ -409,5 +434,37 @@ export function getAppConfig() {
     })
     .then(response => response.json())
     .then(json => dispatch(getAppConfigState(json)))
+  }
+}
+
+export function resetAppConfig() {
+  return dispatch => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/appconf/reset`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'resetAppConfig',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(getAppConfig());
+      dispatch(
+        triggerToaster(
+          'Settings are reset to default',
+          translate('TOASTR.SETTINGS_NOTIFICATION'),
+          'success'
+        )
+      );
+    })
   }
 }

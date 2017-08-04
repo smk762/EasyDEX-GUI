@@ -1,39 +1,45 @@
 import { SYNCING_NATIVE_MODE } from '../storeType';
 import {
   triggerToaster,
-  Config,
   getPassthruAgent,
-  getDebugLog
+  getDebugLog,
+  toggleCoindDownModal
 } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function getSyncInfoNativeKMD(skipDebug) {
   const coin = 'KMD';
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'getSyncInfoNativeKMD',
-      'type': 'post',
-      'url': `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`,
-      'payload': '',
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'getSyncInfoNativeKMD',
+        'type': 'post',
+        'url': Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`,
+        'payload': '',
+        'status': 'pending',
+      }));
+    }
 
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
+    return fetch(
+      Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
       method: 'GET',
     })
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'getSyncInfoNativeKMD',
@@ -44,12 +50,14 @@ export function getSyncInfoNativeKMD(skipDebug) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
-      dispatch(getSyncInfoNativeState({ 'remoteKMDNode': json }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': Config.iguanaLessMode ? json.info : json,
+        }));
+      }
+      dispatch(getSyncInfoNativeState({ 'remoteKMDNode': Config.iguanaLessMode ? json.info : json }));
     })
     .then(function() {
       if (!skipDebug) {
@@ -60,24 +68,23 @@ export function getSyncInfoNativeKMD(skipDebug) {
 }
 
 function getSyncInfoNativeState(json, coin, skipDebug) {
-  console.log('getSyncInfoNativeState', json);
   if (coin === 'KMD' &&
       json &&
-      json.error) {
+      json.error &&
+      json.error.message.indexOf('Activating best') === -1) {
     return getSyncInfoNativeKMD(skipDebug);
   } else {
     if (json &&
         json.error &&
         Config.cli.default) {
-      console.log('getSyncInfoNativeState', 'error');
       return {
         type: SYNCING_NATIVE_MODE,
-        progress: Config.cli.default ? json.error : json,
+        progress: json.error,
       }
     } else {
       return {
         type: SYNCING_NATIVE_MODE,
-        progress: Config.cli.default ? json.result : json,
+        progress: json.result ? json.result : json,
       }
     }
   }
@@ -103,14 +110,16 @@ export function getSyncInfoNative(coin, skipDebug) {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'getSyncInfo',
-      'type': 'post',
-      'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'getSyncInfo',
+        'type': 'post',
+        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': payload,
+        'status': 'pending',
+      }));
+    }
     let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -132,11 +141,13 @@ export function getSyncInfoNative(coin, skipDebug) {
     )
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'getSyncInfo',
@@ -149,7 +160,6 @@ export function getSyncInfoNative(coin, skipDebug) {
       const _response = response.text().then(function(text) { return text; });
       return _response;
     })
-    //.then(response => response.json())
     .then(json => {
       if (!json &&
         Config.cli.default) {
@@ -158,18 +168,27 @@ export function getSyncInfoNative(coin, skipDebug) {
             'Komodod is down',
             'Critical Error',
             'error',
-            false
+            true
           )
         );
+        dispatch(getDebugLog('komodo', 50));
+        dispatch(toggleCoindDownModal(true));
       } else {
         json = JSON.parse(json);
       }
 
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (json.error &&
+          json.error.message.indexOf('Activating best') === -1) {
+        dispatch(getDebugLog('komodo', 1));
+      }
+
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(
         getSyncInfoNativeState(
           json,

@@ -1,8 +1,6 @@
 import { LOG_GUI_HTTP } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
+import Config from '../../config';
 
 export function logGuiHttp(payload) {
   return dispatch => {

@@ -1,9 +1,7 @@
 import React from 'react';
 import Config from '../../../config';
 import { translate } from '../../../translate/translate';
-import {
-  checkTimestamp
-} from '../../../util/time';
+import { checkTimestamp } from '../../../util/time';
 import {
   edexGetTxIDList,
   edexRemoveTXID
@@ -33,7 +31,7 @@ import {
 
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
-const socket = io.connect('http://127.0.0.1:' + Config.agamaPort);
+const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 // TODO: prevent any cache updates rather than utxo while on send coin form
 //       fix a bug - total amount is incorrect when switching between steps
@@ -64,7 +62,16 @@ class SendCoin extends React.Component {
     this.toggleSendAPIType = this.toggleSendAPIType.bind(this);
     this._fetchNewUTXOData = this._fetchNewUTXOData.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
     socket.on('messages', msg => this.updateSocketsData(msg));
+  }
+
+  setRecieverFromScan(receiver) {
+    this.setState({
+      sendTo: receiver
+    });
+
+    document.getElementById('edexcoinSendTo').focus();
   }
 
   componentWillMount() {
@@ -94,7 +101,8 @@ class SendCoin extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (!this.state.sendFrom &&
+    if (this.state &&
+        !this.state.sendFrom &&
         this.props.ActiveCoin.activeAddress) {
       this.setState(Object.assign({}, this.state, {
         sendFrom: this.props.ActiveCoin.activeAddress,
@@ -103,7 +111,6 @@ class SendCoin extends React.Component {
   }
 
   updateSocketsData(data) {
-    console.log('sockets', data);
     if (data &&
         data.message &&
         data.message.shepherd.iguanaAPI &&
@@ -149,20 +156,23 @@ class SendCoin extends React.Component {
             timestamp,
             isReadyToUpdate,
             waitUntilCallIsFinished = this.state.currentStackLength > 1 ? true : false;
+        const _cache = this.props.ActiveCoin.cache;
+        const _coin = this.props.ActiveCoin.coin;
+        const _sendFrom = this.state.sendFrom;
 
-      if (this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].refresh ||
-        this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].listunspent) {
-        refreshCacheData = this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].refresh || this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].listunspent;
+      if (_cache[_coin][_sendFrom].refresh ||
+          _cache[_coin][_sendFrom].listunspent) {
+        refreshCacheData = _cache[_coin][_sendFrom].refresh || _cache[_coin][_sendFrom].listunspent;
         timestamp = checkTimestamp(refreshCacheData.timestamp);
         isReadyToUpdate = timestamp > 600 ? true : false;
       } else {
         isReadyToUpdate = true;
       }
 
-      if (this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].refresh &&
-          this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].refresh.data &&
-          this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].refresh.data.error &&
-          this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].refresh.data.error === 'request failed') {
+      if (_cache[_coin][_sendFrom].refresh &&
+          _cache[_coin][_sendFrom].refresh.data &&
+          _cache[_coin][_sendFrom].refresh.data.error &&
+          _cache[_coin][_sendFrom].refresh.data.error === 'request failed') {
         timestamp = null;
       }
 
@@ -170,7 +180,7 @@ class SendCoin extends React.Component {
         this,
         refreshCacheData,
         isReadyToUpdate,
-        waitUntilCallIsFinished,  
+        waitUntilCallIsFinished,
         timestamp
       );
     }
@@ -179,13 +189,15 @@ class SendCoin extends React.Component {
   }
 
   renderAddressAmount(address) {
-    if (this.props.ActiveCoin.addresses &&
-        this.props.ActiveCoin.addresses.public &&
-        this.props.ActiveCoin.addresses.public.length) {
-      for (let i = 0; i < this.props.ActiveCoin.addresses.public.length; i++) {
-        if (this.props.ActiveCoin.addresses.public[i].address === address) {
-          if (this.props.ActiveCoin.addresses.public[i].amount !== 'N/A') {
-            return this.props.ActiveCoin.addresses.public[i].amount;
+    const _addresses = this.props.ActiveCoin.addresses;
+
+    if (_addresses &&
+        _addresses.public &&
+        _addresses.public.length) {
+      for (let i = 0; i < _addresses.public.length; i++) {
+        if (_addresses.public[i].address === address) {
+          if (_addresses.public[i].amount !== 'N/A') {
+            return _addresses.public[i].amount;
           }
         }
       }
@@ -195,9 +207,11 @@ class SendCoin extends React.Component {
   }
 
   renderAddressByType(type) {
-    if (this.props.ActiveCoin.addresses &&
-        this.props.ActiveCoin.addresses[type] &&
-        this.props.ActiveCoin.addresses[type].length) {
+    const _addresses = this.props.ActiveCoin.addresses;
+
+    if (_addresses &&
+        _addresses[type] &&
+        _addresses[type].length) {
       if (this.state.sendApiType) {
         const mainAddress = this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
         const mainAddressAmount = this.renderAddressAmount(mainAddress);
@@ -206,27 +220,41 @@ class SendCoin extends React.Component {
           <li
             key={ mainAddress }
             className={ mainAddressAmount <= 0 ? 'hide' : '' }>
-            <a onClick={ () => this.updateAddressSelection(mainAddress, type, mainAddressAmount) }><i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { mainAddressAmount } { this.props.ActiveCoin.coin } ]  { mainAddress }</span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+            <a onClick={ () => this.updateAddressSelection(mainAddress, type, mainAddressAmount) }>
+              <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+              <span className="text">
+                [ { mainAddressAmount } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
+                { mainAddress }
+              </span>
+              <span className="glyphicon glyphicon-ok check-mark"></span>
+            </a>
           </li>
         );
       } else {
         let items = [];
+        const _addresses = this.props.ActiveCoin.addresses;
+        const _cache = this.props.ActiveCoin.cache;
+        const _coin = this.props.ActiveCoin.coin;
 
-        for (let i = 0; i < this.props.ActiveCoin.addresses[type].length; i++) {
-          const address = this.props.ActiveCoin.addresses[type][i];
+        for (let i = 0; i < _addresses[type].length; i++) {
+          const address = _addresses[type][i].address;
           let _amount = address.amount;
 
           if (this.props.ActiveCoin.mode === 'basilisk' &&
-              this.props.ActiveCoin.cache) {
-            _amount = this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address] && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address].getbalance.data && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address].getbalance.data.balance ? this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address.address].getbalance.data.balance : 'N/A';
+              _cache) {
+            _amount = _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
 
           if (_amount !== 'N/A') {
             items.push(
               <li
-                key={ address.address }
+                key={ address }
                 className={ _amount <= 0 ? 'hide' : '' }>
-                <a onClick={ () => this.updateAddressSelection(address.address, type, _amount) }><i className={ type === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { _amount } { this.props.ActiveCoin.coin } ]  { address.address }</span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+                <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
+                  <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+                  <span className="text">[ { _amount } { _coin } ]  { address }</span>
+                  <span className="glyphicon glyphicon-ok check-mark"></span>
+                </a>
               </li>
             );
           }
@@ -242,18 +270,22 @@ class SendCoin extends React.Component {
   renderSelectorCurrentLabel() {
     if (this.state.sendFrom) {
       let _amount;
+      const _cache = this.props.ActiveCoin.cache;
+      const _coin = this.props.ActiveCoin.coin;
+      const _sendFrom = this.state.sendFrom;
 
       if (this.state.sendFromAmount === 0 &&
           this.props.ActiveCoin.mode === 'basilisk' &&
-          this.props.ActiveCoin.cache) {
-        _amount = this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].getbalance.data && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].getbalance.data.balance ? this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom].getbalance.data.balance : 'N/A';
+          _cache) {
+        _amount = _cache[_coin][_sendFrom].getbalance.data && _cache[_coin][_sendFrom].getbalance.data.balance ? _cache[_coin][_sendFrom].getbalance.data.balance : 'N/A';
       } else {
         _amount = this.state.sendFromAmount;
       }
 
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { _amount } { this.props.ActiveCoin.coin } ]  { this.state.sendFrom }</span>
+          <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+          <span className="text">[ { _amount } { _coin } ]  { _sendFrom }</span>
         </span>
       );
     } else if (this.state.sendApiType) {
@@ -262,12 +294,13 @@ class SendCoin extends React.Component {
 
       return (
         <span>
-          <i className={ this.state.addressType === 'public' ? 'icon fa-eye' : 'icon fa-eye-slash' }></i>  <span className="text">[ { mainAddressAmount } { this.props.ActiveCoin.coin } ]  { mainAddress }</span>
+          <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+          <span className="text">[ { mainAddressAmount } { this.props.ActiveCoin.coin } ]  { mainAddress }</span>
         </span>
       );
     } else {
       return (
-        <span>- { translate('SEND.SELECT_T_OR_Z_ADDR') } -</span>
+        <span>{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
       );
     }
   }
@@ -278,7 +311,7 @@ class SendCoin extends React.Component {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          title={ '-' + translate('SEND.SELECT_T_OR_Z_ADDR') + '-' }
+          title={ `-${translate('SEND.SELECT_T_OR_Z_ADDR')}-` }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">
             { this.renderSelectorCurrentLabel() }&nbsp;&nbsp;
@@ -290,7 +323,10 @@ class SendCoin extends React.Component {
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
             <li className="selected">
-              <a><span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+              <a>
+                <span className="text">{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
+                <span className="glyphicon glyphicon-ok check-mark"></span>
+              </a>
             </li>
             { this.renderAddressByType('public') }
           </ul>
@@ -307,10 +343,12 @@ class SendCoin extends React.Component {
 
   updateAddressSelection(address, type, amount) {
     let _sendFromAmount = amount ? amount : this.props.ActiveCoin.addresses[type][address].amount;
+    const _cache = this.props.ActiveCoin.cache;
+    const _coin = this.props.ActiveCoin.coin;
 
     if (this.props.ActiveCoin.mode === 'basilisk' &&
         this.props.ActiveCoin.cache) {
-      _sendFromAmount = this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address].getbalance.data && this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address].getbalance.data.balance ? this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][address].getbalance.data.balance : 'N/A';
+      _sendFromAmount = _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
     }
 
     this.setState(Object.assign({}, this.state, {
@@ -334,7 +372,7 @@ class SendCoin extends React.Component {
         amount: 0,
         fee: 0.0001,
         sendSig: false,
-        sendApiType: false,
+        sendApiType: true,
         addressSelectorOpen: false,
         currentStackLength: 0,
         totalStackLength: 0,
@@ -403,13 +441,14 @@ class SendCoin extends React.Component {
             'utxos': utxoSet
           };
 
+    // TODO: es arrows
     iguanaUTXORawTX(sendData, Store.dispatch)
     .then(function(json) {
       if (json.result === 'success' &&
           json.completed === true) {
         Store.dispatch(
           triggerToaster(
-            translate('TOASTR.SIGNED_TX_GENERATED') + '.',
+            translate('TOASTR.SIGNED_TX_GENERATED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success'
           )
@@ -451,7 +490,7 @@ class SendCoin extends React.Component {
                 return new Promise(function(resolve, reject) {
                   Store.dispatch(
                     triggerToaster(
-                      translate('TOASTR.GETTING_TXID_INFO') + '.',
+                      translate('TOASTR.GETTING_TXID_INFO'),
                       translate('TOASTR.WALLET_NOTIFICATION'),
                       'info'
                     )
@@ -509,7 +548,7 @@ class SendCoin extends React.Component {
 
               Store.dispatch(
                 triggerToaster(
-                  translate('TOASTR.AWAITING_TX_RESP') + '...',
+                  `${translate('TOASTR.AWAITING_TX_RESP')}...`,
                   translate('TOASTR.WALLET_NOTIFICATION'),
                   'info'
                 )
@@ -518,7 +557,7 @@ class SendCoin extends React.Component {
               function waterfallUTXOProcess() {
                 Store.dispatch(
                   triggerToaster(
-                    translate('TOASTR.PROCESSING_UTXO') + '...',
+                    `${translate('TOASTR.PROCESSING_UTXO')}...`,
                     translate('TOASTR.WALLET_NOTIFICATION'),
                     'info'
                   )
@@ -559,7 +598,7 @@ class SendCoin extends React.Component {
         Store.dispatch(sendToAddressStateAlt(json));
         Store.dispatch(
           triggerToaster(
-            translate('TOASTR.SIGNED_TX_GENERATED_FAIL') + '.',
+            `${translate('TOASTR.SIGNED_TX_GENERATED_FAIL')}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -602,17 +641,19 @@ class SendCoin extends React.Component {
     } else if (key === 'rawtx') {
       return this.renderSignedTx(true);
     } else if (key === 'complete' || key === 'completed' || key === 'result') {
-      if (this.props.ActiveCoin.lastSendToResponse[key] === true ||
-          this.props.ActiveCoin.lastSendToResponse[key] === 'success') {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
+      if (_lastSendToResponse[key] === true ||
+         _lastSendToResponse[key] === 'success') {
         return (
-          <span className="label label-success">{ this.props.ActiveCoin.lastSendToResponse[key] === true ? 'true' : 'success' }</span>
+          <span className="label label-success">{ _lastSendToResponse[key] === true ? 'true' : 'success' }</span>
         );
       } else {
         if (key === 'result' &&
-          this.props.ActiveCoin.lastSendToResponse.result &&
-          typeof this.props.ActiveCoin.lastSendToResponse.result !== 'object') {
+          _lastSendToResponse.result &&
+          typeof _lastSendToResponse.result !== 'object') {
           return (
-            <span>{ this.props.ActiveCoin.lastSendToResponse.result }</span>
+            <span>{ _lastSendToResponse.result }</span>
           );
         } else {
           return (
@@ -621,17 +662,21 @@ class SendCoin extends React.Component {
         }
       }
     } else if (key === 'error') {
-      if (Object.keys(this.props.ActiveCoin.lastSendToResponse[key]).length) {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
+      if (Object.keys(_lastSendToResponse[key]).length) {
         return (
-          <span>{ JSON.stringify(this.props.ActiveCoin.lastSendToResponse[key], null, '\t') }</span>
+          <span>{ JSON.stringify(_lastSendToResponse[key], null, '\t') }</span>
         );
       } else {
         return (
-          <span className="label label-danger">{ this.props.ActiveCoin.lastSendToResponse[key] }</span>
+          <span className="label label-danger">{ _lastSendToResponse[key] }</span>
         );
       }
     } else if (key === 'sendrawtransaction') {
-      if (this.props.ActiveCoin.lastSendToResponse[key] === 'success') {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
+      if (_lastSendToResponse[key] === 'success') {
         return (
           <span className="label label-success">true</span>
         );
@@ -641,8 +686,10 @@ class SendCoin extends React.Component {
         );
       }
     } else if (key === 'txid' || key === 'sent') {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
       return (
-        <span>{ this.props.ActiveCoin.lastSendToResponse[key] }</span>
+        <span>{ _lastSendToResponse[key] }</span>
       );
     } else if (key === 'tag') {
       return null;
@@ -653,6 +700,7 @@ class SendCoin extends React.Component {
     return SendCoinResponseRender.call(this);
   }
 
+  // experimental, ask @kolo for details if required
   getOAdress() {
     resolveOpenAliasAddress(this.state.sendToOA)
     .then(function(json) {

@@ -7,7 +7,7 @@ import AddCoinOptionsACFiat from '../../addcoin/addcoinOptionsACFiat';
 
 const AtomicRender = function () {
   return (
-    <div className="page margin-left-0">
+    <div className="page margin-left-0 full-height">
       <div className="page-content">
         <div className="row">
           <div className="col-xlg-12 col-md-12">

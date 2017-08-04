@@ -4,6 +4,57 @@ import AddCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import AddCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../../addcoin/addcoinOptionsACFiat';
 
+export const AppUpdateTabRender = function() {
+  return (
+    <div
+      className="panel"
+      id="AppUpdate"
+      onClick={ () => this.openTab('AppUpdate', 10) }>
+      <div className="panel-heading">
+        <a className={ 'panel-title' + (this.state.activeTab === 10 ? '' : ' collapsed') }>
+          <i className="icon fa fa-life-ring"></i> { translate('INDEX.UPDATE') }
+        </a>
+      </div>
+      <div
+        className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }
+        style={{ height: this.state.activeTab === 10 ? `${this.state.activeTabHeight}px` : '0' }}>
+        <div className="panel-body">
+          <div className="col-sm-4 padding-top-15">
+            <h5>{ translate('INDEX.UI_UPDATE') }</h5>
+            <div className="padding-top-15">
+              <button
+                type="button"
+                className="btn btn-info waves-effect waves-light"
+                onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light margin-left-20"
+                onClick={ this._updateUIPromise }
+                disabled={ !this.state.updatePatch }>{ translate('INDEX.UPDATE_UI_NOW') }</button>
+            </div>
+          </div>
+          <div className="col-sm-4 padding-top-15 hide">
+            <h5>{ translate('INDEX.BINS_UPDATE') }</h5>
+            <div className="padding-top-15">
+              <button
+                type="button"
+                className="btn btn-info waves-effect waves-light"
+                onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light margin-left-20"
+                onClick={ this.checkNodes }>{ translate('INDEX.UPDATE_BINS_NOW') }</button>
+            </div>
+          </div>
+          <div className="col-sm-12 padding-top-15">
+            { this.renderUpdateStatus() }
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const AppInfoTabRender = function() {
   return (
     <div
@@ -11,13 +62,13 @@ export const AppInfoTabRender = function() {
       id="AppInfo"
       onClick={ () => this.openTab('AppInfo', 8) }>
       <div className="panel-heading">
-        <a className={ this.state.activeTab === 8 ? 'panel-title' : 'panel-title collapsed' }>
+        <a className={ 'panel-title' + (this.state.activeTab === 8 ? '' : ' collapsed') }>
           <i className="icon md-info"></i>{ translate('SETTINGS.APP_INFO') }
         </a>
       </div>
       <div
-        className={ this.state.activeTab === 8 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-        style={{ height: this.state.activeTab === 8 ? this.state.activeTabHeight + 'px' : '0' }}>
+        className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }
+        style={{ height: this.state.activeTab === 8 ? `${this.state.activeTabHeight}px` : '0' }}>
         <div className="panel-body">
           <div className="col-sm-12 padding-top-15">
             <div className="row">
@@ -26,7 +77,7 @@ export const AppInfoTabRender = function() {
                 { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
               </div>
               <div>
-                { translate('SETTINGS.VERSION') }: { this.props.Settings.appInfo.releaseInfo.version }
+                { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}-beta` }
               </div>
               <div>
                 { translate('SETTINGS.APP_SESSION') }: { this.props.Settings.appInfo.appSession }
@@ -93,9 +144,9 @@ export const AppInfoTabRender = function() {
 
 export const SettingsRender = function() {
   return (
-    <div className="margin-left-0">
+    <div className="margin-left-0 full-height">
       <div
-        className="page-content"
+        className="page-content full-height"
         id="section-iguana-wallet-settings">
         <div className="row">
           <div className="col-xlg-12 col-md-12">
@@ -105,69 +156,71 @@ export const SettingsRender = function() {
                 <div
                   className="panel-group"
                   id="SettingsAccordion">
-                  <div
-                    className="panel"
-                    id="WalletInfo"
-                    onClick={ () => this.openTab('WalletInfo', 0) }>
-                    <div className="panel-heading">
-                      <a className={ this.state.activeTab === 0 ? 'panel-title' : 'panel-title collapsed' }>
-                        <i className="icon md-balance-wallet"></i>{ translate('INDEX.WALLET_INFO') }
-                      </a>
-                    </div>
+                  { !this.props.disableWalletSpecificUI &&
                     <div
-                      className={ this.state.activeTab === 0 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 0 ? this.state.activeTabHeight + 'px' : '0' }}>
-                      <div className="panel-body">
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              <th width="10%">{ translate('INDEX.KEY') }</th>
-                              <th>{ translate('INDEX.VALUE') }</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td className="wallet-info-key">pubkey</td>
-                              <td>{ this.props.Main.activeHandle.pubkey }</td>
-                            </tr>
-                            <tr>
-                              <td className="wallet-info-key">btcpubkey</td>
-                              <td>{ this.props.Main.activeHandle.btcpubkey }</td>
-                            </tr>
-                            <tr>
-                              <td className="wallet-info-key">rmd160</td>
-                              <td>{ this.props.Main.activeHandle.rmd160 }</td>
-                            </tr>
-                            <tr>
-                              <td className="wallet-info-key">NXT</td>
-                              <td>{ this.props.Main.activeHandle.NXT }</td>
-                            </tr>
-                            <tr>
-                              <td className="wallet-info-key">notary</td>
-                              <td>{ this.props.Main.activeHandle.notary }</td>
-                            </tr>
-                            <tr>
-                              <td className="wallet-info-key">status</td>
-                              <td>{ this.props.Main.activeHandle.status }</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                      id="WalletInfo"
+                      onClick={ () => this.openTab('WalletInfo', 0) }
+                      className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
+                      <div className="panel-heading">
+                        <a className={ 'panel-title' + (this.state.activeTab === 0 ? '' : ' collapsed') }>
+                          <i className="icon md-balance-wallet"></i>{ translate('INDEX.WALLET_INFO') }
+                        </a>
+                      </div>
+                      <div
+                        className={ 'panel-collapse collapse' + (this.state.activeTab === 0 ? ' in' : '') }
+                        style={{ height: this.state.activeTab === 0 ? `${this.state.activeTabHeight}px` : '0' }}>
+                        <div className="panel-body">
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th width="10%">{ translate('INDEX.KEY') }</th>
+                                <th>{ translate('INDEX.VALUE') }</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td className="wallet-info-key">pubkey</td>
+                                <td>{ this.props.Main.activeHandle.pubkey }</td>
+                              </tr>
+                              <tr>
+                                <td className="wallet-info-key">btcpubkey</td>
+                                <td>{ this.props.Main.activeHandle.btcpubkey }</td>
+                              </tr>
+                              <tr>
+                                <td className="wallet-info-key">rmd160</td>
+                                <td>{ this.props.Main.activeHandle.rmd160 }</td>
+                              </tr>
+                              <tr>
+                                <td className="wallet-info-key">NXT</td>
+                                <td>{ this.props.Main.activeHandle.NXT }</td>
+                              </tr>
+                              <tr>
+                                <td className="wallet-info-key">notary</td>
+                                <td>{ this.props.Main.activeHandle.notary }</td>
+                              </tr>
+                              <tr>
+                                <td className="wallet-info-key">status</td>
+                                <td>{ this.props.Main.activeHandle.status }</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
+                  }
+                  { !this.props.disableWalletSpecificUI &&
                   <div
-                    className="panel"
                     id="AddNodeforCoin"
-                    onClick={ () => this.openTab('AddNodeforCoin', 1) }>
+                    onClick={ () => this.openTab('AddNodeforCoin', 1) }
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 1 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 1 ? '' : ' collapsed') }>
                         <i className="icon md-plus-square"></i>{ translate('INDEX.ADD_NODE') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 1 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 1 ? this.state.activeTabHeight + 'px' : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 1 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 1 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <div className="row">
                           <div className="col-sm-6">
@@ -241,53 +294,56 @@ export const SettingsRender = function() {
                       </div>
                     </div>
                   </div>
-
+                  }
+                  { !this.props.disableWalletSpecificUI &&
                   <div
-                    className="panel"
                     id="DumpWallet"
-                    onClick={ () => this.openTab('DumpWallet', 2) }>
+                    onClick={ () => this.openTab('DumpWallet', 2) }
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 2 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 2 ? '' : ' collapsed') }>
                         <i className="icon wb-briefcase"></i>{ translate('INDEX.WALLET_BACKUP') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 2 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 2 ? this.state.activeTabHeight + 'px' : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 2 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 2 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">Wallet Backup section to be updated soon.</div>
                     </div>
                   </div>
-
+                  }
+                  { !this.props.disableWalletSpecificUI &&
                   <div
-                    className="panel"
                     id="FiatCurrencySettings"
-                    onClick={ () => this.openTab('FiatCurrencySettings', 3) }>
+                    onClick={ () => this.openTab('FiatCurrencySettings', 3) }
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 3 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 3 ? '' : ' collapsed') }>
                         <i className="icon fa-money"></i>{ translate('INDEX.FIAT_CURRENCY') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 3 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 3 ? this.state.activeTabHeight + 'px' : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 3 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 3 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">Fiat currency settings section to be updated soon.</div>
                     </div>
                   </div>
-
+                  }
+                  { !this.props.disableWalletSpecificUI &&
                   <div
-                    className="panel"
                     id="ExportKeys"
-                    onClick={ () => this.openTab('ExportKeys', 4) }>
+                    onClick={ () => this.openTab('ExportKeys', 4) }
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 4 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 4 ? '' : ' collapsed') }>
                         <i className="icon md-key"></i>{ translate('INDEX.EXPORT_KEYS') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 4 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 4 ? this.state.activeTabHeight + 'px' : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 4 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
-                        <p>
+                        <div>
                           <div className="padding-bottom-20">{ this.renderLB('INDEX.ONLY_ACTIVE_WIF_KEYS') }</div>
                           <div className="padding-bottom-20">
                             <i>{ this.renderLB('SETTINGS.EXPORT_KEYS_NOTE') }</i>
@@ -295,7 +351,7 @@ export const SettingsRender = function() {
                           <strong>
                             <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
                           </strong>
-                        </p>
+                        </div>
                         <div className="col-sm-12"></div>
                         <form
                           className="wifkeys-form"
@@ -304,13 +360,20 @@ export const SettingsRender = function() {
                           autoComplete="off">
                           <div className="form-group form-material floating">
                             <input
-                              type={ this.state.seedInputVisibility ? 'text' : 'password' }
-                              className="form-control"
+                              type="password"
+                              className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                               name="wifkeysPassphrase"
                               id="wifkeysPassphrase"
-                              onChange={ this.updateInput } />
+                              onChange={ this.updateInput }
+                              value={ this.state.wifkeysPassphrase } />
+                            <textarea
+                              className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                              id="wifkeysPassphraseTextarea"
+                              name="wifkeysPassphrase"
+                              onChange={ this.updateInput }
+                              value={ this.state.wifkeysPassphrase }></textarea>
                             <i
-                              className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                              className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                               onClick={ this.toggleSeedInputVisibility }></i>
                             <label
                               className="floating-label"
@@ -343,28 +406,29 @@ export const SettingsRender = function() {
                       </div>
                     </div>
                   </div>
-
+                  }
+                  { !this.props.disableWalletSpecificUI &&
                   <div
-                    className="panel"
                     id="ImportKeys"
-                    onClick={ () => this.openTab('ImportKeys', 5) }>
+                    onClick={ () => this.openTab('ImportKeys', 5) }
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 5 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 5 ? '' : ' collapsed') }>
                         <i className="icon md-key"></i>{ translate('INDEX.IMPORT_KEYS') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 5 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 5 ? this.state.activeTabHeight + 'px' : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 5 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 5 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
-                        <p>
-                          <div>{ translate('INDEX.IMPORT_KEYS_DESC_P1') }</div><br/>
-                          <div>{ translate('INDEX.IMPORT_KEYS_DESC_P2') }</div><br/>
-                          <div>{ translate('INDEX.IMPORT_KEYS_DESC_P3') }</div><br/>
+                        <div>{ translate('INDEX.IMPORT_KEYS_DESC_P1') }</div><br/>
+                        <div>{ translate('INDEX.IMPORT_KEYS_DESC_P2') }</div><br/>
+                        <div>{ translate('INDEX.IMPORT_KEYS_DESC_P3') }</div><br/>
+                        <div>
                           <strong>
                             <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
                           </strong>
-                        </p>
+                        </div>
                         <div className="col-sm-12"></div>
                         <form
                           className="wifkeys-import-form"
@@ -392,19 +456,20 @@ export const SettingsRender = function() {
                       </div>
                     </div>
                   </div>
+                  }
 
                   <div
                     className="panel"
                     id="DebugLog"
                     onClick={ () => this.openTab('DebugLog', 6) }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 6 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 6 ? '' : ' collapsed') }>
                         <i className="icon fa-bug"></i>{ translate('INDEX.DEBUG_LOG') }
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 6 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 6 ? this.state.activeTabHeight + 'px' : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 6 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 6 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
                         <div className="col-sm-12"></div>
@@ -431,7 +496,7 @@ export const SettingsRender = function() {
                               name="debugTarget"
                               id="settingsDelectDebugLogOptions"
                               onChange={ this.updateInput }>
-                              <option value="iguana">Iguana</option>
+                              <option value="iguana" className={ this.state.nativeOnly ? 'hide' : '' }>Iguana</option>
                               <option value="komodo">Komodo</option>
                             </select>
                             <label
@@ -457,13 +522,13 @@ export const SettingsRender = function() {
                     id="AppSettings"
                     onClick={ () => this.openTab('AppSettings', 7) }>
                     <div className="panel-heading">
-                      <a className={ this.state.activeTab === 7 ? 'panel-title' : 'panel-title collapsed' }>
+                      <a className={ 'panel-title' + (this.state.activeTab === 7 ? '' : ' collapsed') }>
                         <i className="icon fa-wrench"></i>{ translate('SETTINGS.APP_CONFIG') } (config.json)
                       </a>
                     </div>
                     <div
-                      className={ this.state.activeTab === 7 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 7 ? this.state.activeTabHeight + 'px' : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 7 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 7 ? `${this.state.activeTabHeight}px` : '0' }}>
                       <div className="panel-body">
                         <p>
                           <strong>{ translate('SETTINGS.CONFIG_RESTART_REQUIRED') }</strong>
@@ -480,73 +545,81 @@ export const SettingsRender = function() {
                             type="button"
                             className="btn btn-primary waves-effect waves-light"
                             onClick={ this._saveAppConfig }>{ translate('SETTINGS.SAVE_APP_CONFIG') }</button>
+                          <button
+                            type="button"
+                            className="btn btn-primary waves-effect waves-light margin-left-30"
+                            onClick={ this._resetAppConfig }>Reset to default</button>
                         </div>
                       </div>
                     </div>
                   </div>
                   { this.renderAppInfoTab() }
 
-                  <div
-                    className="panel"
-                    id="Cli"
-                    onClick={ () => this.openTab('Cli', 9) }>
-                    <div className="panel-heading">
-                      <a className={ this.state.activeTab === 9 ? 'panel-title' : 'panel-title collapsed' }>
-                        <i className="icon fa-code"></i> CLI
-                      </a>
-                    </div>
+                  { this.props.Main && this.props.Main.coins.native &&
                     <div
-                      className={ this.state.activeTab === 9 ? 'panel-collapse collapse in' : 'panel-collapse collapse' }
-                      style={{ height: this.state.activeTab === 9 ? this.state.activeTabHeight + 'px' : '0' }}>
-                      <div className="panel-body">
-                        <p>Select a coin and type in CLI compatible command</p>
-                        <div className="col-sm-12"></div>
-                        <form
-                          className="execute-cli-cmd-form"
-                          method="post"
-                          action="javascript:"
-                          autoComplete="off">
-                          <div className="form-group form-material floating">
-                            <select
-                              className="form-control form-material"
-                              name="cliCoin"
-                              id="settingsCliOptions"
-                              onChange={ this.updateInput }>
-                              <option value="">Select coin</option>
-                              { this.renderActiveCoinsList('native') }
-                            </select>
-                            <label
-                              className="floating-label"
-                              htmlFor="settingsDelectDebugLogOptions">Coin</label>
-                          </div>
-                          <div className="form-group form-material floating">
-                            <textarea
-                              type="text"
-                              className="form-control"
-                              name="cliCmd"
-                              id="cliCmd"
-                              value={ this.state.cliCmdString }
-                              onChange={ this.updateInput }></textarea>
-                            <label
-                              className="floating-label"
-                              htmlFor="readDebugLogLines">Type in CLI compatible cmd</label>
-                          </div>
-                          <div className="col-sm-12 col-xs-12 text-align-center">
-                            <button
-                              type="button"
-                              className="btn btn-primary waves-effect waves-light"
-                              disabled={ !this.state.cliCoin || !this.state.cliCmd }
-                              onClick={ () => this.execCliCmd() }>Execute</button>
-                          </div>
-                          <div className="col-sm-12 col-xs-12 text-align-left">
-                            <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
-                              { this.renderCliResponse() }
+                      id="Cli"
+                      onClick={ () => this.openTab('Cli', 9) }
+                      className={ 'panel' + (!this.props.Main.coins.native.length ? ' hide' : '') }>
+                      <div className="panel-heading">
+                        <a className={ 'panel-title' + (this.state.activeTab === 9 ? '' : ' collapsed') }>
+                          <i className="icon fa-code"></i> CLI
+                        </a>
+                      </div>
+                      <div
+                        className={ 'panel-collapse collapse' + (this.state.activeTab === 9 ? ' in' : '') }
+                        style={{ height: this.state.activeTab === 9 ? `${this.state.activeTabHeight}px` : '0' }}>
+                        <div className="panel-body">
+                          <p>{ translate('INDEX.CLI_SELECT_A_COIN') }</p>
+                          <div className="col-sm-12"></div>
+                          <form
+                            className="execute-cli-cmd-form"
+                            method="post"
+                            action="javascript:"
+                            autoComplete="off">
+                            <div className="form-group form-material floating">
+                              <select
+                                className="form-control form-material"
+                                name="cliCoin"
+                                id="settingsCliOptions"
+                                onChange={ this.updateInput }>
+                                <option>{ translate('INDEX.CLI_NATIVE_COIN') }</option>
+                                { this.renderActiveCoinsList('native') }
+                              </select>
+                              <label
+                                className="floating-label"
+                                htmlFor="settingsDelectDebugLogOptions">{ translate('INDEX.COIN') }</label>
                             </div>
-                          </div>
-                        </form>
+                            <div className="form-group form-material floating">
+                              <textarea
+                                type="text"
+                                className="form-control"
+                                name="cliCmdString"
+                                id="cliCmd"
+                                value={ this.state.cliCmdString }
+                                onChange={ this.updateInput }></textarea>
+                              <label
+                                className="floating-label"
+                                htmlFor="readDebugLogLines">{ translate('INDEX.TYPE_CLI_CMD') }</label>
+                            </div>
+                            <div className="col-sm-12 col-xs-12 text-align-center">
+                              <button
+                                type="button"
+                                className="btn btn-primary waves-effect waves-light"
+                                disabled={ !this.state.cliCoin || !this.state.cliCmd }
+                                onClick={ () => this.execCliCmd() }>{ translate('INDEX.EXECUTE') }</button>
+                            </div>
+                            <div className="col-sm-12 col-xs-12 text-align-left">
+                              <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+                                { this.renderCliResponse() }
+                              </div>
+                            </div>
+                          </form>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  }
+
+                  { this.renderAppUpdateTab() }
                 </div>
               </div>
             </div>

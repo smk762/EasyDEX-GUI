@@ -6,9 +6,10 @@ import {
   startInterval,
   toggleSyncOnlyModal,
   getSyncOnlyForks,
-  logout
+  logout,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import Config from '../../../config';
 
 import NavbarRender from './navbar.render';
 
@@ -17,6 +18,7 @@ class Navbar extends React.Component {
     super(props);
     this.state = {
       openDropMenu: false,
+      nativeOnly: Config.iguanaLessMode,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.logout = this.logout.bind(this);
@@ -79,6 +81,7 @@ class Navbar extends React.Component {
       )
     );
     Store.dispatch(logout());
+    location.reload();
   }
 
   openSyncOnlyModal() {

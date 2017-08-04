@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import Config from '../../../config';
 import {
   iguanaActiveHandle,
   encryptWallet,
@@ -10,15 +11,27 @@ import {
   addPeerNode,
   getAppConfig,
   saveAppConfig,
+  resetAppConfig,
   getAppInfo,
-  shepherdCli
+  shepherdCli,
+  checkForUpdateUIPromise,
+  updateUIPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 import {
   AppInfoTabRender,
-  SettingsRender
+  SettingsRender,
+  AppUpdateTabRender,
 } from './settings.render';
+
+import { SocketProvider } from 'socket.io-react';
+import io from 'socket.io-client';
+
+const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
+let updateProgressBar = {
+  patch: -1,
+};
 
 /*
   TODO:
@@ -37,11 +50,19 @@ class Settings extends React.Component {
       activeTabHeight: '0',
       appSettings: {},
       tabElId: null,
-      cliCmdString: null,
+      cliCmdString: '',
       cliCoin: null,
       cliResponse: null,
       exportWifKeysRaw: false,
       seedInputVisibility: false,
+      nativeOnly: Config.iguanaLessMode,
+      updatePatch: null,
+      updateBins: null,
+      updateLog: [],
+      updateProgressPatch: null,
+      wifkeysPassphrase: '',
+      trimPassphraseTimer: null,
+      disableWalletSpecificUI: null,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -53,12 +74,30 @@ class Settings extends React.Component {
     this.renderPeersList = this.renderPeersList.bind(this);
     this.renderSNPeersList = this.renderSNPeersList.bind(this);
     this._saveAppConfig = this._saveAppConfig.bind(this);
+    this._resetAppConfig = this._resetAppConfig.bind(this);
     this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
+    this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
+    this._updateUIPromise = this._updateUIPromise.bind(this);
+  }
+
+  componentWillMount() {
+    socket.on('patch', msg => this.updateSocketsData(msg));
+  }
+
+  componentWillUnmount() {
+    socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
+
+    if (!this.state.disableWalletSpecificUI) {
+      document.documentElement.style.height = '100%';
+      document.body.style.height = '100%';
+    }
   }
 
   componentDidMount() {
-    Store.dispatch(iguanaActiveHandle());
+    if (!this.props.disableWalletSpecificUI) {
+      Store.dispatch(iguanaActiveHandle());
+    }
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
   }
@@ -71,7 +110,135 @@ class Settings extends React.Component {
         activeTab: this.state.activeTab,
         activeTabHeight: _height,
         tabElId: this.state.tabElId,
+        disableWalletSpecificUI: props.disableWalletSpecificUI,
       }));
+    }
+  }
+
+  _resetAppConfig() {
+    Store.dispatch(resetAppConfig());
+  }
+
+  resizeLoginTextarea() {
+    // auto-size textarea
+    setTimeout(() => {
+      if (this.state.seedInputVisibility) {
+        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
+        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+      }
+    }, 100);
+  }
+
+  updateSocketsData(data) {
+    if (data &&
+        data.msg &&
+        data.msg.type === 'ui') {
+
+      if (data.msg.status === 'progress' &&
+          data.msg.progress &&
+          data.msg.progress < 100) {
+        this.setState(Object.assign({}, this.state, {
+          updateProgressPatch: data.msg.progress,
+        }));
+        updateProgressBar.patch = data.msg.progress;
+      } else {
+        if (data.msg.status === 'progress' &&
+            data.msg.progress &&
+            data.msg.progress === 100) {
+          let _updateLog = [];
+          _updateLog.push('UI update downloaded. Verifying...');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = 100;
+        }
+
+        if (data.msg.status === 'done') {
+          let _updateLog = [];
+          _updateLog.push('UI is updated!');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+            updatePatch: null,
+          }));
+          updateProgressBar.patch = -1;
+        }
+
+        if (data.msg.status === 'error') {
+          let _updateLog = [];
+          _updateLog.push('Error while verifying update file! Please retry again.');
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = -1;
+        }
+      }
+    } else {
+      if (data &&
+          data.msg) {
+        let _updateLog = this.state.updateLog;
+        _updateLog.push(data.msg);
+        this.setState(Object.assign({}, this.state, {
+          updateLog: _updateLog,
+        }));
+      }
+    }
+  }
+
+  _checkForUpdateUIPromise() {
+    let _updateLog = [];
+    _updateLog.push('Checking for UI update...');
+    this.setState(Object.assign({}, this.state, {
+      updateLog: _updateLog,
+    }));
+
+    checkForUpdateUIPromise()
+    .then((res) => {
+      let _updateLog = this.state.updateLog;
+      _updateLog.push(res.result === 'update' ? (`New UI update available ${res.version.remote}`) : 'You have the lastest UI version');
+      this.setState(Object.assign({}, this.state, {
+        updatePatch: res.result === 'update' ? true : false,
+        updateLog: _updateLog,
+      }));
+    });
+  }
+
+  _updateUIPromise() {
+    updateProgressBar.patch = 0;
+    let _updateLog = [];
+    _updateLog.push('Downloading UI update...');
+    this.setState(Object.assign({}, this.state, {
+      updateLog: _updateLog,
+    }));
+
+    updateUIPromise();
+  }
+
+  renderUpdateStatus() {
+    let items = [];
+    let patchProgressBar = null;
+
+    for (let i = 0; i < this.state.updateLog.length; i++) {
+      items.push(
+        <div key={ `settings-update-log-${i}` }>{ this.state.updateLog[i] }</div>
+      );
+    }
+
+    if (this.state.updateLog.length) {
+      return (
+        <div style={{ minHeight: '200px' }}>
+          <hr />
+          <h5>Progress:</h5>
+          <div className="padding-bottom-15">{ items }</div>
+          <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
+            <div
+              className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+              style={{ width: updateProgressBar.patch + '%' }}>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return null;
     }
   }
 
@@ -100,6 +267,17 @@ class Settings extends React.Component {
         activeTabHeight: _height,
         tabElId: elemId,
       }));
+
+      // body size hack
+      if (!this.state.disableWalletSpecificUI) {
+        document.documentElement.style.height = '100%';
+        document.body.style.height = '100%';
+
+        setTimeout(() => {
+          document.documentElement.style.height = _height <= 200 ? '100%' : 'inherit';
+          document.body.style.height = _height <= 200 ? '100%' : 'inherit';
+        }, 100);
+      }
     }, 100);
   }
 
@@ -171,6 +349,10 @@ class Settings extends React.Component {
     }
 
     return null;
+  }
+
+  renderAppUpdateTab() {
+    return AppUpdateTabRender.call(this);
   }
 
   renderSNPeersList() {
@@ -271,9 +453,29 @@ class Settings extends React.Component {
   }
 
   updateInput(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === 'wifkeysPassphrase') {
+      // remove any empty chars from the start/end of the string
+      const newValue = e.target.value;
+
+      clearTimeout(this.state.trimPassphraseTimer);
+
+      const _trimPassphraseTimer = setTimeout(() => {
+        this.setState({
+          wifkeysPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
+        });
+      }, 2000);
+
+      this.resizeLoginTextarea();
+
+      this.setState({
+        trimPassphraseTimer: _trimPassphraseTimer,
+        [e.target.name]: newValue,
+      });
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value,
+      });
+    }
   }
 
   renderDebugLogData() {
@@ -308,11 +510,14 @@ class Settings extends React.Component {
     );
   }
 
+  // TODO: rerender only if prop is changed
   renderCliResponse() {
     const _cliResponse = this.props.Settings.cli;
+    let _items = [];
 
     if (_cliResponse) {
       let _cliResponseParsed;
+      let responseType;
 
       try {
         _cliResponseParsed = JSON.parse(_cliResponse.result);
@@ -320,12 +525,52 @@ class Settings extends React.Component {
         _cliResponseParsed = _cliResponse.result;
       }
 
+      if (Object.prototype.toString.call(_cliResponseParsed) === '[object Array]') {
+        responseType = 'array';
+
+        for (let i = 0; i < _cliResponseParsed.length; i++) {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed[i], null, '\t') }</div>
+          );
+        }
+      }
+      if (Object.prototype.toString.call(_cliResponseParsed) === '[object]' ||
+          typeof _cliResponseParsed === 'object') {
+        responseType = 'object';
+
+        _items.push(
+          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed, null, '\t') }</div>
+        );
+      }
+      if (Object.prototype.toString.call(_cliResponseParsed) === 'number' ||
+          typeof _cliResponseParsed === 'boolean' ||
+          _cliResponseParsed === 'wrong cli string format') {
+        responseType = 'number';
+
+        _items.push(
+          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ _cliResponseParsed.toString() }</div>
+        );
+      }
+
+      if (responseType !== 'number' &&
+          responseType !== 'array' &&
+          responseType !== 'object' &&
+          _cliResponseParsed.indexOf('\n') > -1) {
+        _cliResponseParsed = _cliResponseParsed.split('\n');
+
+        for (let i = 0; i < _cliResponseParsed.length; i++) {
+          _items.push(
+            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{  _cliResponseParsed[i] }</div>
+          );
+        }
+      }
+
       return (
         <div>
           <div>
             <strong>CLI response:</strong>
           </div>
-          { JSON.stringify(_cliResponseParsed, null, '\t') }
+          { _items }
         </div>
       );
     } else {

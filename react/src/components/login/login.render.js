@@ -1,25 +1,53 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
+import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
 
 const LoginRender = function () {
   return (
     <div>
+      <LoginSettingsModal
+        {...this.props}
+        section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
           <div className="brand">
             <img
               className="brand-img"
-              src="assets/images/easydex-logo-big.png"
+              src="assets/images/agama-login-logo.svg"
+              width="200"
+              height="160"
               alt="SuperNET Iguana" />
           </div>
 
-          <div className="vertical-padding-20 horizontal-padding-0">
-            <span
-              className="display-sync-only-coins-toggle"
-              onClick={ this.openSyncOnlyModal }>
-              <i className="fa fa-cubes"></i> { translate('LOGIN.DISPLAY_SYNC_ONLY') }
-            </span>
+          <div className="login-settings-dropdown margin-bottom-30">
+            <div>
+              <span
+                className="login-settings-dropdown-trigger"
+                onClick={ this.toggleLoginSettingsDropdown }>
+                <i className="icon fa-cogs"></i>&nbsp;
+                <span className="login-settings-dropdown-label">Quick access</span>
+              </span>
+            </div>
+            <div>
+              <ul className={ this.state.displayLoginSettingsDropdown ? 'dropdown-menu show' : 'hide' }>
+                <li>
+                  <a onClick={ () => this.toggleLoginSettingsDropdownSection('settings') }>
+                    <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
+                  </a>
+                </li>
+                <li className={ this.state.nativeOnly ? 'hide' : '' }>
+                  <a onClick={ this.openSyncOnlyModal }>
+                    <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
+                  </a>
+                </li>
+                <li>
+                  <a onClick={ () => this.toggleLoginSettingsDropdownSection('about') }>
+                    <i className="icon fa-users"></i> { translate('INDEX.ABOUT_IGUANA') }
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div className={ this.state.activeLoginSection === 'ieWarning' ? 'show' : 'hide' }>
@@ -52,38 +80,44 @@ const LoginRender = function () {
             </div>
           </div>
 
-          <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
+          <div className={ this.state.activeLoginSection === 'login' && !this.state.nativeOnly ? 'show' : 'hide' }>
             <h4 className="color-white">
-              {translate('INDEX.WELCOME_LOGIN')}
+              { translate('INDEX.WELCOME_LOGIN') }
             </h4>
-            <div className="form-group form-material floating col-sm-9 horizontal-padding-0">
+            <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
-                type={ this.state.seedInputVisibility ? 'text' : 'password' }
-                className="form-control"
+                type="password"
+                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
-                onKeyDown={ (event) => this.handleKeydown(event) }/>
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                value={ this.state.loginPassphrase } />
+              <textarea
+                className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                id="loginPassphrase"
+                name="loginPassphrase"
+                onChange={ this.updateLoginPassPhraseInput }
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                value={ this.state.loginPassphrase }></textarea>
               <i
-                className={ !this.state.seedInputVisibility ? 'seed-toggle fa fa-eye-slash' : 'seed-toggle fa fa-eye' }
+                className={ 'seed-toggle fa fa-eye' +  (!this.state.seedInputVisibility ? '-slash' : '') }
                 onClick={ this.toggleSeedInputVisibility }></i>
               <label
                 className="floating-label"
                 htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
             </div>
-            <div className="form-group form-material floating col-sm-3 horizontal-padding-0 margin-top-20">
-              { this.state.loginPassPhraseSeedType
-                ?
-                  this.state.loginPassPhraseSeedType
-                :
-                <div className="placeholder-label">Seed Type</div>
-              }
-            </div>
+            { this.state.loginPassPhraseSeedType &&
+              <div
+                className="form-group form-material floating horizontal-padding-0 margin-top-20 seed-type-block"
+                style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
+                <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
+              </div>
+            }
             <button
               type="button"
               className="btn btn-primary btn-block"
               onClick={ this.loginSeed }
-              disabled={ !this.state.loginPassphrase
-              || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
+              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
             <div className="form-group form-material floating">
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect"
@@ -151,33 +185,36 @@ const LoginRender = function () {
                     <div className="form-group form-material floating">
                       <div
                         className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.generateNewSeed(256) }>
+                        onClick={ () =>this.state.bitsOption !== 256 && this.generateNewSeed(256) }>
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 256 }/>
+                          checked={ this.state.bitsOption === 256 }
+                          readOnly />
                         <label htmlFor="PassPhraseOptionsIguana">
                           { translate('LOGIN.IGUANA_SEED') }
                         </label>
                       </div>
                       <div
                         className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.generateNewSeed(160) }>
+                        onClick={ () => this.state.bitsOption !== 160 && this.generateNewSeed(160) }>
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 160 }/>
+                          checked={ this.state.bitsOption === 160 }
+                          readOnly />
                         <label htmlFor="PassPhraseOptionsWaves">
                           { translate('LOGIN.WAVES_SEED') }
                         </label>
                       </div>
                       <div
                         className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.generateNewSeed(128) }>
+                        onClick={ () => this.state.bitsOption !== 128 && this.generateNewSeed(128) }>
                         <input
                           type="radio"
                           name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 128 }/>
+                          checked={ this.state.bitsOption === 128 }
+                          readOnly />
                         <label htmlFor="PassPhraseOptionsNXT">
                           { translate('LOGIN.NXT_SEED') }
                         </label>
@@ -199,14 +236,14 @@ const LoginRender = function () {
                 ></textarea>
                 <button className="copy-floating-label"
                   htmlFor="walletseed"
-                  onClick={ () => this.copyPassPhraseToClipboard() }>Copy</button>
+                  onClick={ () => this.copyPassPhraseToClipboard() }>{ translate('INDEX.COPY') }</button>
                 <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
-                  <strong>Weak seed!</strong><br /><br />
-                  Your seed must contain:<br />
-                  - at least 1 upper case letter<br />
-                  - at least 1 digit<br />
-                  - at least 1 special character<br />
-                  - minimum 10 characters long
+                  <strong>{ translate('INDEX.WEAK_SEED') }</strong><br /><br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN1') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN2') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN3') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }
                 </span>
                 <label
                   className="floating-label"

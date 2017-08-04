@@ -2,7 +2,7 @@ import { _lang } from './en';
 import Config from '../config';
 
 export function translate(langID) {
-  let  defaultLang = Config.defaultLang;
+  let defaultLang = Config.defaultLang || 'EN';
 
   if (langID &&
       langID.indexOf('.') > -1) {
@@ -13,13 +13,13 @@ export function translate(langID) {
         _lang[defaultLang][langIDComponents[0]][langIDComponents[1]]) {
       return _lang[defaultLang][langIDComponents[0]][langIDComponents[1]];
     } else {
-      console.log('Missing translation in js/' +  defaultLang.toLowerCase() + '.js ' + langID);
-      return '--> ' + langID + ' <--';
+      console.warn(`Missing translation ${langID} in js/${defaultLang.toLowerCase()}.js`);
+      return `--> ${langID} <--`;
     }
   } else {
     if (langID.length) {
-      console.log('Missing translation in js/' +  defaultLang.toLowerCase() + '.js ' + langID);
-      return '--> ' + langID + ' <--';
+      console.warn(`Missing translation ${langID} in js/${defaultLang.toLowerCase()}.js`);
+      return `--> ${langID} <--`;
     }
   }
 }

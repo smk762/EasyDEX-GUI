@@ -1,12 +1,10 @@
 import { DASHBOARD_ACTIVE_COIN_BALANCE } from '../storeType';
-import {
-  triggerToaster,
-  Config
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import {
   logGuiHttp,
   guiLogState
 } from './log';
+import Config from '../../config';
 
 export function iguanaEdexBalance(coin) {
   const _payload = {
@@ -19,14 +17,16 @@ export function iguanaEdexBalance(coin) {
   return dispatch => {
     if (coin) {
       const _timestamp = Date.now();
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'iguanaEdexBalance',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': _payload,
-        'status': 'pending',
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'function': 'iguanaEdexBalance',
+          'type': 'post',
+          'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
+          'payload': _payload,
+          'status': 'pending',
+        }));
+      }
 
       return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
         method: 'POST',
@@ -34,11 +34,13 @@ export function iguanaEdexBalance(coin) {
       })
       .catch(function(error) {
         console.log(error);
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'error',
+            'response': error,
+          }));
+        }
         dispatch(
           triggerToaster(
             'Error iguanaEdexBalance',
@@ -72,14 +74,16 @@ export function getDexBalance(coin, mode, addr) {
 
     return new Promise((resolve, reject) => {
       const _timestamp = Date.now();
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getDexBalance',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'function': 'getDexBalance',
+          'type': 'post',
+          'url': `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
+          'payload': payload,
+          'status': 'pending',
+        }));
+      }
 
       fetch(`http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`, {
         method: 'POST',
@@ -87,11 +91,13 @@ export function getDexBalance(coin, mode, addr) {
       })
       .catch(function(error) {
         console.log(error);
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'error',
+            'response': error,
+          }));
+        }
         dispatch(
           triggerToaster(
             'getDexBalance',
@@ -103,11 +109,13 @@ export function getDexBalance(coin, mode, addr) {
       .then(response => response.json())
       .then(json => {
         console.log(json);
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
-        }));
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'success',
+            'response': json,
+          }));
+        }
       })
 
       resolve(index);
