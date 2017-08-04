@@ -73,6 +73,7 @@ class WalletsProgress extends React.Component {
         }
         if (temp[i].indexOf('progress=') > -1) {
           currentProgress = Number(temp[i].replace('progress=', '')) * 1000;
+          currentProgress = currentProgress >= 100 ? 100 : currentProgress;
         }
       }
 
@@ -196,14 +197,14 @@ class WalletsProgress extends React.Component {
         }
       } else if (this.props.Settings.debugLog.indexOf('Rescanning last') > -1) {
         return (
-          `: ({ translate('INDEX.RESCANNING_LAST_BLOCKS') })`
+          `: (${ translate('INDEX.RESCANNING_LAST_BLOCKS') })`
         );
       } else if (
           this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
           this.props.Settings.debugLog.indexOf('Reindexing block file') > -1
         ) {
         return (
-          `: ({ translate('INDEX.REINDEX') })`
+          `: (${ translate('INDEX.REINDEX') })`
         );
       } else {
         return (

@@ -46,7 +46,7 @@ export const PaginationRender = function(paginationFrom, paginationTo) {
   const disableNextBtn = this.state.activePage >= Math.floor(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage);
 
   return (
-    <div className="row unselectable">
+    <div className="row unselectable padding-top-20">
       <div className="col-sm-5">
         <div className="dataTables_info">
           { translate('INDEX.SHOWING') }&nbsp;
@@ -117,7 +117,7 @@ export const AddressListRender = function() {
   if (isMultiPublicAddress ||
       isMultiPrivateAddress) {
     return (
-      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
+      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open margin-bottom-10' : 'margin-bottom-10')}` }>
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
