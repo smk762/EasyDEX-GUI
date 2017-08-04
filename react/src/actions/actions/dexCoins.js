@@ -17,14 +17,16 @@ export function getDexCoins() {
 
   return dispatch => {
     const _timestamp = Date.now();
-    dispatch(logGuiHttp({
-      'timestamp': _timestamp,
-      'function': 'getDexCoins',
-      'type': 'post',
-      'url': Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/InstantDEX/allcoins` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-      'payload': _payload,
-      'status': 'pending',
-    }));
+    if (Config.debug) {
+      dispatch(logGuiHttp({
+        'timestamp': _timestamp,
+        'function': 'getDexCoins',
+        'type': 'post',
+        'url': Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/InstantDEX/allcoins` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        'payload': _payload,
+        'status': 'pending',
+      }));
+    }
 
     let _fetchConfig = {
       method: 'POST',
@@ -46,11 +48,13 @@ export function getDexCoins() {
     )
     .catch(function(error) {
       console.log(error);
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'error',
-        'response': error,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'error',
+          'response': error,
+        }));
+      }
       dispatch(
         triggerToaster(
           'Error getDexCoins',
@@ -61,11 +65,13 @@ export function getDexCoins() {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'status': 'success',
-        'response': json,
-      }));
+      if (Config.debug) {
+        dispatch(logGuiHttp({
+          'timestamp': _timestamp,
+          'status': 'success',
+          'response': json,
+        }));
+      }
       dispatch(dashboardCoinsState(json));
     });
   }

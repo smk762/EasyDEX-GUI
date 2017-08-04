@@ -325,9 +325,9 @@ export function getNativeTxHistoryState(json) {
   if (json &&
       json.error) {
     json = null;
-  } else if (json && json.result) {
+  } else if (json && json.result && json.result.length) {
     json = json.result;
-  } else if (!json.length) {
+  } else if (!json || !json.result.length) {
     json = 'no data';
   }
 

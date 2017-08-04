@@ -70,14 +70,13 @@ class WalletsBalance extends React.Component {
 
     if (_mode === 'full') {
       _balance = this.props.ActiveCoin.balance || 0;
-    } else {
+    } else if (_mode === 'basilisk') {
       if (this.props.ActiveCoin.cache) {
         const _cache = this.props.ActiveCoin.cache;
         const _coin = this.props.ActiveCoin.coin;
         const _address = this.props.ActiveCoin.activeAddress;
 
-        if (type === 'main' &&
-            _mode === 'basilisk' &&
+        if (type === 'transparent' &&
             _address &&
             _cache[_coin] &&
             _cache[_coin][_address] &&
@@ -88,7 +87,6 @@ class WalletsBalance extends React.Component {
         }
 
         if (type === 'interest' &&
-            _mode === 'basilisk' &&
             _address &&
             _cache[_coin] &&
             _cache[_coin][_address] &&
@@ -99,7 +97,6 @@ class WalletsBalance extends React.Component {
         }
 
         if (type === 'total' &&
-            _mode === 'basilisk' &&
             _address &&
             _cache[_coin] &&
             _cache[_coin][_address] &&
@@ -112,6 +109,30 @@ class WalletsBalance extends React.Component {
 
           _balance = _regBalance + _regInterest;
         }
+      }
+    } else if (_mode === 'native') {
+      if (type === 'total' &&
+          this.props.ActiveCoin.balance &&
+          this.props.ActiveCoin.balance.total) {
+        _balance = this.props.ActiveCoin.balance.total;
+      }
+
+      if (type === 'interest' &&
+          this.props.Dashboard.progress &&
+          this.props.Dashboard.progress.interest) {
+        _balance = this.props.Dashboard.progress.interest;
+      }
+
+      if (type === 'private' &&
+          this.props.ActiveCoin.balance &&
+          this.props.ActiveCoin.balance.private) {
+        _balance = this.props.ActiveCoin.balance.private;
+      }
+
+      if (type === 'transparent' &&
+          this.props.ActiveCoin.balance &&
+          this.props.ActiveCoin.balance.transparent) {
+        _balance = this.props.ActiveCoin.balance.transparent;
       }
     }
 

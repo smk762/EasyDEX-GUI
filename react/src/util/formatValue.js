@@ -1,5 +1,6 @@
 // ref: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Math/round#Decimal_rounding
 export function formatValue(formatType, formatValue, formatExp) {
+  let _formatExp;
   /**
    * Decimal adjustment of a number.
    *
@@ -31,19 +32,21 @@ export function formatValue(formatType, formatValue, formatExp) {
     return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
   }
 
-  if (formatValue >= 1) {
-    formatExp = -3;
+  if (Math.abs(Number(formatValue)) >= 1) {
+    _formatExp = -3;
+  } else {
+    _formatExp = formatExp;
   }
 
   switch (formatType) {
     case 'round':
-      return decimalAdjust('round', formatValue, formatExp);
+      return decimalAdjust('round', formatValue, _formatExp);
       break;
     case 'floor':
-      return decimalAdjust('floor', formatValue, formatExp);
+      return decimalAdjust('floor', formatValue, _formatExp);
       break;
     case 'ceil':
-      return decimalAdjust('ceil', formatValue, formatExp);
+      return decimalAdjust('ceil', formatValue, _formatExp);
       break;
   }
 }

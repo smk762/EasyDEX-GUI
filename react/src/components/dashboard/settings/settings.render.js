@@ -24,7 +24,7 @@ export const AppUpdateTabRender = function() {
             <div className="padding-top-15">
               <button
                 type="button"
-                className="btn btn-primary waves-effect waves-light"
+                className="btn btn-info waves-effect waves-light"
                 onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
               <button
                 type="button"
@@ -38,7 +38,7 @@ export const AppUpdateTabRender = function() {
             <div className="padding-top-15">
               <button
                 type="button"
-                className="btn btn-primary waves-effect waves-light"
+                className="btn btn-info waves-effect waves-light"
                 onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
               <button
                 type="button"
@@ -144,9 +144,9 @@ export const AppInfoTabRender = function() {
 
 export const SettingsRender = function() {
   return (
-    <div className="margin-left-0">
+    <div className="margin-left-0 full-height">
       <div
-        className="page-content"
+        className="page-content full-height"
         id="section-iguana-wallet-settings">
         <div className="row">
           <div className="col-xlg-12 col-md-12">
@@ -593,7 +593,7 @@ export const SettingsRender = function() {
                               <textarea
                                 type="text"
                                 className="form-control"
-                                name="cliCmd"
+                                name="cliCmdString"
                                 id="cliCmd"
                                 value={ this.state.cliCmdString }
                                 onChange={ this.updateInput }></textarea>

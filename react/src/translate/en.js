@@ -17,6 +17,7 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'RESCANNING_LAST_BLOCKS': 'Rescanning last blocks...',
       'NO_DATA_AVAILABLE': 'No data available',
       'LOADING': 'Loading',
       'ACTIVATING_SM': 'activating',

@@ -649,3 +649,39 @@ select{
   right: 4px;
   top: 3px;
 }
+
+.table-striped {
+  > tbody {
+    > tr.hover--none {
+      background-color: inherit;
+    }
+  }
+}
+
+.qr-modal-send-block {
+  position: absolute;
+  top: 15px;
+  right: 30px;
+}
+
+@media only screen and (min-width : 1201px) {
+  .wallet-widgets {
+    .flex {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    > div {
+      display: flex;
+
+      .widget,
+      .widget-content {
+        height: 100%;
+
+        > div,
+        .clearfix {
+          height: 100%;
+        }
+      }
+    }
+  }
+}

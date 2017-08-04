@@ -49,6 +49,7 @@ class WalletsData extends React.Component {
       currentStackLength: 0,
       totalStackLength: 0,
       useCache: true,
+      coin: null,
     };
     this.updateInput = this.updateInput.bind(this);
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
@@ -64,7 +65,6 @@ class WalletsData extends React.Component {
     this.basiliskRefreshActionOne = this.basiliskRefreshActionOne.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
-    socket.on('messages', msg => this.updateSocketsData(msg));
   }
 
   componentWillMount() {
@@ -73,6 +73,14 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+
+    setTimeout(() => {
+      if (this.props.ActiveCoin.mode === 'basilisk' || (Object.keys(this.props.Main.coins.basilisk).length && (Object.keys(this.props.Main.coins.native).length || Object.keys(this.props.Main.coins.full).length)) || Object.keys(this.props.Main.coins.basilisk).length) {
+        socket.on('messages', msg => this.updateSocketsData(msg));
+      } else {
+        socket.removeAllListeners('messages');
+      }
+    }, 100);
   }
 
   componentWillUnmount() {
@@ -81,6 +89,8 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+
+    socket.removeAllListeners('messages');
   }
 
   handleClickOutside(e) {
@@ -115,28 +125,34 @@ class WalletsData extends React.Component {
   }
 
   updateSocketsData(data) {
-    if (data &&
-        data.message &&
-        data.message.shepherd.iguanaAPI &&
-        data.message.shepherd.iguanaAPI.totalStackLength) {
-      this.setState(Object.assign({}, this.state, {
-        totalStackLength: data.message.shepherd.iguanaAPI.totalStackLength,
-      }));
-    }
-    if (data &&
-        data.message &&
-        data.message.shepherd.iguanaAPI &&
-        data.message.shepherd.iguanaAPI.currentStackLength) {
-      this.setState(Object.assign({}, this.state, {
-        currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
-      }));
-    }
-    if (data &&
-        data.message &&
-        data.message.shepherd.method &&
-        data.message.shepherd.method === 'cache-one' &&
-        data.message.shepherd.status === 'done') {
-      Store.dispatch(basiliskRefresh(false));
+    let stateObj = {};
+
+    if (this.props.ActiveCoin.mode === 'basilisk') {
+      if (data &&
+          data.message &&
+          data.message.shepherd.iguanaAPI &&
+          data.message.shepherd.iguanaAPI.totalStackLength) {
+        stateObj = Object.assign(stateObj, {
+          totalStackLength: data.message.shepherd.iguanaAPI.totalStackLength,
+        });
+      }
+      if (data &&
+          data.message &&
+          data.message.shepherd.iguanaAPI &&
+          data.message.shepherd.iguanaAPI.currentStackLength) {
+        stateObj = Object.assign(stateObj, {
+          currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
+        });
+      }
+      if (data &&
+          data.message &&
+          data.message.shepherd.method &&
+          data.message.shepherd.method === 'cache-one' &&
+          data.message.shepherd.status === 'done') {
+        Store.dispatch(basiliskRefresh(false));
+      }
+
+      this.setState(Object.assign({}, this.state, stateObj));
     }
   }
 
@@ -237,41 +253,86 @@ class WalletsData extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (!this.state.currentAddress &&
-        this.props.ActiveCoin.activeAddress) {
-      this.setState(Object.assign({}, this.state, {
-        currentAddress: this.props.ActiveCoin.activeAddress,
-      }));
-    }
+    let historyToSplit;
+    let stateObj = {};
 
-    if (this.props.ActiveCoin.txhistory &&
+    if (this.props &&
+        this.props.ActiveCoin &&
+        this.props.ActiveCoin.coin) {
+      if ((!this.state.currentAddress && this.props.ActiveCoin.activeAddress) ||
+          (this.state.currentAddress !== this.props.ActiveCoin.activeAddress)) {
+        stateObj = Object.assign(stateObj, {
+          currentAddress: this.props.ActiveCoin.activeAddress,
+        });
+      }
+
+      if (this.props.ActiveCoin.txhistory &&
+          this.props.ActiveCoin.txhistory !== 'loading' &&
+          this.props.ActiveCoin.txhistory !== 'no data' &&
+          this.props.ActiveCoin.txhistory.length) {
+        if (!this.state.itemsList ||
+            (this.state.itemsList && !this.state.itemsList.length) ||
+            (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
+          historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
+          historyToSplit = historyToSplit.slice(
+            (this.state.activePage - 1) * this.state.itemsPerPage,
+            this.state.activePage * this.state.itemsPerPage
+          );
+
+          if (!this.state.itemsList || (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) || (historyToSplit &&
+              historyToSplit.length &&
+              this.state.itemsList &&
+              this.state.itemsList.length &&
+              historyToSplit[0].txid !== this.state.itemsList[0].txid &&
+              historyToSplit[historyToSplit.length - 1].txid !== this.state.itemsList[this.state.itemsList.length - 1].txid)) {
+            stateObj = Object.assign(stateObj, {
+              itemsList: historyToSplit,
+            });
+          }
+        }
+      }
+
+      if (!historyToSplit &&
+          this.props.ActiveCoin.txhistory &&
+          this.props.ActiveCoin.txhistory === 'no data') {
+        stateObj = Object.assign(stateObj, {
+          itemsList: 'no data',
+        });
+      } else if (!historyToSplit && this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
+        stateObj = Object.assign(stateObj, {
+          itemsList: 'loading',
+        });
+      } else if ( // dirty first txhistory load workaround
+        !historyToSplit &&
+        this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
-        this.props.ActiveCoin.txhistory.length) {
-      if (!this.state.itemsList ||
-          (this.state.itemsList && !this.state.itemsList.length) ||
-          (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
-        let historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
+        this.props.ActiveCoin.txhistory.length
+        ) {
+        historyToSplit = sortByDate(this.props.ActiveCoin.txhistory);
         historyToSplit = historyToSplit.slice(
           (this.state.activePage - 1) * this.state.itemsPerPage,
           this.state.activePage * this.state.itemsPerPage
         );
 
-        this.setState(Object.assign({}, this.state, {
-          itemsList: historyToSplit,
-        }));
+        if (!this.state.itemsList || (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) || (historyToSplit &&
+            historyToSplit.length &&
+            this.state.itemsList &&
+            this.state.itemsList.length &&
+            historyToSplit[0].txid !== this.state.itemsList[0].txid &&
+            historyToSplit[historyToSplit.length - 1].txid !== this.state.itemsList[this.state.itemsList.length - 1].txid)) {
+          stateObj = Object.assign(stateObj, {
+            itemsList: historyToSplit,
+          });
+        }
       }
-    }
 
-    if (this.props.ActiveCoin.txhistory &&
-        this.props.ActiveCoin.txhistory === 'no data') {
-      this.setState(Object.assign({}, this.state, {
-        itemsList: 'no data',
-      }));
-    } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
-      this.setState(Object.assign({}, this.state, {
-        itemsList: 'loading',
-      }));
+      stateObj = Object.assign(stateObj, {
+        coin: this.props.ActiveCoin.coin,
+      });
+      if (Object.keys(stateObj).length) {
+        this.setState(Object.assign({}, this.state, stateObj));
+      }
     }
   }
 
@@ -384,15 +445,15 @@ class WalletsData extends React.Component {
     if (this.state.itemsList === 'loading') {
       if (!this.isNativeMode() || this.isFullySynced()) {
         return (
-          <tr>
-            <td colSpan="6">{ translate('INDEX.LOADING_HISTORY') }...</td>
+          <tr className="hover--none">
+            <td colSpan="7">{ translate('INDEX.LOADING_HISTORY') }...</td>
           </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
-        <tr>
-          <td colSpan="6">{ translate('INDEX.NO_DATA') }</td>
+        <tr className="hover--none">
+          <td colSpan="7">{ translate('INDEX.NO_DATA') }</td>
         </tr>
       );
     } else {
@@ -473,13 +534,17 @@ class WalletsData extends React.Component {
           let _amount = address.amount;
 
           if (this.props.ActiveCoin.mode === 'basilisk') {
-            _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+            _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
           }
 
-          _amount = formatValue('round', _amount, -6);
+          if (_amount !== 'N/A') {
+            _amount = formatValue('round', _amount, -6);
+          }
 
           items.push(
-            <li key={address}>
+            <li
+              key={address}
+              className={ address === this.state.currentAddress ? 'selected' : '' }>
               <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
                 <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
                 <span className="text">[ { _amount } { _coin } ]  { address }</span>
@@ -511,12 +576,20 @@ class WalletsData extends React.Component {
         if (_addresses.public[i].address === this.state.currentAddress) {
           if (_addresses.public[i].amount &&
               _addresses.public[i].amount !== 'N/A') {
-            return _addresses.public[i].amount;
+            let _amount = _addresses.public[i].amount;
+
+            if (_amount !== 'N/A') {
+              _amount = formatValue('round', _amount, -6);
+            }
+
+            return _amount;
           } else {
             const address = _addresses.public[i].address;
             let _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
 
-            _amount = formatValue('round', _amount, -6);
+            if (_amount !== 'N/A') {
+              _amount = formatValue('round', _amount, -6);
+            }
 
             return _amount;
           }
@@ -576,8 +649,14 @@ class WalletsData extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        !this.props.ActiveCoin.send &&
-        !this.props.ActiveCoin.receive) {
+        (
+          this.props.ActiveCoin.mode !== 'native' &&
+          !this.props.ActiveCoin.send &&
+          !this.props.ActiveCoin.receive
+        ) || (
+          this.props.ActiveCoin.mode === 'native' &&
+          this.props.ActiveCoin.nativeActiveSection === 'default'
+        )) {
       return WalletsDataRender.call(this);
     } else {
       return null;
