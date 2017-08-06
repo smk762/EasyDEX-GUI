@@ -36,21 +36,21 @@ const DashboardRender = function() {
           <WalletsTxInfo {...this.props} />
           <WalletsNative {...this.props} />
         </div>
-        <div className={ this.isSectionActive('edex') ? 'show' : 'hide' }>
+        { this.isSectionActive('edex') &&
           <EDEX {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('atomic') ? 'show full-height' : 'hide' }>
+        }
+        { this.isSectionActive('atomic') &&
           <Atomic {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('jumblr') ? 'show' : 'hide' }>
+        }
+        { this.isSectionActive('jumblr') &&
           <Jumblr {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('settings') ? 'show' : 'hide' }>
+        }
+        { this.isSectionActive('settings') &&
           <Settings {...this.props} />
-        </div>
-        <div className={ this.isSectionActive('about') ? 'show' : 'hide' }>
+        }
+        { this.isSectionActive('about') &&
           <About {...this.props} />
-        </div>
+        }
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export const LoadingBlocksRender = function() {
 
 export const TranslationComponentsRender = function(translationID) {
   const translationComponents = translate(translationID).split('<br>');
-  
+
   return translationComponents.map((translation, idx) =>
     <span key={idx}>
       { translation }
@@ -71,7 +71,7 @@ export const ChainActivationNotificationRender = function() {
   );
 };
 
-export const WalletsProgressRender = function () {
+export const WalletsProgressRender = function() {
   return (
     <div
       id="edex-footer"

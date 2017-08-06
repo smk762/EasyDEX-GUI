@@ -24,36 +24,46 @@ export const WalletsNavWithWalletRender = function() {
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-' + (this.props.appSettings.iguanaLess ? '40' : '20') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-' + (this.state.nativeOnly ? '40' : '20') }
         id="header-dashboard"
-        style={{ marginBottom: this.props.activeCoin.mode === 'basilisk' ? '30px' : '0' }}>
-        <ol className={ this.props.appSettings.iguanaLess ? 'hide' : 'breadcrumb' }>
-          <strong>{ translate('INDEX.MY') } { this.props.activeCoin ? this.props.activeCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong> 
-          { this.props.activeHandle ? this.props.activeHandle[this.props.activeCoin.coin] : '-' } 
+        style={{ marginBottom: this.props.ActiveCoin.mode === 'basilisk' ? '30px' : '0' }}>
+        <ol className={ this.state.nativeOnly ? 'hide' : 'breadcrumb' }>
+          <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+          { this.props && this.props.Dashboard && this.props.Dashboard.activeHandle ? this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] : '-' }
           <button
             className="btn btn-default btn-xs clipboard-edexaddr"
-            onClick={ () => this.copyMyAddress(this.props.activeHandle[this.props.activeCoin.coin]) }>
+            onClick={ () => this.copyMyAddress(this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) }>
             <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
           </button>
         </ol>
         <div className="page-header-actions">
           <div id="kmd_header_button">
+            { this.props.ActiveCoin.mode === 'native' &&
+              <button
+                type="button"
+                className="btn btn-info waves-effect waves-light"
+                onClick={ this.toggleNativeWalletInfo }>
+                <i className="icon fa-info"></i>
+              </button>
+            }
             <button
               type="button"
               className="btn btn-dark waves-effect waves-light"
-              onClick={ this.toggleSendReceiveCoinForms }>
-              <i className="icon md-view-dashboard"></i> { this.props.activeCoin.mode !== 'native' ? translate('INDEX.DASHBOARD') : translate('INDEX.WALLET_INFO') }
+              onClick={ this.props.ActiveCoin.mode !== 'native' ? this.toggleSendReceiveCoinForms : this.toggleNativeWalletTransactions }>
+              <i className="icon md-view-dashboard"></i> { translate('INDEX.TRANSACTIONS') }
             </button>
+            { this.checkTotalBalance() > 0 &&
+              <button
+                type="button"
+                className="btn btn-primary waves-effect waves-light"
+                onClick={ () => this.toggleSendCoinForm(!this.props.ActiveCoin.send) }>
+                <i className="icon fa-send"></i> { translate('INDEX.SEND') }
+              </button>
+            }
             <button
               type="button"
-              className="btn btn-primary waves-effect waves-light"
-              onClick={ () => this.toggleSendCoinForm(!this.props.activeCoin.send) }>
-              <i className="icon fa-send"></i> { translate('INDEX.SEND') }
-            </button>
-            <button
-              type="button"
-              className="btn btn-info waves-effect waves-light"
-              onClick={ () => this.toggleReceiveCoinForm(!this.props.activeCoin.receive) }>
+              className="btn btn-success waves-effect waves-light"
+              onClick={ () => this.toggleReceiveCoinForm(!this.props.ActiveCoin.receive) }>
               <i className="icon fa-inbox"></i> { translate('INDEX.RECEIVE') }
             </button>
           </div>
