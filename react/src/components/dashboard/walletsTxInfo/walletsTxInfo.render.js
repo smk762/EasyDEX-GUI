@@ -95,7 +95,7 @@ const WalletsTxInfoRender = function(txInfo) {
                           <tr>
                             <td>walletconflicts</td>
                             <td>
-                              { txInfo.walletconflicts.length }
+                              { txInfo.walletconflicts ? txInfo.walletconflicts.length : null }
                             </td>
                           </tr>
                         }

@@ -46,6 +46,7 @@ class WalletsData extends React.Component {
     this.state = {
       basiliskActionsMenu: false,
       itemsList: [],
+      filteredItemsList: [],
       currentAddress: null,
       addressSelectorOpen: false,
       currentStackLength: 0,
@@ -53,7 +54,8 @@ class WalletsData extends React.Component {
       useCache: true,
       itemsListColumns: this.generateItemsListColumns(),
       pageSize: 20,
-      showPagination: false
+      showPagination: false,
+      searchTerm: null
     };
 
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
@@ -318,8 +320,10 @@ class WalletsData extends React.Component {
       if (!this.state.itemsList ||
           (this.state.itemsList && !this.state.itemsList.length) ||
           (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
-        this.setState(Object.assign({}, this.state, {
-          itemsList: sortByDate(this.props.ActiveCoin.txhistory.slice(0, 30)),
+          const sortedItemsList = sortByDate(this.props.ActiveCoin.txhistory);
+          this.setState(Object.assign({}, this.state, {
+          itemsList: sortedItemsList,
+          filteredItemsList: this.filterTransactions(sortedItemsList, this.state.searchTerm),
           showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.pageSize
         }));
       }
@@ -502,14 +506,45 @@ class WalletsData extends React.Component {
     }
   }
 
-  renderAddressList() {
-    if (this.props.Dashboard &&
+  shouldDisplayAddressList() {
+    return this.props.Dashboard &&
         this.props.Dashboard.activeHandle &&
-        this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) {
+        this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
+  }
+
+  renderAddressList() {
+    if (this.shouldDisplayAddressList()) {
       return AddressListRender.call(this);
     } else {
       return null;
     }
+  }
+
+  onSearchTermChange(newSearchTerm) {
+    this.setState(Object.assign({}, this.state, {
+      searchTerm: newSearchTerm,
+      filteredItemsList: this.filterTransactions(this.state.itemsList, newSearchTerm)
+    }));
+  }
+
+  filterTransactions(txList, searchTerm) {
+    return txList.filter(tx => this.filterTransaction(tx, searchTerm));
+  }
+
+  filterTransaction(tx, term) {
+    if (!term) {
+      return true;
+    }
+
+    return this.contains(tx.address, term)
+      || this.contains(tx.confirmations, term)
+      || this.contains(tx.amount, term)
+      || this.contains(tx.type, term)
+      || this.contains(secondsToString(tx.blocktime || tx.timestamp || tx.time), term);
+  }
+
+  contains(value, property) {
+    return (value + "").indexOf(property) !== -1;
   }
 
   isActiveCoinMode(coinMode) {

@@ -147,7 +147,7 @@ export const TxAmountRender = function (tx) {
 export const TxHistoryListRender = function() {
   return (
     <ReactTable
-      data={this.state.itemsList}
+      data={this.state.filteredItemsList}
       columns={this.state.itemsListColumns}
       sortable={true}
       className='-striped -highlight'
@@ -239,15 +239,22 @@ export const WalletsDataRender = function() {
                         null
                       }
                     </div>
-                    <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
+                    <h4 className='panel-title'>{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
-                  <div className="panel-body">
-                    <div className="row">
-                      <div className="col-sm-8 padding-bottom-20">
-                        { this.renderAddressList() }
+                  <div className='panel-body'>
+                    <div className='row padding-bottom-20'>
+                      {this.shouldDisplayAddressList() &&
+                        <div className='col-sm-8'>
+                          {this.renderAddressList()}
+                        </div>
+                      }
+                      <div className='col-sm-4'>
+                        <input className="form-control"
+                               onChange={e => this.onSearchTermChange(e.target.value)}
+                               placeholder='Search' />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className='row'>
                       { this.renderTxHistoryList() }
                     </div>
                   </div>
