@@ -17,6 +17,7 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'RESCANNING_LAST_BLOCKS': 'Rescanning last blocks...',
       'NO_DATA_AVAILABLE': 'No data available',
       'LOADING': 'Loading',
       'ACTIVATING_SM': 'activating',
@@ -193,7 +194,8 @@ export const _lang = {
                          '- Your External Wallet/daemon is setup, but is not setup with config settings like<br>',
       'ACTIVATING_CHAIN': 'Activating best chain',
       'KMD_STARTED': 'Komodo daemon has been started and is processing.<br>' +
-                     'Please wait while the best chain is being activated.',
+                     'Please wait while the best chain is being activated.<br>' +
+                     'Tip: in case sync is stuck restart the wallet.',
       'CONNECTIONS': 'Connections',
       'TRANSPARENT_BALANCE': 'Transparent Balance',
       'Z_BALANCE': 'Private (Z) Balance',

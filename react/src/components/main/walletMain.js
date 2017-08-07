@@ -10,6 +10,7 @@ class WalletMain extends React.Component {
   render() {
     return (
       <div className="full-height">
+        <input type="text" id="js-copytextarea" />
         <SyncOnly {...this.props} />
         <Dashboard {...this.props} />
         <AddCoin {...this.props} />

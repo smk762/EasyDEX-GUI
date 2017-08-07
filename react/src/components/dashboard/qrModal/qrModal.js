@@ -19,22 +19,28 @@ class QRModal extends React.Component {
     this.closeModal = this.closeModal.bind(this);
     this.handleScan = this.handleScan.bind(this);
     this.handleError = this.handleError.bind(this);
-    document.body.addEventListener('click', this.closeModal);
   }
 
   handleScan(data) {
     if (data !== null) {
       if (this.props.mode === 'scan') {
-        this.props.setRecieverFromScan(data)
+        this.props.setRecieverFromScan(data);
       }
+
       this.closeModal();
     }
   }
 
   handleError(err) {
-    this.setState({
-      error: err,
-    });
+    if (err.name === 'NoVideoInputDevicesError') {
+      this.setState({
+        error: 'Error: No video input devices found!',
+      });
+    } else {
+      this.setState({
+        error: 'Error: unknown error!',
+      });
+    }
   }
 
   openModal() {
@@ -60,10 +66,6 @@ class QRModal extends React.Component {
     this.setState({
       modalIsOpen: false,
     });
-
-    if (this.props.mode === 'scan') {
-      ReactDOM.unmountComponentAtNode(document.getElementById('webcam'));
-    }
   }
 
   render() {

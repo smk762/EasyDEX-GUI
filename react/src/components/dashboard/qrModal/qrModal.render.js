@@ -66,7 +66,13 @@ export const QRModalReaderRender = function () {
               </div>
               <div className="modal-body">
                 <div className="animsition vertical-align fade-in">
-                  <div className="page-content vertical-align-middle">
+                  <div
+                    className="page-content vertical-align-middle"
+                    style={{
+                      width: '100%',
+                      textAlign: 'center',
+                      fontSize: '16px'
+                    }}>
                     <div id="webcam">
                       { this.state.error }
                     </div>

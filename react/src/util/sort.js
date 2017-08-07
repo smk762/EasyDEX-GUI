@@ -1,10 +1,13 @@
-export function sortByDate(data) {
+export function sortByDate(data, sortKey) {
   return data.sort(function(a, b) {
-    if (a.timestamp &&
-        b.timestamp) {
-      return b.timestamp - a.timestamp;
-    } else {
-      return b.blocktime - a.blocktime;
+    if (a[sortKey] < b[sortKey]) {
+      return -1;
     }
+
+    if (a[sortKey] > b[sortKey]) {
+      return 1;
+    }
+
+    return 0;
   });
 }

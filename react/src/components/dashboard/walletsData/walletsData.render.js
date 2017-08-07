@@ -66,7 +66,7 @@ export const AddressListRender = function() {
   if (isMultiPublicAddress ||
       isMultiPrivateAddress) {
     return (
-      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
+      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open margin-bottom-10' : 'margin-bottom-10')}` }>
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
@@ -80,7 +80,7 @@ export const AddressListRender = function() {
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
             <li className="selected">
-              <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span><span className="glyphicon glyphicon-ok check-mark"></span></a>
+              <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span></a>
             </li>
             { this.renderAddressByType('public') }
           </ul>
@@ -196,19 +196,19 @@ export const WalletsDataRender = function() {
                             <span className="caret"></span>
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
-                            <li>
+                            <li className="hide">
                               <a onClick={ this.getDexNotariesAction }>
                                 <i className="icon fa-sitemap"></i> { translate('INDEX.GET_NOTARY_NODES_LIST') }
                               </a>
                             </li>
-                            <li>
+                            <li className="hide">
                               <a onClick={ this.basiliskConnectionAction }>
                                 <i className="icon wb-refresh"></i> { translate('INDEX.REFRESH_BASILISK_CONNECTIONS') }
                               </a>
                             </li>
                             <li className={ !this.state.useCache ? 'hide' : '' }>
                               <a onClick={ this.basiliskRefreshActionOne }>
-                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') }
+                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') }&nbsp;
                                 ({ translate('INDEX.ACTIVE_ADDRESS') })
                               </a>
                             </li>
@@ -228,7 +228,7 @@ export const WalletsDataRender = function() {
                                 <i className="icon fa-refresh"></i> Restart Basilisk Instance (unsafe!)
                               </a>
                             </li>
-                            <li className={ !this.state.useCache ? 'hide' : '' }>
+                            <li className="hide">
                               <a onClick={ this._toggleViewCacheModal }>
                                 <i className="icon fa-list-alt"></i> { translate('INDEX.VIEW_CACHE_DATA') }
                               </a>

@@ -1,9 +1,7 @@
 import React from 'react';
 import Config from '../../../config';
 import { translate } from '../../../translate/translate';
-import {
-  checkTimestamp
-} from '../../../util/time';
+import { checkTimestamp } from '../../../util/time';
 import {
   edexGetTxIDList,
   edexRemoveTXID
@@ -55,7 +53,6 @@ class SendCoin extends React.Component {
       currentStackLength: 0,
       totalStackLength: 0,
       utxoMethodInProgress: false,
-      isCameraFeatureDetected: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.handleBasiliskSend = this.handleBasiliskSend.bind(this);
@@ -66,25 +63,7 @@ class SendCoin extends React.Component {
     this._fetchNewUTXOData = this._fetchNewUTXOData.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
-    this.detectCamera = this.detectCamera.bind(this);
     socket.on('messages', msg => this.updateSocketsData(msg));
-  }
-
-  // test device camera capabilities
-  detectCamera() {
-    const _getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-    _getUserMedia(
-      { 'video': true },
-      function() {
-        this.setState({
-          isCameraFeatureDetected: true,
-        });
-      },
-      function() {
-        console.warn('this device doesn\'t have camera!');
-      }
-    );
   }
 
   setRecieverFromScan(receiver) {
@@ -101,8 +80,6 @@ class SendCoin extends React.Component {
       this.handleClickOutside,
       false
     );
-
-    this.detectCamera();
   }
 
   componentWillUnmount() {
@@ -323,7 +300,7 @@ class SendCoin extends React.Component {
       );
     } else {
       return (
-        <span>- { translate('SEND.SELECT_T_OR_Z_ADDR') } -</span>
+        <span>{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
       );
     }
   }
@@ -347,7 +324,7 @@ class SendCoin extends React.Component {
           <ul className="dropdown-menu inner">
             <li className="selected">
               <a>
-                <span className="text"> - { translate('SEND.SELECT_T_OR_Z_ADDR') } - </span>
+                <span className="text">{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
                 <span className="glyphicon glyphicon-ok check-mark"></span>
               </a>
             </li>
@@ -395,7 +372,7 @@ class SendCoin extends React.Component {
         amount: 0,
         fee: 0.0001,
         sendSig: false,
-        sendApiType: false,
+        sendApiType: true,
         addressSelectorOpen: false,
         currentStackLength: 0,
         totalStackLength: 0,
@@ -697,6 +674,8 @@ class SendCoin extends React.Component {
         );
       }
     } else if (key === 'sendrawtransaction') {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
       if (_lastSendToResponse[key] === 'success') {
         return (
           <span className="label label-success">true</span>
@@ -707,6 +686,8 @@ class SendCoin extends React.Component {
         );
       }
     } else if (key === 'txid' || key === 'sent') {
+      const _lastSendToResponse = this.props.ActiveCoin.lastSendToResponse;
+
       return (
         <span>{ _lastSendToResponse[key] }</span>
       );
@@ -775,6 +756,7 @@ class SendCoin extends React.Component {
 
     return null;
   }
+
   render() {
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.send &&
