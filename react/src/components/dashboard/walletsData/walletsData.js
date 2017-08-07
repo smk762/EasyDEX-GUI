@@ -55,9 +55,9 @@ class WalletsData extends React.Component {
       itemsListColumns: this.generateItemsListColumns(),
       pageSize: 20,
       showPagination: false,
-      searchTerm: null
+      searchTerm: null,
       coin: null,
-      txhistory: null,
+      txhistory: null
     };
 
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
