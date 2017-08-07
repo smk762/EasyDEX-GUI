@@ -345,13 +345,15 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
         this.props.ActiveCoin.txhistory.length) {
-      if (!this.state.itemsList ||
-          (this.state.itemsList && !this.state.itemsList.length) ||
-          (props.ActiveCoin.txhistory !== this.props.ActiveCoin.txhistory)) {
-          const sortedItemsList = sortByDate(this.props.ActiveCoin.txhistory);
+        if (!this.state.itemsList ||
+            (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) ||
+            (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {
+          const sortedItemsList = this.indexTxHistory(sortByDate(this.props.ActiveCoin.txhistory, this.props.ActiveCoin.mode === 'basilisk' ? 'index' : 'confirmations'));
+
           this.setState(Object.assign({}, this.state, {
             itemsList: sortedItemsList,
             filteredItemsList: this.filterTransactions(sortedItemsList, this.state.searchTerm),
+            txhistory: this.props.ActiveCoin.txhistory,
             showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.pageSize
           }));
       }
