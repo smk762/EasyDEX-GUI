@@ -24,15 +24,15 @@ export const WalletsNavWithWalletRender = function() {
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-' + (this.state.nativeOnly ? '40' : '20') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-' + (this.props.nativeOnly ? '40' : '20') }
         id="header-dashboard"
         style={{ marginBottom: this.props.ActiveCoin.mode === 'basilisk' ? '30px' : '0' }}>
-        <ol className={ this.state.nativeOnly ? 'hide' : 'breadcrumb' }>
+        <ol className={ this.props.nativeOnly ? 'hide' : 'breadcrumb' }>
           <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
-          { this.props && this.props.Dashboard && this.props.Dashboard.activeHandle ? this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] : '-' }
+          { this.props.activeHandle ? this.props.activeHandle[this.props.ActiveCoin.coin] : '-' }
           <button
             className="btn btn-default btn-xs clipboard-edexaddr"
-            onClick={ () => this.copyMyAddress(this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) }>
+            onClick={ () => this.copyMyAddress(this.props.activeHandle[this.props.ActiveCoin.coin]) }>
             <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
           </button>
         </ol>
