@@ -8,6 +8,7 @@ class AddCoinOptionsAC extends React.Component {
         <option value="BET|basilisk|native">BET (BET)</option>
         <option value="BOTS|basilisk|native">BOTS (BOTS)</option>
         <option value="CEAL|basilisk|native">CEAL NET (CEAL)</option>
+        <option value="COQUI|basilisk|native">COQUI (COQUI)</option>
         <option value="CRYPTO|basilisk|native">CRYPTO (CRYPTO)</option>
         <option value="HOD|basilisk|native">HODL (HODL)</option>
         <option value="DEX|basilisk|native">InstantDEX (DEX)</option>

@@ -685,3 +685,57 @@ select{
     }
   }
 }
+
+.breadcrumb {
+  padding: 8px 30px 0;
+  position: relative;
+  top: -10px;
+}
+
+.header-easydex-section {
+  img {
+    max-width: 60px;
+  }
+}
+
+.coin-logo-wide {
+  padding: 8px 30px 0;
+  position: relative;
+  top: 0;
+
+  .header-easydex-section {
+    img {
+      width: inherit;
+      max-width: inherit;
+      position: relative;
+      top: -5px;
+    }
+  }
+}
+
+.native-coin-logo {
+  float: left;
+  position: absolute;
+  top: -105px;
+  z-index: 100;
+
+  .header-easydex-section {
+    img {
+      width: 60px;
+    }
+  }
+}
+
+.coin-logo-wide {
+  &.native-coin-logo {
+    top: -93px;
+
+    .header-easydex-section img {
+      width: inherit;
+    }
+  }
+}
+
+.page-header--native {
+  height: 75px;
+}

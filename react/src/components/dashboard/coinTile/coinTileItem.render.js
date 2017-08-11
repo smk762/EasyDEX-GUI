@@ -12,7 +12,7 @@ const CoinTileItemRender = function() {
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"
-              src={ `assets/images/cryptologo/${item.coinlogo}.png` }
+              src={ `assets/images/cryptologo/${item.coinlogo.toLowerCase()}.png` }
               alt={ item.coinname }/>
             <span className={ `badge up badge-${item.modecolor}` }>
               { item.modecode }
