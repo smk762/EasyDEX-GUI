@@ -1,4 +1,5 @@
 // TODO: merge check functions
+//			 move to nodejs
 
 export function checkAC(coinVal) {
 	if (coinVal === 'SUPERNET' ||
@@ -9,6 +10,7 @@ export function checkAC(coinVal) {
 			coinVal === 'JUMBLR' ||
 			coinVal === 'BET' ||
 			coinVal === 'CRYPTO' ||
+			coinVal === 'COQUI' ||
 			coinVal === 'HODL' ||
 			coinVal === 'SHARK' ||
 			coinVal === 'BOTS' ||
@@ -98,6 +100,7 @@ export function checkCoinType(coin) {
 			coin === 'JUMBLR' ||
 			coin === 'BET' ||
 			coin === 'CRYPTO' ||
+			coin === 'COQUI' ||
 			coin === 'HODL' ||
 			coin === 'SHARK' ||
 			coin === 'BOTS' ||
@@ -131,10 +134,10 @@ export function checkCoinType(coin) {
 }
 
 export function startCrypto(confpath, coin, mode) {
-	let tmpinternval = 0,
-			AddCoinData = {},
-			tmpPendValue = 1, // TODO: hook up to shepherd sysinfo
-			tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+	let tmpinternval = 0;
+	let AddCoinData = {};
+	let tmpPendValue = 1; // TODO: hook up to shepherd sysinfo
+	let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
 
 	if (coin !== 'BTC' &&
       coin !== 'LTC' &&
@@ -176,9 +179,9 @@ export function startCrypto(confpath, coin, mode) {
 }
 
 export function startCurrencyAssetChain(confpath, coin, mode) {
-	let AddCoinDataPayload = {},
-			tmpPendValue = 1,
-			tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+	let AddCoinDataPayload = {};
+	let tmpPendValue = 1;
+	let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
 
 	if (coin !== 'BTC' &&
       coin !== 'LTC' &&
@@ -702,7 +705,7 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		'DEX': {
 			'name': 'DEX',
-			'supply': 1300000,
+			'supply': 999999,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"DEX","conf":"DEX.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"DEX","name":"DEX","netmagic":"f2ae0516","p2p":9502,"rpc":9503}) : {},
 			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"DEX","name":"DEX","netmagic":"f2ae0516","p2p":9502,"rpc":9503})
 		},
@@ -726,7 +729,7 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		'HODL': {
 			'name': 'HODL',
-			'supply': 999999,
+			'supply': 9999999,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"HODL","conf":"HODL.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"HODL","name":"HODL","netmagic":"9b13fb5f","p2p":8009,"rpc":8010}) : {},
 			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"HODL","name":"HODL","netmagic":"9b13fb5f","p2p":8009,"rpc":8010})
 		},
@@ -756,7 +759,7 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		'KV': {
 			'name': 'KV',
-			'supply': 999999,
+			'supply': 1000000,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"KV","conf":"KV.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"KV","name":"KV","netmagic":"b09a2d65","p2p":9746,"rpc":9747}) : {},
 			'AddCoinDataVar': Object.assign(_acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"KV","name":"KV","netmagic":"b09a2d65","p2p":9746,"rpc":9747})
 		},
@@ -768,9 +771,15 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		'MESH': {
 			'name': 'MESH',
-			'supply': 1000000,
+			'supply': 1000007,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"MESH","conf":"MESH.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"MESH","name":"MESH","netmagic":"f0265c67","p2p":8399,"rpc":8400}) : {},
 			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"MESH","name":"MESH","netmagic":"f0265c67","p2p":8399,"rpc":8400})
+		},
+		'COQUI': {
+			'name': 'COQUI',
+			'supply': 72000000,
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"COQUI","conf":"COQUI.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"COQUI","name":"COQUI","netmagic":"4cbd5ef4","p2p":14275,"rpc":14276}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"COQUI","name":"COQUI","netmagic":"4cbd5ef4","p2p":14275,"rpc":14276})
 		}
 	};
 
