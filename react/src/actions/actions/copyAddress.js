@@ -15,3 +15,17 @@ export function copyCoinAddress(address) {
     );
   }
 }
+
+export function copyString(string, message) {
+  const _result = copyToClipboard(string);
+
+  return dispatch => {
+    dispatch(
+      triggerToaster(
+        message,
+        translate('TOASTR.COIN_NOTIFICATION'),
+        _result ? 'success' : 'error'
+      )
+    );
+  }
+}

@@ -12,7 +12,9 @@ import Store from '../../../store';
 import {
   AddressListRender,
   OASendUIRender,
-  WalletsNativeSendRender
+  WalletsNativeSendRender,
+  WalletsNativeSendFormRender,
+  _WalletsNativeSendFormRender
 } from './walletsNativeSend.render';
 
 class WalletsNativeSend extends React.Component {
@@ -37,6 +39,11 @@ class WalletsNativeSend extends React.Component {
     this.checkZAddressCount = this.checkZAddressCount.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
     this.renderOPIDListCheck = this.renderOPIDListCheck.bind(this);
+    this.WalletsNativeSendFormRender = _WalletsNativeSendFormRender.bind(this);
+  }
+
+  WalletsNativeSendFormRender() {
+    return this._WalletsNativeSendFormRender();
   }
 
   componentWillMount() {
@@ -344,7 +351,7 @@ class WalletsNativeSend extends React.Component {
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
-        this.props.ActiveCoin.nativeActiveSection === 'send') {
+        (this.props.ActiveCoin.nativeActiveSection === 'send' || this.props.nativeActiveSection === 'send')) {
       return WalletsNativeSendRender.call(this);
     }
 
