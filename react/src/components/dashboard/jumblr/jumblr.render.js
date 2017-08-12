@@ -9,7 +9,6 @@ export const JumblrRenderSecretAddressList = function(type) {
   const _jumblrAddressList = type === 'gen' ? this.state.jumblrSecretAddress : this.state.jumblrSecretAddressImport;
   let _items = [];
 
-  console.warn('_jumblrAddressList', type);
   if (_jumblrAddressList &&
       _jumblrAddressList.length) {
     for (let i = 0; i < _jumblrAddressList.length; i++) {
