@@ -91,14 +91,14 @@ const LoginRender = function () {
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase } />
+                value={ this.state.loginPassphrase || '' } />
               <textarea
                 className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 id="loginPassphrase"
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase }></textarea>
+                value={ this.state.loginPassphrase || '' }></textarea>
               <i
                 className={ 'seed-toggle fa fa-eye' +  (!this.state.seedInputVisibility ? '-slash' : '') }
                 onClick={ this.toggleSeedInputVisibility }></i>

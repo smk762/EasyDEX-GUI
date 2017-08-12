@@ -68,6 +68,7 @@ export * from './actions/basiliskTxHistory';
 export * from './actions/iguanaHelpers';
 export * from './actions/cli';
 export * from './actions/update';
+export * from './actions/jumblr';
 
 export function changeActiveAddress(address) {
   return {

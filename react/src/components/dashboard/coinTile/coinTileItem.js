@@ -110,6 +110,11 @@ class CoinTileItem extends React.Component {
       setTimeout(() => {
         this.dispatchCoinActions(coin, mode);
       }, 100);
+      if (mode === 'native') { // faster coin data load if fully synced
+        setTimeout(() => {
+          this.dispatchCoinActions(coin, mode);
+        }, 1000);
+      }
 
       Store.dispatch(
         stopInterval(
@@ -140,7 +145,7 @@ class CoinTileItem extends React.Component {
       if (mode === 'native') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
-        }, coin === 'KMD' ? IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE : IGUNA_ACTIVE_HANDLE_TIMEOUT);
+        }, IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       }
