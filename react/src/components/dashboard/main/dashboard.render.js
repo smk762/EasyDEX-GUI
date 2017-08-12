@@ -23,8 +23,8 @@ const DashboardRender = function() {
       <div
         className={ this.isSectionActive('wallets') ? 'page-main' : '' }
         id="section-dashboard">
-        <Navbar {...this.props} />
-        <CoindDownModal {...this.props} />
+        <Navbar />
+        <CoindDownModal />
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile {...this.props} />
           <WalletsNav />

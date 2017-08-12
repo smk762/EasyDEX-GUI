@@ -1,12 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { toggleCoindDownModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 import CoindDownModalRender from './coindDownModal.render';
 
 class CoindDownModal extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       display: false,
       debugLogCrash: null,
@@ -18,20 +19,12 @@ class CoindDownModal extends React.Component {
     Store.dispatch(toggleCoindDownModal(false));
   }
 
-  componentWillReceiveProps(props) {
-    const coindDownModalProps = props ? props.Dashboard : null;
-
-    if (coindDownModalProps &&
-        coindDownModalProps.displayCoindDownModal !== this.state.display) {
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.displayCoindDownModal);
+    if (this.props.displayCoindDownModal !== nextProps.displayCoindDownModal) {
       this.setState(Object.assign({}, this.state, {
-        display: coindDownModalProps.displayCoindDownModal,
+        display: nextProps.displayCoindDownModal,
       }));
-
-      setTimeout(() => {
-        this.setState(Object.assign({}, this.state, {
-          display: coindDownModalProps.displayCoindDownModal,
-        }));
-      }, 100);
     }
   }
 
@@ -43,5 +36,12 @@ class CoindDownModal extends React.Component {
     return null;
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    displayCoindDownModal: state.Dashboard.displayCoindDownModal,
+    debugLog: state.Settings.debugLog
+  };
+ 
+};
 
-export default CoindDownModal;
+export default connect(mapStateToProps)(CoindDownModal);

@@ -24,8 +24,9 @@ const CoindDownModalRender = function () {
                   <strong>Debug.log (last 50 lines)</strong>
                   <div className="form-group form-material floating">
                     <textarea
+                      readOnly
                       className="form-control"
-                      value={ this.props.Settings.debugLog }></textarea>
+                      value={ this.props.debugLog || '' }></textarea>
                   </div>
                   <button
                     type="button"
