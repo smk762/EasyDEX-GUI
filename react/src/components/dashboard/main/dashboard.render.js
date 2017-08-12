@@ -26,7 +26,7 @@ const DashboardRender = function() {
         <Navbar />
         <CoindDownModal />
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
-          <CoinTile {...this.props} />
+          <CoinTile />
           <WalletsNav />
           { !this.isNativeMode() && <WalletsProgress {...this.props} /> }
           { !this.isNativeMode() && <WalletsBalance {...this.props} />}
