@@ -57,11 +57,13 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
-            <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
-              <a onClick={ () => this.dashboardChangeSection('jumblr') }>
-                <i className="site-menu-icon"></i> Jumblr
-              </a>
-            </li>
+            { this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' &&
+              <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
+                <a onClick={ () => this.dashboardChangeSection('jumblr') }>
+                  <i className="site-menu-icon"></i> Jumblr
+                </a>
+              </li>
+            }
             <li className={ this.state.nativeOnly ? 'hide' : (this.isSectionActive('atomic') ? 'active nav-top-menu' : 'nav-top-menu') }>
               <a onClick={ () => this.dashboardChangeSection('atomic') }>
                 <i className="site-menu-icon"></i> Atomic Explorer

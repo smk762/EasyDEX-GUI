@@ -428,13 +428,11 @@ class WalletsData extends React.Component {
   // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
     if (this.state.itemsList === 'loading') {
-      if (!this.isNativeMode() || this.isFullySynced()) {
-        return (
-          <tr className="hover--none">
-            <td colSpan="7">{ translate('INDEX.LOADING_HISTORY') }...</td>
-          </tr>
-        );
-      }
+      return (
+        <tr className="hover--none">
+          <td colSpan="7">{ translate('INDEX.LOADING_HISTORY') }...</td>
+        </tr>
+      );
     } else if (this.state.itemsList === 'no data') {
       return (
         <tr className="hover--none">

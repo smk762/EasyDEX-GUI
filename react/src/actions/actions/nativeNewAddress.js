@@ -10,10 +10,6 @@ import {
   guiLogState
 } from './log';
 
-function handleGetNewKMDAddresses(pubpriv, coin, dispatch, json) {
-
-}
-
 export function getNewKMDAddresses(coin, pubpriv, mode) {
   let payload;
   let ajaxFunctionInput = pubpriv === 'public' ? 'getnewaddress' : 'z_getnewaddress';
@@ -113,14 +109,6 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
         )
       );
       dispatch(getKMDAddressesNative(coin, mode));
-      /*dispatch(
-        handleGetNewKMDAddresses(
-          pubpriv,
-          coin,
-          dispatch,
-          json
-        )
-      );*/
     })
     .catch(function(ex) {
       dispatch(
