@@ -130,6 +130,9 @@ const mapStateToProps = (state) => {
       send: state.ActiveCoin.send,
       receive: state.ActiveCoin.receive,
       balance: state.ActiveCoin.balance,
+      cache: state.ActiveCoin.cache,
+      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+      activeAddress: state.ActiveCoin.activeAddress
     },
     ActiveHandle: state.Dashboard.activeHandle,
     nativeOnly: Config.iguanaLessMode,
