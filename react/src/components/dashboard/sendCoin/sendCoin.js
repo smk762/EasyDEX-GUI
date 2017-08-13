@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Config from '../../../config';
 import { translate } from '../../../translate/translate';
 import { checkTimestamp } from '../../../util/time';
@@ -41,7 +42,7 @@ class SendCoin extends React.Component {
     super(props);
     this.state = {
       currentStep: 0,
-      sendFrom: this.props.Dashboard && this.props.Dashboard.activeHandle ? this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] : null,
+      sendFrom: this.props.Dashboard.activeHandle ? this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] : null,
       sendFromAmount: 0,
       sendTo: '',
       sendToOA: null,
@@ -768,4 +769,26 @@ class SendCoin extends React.Component {
   }
 }
 
-export default SendCoin;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+      send: state.ActiveCoin.send,
+      receive: state.ActiveCoin.receive,
+      balance: state.ActiveCoin.balance,
+      cache: state.ActiveCoin.cache,
+      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+      activeAddress: state.ActiveCoin.activeAddress,
+      lastSendToResponse: state.ActiveCoin.lastSendToResponse,
+      addresses: state.ActiveCoin.addresses,
+    },
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+    }
+
+  };
+ 
+};
+
+export default connect(mapStateToProps)(SendCoin);

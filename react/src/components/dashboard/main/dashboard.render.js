@@ -30,7 +30,7 @@ const DashboardRender = function() {
           <WalletsNav />
           { !this.isNativeMode() && <WalletsProgress /> }
           { !this.isNativeMode() && <WalletsBalance />}
-          <SendCoin {...this.props} />
+          <SendCoin />
           { !this.isNativeMode() && <ReceiveCoin {...this.props.ActiveCoin} /> }
           { !this.isNativeMode() && <WalletsData {...this.props} /> }
           <WalletsTxInfo {...this.props} />
