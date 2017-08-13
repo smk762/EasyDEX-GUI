@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import {
   SyncErrorLongestChainRender,
@@ -12,8 +13,8 @@ import {
 } from './walletsProgress.render';
 
 class WalletsProgress extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.isFullySynced = this.isFullySynced.bind(this);
   }
 
@@ -229,5 +230,18 @@ class WalletsProgress extends React.Component {
     return null;
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    Dashboard: state.Dashboard,
+    Settings: {
+      debugLog: state.Settings.debugLog,
+    },
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+      coin: state.coin,
+    }
+  };
+ 
+};
 
-export default WalletsProgress;
+export default connect(mapStateToProps)(WalletsProgress);
