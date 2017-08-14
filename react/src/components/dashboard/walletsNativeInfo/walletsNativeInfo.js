@@ -1,9 +1,16 @@
 import React from 'react';
+import { toggleClaimInterestModal } from '../../../actions/actionCreators';
+import Store from '../../../store';
 import WalletsNativeInfoRender from './walletsNativeInfo.render';
 
 class WalletsNativeInfo extends React.Component {
   constructor(props) {
     super(props);
+    this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
+  }
+
+  openClaimInterestModal() {
+    Store.dispatch(toggleClaimInterestModal(true));
   }
 
   render() {
