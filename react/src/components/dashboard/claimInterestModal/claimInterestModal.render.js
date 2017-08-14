@@ -30,14 +30,6 @@ export const _ClaimInterestTableRender = function() {
               <i className="fa-exclamation-circle red"></i>
             }
           </td>
-          <td>
-            <button
-              type="button"
-              className={ 'btn btn-success waves-effect waves-light' + (_transactionsList[i].interest < MIN_INTEREST_THRESHOLD ? ' show' : '') }
-              onClick={ () => this.claimInterest(_transactionsList[i].address, _transactionsList[i].amount) }>
-              <i className="icon fa-dollar"></i> Claim
-            </button>
-          </td>
         </tr>
       );
     }
@@ -46,7 +38,7 @@ export const _ClaimInterestTableRender = function() {
   return (
     <span>
       <div className="padding-bottom-20">
-        <strong>Requirements to accure interest:</strong> locktime field is set and amount is greater than 10 KMD
+        <strong>Requirements to accrue interest:</strong> locktime field is set and amount is greater than <strong>10 KMD</strong>
       </div>
       <div className="text-left padding-top-10 padding-bottom-10">
         <label className="switch">
@@ -63,6 +55,12 @@ export const _ClaimInterestTableRender = function() {
           Show zero interest
         </div>
       </div>
+      <button
+        type="button"
+        className="btn btn-success waves-effect waves-light claim-btn"
+        onClick={ () => this.claimInterest() }>
+        <i className="icon fa-dollar"></i> Claim interest
+      </button>
       <div className="table-scroll">
         <table className="table table-hover dataTable table-striped">
           <thead>
@@ -72,7 +70,6 @@ export const _ClaimInterestTableRender = function() {
               <th>Amount</th>
               <th>Interest</th>
               <th>Locktime</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -85,7 +82,6 @@ export const _ClaimInterestTableRender = function() {
               <th>Amount</th>
               <th>Interest</th>
               <th>Locktime</th>
-              <th></th>
             </tr>
           </tfoot>
         </table>
@@ -93,10 +89,6 @@ export const _ClaimInterestTableRender = function() {
     </span>
   );
 };
-
-          //{ this.renderAddressList('public') }
-          //{ this.isNativeMode() && this.renderAddressList('private') }
-
 
 export const ClaimInterestModalRender = function() {
   return (

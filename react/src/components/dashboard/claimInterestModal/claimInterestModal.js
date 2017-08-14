@@ -6,7 +6,8 @@ import {
   getListUnspent,
   getRawTransaction,
   copyString,
-  sendFromPromise
+  sendToAddressPromise,
+  triggerToaster
 } from '../../../actions/actionCreators';
 import { translate } from '../../../translate/translate';
 import {
@@ -36,12 +37,12 @@ class ClaimInterestModal extends React.Component {
   loadListUnspent() {
     let _transactionsList = [];
 
-    getListUnspent('KMD')
+    getListUnspent(this.props.ActiveCoin.coin)
     .then((json) => {
       if (json &&
           json.length) {
         for (let i = 0; i < json.length; i++) {
-          getRawTransaction('KMD', json[i].txid)
+          getRawTransaction(this.props.ActiveCoin.coin, json[i].txid)
           .then((_json) => {
             _transactionsList.push({
               address: json[i].address,
@@ -64,11 +65,28 @@ class ClaimInterestModal extends React.Component {
   }
 
   claimInterest(address, amount) {
-    console.warn('claim interest', `${address} ${amount}`);
-    /*sendFromPromise(address, amount)
+    sendToAddressPromise(this.props.ActiveCoin.coin, this.state.transactionsList[0].address, this.props.ActiveCoin.balance.transparent)
     .then((json) => {
-      console.warn(json);
-    });*/
+      if (json.error &&
+          json.error.code) {
+        Store.dispatch(
+          triggerToaster(
+            json.error.message,
+            'Error',
+            'error'
+          )
+        );
+      } else if (json.result && json.result.length && json.result.length === 64) {
+        Store.dispatch(
+          triggerToaster(
+            `Your full balance is sent to address ${this.state.transactionsList[0].address}. Check back your new balance in a few minutes.`,
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'success',
+            false
+          )
+        );
+      }
+    });
   }
 
   checkTransactionsListLength() {

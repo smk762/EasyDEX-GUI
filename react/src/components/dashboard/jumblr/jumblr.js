@@ -169,7 +169,7 @@ class Jumblr extends React.Component {
               json.error.code) {
             Store.dispatch(
               triggerToaster(
-                json.error.code,
+                json.error.message,
                 'Error',
                 'error'
               )
@@ -299,7 +299,7 @@ class Jumblr extends React.Component {
             } else {
               Store.dispatch(
                 triggerToaster(
-                  json.error.code,
+                  json.error.message,
                   'Error',
                   'error'
                 )
@@ -348,7 +348,7 @@ class Jumblr extends React.Component {
               json.error.code) {
             Store.dispatch(
               triggerToaster(
-                json.error.code,
+                json.error.message,
                 'Error',
                 'error'
               )
@@ -372,7 +372,7 @@ class Jumblr extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            json.error.code,
+            json.error.message,
             'Error',
             'error'
           )

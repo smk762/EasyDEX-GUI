@@ -286,15 +286,18 @@ export function getKMDOPID(opid, coin) {
   }
 }
 
-export function sendFromPromise(coin, address, amount) {
+export function sendToAddressPromise(coin, address, amount) {
   return new Promise((resolve, reject) => {
     const payload = {
       mode: null,
       chain: coin,
-      cmd: 'sendfrom',
+      cmd: 'sendtoaddress',
       params: [
         address,
-        amount
+        amount,
+        'KMD interest claim request',
+        'KMD interest claim request',
+        true
       ]
     };
 
@@ -314,7 +317,7 @@ export function sendFromPromise(coin, address, amount) {
       console.log(error);
       dispatch(
         triggerToaster(
-          'sendFrom',
+          'sendToAddress',
           'Error',
           'error'
         )
@@ -322,7 +325,7 @@ export function sendFromPromise(coin, address, amount) {
     })
     .then(response => response.json())
     .then(json => {
-      resolve(json.result ? json.result : json);
+      resolve(json);
     })
   });
 }
