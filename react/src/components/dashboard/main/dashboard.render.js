@@ -31,8 +31,8 @@ const DashboardRender = function() {
           { !this.isNativeMode() && <WalletsProgress /> }
           { !this.isNativeMode() && <WalletsBalance />}
           <SendCoin />
-          { !this.isNativeMode() && <ReceiveCoin {...this.props.ActiveCoin} /> }
-          { !this.isNativeMode() && <WalletsData {...this.props} /> }
+          { !this.isNativeMode() && <ReceiveCoin /> }
+          { !this.isNativeMode() && <WalletsData /> }
           <WalletsTxInfo {...this.props} />
           <WalletsNative {...this.props} />
         </div>

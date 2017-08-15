@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import WalletsBasiliskRefreshRender from './walletsBasiliskRefresh.render';
 
 class WalletsBasiliskRefresh extends React.Component {
@@ -15,5 +16,11 @@ class WalletsBasiliskRefresh extends React.Component {
     return null;
   }
 }
-
-export default WalletsBasiliskRefresh;
+const mapStateToProps = (state) => {
+  return {
+    Dashboard: {
+      basiliskRefresh: state.Dashboard.basiliskRefresh,
+    }
+  };
+};
+export default connect(mapStateToProps)(WalletsBasiliskRefresh);

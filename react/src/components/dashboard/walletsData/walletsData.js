@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
 import { formatValue } from '../../../util/formatValue';
@@ -647,4 +648,34 @@ class WalletsData extends React.Component {
   }
 }
 
-export default WalletsData;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+      send: state.ActiveCoin.send,
+      receive: state.ActiveCoin.receive,
+      balance: state.ActiveCoin.balance,
+      cache: state.ActiveCoin.cache,
+      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+      activeAddress: state.ActiveCoin.activeAddress,
+      lastSendToResponse: state.ActiveCoin.lastSendToResponse,
+      addresses: state.ActiveCoin.addresses,
+      txhistory: state.ActiveCoin.txhistory,
+      showTransactionInfo: state.ActiveCoin.showTransactionInfo,
+    },
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+      displayViewCacheModal: state.Dashboard.displayViewCacheModal,
+      basiliskConnection: state.Dashboard.basiliskConnection,
+      progress: state.Dashboard.progress,
+    },
+    Main: {
+      coins: state.Main.coins,
+    }
+
+  };
+ 
+};
+
+export default connect(mapStateToProps)(WalletsData);

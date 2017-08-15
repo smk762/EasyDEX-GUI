@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   copyCoinAddress,
   checkAddressBasilisk,
@@ -18,8 +19,8 @@ import {
 // TODO: fallback to localstorage/stores data in case iguana is taking too long to respond
 
 class ReceiveCoin extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       openDropMenu: false,
@@ -216,5 +217,18 @@ class ReceiveCoin extends React.Component {
     return null;
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    coin: state.ActiveCoin.coin,
+    mode: state.ActiveCoin.mode,
+    receive: state.ActiveCoin.receive,
+    balance: state.ActiveCoin.balance,
+    cache: state.ActiveCoin.cache,
+    nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+    activeAddress: state.ActiveCoin.activeAddress,
+    addresses: state.ActiveCoin.addresses
+  };
+ 
+};
 
-export default ReceiveCoin;
+export default connect(mapStateToProps)(ReceiveCoin);

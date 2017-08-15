@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import { displayNotariesModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -9,8 +10,8 @@ import {
 } from './walletsNotariesList.render';
 
 class WalletsNotariesList extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.closeNotariesModal = this.closeNotariesModal.bind(this);
   }
 
@@ -58,5 +59,15 @@ class WalletsNotariesList extends React.Component {
     return null;
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+      displayNotariesModal: state.ActiveCoin.displayNotariesModal,
+      notaries: state.ActiveCoin.notaries,
+    }
+  };
+ 
+};
 
-export default WalletsNotariesList;
+export default connect(mapStateToProps)(WalletsNotariesList);
