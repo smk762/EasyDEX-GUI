@@ -629,12 +629,19 @@ select{
     > div {
       height: 100%;
     }
+    .form-group {
+      &.form-material {
+        &.floating {
+          height: 80%;
+        }
+      }
+    }
     .page-content {
       width: 90%;
       height: 100%;
 
       textarea {
-        min-height: 200px;
+        height: 100%;
       }
     }
   }

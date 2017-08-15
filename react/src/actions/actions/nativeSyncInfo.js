@@ -182,7 +182,12 @@ export function getSyncInfoNative(coin, skipDebug) {
               true
             )
           );
-          dispatch(getDebugLog('komodo', 50));
+
+          if (coin === 'KMD') {
+            dispatch(getDebugLog('komodo', 50));
+          } else {
+            dispatch(getDebugLog('komodo', 50, coin));
+          }
           dispatch(toggleCoindDownModal(true));
         } else {
           json = JSON.parse(json);
@@ -190,7 +195,11 @@ export function getSyncInfoNative(coin, skipDebug) {
 
         if (json.error &&
             json.error.message.indexOf('Activating best') === -1) {
-          dispatch(getDebugLog('komodo', 1));
+          if (coin === 'KMD') {
+            dispatch(getDebugLog('komodo', 1));
+          } else {
+            dispatch(getDebugLog('komodo', 1, coin));
+          }
         }
 
         if (Config.debug) {

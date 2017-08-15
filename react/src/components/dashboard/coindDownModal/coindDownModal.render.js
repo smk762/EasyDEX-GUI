@@ -16,7 +16,7 @@ const CoindDownModalRender = function () {
                 onClick={ this.dismiss }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white">Komodod is down!</h4>
+              <h4 className="modal-title white">{ this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}` } is down!</h4>
             </div>
             <div className="modal-body">
               <div className="vertical-align text-center">
