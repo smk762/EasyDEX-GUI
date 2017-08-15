@@ -195,7 +195,7 @@ export function getKMDOPID(opid, coin) {
           passthruAgent = getPassthruAgent(coin),
           tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
 
-      if (passthruAgent == 'iguana') {
+      if (passthruAgent === 'iguana') {
         payload = {
           'userpass': tmpIguanaRPCAuth,
           'agent': passthruAgent,
@@ -284,4 +284,48 @@ export function getKMDOPID(opid, coin) {
       })
     })
   }
+}
+
+export function sendToAddressPromise(coin, address, amount) {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'sendtoaddress',
+      params: [
+        address,
+        amount,
+        'KMD interest claim request',
+        'KMD interest claim request',
+        true
+      ]
+    };
+
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'payload': payload }),
+    };
+
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'sendToAddress',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    })
+  });
 }

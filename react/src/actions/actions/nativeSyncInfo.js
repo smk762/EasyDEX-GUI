@@ -13,7 +13,7 @@ import Config from '../../config';
 
 export function getSyncInfoNativeKMD(skipDebug, json) {
   const coin = 'KMD';
-
+  // https://www.kmd.host/
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {

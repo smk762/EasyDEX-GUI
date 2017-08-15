@@ -57,7 +57,7 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
-            { this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' &&
+            { this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' && (this._checkAC() || this.props.ActiveCoin.coin === 'KMD') &&
               <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr
