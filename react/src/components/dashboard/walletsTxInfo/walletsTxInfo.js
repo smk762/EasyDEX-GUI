@@ -5,8 +5,8 @@ import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
 
 class WalletsTxInfo extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       activeTab: 0,
     };
@@ -52,4 +52,17 @@ class WalletsTxInfo extends React.Component {
   }
 }
 
-export default WalletsTxInfo;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+      txhistory: state.ActiveCoin.txhistory,
+      showTransactionInfo: state.ActiveCoin.showTransactionInfo,
+      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+      activeAddress: state.ActiveCoin.activeAddress,
+    }
+  };
+ 
+};
+
+export default connect(mapStateToProps)(WalletsTxInfo);
