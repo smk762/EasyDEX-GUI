@@ -1,10 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../translate/translate';
 import Config from '../../config';
 
 class AddCoinOptionsCrypto extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       nativeOnly: Config.iguanaLessMode,
     }
@@ -60,4 +61,11 @@ class AddCoinOptionsCrypto extends React.Component {
   }
 }
 
-export default AddCoinOptionsCrypto;
+const mapStateToProps = (state) => {
+  return {
+    appSettings:  state.appSettings,
+  };
+ 
+};
+
+export default connect(mapStateToProps)(AddCoinOptionsCrypto);

@@ -4,7 +4,7 @@ import WalletsNativeInfoRender from './walletsInfo.render';
 import { toggleClaimInterestModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
-class WalletsNativeInfo extends React.Component {
+class WalletsInfo extends React.Component {
   constructor() {
     super();
     this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
@@ -39,4 +39,4 @@ const mapStateToProps = (state) => {
  
 };
 
-export default connect(mapStateToProps)(WalletsNativeInfo);
+export default connect(mapStateToProps)(WalletsInfo);

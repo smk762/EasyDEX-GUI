@@ -224,7 +224,7 @@ const mapStateToProps = (state) => {
     receive: state.ActiveCoin.receive,
     balance: state.ActiveCoin.balance,
     cache: state.ActiveCoin.cache,
-    nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+    activeSection: state.ActiveCoin.activeSection,
     activeAddress: state.ActiveCoin.activeAddress,
     addresses: state.ActiveCoin.addresses
   };

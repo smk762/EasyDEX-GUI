@@ -59,7 +59,7 @@ const mapStateToProps = (state) => {
       mode: state.ActiveCoin.mode,
       txhistory: state.ActiveCoin.txhistory,
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
-      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+      activeSection: state.ActiveCoin.activeSection,
       activeAddress: state.ActiveCoin.activeAddress,
       showTransactionInfoTxIndex: state.ActiveCoin.showTransactionInfoTxIndex,
     }

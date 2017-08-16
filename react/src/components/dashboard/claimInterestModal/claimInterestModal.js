@@ -138,7 +138,7 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
       balance: state.ActiveCoin.balance,
-      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+      activeSection: state.ActiveCoin.activeSection,
     },
     Dashboard: {
       displayClaimInterestModal: state.Dashboard.displayClaimInterestModal

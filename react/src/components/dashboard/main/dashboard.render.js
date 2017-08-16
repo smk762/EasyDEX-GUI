@@ -37,7 +37,7 @@ const DashboardRender = function() {
           <WalletsNative />
         </div>
         { this.isSectionActive('edex') &&
-          <EDEX {...this.props} />
+          <EDEX />
         }
         { this.isSectionActive('atomic') &&
           <Atomic {...this.props} />

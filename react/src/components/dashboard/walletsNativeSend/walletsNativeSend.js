@@ -367,7 +367,7 @@ const mapStateToProps = (state) => {
       coin: state.ActiveCoin.coin,
       mode: state.ActiveCoin.mode,
       opids: state.ActiveCoin.opids,
-      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+      activeSection: state.ActiveCoin.activeSection,
     },
     renderFormOnly: state.renderFormOnly
   };
