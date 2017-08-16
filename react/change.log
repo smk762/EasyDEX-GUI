@@ -10,6 +10,16 @@ UI:
 - komodod crash report modal
 - values rounding (up to 6 decimals)
 - add coin multi ui reflow fix
+- reset app setting to default
+- manual balance / transactions list refresh
+- quick access dropdown on login to open settings / about / sync only modals
+- qr code generator / scan
+- basilisk send form reset fix
+- added native wallet info button
+- added coqui assetchain
+- jumblr
+- zcashparams folder check
+- claim interest modal
 
 v0.2.0.21a-beta
 --------------

@@ -17,6 +17,7 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'RESCANNING_LAST_BLOCKS': 'Rescanning last blocks...',
       'NO_DATA_AVAILABLE': 'No data available',
       'LOADING': 'Loading',
       'ACTIVATING_SM': 'activating',
@@ -193,7 +194,8 @@ export const _lang = {
                          '- Your External Wallet/daemon is setup, but is not setup with config settings like<br>',
       'ACTIVATING_CHAIN': 'Activating best chain',
       'KMD_STARTED': 'Komodo daemon has been started and is processing.<br>' +
-                     'Please wait while the best chain is being activated.',
+                     'Please wait while the best chain is being activated.<br>' +
+                     'Tip: in case sync is stuck restart the wallet.',
       'CONNECTIONS': 'Connections',
       'TRANSPARENT_BALANCE': 'Transparent Balance',
       'Z_BALANCE': 'Private (Z) Balance',
@@ -249,7 +251,11 @@ export const _lang = {
       'INFO': 'Info',
       'ENTER': 'Enter',
       'ADDR_SM': 'address',
-      'ACTIVATING': 'Activating'
+      'ACTIVATING': 'Activating',
+      'QRCODE': 'Show QR code',
+      'SCAN_QR_CODE': 'Scan QR Code',
+      'SCAN_QRCODE_WEBCAM': 'Scan QR Code with webcam',
+      'TOGGLE_ZERO_ADDRESSES': 'Toggle empty addresses'
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',
@@ -273,15 +279,15 @@ export const _lang = {
     },
     'JUMBLR': {
       'NOTICE': 'EXPERIMENTAL TEST VERSION ONLY',
-      'DESCRIPTION': 'Jumblr feature is very experimental and for now, is Only enabled for testing and debugging.' +
+      'DESCRIPTION': 'Jumblr feature is very experimental and for now, is Only enabled for testing and debugging. ' +
                      'Please use the current version of Jumblr only with small amounts if you are participating in testing this feature.',
       'NEED_NATIVE': 'Need Native Mode Komodo',
       'TO_USE_JUMBLR': 'To use Jumblr feature, you need to activate Komodo in Native Mode.',
       'IF_YOU_ALREADY_RUNNING': 'If you are already running Komodo in either Basilisk Mode or Full Mode, close the wallet and restart again to start Komodo In Native Mode.',
       'THIS_SCREEN_DOESNT_REFRESH': 'This screen does not auto refresh. ' +
-                'You will need to hit the Refresh button on the top right corner of the screen to get latest Jumblr data.',
+                                    'You will need to hit the Refresh button on the top right corner of the screen to get latest Jumblr data.',
       'FEW_SECURITY_NOTES': 'Few Security Notes for your Privacy and Anonymity of funds',
-      'FEW_SECURITY_NOTES_DESC1': 'Jumblr addresses (BTC Jumbler and KMD Jumbler) addresses are your Private Addresses.',
+      'FEW_SECURITY_NOTES_DESC1': 'Jumblr addresses addresses are your Private Addresses.',
       'FEW_SECURITY_NOTES_DESC2': 'DO NOT SHARE your Jumblr addresses with anyone.',
       'FEW_SECURITY_NOTES_DESC3': 'Jumblr addresses are like YOUR PASSWORD. Keep them safe, secure and hidden.',
       'FEW_SECURITY_NOTES_DESC4': 'Only YOU should know your Jumblr Address. Nobody else.',

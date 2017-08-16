@@ -8,7 +8,8 @@ import {
   toggleSyncOnlyModal,
   getSyncOnlyForks,
   createNewWallet,
-  triggerToaster
+  triggerToaster,
+  toggleLoginSettingsModal
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -19,6 +20,8 @@ import { translate } from '../../translate/translate';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
+
+// TODO: remove duplicate activehandle and activecoins calls
 
 class Login extends React.Component {
   constructor(props) {
@@ -39,6 +42,8 @@ class Login extends React.Component {
       isCustomSeedWeak: false,
       nativeOnly: Config.iguanaLessMode,
       trimPassphraseTimer: null,
+      displayLoginSettingsDropdown: false,
+      displayLoginSettingsDropdownSection: null,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -51,10 +56,20 @@ class Login extends React.Component {
     this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
+    this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
   }
 
   // the setInterval handler for 'activeCoins'
   _iguanaActiveCoins = null;
+
+  toggleLoginSettingsDropdownSection(sectionName) {
+    Store.dispatch(toggleLoginSettingsModal(true));
+
+    this.setState({
+      displayLoginSettingsDropdown: false,
+      displayLoginSettingsDropdownSection: sectionName,
+    });
+  }
 
   isCustomWalletSeed() {
     return this.state.customWalletSeed;
@@ -95,6 +110,9 @@ class Login extends React.Component {
     );
 
     Store.dispatch(toggleSyncOnlyModal(true));
+    this.setState({
+      displayLoginSettingsDropdown: false,
+    });
   }
 
   componentDidMount() {
@@ -114,6 +132,12 @@ class Login extends React.Component {
       randomSeed: PassPhraseGenerator.generatePassPhrase(bits),
       bitsOption: bits,
       isSeedBlank: false,
+    }));
+  }
+
+  toggleLoginSettingsDropdown() {
+    this.setState(Object.assign({}, this.state, {
+      displayLoginSettingsDropdown: !this.state.displayLoginSettingsDropdown,
     }));
   }
 
@@ -171,14 +195,14 @@ class Login extends React.Component {
       if (this.state.seedInputVisibility) {
           document.querySelector('#loginPassphrase').style.height = '1px';
           document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
-      }    
+      }
     }, 100);
   }
 
   updateLoginPassPhraseInput(e) {
     // remove any empty chars from the start/end of the string
     const newValue = e.target.value;
-    
+
     clearTimeout(this.state.trimPassphraseTimer);
 
     const _trimPassphraseTimer = setTimeout(() => {
@@ -189,7 +213,7 @@ class Login extends React.Component {
     }, 2000);
 
     this.resizeLoginTextarea();
-    
+
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name]: newValue,
@@ -328,7 +352,7 @@ class Login extends React.Component {
   copyPassPhraseToClipboard() {
     const passPhrase = this.state.randomSeed;
     const textField = document.createElement('textarea');
-    
+
     textField.innerText = passPhrase;
     document.body.appendChild(textField);
     textField.select();

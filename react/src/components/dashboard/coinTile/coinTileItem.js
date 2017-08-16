@@ -76,7 +76,7 @@ class CoinTileItem extends React.Component {
       const useAddress = this.props.ActiveCoin.mainBasiliskAddress ? this.props.ActiveCoin.mainBasiliskAddress : this.props.Dashboard.activeHandle[coin];
 
       Store.dispatch(iguanaActiveHandle(true));
-      
+
       Store.dispatch(
         getKMDAddressesNative(
           coin,
@@ -107,6 +107,16 @@ class CoinTileItem extends React.Component {
 
   dashboardChangeActiveCoin(coin, mode) {
     if (coin !== this.props.ActiveCoin.coin) {
+      Store.dispatch(dashboardChangeActiveCoin(coin, mode));
+      setTimeout(() => {
+        this.dispatchCoinActions(coin, mode);
+      }, 100);
+      if (mode === 'native') { // faster coin data load if fully synced
+        setTimeout(() => {
+          this.dispatchCoinActions(coin, mode);
+        }, 1000);
+      }
+
       Store.dispatch(
         stopInterval(
           'sync',
@@ -120,10 +130,6 @@ class CoinTileItem extends React.Component {
           this.props.Interval.interval
         )
       );
-
-      Store.dispatch(dashboardChangeActiveCoin(coin, mode));
-
-      this.dispatchCoinActions(coin, mode);
 
       if (mode === 'full') {
         const _iguanaActiveHandle = setInterval(() => {
@@ -140,13 +146,14 @@ class CoinTileItem extends React.Component {
       if (mode === 'native') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
-        }, coin === 'KMD' ? IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE : IGUNA_ACTIVE_HANDLE_TIMEOUT);
+        }, IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       }
       if (mode === 'basilisk') {
         const _activeHandle = this.props.Dashboard.activeHandle;
         const _basiliskMainAddress = _activeHandle[coin] || JSON.parse(sessionStorage.getItem('IguanaActiveAccount'))[coin];
+
         Store.dispatch(changeActiveAddress(_basiliskMainAddress));
 
         if (_basiliskMainAddress) {
@@ -178,7 +185,7 @@ class CoinTileItem extends React.Component {
               _iguanaActiveHandle
             )
           );
-          
+
           Store.dispatch(
             startInterval(
               'basilisk',

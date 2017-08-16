@@ -62,6 +62,7 @@ class Settings extends React.Component {
       updateProgressPatch: null,
       wifkeysPassphrase: '',
       trimPassphraseTimer: null,
+      disableWalletSpecificUI: null,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -78,11 +79,25 @@ class Settings extends React.Component {
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
+  }
+
+  componentWillMount() {
     socket.on('patch', msg => this.updateSocketsData(msg));
   }
 
+  componentWillUnmount() {
+    socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
+
+    if (!this.state.disableWalletSpecificUI) {
+      document.documentElement.style.height = '100%';
+      document.body.style.height = '100%';
+    }
+  }
+
   componentDidMount() {
-    Store.dispatch(iguanaActiveHandle());
+    if (!this.props.disableWalletSpecificUI) {
+      Store.dispatch(iguanaActiveHandle());
+    }
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
   }
@@ -95,6 +110,7 @@ class Settings extends React.Component {
         activeTab: this.state.activeTab,
         activeTabHeight: _height,
         tabElId: this.state.tabElId,
+        disableWalletSpecificUI: props.disableWalletSpecificUI,
       }));
     }
   }
@@ -203,23 +219,27 @@ class Settings extends React.Component {
 
     for (let i = 0; i < this.state.updateLog.length; i++) {
       items.push(
-        <div>{ this.state.updateLog[i] }</div>
+        <div key={ `settings-update-log-${i}` }>{ this.state.updateLog[i] }</div>
       );
     }
 
-    return (
-      <div style={{ minHeight: '200px' }}>
-        <hr />
-        <h5>Progress:</h5>
-        <div className="padding-bottom-15">{ items }</div>
-        <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
-          <div
-            className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-            style={{ width: updateProgressBar.patch + '%' }}>
+    if (this.state.updateLog.length) {
+      return (
+        <div style={{ minHeight: '200px' }}>
+          <hr />
+          <h5>Progress:</h5>
+          <div className="padding-bottom-15">{ items }</div>
+          <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
+            <div
+              className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+              style={{ width: updateProgressBar.patch + '%' }}>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   }
 
   toggleSeedInputVisibility() {
@@ -247,6 +267,17 @@ class Settings extends React.Component {
         activeTabHeight: _height,
         tabElId: elemId,
       }));
+
+      // body size hack
+      if (!this.state.disableWalletSpecificUI) {
+        document.documentElement.style.height = '100%';
+        document.body.style.height = '100%';
+
+        setTimeout(() => {
+          document.documentElement.style.height = _height <= 200 ? '100%' : 'inherit';
+          document.body.style.height = _height <= 200 ? '100%' : 'inherit';
+        }, 100);
+      }
     }, 100);
   }
 

@@ -15,6 +15,10 @@ class WalletsTxInfo extends React.Component {
 
   toggleTxInfoModal() {
     Store.dispatch(toggleDashboardTxInfoModal(false));
+
+    this.setState(Object.assign({}, this.state, {
+      activeTab: 0,
+    }));
   }
 
   openTab(tab) {
