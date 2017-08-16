@@ -64,13 +64,8 @@ export const AddressItemRender = function(address, type) {
 export const _ReceiveCoinTableRender = function() {
   return (
     <span>
-      { this.checkTotalBalance() === 0 &&
+      { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-10 padding-bottom-10">
-          <div
-            className="toggle-label margin-right-15 pointer"
-            onClick={ this.toggleVisibleAddress }>
-            { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
-          </div>
           <label className="switch">
             <input
               type="checkbox"
@@ -79,6 +74,11 @@ export const _ReceiveCoinTableRender = function() {
               className="slider"
               onClick={ this.toggleVisibleAddress }></div>
           </label>
+          <div
+            className="toggle-label margin-right-15 pointer"
+            onClick={ this.toggleVisibleAddress }>
+            { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
+          </div>
         </div>
       }
       <table className="table table-hover dataTable table-striped">

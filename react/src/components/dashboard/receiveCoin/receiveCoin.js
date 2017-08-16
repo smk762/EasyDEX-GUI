@@ -187,7 +187,7 @@ class ReceiveCoin extends React.Component {
         }
 
         if (this.state.hideZeroAddresses) {
-          if (!this.hasNoAmount) {
+          if (!this.hasNoAmount(address)) {
             items.push(
               AddressItemRender.call(this, address, type)
             );
