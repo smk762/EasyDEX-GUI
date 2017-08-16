@@ -10,7 +10,8 @@ import {
   AddressActionsBasiliskModeRender,
   AddressActionsNonBasiliskModeRender,
   AddressItemRender,
-  ReceiveCoinRender
+  ReceiveCoinRender,
+  _ReceiveCoinTableRender
 } from './receiveCoin.render';
 
 // TODO: implement balance/interest sorting
@@ -28,6 +29,11 @@ class ReceiveCoin extends React.Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.toggleVisibleAddress = this.toggleVisibleAddress.bind(this);
     this.checkTotalBalance = this.checkTotalBalance.bind(this);
+    this.ReceiveCoinTableRender = _ReceiveCoinTableRender.bind(this);
+  }
+
+  ReceiveCoinTableRender() {
+    return this._ReceiveCoinTableRender();
   }
 
   componentWillMount() {
@@ -108,7 +114,7 @@ class ReceiveCoin extends React.Component {
   }
 
   getNewAddress(type) {
-    Store.dispatch(getNewKMDAddresses(this.props.coin, type));
+    Store.dispatch(getNewKMDAddresses(this.props.coin, type, this.props.mode));
   }
 
   toggleVisibleAddress() {
@@ -167,15 +173,17 @@ class ReceiveCoin extends React.Component {
 
         if (this.isBasiliskMode() &&
             this.hasNoAmount(address)) {
-          address.amount = _cache && _cache[_coin][address.address]
-          && _cache[_coin][address.address].getbalance.data
-          && _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
+          address.amount = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
         }
         if (this.isBasiliskMode() &&
             this.hasNoInterest(address)) {
-          address.interest = _cache && _cache[_coin][address.address]
-          && _cache[_coin][address.address].getbalance.data
-          && _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
+          address.interest = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
         }
 
         if (this.state.hideZeroAddresses) {

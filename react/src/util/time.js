@@ -18,7 +18,7 @@ export function secondsToString(seconds, skipMultiply, showSeconds) {
         month = months[a.getMonth()],
         date = a.getDate(),
         hour = a.getHours() < 10 ? `0${a.getHours()}` : a.getHours(),
-        min = a.getMinutes() < 10 ? `0 ${a.getMinutes()}` : a.getMinutes(),
+        min = a.getMinutes() < 10 ? `0${a.getMinutes()}` : a.getMinutes(),
         sec = a.getSeconds(),
         time = `${date} ${month} ${year} ${hour}:${min}${(showSeconds ? ':' + sec : '')}`;
 
@@ -37,9 +37,9 @@ export function secondsElapsedToString(timestamp) { // in seconds
   const hours = Math.floor(timestamp / 3600);
   const minutes = Math.floor((timestamp - (hours * 3600)) / 60);
   const seconds = timestamp - (hours * 3600) - (minutes * 60);
-  const returnTimeVal = (hours > 0 ? hours + ' hour(s) ' : '') +
-                        (minutes > 0 ? minutes + ' minute(s) ' : '') +
-                        (seconds > 0 ? seconds + ' second(s) ' : '');
+  const returnTimeVal = (hours > 0 ? `${hours} hour(s) ` : '') +
+                        (minutes > 0 ? `${minutes} minute(s) ` : '') +
+                        (seconds > 0 ? `${seconds} second(s) ` : '');
 
   return returnTimeVal;
 }

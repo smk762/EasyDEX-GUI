@@ -27,6 +27,7 @@ import {
   DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,
   DISPLAY_LOGIN_SETTINGS_MODAL,
   DISPLAY_COIND_DOWN_MODAL,
+  DISPLAY_CLAIM_INTEREST_MODAL,
   START_INTERVAL,
   STOP_INTERVAL
 } from './storeType';
@@ -68,6 +69,8 @@ export * from './actions/basiliskTxHistory';
 export * from './actions/iguanaHelpers';
 export * from './actions/cli';
 export * from './actions/update';
+export * from './actions/jumblr';
+export * from './actions/interest';
 
 export function changeActiveAddress(address) {
   return {
@@ -325,9 +328,9 @@ export function getNativeTxHistoryState(json) {
   if (json &&
       json.error) {
     json = null;
-  } else if (json && json.result) {
+  } else if (json && json.result && json.result.length) {
     json = json.result;
-  } else if (!json.length) {
+  } else if (!json || !json.result.length) {
     json = 'no data';
   }
 
@@ -365,5 +368,12 @@ export function toggleLoginSettingsModal(display) {
   return {
     type: DISPLAY_LOGIN_SETTINGS_MODAL,
     displayLoginSettingsModal: display,
+  }
+}
+
+export function toggleClaimInterestModal(display) {
+  return {
+    type: DISPLAY_CLAIM_INTEREST_MODAL,
+    displayClaimInterestModal: display,
   }
 }

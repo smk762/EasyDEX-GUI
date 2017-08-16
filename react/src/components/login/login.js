@@ -21,6 +21,8 @@ import { translate } from '../../translate/translate';
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
 
+// TODO: remove duplicate activehandle and activecoins calls
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -62,7 +64,7 @@ class Login extends React.Component {
 
   toggleLoginSettingsDropdownSection(sectionName) {
     Store.dispatch(toggleLoginSettingsModal(true));
-    
+
     this.setState({
       displayLoginSettingsDropdown: false,
       displayLoginSettingsDropdownSection: sectionName,
@@ -193,14 +195,14 @@ class Login extends React.Component {
       if (this.state.seedInputVisibility) {
           document.querySelector('#loginPassphrase').style.height = '1px';
           document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
-      }    
+      }
     }, 100);
   }
 
   updateLoginPassPhraseInput(e) {
     // remove any empty chars from the start/end of the string
     const newValue = e.target.value;
-    
+
     clearTimeout(this.state.trimPassphraseTimer);
 
     const _trimPassphraseTimer = setTimeout(() => {
@@ -211,7 +213,7 @@ class Login extends React.Component {
     }, 2000);
 
     this.resizeLoginTextarea();
-    
+
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name]: newValue,
@@ -350,7 +352,7 @@ class Login extends React.Component {
   copyPassPhraseToClipboard() {
     const passPhrase = this.state.randomSeed;
     const textField = document.createElement('textarea');
-    
+
     textField.innerText = passPhrase;
     document.body.appendChild(textField);
     textField.select();

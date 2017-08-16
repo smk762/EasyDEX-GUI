@@ -5,7 +5,8 @@ import Store from '../../store';
 import {
   Config,
   getDexCoins,
-  iguanaActiveHandle
+  iguanaActiveHandle,
+  triggerToaster
 } from '../../actions/actionCreators';
 
 const IGUANA_ACTIVE_HANDLE_TIMEOUT = 30000;
@@ -23,6 +24,29 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
+    let appVersion;
+    let zcashParamsExist;
+
+    try {
+      appVersion = window.require('electron').remote.getCurrentWindow().appBasicInfo;
+      zcashParamsExist = window.require('electron').remote.getCurrentWindow().zcashParamsExist;
+    } catch (e) {}
+
+    if (appVersion) {
+      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
+    }
+
+    if (!zcashParamsExist) {
+      Store.dispatch(
+        triggerToaster(
+          'Zcash params are missing',
+          'Komodo',
+          'error',
+          false
+        )
+      );
+    }
+
     Store.dispatch(iguanaActiveHandle());
     const _iguanaActiveHandle = setInterval(function() {
       Store.dispatch(iguanaActiveHandle());

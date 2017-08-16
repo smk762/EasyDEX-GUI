@@ -13,13 +13,13 @@ export function translate(langID) {
         _lang[defaultLang][langIDComponents[0]][langIDComponents[1]]) {
       return _lang[defaultLang][langIDComponents[0]][langIDComponents[1]];
     } else {
-      console.warn('Missing translation in js/' +  defaultLang.toLowerCase() + '.js ' + langID);
-      return '--> ' + langID + ' <--';
+      console.warn(`Missing translation ${langID} in js/${defaultLang.toLowerCase()}.js`);
+      return `--> ${langID} <--`;
     }
   } else {
     if (langID.length) {
-      console.warn('Missing translation in js/' +  defaultLang.toLowerCase() + '.js ' + langID);
-      return '--> ' + langID + ' <--';
+      console.warn(`Missing translation ${langID} in js/${defaultLang.toLowerCase()}.js`);
+      return `--> ${langID} <--`;
     }
   }
 }
