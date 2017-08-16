@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import Store from '../../../store';
 import {
@@ -16,8 +17,8 @@ import {
 } from './claimInterestModal.render';
 
 class ClaimInterestModal extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       open: false,
       isLoading: true,
@@ -132,5 +133,18 @@ class ClaimInterestModal extends React.Component {
     return ClaimInterestModalRender.call(this);
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      balance: state.ActiveCoin.balance,
+      nativeActiveSection: state.ActiveCoin.nativeActiveSection,
+    },
+    Dashboard: {
+      displayClaimInterestModal: state.Dashboard.displayClaimInterestModal
+    }
+  };
+ 
+};
 
-export default ClaimInterestModal;
+export default connect(mapStateToProps)(ClaimInterestModal);

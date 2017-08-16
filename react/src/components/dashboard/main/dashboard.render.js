@@ -34,7 +34,7 @@ const DashboardRender = function() {
           { !this.isNativeMode() && <ReceiveCoin /> }
           { !this.isNativeMode() && <WalletsData /> }
           <WalletsTxInfo />
-          <WalletsNative {...this.props} />
+          <WalletsNative />
         </div>
         { this.isSectionActive('edex') &&
           <EDEX {...this.props} />

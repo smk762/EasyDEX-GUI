@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import WalletsNativeRender from './walletsNative.render';
 import { translate } from '../../../translate/translate';
 import { triggerToaster } from '../../../actions/actionCreators';
@@ -12,8 +13,8 @@ import io from 'socket.io-client';
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 class WalletsNative extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       nativeOnly: Config.iguanaLessMode,
     };
@@ -73,4 +74,14 @@ class WalletsNative extends React.Component {
   }
 }
 
-export default WalletsNative;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+    }
+  };
+ 
+};
+
+export default connect(mapStateToProps)(WalletsNative);

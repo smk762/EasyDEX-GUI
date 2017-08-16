@@ -20,7 +20,6 @@ class CoindDownModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.displayCoindDownModal);
     if (this.props.displayCoindDownModal !== nextProps.displayCoindDownModal) {
       this.setState(Object.assign({}, this.state, {
         display: nextProps.displayCoindDownModal,

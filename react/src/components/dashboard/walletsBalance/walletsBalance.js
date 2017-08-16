@@ -199,6 +199,9 @@ const mapStateToProps = (state) => {
       cache: state.ActiveCoin.cache,
       nativeActiveSection: state.ActiveCoin.nativeActiveSection,
       activeAddress: state.ActiveCoin.activeAddress
+    },
+    Dashboard: {
+      progress: state.Dashboard.progress,
     }
   };
  

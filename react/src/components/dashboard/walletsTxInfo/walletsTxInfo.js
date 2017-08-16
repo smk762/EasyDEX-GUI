@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { sortByDate } from '../../../util/sort';
 import { toggleDashboardTxInfoModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -60,6 +61,7 @@ const mapStateToProps = (state) => {
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
       nativeActiveSection: state.ActiveCoin.nativeActiveSection,
       activeAddress: state.ActiveCoin.activeAddress,
+      showTransactionInfoTxIndex: state.ActiveCoin.showTransactionInfoTxIndex,
     }
   };
  

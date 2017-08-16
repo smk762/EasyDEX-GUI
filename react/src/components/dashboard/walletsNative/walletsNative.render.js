@@ -28,13 +28,13 @@ const WalletsNativeRender = function() {
           </ol>
         </div>
         <div className="page-content">
-          <WalletsProgress {...this.props} />
+          <WalletsProgress />
           <div className="row">
-            <WalletsBalance {...this.props} />
-            <ReceiveCoin {...this.props.ActiveCoin} />
-            <WalletsData {...this.props} />
-            <WalletsNativeSend {...this.props} />
-            <WalletsNativeInfo {...this.props} />
+            <WalletsBalance />
+            <ReceiveCoin />
+            <WalletsData />
+            <WalletsNativeSend />
+            <WalletsNativeInfo />
           </div>
         </div>
       </div>

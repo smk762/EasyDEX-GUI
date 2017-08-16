@@ -47,7 +47,7 @@ const WalletsNativeInfoRender = function() {
               type="button"
               className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
               onClick={ () => this.openClaimInterestModal() }>Claim interest</button>
-            <ClaimInterestModal {...this.props} />
+            <ClaimInterestModal />
           </div>
         }
       </div>
