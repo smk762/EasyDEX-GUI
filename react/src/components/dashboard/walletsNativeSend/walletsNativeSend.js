@@ -352,7 +352,7 @@ class WalletsNativeSend extends React.Component {
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
-        (this.props.ActiveCoin.nativeActiveSection === 'send' || this.props.nativeActiveSection === 'send')) {
+        (this.props.ActiveCoin.activeSection === 'send' || this.props.activeSection === 'send')) {
       return WalletsNativeSendRender.call(this);
     }
 

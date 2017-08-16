@@ -167,11 +167,15 @@ function getDebugLogState(json) {
   }
 }
 
-export function getDebugLog(target, linesCount) {
+export function getDebugLog(target, linesCount, acName) {
   const payload = {
     'herdname': target,
     'lastLines': linesCount
   };
+
+  if (acName) {
+    payload['ac'] = acName;
+  }
 
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/debuglog`, {
