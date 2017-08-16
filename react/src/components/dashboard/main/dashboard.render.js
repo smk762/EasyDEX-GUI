@@ -40,10 +40,10 @@ const DashboardRender = function() {
           <EDEX />
         }
         { this.isSectionActive('atomic') &&
-          <Atomic {...this.props} />
+          <Atomic />
         }
         { this.isSectionActive('jumblr') &&
-          <Jumblr {...this.props} />
+          <Jumblr  />
         }
         { this.isSectionActive('settings') &&
           <Settings {...this.props} />

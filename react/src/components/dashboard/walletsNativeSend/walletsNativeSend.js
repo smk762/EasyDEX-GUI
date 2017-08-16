@@ -19,8 +19,8 @@ import {
 } from './walletsNativeSend.render';
 
 class WalletsNativeSend extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       addressType: null,
       sendFrom: null,
@@ -368,8 +368,7 @@ const mapStateToProps = (state) => {
       mode: state.ActiveCoin.mode,
       opids: state.ActiveCoin.opids,
       activeSection: state.ActiveCoin.activeSection,
-    },
-    renderFormOnly: state.renderFormOnly
+    }
   };
  
 };

@@ -117,6 +117,10 @@ class Navbar extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+      coin: state.ActiveCoin.coin,
+    },
     Dashboard: {
       activeSection: state.Dashboard.activeSection,
     },

@@ -369,7 +369,6 @@ export const JumblrRender = function() {
                     <p>Use the form below to send funds to your jumblr deposit address.</p>
                     <p className="padding-bottom-20">You can also send funds to deposit address from an external service or another wallet.</p>
                     <WalletsNativeSend
-                      {...this.props}
                       renderFormOnly="true"
                       activeSection="send" />
                   </div>
@@ -475,7 +474,6 @@ export const JumblrRender = function() {
                   </div>
                   <div className={ 'tab-pane' + (this.state.activeTab === 1 ? ' active' : '') }>
                     <ReceiveCoin
-                      {...this.props.ActiveCoin}
                       activeSection="receive"
                       renderTableOnly="true" />
                   </div>
