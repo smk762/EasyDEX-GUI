@@ -371,7 +371,7 @@ export const JumblrRender = function() {
                     <WalletsNativeSend
                       {...this.props}
                       renderFormOnly="true"
-                      nativeActiveSection="send" />
+                      activeSection="send" />
                   </div>
                 </div>
               </div>
@@ -476,7 +476,7 @@ export const JumblrRender = function() {
                   <div className={ 'tab-pane' + (this.state.activeTab === 1 ? ' active' : '') }>
                     <ReceiveCoin
                       {...this.props.ActiveCoin}
-                      nativeActiveSection="receive"
+                      activeSection="receive"
                       renderTableOnly="true" />
                   </div>
                 </div>

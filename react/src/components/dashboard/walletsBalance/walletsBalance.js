@@ -167,7 +167,7 @@ class WalletsBalance extends React.Component {
   }
 
   isNativeBalanceActive() {
-    return this.isNativeMode() && this.props.ActiveCoin.nativeActiveSection === 'default';
+    return this.isNativeMode() && this.props.ActiveCoin.activeSection === 'default';
   }
 
   isNonNativeBalanceActive() {

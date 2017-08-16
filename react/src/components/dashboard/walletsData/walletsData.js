@@ -638,7 +638,7 @@ class WalletsData extends React.Component {
           !this.props.ActiveCoin.receive
         ) || (
           this.props.ActiveCoin.mode === 'native' &&
-          this.props.ActiveCoin.nativeActiveSection === 'default'
+          this.props.ActiveCoin.activeSection === 'default'
         )) {
       return WalletsDataRender.call(this);
     } else {

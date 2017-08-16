@@ -73,7 +73,7 @@ class WalletsNav extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
-          this.props.ActiveCoin.nativeActiveSection === 'settings' ? 'default' : 'settings'
+          this.props.ActiveCoin.activeSection === 'settings' ? 'default' : 'settings'
         )
       );
     } else {
@@ -93,7 +93,7 @@ class WalletsNav extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
-          this.props.ActiveCoin.nativeActiveSection === 'send' ? 'default' : 'send'
+          this.props.ActiveCoin.activeSection === 'send' ? 'default' : 'send'
         )
       );
     } else {
@@ -105,7 +105,7 @@ class WalletsNav extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
-          this.props.ActiveCoin.nativeActiveSection === 'receive' ? 'default' : 'receive'
+          this.props.ActiveCoin.activeSection === 'receive' ? 'default' : 'receive'
         )
       );
     } else {

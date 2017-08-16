@@ -1,7 +1,7 @@
 import React from 'react';
+import WalletsNativeInfoRender from './walletsInfo.render';
 import { toggleClaimInterestModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import WalletsNativeInfoRender from './walletsNativeInfo.render';
 
 class WalletsNativeInfo extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class WalletsNativeInfo extends React.Component {
     if (this.props &&
         this.props.Dashboard &&
         this.props.Dashboard.progress &&
-        this.props.ActiveCoin.nativeActiveSection === 'settings') {
+        this.props.ActiveCoin.activeSection === 'settings') {
       return WalletsNativeInfoRender.call(this);
     }
 
