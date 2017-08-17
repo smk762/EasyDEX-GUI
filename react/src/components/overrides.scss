@@ -894,6 +894,15 @@ select{
   }
 }
 
+.basilisk-progress-bar {
+  position: absolute;
+  width: calc(100% - 100px);
+}
+
+.breadcrumb--basilisk {
+  top: 0;
+}
+
 .ReactTable {
   border: none;
 
@@ -919,6 +928,11 @@ select{
   .rt-thead .rt-th,
   .rt-thead .rt-td {
     padding: 10px 5px;
+  }
+  .rt-tr.-odd div,
+  .rt-tr.-even div {
+    padding-top: 7px;
+    padding-bottom: 7px;
   }
   .colum--direction {
     width: 40px !important;

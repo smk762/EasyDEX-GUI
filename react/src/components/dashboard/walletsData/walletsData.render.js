@@ -176,18 +176,20 @@ export const WalletsDataRender = function() {
             <div>
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                 <div className="panel">
-                  <header className="panel-heading z-index-10">
-                  <i
-                    className="icon fa-refresh manual-txhistory-refresh pointer"
-                    onClick={ this.refreshTxHistory }></i>
-                    <div className={ 'panel-actions' + (this.props.ActiveCoin.mode === 'basilisk' ? '' : ' hide') }>
-                      <div className={ 'margin-bottom-3 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
-                        <div
-                          className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-                          style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
-                          { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
-                        </div>
+                  { this.props.ActiveCoin.mode === 'basilisk' &&
+                    <div className={ 'margin-bottom-3 basilisk-progress-bar ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
+                      <div
+                        className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                        style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
+                        { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
                       </div>
+                    </div>
+                  }
+                  <header className="panel-heading z-index-10">
+                    <i
+                      className={ 'icon fa-refresh manual-txhistory-refresh pointer' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? '' : ' hide') }
+                      onClick={ this.refreshTxHistory }></i>
+                    <div className={ 'panel-actions' + (this.props.ActiveCoin.mode === 'basilisk' ? '' : ' hide') }>
                       { !this.isNativeMode() ?
                         <div
                           className={ 'dropdown basilisk-actions' + (this.state.basiliskActionsMenu ? ' open' : '') }
