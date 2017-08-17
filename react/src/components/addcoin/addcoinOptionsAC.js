@@ -10,12 +10,12 @@ class AddCoinOptionsAC extends React.Component {
         <option value="CEAL|basilisk|native">CEAL NET (CEAL)</option>
         <option value="COQUI|basilisk|native">COQUI (COQUI)</option>
         <option value="CRYPTO|basilisk|native">CRYPTO (CRYPTO)</option>
-        <option value="HOD|basilisk|native">HODL (HODL)</option>
+        <option value="HODL|basilisk|native">HODL (HODL)</option>
         <option value="DEX|basilisk|native">InstantDEX (DEX)</option>
         <option value="JUMBLR|basilisk|native">JUMBLR (JUMBLR)</option>
         <option value="KV|basilisk|native">KV (KV)</option>
         <option value="MGW|basilisk|native">MultiGateway (MGW)</option>
-        <option value="MVP|basilisk|native">MVP Lineup (MVP)</option>
+        <option value="MVP|basilisk|native" className="hide">MVP Lineup (MVP)</option>
         <option value="PANGEA|basilisk|native">PANGEA (PANGEA)</option>
         <option value="REVS|basilisk|native">REVS (REVS)</option>
         <option value="SHARK|basilisk|native">SHARK (SHARK)</option>
