@@ -41,7 +41,6 @@ export function getAgamaLog(type) {
       );
     })
     .then(response => response.json())
-    .then()
   }
 }
 

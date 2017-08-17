@@ -10,6 +10,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
+import { checkAC } from '../../addcoin/payload';
 
 import NavbarRender from './navbar.render';
 
@@ -23,6 +24,7 @@ class Navbar extends React.Component {
     this.openDropMenu = this.openDropMenu.bind(this);
     this.logout = this.logout.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this._checkAC = this._checkAC.bind(this);
   }
 
   componentWillMount() {
@@ -65,6 +67,10 @@ class Navbar extends React.Component {
 
   dashboardChangeSection(sectionName) {
     Store.dispatch(dashboardChangeSection(sectionName));
+  }
+
+  _checkAC() {
+    return checkAC(this.props.ActiveCoin.coin);
   }
 
   logout() {

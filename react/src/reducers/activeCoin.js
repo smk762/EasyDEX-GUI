@@ -27,7 +27,7 @@ export function ActiveCoin(state = {
   send: false,
   receive: false,
   balance: 0,
-  nativeActiveSection: 'default',
+  activeSection: 'default',
   showTransactionInfo: false,
   showTransactionInfoTxIndex: null,
   txhistory: [],
@@ -53,7 +53,7 @@ export function ActiveCoin(state = {
           receive: state.receive,
           showTransactionInfo: state.showTransactionInfo,
           showTransactionInfoTxIndex: state.showTransactionInfoTxIndex,
-          nativeActiveSection: state.nativeActiveSection,
+          activeSection: state.activeSection,
           lastSendToResponse: state.lastSendToResponse,
           mainBasiliskAddress: state.mainBasiliskAddress,
           opids: state.opids,
@@ -73,7 +73,7 @@ export function ActiveCoin(state = {
           receive: _coinData.receive,
           showTransactionInfo: _coinData.showTransactionInfo,
           showTransactionInfoTxIndex: _coinData.showTransactionInfoTxIndex,
-          nativeActiveSection: _coinData.nativeActiveSection,
+          activeSection: _coinData.activeSection,
           lastSendToResponse: _coinData.lastSendToResponse,
           mainBasiliskAddress: _coinData.mainBasiliskAddress,
           opids: _coinData.opids,
@@ -91,7 +91,7 @@ export function ActiveCoin(state = {
             receive: state.receive,
             showTransactionInfo: state.showTransactionInfo,
             showTransactionInfoTxIndex: state.showTransactionInfoTxIndex,
-            nativeActiveSection: state.nativeActiveSection,
+            activeSection: state.activeSection,
             lastSendToResponse: state.lastSendToResponse,
             mainBasiliskAddress: state.mainBasiliskAddress,
             opids: state.opids,
@@ -110,7 +110,7 @@ export function ActiveCoin(state = {
             receive: false,
             showTransactionInfo: false,
             showTransactionInfoTxIndex: null,
-            nativeActiveSection: 'default',
+            activeSection: 'default',
           });
         } else {
           return Object.assign({}, state, {
@@ -122,7 +122,7 @@ export function ActiveCoin(state = {
             receive: false,
             showTransactionInfo: false,
             showTransactionInfoTxIndex: null,
-            nativeActiveSection: 'default',
+            activeSection: 'default',
           });
         }
       }
@@ -151,7 +151,7 @@ export function ActiveCoin(state = {
       });
     case DASHBOARD_ACTIVE_SECTION:
       return Object.assign({}, state, {
-        nativeActiveSection: action.section,
+        activeSection: action.section,
       });
     case DASHBOARD_ACTIVE_TXINFO_MODAL:
       return Object.assign({}, state, {

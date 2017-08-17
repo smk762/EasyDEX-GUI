@@ -11,9 +11,9 @@ import {
 } from './log';
 import Config from '../../config';
 
-export function getSyncInfoNativeKMD(skipDebug) {
+export function getSyncInfoNativeKMD(skipDebug, json) {
   const coin = 'KMD';
-
+  // https://www.kmd.host/
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
@@ -40,13 +40,15 @@ export function getSyncInfoNativeKMD(skipDebug) {
           'response': error,
         }));
       }
-      dispatch(
+      /*dispatch(
         triggerToaster(
           'getSyncInfoNativeKMD',
           'Error',
           'error'
         )
-      );
+      );*/
+    console.warn('remote kmd node fetch failed', true);
+      dispatch(getSyncInfoNativeState({ 'remoteKMDNode': null }));
     })
     .then(response => response.json())
     .then(json => {
@@ -72,7 +74,7 @@ function getSyncInfoNativeState(json, coin, skipDebug) {
       json &&
       json.error &&
       json.error.message.indexOf('Activating best') === -1) {
-    return getSyncInfoNativeKMD(skipDebug);
+    return getSyncInfoNativeKMD(skipDebug, json);
   } else {
     if (json &&
         json.error &&
@@ -161,41 +163,60 @@ export function getSyncInfoNative(coin, skipDebug) {
       return _response;
     })
     .then(json => {
-      if (!json &&
-        Config.cli.default) {
+      if (json === 'Work queue depth exceeded') {
         dispatch(
-          triggerToaster(
-            'Komodod is down',
-            'Critical Error',
-            'error',
-            true
+          getSyncInfoNativeState(
+            { result: 'daemon is busy', error: null, id: null },
+            coin,
+            skipDebug
           )
         );
-        dispatch(getDebugLog('komodo', 50));
-        dispatch(toggleCoindDownModal(true));
       } else {
-        json = JSON.parse(json);
-      }
+        if (!json &&
+          Config.cli.default) {
+          dispatch(
+            triggerToaster(
+              'Komodod is down',
+              'Critical Error',
+              'error',
+              true
+            )
+          );
 
-      if (json.error &&
-          json.error.message.indexOf('Activating best') === -1) {
-        dispatch(getDebugLog('komodo', 1));
-      }
+          if (coin === 'KMD') {
+            dispatch(getDebugLog('komodo', 50));
+          } else {
+            dispatch(getDebugLog('komodo', 50, coin));
+          }
+          dispatch(toggleCoindDownModal(true));
+        } else {
+          json = JSON.parse(json);
+        }
 
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
-        }));
+        if (json.error &&
+            json.error.message.indexOf('Activating best') === -1) {
+          if (coin === 'KMD') {
+            dispatch(getDebugLog('komodo', 1));
+          } else {
+            dispatch(getDebugLog('komodo', 1, coin));
+          }
+        }
+
+        if (Config.debug) {
+          dispatch(logGuiHttp({
+            'timestamp': _timestamp,
+            'status': 'success',
+            'response': json,
+          }));
+        }
+        dispatch(
+          getSyncInfoNativeState(
+            json,
+            coin,
+            skipDebug
+          )
+        );
       }
-      dispatch(
-        getSyncInfoNativeState(
-          json,
-          coin,
-          skipDebug
-        )
-      );
     })
   }
 }

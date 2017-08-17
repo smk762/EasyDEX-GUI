@@ -53,7 +53,7 @@ class WalletsData extends React.Component {
       totalStackLength: 0,
       useCache: true,
       itemsListColumns: this.generateItemsListColumns(),
-      pageSize: 20,
+      pageSize: 10,
       showPagination: false,
       searchTerm: null,
       coin: null,
@@ -117,6 +117,9 @@ class WalletsData extends React.Component {
       id: 'direction',
       Header: translate('INDEX.DIRECTION'),
       Footer: translate('INDEX.DIRECTION'),
+      className: 'colum--direction',
+      headerClassName: 'colum--direction',
+      footerClassName: 'colum--direction',
       accessor: (tx) => TxTypeRender.call(this, tx.category || tx.type)
     },
     {
@@ -158,15 +161,15 @@ class WalletsData extends React.Component {
       });
     }
 
-    const txDetailColumnCssClasses = this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm';
+    // const txDetailColumnCssClasses = this.isBasiliskMode() ? 'hidden-xs hidden-sm' : 'hidden-xs hidden-sm';
 
     columns.push({
       id: 'tx-detail',
       Header: translate('INDEX.TX_DETAIL'),
       Footer: translate('INDEX.TX_DETAIL'),
-      headerClassName: txDetailColumnCssClasses,
-      footerClassName: txDetailColumnCssClasses,
-      className: txDetailColumnCssClasses,
+      className: 'colum--txinfo',
+      headerClassName: 'colum--txinfo',
+      footerClassName: 'colum--txinfo',
       Cell: props => TransactionDetailRender.call(this, props.index)
     });
 
@@ -389,15 +392,21 @@ class WalletsData extends React.Component {
 
   // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
-    if (this.state.itemsList === 'loading') {
-      if (!this.isNativeMode() || this.isFullySynced()) {
+    if (this.state.itemsList === 'loading' || this.state.itemsList.length == 0) {
+      if (this.isFullySynced()) {
         return (
           <tr className="hover--none">
             <td colSpan="7">{ translate('INDEX.LOADING_HISTORY') }...</td>
           </tr>
         );
+      } else {
+        return (
+          <tr className="hover--none">
+            <td colSpan="7">Synchronization is in progress...</td>
+          </tr>
+        );
       }
-    } else if (this.state.itemsList === 'no data' || this.state.itemsList.length == 0) {
+    } else if (this.state.itemsList === 'no data') {
       return (
         <tr className="hover--none">
           <td colSpan="7">{ translate('INDEX.NO_DATA') }</td>
@@ -413,7 +422,7 @@ class WalletsData extends React.Component {
   onPageSizeChange(pageSize, pageIndex) {
     this.setState(Object.assign({}, this.state, {
       pageSize: pageSize,
-      showPagination: this.state.itemsList && this.state.itemsList.length >= pageSize
+      showPagination: this.state.itemsList && this.state.itemsList.length >= pageSize,
     }))
   }
 
@@ -547,6 +556,7 @@ class WalletsData extends React.Component {
   }
 
   shouldDisplayAddressList() {
+    //return true;
     return this.props.Dashboard &&
         this.props.Dashboard.activeHandle &&
         this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
@@ -613,7 +623,7 @@ class WalletsData extends React.Component {
           !this.props.ActiveCoin.receive
         ) || (
           this.props.ActiveCoin.mode === 'native' &&
-          this.props.ActiveCoin.nativeActiveSection === 'default'
+          this.props.ActiveCoin.activeSection === 'default'
         )) {
       return WalletsDataRender.call(this);
     } else {

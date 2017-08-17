@@ -1,6 +1,6 @@
 import React from 'react';
 import WalletsBalance from '../walletsBalance/walletsBalance';
-import WalletsNativeInfo from '../walletsNativeInfo/walletsNativeInfo';
+import WalletsInfo from '../walletsInfo/walletsInfo';
 import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsData from '../walletsData/walletsData';
@@ -13,12 +13,14 @@ const WalletsNativeRender = function() {
         <div
           id="easydex-header-div"
           className="background-color-white"
-          style={{ 'backgroundImage': `url("assets/images/bg/${this.defaultBG()}_transparent_header_bg.png")` }}>
-          <ol className="breadcrumb">
+          style={ this.getCoinStyle('transparent') }>
+          <ol className={ (!this.state.nativeOnly ? 'breadcrumb breadcrumb--normal' : 'breadcrumb') + (this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? ' coin-logo-wide' : '') + (this.state.nativeOnly ? ' native-coin-logo' : '') }>
             <li className="header-easydex-section">
-              <img src={ `assets/images/native/${this.defaultBG()}_header_title_logo.png` } />
+              { this.getCoinStyle('title') &&
+                <img src={ this.getCoinStyle('title') } />
+              }
               <span
-                className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' ? 'hide' : '')}` }
+                className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? 'hide' : '')}` }
                 style={{ marginLeft: '20px' }}>
                 { this.props.ActiveCoin.coin }
               </span>
@@ -32,7 +34,7 @@ const WalletsNativeRender = function() {
             <ReceiveCoin {...this.props.ActiveCoin} />
             <WalletsData {...this.props} />
             <WalletsNativeSend {...this.props} />
-            <WalletsNativeInfo {...this.props} />
+            <WalletsInfo {...this.props} />
           </div>
         </div>
       </div>

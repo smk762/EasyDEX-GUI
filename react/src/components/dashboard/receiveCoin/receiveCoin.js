@@ -10,7 +10,8 @@ import {
   AddressActionsBasiliskModeRender,
   AddressActionsNonBasiliskModeRender,
   AddressItemRender,
-  ReceiveCoinRender
+  ReceiveCoinRender,
+  _ReceiveCoinTableRender
 } from './receiveCoin.render';
 
 // TODO: implement balance/interest sorting
@@ -28,6 +29,11 @@ class ReceiveCoin extends React.Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.toggleVisibleAddress = this.toggleVisibleAddress.bind(this);
     this.checkTotalBalance = this.checkTotalBalance.bind(this);
+    this.ReceiveCoinTableRender = _ReceiveCoinTableRender.bind(this);
+  }
+
+  ReceiveCoinTableRender() {
+    return this._ReceiveCoinTableRender();
   }
 
   componentWillMount() {
@@ -108,7 +114,7 @@ class ReceiveCoin extends React.Component {
   }
 
   getNewAddress(type) {
-    Store.dispatch(getNewKMDAddresses(this.props.coin, type));
+    Store.dispatch(getNewKMDAddresses(this.props.coin, type, this.props.mode));
   }
 
   toggleVisibleAddress() {
@@ -181,7 +187,7 @@ class ReceiveCoin extends React.Component {
         }
 
         if (this.state.hideZeroAddresses) {
-          if (!this.hasNoAmount) {
+          if (!this.hasNoAmount(address)) {
             items.push(
               AddressItemRender.call(this, address, type)
             );
@@ -200,10 +206,10 @@ class ReceiveCoin extends React.Component {
   }
 
   render() {
-    // TODO nativeActiveSection === 'receive' should be removed when native mode is fully merged
+    // TODO activeSection === 'receive' should be removed when native mode is fully merged
     // into the rest of the components
     if (this.props &&
-       (this.props.receive || (this.isNativeMode() && this.props.nativeActiveSection === 'receive'))) {
+       (this.props.receive || (this.isNativeMode() && this.props.activeSection === 'receive'))) {
       return ReceiveCoinRender.call(this);
     }
 

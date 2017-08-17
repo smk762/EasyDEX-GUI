@@ -10,21 +10,7 @@ import {
   guiLogState
 } from './log';
 
-function handleGetNewKMDAddresses(pubpriv, coin, dispatch, json) {
-  dispatch(
-    triggerToaster(
-      json.result ? json.result : json,
-      translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
-      'info',
-      false
-    )
-  );
-  dispatch(getKMDAddressesNative(coin));
-
-  return {};
-}
-
-export function getNewKMDAddresses(coin, pubpriv) {
+export function getNewKMDAddresses(coin, pubpriv, mode) {
   let payload;
   let ajaxFunctionInput = pubpriv === 'public' ? 'getnewaddress' : 'z_getnewaddress';
 
@@ -115,22 +101,25 @@ export function getNewKMDAddresses(coin, pubpriv) {
         }));
       }
       dispatch(
-        handleGetNewKMDAddresses(
-          pubpriv,
-          coin,
-          dispatch,
-          json
+        triggerToaster(
+          json.result ? json.result : json,
+          translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
+          'info',
+          false
         )
       );
+      dispatch(getKMDAddressesNative(coin, mode));
     })
     .catch(function(ex) {
       dispatch(
-        handleGetNewKMDAddresses(
-          pubpriv,
-          coin,
-          dispatch
+        triggerToaster(
+          json.result ? json.result : json,
+          translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
+          'info',
+          false
         )
       );
+      dispatch(getKMDAddressesNative(coin, mode));
     });
   }
 }

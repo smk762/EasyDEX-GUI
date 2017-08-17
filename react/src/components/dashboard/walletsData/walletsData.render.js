@@ -13,11 +13,11 @@ import Config from '../../../config';
 
 export const AddressTypeRender = function() {
   return (
-    <td>
+    <span>
       <span className="label label-default">
         <i className="icon fa-eye"></i> { translate('IAPI.PUBLIC_SM') }
       </span>
-    </td>
+    </span>
   );
 };
 
@@ -49,8 +49,9 @@ export const AddressRender = function(tx) {
 
 export const AddressItemRender = function(address, type, amount, coin) {
   return (
-    <li key={address}
-        className={ address === this.state.currentAddress ? 'selected' : '' }>
+    <li
+      key={address}
+      className={ address === this.state.currentAddress ? 'selected' : '' }>
       <a onClick={ () => this.updateAddressSelection(address) }>
         <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
         <span className="text">[ { amount } { coin } ]  { address }</span>
@@ -98,37 +99,37 @@ export const TxTypeRender = function(category) {
     category === 'sent') {
     return (
       <span className="label label-danger">
-          <i className="icon fa-arrow-circle-left"></i> <span>{ translate('DASHBOARD.OUT') }</span>
-        </span>
+        <i className="icon fa-arrow-circle-left"></i> <span>{ translate('DASHBOARD.OUT') }</span>
+      </span>
     );
   }
   if (category === 'receive' ||
     category === 'received') {
     return (
       <span className="label label-success">
-          <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') }</span>
-        </span>
+        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') }</span>
+      </span>
     );
   }
   if (category === 'generate') {
     return (
       <span>
-          <i className="icon fa-cogs"></i> <span>{ translate('DASHBOARD.MINED') }</span>
-        </span>
+        <i className="icon fa-cogs"></i> <span>{ translate('DASHBOARD.MINED') }</span>
+      </span>
     );
   }
   if (category === 'immature') {
     return (
       <span>
-          <i className="icon fa-clock-o"></i> <span>{ translate('DASHBOARD.IMMATURE') }</span>
-        </span>
+        <i className="icon fa-clock-o"></i> <span>{ translate('DASHBOARD.IMMATURE') }</span>
+      </span>
     );
   }
   if (category === 'unknown') {
     return (
       <span>
-          <i className="icon fa-meh-o"></i> <span>{ translate('DASHBOARD.UNKNOWN') }</span>
-        </span>
+        <i className="icon fa-meh-o"></i> <span>{ translate('DASHBOARD.UNKNOWN') }</span>
+      </span>
     );
   }
 };
@@ -136,12 +137,12 @@ export const TxTypeRender = function(category) {
 export const TxAmountRender = function (tx) {
   if (Config.roundValues) {
     return (
-      <td title={ tx.amount }>{ formatValue('round', tx.amount, -6) || translate('DASHBOARD.UNKNOWN') }</td>
+      <span title={ tx.amount }>{ formatValue('round', tx.amount, -6) || translate('DASHBOARD.UNKNOWN') }</span>
     );
   }
 
   return (
-    <td>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</td>
+    <span>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</span>
   );
 };
 
@@ -151,15 +152,14 @@ export const TxHistoryListRender = function() {
       data={this.state.filteredItemsList}
       columns={this.state.itemsListColumns}
       sortable={true}
-      className='-striped -highlight'
+      className="-striped -highlight"
       PaginationComponent={TablePaginationRenderer}
       nextText={translate('INDEX.NEXT_PAGE')}
       previousText={translate('INDEX.PREVIOUS_PAGE')}
       showPaginationBottom={this.state.showPagination}
       showPaginationTop={this.state.showPagination}
       pageSize={this.pageSize}
-      onPageSizeChange={(pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex)}
-    />
+      onPageSizeChange={(pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex)} />
   );
 };
 
@@ -240,22 +240,23 @@ export const WalletsDataRender = function() {
                         null
                       }
                     </div>
-                    <h4 className='panel-title'>{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
+                    <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
-                  <div className='panel-body'>
-                    <div className='row padding-bottom-20'>
-                      {this.shouldDisplayAddressList() &&
-                        <div className='col-sm-8'>
+                  <div className="panel-body">
+                    <div className="row padding-bottom-20">
+                      { this.shouldDisplayAddressList() &&
+                        <div className="col-sm-8">
                           {this.renderAddressList()}
                         </div>
                       }
-                      <div className='col-sm-4'>
-                        <input className="form-control"
-                               onChange={e => this.onSearchTermChange(e.target.value)}
-                               placeholder='Search' />
+                      <div className="col-sm-4">
+                        <input
+                          className="form-control"
+                          onChange={e => this.onSearchTermChange(e.target.value)}
+                          placeholder="Search" />
                       </div>
                     </div>
-                    <div className='row'>
+                    <div className="row">
                       { this.renderTxHistoryList() }
                     </div>
                   </div>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 
-const WalletsNativeInfoRender = function() {
+const WalletsInfoRender = function() {
   return (
     <div>
       <div className="col-xlg-6 col-md-4">
@@ -40,6 +41,15 @@ const WalletsNativeInfoRender = function() {
             </table>
           </div>
         </div>
+        { this.props.ActiveCoin.coin === 'KMD' &&
+          <div>
+            <button
+              type="button"
+              className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
+              onClick={ () => this.openClaimInterestModal() }>Claim interest</button>
+            <ClaimInterestModal {...this.props} />
+          </div>
+        }
       </div>
 
       <div className="col-xlg-6 col-md-8">
@@ -146,4 +156,4 @@ const WalletsNativeInfoRender = function() {
   );
 };
 
-export default WalletsNativeInfoRender;
+export default WalletsInfoRender;

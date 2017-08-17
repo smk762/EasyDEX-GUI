@@ -61,105 +61,119 @@ export const AddressItemRender = function(address, type) {
   );
 };
 
-export const ReceiveCoinRender = function() {
+export const _ReceiveCoinTableRender = function() {
   return (
-    <div>
-      <div className="col-xs-12 margin-top-20">
-        <div className="panel nav-tabs-horizontal">
-          <div>
-            <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
-              <div className="panel">
-                <header className="panel-heading">
-                  {this.isNativeMode() &&
-                    <div className="panel-actions">
-                      <div
-                        className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
-                        onClick={ this.openDropMenu }>
-                        <a className="dropdown-toggle white btn btn-warning">
-                          <i className="icon md-arrows margin-right-10"></i> { translate('INDEX.GET_NEW_ADDRESS') }
-                          <span className="caret"></span>
-                        </a>
-                        <ul
-                          className="dropdown-menu dropdown-menu-right">
-                          <li>
-                            <a onClick={ () => this.getNewAddress('public') }>
-                              <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
-                            </a>
-                          </li>
-                          <li>
-                            <a onClick={ () => this.getNewAddress('private') }>
-                              <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  }
-                  <h4 className="panel-title">{ translate('INDEX.RECEIVING_ADDRESS') }</h4>
-                </header>
-                <div className="panel-body">
-                  { this.checkTotalBalance() === 0 &&
-                    <div className="text-left padding-top-10 padding-bottom-10">
-                      <div
-                        className="toggle-label margin-right-15 pointer"
-                        onClick={ this.toggleVisibleAddress }>
-                        { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
-                      </div>
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          checked={ this.state.hideZeroAddresses } />
+    <span>
+      { this.checkTotalBalance() !== 0 &&
+        <div className="text-left padding-top-10 padding-bottom-10">
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={ this.state.hideZeroAddresses } />
+            <div
+              className="slider"
+              onClick={ this.toggleVisibleAddress }></div>
+          </label>
+          <div
+            className="toggle-label margin-right-15 pointer"
+            onClick={ this.toggleVisibleAddress }>
+            { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
+          </div>
+        </div>
+      }
+      <table className="table table-hover dataTable table-striped">
+        <thead>
+        { this.isNativeMode() ?
+          <tr>
+            <th>{ translate('INDEX.TYPE') }</th>
+            <th>{ translate('INDEX.ADDRESS') }</th>
+            <th>{ translate('INDEX.AMOUNT') }</th>
+          </tr>
+          :
+          <tr>
+            <th>{ translate('INDEX.TYPE') }</th>
+            <th>{ translate('INDEX.ADDRESS') }</th>
+            <th>{ translate('INDEX.BALANCE') }</th>
+            <th> {translate('INDEX.INTEREST') }</th>
+          </tr>
+        }
+        </thead>
+        <tbody>
+          { this.renderAddressList('public') }
+          { this.isNativeMode() && this.renderAddressList('private') }
+        </tbody>
+        <tfoot>
+        { this.isNativeMode() ?
+          <tr>
+            <th>{ translate('INDEX.TYPE') }</th>
+            <th>{ translate('INDEX.ADDRESS') }</th>
+            <th>{ translate('INDEX.AMOUNT') }</th>
+          </tr>
+          :
+          <tr>
+            <th>{ translate('INDEX.TYPE') }</th>
+            <th>{ translate('INDEX.ADDRESS') }</th>
+            <th>{ translate('INDEX.BALANCE') }</th>
+            <th>{ translate('INDEX.INTEREST') }</th>
+          </tr>
+        }
+        </tfoot>
+      </table>
+    </span>
+  );
+};
+
+export const ReceiveCoinRender = function() {
+  if (this.props.renderTableOnly) {
+    return (
+      <div>{ this.ReceiveCoinTableRender() }</div>
+    );
+  } else {
+    return (
+      <div>
+        <div className="col-xs-12 margin-top-20">
+          <div className="panel nav-tabs-horizontal">
+            <div>
+              <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
+                <div className="panel">
+                  <header className="panel-heading">
+                    { this.isNativeMode() &&
+                      <div className="panel-actions">
                         <div
-                          className="slider"
-                          onClick={ this.toggleVisibleAddress }></div>
-                      </label>
-                    </div>
-                  }
-                  <table className="table table-hover dataTable table-striped">
-                    <thead>
-                    { this.isNativeMode() ?
-                      <tr>
-                        <th>{ translate('INDEX.TYPE') }</th>
-                        <th>{ translate('INDEX.ADDRESS') }</th>
-                        <th>{ translate('INDEX.AMOUNT') }</th>
-                      </tr>
-                      :
-                      <tr>
-                        <th>{ translate('INDEX.TYPE') }</th>
-                        <th>{ translate('INDEX.ADDRESS') }</th>
-                        <th>{ translate('INDEX.BALANCE') }</th>
-                        <th> {translate('INDEX.INTEREST') }</th>
-                      </tr>
+                          className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
+                          onClick={ this.openDropMenu }>
+                          <a className="dropdown-toggle white btn btn-warning">
+                            <i className="icon md-arrows margin-right-10"></i> { translate('INDEX.GET_NEW_ADDRESS') }
+                            <span className="caret"></span>
+                          </a>
+                          <ul
+                            className="dropdown-menu dropdown-menu-right">
+                            <li>
+                              <a onClick={ () => this.getNewAddress('public') }>
+                                <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
+                              </a>
+                            </li>
+                            <li>
+                              <a onClick={ () => this.getNewAddress('private') }>
+                                <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
                     }
-                    </thead>
-                    <tbody>
-                      { this.renderAddressList('public') }
-                      { this.isNativeMode() && this.renderAddressList('private') }
-                    </tbody>
-                    <tfoot>
-                    { this.isNativeMode() ?
-                      <tr>
-                        <th>{ translate('INDEX.TYPE') }</th>
-                        <th>{ translate('INDEX.ADDRESS') }</th>
-                        <th>{ translate('INDEX.AMOUNT') }</th>
-                      </tr>
-                      :
-                      <tr>
-                        <th>{ translate('INDEX.TYPE') }</th>
-                        <th>{ translate('INDEX.ADDRESS') }</th>
-                        <th>{ translate('INDEX.BALANCE') }</th>
-                        <th>{ translate('INDEX.INTEREST') }</th>
-                      </tr>
-                    }
-                    </tfoot>
-                  </table>
+                    <h4 className="panel-title">{ translate('INDEX.RECEIVING_ADDRESS') }</h4>
+                  </header>
+                  <div className="panel-body">
+                  { this.ReceiveCoinTableRender() }
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 

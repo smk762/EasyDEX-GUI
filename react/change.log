@@ -16,6 +16,10 @@ UI:
 - qr code generator / scan
 - basilisk send form reset fix
 - added native wallet info button
+- added coqui assetchain
+- jumblr
+- zcashparams folder check
+- claim interest modal
 
 v0.2.0.21a-beta
 --------------

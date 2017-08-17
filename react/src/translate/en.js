@@ -281,15 +281,15 @@ export const _lang = {
     },
     'JUMBLR': {
       'NOTICE': 'EXPERIMENTAL TEST VERSION ONLY',
-      'DESCRIPTION': 'Jumblr feature is very experimental and for now, is Only enabled for testing and debugging.' +
+      'DESCRIPTION': 'Jumblr feature is very experimental and for now, is Only enabled for testing and debugging. ' +
                      'Please use the current version of Jumblr only with small amounts if you are participating in testing this feature.',
       'NEED_NATIVE': 'Need Native Mode Komodo',
       'TO_USE_JUMBLR': 'To use Jumblr feature, you need to activate Komodo in Native Mode.',
       'IF_YOU_ALREADY_RUNNING': 'If you are already running Komodo in either Basilisk Mode or Full Mode, close the wallet and restart again to start Komodo In Native Mode.',
       'THIS_SCREEN_DOESNT_REFRESH': 'This screen does not auto refresh. ' +
-                'You will need to hit the Refresh button on the top right corner of the screen to get latest Jumblr data.',
+                                    'You will need to hit the Refresh button on the top right corner of the screen to get latest Jumblr data.',
       'FEW_SECURITY_NOTES': 'Few Security Notes for your Privacy and Anonymity of funds',
-      'FEW_SECURITY_NOTES_DESC1': 'Jumblr addresses (BTC Jumbler and KMD Jumbler) addresses are your Private Addresses.',
+      'FEW_SECURITY_NOTES_DESC1': 'Jumblr addresses addresses are your Private Addresses.',
       'FEW_SECURITY_NOTES_DESC2': 'DO NOT SHARE your Jumblr addresses with anyone.',
       'FEW_SECURITY_NOTES_DESC3': 'Jumblr addresses are like YOUR PASSWORD. Keep them safe, secure and hidden.',
       'FEW_SECURITY_NOTES_DESC4': 'Only YOU should know your Jumblr Address. Nobody else.',
