@@ -182,6 +182,11 @@ export function startCurrencyAssetChain(confpath, coin, mode) {
 	let AddCoinDataPayload = {};
 	let tmpPendValue = 1;
 	let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+	let assetChainPorts;
+
+  try {
+    assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
+  } catch (e) {}
 
 	if (coin !== 'BTC' &&
       coin !== 'LTC' &&
@@ -424,218 +429,218 @@ export function startCurrencyAssetChain(confpath, coin, mode) {
 	} else {
 		const USDDiff = {
 			'netmagic': '2d8e7803',
-			'p2p': 13966,
-			'rpc': 13967
+			'p2p': assetChainPorts.USD,
+			'rpc': assetChainPorts.USD - 1
 		};
 		AddCoinDataPayload.USDVar = Object.assign({}, _payloadVar, USDDiff);
 
 		const CHFDiff = {
 			'netmagic': '59fbeb5c',
-			'p2p': 15311,
-			'rpc': 15312
+			'p2p': assetChainPorts.CHF,
+			'rpc': assetChainPorts.CHF - 1
 		};
 		AddCoinDataPayload.CHFVar = Object.assign({}, _payloadVar, CHFDiff);
 
 		const CADDiff = {
 			'netmagic': '3c212763',
-			'p2p': 8719,
-			'rpc': 8720
+			'p2p': assetChainPorts.CAD,
+			'rpc': assetChainPorts.CAD - 1
 		};
 		AddCoinDataPayload.CADVar = Object.assign({}, _payloadVar, CADDiff);
 
 		const BRLDiff = {
 			'netmagic': 'ab82d10d',
-			'p2p': 9913,
-			'rpc': 9914
+			'p2p': assetChainPorts.BRL,
+			'rpc': assetChainPorts.BRL - 1
 		};
 		AddCoinDataPayload.BRLVar = Object.assign({}, _payloadVar, BRLDiff);
 
 		const BGNDiff = {
 			'netmagic': '93056ad4',
-			'p2p': 9109,
-			'rpc': 9110
+			'p2p': assetChainPorts.BGN,
+			'rpc': assetChainPorts.BGN - 1
 		};
 		AddCoinDataPayload.BGNVar = Object.assign({}, _payloadVar, BGNDiff);
 
 		const AUDDiff = {
 			'netmagic': '07220d4e',
-			'p2p': 8044,
-			'rpc': 8045
+			'p2p': assetChainPorts.AUD,
+			'rpc': assetChainPorts.AUD - 1
 		};
 		AddCoinDataPayload.AUDVar = Object.assign({}, _payloadVar, AUDDiff);
 
 		const PLNDiff = {
 			'netmagic': '46ab3c28',
-			'p2p': 13492,
-			'rpc': 13493
+			'p2p': assetChainPorts.PLN,
+			'rpc': assetChainPorts.PLN - 1
 		};
 		AddCoinDataPayload.PLNVar = Object.assign({}, _payloadVar, PLNDiff);
 
 		const PHPDiff = {
 			'netmagic': '21535fb6',
-			'p2p': 11180,
-			'rpc': 11181
+			'p2p': assetChainPorts.PHP,
+			'rpc': assetChainPorts.PHP - 1
 		};
 		AddCoinDataPayload.PHPVar = Object.assign({}, _payloadVar, PHPDiff);
 
 		const NZDDiff = {
 			'netmagic': 'f579c9c2',
-			'p2p': 10914,
-			'rpc': 10915
+			'p2p': assetChainPorts.NZD,
+			'rpc': assetChainPorts.NZD - 1
 		};
 		AddCoinDataPayload.NZDVar = Object.assign({}, _payloadVar, NZDDiff);
 
 		const NOKDiff = {
 			'netmagic': '7082c365',
-			'p2p': 11587,
-			'rpc': 11588
+			'p2p': assetChainPorts.NOK,
+			'rpc': assetChainPorts.NOK - 1
 		};
 		AddCoinDataPayload.NOKVar = Object.assign({}, _payloadVar, NOKDiff);
 
 		const MYRDiff = {
 			'netmagic': '3e21761f',
-			'p2p': 10687,
-			'rpc': 10688
+			'p2p': assetChainPorts.MYR,
+			'rpc': assetChainPorts.MYR - 1
 		};
 		AddCoinDataPayload.MYRVar = Object.assign({}, _payloadVar, MYRDiff);
 
 		const MXNDiff = {
 			'netmagic': '304c6c12',
-			'p2p': 13969,
-			'rpc': 13970
+			'p2p': assetChainPorts.MXN,
+			'rpc': assetChainPorts.MXN - 1
 		};
 		AddCoinDataPayload.MXNVar = Object.assign({}, _payloadVar, MXNDiff);
 
 		const KRWDiff = {
 			'netmagic': 'c8706588',
-			'p2p': 14019,
-			'rpc': 14020
+			'p2p': assetChainPorts.KRW,
+			'rpc': assetChainPorts.KRW - 1
 		};
 		AddCoinDataPayload.KRWVar = Object.assign({}, _payloadVar, KRWDiff);
 
 		const JPYDiff = {
 			'netmagic': '7a55295c',
-			'p2p': 13144,
-			'rpc': 13145
+			'p2p': assetChainPorts.JPY,
+			'rpc': assetChainPorts.JPY - 1
 		};
 		AddCoinDataPayload.JPYVar = Object.assign({}, _payloadVar, JPYDiff);
 
 		const INRDiff = {
 			'netmagic': '740dfc1d',
-			'p2p': 10535,
-			'rpc': 10536
+			'p2p': assetChainPorts.INR,
+			'rpc': assetChainPorts.INR - 1
 		};
 		AddCoinDataPayload.INRVar = Object.assign({}, _payloadVar, INRDiff);
 
 		const ILSDiff = {
 			'netmagic': '605fcd58',
-			'p2p': 14637,
-			'rpc': 14638
+			'p2p': assetChainPorts.ILS,
+			'rpc': assetChainPorts.ILS - 1
 		};
 		AddCoinDataPayload.ILSVar = Object.assign({}, _payloadVar, ILSDiff);
 
 		const IDRDiff = {
 			'netmagic': 'fee513e7',
-			'p2p': 14458,
-			'rpc': 14459
+			'p2p': assetChainPorts.IDR,
+			'rpc': assetChainPorts.IDR - 1
 		};
 		AddCoinDataPayload.IDRVar = Object.assign({}, _payloadVar, IDRDiff);
 
 		const HKDDiff = {
 			'netmagic': '57269d95',
-			'p2p': 15408,
-			'rpc': 15409
+			'p2p': assetChainPorts.HKD,
+			'rpc': assetChainPorts.HKD - 1
 		};
 		AddCoinDataPayload.HKDVar = Object.assign({}, _payloadVar, HKDDiff);
 
 		const HUFDiff = {
 			'netmagic': 'a478d2af',
-			'p2p': 13698,
-			'rpc': 13699
+			'p2p': assetChainPorts.HUF,
+			'rpc': assetChainPorts.HUF - 1
 		};
 		AddCoinDataPayload.HUFVar = Object.assign({}, _payloadVar, HUFDiff);
 
 		const GBPDiff = {
 			'netmagic': '5e0ed955',
-			'p2p': 11504,
-			'rpc': 11505
+			'p2p': assetChainPorts.GBP,
+			'rpc': assetChainPorts.GBP - 1
 		};
 		AddCoinDataPayload.GBPVar = Object.assign({}, _payloadVar, GBPDiff);
 
 		const EURDiff = {
 			'netmagic': '8a3fd0bd',
-			'p2p': 8064,
-			'rpc': 8065
+			'p2p': assetChainPorts.EUR,
+			'rpc': assetChainPorts.EUR - 1
 		};
 		AddCoinDataPayload.EURVar = Object.assign({}, _payloadVar, EURDiff);
 
 		const DKKDiff = {
 			'netmagic': 'a2c2380c',
-			'p2p': 13829,
-			'rpc': 13830
+			'p2p': assetChainPorts.DKK,
+			'rpc': assetChainPorts.DKK - 1
 		};
 		AddCoinDataPayload.DKKVar = Object.assign({}, _payloadVar, DKKDiff);
 
 		const CNYDiff = {
 			'netmagic': '2a51b987',
-			'p2p': 10383,
-			'rpc': 10384
+			'p2p': assetChainPorts.CNY,
+			'rpc': assetChainPorts.CNY - 1
 		};
 		AddCoinDataPayload.CNYVar = Object.assign({}, _payloadVar, CNYDiff);
 
 		const ZARDiff = {
 			'netmagic': '920c0484',
-			'p2p': 15159,
-			'rpc': 15160
+			'p2p': assetChainPorts.ZAR,
+			'rpc': assetChainPorts.ZAR - 1
 		};
 		AddCoinDataPayload.ZARVar = Object.assign({}, _payloadVar, ZARDiff);
 
 		const TRYDiff = {
 			'netmagic': '82b9a778',
-			'p2p': 13923,
-			'rpc': 13924
+			'p2p': assetChainPorts.TRY,
+			'rpc': assetChainPorts.TRY - 1
 		};
 		AddCoinDataPayload.TRYVar = Object.assign({}, _payloadVar, TRYDiff);
 
 		const THBDiff = {
 			'netmagic': 'b58aef42',
-			'p2p': 11846,
-			'rpc': 11847
+			'p2p': assetChainPorts.THB,
+			'rpc': assetChainPorts.THB - 1
 		};
 		AddCoinDataPayload.THBVar = Object.assign({}, _payloadVar, THBDiff);
 
 		const SGDDiff = {
 			'netmagic': 'ca255b29',
-			'p2p': 14474,
-			'rpc': 14475
+			'p2p': assetChainPorts.SGD,
+			'rpc': assetChainPorts.SGD - 1
 		};
 		AddCoinDataPayload.SGDVar = Object.assign({}, _payloadVar, SGDDiff);
 
 		const SEKDiff = {
 			'netmagic': 'd95ad28b',
-			'p2p': 11446,
-			'rpc': 11447
+			'p2p': assetChainPorts.SEK,
+			'rpc': assetChainPorts.SEK - 1
 		};
 		AddCoinDataPayload.SEKVar = Object.assign({}, _payloadVar, SEKDiff);
 
 		const RONDiff = {
 			'netmagic': 'eb2c9500',
-			'p2p': 8674,
-			'rpc': 8675
+			'p2p': assetChainPorts.RON,
+			'rpc': assetChainPorts.RON - 1
 		};
 		AddCoinDataPayload.RONVar = Object.assign({}, _payloadVar, RONDiff);
 
 		const RUBDiff = {
 			'netmagic': '1b9a0eb9',
-			'p2p': 8198,
-			'rpc': 8199
+			'p2p': assetChainPorts.RUB,
+			'rpc': assetChainPorts.RUB - 1
 		};
 		AddCoinDataPayload.RUBVar = Object.assign({}, _payloadVar, RUBDiff);
 
 		const CZKDiff = {
 			'netmagic': '37f7ae5a',
-			'p2p': 9481,
-			'rpc': 9482
+			'p2p': assetChainPorts.CZK,
+			'rpc': assetChainPorts.CZK - 1
 		};
 		AddCoinDataPayload.CZKVar = Object.assign({}, _payloadVar, CZKDiff);
 
@@ -646,6 +651,11 @@ export function startCurrencyAssetChain(confpath, coin, mode) {
 export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 	let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
 	let tmpPendValue;
+	let assetChainPorts;
+
+  try {
+    assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
+  } catch (e) {}
 
 	if (coin !== 'BTC' &&
       coin !== 'LTC' &&
@@ -682,74 +692,74 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		'SUPERNET': {
 			'name': 'SUPERNET',
 			'supply': 816061,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"SUPERNET","conf":"SUPERNET.conf","path":confpath,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":32,"newcoin":"SUPERNET","name":"SUPERNET","netmagic":"cc55d9d4","p2p":11340,"rpc":11341}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":32,"newcoin":"SUPERNET","name":"SUPERNET","netmagic":"cc55d9d4","p2p":11340,"rpc":11341})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"SUPERNET","conf":"SUPERNET.conf","path":confpath,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":32,"newcoin":"SUPERNET","name":"SUPERNET","netmagic":"cc55d9d4","p2p":assetChainPorts.SUPERNET - 1,"rpc":assetChainPorts.SUPERNET}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":32,"newcoin":"SUPERNET","name":"SUPERNET","netmagic":"cc55d9d4","p2p":assetChainPorts.SUPERNET - 1,"rpc":assetChainPorts.SUPERNET})
 		},
 		'REVS': {
 			'name': 'REVS',
 			'supply': 1300000,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"REVS","conf":"REVS.conf","path":confpath,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"REVS","name":"REVS","netmagic":"905c3498","p2p":10195,"rpc":10196}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"REVS","name":"REVS","netmagic":"905c3498","p2p":10195,"rpc":10196})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"REVS","conf":"REVS.conf","path":confpath,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"REVS","name":"REVS","netmagic":"905c3498","p2p":assetChainPorts.REVS - 1,"rpc":assetChainPorts.REVS}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"REVS","name":"REVS","netmagic":"905c3498","p2p":assetChainPorts.REVS - 1,"rpc":assetChainPorts.REVS})
 		},
 		'WLC': {
 			'name': 'WIRELESS',
 			'supply': 210000000,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"WLC","conf":"WLC.conf","path":confpath,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"WLC","name":"WIRELESS","netmagic":"62071ed3","p2p":11666,"rpc":11667}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"WLC","name":"WIRELESS","netmagic":"62071ed3","p2p":11666,"rpc":11667})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"WLC","conf":"WLC.conf","path":confpath,"RELAY":-1,"VALIDATE":0,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"WLC","name":"WIRELESS","netmagic":"62071ed3","p2p":assetChainPorts.WIRELESS - 1,"rpc":assetChainPorts.WIRELESS}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"WLC","name":"WIRELESS","netmagic":"62071ed3","p2p":assetChainPorts.WIRELESS - 1,"rpc":assetChainPorts.WIRELESS})
 		},
 		'PANGEA': {
 			'name': 'PANGEA',
 			'supply': 999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"PANGEA","conf":"PANGEA.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"PANGEA","name":"PANGEA","netmagic":"5fa45ae8","p2p":10073,"rpc":10074}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"PANGEA","name":"PANGEA","netmagic":"5fa45ae8","p2p":10073,"rpc":10074})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"PANGEA","conf":"PANGEA.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"PANGEA","name":"PANGEA","netmagic":"5fa45ae8","p2p":assetChainPorts.PANGEA - 1,"rpc":assetChainPorts.PANGEA}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"PANGEA","name":"PANGEA","netmagic":"5fa45ae8","p2p":assetChainPorts.PANGEA - 1,"rpc":assetChainPorts.PANGEA})
 		},
 		'DEX': {
 			'name': 'DEX',
 			'supply': 999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"DEX","conf":"DEX.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"DEX","name":"DEX","netmagic":"f2ae0516","p2p":9502,"rpc":9503}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"DEX","name":"DEX","netmagic":"f2ae0516","p2p":9502,"rpc":9503})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"DEX","conf":"DEX.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"DEX","name":"DEX","netmagic":"f2ae0516","p2p":assetChainPorts.DEX - 1,"rpc":assetChainPorts.DEX}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"DEX","name":"DEX","netmagic":"f2ae0516","p2p":assetChainPorts.DEX - 1,"rpc":assetChainPorts.DEX})
 		},
 		'JUMBLR': {
 			'name': 'JUMBLR',
 			'supply': 999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"JUMBLR","conf":"JUMBLR.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"JUMBLR","name":"JUMBLR","netmagic":"7223759e","p2p":10788,"rpc":10789}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"JUMBLR","name":"JUMBLR","netmagic":"7223759e","p2p":10788,"rpc":10789})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"JUMBLR","conf":"JUMBLR.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"JUMBLR","name":"JUMBLR","netmagic":"7223759e","p2p":assetChainPorts.JUMBLR - 1,"rpc":assetChainPorts.JUMBLR}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"JUMBLR","name":"JUMBLR","netmagic":"7223759e","p2p":assetChainPorts.JUMBLR - 1,"rpc":assetChainPorts.JUMBLR})
 		},
 		'BET': {
 			'name': 'BET',
 			'supply': 999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"BET","conf":"BET.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"BET","name":"BET","netmagic":"6b9e3e1b","p2p":11221,"rpc":11222}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"BET","name":"BET","netmagic":"6b9e3e1b","p2p":11221,"rpc":11222})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"BET","conf":"BET.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"BET","name":"BET","netmagic":"6b9e3e1b","p2p":assetChainPorts.BET - 1,"rpc":assetChainPorts.BET}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"BET","name":"BET","netmagic":"6b9e3e1b","p2p":assetChainPorts.BET - 1,"rpc":assetChainPorts.BET})
 		},
 		'CRYPTO': {
 			'name': 'CRYPTO',
 			'supply': 999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"CRYPTO","conf":"CRYPTO.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"CRYPTO","name":"CRYPTO","netmagic":"fced9e2a","p2p":10419,"rpc":10420}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"CRYPTO","name":"CRYPTO","netmagic":"fced9e2a","p2p":10419,"rpc":10420})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"CRYPTO","conf":"CRYPTO.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"CRYPTO","name":"CRYPTO","netmagic":"fced9e2a","p2p":assetChainPorts.CRYPTO - 1,"rpc":assetChainPorts.CRYPTO}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"CRYPTO","name":"CRYPTO","netmagic":"fced9e2a","p2p":assetChainPorts.CRYPTO - 1,"rpc":assetChainPorts.CRYPTO})
 		},
 		'HODL': {
 			'name': 'HODL',
 			'supply': 9999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"HODL","conf":"HODL.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"HODL","name":"HODL","netmagic":"9b13fb5f","p2p":8009,"rpc":8010}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"HODL","name":"HODL","netmagic":"9b13fb5f","p2p":8009,"rpc":8010})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"HODL","conf":"HODL.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"HODL","name":"HODL","netmagic":"9b13fb5f","p2p":assetChainPorts.HODL - 1,"rpc":assetChainPorts.HODL}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"HODL","name":"HODL","netmagic":"9b13fb5f","p2p":assetChainPorts.HODL - 1,"rpc":assetChainPorts.HODL})
 		},
 		'SHARK': {
 			'name': 'SHARK',
 			'supply': 1401,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"SHARK","conf":"SHARK.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"SHARK","name":"SHARK","netmagic":"54a5e30c","p2p":14103,"rpc":14104}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"SHARK","name":"SHARK","netmagic":"54a5e30c","p2p":14103,"rpc":14104})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"SHARK","conf":"SHARK.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"SHARK","name":"SHARK","netmagic":"54a5e30c","p2p":assetChainPorts.SHARK - 1,"rpc":assetChainPorts.SHARK}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"SHARK","name":"SHARK","netmagic":"54a5e30c","p2p":assetChainPorts.SHARK - 1,"rpc":assetChainPorts.SHARK})
 		},
 		'BOTS': {
 			'name': 'BOTS',
 			'supply': 999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"BOTS","conf":"BOTS.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"BOTS","name":"BOTS","netmagic":"5bec8cf7","p2p":10150,"rpc":10151}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"BOTS","name":"BOTS","netmagic":"5bec8cf7","p2p":10150,"rpc":10151})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"BOTS","conf":"BOTS.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"BOTS","name":"BOTS","netmagic":"5bec8cf7","p2p":assetChainPorts.BOTS - 1,"rpc":assetChainPorts.BOTS}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"BOTS","name":"BOTS","netmagic":"5bec8cf7","p2p":assetChainPorts.BOTS - 1,"rpc":assetChainPorts.BOTS})
 		},
 		'MGW': {
 			'name': 'MGW',
 			'supply': 999999,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"MGW","conf":"MGW.conf","path":confpath,"unitval":"20","zcash":1,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"MGW","name":"MGW","netmagic":"6eea5dbb","p2p":15523,"rpc":15524}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"unitval":"20","zcash":1,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"MGW","name":"MGW","netmagic":"6eea5dbb","p2p":15523,"rpc":15524})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"MGW","conf":"MGW.conf","path":confpath,"unitval":"20","zcash":1,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"MGW","name":"MGW","netmagic":"6eea5dbb","p2p":assetChainPorts.MGW - 1,"rpc":assetChainPorts.MGW}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"unitval":"20","zcash":1,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"MGW","name":"MGW","netmagic":"6eea5dbb","p2p":assetChainPorts.MGW - 1,"rpc":assetChainPorts.MGW})
 		},
 		'MVP': {
 			'name': 'MVP',
@@ -760,26 +770,26 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		'KV': {
 			'name': 'KV',
 			'supply': 1000000,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"KV","conf":"KV.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"KV","name":"KV","netmagic":"b09a2d65","p2p":9746,"rpc":9747}) : {},
-			'AddCoinDataVar': Object.assign(_acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"KV","name":"KV","netmagic":"b09a2d65","p2p":9746,"rpc":9747})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"KV","conf":"KV.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"KV","name":"KV","netmagic":"b09a2d65","p2p":assetChainPorts.KV - 1,"rpc":assetChainPorts.KV}) : {},
+			'AddCoinDataVar': Object.assign(_acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"KV","name":"KV","netmagic":"b09a2d65","p2p":assetChainPorts.KV - 1,"rpc":assetChainPorts.KV})
 		},
 		'CEAL': {
 			'name': 'CEAL',
 			'supply': 366666666,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"CEAL","conf":"CEAL.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"CEAL","name":"CEAL","netmagic":"09e51af8","p2p":13096,"rpc":13097}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"CEAL","name":"CEAL","netmagic":"09e51af8","p2p":13096,"rpc":13097})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"CEAL","conf":"CEAL.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"CEAL","name":"CEAL","netmagic":"09e51af8","p2p":assetChainPorts.CEAL - 1,"rpc":assetChainPorts.CEAL}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"CEAL","name":"CEAL","netmagic":"09e51af8","p2p":assetChainPorts.CEAL - 1,"rpc":assetChainPorts.CEAL})
 		},
 		'MESH': {
 			'name': 'MESH',
 			'supply': 1000007,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"MESH","conf":"MESH.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"MESH","name":"MESH","netmagic":"f0265c67","p2p":8399,"rpc":8400}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"MESH","name":"MESH","netmagic":"f0265c67","p2p":8399,"rpc":8400})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"MESH","conf":"MESH.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"MESH","name":"MESH","netmagic":"f0265c67","p2p":assetChainPorts.MESH - 1,"rpc":assetChainPorts.MESH}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"MESH","name":"MESH","netmagic":"f0265c67","p2p":assetChainPorts.MESH - 1,"rpc":assetChainPorts.MESH})
 		},
 		'COQUI': {
 			'name': 'COQUI',
 			'supply': 72000000,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"COQUI","conf":"COQUI.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"COQUI","name":"COQUI","netmagic":"4cbd5ef4","p2p":14275,"rpc":14276}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"COQUI","name":"COQUI","netmagic":"4cbd5ef4","p2p":14275,"rpc":14276})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {"coin":"COQUI","conf":"COQUI.conf","path":confpath,"RELAY":-1,"VALIDATE":1,"startpend":4,"endpend":4,"maxpeers":8,"newcoin":"COQUI","name":"COQUI","netmagic":"4cbd5ef4","p2p":assetChainPorts.COQUI - 1,"rpc":assetChainPorts.COQUI}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,"RELAY":mode,"VALIDATE":mode,"startpend":tmpPendValue,"endpend":tmpPendValue,"maxpeers":8,"newcoin":"COQUI","name":"COQUI","netmagic":"4cbd5ef4","p2p":assetChainPorts.COQUI - 1,"rpc":assetChainPorts.COQUI})
 		}
 	};
 
