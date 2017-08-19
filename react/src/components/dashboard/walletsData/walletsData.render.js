@@ -268,12 +268,14 @@ export const WalletsDataRender = function() {
                           { this.renderAddressList() }
                         </div>
                       }
-                      <div className="col-sm-4 search-box">
-                        <input
-                          className="form-control"
-                          onChange={ e => this.onSearchTermChange(e.target.value) }
-                          placeholder="Search" />
-                      </div>
+                      { this.props.ActiveCoin.txhistory !== 'loading' &&
+                        <div className="col-sm-4 search-box">
+                          <input
+                            className="form-control"
+                            onChange={ e => this.onSearchTermChange(e.target.value) }
+                            placeholder="Search" />
+                        </div>
+                      }
                     </div>
                     <div className="row">
                       { this.renderTxHistoryList() }
