@@ -4,109 +4,58 @@ import WalletsBasiliskRefresh from '../walletsBasiliskRefresh/walletsBasiliskRef
 import WalletsBasiliskConnection from '../walletsBasiliskConnection/walletsBasiliskConnection';
 import WalletsNotariesList from '../walletsNotariesList/walletsNotariesList';
 import WalletsCacheData from '../walletsCacheData/walletsCacheData';
-import { secondsToString } from '../../../util/time';
+import ReactTable from 'react-table';
+import TablePaginationRenderer from './pagination';
 import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
 
-// TODO: clean basilisk dropdown menu
+export const AddressTypeRender = function() {
+  return (
+    <span>
+      <span className="label label-default">
+        <i className="icon fa-eye"></i> { translate('IAPI.PUBLIC_SM') }
+      </span>
+    </span>
+  );
+};
 
-export const PaginationItemRender = function(i) {
+export const TransactionDetailRender = function(transactionIndex) {
+  return (
+    <button
+      type="button"
+      className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
+      onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, transactionIndex) }>
+      <i className="icon fa-search"></i>
+    </button>
+  );
+};
+
+export const AddressRender = function(tx) {
+  if (!tx.address) {
+    return (
+      <span>
+        <i className="icon fa-bullseye"></i>
+        <span className="label label-dark">
+          { translate('DASHBOARD.ZADDR_NOT_LISTED') }
+        </span>
+      </span>
+    );
+  }
+
+  return tx.address;
+};
+
+export const AddressItemRender = function(address, type, amount, coin) {
   return (
     <li
-      key={ `${i}-pagination-link` }
-      className={ 'paginate_button' + (this.state.activePage === i + 1 ? ' active' : '') }>
-      <a
-        key={ `${i}-pagination` }
-        onClick={ this.state.activePage !== (i + 1) ? () => this.updateCurrentPage(i + 1) : null }>{ i + 1 }</a>
+      key={address}
+      className={ address === this.state.currentAddress ? 'selected' : '' }>
+      <a onClick={ () => this.updateAddressSelection(address) }>
+        <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
+        <span className="text">[ { amount } { coin } ]  { address }</span>
+        <span className="glyphicon glyphicon-ok check-mark"></span>
+      </a>
     </li>
-  );
-};
-
-export const PaginationItemsPerPageSelectorRender = function() {
-  return (
-    <div className="dataTables_length">
-      <label>
-        { translate('INDEX.SHOW') }&nbsp;
-        <select
-          name="itemsPerPage"
-          className="form-control input-sm"
-          onChange={ this.updateInput }>
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>&nbsp;
-        { translate('INDEX.ENTRIES_SM') }
-      </label>
-    </div>
-  );
-};
-
-export const PaginationRender = function(paginationFrom, paginationTo) {
-  const disableNextBtn = this.state.activePage >= Math.floor(this.props.ActiveCoin.txhistory.length / this.state.itemsPerPage);
-
-  return (
-    <div className="row unselectable padding-top-20">
-      <div className="col-sm-5">
-        <div className="dataTables_info">
-          { translate('INDEX.SHOWING') }&nbsp;
-          { paginationFrom }&nbsp;
-          { translate('INDEX.TO_ALT') }&nbsp;
-          { paginationTo }&nbsp;
-          { translate('INDEX.OF') }&nbsp;
-          { this.props.ActiveCoin.txhistory.length }&nbsp;
-          { translate('INDEX.ENTRIES_SM') }
-        </div>
-      </div>
-      <div className="col-sm-7">
-        <div className="dataTables_paginate paging_simple_numbers">
-          <ul className="pagination">
-            <li className={ 'paginate_button previous' + (this.state.activePage === 1 ? ' disabled' : '') }>
-              <a onClick={ () => this.updateCurrentPage(this.state.activePage - 1) }>{ translate('INDEX.PREVIOUS') }</a>
-            </li>
-            { this.renderPaginationItems() }
-            <li className={ 'paginate_button next' + (disableNextBtn ? ' disabled' : '') }>
-              <a onClick={ () => this.updateCurrentPage(this.state.activePage + 1) }>{ translate('INDEX.NEXT') }</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const TxHistoryListRender = function(tx, index) {
-  return (
-    <tr key={ tx.txid + tx.amount }>
-      { this.isNativeMode() ?
-          <td>
-            <span className="label label-default">
-              <i className="icon fa-eye"></i> { translate('IAPI.PUBLIC_SM') }
-            </span>
-          </td>
-        :
-        null
-      }
-      <td>{ this.renderTxType(tx.category || tx.type) }</td>
-      <td>{ tx.confirmations }</td>
-      { Config.roundValues &&
-        <td title={ tx.amount }>{ formatValue('round', tx.amount, -6) || translate('DASHBOARD.UNKNOWN') }</td>
-      }
-      { !Config.roundValues &&
-        <td>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</td>
-      }
-      <td>{ secondsToString(tx.blocktime || tx.timestamp || tx.time) }</td>
-      <td className={ this.isFullMode() ? '' : 'hide' }>{ tx.address }</td>
-      <td className={ this.isNativeMode() ? '' : 'hide' }>{ this.renderAddress(tx) }</td>
-      <td className={ this.isBasiliskMode() ? 'text-center' : '' }>
-        <button
-          type="button"
-          className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
-          onClick={ () => this.toggleTxInfoModal(!this.props.ActiveCoin.showTransactionInfo, ((this.state.activePage - 1) * this.state.itemsPerPage) + index) }>
-          <i className="icon fa-search"></i>
-        </button>
-      </td>
-    </tr>
   );
 };
 
@@ -121,7 +70,7 @@ export const AddressListRender = function() {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          title={ `-${translate('KMD_NATIVE.SELECT_ADDRESS')}-` }
+          title={ `${translate('KMD_NATIVE.SELECT_ADDRESS')}` }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
           <span className="bs-caret">
@@ -130,9 +79,17 @@ export const AddressListRender = function() {
         </button>
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
-            <li className="selected">
-              <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span></a>
+            <li className="no--hover">
+              <a><span className="text">{ this.props.ActiveCoin.mode === 'basilisk' ? 'Filter by address' : translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
             </li>
+            { this.props.ActiveCoin.mode === 'native' &&
+              <li className={ !this.state.currentAddress ? 'selected' : '' }>
+                <a onClick={ () => this.updateAddressSelection('') }>
+                  <span className="text">All</span>
+                  <span className="glyphicon glyphicon-ok check-mark"></span>
+                </a>
+              </li>
+            }
             { this.renderAddressByType('public') }
           </ul>
         </div>
@@ -141,6 +98,86 @@ export const AddressListRender = function() {
   } else {
     return null;
   }
+};
+
+export const TxTypeRender = function(category) {
+  if (category === 'send' ||
+      category === 'sent') {
+    return (
+      <span className="label label-danger">
+        <i className="icon fa-arrow-circle-left"></i> <span>{ translate('DASHBOARD.OUT') }</span>
+      </span>
+    );
+  }
+  if (category === 'receive' ||
+      category === 'received') {
+    return (
+      <span className="label label-success">
+        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') } &nbsp; &nbsp;</span>
+      </span>
+    );
+  }
+  if (category === 'generate') {
+    return (
+      <span>
+        <i className="icon fa-cogs"></i> <span>{ translate('DASHBOARD.MINED') }</span>
+      </span>
+    );
+  }
+  if (category === 'immature') {
+    return (
+      <span>
+        <i className="icon fa-clock-o"></i> <span>{ translate('DASHBOARD.IMMATURE') }</span>
+      </span>
+    );
+  }
+  if (category === 'unknown') {
+    return (
+      <span>
+        <i className="icon fa-meh-o"></i> <span>{ translate('DASHBOARD.UNKNOWN') }</span>
+      </span>
+    );
+  }
+};
+
+export const TxAmountRender = function(tx) {
+  let _amountNegative;
+
+  if ((tx.category === 'send' ||
+      tx.category === 'sent') ||
+      (tx.type === 'send' ||
+      tx.type === 'sent')) {
+    _amountNegative = -1;
+  } else {
+    _amountNegative = 1;
+  }
+
+  if (Config.roundValues) {
+    return (
+      <span title={ tx.amount * _amountNegative }>{ formatValue('round', tx.amount, -6) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+    );
+  }
+
+  return (
+    <span>{ tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+  );
+};
+
+export const TxHistoryListRender = function() {
+  return (
+    <ReactTable
+      data={ this.state.filteredItemsList }
+      columns={ this.state.itemsListColumns }
+      minRows="0"
+      sortable={ true }
+      className="-striped -highlight"
+      PaginationComponent={ TablePaginationRenderer }
+      nextText={ translate('INDEX.NEXT_PAGE') }
+      previousText={ translate('INDEX.PREVIOUS_PAGE') }
+      showPaginationBottom={ this.state.showPagination }
+      pageSize={ this.pageSize }
+      onPageSizeChange={ (pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex) } />
+  );
 };
 
 export const WalletsDataRender = function() {
@@ -156,18 +193,20 @@ export const WalletsDataRender = function() {
             <div>
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                 <div className="panel">
-                  <header className="panel-heading z-index-10">
-                  <i
-                    className="icon fa-refresh manual-txhistory-refresh pointer"
-                    onClick={ this.refreshTxHistory }></i>
-                    <div className={ 'panel-actions' + (this.props.ActiveCoin.mode === 'basilisk' ? '' : ' hide') }>
-                      <div className={ 'margin-bottom-3 ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
-                        <div
-                          className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-                          style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
-                          { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
-                        </div>
+                  { this.props.ActiveCoin.mode === 'basilisk' &&
+                    <div className={ 'margin-bottom-3 basilisk-progress-bar ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
+                      <div
+                        className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                        style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
+                        { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
                       </div>
+                    </div>
+                  }
+                  <header className="panel-heading z-index-10">
+                    <i
+                      className={ 'icon fa-refresh manual-txhistory-refresh pointer' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? '' : ' hide') }
+                      onClick={ this.refreshTxHistory }></i>
+                    <div className={ 'panel-actions' + (this.props.ActiveCoin.mode === 'basilisk' ? '' : ' hide') }>
                       { !this.isNativeMode() ?
                         <div
                           className={ 'dropdown basilisk-actions' + (this.state.basiliskActionsMenu ? ' open' : '') }
@@ -223,63 +262,22 @@ export const WalletsDataRender = function() {
                     <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
                   <div className="panel-body">
-                    <div className="row">
-                      <div className="col-sm-8">
-                        { this.renderAddressList() }
-                      </div>
-                    </div>
-                    <div className="row pagination-container">
-                      <div className="col-sm-6">
-                        { this.renderPaginationItemsPerPageSelector() }
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="dataTables_filter">
-                          <label>
-                            { translate('INDEX.SEARCH') }: <input type="search" className="form-control input-sm" disabled="true" />
-                          </label>
+                    <div className="row padding-bottom-30 padding-top-10">
+                      { this.shouldDisplayAddressList() &&
+                        <div className="col-sm-8 no-padding-left">
+                          { this.renderAddressList() }
                         </div>
+                      }
+                      <div className="col-sm-4 search-box">
+                        <input
+                          className="form-control"
+                          onChange={ e => this.onSearchTermChange(e.target.value) }
+                          placeholder="Search" />
                       </div>
                     </div>
                     <div className="row">
-                      <table
-                        className="table table-hover dataTable table-striped"
-                        width="100%">
-                        <thead>
-                          <tr>
-                            { this.isNativeMode() ?
-                              <th>{ translate('INDEX.TYPE') }</th>
-                              :
-                              null
-                            }
-                            <th>{ translate('INDEX.DIRECTION') }</th>
-                            <th className="hidden-xs hidden-sm">{ translate('INDEX.CONFIRMATIONS') }</th>
-                            <th>{ translate('INDEX.AMOUNT') }</th>
-                            <th>{ translate('INDEX.TIME') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : 'hidden-xs hidden-sm' }>{ translate('INDEX.TX_DETAIL') }</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          { this.renderTxHistoryList() }
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                             { this.isNativeMode() ?
-                               <th>{ translate('INDEX.TYPE') }</th>
-                               :
-                               null
-                             }
-                            <th>{ translate('INDEX.DIRECTION') }</th>
-                            <th>{ translate('INDEX.CONFIRMATIONS') }</th>
-                            <th>{ translate('INDEX.AMOUNT') }</th>
-                            <th>{ translate('INDEX.TIME') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hide' : '' }>{ translate('INDEX.DEST_ADDRESS') }</th>
-                            <th className={ this.isBasiliskMode() ? 'hidden-xs hidden-sm text-center' : '' }>{ translate('INDEX.TX_DETAIL') }</th>
-                          </tr>
-                        </tfoot>
-                      </table>
+                      { this.renderTxHistoryList() }
                     </div>
-                    { this.renderPagination() }
                   </div>
                 </div>
               </div>
