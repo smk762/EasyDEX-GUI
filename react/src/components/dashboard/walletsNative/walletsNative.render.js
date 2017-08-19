@@ -14,7 +14,7 @@ const WalletsNativeRender = function() {
           id="easydex-header-div"
           className="background-color-white"
           style={ this.getCoinStyle('transparent') }>
-          <ol className={ (!this.state.nativeOnly ? 'breadcrumb breadcrumb--normal' : 'breadcrumb') + (this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? ' coin-logo-wide' : '') + (this.state.nativeOnly ? ' native-coin-logo' : '') }>
+          <ol className={ 'coin-logo ' + (!this.state.nativeOnly ? 'breadcrumb breadcrumb--normal' : 'breadcrumb') + (this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? ' coin-logo-wide' : '') + (this.state.nativeOnly ? ' native-coin-logo' : '') }>
             <li className="header-easydex-section">
               { this.getCoinStyle('title') &&
                 <img src={ this.getCoinStyle('title') } />

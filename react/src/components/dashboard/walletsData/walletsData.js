@@ -53,8 +53,9 @@ class WalletsData extends React.Component {
       totalStackLength: 0,
       useCache: true,
       itemsListColumns: this.generateItemsListColumns(),
+      defaultPageSize: 10,
       pageSize: 10,
-      showPagination: false,
+      showPagination: true,
       searchTerm: null,
       coin: null,
       txhistory: null
@@ -108,6 +109,9 @@ class WalletsData extends React.Component {
       columns.push({
         Header: translate('INDEX.TYPE'),
         Footer: translate('INDEX.TYPE'),
+        className: 'colum--type',
+        headerClassName: 'colum--type',
+        footerClassName: 'colum--type',
         Cell: AddressTypeRender()
       });
     }
@@ -329,7 +333,7 @@ class WalletsData extends React.Component {
   indexTxHistory(txhistoryArr) {
     if (txhistoryArr.length > 1) {
       for (let i = 0; i < txhistoryArr.length; i++) {
-        this.props.ActiveCoin.txhistory[i]['index'] = i + 1;
+        this.props.ActiveCoin.txhistory[i].index = i + 1;
       }
     }
 
@@ -338,7 +342,8 @@ class WalletsData extends React.Component {
 
   componentWillReceiveProps(props) {
     if (!this.state.currentAddress &&
-      this.props.ActiveCoin.activeAddress) {
+      this.props.ActiveCoin.activeAddress &&
+      this.props.ActiveCoin.mode === 'basilisk') {
       this.setState(Object.assign({}, this.state, {
         currentAddress: this.props.ActiveCoin.activeAddress,
       }));
@@ -357,7 +362,7 @@ class WalletsData extends React.Component {
             itemsList: sortedItemsList,
             filteredItemsList: this.filterTransactions(sortedItemsList, this.state.searchTerm),
             txhistory: this.props.ActiveCoin.txhistory,
-            showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.pageSize
+            showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize
           }));
       }
     }
@@ -392,7 +397,8 @@ class WalletsData extends React.Component {
 
   // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
-    if (this.state.itemsList === 'loading' || this.state.itemsList.length == 0) {
+    if (this.state.itemsList === 'loading' ||
+        this.state.itemsList.length == 0) {
       if (this.isFullySynced()) {
         return (
           <tr className="hover--none">
@@ -422,7 +428,7 @@ class WalletsData extends React.Component {
   onPageSizeChange(pageSize, pageIndex) {
     this.setState(Object.assign({}, this.state, {
       pageSize: pageSize,
-      showPagination: this.state.itemsList && this.state.itemsList.length >= pageSize,
+      showPagination: this.state.itemsList && this.state.itemsList.length >= defaultPageSize,
     }))
   }
 
@@ -473,7 +479,7 @@ class WalletsData extends React.Component {
 
         for (let i = 0; i < _addresses[type].length; i++) {
           const address = _addresses[type][i].address;
-          let _amount = address.amount;
+          let _amount = _addresses[type][i].amount;
 
           if (this.props.ActiveCoin.mode === 'basilisk') {
             _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
@@ -489,8 +495,9 @@ class WalletsData extends React.Component {
         }
 
         return items;
-    } else if (this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) {
+    } else if (this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] && this.props.ActiveCoin.mode === 'basilisk') {
       const address = this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
+
       return AddressItemRender.call(this, address, type, null, _coin);
     }
 
@@ -522,7 +529,13 @@ class WalletsData extends React.Component {
             return _amount;
           } else {
             const address = _addresses.public[i].address;
-            let _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+            let _amount;
+
+            if (this.props.ActiveCoin.mode === 'basilisk') {
+              _amount = _cache && _cache[_coin] && _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
+            } else {
+              _amount = _addresses.public[i].amount;
+            }
 
             if (_amount !== 'N/A') {
               _amount = formatValue('round', _amount, -6);
@@ -550,16 +563,17 @@ class WalletsData extends React.Component {
       );
     } else {
       return (
-        <span>- { translate('KMD_NATIVE.SELECT_ADDRESS') } -</span>
+        <span>Filter by address</span>
       );
     }
   }
 
   shouldDisplayAddressList() {
-    //return true;
-    return this.props.Dashboard &&
+    if (this.props.ActiveCoin.mode === 'basilisk') {
+      return this.props.Dashboard &&
         this.props.Dashboard.activeHandle &&
         this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
+    }
   }
 
   renderAddressList() {
@@ -594,7 +608,7 @@ class WalletsData extends React.Component {
   }
 
   contains(value, property) {
-    return (value + "").indexOf(property) !== -1;
+    return (value + '').indexOf(property) !== -1;
   }
 
   isActiveCoinMode(coinMode) {

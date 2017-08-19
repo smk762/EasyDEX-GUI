@@ -373,6 +373,9 @@ input:checked + .slider:before {
   text-align: center;
 }
 
+.coin-logo.breadcrumb {
+  z-index: 100;
+}
 .breadcrumb > li + li:before {
   display: none;
 }
@@ -754,6 +757,10 @@ select{
   }
 }
 
+.toggle-filters:hover {
+  background-color: #f3f1f1;
+}
+
 /* jumblr */
 .jumblr {
   p {
@@ -894,36 +901,42 @@ select{
   }
 }
 
-.basilisk-progress-bar {
-  position: absolute;
-  width: calc(100% - 100px);
+.search-box {
+  float: right;
+  padding-right: 0;
 }
 
-.breadcrumb--basilisk {
+.no-padding-left {
+  padding-left: 0;
+}
+
+.basilisk-progress-bar {
+  position: absolute;
+  width: 100%;
+}
+
+.breadcrumb--basilisk,
+.breadcrumb--native {
   top: 0;
+}
+
+.dropdown-menu {
+  .no--hover {
+    pointer-events: none;
+  }
 }
 
 .ReactTable {
   border: none;
 
-  .pagination-top {
-    display: none;
+  .pagination-bottom {
+    margin-top: 35px;
   }
   .rt-td {
     text-align: center;
   }
-  .ReactTable .rt-thead .rt-th,
-  .ReactTable .rt-thead .rt-td {
-    padding: 10px 5px;
-  }
   .rt-table {
     border: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  .rt-tfoot {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  .rt-thead {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
   .rt-thead .rt-th,
   .rt-thead .rt-td {
@@ -931,12 +944,56 @@ select{
   }
   .rt-tr.-odd div,
   .rt-tr.-even div {
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .-pagination,
+  .rt-thead,
+  .rt-tfoot {
+    border: none;
+  }
+  .rt-tfoot {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .rt-thead {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
   .colum--direction {
     width: 40px !important;
     flex: 40 0 auto !important;
     padding-right: 10px;
+  }
+  .colum--txinfo {
+    width: 40px !important;
+    flex: 40 0 auto !important;
+  }
+  .colum--type {
+    width: 40px !important;
+    flex: 40 0 auto !important;
+  }
+  .-pagination {
+    .-pageJump {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+    .-btn {
+      color: #757575;
+      background-color: #efefef;
+      border: 1px solid #e0e0e0;
+    }
+    .-btn:hover {
+      color: #fff;
+    }
+    .-btn[disabled]:hover {
+      color: #757575;
+    }
+  }
+  .rt-noData {
+    top: 46px;
+    width: 100%;
+    text-align: center;
+    height: 98px;
+    padding: 38px;
+    background: rgba(255, 255, 255, 0.85);
   }
 }

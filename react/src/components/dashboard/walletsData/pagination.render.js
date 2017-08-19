@@ -2,7 +2,10 @@ import React from 'react';
 import classnames from 'classnames';
 
 const defaultButton = props =>
-  <button type='button' {...props} className='-btn'>
+  <button
+    type="button"
+    className="-btn"
+    {...props}>
     {props.children}
   </button>
 
@@ -72,7 +75,9 @@ const PaginationRender = function() {
               value={pageSize}>
               { pageSizeOptions.map((option, i) => {
                 return (
-                  <option key={i} value={option}>
+                  <option
+                    key={i}
+                    value={option}>
                     {option} {this.props.rowsText}
                   </option>
                 );
@@ -85,7 +90,7 @@ const PaginationRender = function() {
         <NextComponent
           onClick={e => {
             if (!canNext) return;
-            this.changePage(page + 1)
+            this.changePage(page + 1);
           }}
           disabled={!canNext}>
           {this.props.nextText}

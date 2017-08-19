@@ -9,8 +9,6 @@ import TablePaginationRenderer from './pagination';
 import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
 
-// TODO: clean basilisk dropdown menu
-
 export const AddressTypeRender = function() {
   return (
     <span>
@@ -72,7 +70,7 @@ export const AddressListRender = function() {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          title={ `-${translate('KMD_NATIVE.SELECT_ADDRESS')}-` }
+          title={ `${translate('KMD_NATIVE.SELECT_ADDRESS')}` }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
           <span className="bs-caret">
@@ -81,9 +79,17 @@ export const AddressListRender = function() {
         </button>
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
-            <li className="selected">
-              <a><span className="text"> - { translate('KMD_NATIVE.SELECT_ADDRESS') } - </span></a>
+            <li className="no--hover">
+              <a><span className="text">{ this.props.ActiveCoin.mode === 'basilisk' ? 'Filter by address' : translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
             </li>
+            { this.props.ActiveCoin.mode === 'native' &&
+              <li className={ !this.state.currentAddress ? 'selected' : '' }>
+                <a onClick={ () => this.updateAddressSelection('') }>
+                  <span className="text">All</span>
+                  <span className="glyphicon glyphicon-ok check-mark"></span>
+                </a>
+              </li>
+            }
             { this.renderAddressByType('public') }
           </ul>
         </div>
@@ -96,7 +102,7 @@ export const AddressListRender = function() {
 
 export const TxTypeRender = function(category) {
   if (category === 'send' ||
-    category === 'sent') {
+      category === 'sent') {
     return (
       <span className="label label-danger">
         <i className="icon fa-arrow-circle-left"></i> <span>{ translate('DASHBOARD.OUT') }</span>
@@ -104,10 +110,10 @@ export const TxTypeRender = function(category) {
     );
   }
   if (category === 'receive' ||
-    category === 'received') {
+      category === 'received') {
     return (
       <span className="label label-success">
-        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') }</span>
+        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') } &nbsp; &nbsp;</span>
       </span>
     );
   }
@@ -134,32 +140,43 @@ export const TxTypeRender = function(category) {
   }
 };
 
-export const TxAmountRender = function (tx) {
+export const TxAmountRender = function(tx) {
+  let _amountNegative;
+
+  if ((tx.category === 'send' ||
+      tx.category === 'sent') ||
+      (tx.type === 'send' ||
+      tx.type === 'sent')) {
+    _amountNegative = -1;
+  } else {
+    _amountNegative = 1;
+  }
+
   if (Config.roundValues) {
     return (
-      <span title={ tx.amount }>{ formatValue('round', tx.amount, -6) || translate('DASHBOARD.UNKNOWN') }</span>
+      <span title={ tx.amount * _amountNegative }>{ formatValue('round', tx.amount, -6) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
     );
   }
 
   return (
-    <span>{ tx.amount || translate('DASHBOARD.UNKNOWN') }</span>
+    <span>{ tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
   );
 };
 
 export const TxHistoryListRender = function() {
   return (
     <ReactTable
-      data={this.state.filteredItemsList}
-      columns={this.state.itemsListColumns}
-      sortable={true}
+      data={ this.state.filteredItemsList }
+      columns={ this.state.itemsListColumns }
+      minRows="0"
+      sortable={ true }
       className="-striped -highlight"
-      PaginationComponent={TablePaginationRenderer}
-      nextText={translate('INDEX.NEXT_PAGE')}
-      previousText={translate('INDEX.PREVIOUS_PAGE')}
-      showPaginationBottom={this.state.showPagination}
-      showPaginationTop={this.state.showPagination}
-      pageSize={this.pageSize}
-      onPageSizeChange={(pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex)} />
+      PaginationComponent={ TablePaginationRenderer }
+      nextText={ translate('INDEX.NEXT_PAGE') }
+      previousText={ translate('INDEX.PREVIOUS_PAGE') }
+      showPaginationBottom={ this.state.showPagination }
+      pageSize={ this.pageSize }
+      onPageSizeChange={ (pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex) } />
   );
 };
 
@@ -245,16 +262,16 @@ export const WalletsDataRender = function() {
                     <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
                   <div className="panel-body">
-                    <div className="row padding-bottom-20">
+                    <div className="row padding-bottom-30 padding-top-10">
                       { this.shouldDisplayAddressList() &&
-                        <div className="col-sm-8">
-                          {this.renderAddressList()}
+                        <div className="col-sm-8 no-padding-left">
+                          { this.renderAddressList() }
                         </div>
                       }
-                      <div className="col-sm-4">
+                      <div className="col-sm-4 search-box">
                         <input
                           className="form-control"
-                          onChange={e => this.onSearchTermChange(e.target.value)}
+                          onChange={ e => this.onSearchTermChange(e.target.value) }
                           placeholder="Search" />
                       </div>
                     </div>
