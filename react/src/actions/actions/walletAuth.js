@@ -255,6 +255,12 @@ export function iguanaActiveHandle(getMainAddress) {
           'response': json,
         }));
       }
+      if (!Config.iguanaLessMode &&
+          sessionStorage.getItem('IguanaActiveAccount') &&
+          JSON.parse(sessionStorage.getItem('IguanaActiveAccount')).pubkey === json.pubkey &&
+          json.status === 'unlocked') {
+        sessionStorage.setItem('IguanaActiveAccount', JSON.stringify(json));
+      }
       dispatch(getMainAddress ? getMainAddressState(json) : iguanaActiveHandleState(json));
     });
   }

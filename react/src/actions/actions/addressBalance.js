@@ -222,7 +222,7 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
 
             let isNewAddr = true;
             for (let x = 0; x < result.length && isNewAddr; x++) {
-              for (let y=0; y < result[x].length && isNewAddr; y++) {
+              for (let y = 0; y < result[x].length && isNewAddr; y++) {
                 if (allAddrArray[a] === result[x][y]) {
                   isNewAddr = false;
                 }
