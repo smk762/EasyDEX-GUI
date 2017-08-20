@@ -24,10 +24,10 @@ export const WalletsNavWithWalletRender = function() {
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-' + (this.state.nativeOnly ? '40 page-header--native' : '20') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-' + (this.props.nativeOnly ? '40 page-header--native' : '20') }
         id="header-dashboard"
-        style={{ marginBottom: this.props.ActiveCoin.mode === 'basilisk' ? '30px' : (this.state.nativeOnly ? '30px' : '0') }}>
-        <ol className={ this.state.nativeOnly ? 'hide' : 'breadcrumb' + (this.props.ActiveCoin.mode === 'basilisk' ? ' breadcrumb--basilisk' : ' breadcrumb--native') }>
+        style={{ marginBottom: this.props.ActiveCoin.mode === 'basilisk' ? '30px' : (this.props.nativeOnly ? '30px' : '0') }}>
+        <ol className={ this.props.nativeOnly ? 'hide' : 'breadcrumb' + (this.props.ActiveCoin.mode === 'basilisk' ? ' breadcrumb--basilisk' : ' breadcrumb--native') }>
           <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
           { this.props && this.props.Dashboard && this.props.Dashboard.activeHandle ? this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin] : '-' }
           <button
