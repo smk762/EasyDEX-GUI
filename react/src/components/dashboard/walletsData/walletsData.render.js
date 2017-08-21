@@ -181,6 +181,9 @@ export const TxHistoryListRender = function() {
 };
 
 export const WalletsDataRender = function() {
+  let _basiliskProgressBarWidth = 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength);
+  _basiliskProgressBarWidth = _basiliskProgressBarWidth < 20 ? 20 : _basiliskProgressBarWidth;
+
   return (
     <span>
       <WalletsBasiliskRefresh {...this.props} />
@@ -197,7 +200,7 @@ export const WalletsDataRender = function() {
                     <div className={ 'margin-bottom-3 basilisk-progress-bar ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
                       <div
                         className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-                        style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
+                        style={{ width: _basiliskProgressBarWidth + '%' }}>
                         { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
                       </div>
                     </div>
