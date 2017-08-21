@@ -134,3 +134,45 @@
 .height-170 {
   height: 170px;
 }
+
+.rt-tr.-odd div,
+.rt-tr.-even div {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.rt-tr-group.-odd .-padRow {
+  display: none;
+}
+
+.ReactTable .rt-tfoot .rt-td {
+  text-align: center;
+}
+
+.ReactTable .rt-thead .rt-th.-sort-asc,
+.ReactTable .rt-thead .rt-td.-sort-asc,
+.ReactTable .rt-thead .rt-th.-sort-desc,
+.ReactTable .rt-thead .rt-td.-sort-desc{
+  box-shadow: none;
+}
+
+.ReactTable .rt-thead .rt-th.-sort-asc div:nth-child(1):after {
+  font-family: FontAwesome;
+  padding-left: 5px;
+  content: "\f106";
+}
+.ReactTable .rt-thead .rt-th.-sort-desc div:nth-child(1):after {
+  font-family: FontAwesome;
+  padding-left: 5px;
+  content: "\f107";
+}
+
+.rt-tr.-padRow {
+  display: none;
+}
+
+.ReactTable .-pagination,
+.ReactTable .rt-thead.-header,
+.ReactTable .rt-tfoot{
+  box-shadow: none;
+}

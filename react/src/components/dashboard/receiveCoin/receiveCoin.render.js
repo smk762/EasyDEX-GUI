@@ -54,7 +54,7 @@ export const AddressItemRender = function(address, type) {
       { this.renderAddressActions(address.address, type) }
       <td>{ type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }</td>
       <td>{ address.amount }</td>
-      {!this.isNativeMode() &&
+      { !this.isNativeMode() &&
         <td>{ address.interest ? address.interest : 'N/A' }</td>
       }
     </tr>
@@ -176,4 +176,3 @@ export const ReceiveCoinRender = function() {
     );
   }
 };
-
