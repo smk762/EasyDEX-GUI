@@ -46,10 +46,10 @@ const DashboardRender = function() {
           <Jumblr  />
         }
         { this.isSectionActive('settings') &&
-          <Settings {...this.props} />
+          <Settings />
         }
         { this.isSectionActive('about') &&
-          <About {...this.props} />
+          <About />
         }
       </div>
     </div>

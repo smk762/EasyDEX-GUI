@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   toggleAddcoinModal,
   iguanaWalletPassphrase,
@@ -24,8 +25,8 @@ const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
 // TODO: remove duplicate activehandle and activecoins calls
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       display: false,
       activeLoginSection: 'activateCoin',
@@ -386,4 +387,17 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    Main: state.Main,
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+    },
+    Interval: {
+      interval: state.Interval.interval,
+    }
+  };
+
+};
+
+export default connect(mapStateToProps)(Login);

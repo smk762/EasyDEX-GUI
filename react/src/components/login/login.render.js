@@ -6,8 +6,7 @@ const LoginRender = function () {
   return (
     <div>
       <LoginSettingsModal
-        {...this.props}
-        section={ this.state.displayLoginSettingsDropdownSection } />
+         section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">

@@ -6,13 +6,12 @@ import Settings from '../settings/settings';
 export const LoginSettingsModalRender = function() {
   return (
     <div>
-      <div className="modal show login-settings-modal">
+      <div className="modal show login-settings-modal ff">
         <div className="modal-dialog modal-center modal-lg">
           <div className="modal-content">
             <div className="modal-body modal-body-container">
               { this.props.section === 'settings' &&
                 <Settings
-                  {...this.props}
                   disableWalletSpecificUI="true" />
               }
               { this.props.section === 'about' &&

@@ -12,11 +12,11 @@ class WalletMain extends React.Component {
       <div className="full-height">
         <input type="text" id="js-copytextarea" />
         <SyncOnly />
-        <Dashboard {...this.props} />
-        <AddCoin {...this.props} />
-        <Login {...this.props} />
+        <Dashboard />
+        <AddCoin />
+        <Login />
         <Toaster {...this.props.toaster} />
-        <Notifications {...this.props} />
+        <Notifications />
       </div>
     );
   }

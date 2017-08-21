@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import Config from '../../../config';
 import {
@@ -41,8 +42,8 @@ let updateProgressBar = {
   4) batch export/import wallet addresses
 */
 class Settings extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       activeTab: 0,
       debugLinesCount: 10,
@@ -79,14 +80,27 @@ class Settings extends React.Component {
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
+    this.updateTabDimensions = this.updateTabDimensions.bind(this);
+  }
+
+  updateTabDimensions() {
+    setTimeout(() => {
+      const _height = document.querySelector(`#${this.state.tabElId} .panel-collapse .panel-body`).offsetHeight;
+
+      this.setState(Object.assign({}, this.state, {
+        activeTabHeight: _height,
+      }));
+    }, 100);
   }
 
   componentWillMount() {
     socket.on('patch', msg => this.updateSocketsData(msg));
+    window.addEventListener('resize', this.updateTabDimensions);
   }
 
   componentWillUnmount() {
     socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
+    window.removeEventListener('resize', this.updateTabDimensions);
 
     if (!this.state.disableWalletSpecificUI) {
       document.documentElement.style.height = '100%';
@@ -94,7 +108,7 @@ class Settings extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(props) {
     if (!this.props.disableWalletSpecificUI) {
       Store.dispatch(iguanaActiveHandle());
     }
@@ -113,6 +127,25 @@ class Settings extends React.Component {
         disableWalletSpecificUI: props.disableWalletSpecificUI,
       }));
     }
+  }
+
+  openExternalWindow(url) {
+    const remote = window.require('electron').remote;
+    const BrowserWindow = remote.BrowserWindow;
+
+    const externalWindow = new BrowserWindow({
+      width: 1280,
+      height: 800,
+      title: 'Loading...',
+      icon: remote.getCurrentWindow().iguanaIcon,
+    });
+
+    externalWindow.loadURL(url);
+    externalWindow.webContents.on('did-finish-load', function() {
+      setTimeout(function() {
+        externalWindow.show();
+      }, 40);
+    });
   }
 
   _resetAppConfig() {
@@ -680,4 +713,18 @@ class Settings extends React.Component {
   }
 }
 
-export default Settings;
+const mapStateToProps = (state) => {
+  return {
+    Main: {
+      coins: state.Main.coins,
+      activeHandle: state.Main.activeHandle,
+    },
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+    },
+    Settings: state.Settings,      
+  };
+
+};
+
+export default connect(mapStateToProps)(Settings);

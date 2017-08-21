@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { sortByDate } from '../../../util/sort';
 import Config from '../../../config';
 import {
@@ -8,8 +9,8 @@ import {
 } from './notifications.render';
 
 class Notifications extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       displayModal: false,
       calls: {
@@ -107,4 +108,15 @@ class Notifications extends React.Component {
   }
 }
 
-export default Notifications;
+const mapStateToProps = (state) => {
+  return {
+    Dashboard: {
+      guiLog: state.Dashboard.guiLog,
+      activeHandle: state.Dashboard.activeHandle,
+    }     
+  };
+
+};
+
+export default connect(mapStateToProps)(Notifications);
+
