@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Toaster from '../toaster/toaster';
 import AddCoin from '../addcoin/addcoin';
 import Login from '../login/login';
@@ -22,4 +23,12 @@ class WalletMain extends React.Component {
   }
 }
 
-export default WalletMain;
+const mapStateToProps = (state) => {
+  return {
+    toaster: state.toaster
+  };
+
+};
+
+export default connect(mapStateToProps)(WalletMain);
+
