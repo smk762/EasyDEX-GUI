@@ -801,7 +801,7 @@ class SendCoin extends React.Component {
 
   validateSendFormData() {
     let valid = true;
-    if (!this.state.sendTo || this.state.sendTo.length < 64) {
+    if (!this.state.sendTo || this.state.sendTo.length < 34) {
       Store.dispatch(
         triggerToaster(
           translate('SEND.SEND_TO_ADDRESS_MIN_LENGTH'),
