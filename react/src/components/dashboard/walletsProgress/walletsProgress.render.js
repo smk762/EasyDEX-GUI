@@ -76,7 +76,6 @@ export const WalletsProgressRender = function() {
     <div
       id="edex-footer"
       className="margin-bottom-20">
-
       { !this.isNativeMode() &&
         this.props.Dashboard.progress &&
         <div className="row no-space">

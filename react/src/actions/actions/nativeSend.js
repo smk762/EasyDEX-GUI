@@ -176,8 +176,8 @@ export function getKMDOPIDState(json) {
 }
 
 export function getKMDOPID(opid, coin) {
-  let tmpopidOutput = '',
-      ajaxDataToHex;
+  let tmpopidOutput = '';
+  let ajaxDataToHex;
 
   if (opid === undefined) {
     ajaxDataToHex = null;
