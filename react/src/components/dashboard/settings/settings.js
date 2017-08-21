@@ -79,14 +79,27 @@ class Settings extends React.Component {
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
+    this.updateTabDimensions = this.updateTabDimensions.bind(this);
+  }
+
+  updateTabDimensions() {
+    setTimeout(() => {
+      const _height = document.querySelector(`#${this.state.tabElId} .panel-collapse .panel-body`).offsetHeight;
+
+      this.setState(Object.assign({}, this.state, {
+        activeTabHeight: _height,
+      }));
+    }, 100);
   }
 
   componentWillMount() {
     socket.on('patch', msg => this.updateSocketsData(msg));
+    window.addEventListener('resize', this.updateTabDimensions);
   }
 
   componentWillUnmount() {
     socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
+    window.removeEventListener('resize', this.updateTabDimensions);
 
     if (!this.state.disableWalletSpecificUI) {
       document.documentElement.style.height = '100%';
@@ -113,6 +126,25 @@ class Settings extends React.Component {
         disableWalletSpecificUI: props.disableWalletSpecificUI,
       }));
     }
+  }
+
+  openExternalWindow(url) {
+    const remote = window.require('electron').remote;
+    const BrowserWindow = remote.BrowserWindow;
+
+    const externalWindow = new BrowserWindow({
+      width: 1280,
+      height: 800,
+      title: 'Loading...',
+      icon: remote.getCurrentWindow().iguanaIcon,
+    });
+
+    externalWindow.loadURL(url);
+    externalWindow.webContents.on('did-finish-load', function() {
+      setTimeout(function() {
+        externalWindow.show();
+      }, 40);
+    });
   }
 
   _resetAppConfig() {

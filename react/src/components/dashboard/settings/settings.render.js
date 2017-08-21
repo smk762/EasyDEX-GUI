@@ -12,7 +12,7 @@ export const AppUpdateTabRender = function() {
       onClick={ () => this.openTab('AppUpdate', 10) }>
       <div className="panel-heading">
         <a className={ 'panel-title' + (this.state.activeTab === 10 ? '' : ' collapsed') }>
-          <i className="icon fa fa-life-ring"></i> { translate('INDEX.UPDATE') }
+          <i className="icon fa fa-cloud-download"></i> { translate('INDEX.UPDATE') }
         </a>
       </div>
       <div
@@ -620,6 +620,61 @@ export const SettingsRender = function() {
                   }
 
                   { this.renderAppUpdateTab() }
+
+                  <div
+                    className="panel"
+                    id="Support"
+                    onClick={ () => this.openTab('Support', 11) }>
+                    <div className="panel-heading">
+                      <a className={ 'panel-title' + (this.state.activeTab === 11 ? '' : ' collapsed') }>
+                        <i className="icon fa fa-life-ring"></i> Support
+                      </a>
+                    </div>
+                    <div
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 11 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 11 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      <div className="panel-body">
+                        <div className="col-sm-12 no-padding-left">
+                          <div className="support-box-wrapper">
+                            <div
+                              className="support-box"
+                              onClick={ () => this.openExternalWindow('http://support.supernet.org') }>
+                              <img src="assets/images/cryptologo/supernet.png" alt="Support tickets" />
+                              <div className="support-box-title">Support tickets</div>
+                              <div className="support-box-link">support.supernet.org</div>
+                            </div>
+                          </div>
+                          <div className="support-box-wrapper">
+                            <div
+                              className="support-box"
+                              onClick={ () => this.openExternalWindow('https://sprnt.slack.com') }>
+                              <img src="assets/images/support/slack-icon.png" alt="Slack" />
+                              <div className="support-box-title">Slack</div>
+                              <div className="support-box-link">sprnt.slack.com</div>
+                            </div>
+                          </div>
+                          <div className="support-box-wrapper">
+                            <div
+                              className="support-box"
+                              onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org') }>
+                              <img src="assets/images/support/slack-invite-icon.png" alt="Slack invite" />
+                              <div className="support-box-title">Get Slack invite</div>
+                              <div className="support-box-link">slackinvite.supernet.org</div>
+                            </div>
+                          </div>
+                          <div className="support-box-wrapper">
+                            <div
+                              className="support-box"
+                              onClick={ () => this.openExternalWindow('https://github.com/SuperNETorg/Agama') }>
+                              <img src="assets/images/support/github-icon.png" alt="Github" />
+                              <div className="support-box-title">Github</div>
+                              <div className="support-box-link">github.com/SuperNETorg/Agama</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
