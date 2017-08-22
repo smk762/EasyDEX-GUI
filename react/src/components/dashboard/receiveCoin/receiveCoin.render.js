@@ -94,7 +94,7 @@ export const _ReceiveCoinTableRender = function() {
             <th>{ translate('INDEX.TYPE') }</th>
             <th>{ translate('INDEX.ADDRESS') }</th>
             <th>{ translate('INDEX.BALANCE') }</th>
-            <th> {translate('INDEX.INTEREST') }</th>
+            <th>{translate('INDEX.INTEREST') }</th>
           </tr>
         }
         </thead>
@@ -146,8 +146,7 @@ export const ReceiveCoinRender = function() {
                             <i className="icon md-arrows margin-right-10"></i> { translate('INDEX.GET_NEW_ADDRESS') }
                             <span className="caret"></span>
                           </a>
-                          <ul
-                            className="dropdown-menu dropdown-menu-right">
+                          <ul className="dropdown-menu dropdown-menu-right">
                             <li>
                               <a onClick={ () => this.getNewAddress('public') }>
                                 <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }

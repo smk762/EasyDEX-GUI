@@ -13,7 +13,7 @@ function getNewAddress(coin) { // TODO: remove(?)
     const payload = {
       mode: null,
       chain: coin,
-      cmd: 'getnewaddress'
+      cmd: 'getnewaddress',
     };
 
     const _fetchConfig = {
@@ -21,7 +21,7 @@ function getNewAddress(coin) { // TODO: remove(?)
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload: payload }),
     };
 
     fetch(
@@ -59,7 +59,7 @@ export function setJumblrAddress(coin, type, address) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload: payload }),
     };
 
     fetch(
@@ -97,7 +97,7 @@ function dumpPrivkey(coin, key) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload: payload }),
     };
 
     fetch(
@@ -139,7 +139,7 @@ export function importPrivkey(coin, key) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload: payload }),
     };
 
     fetch(

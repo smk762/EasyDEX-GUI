@@ -16,20 +16,20 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
 
   if (getPassthruAgent(coin) === 'iguana') {
     payload = {
-      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      'agent': getPassthruAgent(coin),
-      'method': 'passthru',
-      'asset': coin,
-      'function': ajaxFunctionInput,
-      'hex': '',
+      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+      agent: getPassthruAgent(coin),
+      method: 'passthru',
+      asset: coin,
+      function: ajaxFunctionInput,
+      hex: '',
     };
   } else {
     payload = {
-      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      'agent': coin,
-      'method': 'passthru',
-      'function': ajaxFunctionInput,
-      'hex': '',
+      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+      agent: coin,
+      method: 'passthru',
+      function: ajaxFunctionInput,
+      hex: '',
     };
   }
 
@@ -37,12 +37,12 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getNewKMDAddresses',
-        'type': 'post',
-        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getNewKMDAddresses',
+        type: 'post',
+        url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -55,7 +55,7 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
       payload = {
         mode: null,
         chain: coin,
-        cmd: payload.function
+        cmd: payload.function,
       };
 
       _fetchConfig = {
@@ -63,7 +63,7 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'payload': payload }),
+        body: JSON.stringify({ payload: payload }),
       };
     }
 
@@ -75,9 +75,9 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -95,9 +95,9 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
       }
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(

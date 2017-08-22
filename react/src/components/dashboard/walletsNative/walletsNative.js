@@ -29,7 +29,7 @@ class WalletsNative extends React.Component {
           case 'run -reindex':
             Store.dispatch(
               triggerToaster(
-                'Restart Agama and run Komodo with -reindex param',
+                translate('TOASTR.RESTART_AGAMA_WITH_REINDEX_PARAM'),
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 'info',
                 false

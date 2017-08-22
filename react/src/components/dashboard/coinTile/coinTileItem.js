@@ -158,11 +158,11 @@ class CoinTileItem extends React.Component {
 
         if (_basiliskMainAddress) {
           Store.dispatch(fetchNewCacheData({
-            'pubkey': _activeHandle.pubkey,
-            'allcoins': false,
-            'coin': coin,
-            'calls': 'listtransactions:getbalance',
-            'address': _basiliskMainAddress,
+            pubkey: _activeHandle.pubkey,
+            allcoins: false,
+            coin: coin,
+            calls: 'listtransactions:getbalance',
+            address: _basiliskMainAddress,
           }));
 
           const _iguanaActiveHandle = setInterval(() => {
@@ -171,11 +171,11 @@ class CoinTileItem extends React.Component {
 
           const _basiliskCache = setInterval(() => {
             Store.dispatch(fetchNewCacheData({
-              'pubkey': _activeHandle.pubkey,
-              'allcoins': false,
-              'coin': this.props.ActiveCoin.coin,
-              'calls': 'listtransactions:getbalance',
-              'address': _basiliskMainAddress,
+              pubkey: _activeHandle.pubkey,
+              allcoins: false,
+              coin: this.props.ActiveCoin.coin,
+              calls: 'listtransactions:getbalance',
+              address: _basiliskMainAddress,
             }));
           }, BASILISK_CACHE_UPDATE_TIMEOUT);
 

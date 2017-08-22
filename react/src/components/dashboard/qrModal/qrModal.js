@@ -34,11 +34,11 @@ class QRModal extends React.Component {
   handleError(err) {
     if (err.name === 'NoVideoInputDevicesError') {
       this.setState({
-        error: 'Error: No video input devices found!',
+        error: translate('DASHBOARD.QR_ERR_NO_VIDEO_DEVICE'),
       });
     } else {
       this.setState({
-        error: 'Error: unknown error!',
+        error: translate('DASHBOARD.QR_ERR_UNKNOWN'),
       });
     }
   }

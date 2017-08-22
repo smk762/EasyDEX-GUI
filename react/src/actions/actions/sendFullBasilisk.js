@@ -12,10 +12,10 @@ import {
 
 export function sendToAddress(coin, _payload) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'coin': coin,
-    'method': 'sendtoaddress',
-    'params': [
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    coin: coin,
+    method: 'sendtoaddress',
+    params: [
       _payload.sendTo,
       _payload.amount,
       'EasyDEX',
@@ -27,12 +27,12 @@ export function sendToAddress(coin, _payload) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'sendToAddress',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'sendToAddress',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -44,9 +44,9 @@ export function sendToAddress(coin, _payload) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -61,9 +61,9 @@ export function sendToAddress(coin, _payload) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(sendToAddressState(json, dispatch));
@@ -73,10 +73,10 @@ export function sendToAddress(coin, _payload) {
 
 export function sendFromAddress(coin, _payload) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'coin': coin,
-    'method': 'sendfrom',
-    'params': [
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    coin: coin,
+    method: 'sendfrom',
+    params: [
       _payload.sendFrom,
       _payload.sendTo,
       _payload.amount,
@@ -89,12 +89,12 @@ export function sendFromAddress(coin, _payload) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'sendFromAddress',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'sendFromAddress',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -106,9 +106,9 @@ export function sendFromAddress(coin, _payload) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -123,9 +123,9 @@ export function sendFromAddress(coin, _payload) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(sendToAddressState(json, dispatch));
@@ -135,31 +135,31 @@ export function sendFromAddress(coin, _payload) {
 
 export function iguanaUTXORawTX(data, dispatch) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'symbol': data.coin,
-    'agent': 'basilisk',
-    'method': 'utxorawtx',
-    'vals': {
-      'timelock': 0,
-      'changeaddr': data.sendfrom,
-      'destaddr': data.sendtoaddr,
-      'txfee': data.txfee,
-      'amount': data.amount,
-      'sendflag': data.sendsig
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    symbol: data.coin,
+    agent: 'basilisk',
+    method: 'utxorawtx',
+    vals: {
+      timelock: 0,
+      changeaddr: data.sendfrom,
+      destaddr: data.sendtoaddr,
+      txfee: data.txfee,
+      amount: data.amount,
+      sendflag: data.sendsig,
     },
-    'utxos': data.utxos,
+    utxos: data.utxos,
   };
 
   return new Promise((resolve, reject) => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'iguanaUTXORawTX',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'iguanaUTXORawTX',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -171,9 +171,9 @@ export function iguanaUTXORawTX(data, dispatch) {
       console.log(error);
       if (Config.debug) {
         dispatch => dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -188,9 +188,9 @@ export function iguanaUTXORawTX(data, dispatch) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       resolve(json);
@@ -200,23 +200,23 @@ export function iguanaUTXORawTX(data, dispatch) {
 
 export function dexSendRawTX(data, dispatch) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'dex',
-    'method': 'sendrawtransaction',
-    'signedtx': data.signedtx,
-    'symbol': data.coin
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'dex',
+    method: 'sendrawtransaction',
+    signedtx: data.signedtx,
+    symbol: data.coin,
   };
 
   return new Promise((resolve, reject) => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'dexSendRawTX',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'dexSendRawTX',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -228,9 +228,9 @@ export function dexSendRawTX(data, dispatch) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -249,9 +249,9 @@ export function dexSendRawTX(data, dispatch) {
     .then(function(json) {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       resolve(json);

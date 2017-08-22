@@ -49,6 +49,7 @@ class Settings extends React.Component {
       debugTarget: 'iguana',
       activeTabHeight: '0',
       appSettings: {},
+      appSettingsTypes: {},
       tabElId: null,
       cliCmdString: '',
       cliCoin: null,
@@ -95,6 +96,14 @@ class Settings extends React.Component {
   componentWillMount() {
     socket.on('patch', msg => this.updateSocketsData(msg));
     window.addEventListener('resize', this.updateTabDimensions);
+
+    /*try {
+      const _window.require('electron').remote.getCurrentWindow().appBasicInfo;
+
+      this.setState(Object.assign({}, this.state, {
+        activeTabHeight: _height,
+      }));
+    } catch(e) {}*/
   }
 
   componentWillUnmount() {
@@ -135,7 +144,7 @@ class Settings extends React.Component {
     const externalWindow = new BrowserWindow({
       width: 1280,
       height: 800,
-      title: 'Loading...',
+      title: `${translate('INDEX.LOADING')}...`,
       icon: remote.getCurrentWindow().iguanaIcon,
     });
 
@@ -178,7 +187,7 @@ class Settings extends React.Component {
             data.msg.progress &&
             data.msg.progress === 100) {
           let _updateLog = [];
-          _updateLog.push('UI update downloaded. Verifying...');
+          _updateLog.push(`${translate('INDEX.UI_UPDATE_DOWNLOADED')}...`);
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
           }));
@@ -187,7 +196,7 @@ class Settings extends React.Component {
 
         if (data.msg.status === 'done') {
           let _updateLog = [];
-          _updateLog.push('UI is updated!');
+          _updateLog.push(translate('INDEX.UI_UPDATED'));
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
             updatePatch: null,
@@ -197,7 +206,7 @@ class Settings extends React.Component {
 
         if (data.msg.status === 'error') {
           let _updateLog = [];
-          _updateLog.push('Error while verifying update file! Please retry again.');
+          _updateLog.push(translate('INDEX.UI_UPDATE_ERROR'));
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
           }));
@@ -218,7 +227,7 @@ class Settings extends React.Component {
 
   _checkForUpdateUIPromise() {
     let _updateLog = [];
-    _updateLog.push('Checking for UI update...');
+    _updateLog.push(translate('INDEX.CHECKING_UI_UPDATE'));
     this.setState(Object.assign({}, this.state, {
       updateLog: _updateLog,
     }));
@@ -226,7 +235,7 @@ class Settings extends React.Component {
     checkForUpdateUIPromise()
     .then((res) => {
       let _updateLog = this.state.updateLog;
-      _updateLog.push(res.result === 'update' ? (`New UI update available ${res.version.remote}`) : 'You have the lastest UI version');
+      _updateLog.push(res.result === 'update' ? (`${translate('INDEX.NEW_UI_UPDATE')} ${res.version.remote}`) : translate('INDEX.YOU_HAVE_LATEST_UI'));
       this.setState(Object.assign({}, this.state, {
         updatePatch: res.result === 'update' ? true : false,
         updateLog: _updateLog,
@@ -237,7 +246,7 @@ class Settings extends React.Component {
   _updateUIPromise() {
     updateProgressBar.patch = 0;
     let _updateLog = [];
-    _updateLog.push('Downloading UI update...');
+    _updateLog.push(`${translate('INDEX.DOWNLOADING_UI_UPDATE')}...`);
     this.setState(Object.assign({}, this.state, {
       updateLog: _updateLog,
     }));
@@ -600,7 +609,7 @@ class Settings extends React.Component {
       return (
         <div>
           <div>
-            <strong>CLI response:</strong>
+            <strong>{ translate('SETTINGS.CLI_RESPONSE') }:</strong>
           </div>
           { _items }
         </div>
@@ -676,7 +685,7 @@ class Settings extends React.Component {
         items.push(
           <tr key={ `wif-export-table-header-${i}` }>
             <td className="padding-bottom-10 padding-top-10">
-              <strong>{ i === 0 ? 'Address list' : 'Wif key list' }</strong>
+              <strong>{ i === 0 ? translate('SETTINGS.ADDRESS_LIST') : translate('SETTINGS.WIF_KEY_LIST') }</strong>
             </td>
             <td className="padding-bottom-10 padding-top-10"></td>
           </tr>

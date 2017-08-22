@@ -639,8 +639,10 @@ export const SettingsRender = function() {
                             <div
                               className="support-box"
                               onClick={ () => this.openExternalWindow('http://support.supernet.org') }>
-                              <img src="assets/images/cryptologo/supernet.png" alt="Support tickets" />
-                              <div className="support-box-title">Support tickets</div>
+                              <img
+                                src="assets/images/cryptologo/supernet.png"
+                                alt="Support tickets" />
+                              <div className="support-box-title">{ translate('SETTINGS.SUPPORT_TICKETS') }</div>
                               <div className="support-box-link">support.supernet.org</div>
                             </div>
                           </div>
@@ -648,7 +650,9 @@ export const SettingsRender = function() {
                             <div
                               className="support-box"
                               onClick={ () => this.openExternalWindow('https://sprnt.slack.com') }>
-                              <img src="assets/images/support/slack-icon.png" alt="Slack" />
+                              <img
+                                src="assets/images/support/slack-icon.png"
+                                alt="Slack" />
                               <div className="support-box-title">Slack</div>
                               <div className="support-box-link">sprnt.slack.com</div>
                             </div>
@@ -657,8 +661,10 @@ export const SettingsRender = function() {
                             <div
                               className="support-box"
                               onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org') }>
-                              <img src="assets/images/support/slack-invite-icon.png" alt="Slack invite" />
-                              <div className="support-box-title">Get Slack invite</div>
+                              <img
+                                src="assets/images/support/slack-invite-icon.png"
+                                alt="Slack invite" />
+                              <div className="support-box-title">{ translate('SETTINGS.GET_SLACK_INVITE') }</div>
                               <div className="support-box-link">slackinvite.supernet.org</div>
                             </div>
                           </div>
@@ -666,7 +672,9 @@ export const SettingsRender = function() {
                             <div
                               className="support-box"
                               onClick={ () => this.openExternalWindow('https://github.com/SuperNETorg/Agama') }>
-                              <img src="assets/images/support/github-icon.png" alt="Github" />
+                              <img
+                                src="assets/images/support/github-icon.png"
+                                alt="Github" />
                               <div className="support-box-title">Github</div>
                               <div className="support-box-link">github.com/SuperNETorg/Agama</div>
                             </div>

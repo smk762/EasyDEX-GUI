@@ -16,12 +16,12 @@ const CoindDownModalRender = function () {
                 onClick={ this.dismiss }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white">{ this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}` } is down!</h4>
+              <h4 className="modal-title white">{ this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}` } { translate('INDEX.IS_DOWN') }!</h4>
             </div>
             <div className="modal-body">
               <div className="vertical-align text-center">
                 <div className="page-content vertical-align-middle">
-                  <strong>Debug.log (last 50 lines)</strong>
+                  <strong>Debug.log ({ translate('INDEX.LAST_50_LINES') })</strong>
                   <div className="form-group form-material floating">
                     <textarea
                       className="form-control"

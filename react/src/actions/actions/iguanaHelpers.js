@@ -18,10 +18,10 @@ export function getPassthruAgent(coin) {
 
 export function iguanaHashHex(data, dispatch) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'hash',
-    'method': 'hex',
-    'message': data,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'hash',
+    method: 'hex',
+    message: data,
   };
 
   return new Promise((resolve, reject) => {
@@ -32,12 +32,12 @@ export function iguanaHashHex(data, dispatch) {
       const _timestamp = Date.now();
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'function': 'iguanaHashHex',
-          'type': 'post',
-          'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-          'payload': payload,
-          'status': 'pending',
+          timestamp: _timestamp,
+          function: 'iguanaHashHex',
+          type: 'post',
+          url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+          payload: payload,
+          status: 'pending',
         }));
       }
 
@@ -49,9 +49,9 @@ export function iguanaHashHex(data, dispatch) {
         console.log(error);
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'error',
-            'response': error,
+            timestamp: _timestamp,
+            status: 'error',
+            response: error,
           }));
         }
         dispatch(
@@ -66,9 +66,9 @@ export function iguanaHashHex(data, dispatch) {
       .then(json => {
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'success',
-            'response': json,
+            timestamp: _timestamp,
+            status: 'success',
+            response: json,
           }));
         }
         resolve(json.hex);

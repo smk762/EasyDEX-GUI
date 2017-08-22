@@ -10,7 +10,7 @@ export function shepherdCliPromise(mode, chain, cmd) {
   const _payload = {
     mode,
     chain,
-    cmd
+    cmd,
   };
 
   return new Promise((resolve, reject) => {
@@ -19,7 +19,7 @@ export function shepherdCliPromise(mode, chain, cmd) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': _payload }),
+      body: JSON.stringify({ payload: _payload }),
     })
     .catch(function(error) {
       console.log(error);
@@ -40,7 +40,7 @@ export function shepherdCli(mode, chain, cmd) {
   const _payload = {
     mode,
     chain,
-    cmd
+    cmd,
   };
 
   return dispatch => {

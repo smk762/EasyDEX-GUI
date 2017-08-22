@@ -79,7 +79,7 @@ class ClaimInterestModal extends React.Component {
       } else if (json.result && json.result.length && json.result.length === 64) {
         Store.dispatch(
           triggerToaster(
-            `Your full balance is sent to address ${this.state.transactionsList[0].address}. Check back your new balance in a few minutes.`,
+            `translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1') ${this.state.transactionsList[0].address}. translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
             false
@@ -90,7 +90,8 @@ class ClaimInterestModal extends React.Component {
   }
 
   checkTransactionsListLength() {
-    if (this.state.transactionsList && this.state.transactionsList.length) {
+    if (this.state.transactionsList &&
+        this.state.transactionsList.length) {
       return true;
     } else if (!this.state.transactionsList || !this.state.transactionsList.length) {
       return false;
@@ -104,7 +105,7 @@ class ClaimInterestModal extends React.Component {
   }
 
   copyTxId(txid) {
-    Store.dispatch(copyString(txid, 'Transaction ID copied'));
+    Store.dispatch(copyString(txid, translate('TOASTR.TXID_COPIED')));
   }
 
   claimInterestTableRender() {

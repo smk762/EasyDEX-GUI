@@ -80,7 +80,7 @@ export const AddressListRender = function() {
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
             <li className="no--hover">
-              <a><span className="text">{ this.props.ActiveCoin.mode === 'basilisk' ? 'Filter by address' : translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
+              <a><span className="text">{ this.props.ActiveCoin.mode === 'basilisk' ? translate('INDEX.FILTER_BY_ADDRESS') : translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
             </li>
             { this.props.ActiveCoin.mode === 'native' &&
               <li className={ !this.state.currentAddress ? 'selected' : '' }>

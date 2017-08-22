@@ -1,7 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import { secondsToString } from '../../../util/time';
-import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
 
 const WalletsTxInfoRender = function(txInfo) {
@@ -55,7 +54,7 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tr>
                               <td>{ translate('TX_INFO.AMOUNT') }</td>
                               <td>
-                                { Config.roundValues ? formatValue('round', txInfo.amount, -10) : txInfo.amount }
+                                { txInfo.amount }
                               </td>
                             </tr>
                             <tr>

@@ -345,8 +345,8 @@ export function getCoinTitle(coin) {
   }
 
   return {
-    'logo': coinlogo,
-    'name': coinname,
+    logo: coinlogo,
+    name: coinname,
     titleBG,
     transparentBG,
   };
@@ -386,8 +386,8 @@ export function getModeInfo(mode) {
   }
 
   return {
-    'code': modecode,
-    'tip': modetip,
-    'color': modecolor
+    code: modecode,
+    tip: modetip,
+    color: modecolor,
   };
 }

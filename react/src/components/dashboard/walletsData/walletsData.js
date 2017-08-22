@@ -58,7 +58,7 @@ class WalletsData extends React.Component {
       showPagination: true,
       searchTerm: null,
       coin: null,
-      txhistory: null
+      txhistory: null,
     };
 
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
@@ -112,7 +112,7 @@ class WalletsData extends React.Component {
         className: 'colum--type',
         headerClassName: 'colum--type',
         footerClassName: 'colum--type',
-        Cell: AddressTypeRender()
+        Cell: AddressTypeRender(),
       });
     }
 
@@ -124,7 +124,7 @@ class WalletsData extends React.Component {
       className: 'colum--direction',
       headerClassName: 'colum--direction',
       footerClassName: 'colum--direction',
-      accessor: (tx) => TxTypeRender.call(this, tx.category || tx.type)
+      accessor: (tx) => TxTypeRender.call(this, tx.category || tx.type),
     },
     {
       Header: translate('INDEX.CONFIRMATIONS'),
@@ -132,19 +132,19 @@ class WalletsData extends React.Component {
       headerClassName: 'hidden-xs hidden-sm',
       footerClassName: 'hidden-xs hidden-sm',
       className: 'hidden-xs hidden-sm',
-      accessor: 'confirmations'
+      accessor: 'confirmations',
     },
     {
       id: 'amount',
       Header: translate('INDEX.AMOUNT'),
       Footer: translate('INDEX.AMOUNT'),
-      accessor: (tx) => TxAmountRender.call(this, tx)
+      accessor: (tx) => TxAmountRender.call(this, tx),
     },
     {
       id: 'timestamp',
       Header: translate('INDEX.TIME'),
       Footer: translate('INDEX.TIME'),
-      accessor: (tx) => secondsToString(tx.blocktime || tx.timestamp || tx.time)
+      accessor: (tx) => secondsToString(tx.blocktime || tx.timestamp || tx.time),
     }
     ]);
 
@@ -152,7 +152,7 @@ class WalletsData extends React.Component {
       columns.push({
         Header: translate('INDEX.DEST_ADDRESS'),
         Footer: translate('INDEX.DEST_ADDRESS'),
-        accessor: 'address'
+        accessor: 'address',
       });
     }
 
@@ -161,7 +161,7 @@ class WalletsData extends React.Component {
         id: 'destination-address',
         Header: translate('INDEX.DEST_ADDRESS'),
         Footer: translate('INDEX.DEST_ADDRESS'),
-        accessor: (tx) => AddressRender.call(this, tx)
+        accessor: (tx) => AddressRender.call(this, tx),
       });
     }
 
@@ -174,7 +174,7 @@ class WalletsData extends React.Component {
       className: 'colum--txinfo',
       headerClassName: 'colum--txinfo',
       footerClassName: 'colum--txinfo',
-      Cell: props => TransactionDetailRender.call(this, props.index)
+      Cell: props => TransactionDetailRender.call(this, props.index),
     });
 
     return columns;
@@ -252,12 +252,12 @@ class WalletsData extends React.Component {
     switch(_mode) {
       case 'basilisk':
         Store.dispatch(fetchNewCacheData({
-          'pubkey': this.props.Dashboard.activeHandle.pubkey,
-          'allcoins': false,
-          'coin': _coin,
-          'calls': 'listtransactions',
-          'skip': true,
-          'address': this.state.currentAddress,
+          pubkey: this.props.Dashboard.activeHandle.pubkey,
+          allcoins: false,
+          coin: _coin,
+          calls: 'listtransactions',
+          skip: true,
+          address: this.state.currentAddress,
         }));
         break;
       case 'native':
@@ -271,21 +271,21 @@ class WalletsData extends React.Component {
 
   removeAndFetchNewCache() {
     Store.dispatch(deleteCacheFile({
-      'pubkey': this.props.Dashboard.activeHandle.pubkey,
-      'allcoins': false,
-      'coin': this.props.ActiveCoin.coin,
-      'calls': 'listtransactions:getbalance',
-      'address': this.state.currentAddress,
+      pubkey: this.props.Dashboard.activeHandle.pubkey,
+      allcoins: false,
+      coin: this.props.ActiveCoin.coin,
+      calls: 'listtransactions:getbalance',
+      address: this.state.currentAddress,
     }));
   }
 
   _fetchUtxoCache() {
     Store.dispatch(fetchUtxoCache({
-      'pubkey': this.props.Dashboard.activeHandle.pubkey,
-      'allcoins': false,
-      'coin': this.props.ActiveCoin.coin,
-      'calls': 'refresh',
-      'address': this.state.currentAddress,
+      pubkey: this.props.Dashboard.activeHandle.pubkey,
+      allcoins: false,
+      coin: this.props.ActiveCoin.coin,
+      calls: 'refresh',
+      address: this.state.currentAddress,
     }));
   }
 
@@ -297,20 +297,20 @@ class WalletsData extends React.Component {
 
   basiliskRefreshAction() {
     Store.dispatch(fetchNewCacheData({
-      'pubkey': this.props.Dashboard.activeHandle.pubkey,
-      'allcoins': false,
-      'coin': this.props.ActiveCoin.coin,
-      'calls': 'listtransactions:getbalance',
+      pubkey: this.props.Dashboard.activeHandle.pubkey,
+      allcoins: false,
+      coin: this.props.ActiveCoin.coin,
+      calls: 'listtransactions:getbalance',
     }));
   }
 
   basiliskRefreshActionOne() {
     Store.dispatch(fetchNewCacheData({
-      'pubkey': this.props.Dashboard.activeHandle.pubkey,
-      'allcoins': false,
-      'coin': this.props.ActiveCoin.coin,
-      'calls': 'listtransactions:getbalance',
-      'address': this.props.ActiveCoin.activeAddress,
+      pubkey: this.props.Dashboard.activeHandle.pubkey,
+      allcoins: false,
+      coin: this.props.ActiveCoin.coin,
+      calls: 'listtransactions:getbalance',
+      address: this.props.ActiveCoin.activeAddress,
     }));
   }
 
@@ -408,7 +408,7 @@ class WalletsData extends React.Component {
       } else {
         return (
           <tr className="hover--none">
-            <td colSpan="7">Synchronization is in progress...</td>
+            <td colSpan="7">{ translate('INDEX.SYNC_IN_PROGRESS') }...</td>
           </tr>
         );
       }
@@ -452,11 +452,11 @@ class WalletsData extends React.Component {
       }, 100);
 
       Store.dispatch(fetchNewCacheData({
-        'pubkey': this.props.Dashboard.activeHandle.pubkey,
-        'allcoins': false,
-        'coin': this.props.ActiveCoin.coin,
-        'calls': 'listtransactions:getbalance',
-        'address': address,
+        pubkey: this.props.Dashboard.activeHandle.pubkey,
+        allcoins: false,
+        coin: this.props.ActiveCoin.coin,
+        calls: 'listtransactions:getbalance',
+        address: address,
       }));
     }
   }
@@ -563,7 +563,7 @@ class WalletsData extends React.Component {
       );
     } else {
       return (
-        <span>Filter by address</span>
+        <span>{ translate('INDEX.FILTER_BY_ADDRESS') }</span>
       );
     }
   }
@@ -587,7 +587,7 @@ class WalletsData extends React.Component {
   onSearchTermChange(newSearchTerm) {
     this.setState(Object.assign({}, this.state, {
       searchTerm: newSearchTerm,
-      filteredItemsList: this.filterTransactions(this.state.itemsList, newSearchTerm)
+      filteredItemsList: this.filterTransactions(this.state.itemsList, newSearchTerm),
     }));
   }
 

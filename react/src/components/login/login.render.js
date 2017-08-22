@@ -26,7 +26,7 @@ const LoginRender = function () {
                 className="login-settings-dropdown-trigger"
                 onClick={ this.toggleLoginSettingsDropdown }>
                 <i className="icon fa-cogs"></i>&nbsp;
-                <span className="login-settings-dropdown-label">Quick access</span>
+                <span className="login-settings-dropdown-label">{ translate('LOGIN.QUICK_ACCESS') }</span>
               </span>
             </div>
             <div>
@@ -47,36 +47,6 @@ const LoginRender = function () {
                   </a>
                 </li>
               </ul>
-            </div>
-          </div>
-
-          <div className={ this.state.activeLoginSection === 'ieWarning' ? 'show' : 'hide' }>
-            <div className="panel">
-              <div className="panel-heading">
-                <h3 className="panel-title">
-                  { translate('INDEX.UNSUPPORTED_BROWSER') }
-                </h3>
-              </div>
-              <div className="alert alert-danger alert-dismissible">
-                <button type="button">
-                  <span>&times;</span>
-                  <span className="sr-only">
-                    { translate('INDEX.CLOSE') }
-                  </span>
-                </button>
-                { translate('INDEX.IE_UNSUPPORTED') }
-              </div>
-              <div className="panel-body">
-                <p className="browser-usage-container">
-                  { translate('INDEX.PLEASE_USE') } <a href="https://www.google.com/chrome/">Google Chrome</a> { translate('INDEX.OR') } <a href="https://www.firefox.com">Mozilla FireFox</a> { translate('INDEX.TO_USE') } EasyDEX-GUI. { translate('INDEX.PLEASE_CLICK_ON') }.
-                </p>
-                <div className="col-sm-6 col-xs-6">
-                  <a href="https://www.google.com/chrome/"><img className="brand-img" src="assets/images/browsers/chrome.png" alt="Google Chrome" /></a>
-                </div>
-                <div className="col-sm-6 col-xs-6">
-                  <a href="https://www.firefox.com"><img className="brand-img" src="assets/images/browsers/firefox.png" alt="Mozilla FireFox" /></a>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -232,8 +202,7 @@ const LoginRender = function () {
                   id="walletseed"
                   value={ this.state.randomSeed }
                   onChange={ (e) => this.updateWalletSeed(e) }
-                  readOnly={ !this.isCustomWalletSeed() }
-                ></textarea>
+                  readOnly={ !this.isCustomWalletSeed() }></textarea>
                 <button className="copy-floating-label"
                   htmlFor="walletseed"
                   onClick={ () => this.copyPassPhraseToClipboard() }>{ translate('INDEX.COPY') }</button>
