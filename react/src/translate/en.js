@@ -633,6 +633,11 @@ export const _lang = {
       'ENTER_AN_ADDRESS': 'Enter an address',
       'YOU_PICKED_OPT': 'You picked option',
       'PLEASE_WAIT': 'Please wait',
+      'SEND_TO_ADDRESS_MIN_LENGTH': 'Send to address must be at least 34 characters long',
+      'AMOUNT_POSITIVE_NUMBER': 'Amount must be a positive number',
+      'FEE_POSITIVE_NUMBER': 'Fee must be a positive number',
+      'TOTAL_AMOUNT_POSITIVE_NUMBER': 'Total amount (amount - fee) must be a positive number',
+      'INSUFFICIENT_FUNDS': 'You don\'t have the necessary funds to make this transaction',
     },
     'FIAT_CURRENCIES': {
       'AUD': 'Australian Dollar (AUD)',

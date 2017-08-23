@@ -29,8 +29,8 @@ import {
   SendCoinRender
 } from './sendCoin.render';
 
-import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
+import { isPositiveNumber } from '../../../util/number';
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 // TODO: prevent any cache updates rather than utxo while on send coin form
@@ -378,6 +378,12 @@ class SendCoin extends React.Component {
         totalStackLength: 0,
         utxoMethodInProgress: false,
       });
+    }
+
+    if (step === 1) {
+      if (!this.validateSendFormData()) {
+        return;
+      }
     }
 
     if (step === 1 ||
@@ -755,6 +761,106 @@ class SendCoin extends React.Component {
     }
 
     return null;
+  }
+
+  // TODO same as in walletsNav and receiveCoin, find a way to reuse it?
+  checkTotalBalance() {
+    let _balance = '0';
+    const _mode = this.props.ActiveCoin.mode;
+
+    if (_mode === 'full') {
+      _balance = this.props.ActiveCoin.balance || 0;
+    } else if (_mode === 'basilisk') {
+      if (this.props.ActiveCoin.cache) {
+        const _cache = this.props.ActiveCoin.cache;
+        const _coin = this.props.ActiveCoin.coin;
+        const _address = this.props.ActiveCoin.activeAddress;
+
+        if (_address &&
+          _cache[_coin] &&
+          _cache[_coin][_address] &&
+          _cache[_coin][_address].getbalance &&
+          _cache[_coin][_address].getbalance.data &&
+          (_cache[_coin][_address].getbalance.data.balance ||
+            _cache[_coin][_address].getbalance.data.interest)) {
+          const _regBalance = _cache[_coin][_address].getbalance.data.balance ? _cache[_coin][_address].getbalance.data.balance : 0;
+          const _regInterest = _cache[_coin][_address].getbalance.data.interest ? _cache[_coin][_address].getbalance.data.interest : 0;
+
+          _balance = _regBalance + _regInterest;
+        }
+      }
+    } else if (_mode === 'native') {
+      if (this.props.ActiveCoin.balance &&
+        this.props.ActiveCoin.balance.total) {
+        _balance = this.props.ActiveCoin.balance.total;
+      }
+    }
+
+    return +_balance;
+  }
+
+  validateSendFormData() {
+    let valid = true;
+    if (!this.state.sendTo || this.state.sendTo.length < 34) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.SEND_TO_ADDRESS_MIN_LENGTH'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (!isPositiveNumber(this.state.amount)) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.AMOUNT_POSITIVE_NUMBER'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (!isPositiveNumber(this.state.fee)) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.FEE_POSITIVE_NUMBER'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (!isPositiveNumber(this.getTotalAmount())) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.TOTAL_AMOUNT_POSITIVE_NUMBER'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (this.state.amount > this.checkTotalBalance()) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.INSUFFICIENT_FUNDS'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  getTotalAmount() {
+    return Number(this.state.amount) - Number(this.state.fee);
   }
 
   render() {
