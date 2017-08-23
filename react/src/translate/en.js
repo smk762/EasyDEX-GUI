@@ -574,6 +574,7 @@ export const _lang = {
       'JUMBLR_MOTTO': 'Secure, Native and Decentralised Coin Anonymizer',
     },
     'SETTINGS': {
+      'PROGRESS': 'Progress',
       'SUPPORT_TICKETS': 'Support tickets',
       'GET_SLACK_INVITE': 'Get Slack invite',
       'ADDRESS_LIST': 'Address list',

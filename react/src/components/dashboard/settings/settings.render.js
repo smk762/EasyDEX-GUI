@@ -540,7 +540,7 @@ export const SettingsRender = function() {
                             </tbody>
                           </table>
                         </div>
-                        <div className="col-sm-12 col-xs-12 text-align-center padding-top-25 padding-bottom-25">
+                        <div className="col-sm-12 col-xs-12 text-align-center padding-top-35 padding-bottom-30">
                           <button
                             type="button"
                             className="btn btn-primary waves-effect waves-light"

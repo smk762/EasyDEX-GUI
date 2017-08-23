@@ -1056,3 +1056,21 @@ select{
     }
   }
 }
+
+.settings-help {
+  font-size: 20px;
+  position: relative;
+  top: 2px;
+  left: 10px;
+  color: #5683ad;
+}
+
+#SettingsAccordion {
+  .toggle {
+    position: relative;
+    top: 4px;
+  }
+  table {
+    width: 80%;
+  }
+}

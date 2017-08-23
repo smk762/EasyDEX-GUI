@@ -49,7 +49,7 @@ class Settings extends React.Component {
       debugTarget: 'iguana',
       activeTabHeight: '0',
       appSettings: {},
-      appSettingsTypes: {},
+      appConfigSchema: {},
       tabElId: null,
       cliCmdString: '',
       cliCoin: null,
@@ -67,7 +67,7 @@ class Settings extends React.Component {
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
-    this.updateInputSettings = this.updateInputSettings.bind(this);
+    // this.updateInputSettings = this.updateInputSettings.bind(this);
     this.importWifKey = this.importWifKey.bind(this);
     this.readDebugLog = this.readDebugLog.bind(this);
     this.checkNodes = this.checkNodes.bind(this);
@@ -97,13 +97,17 @@ class Settings extends React.Component {
     socket.on('patch', msg => this.updateSocketsData(msg));
     window.addEventListener('resize', this.updateTabDimensions);
 
-    /*try {
-      const _window.require('electron').remote.getCurrentWindow().appBasicInfo;
+    try {
+      const _appConfigSchema = window.require('electron').remote.getCurrentWindow().appConfigSchema;
+      const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : window.require('electron').remote.getCurrentWindow().appConfig;
 
       this.setState(Object.assign({}, this.state, {
-        activeTabHeight: _height,
+        appConfigSchema: _appConfigSchema,
+        appSettings: _appSettings,
       }));
-    } catch(e) {}*/
+
+      console.warn(_appSettings);
+    } catch(e) {}
   }
 
   componentWillUnmount() {
@@ -120,6 +124,7 @@ class Settings extends React.Component {
     if (!this.props.disableWalletSpecificUI) {
       Store.dispatch(iguanaActiveHandle());
     }
+
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
   }
@@ -268,7 +273,7 @@ class Settings extends React.Component {
       return (
         <div style={{ minHeight: '200px' }}>
           <hr />
-          <h5>Progress:</h5>
+          <h5>{ translate('SETTINGS.PROGRESS') }:</h5>
           <div className="padding-bottom-15">{ items }</div>
           <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
             <div
@@ -416,9 +421,18 @@ class Settings extends React.Component {
     }
   }
 
-  updateInputSettings(e) {
+  updateInputSettings(e, parentKey, childKey) {
+    console.warn(parentKey + ' | ' + childKey);
     let _appSettings = this.state.appSettings;
-    _appSettings[e.target.name] = e.target.value;
+    console.warn(this.state.appSettings);
+
+    if (!childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
+      _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
+    } else if (childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
+      _appSettings[parentKey][childKey] = typeof _appSettings[parentKey][childKey] !== undefined ? !_appSettings[parentKey][childKey] : !this.state.appSettings[parentKey][childKey];
+    } else {
+      _appSettings[e.target.name] = e.target.value;
+    }
 
     this.setState({
       appSettings: _appSettings,
@@ -443,50 +457,111 @@ class Settings extends React.Component {
 
   renderConfigEditForm() {
     let items = [];
-    const _appConfig = this.props.Settings.appSettings;
+    const _appConfig = this.state.appSettings;
 
     for (let key in _appConfig) {
       if (typeof _appConfig[key] === 'object') {
-        items.push(
-          <tr key={ `app-settings-${key}` }>
-            <td className="padding-15">
-              { key }
-            </td>
-            <td className="padding-15"></td>
-          </tr>
-        );
-
-        for (let _key in _appConfig[key]) {
+        if (this.state.appConfigSchema[key].display) {
           items.push(
-            <tr key={ `app-settings-${key}-${_key}` }>
-              <td className="padding-15 padding-left-30">
-                { _key }
+            <tr key={ `app-settings-${key}` }>
+              <td className="padding-15">
+                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
+                { this.state.appConfigSchema[key].info &&
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    title={ this.state.appConfigSchema[key].info }></i>
+                }
+              </td>
+              <td className="padding-15"></td>
+            </tr>
+          );
+
+          for (let _key in _appConfig[key]) {
+            items.push(
+              <tr key={ `app-settings-${key}-${_key}` }>
+                <td className="padding-15 padding-left-30">
+                  { this.state.appConfigSchema[key][_key].displayName ? this.state.appConfigSchema[key][_key].displayName : _key }
+                  { this.state.appConfigSchema[key][_key].info &&
+                    <i
+                      className="icon fa-question-circle settings-help"
+                      title={ this.state.appConfigSchema[key][_key].info }></i>
+                  }
+                </td>
+                <td className="padding-15">
+                  { this.state.appConfigSchema[key][_key].type === 'number' &&
+                    <input
+                      type="number"
+                      pattern="[0-9]*"
+                      type="text"
+                      name={ `${key}__${_key}` }
+                      defaultValue={ _appConfig[key][_key] }
+                      onChange={ this.updateInputSettings } />
+                  }
+                  { this.state.appConfigSchema[key][_key].type === 'boolean' &&
+                    <span className="pointer toggle">
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          name={ `${key}__${_key}` }
+                          value={ _appConfig[key] }
+                          checked={ _appConfig[key][_key] } />
+                        <div
+                          className="slider"
+                          onClick={ (event) => this.updateInputSettings(event, key, _key) }></div>
+                      </label>
+                    </span>
+                  }
+                </td>
+              </tr>
+            );
+          }
+        }
+      } else {
+        if (this.state.appConfigSchema[key].display) {
+          items.push(
+            <tr key={ `app-settings-${key}` }>
+              <td className="padding-15">
+                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
+                { this.state.appConfigSchema[key].info &&
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    title={ this.state.appConfigSchema[key].info }></i>
+                }
               </td>
               <td className="padding-15">
-                <input
-                  type="text"
-                  name={ `${key}__${_key}` }
-                  defaultValue={ _appConfig[key][_key] }
-                  onChange={ this.updateInputSettings } />
+                { this.state.appConfigSchema[key].type === 'number' &&
+                  <input
+                    type="number"
+                    pattern="[0-9]*"
+                    name={ `${key}` }
+                    defaultValue={ _appConfig[key] }
+                    onChange={ this.updateInputSettings } />
+                }
+                { this.state.appConfigSchema[key].type === 'string' &&
+                  <input
+                    type="text"
+                    name={ `${key}` }
+                    defaultValue={ _appConfig[key] }
+                    onChange={ this.updateInputSettings } />
+                }
+                { this.state.appConfigSchema[key].type === 'boolean' &&
+                  <span className="pointer toggle">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        name={ `${key}` }
+                        value={ _appConfig[key] }
+                        checked={ _appConfig[key] } />
+                      <div
+                        className="slider"
+                        onClick={ (event) => this.updateInputSettings(event, key) }></div>
+                    </label>
+                  </span>
+                }
               </td>
             </tr>
           );
         }
-      } else {
-        items.push(
-          <tr key={ `app-settings-${key}` }>
-            <td className="padding-15">
-              { key }
-            </td>
-            <td className="padding-15">
-              <input
-                type="text"
-                name={ `${key}` }
-                defaultValue={ _appConfig[key] }
-                onChange={ this.updateInputSettings } />
-            </td>
-          </tr>
-        );
       }
     }
 
