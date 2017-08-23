@@ -74,14 +74,12 @@ export const JumblrRender = function() {
                 <span>×</span>
               </button>
               <span className="jumblr-header">
-                <i className="icon fa-paw"></i> About Jumblr
+                <i className="icon fa-paw"></i> { translate('JUMBLR.ABOUT') }
               </span>
               <br />
+              <p>{ translate('JUMBLR.JUMBLR_FUNCTIONS') }</p>
               <p>
-                Jumblr functions all locally which means no middle man is required to jumble your funds. You take control over the whole process.
-              </p>
-              <p>
-                <strong>Tip:</strong> to achive maximum anonimity setup Jumblr node on a dedicated piece of hardware (laptop or VPS), use a separate IP address for main Jumblr node.
+                <strong>{ translate('JUMBLR.TIP') }:</strong> { translate('JUMBLR.TIP_DESC') }.
               </p>
             </div>
           </div>
@@ -106,7 +104,7 @@ export const JumblrRender = function() {
                 <span
                   className="labelauty-unchecked"
                   style={{ display: this.state.jumblrMode === 'public' ? 'none' : 'inline-block' }}>
-                    Public node
+                    { translate('JUMBLR.PUBLIC_NODE') }
                 </span>
                 <span
                   className="labelauty-checked-image"
@@ -114,7 +112,7 @@ export const JumblrRender = function() {
                 <span
                   className="labelauty-checked"
                   style={{ display: this.state.jumblrMode === 'public' ? 'inline-block' : 'none' }}>
-                    Public node
+                    { translate('JUMBLR.PUBLIC_NODE') }
                 </span>
               </label>
             </div>
@@ -138,7 +136,7 @@ export const JumblrRender = function() {
                 <span
                   className="labelauty-unchecked"
                   style={{ display: this.state.jumblrMode === 'private' ? 'none' : 'inline-block' }}>
-                    Private node
+                    { translate('JUMBLR.PRIVATE_NODE') }
                 </span>
                 <span
                   className="labelauty-checked-image"
@@ -146,7 +144,7 @@ export const JumblrRender = function() {
                 <span
                   className="labelauty-checked"
                   style={{ display: this.state.jumblrMode === 'private' ? 'inline-block' : 'none' }}>
-                    Private node
+                    { translate('JUMBLR.PRIVATE_NODE') }
                 </span>
               </label>
             </div>
@@ -166,30 +164,22 @@ export const JumblrRender = function() {
                   <li
                     className={ this.state.activeTab === 0 ? 'active' : '' }
                     onClick={ () => this.openTab(0) }>
-                    <a>
-                      { translate('JUMBLR.USING_JUMBLR') }
-                    </a>
+                    <a>{ translate('JUMBLR.USING_JUMBLR') }</a>
                   </li>
                   <li
                     className={ this.state.activeTab === 1 ? 'active' : '' }
                     onClick={ () => this.openTab(1) }>
-                    <a>
-                      Deposit address
-                    </a>
+                    <a>{ translate('JUMBLR.DEPOSIT_ADDRESS') }</a>
                   </li>
                   <li
                     className={ this.state.activeTab === 2 ? 'active' : '' }
                     onClick={ () => this.openTab(2) }>
-                    <a>
-                      Secret address
-                    </a>
+                    <a>{ translate('JUMBLR.SECRET_ADDRESS') }</a>
                   </li>
                   <li
                     className={ this.state.activeTab === 3 ? 'active' : '' }
                     onClick={ () => this.openTab(3) }>
-                    <a>
-                      Deposit funds
-                    </a>
+                    <a>{ translate('JUMBLR.DEPOSIT_FUNDS') }</a>
                   </li>
                 </ul>
                 <div className="tab-content padding-20">
@@ -197,12 +187,12 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                      onClick={ () => this.openTab(1) }>Next</button>
-                    <h5>How to use Jumblr</h5>
+                      onClick={ () => this.openTab(1) }>{ translate('INDEX.NEXT') }</button>
+                    <h5>{ translate('JUMBLR.HOW_TO_USE') }</h5>
                     <ul>
-                      <li>Create deposit address</li>
-                      <li>Create secret address</li>
-                      <li>Send funds to deposit address</li>
+                      <li>{ translate('JUMBLR.CREATE_DEPOSIT_ADDRESS') }</li>
+                      <li>{ translate('JUMBLR.CREATE_SECRET_ADDRESS') }</li>
+                      <li>{ translate('JUMBLR.SEND_FUNDS_TO_DEPOSIT') }</li>
                       <li>{ translate('JUMBLR.KEEP_WALLET_OPEN') }</li>
                       <li>{ translate('JUMBLR.IMPORTANT_FUNDS') }</li>
                       <li>{ translate('JUMBLR.LARGE_LOT') }</li>
@@ -216,7 +206,7 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light btn-next"
-                      onClick={ () => this.openTab(2) }>Next</button>
+                      onClick={ () => this.openTab(2) }>{ translate('INDEX.NEXT') }</button>
                     <h5>{ translate('JUMBLR.FEW_SECURITY_NOTES') }</h5>
                     <div className="col-xs-12 nofloat">
                       <ul className="padding-bottom-20">
@@ -231,15 +221,15 @@ export const JumblrRender = function() {
                       <div className="padding-bottom-30">
                         <div className="padding-bottom-20">
                           <p>
-                            <strong>Please write down your Jumblr passphrase and keept it safe.</strong>
+                            <strong>{ translate('JUMBLR.PLEASE_WRITE_DOWN_PASSPHRASE') }</strong>
                           </p>
-                          <p>This is your main recovery passphrase.</p>
-                          <p>All Jumblr addresses can be regenrated based on it.</p>
+                          <p>{ translate('JUMBLR.THIS_IS_YOUR_MAIN_RECOVERY') }</p>
+                          <p>{ translate('JUMBLR.ALL_JUMBLR_ADDRESSES_CAN_BE') }</p>
                           <p>
-                            <strong>Tip:</strong> do not use smart editors to store your passphrase as they tend to add extra characters.<br />This may result in passphrase mismatch with the original passphrase.
+                            <strong>{ translate('JUMBLR.TIP') }:</strong> { translate('JUMBLR.DONT_USE_SMART_EDITORS') }
                           </p>
                         </div>
-                        <label>Passphrase</label>
+                        <label>{ translate('INDEX.PASSPHRASE') }</label>
                         <input
                           type="text"
                           className="form-control"
@@ -257,10 +247,10 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-info waves-effect waves-light"
-                      onClick={ this.generateJumblrDepositAddress }>Create Jumblr deposit address</button>
+                      onClick={ this.generateJumblrDepositAddress }>{ translate('JUMBLR.CREATE_JUMBLR_DEPOSIT_ADDRESS') }</button>
                     { this.state.jumblrDepositAddress && this.state.jumblrDepositAddress.address &&
                       <div className="padding-top-40">
-                        <strong>Your Jumblr deposit address:</strong>
+                        <strong>{ translate('JUMBLR.YOUR_JUMBLR_DEPOSIT_ADDRESS') }:</strong>
                         <p>
                           { this.state.jumblrDepositAddress.address }
                           <button
@@ -286,12 +276,12 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                      onClick={ () => this.openTab(3) }>Next</button>
-                    <p>Jumblr secret addresses are used for the final z -> t transactions.</p>
-                    <p>In order to allow larger accounts to obtain privacy, up to 777 secret addresses are supported.</p>
-                    <p>Whenever a z -> t stage is activated, a random secret address from the list of the then active secret addresses is selected.</p>
-                    <p>To add a new set of secret addresses enter address count below. The passphrase below is exactly the same you saw on the previous step.</p>
-                    <p>Your Jumblr secret address recovery passphrase will have the following pattern <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer XXX</code>. Where XXX any number from 001 to 777.</p>
+                      onClick={ () => this.openTab(3) }>{ translate('INDEX.NEXT') }</button>
+                    <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P1') }</p>
+                    <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P2') }</p>
+                    <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P3') }</p>
+                    <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P4') }</p>
+                    <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P5') } <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer XXX</code>. { translate('JUMBLR.JUMBLR_SECRET_DESC_P6') }.</p>
 
                     { this.state.jumblrDepositAddressPBased &&
                       <div className="padding-bottom-20 padding-top-20">
@@ -310,7 +300,7 @@ export const JumblrRender = function() {
                         </button>
                       </div>
                     }
-                    <div className="col-xs-2 nofloat padding-top-30">Number of secret addresses</div>
+                    <div className="col-xs-2 nofloat padding-top-30">{ translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }</div>
                     <div className="col-xs-2 nofloat padding-left-10">
                       <input
                         type="text"
@@ -326,7 +316,7 @@ export const JumblrRender = function() {
                       <button
                         type="button"
                         className="btn btn-info waves-effect waves-light"
-                        onClick={ this.generateJumblrSecretAddress }>Create Jumblr secret address(es)</button>
+                        onClick={ this.generateJumblrSecretAddress }>{ translate('JUMBLR.CREATE_JUMBLR_SECRET_ADDR') }</button>
                     </div>
                     <div className="toggle-box padding-top-20">
                       <span className="pointer">
@@ -341,7 +331,7 @@ export const JumblrRender = function() {
                         <div
                           className="toggle-label"
                           onClick={ () => this.toggle('jumblrSecretAddressShow') }>
-                            Show address list
+                            { translate('JUMBLR.SHOW_ADDRESS_LIST') }
                         </div>
                       </span>
                     </div>
@@ -351,7 +341,7 @@ export const JumblrRender = function() {
                           <thead>
                             <tr>
                               <td>
-                                <strong>Address</strong>
+                                <strong>{ translate('INDEX.ADDRESS') }</strong>
                               </td>
                               <td>
                                 <strong>Wif</strong>
@@ -366,8 +356,8 @@ export const JumblrRender = function() {
                     </div>
                   </div>
                   <div className={ 'tab-pane' + (this.state.activeTab === 3 ? ' active' : '') }>
-                    <p>Use the form below to send funds to your jumblr deposit address.</p>
-                    <p className="padding-bottom-20">You can also send funds to deposit address from an external service or another wallet.</p>
+                    <p>{ translate('JUMBLR.DEPOSIT_FORM_P1') }</p>
+                    <p className="padding-bottom-20">{ translate('JUMBLR.DEPOSIT_FORM_P2') }</p>
                     <WalletsNativeSend
                       {...this.props}
                       renderFormOnly="true"
@@ -382,16 +372,12 @@ export const JumblrRender = function() {
                   <li
                     className={ this.state.activeTab === 0 ? 'active' : '' }
                     onClick={ () => this.openTab(0) }>
-                    <a>
-                      Import secret address
-                    </a>
+                    <a>{ translate('JUMBLR.IMPORT_SECRET_ADDRESS') }</a>
                   </li>
                   <li
                     className={ this.state.activeTab === 1 ? 'active' : '' }
                     onClick={ () => this.openTab(1) }>
-                    <a>
-                      Check funds
-                    </a>
+                    <a>{ translate('JUMBLR.CHECK_FUNDS') }</a>
                   </li>
                 </ul>
                 <div className="tab-content padding-20">
@@ -399,16 +385,16 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                      onClick={ () => this.openTab(1) }>Next</button>
+                      onClick={ () => this.openTab(1) }>{ translate('INDEX.NEXT') }</button>
                     <div className="col-xlg-12 col-md-12 nofloat">
-                      <p>Enter your Jumblr passphrase you got previously during Public node configuration to import secret address.</p>
-                      <p>Passphrase example: <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer</code>.</p>
-                      <p>The form below will "regenerate" Jumblr secret address based on passphrase provided.</p>
-                      <p>After this final step expect to see funds processed and credited to your address after 2 days period.</p>
+                      <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P1') }</p>
+                      <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P2') }: <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer</code>.</p>
+                      <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P3') }</p>
+                      <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P4') }</p>
 
                       { this.state.jumblrDepositAddressPBased &&
                         <div className="padding-bottom-20 padding-top-20">
-                          <label>Passphrase</label>
+                          <label>{ translate('INDEX.PASSPHRASE') }</label>
                           <input
                             type="text"
                             className="form-control"
@@ -417,7 +403,7 @@ export const JumblrRender = function() {
                             value={ this.state.jumblrPassphraseImport } />
                         </div>
                       }
-                      <div className="col-xs-2 nofloat padding-top-30">Number of secret addresses</div>
+                      <div className="col-xs-2 nofloat padding-top-30">{ translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }</div>
                       <div className="col-xs-2 nofloat padding-left-10">
                         <input
                           type="text"
@@ -433,7 +419,7 @@ export const JumblrRender = function() {
                         <button
                           type="button"
                           className="btn btn-info waves-effect waves-light"
-                          onClick={ this.importJumblrSecretAddress }>Import Jumblr secret address(es)</button>
+                          onClick={ this.importJumblrSecretAddress }>{ translate('JUMBLR.IMPORT_JUMLR_SECRET_ADDRESSES') }</button>
                       </div>
                       <div className="toggle-box padding-top-20">
                         <span className="pointer">
@@ -448,7 +434,7 @@ export const JumblrRender = function() {
                           <div
                             className="toggle-label"
                             onClick={ () => this.toggle('jumblrSecretAddressShowImport') }>
-                              Show address list
+                              { translate('JUMBLR.SHOW_ADDRESS_LIST') }
                           </div>
                         </span>
                       </div>
@@ -458,7 +444,7 @@ export const JumblrRender = function() {
                             <thead>
                               <tr>
                                 <td>
-                                  <strong>Address</strong>
+                                  <strong>{ translate('INDEX.ADDRESS') }</strong>
                                 </td>
                                 <td>
                                   <strong>Wif</strong>

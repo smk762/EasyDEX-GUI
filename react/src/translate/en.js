@@ -1,5 +1,34 @@
 export const _lang = {
   'EN': {
+    'CLAIM_INTEREST': {
+      'REQ_P1': 'Requirements to accrue interest',
+      'REQ_P2': 'locktime field is set and amount is greater than',
+      'CLAIM_INTEREST': 'Claim interest',
+      'LOADING': 'Loading interest data',
+      'NO_DATA': 'No data'
+    },
+    'ABOUT': {
+      'ABOUT_AGAMA': 'About Agama',
+      'AGAMA_MODES': 'Agama Wallet is a desktop app that you can use to manage multiple cryptocurrency wallets. ' +
+                     'When you set up a wallet, you can configure it to operate in one of the following modes:',
+      'BASILISK_MODE_DESC': 'Doesn\'t download the blockchain. Slightly slower transaction performance.',
+      'FULL_MODE_DESC': 'Downloads the full blockchain, which can take a while. Good transaction performance.',
+      'NATIVE_MODE_DESC': 'Only available for a few currencies. Like \'Full Mode\' but provides advanced functionality.',
+      'AGAMA_CAPABILITIES': 'Agama includes the following capabilities:',
+      'BARTER_DEX_DESC': 'Easily exchange cryptocurrencies via a shapeshift-like service.',
+      'ATOMIC_EXPLORER_DESC': 'A universal local explorer ensures you don\'t have query information from a centralized server.',
+      'AGAMA_NOTE': 'Note: Agama Wallet is still in development. ' +
+                    'It is safe to use, but you should make proper backups. ' +
+                    'We do not recommend using it as the primarily wallet for your cryptocurrencies.',
+      'TESTERS': 'Testers',
+      'TESTERS_P1': 'You can help us test Agama. Just',
+      'TESTERS_P2': 'download and install the latest release',
+      'TESTERS_P3': 'Then, report any bugs you encounter to our developers on the',
+      'TESTERS_P4': 'Your help is greatly appreciated!',
+      'AGAMA_DAPPS': 'Agama also supports the following desktop apps:',
+      'JUMBLR_DESC': 'A decentralized Bitcoin blockchain tumbler for privacy and lower fees.',
+      'BARTER_DEX_DESC_ALT': 'A decentralized coin exchange.',
+    },
     'API': {
       'ERROR_SM': 'error',
       'ATOMIC_EXPLORER_ERR': 'Atomic Explorer error',
@@ -17,6 +46,24 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'T_FUNDS': 'Transparent funds',
+      'HASH': 'Hash',
+      'SYNC_IN_PROGRESS': 'Synchronization is in progress',
+      'UI_UPDATE_DOWNLOADED': 'UI update downloaded. Verifying',
+      'UI_UPDATED': 'UI is updated!',
+      'UI_UPDATE_ERROR': 'Error while verifying update file! Please retry again.',
+      'CHECKING_UI_UPDATE': 'Checking for UI update',
+      'NEW_UI_UPDATE': 'New UI update available',
+      'YOU_HAVE_LATEST_UI': 'You have the lastest UI version',
+      'DOWNLOADING_UI_UPDATE': 'Downloading UI update',
+      'LAST_50_LINES': 'last 50 lines',
+      'IS_DOWN': 'is down',
+      'REINDEX': 'reindex',
+      'RESCAN': 'rescan',
+      'BACKGROUND_PROCESS': 'background process',
+      'NONE': 'none',
+      'DAEMON_PARAM': 'Daemon param',
+      'FILTER_BY_ADDRESS': 'Filter by address',
       'RESCANNING_LAST_BLOCKS': 'Rescanning last blocks...',
       'NO_DATA_AVAILABLE': 'No data available',
       'LOADING': 'Loading',
@@ -257,7 +304,7 @@ export const _lang = {
       'SCAN_QRCODE_WEBCAM': 'Scan QR Code with webcam',
       'TOGGLE_ZERO_ADDRESSES': 'Toggle empty addresses',
       'NEXT_PAGE': 'Next Page',
-      'PREVIOUS_PAGE': 'Previous Page'
+      'PREVIOUS_PAGE': 'Previous Page',
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',
@@ -277,9 +324,49 @@ export const _lang = {
       'MODE': 'mode',
       'CRYPTO_CURRENCIES': 'Crypto Currencies',
       'ASSETCHAINS': 'Assetchains',
-      'FIAT_CURRENCIES': 'Fiat Currencies'
+      'FIAT_CURRENCIES': 'Fiat Currencies',
     },
     'JUMBLR': {
+      'ABOUT': 'About Jumblr',
+      'JUMBLR_FUNCTIONS': 'Jumblr functions all locally which means no middle man is required to jumble your funds. ' +
+                          'You take control over the whole process.',
+      'TIP': 'Tip',
+      'TIP_DESC': 'to achive maximum anonimity setup Jumblr node on a dedicated piece of hardware (laptop or VPS), use a separate IP address for main Jumblr node',
+      'PUBLIC_NODE': 'Public node',
+      'PRIVATE_NODE': 'Private node',
+      'DEPOSIT_ADDRESS': 'Deposit address',
+      'SECRET_ADDRESS': 'Secret address',
+      'DEPOSIT_FUNDS': 'Deposit funds',
+      'HOW_TO_USE': 'How to use Jumblr',
+      'CREATE_DEPOSIT_ADDRESS': 'Create deposit address',
+      'CREATE_SECRET_ADDRESS': 'Create secret address',
+      'SEND_FUNDS_TO_DEPOSIT': 'Send funds to deposit address',
+      'PLEASE_WRITE_DOWN_PASSPHRASE': 'Please write down your Jumblr passphrase and keept it safe.',
+      'THIS_IS_YOUR_MAIN_RECOVERY': 'This is your main recovery passphrase.',
+      'ALL_JUMBLR_ADDRESSES_CAN_BE': 'All Jumblr addresses can be regenrated based on it.',
+      'DONT_USE_SMART_EDITORS': 'do not use smart editors to store your passphrase as they tend to add extra characters.<br />This may result in passphrase mismatch with the original passphrase.',
+      'PASSPHRASE_COPIED': 'Passphrase copied',
+      'CREATE_JUMBLR_DEPOSIT_ADDRESS': 'Create Jumblr deposit address',
+      'YOUR_JUMBLR_DEPOSIT_ADDRESS': 'Your Jumblr deposit address',
+      'JUMBLR_SECRET_DESC_P1': 'Jumblr secret addresses are used for the final z -> t transactions.',
+      'JUMBLR_SECRET_DESC_P2': 'In order to allow larger accounts to obtain privacy, up to 777 secret addresses are supported.',
+      'JUMBLR_SECRET_DESC_P3': 'Whenever a z -> t stage is activated, a random secret address from the list of the then active secret addresses is selected.',
+      'JUMBLR_SECRET_DESC_P4': 'To add a new set of secret addresses enter address count below. The passphrase below is exactly the same you saw on the previous step.',
+      'JUMBLR_SECRET_DESC_P5': 'Your Jumblr secret address recovery passphrase will have the following pattern',
+      'JUMBLR_SECRET_DESC_P6': 'Where XXX any number from 001 to 777',
+      'NUMBER_OF_SECRET_ADDR': 'Number of secret addresses',
+      'CREATE_JUMBLR_SECRET_ADDR': 'Create Jumblr secret address(es)',
+      'SHOW_ADDRESS_LIST': 'Show address list',
+      'DEPOSIT_FORM_P1': 'Use the form below to send funds to your jumblr deposit address.',
+      'DEPOSIT_FORM_P2': 'You can also send funds to deposit address from an external service or another wallet.',
+      'IMPORT_SECRET_ADDRESS': 'Import secret address',
+      'CHECK_FUNDS': 'Check funds',
+      'SECRET_REGEN_DESC_P1': 'Enter your Jumblr passphrase you got previously during Public node configuration to import secret address.',
+      'SECRET_REGEN_DESC_P2': 'Passphrase example',
+      'SECRET_REGEN_DESC_P3': 'The form below will "regenerate" Jumblr secret address based on passphrase provided.',
+      'SECRET_REGEN_DESC_P4': 'After this final step expect to see funds processed and credited to your address after 2 days period.',
+      'IMPORT_JUMLR_SECRET_ADDRESSES': 'Import Jumblr secret address(es)',
+      'SHOW_ADDRESS_LIST': 'Show address list',
       'NOTICE': 'EXPERIMENTAL TEST VERSION ONLY',
       'DESCRIPTION': 'Jumblr feature is very experimental and for now, is Only enabled for testing and debugging. ' +
                      'Please use the current version of Jumblr only with small amounts if you are participating in testing this feature.',
@@ -335,7 +422,7 @@ export const _lang = {
       'PRIV_TO_PRIV': 'Private to Private',
       'PRIV_TO_PUB': 'Private to Public',
       'FINISHED': 'Finished',
-      'PENDING': 'Pending'
+      'PENDING': 'Pending',
     },
     'DASHBOARD': {
       'SELECT_ADDRESS': '- Select Address -',
@@ -351,9 +438,26 @@ export const _lang = {
       'MINED': 'Mined',
       'IMMATURE': 'Immature',
       'ZADDR_NOT_LISTED': 'Z Address not listed by wallet',
-      'ADDR_COPIED': 'Address Copied'
+      'ADDR_COPIED': 'Address Copied',
+      'QR_ERR_NO_VIDEO_DEVICE': 'Error: No video input devices found!',
+      'QR_ERR_UNKNOWN': 'Error: unknown error!',
     },
     'TOASTR': {
+      'RESTART_AGAMA_WITH_REINDEX_PARAM': 'Restart Agama and run Komodo with -reindex param',
+      'JUMBLR_DEPOSIT_ADDRESS_SET': 'Jumblr deposit address is set',
+      'JUMBLR_SECRET_ADDRESSES_IMPORTED': 'Jumblr secret addresses imported',
+      'JUMBLR_SECRET_ADDRESS_IMPORTED': 'Jumblr secret address imported',
+      'JUMBLR_WRONG_PASSPHRASE': 'Provided passphrase has wrong format',
+      'JUMBLR_SECRET_ADDRESS_SET': 'Jumblr secret address is set',
+      'JUMBLR_SECRET_ADDRESSES_SET': 'Jumblr secret addresses are set',
+      'ENTER_CORRECT_ADDR_COUNT': 'Enter a correct address count value',
+      'TXID_COPIED': 'Transaction ID copied',
+      'CLAIM_INTEREST_BALANCE_SENT_P1': 'Your full balance is sent to address',
+      'CLAIM_INTEREST_BALANCE_SENT_P2': 'Check back your new balance in a few minutes.',
+      'BASILISK_CONN_ERROR': 'Basilisk connection error',
+      'SETTINGS_RESET': 'Settings are reset to default',
+      'SETTINGS_SAVED': 'Settings are saved',
+      'TRANSACTION_FAILED': 'Transaction failed',
       'WALLET_NOTIFICATION': 'Wallet Notification',
       'ACCOUNT_NOTIFICATION': 'Account Notification',
       'BASILISK_NOTIFICATION': 'Basilisk Notification',
@@ -416,16 +520,16 @@ export const _lang = {
       'SELECTION_NOT_FOUND': 'Local coin list is not found',
       'LOCAL_UTXO_UPDATED': 'Local UTXO data is updated. Ready to send new transaction.',
       'PROCESSING_UTXO': 'Processing UTXO',
-      'AWAITING_TX_RESP': 'Awaiting transaction data response'
+      'AWAITING_TX_RESP': 'Awaiting transaction data response',
     },
     'COIN_WALLETS': {
       'TX_FAILED': 'Transaction Failed',
       'TX_SUCCESS': 'Transaction Successful',
-      'TX': 'Transaction'
+      'TX': 'Transaction',
     },
     'IAPI': {
       'PUBLIC_SM': 'public',
-      'CON_STATUS': 'Connection status'
+      'CON_STATUS': 'Connection status',
     },
     'KMD_NATIVE': {
       'SELECT_ADDRESS': 'Select Transparent or Private Address',
@@ -439,9 +543,10 @@ export const _lang = {
       'SUCCESS': 'Success',
       'MESSAGE': 'Message',
       'EXECUTION_SECONDS': 'Execution Seconds',
-      'WAIT_UNTIL_SYNCED': 'Transaction history is unavailable during synchronization progresss'
+      'WAIT_UNTIL_SYNCED': 'Transaction history is unavailable during synchronization progresss',
     },
     'LOGIN': {
+      'QUICK_ACCESS': 'Quick access',
       'PWD_REQ': 'Password is required.',
       'WALLET_SEED_REQ': 'Wallet seed is required.',
       'SAVED_WALLET_SEED': 'Have you saved your wallet seed?',
@@ -462,13 +567,19 @@ export const _lang = {
       'WAVES_SEED': 'Waves',
       'NXT_SEED': 'NXT',
       'SEED_COPIED': 'Seed copied',
-      'SEED_SUCCESSFULLY_COPIED': 'The seed was successfully copied'
+      'SEED_SUCCESSFULLY_COPIED': 'The seed was successfully copied',
     },
     'SIDEBAR': {
       'EDEX_MOTTO': 'Most Secure, Easy and Native Decentralised Exchange',
-      'JUMBLR_MOTTO': 'Secure, Native and Decentralised Coin Anonymizer'
+      'JUMBLR_MOTTO': 'Secure, Native and Decentralised Coin Anonymizer',
     },
     'SETTINGS': {
+      'PROGRESS': 'Progress',
+      'SUPPORT_TICKETS': 'Support tickets',
+      'GET_SLACK_INVITE': 'Get Slack invite',
+      'ADDRESS_LIST': 'Address list',
+      'WIF_KEY_LIST': 'Wif key list',
+      'CLI_RESPONSE': 'CLI response',
       'PASSPHRASE_REQ': 'Passphrase is required.',
       'SAVE_APP_CONFIG': 'Save app config',
       'CONFIG_RESTART_REQUIRED': 'Most changes to app config require wallet restart!',
@@ -493,13 +604,13 @@ export const _lang = {
       'ADD_PEER_IP': 'Add Peer IP',
       'APP_SESSION': 'App Session',
       'EXPORT_KEYS_NOTE': 'Note: it\'s important that you provide the same passphrase you used to login to the wallet!<br>' +
-                          'In case passphrases will not match wallet is going to log you out of current session.'
+                          'In case passphrases will not match wallet is going to log you out of current session.',
     },
     'TX_INFO': {
       'ADDRESS': 'address',
       'AMOUNT': 'amount',
       'CATEGORY': 'category',
-      'CONFIRMATIONS': 'confirmations'
+      'CONFIRMATIONS': 'confirmations',
     },
     'SEND': {
       'PRESS_UPDATE_BTN': 'N/A. Press update button.',
@@ -526,7 +637,7 @@ export const _lang = {
       'AMOUNT_POSITIVE_NUMBER': 'Amount must be a positive number',
       'FEE_POSITIVE_NUMBER': 'Fee must be a positive number',
       'TOTAL_AMOUNT_POSITIVE_NUMBER': 'Total amount (amount - fee) must be a positive number',
-      'INSUFFICIENT_FUNDS': 'You don\'t have the necessary funds to make this transaction'
+      'INSUFFICIENT_FUNDS': 'You don\'t have the necessary funds to make this transaction',
     },
     'FIAT_CURRENCIES': {
       'AUD': 'Australian Dollar (AUD)',
@@ -560,7 +671,7 @@ export const _lang = {
       'CHF': 'Swiss Franc (CHF)',
       'THB': 'Thai Baht (THB)',
       'TRY': 'Turkish Lira (TRY)',
-      'USD': 'US Dollar (USD)'
-    }
-  }
+      'USD': 'US Dollar (USD)',
+    },
+  },
 };

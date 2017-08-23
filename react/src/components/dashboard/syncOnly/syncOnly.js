@@ -41,8 +41,8 @@ class SyncOnly extends React.Component {
     const _coinTitle = getCoinTitle(coin);
 
     return {
-      'logo': _coinTitle.logo,
-      'name': _coinTitle.name
+      logo: _coinTitle.logo,
+      name: _coinTitle.name,
     };
   }
 

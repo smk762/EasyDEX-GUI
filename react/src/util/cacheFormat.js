@@ -13,7 +13,7 @@ export function edexRemoveTXID(_obj, address, txidArray) {
 
   if (_obj, _obj.basilisk) {
     if (Object.keys(_obj.basilisk).length === 0) {
-      console.log('no coin nodes to parse');
+      console.warn('no coin nodes to parse');
     } else {
       for (let key in _obj.basilisk) {
         for (let coinAddr in _obj.basilisk[key]) {
@@ -44,7 +44,7 @@ export function edexRemoveTXID(_obj, address, txidArray) {
       }
     }
   } else {
-    console.log('basilisk node is missing');
+    console.warn('basilisk node is missing');
   }
 
   return _obj;

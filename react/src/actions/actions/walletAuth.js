@@ -16,22 +16,22 @@ import {
 
 export function encryptWallet(_passphrase, cb, coin) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'bitcoinrpc',
-    'method': 'encryptwallet',
-    'passphrase': _passphrase,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'bitcoinrpc',
+    method: 'encryptwallet',
+    passphrase: _passphrase,
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'encryptWallet',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'encryptWallet',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -43,9 +43,9 @@ export function encryptWallet(_passphrase, cb, coin) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -61,9 +61,9 @@ export function encryptWallet(_passphrase, cb, coin) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(
@@ -79,23 +79,23 @@ export function encryptWallet(_passphrase, cb, coin) {
 
 export function walletPassphrase(_passphrase) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'bitcoinrpc',
-    'method': 'walletpassphrase',
-    'password': _passphrase,
-    'timeout': '300000',
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'bitcoinrpc',
+    method: 'walletpassphrase',
+    password: _passphrase,
+    timeout: '300000',
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'walletpassphrase',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'walletpassphrase',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -107,9 +107,9 @@ export function walletPassphrase(_passphrase) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -123,9 +123,9 @@ export function walletPassphrase(_passphrase) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
     })
@@ -134,24 +134,24 @@ export function walletPassphrase(_passphrase) {
 
 export function iguanaWalletPassphrase(_passphrase) {
   const _payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'handle': '',
-    'password': _passphrase,
-    'timeout': '2592000',
-    'agent': 'bitcoinrpc',
-    'method': 'walletpassphrase',
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    handle: '',
+    password: _passphrase,
+    timeout: '2592000',
+    agent: 'bitcoinrpc',
+    method: 'walletpassphrase',
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'iguanaWalletPassphrase',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': _payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'iguanaWalletPassphrase',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: _payload,
+        status: 'pending',
       }));
     }
 
@@ -163,9 +163,9 @@ export function iguanaWalletPassphrase(_passphrase) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -180,9 +180,9 @@ export function iguanaWalletPassphrase(_passphrase) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(iguanaWalletPassphraseState(json, dispatch));
@@ -192,21 +192,21 @@ export function iguanaWalletPassphrase(_passphrase) {
 
 export function iguanaActiveHandle(getMainAddress) {
   const _payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'SuperNET',
-    'method': 'activehandle',
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'SuperNET',
+    method: 'activehandle',
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'iguanaActiveHandle',
-        'type': 'post',
-        'url': Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': _payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'iguanaActiveHandle',
+        type: 'post',
+        url: Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: _payload,
+        status: 'pending',
       }));
     }
 
@@ -232,9 +232,9 @@ export function iguanaActiveHandle(getMainAddress) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(updateErrosStack('activeHandle'));
@@ -250,9 +250,9 @@ export function iguanaActiveHandle(getMainAddress) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       if (!Config.iguanaLessMode &&

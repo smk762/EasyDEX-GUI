@@ -30,32 +30,32 @@ export function sendNativeTx(coin, _payload) {
     return iguanaHashHex(ajaxDataToHex, dispatch).then((hashHexJson) => {
       if (getPassthruAgent(coin) === 'iguana') {
         payload = {
-          'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-          'agent': getPassthruAgent(coin),
-          'method': 'passthru',
-          'asset': coin,
-          'function': _apiMethod,
-          'hex': hashHexJson,
+          userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+          agent: getPassthruAgent(coin),
+          method: 'passthru',
+          asset: coin,
+          function: _apiMethod,
+          hex: hashHexJson,
         };
       } else {
         payload = {
-          'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-          'agent': getPassthruAgent(coin),
-          'method': 'passthru',
-          'function': _apiMethod,
-          'hex': hashHexJson,
+          userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+          agent: getPassthruAgent(coin),
+          method: 'passthru',
+          function: _apiMethod,
+          hex: hashHexJson,
         };
       }
 
       const _timestamp = Date.now();
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'function': 'sendNativeTx',
-          'type': 'post',
-          'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-          'payload': payload,
-          'status': 'pending',
+          timestamp: _timestamp,
+          function: 'sendNativeTx',
+          type: 'post',
+          url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+          payload: payload,
+          status: 'pending',
         }));
       }
 
@@ -90,7 +90,7 @@ export function sendNativeTx(coin, _payload) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ 'payload': payload }),
+          body: JSON.stringify({ payload: payload }),
         };
       }
 
@@ -102,9 +102,9 @@ export function sendNativeTx(coin, _payload) {
         console.log(error);
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'error',
-            'response': error,
+            timestamp: _timestamp,
+            status: 'error',
+            response: error,
           }));
         }
         dispatch(
@@ -122,9 +122,9 @@ export function sendNativeTx(coin, _payload) {
       .then(function(json) {
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'success',
-            'response': json,
+            timestamp: _timestamp,
+            status: 'success',
+            response: json,
           }));
         }
 
@@ -191,38 +191,38 @@ export function getKMDOPID(opid, coin) {
         hashHexJson = '';
       }
 
-      let payload,
-          passthruAgent = getPassthruAgent(coin),
-          tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+      let payload;
+      let passthruAgent = getPassthruAgent(coin);
+      let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
 
       if (passthruAgent === 'iguana') {
         payload = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': passthruAgent,
-          'method': 'passthru',
-          'asset': coin,
-          'function': 'z_getoperationstatus',
-          'hex': hashHexJson,
+          userpass: tmpIguanaRPCAuth,
+          agent: passthruAgent,
+          method: 'passthru',
+          asset: coin,
+          function: 'z_getoperationstatus',
+          hex: hashHexJson,
         };
       } else {
         payload = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': passthruAgent,
-          'method': 'passthru',
-          'function': 'z_getoperationstatus',
-          'hex': hashHexJson,
+          userpass: tmpIguanaRPCAuth,
+          agent: passthruAgent,
+          method: 'passthru',
+          function: 'z_getoperationstatus',
+          hex: hashHexJson,
         };
       }
 
       const _timestamp = Date.now();
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'function': 'getKMDOPID',
-          'type': 'post',
-          'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-          'payload': payload,
-          'status': 'pending',
+          timestamp: _timestamp,
+          function: 'getKMDOPID',
+          type: 'post',
+          url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+          payload: payload,
+          status: 'pending',
         }));
       }
 
@@ -243,7 +243,7 @@ export function getKMDOPID(opid, coin) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ 'payload': payload }),
+          body: JSON.stringify({ payload: payload }),
         };
       }
 
@@ -255,9 +255,9 @@ export function getKMDOPID(opid, coin) {
         console.log(error);
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'error',
-            'response': error,
+            timestamp: _timestamp,
+            status: 'error',
+            response: error,
           }));
         }
         dispatch(
@@ -275,9 +275,9 @@ export function getKMDOPID(opid, coin) {
         }
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'success',
-            'response': json,
+            timestamp: _timestamp,
+            status: 'success',
+            response: json,
           }));
         }
         dispatch(getKMDOPIDState(json));
@@ -298,7 +298,7 @@ export function sendToAddressPromise(coin, address, amount) {
         'KMD interest claim request',
         'KMD interest claim request',
         true
-      ]
+      ],
     };
 
     const _fetchConfig = {
@@ -306,7 +306,7 @@ export function sendToAddressPromise(coin, address, amount) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload: payload }),
     };
 
     fetch(

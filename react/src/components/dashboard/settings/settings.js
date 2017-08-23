@@ -49,6 +49,7 @@ class Settings extends React.Component {
       debugTarget: 'iguana',
       activeTabHeight: '0',
       appSettings: {},
+      appConfigSchema: {},
       tabElId: null,
       cliCmdString: '',
       cliCoin: null,
@@ -66,7 +67,7 @@ class Settings extends React.Component {
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
-    this.updateInputSettings = this.updateInputSettings.bind(this);
+    // this.updateInputSettings = this.updateInputSettings.bind(this);
     this.importWifKey = this.importWifKey.bind(this);
     this.readDebugLog = this.readDebugLog.bind(this);
     this.checkNodes = this.checkNodes.bind(this);
@@ -95,6 +96,18 @@ class Settings extends React.Component {
   componentWillMount() {
     socket.on('patch', msg => this.updateSocketsData(msg));
     window.addEventListener('resize', this.updateTabDimensions);
+
+    try {
+      const _appConfigSchema = window.require('electron').remote.getCurrentWindow().appConfigSchema;
+      const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : window.require('electron').remote.getCurrentWindow().appConfig;
+
+      this.setState(Object.assign({}, this.state, {
+        appConfigSchema: _appConfigSchema,
+        appSettings: _appSettings,
+      }));
+
+      console.warn(_appSettings);
+    } catch(e) {}
   }
 
   componentWillUnmount() {
@@ -111,6 +124,7 @@ class Settings extends React.Component {
     if (!this.props.disableWalletSpecificUI) {
       Store.dispatch(iguanaActiveHandle());
     }
+
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
   }
@@ -135,7 +149,7 @@ class Settings extends React.Component {
     const externalWindow = new BrowserWindow({
       width: 1280,
       height: 800,
-      title: 'Loading...',
+      title: `${translate('INDEX.LOADING')}...`,
       icon: remote.getCurrentWindow().iguanaIcon,
     });
 
@@ -178,7 +192,7 @@ class Settings extends React.Component {
             data.msg.progress &&
             data.msg.progress === 100) {
           let _updateLog = [];
-          _updateLog.push('UI update downloaded. Verifying...');
+          _updateLog.push(`${translate('INDEX.UI_UPDATE_DOWNLOADED')}...`);
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
           }));
@@ -187,7 +201,7 @@ class Settings extends React.Component {
 
         if (data.msg.status === 'done') {
           let _updateLog = [];
-          _updateLog.push('UI is updated!');
+          _updateLog.push(translate('INDEX.UI_UPDATED'));
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
             updatePatch: null,
@@ -197,7 +211,7 @@ class Settings extends React.Component {
 
         if (data.msg.status === 'error') {
           let _updateLog = [];
-          _updateLog.push('Error while verifying update file! Please retry again.');
+          _updateLog.push(translate('INDEX.UI_UPDATE_ERROR'));
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
           }));
@@ -218,7 +232,7 @@ class Settings extends React.Component {
 
   _checkForUpdateUIPromise() {
     let _updateLog = [];
-    _updateLog.push('Checking for UI update...');
+    _updateLog.push(translate('INDEX.CHECKING_UI_UPDATE'));
     this.setState(Object.assign({}, this.state, {
       updateLog: _updateLog,
     }));
@@ -226,7 +240,7 @@ class Settings extends React.Component {
     checkForUpdateUIPromise()
     .then((res) => {
       let _updateLog = this.state.updateLog;
-      _updateLog.push(res.result === 'update' ? (`New UI update available ${res.version.remote}`) : 'You have the lastest UI version');
+      _updateLog.push(res.result === 'update' ? (`${translate('INDEX.NEW_UI_UPDATE')} ${res.version.remote}`) : translate('INDEX.YOU_HAVE_LATEST_UI'));
       this.setState(Object.assign({}, this.state, {
         updatePatch: res.result === 'update' ? true : false,
         updateLog: _updateLog,
@@ -237,7 +251,7 @@ class Settings extends React.Component {
   _updateUIPromise() {
     updateProgressBar.patch = 0;
     let _updateLog = [];
-    _updateLog.push('Downloading UI update...');
+    _updateLog.push(`${translate('INDEX.DOWNLOADING_UI_UPDATE')}...`);
     this.setState(Object.assign({}, this.state, {
       updateLog: _updateLog,
     }));
@@ -259,7 +273,7 @@ class Settings extends React.Component {
       return (
         <div style={{ minHeight: '200px' }}>
           <hr />
-          <h5>Progress:</h5>
+          <h5>{ translate('SETTINGS.PROGRESS') }:</h5>
           <div className="padding-bottom-15">{ items }</div>
           <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
             <div
@@ -407,9 +421,18 @@ class Settings extends React.Component {
     }
   }
 
-  updateInputSettings(e) {
+  updateInputSettings(e, parentKey, childKey) {
+    console.warn(parentKey + ' | ' + childKey);
     let _appSettings = this.state.appSettings;
-    _appSettings[e.target.name] = e.target.value;
+    console.warn(this.state.appSettings);
+
+    if (!childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
+      _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
+    } else if (childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
+      _appSettings[parentKey][childKey] = typeof _appSettings[parentKey][childKey] !== undefined ? !_appSettings[parentKey][childKey] : !this.state.appSettings[parentKey][childKey];
+    } else {
+      _appSettings[e.target.name] = e.target.value;
+    }
 
     this.setState({
       appSettings: _appSettings,
@@ -434,50 +457,111 @@ class Settings extends React.Component {
 
   renderConfigEditForm() {
     let items = [];
-    const _appConfig = this.props.Settings.appSettings;
+    const _appConfig = this.state.appSettings;
 
     for (let key in _appConfig) {
       if (typeof _appConfig[key] === 'object') {
-        items.push(
-          <tr key={ `app-settings-${key}` }>
-            <td className="padding-15">
-              { key }
-            </td>
-            <td className="padding-15"></td>
-          </tr>
-        );
-
-        for (let _key in _appConfig[key]) {
+        if (this.state.appConfigSchema[key].display) {
           items.push(
-            <tr key={ `app-settings-${key}-${_key}` }>
-              <td className="padding-15 padding-left-30">
-                { _key }
+            <tr key={ `app-settings-${key}` }>
+              <td className="padding-15">
+                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
+                { this.state.appConfigSchema[key].info &&
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    title={ this.state.appConfigSchema[key].info }></i>
+                }
+              </td>
+              <td className="padding-15"></td>
+            </tr>
+          );
+
+          for (let _key in _appConfig[key]) {
+            items.push(
+              <tr key={ `app-settings-${key}-${_key}` }>
+                <td className="padding-15 padding-left-30">
+                  { this.state.appConfigSchema[key][_key].displayName ? this.state.appConfigSchema[key][_key].displayName : _key }
+                  { this.state.appConfigSchema[key][_key].info &&
+                    <i
+                      className="icon fa-question-circle settings-help"
+                      title={ this.state.appConfigSchema[key][_key].info }></i>
+                  }
+                </td>
+                <td className="padding-15">
+                  { this.state.appConfigSchema[key][_key].type === 'number' &&
+                    <input
+                      type="number"
+                      pattern="[0-9]*"
+                      type="text"
+                      name={ `${key}__${_key}` }
+                      defaultValue={ _appConfig[key][_key] }
+                      onChange={ this.updateInputSettings } />
+                  }
+                  { this.state.appConfigSchema[key][_key].type === 'boolean' &&
+                    <span className="pointer toggle">
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          name={ `${key}__${_key}` }
+                          value={ _appConfig[key] }
+                          checked={ _appConfig[key][_key] } />
+                        <div
+                          className="slider"
+                          onClick={ (event) => this.updateInputSettings(event, key, _key) }></div>
+                      </label>
+                    </span>
+                  }
+                </td>
+              </tr>
+            );
+          }
+        }
+      } else {
+        if (this.state.appConfigSchema[key].display) {
+          items.push(
+            <tr key={ `app-settings-${key}` }>
+              <td className="padding-15">
+                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
+                { this.state.appConfigSchema[key].info &&
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    title={ this.state.appConfigSchema[key].info }></i>
+                }
               </td>
               <td className="padding-15">
-                <input
-                  type="text"
-                  name={ `${key}__${_key}` }
-                  defaultValue={ _appConfig[key][_key] }
-                  onChange={ this.updateInputSettings } />
+                { this.state.appConfigSchema[key].type === 'number' &&
+                  <input
+                    type="number"
+                    pattern="[0-9]*"
+                    name={ `${key}` }
+                    defaultValue={ _appConfig[key] }
+                    onChange={ this.updateInputSettings } />
+                }
+                { this.state.appConfigSchema[key].type === 'string' &&
+                  <input
+                    type="text"
+                    name={ `${key}` }
+                    defaultValue={ _appConfig[key] }
+                    onChange={ this.updateInputSettings } />
+                }
+                { this.state.appConfigSchema[key].type === 'boolean' &&
+                  <span className="pointer toggle">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        name={ `${key}` }
+                        value={ _appConfig[key] }
+                        checked={ _appConfig[key] } />
+                      <div
+                        className="slider"
+                        onClick={ (event) => this.updateInputSettings(event, key) }></div>
+                    </label>
+                  </span>
+                }
               </td>
             </tr>
           );
         }
-      } else {
-        items.push(
-          <tr key={ `app-settings-${key}` }>
-            <td className="padding-15">
-              { key }
-            </td>
-            <td className="padding-15">
-              <input
-                type="text"
-                name={ `${key}` }
-                defaultValue={ _appConfig[key] }
-                onChange={ this.updateInputSettings } />
-            </td>
-          </tr>
-        );
       }
     }
 
@@ -600,7 +684,7 @@ class Settings extends React.Component {
       return (
         <div>
           <div>
-            <strong>CLI response:</strong>
+            <strong>{ translate('SETTINGS.CLI_RESPONSE') }:</strong>
           </div>
           { _items }
         </div>
@@ -676,7 +760,7 @@ class Settings extends React.Component {
         items.push(
           <tr key={ `wif-export-table-header-${i}` }>
             <td className="padding-bottom-10 padding-top-10">
-              <strong>{ i === 0 ? 'Address list' : 'Wif key list' }</strong>
+              <strong>{ i === 0 ? translate('SETTINGS.ADDRESS_LIST') : translate('SETTINGS.WIF_KEY_LIST') }</strong>
             </td>
             <td className="padding-bottom-10 padding-top-10"></td>
           </tr>

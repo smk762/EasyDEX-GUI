@@ -14,7 +14,7 @@ export function deleteCacheFile(_payload) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'filename': _payload.pubkey }),
+      body: JSON.stringify({ filename: _payload.pubkey }),
     })
     .catch(function(error) {
       console.log(error);
@@ -61,14 +61,14 @@ export function getCacheFile(pubkey) {
 }
 
 export function fetchNewCacheData(_payload) {
-  const _userpass = `?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-        _pubkey = `&pubkey=${_payload.pubkey}`,
-        _route = _payload.allcoins ? 'cache-all' : 'cache-one',
-        _coin = `&coin=${_payload.coin}`,
-        _calls = `&calls=${_payload.calls}`,
-        _address = _payload.address ? (`&address=${_payload.address}`) : '',
-        _skip = _payload.skip ? (`&skip=${_payload.skip}`) : '',
-        _iguanaInstancePort = Config.useBasiliskInstance ? `&port=${Config.iguanaCorePort + 1}` : '';
+  const _userpass = `?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+  const _pubkey = `&pubkey=${_payload.pubkey}`;
+  const _route = _payload.allcoins ? 'cache-all' : 'cache-one';
+  const _coin = `&coin=${_payload.coin}`;
+  const _calls = `&calls=${_payload.calls}`;
+  const _address = _payload.address ? (`&address=${_payload.address}`) : '';
+  const _skip = _payload.skip ? (`&skip=${_payload.skip}`) : '';
+  const _iguanaInstancePort = Config.useBasiliskInstance ? `&port=${Config.iguanaCorePort + 1}` : '';
 
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/${_route}${_userpass}${_pubkey}${_coin}${_calls}${_address}${_skip}${_iguanaInstancePort}`, {
@@ -129,10 +129,10 @@ function getShepherdCacheState(json, pubkey, coin) {
       json.result.indexOf('no file with handle') > -1) {
     return dispatch => {
       dispatch(fetchNewCacheData({
-        'pubkey': pubkey,
-        'allcoins': false,
-        'coin': coin,
-        'calls': 'listtransactions:getbalance',
+        pubkey: pubkey,
+        allcoins: false,
+        coin: coin,
+        calls: 'listtransactions:getbalance',
       }));
     }
   } else {
@@ -144,13 +144,13 @@ function getShepherdCacheState(json, pubkey, coin) {
 }
 
 export function fetchUtxoCache(_payload) {
-  const _userpass = `?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-        _pubkey = `&pubkey=${_payload.pubkey}`,
-        _route = _payload.allcoins ? 'cache-all' : 'cache-one',
-        _coin = `&coin=${_payload.coin}`,
-        _calls = `&calls=${_payload.calls}`,
-        _address = _payload.address ? (`&address=${_payload.address}`) : '',
-        _iguanaInstancePort = Config.useBasiliskInstance ? `&port=${Config.iguanaCorePort + 1}` : '';
+  const _userpass = `?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+  const _pubkey = `&pubkey=${_payload.pubkey}`;
+  const _route = _payload.allcoins ? 'cache-all' : 'cache-one';
+  const _coin = `&coin=${_payload.coin}`;
+  const _calls = `&calls=${_payload.calls}`;
+  const _address = _payload.address ? (`&address=${_payload.address}`) : '';
+  const _iguanaInstancePort = Config.useBasiliskInstance ? `&port=${Config.iguanaCorePort + 1}` : '';
 
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/${_route}${_userpass}${_pubkey}${_coin}${_calls}${_address}${_iguanaInstancePort}`, {
@@ -186,8 +186,8 @@ export function shepherdGroomPost(_filename, _payload) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'filename': _filename,
-        'payload': JSON.stringify(_payload),
+        filename: _filename,
+        payload: JSON.stringify(_payload),
       }),
     })
     .catch(function(error) {
@@ -213,8 +213,8 @@ export function shepherdGroomPostPromise(_filename, _payload) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'filename': _filename,
-        'payload': JSON.stringify(_payload),
+        filename: _filename,
+        payload: JSON.stringify(_payload),
       }),
     })
     .catch(function(error) {

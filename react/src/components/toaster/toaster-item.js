@@ -18,7 +18,7 @@ class ToasterItem extends React.Component {
       type: props._type,
       title: props.title,
       autoClose: props.autoClose,
-      toastId: props.toastId
+      toastId: props.toastId,
     };
 
     this.dismissToast = this.dismissToast.bind(this);
@@ -33,7 +33,7 @@ class ToasterItem extends React.Component {
         type: props._type,
         title: props.title,
         autoClose: props.autoClose,
-        toastId: props.toastId
+        toastId: props.toastId,
       });
     } else {
       this.setState({
@@ -41,7 +41,7 @@ class ToasterItem extends React.Component {
         type: null,
         title: null,
         autoClose: true,
-        toastId: null
+        toastId: null,
       });
     }
   }

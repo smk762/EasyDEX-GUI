@@ -5,7 +5,7 @@ import AddCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import AddCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../../addcoin/addcoinOptionsACFiat';
 
-const AtomicRender = function () {
+const AtomicRender = function() {
   return (
     <div className="page margin-left-0 full-height">
       <div className="page-content">
@@ -32,7 +32,7 @@ const AtomicRender = function () {
                   <select
                     className="form-control form-material"
                     onChange={ this.updateSelectedAPI }>
-                    <option value="">-{ translate('ATOMIC.SELECT_COMMAND') }-</option>
+                    <option value="">{ translate('ATOMIC.SELECT_COMMAND') }</option>
                     { this.renderAtomicOptions() }
                   </select>
                 </div>

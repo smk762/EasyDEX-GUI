@@ -138,11 +138,11 @@ class SendCoin extends React.Component {
 
   _fetchNewUTXOData() {
     Store.dispatch(fetchUtxoCache({
-      'pubkey': this.props.Dashboard.activeHandle.pubkey,
-      'allcoins': false,
-      'coin': this.props.ActiveCoin.coin,
-      'calls': 'refresh',
-      'address': this.state.sendFrom,
+      pubkey: this.props.Dashboard.activeHandle.pubkey,
+      allcoins: false,
+      coin: this.props.ActiveCoin.coin,
+      calls: 'refresh',
+      address: this.state.sendFrom,
     }));
   }
 
@@ -152,10 +152,10 @@ class SendCoin extends React.Component {
         !this.state.sendApiType &&
         this.props.ActiveCoin.cache &&
         this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom]) {
-        let refreshCacheData,
-            timestamp,
-            isReadyToUpdate,
-            waitUntilCallIsFinished = this.state.currentStackLength > 1 ? true : false;
+        let refreshCacheData;
+        let timestamp;
+        let isReadyToUpdate;
+        let waitUntilCallIsFinished = this.state.currentStackLength > 1 ? true : false;
         const _cache = this.props.ActiveCoin.cache;
         const _coin = this.props.ActiveCoin.coin;
         const _sendFrom = this.state.sendFrom;
@@ -311,7 +311,7 @@ class SendCoin extends React.Component {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          title={ `-${translate('SEND.SELECT_T_OR_Z_ADDR')}-` }
+          title={ `${translate('SEND.SELECT_T_OR_Z_ADDR')}` }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">
             { this.renderSelectorCurrentLabel() }&nbsp;&nbsp;
@@ -438,14 +438,14 @@ class SendCoin extends React.Component {
     const forceUpdateCache = this._fetchNewUTXOData;
     const _sendFrom = this.state.sendFrom;
     const sendData = {
-            'coin': this.props.ActiveCoin.coin,
-            'sendfrom': this.state.sendFrom,
-            'sendtoaddr': this.state.sendTo,
-            'amount': this.state.amount,
-            'txfee': this.state.fee,
-            'sendsig': this.state.sendSig === true ? 0 : 1,
-            'utxos': utxoSet
-          };
+      coin: this.props.ActiveCoin.coin,
+      sendfrom: this.state.sendFrom,
+      sendtoaddr: this.state.sendTo,
+      amount: this.state.amount,
+      txfee: this.state.fee,
+      sendsig: this.state.sendSig === true ? 0 : 1,
+      utxos: utxoSet,
+    };
 
     // TODO: es arrows
     iguanaUTXORawTX(sendData, Store.dispatch)
@@ -462,8 +462,8 @@ class SendCoin extends React.Component {
 
         if (sendData.sendsig === 1) {
           const dexrawtxData = {
-            'signedtx': json.signedtx,
-            'coin': sendData.coin
+            signedtx: json.signedtx,
+            coin: sendData.coin,
           };
           dexSendRawTX(
             dexrawtxData,
@@ -472,7 +472,7 @@ class SendCoin extends React.Component {
             if (dexRawTxJSON.indexOf('"error":{"code"') > -1) {
               Store.dispatch(
                 triggerToaster(
-                  'Transaction failed',
+                  translate('TOASTR.TRANSACTION_FAILED'),
                   translate('TOASTR.WALLET_NOTIFICATION'),
                   'error'
                 )
@@ -503,8 +503,8 @@ class SendCoin extends React.Component {
                   );
 
                   edexGetTransaction({
-                    'coin': sendData.coin,
-                    'txid': dexRawTxJSON.txid ? dexRawTxJSON.txid : dexRawTxJSON
+                    coin: sendData.coin,
+                    txid: dexRawTxJSON.txid ? dexRawTxJSON.txid : dexRawTxJSON,
                   }, Store.dispatch)
                   .then(function(json) {
                     resolve(json);
@@ -615,7 +615,7 @@ class SendCoin extends React.Component {
         }));
       }
 
-      console.log(json);
+      // console.log(json);
     }.bind(this));
   }
 

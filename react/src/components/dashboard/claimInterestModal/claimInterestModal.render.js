@@ -8,7 +8,8 @@ export const _ClaimInterestTableRender = function() {
   let _items = [];
 
   for (let i = 0; i < _transactionsList.length; i++) {
-    if ((_transactionsList[i].interest === 0 && this.state.showZeroInterest) || (_transactionsList[i].amount > 0 && _transactionsList[i].interest > 0)) {
+    if ((_transactionsList[i].interest === 0 && this.state.showZeroInterest) ||
+        (_transactionsList[i].amount > 0 && _transactionsList[i].interest > 0)) {
       _items.push(
         <tr key={ `${_transactionsList[i].txid}${_transactionsList[i].address}` }>
           <td>
@@ -38,7 +39,7 @@ export const _ClaimInterestTableRender = function() {
   return (
     <span>
       <div className="padding-bottom-20">
-        <strong>Requirements to accrue interest:</strong> locktime field is set and amount is greater than <strong>10 KMD</strong>
+        <strong>{ translate('CLAIM_INTEREST.REQ_P1') }:</strong> { translate('CLAIM_INTEREST.REQ_P2') } <strong>10 KMD</strong>
       </div>
       <div className="text-left padding-top-10 padding-bottom-10">
         <label className="switch">
@@ -59,16 +60,16 @@ export const _ClaimInterestTableRender = function() {
         type="button"
         className="btn btn-success waves-effect waves-light claim-btn"
         onClick={ () => this.claimInterest() }>
-        <i className="icon fa-dollar"></i> Claim interest
+        <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST') }
       </button>
       <div className="table-scroll">
         <table className="table table-hover dataTable table-striped">
           <thead>
             <tr>
               <th></th>
-              <th>Address</th>
-              <th>Amount</th>
-              <th>Interest</th>
+              <th>{ translate('INDEX.ADDRESS') }</th>
+              <th>{ translate('INDEX.AMOUNT') }</th>
+              <th>{ translate('INDEX.Address') }</th>
               <th>Locktime</th>
             </tr>
           </thead>
@@ -78,9 +79,9 @@ export const _ClaimInterestTableRender = function() {
           <tfoot>
             <tr>
               <th></th>
-              <th>Address</th>
-              <th>Amount</th>
-              <th>Interest</th>
+              <th>{ translate('INDEX.ADDRESS') }</th>
+              <th>{ translate('INDEX.AMOUNT') }</th>
+              <th>{ translate('INDEX.Address') }</th>
               <th>Locktime</th>
             </tr>
           </tfoot>
@@ -103,7 +104,7 @@ export const ClaimInterestModalRender = function() {
                 onClick={ this.closeModal }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white text-left">Claim interest</h4>
+              <h4 className="modal-title white text-left">{ translate('INDEX.CLAIM_INTEREST') }</h4>
             </div>
             <div className="modal-body">
               <i
@@ -112,13 +113,13 @@ export const ClaimInterestModalRender = function() {
               <div className="animsition vertical-align fade-in">
                 <div className="page-content vertical-align-middle full-width">
                   { this.state.isLoading &&
-                    <span>Loading interest data...</span>
+                    <span>{ translate('INDEX.LOADING') }...</span>
                   }
                   { !this.state.isLoading && this.checkTransactionsListLength() &&
                     <div>{ this.claimInterestTableRender() }</div>
                   }
                   { !this.state.isLoading && !this.checkTransactionsListLength() &&
-                    <div>No data</div>
+                    <div>{ translate('INDEX.NO_DATA') }</div>
                   }
                 </div>
               </div>

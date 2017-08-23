@@ -47,12 +47,12 @@ class WalletsBalance extends React.Component {
     switch(_mode) {
       case 'basilisk':
         Store.dispatch(fetchNewCacheData({
-          'pubkey': this.props.Dashboard.activeHandle.pubkey,
-          'allcoins': false,
-          'coin': this.props.ActiveCoin.coin,
-          'calls': 'getbalance',
-          'skip': true,
-          'address': this.state.currentAddress,
+          pubkey: this.props.Dashboard.activeHandle.pubkey,
+          allcoins: false,
+          coin: this.props.ActiveCoin.coin,
+          calls: 'getbalance',
+          skip: true,
+          address: this.state.currentAddress,
         }));
         break;
       case 'native':

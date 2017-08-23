@@ -53,7 +53,7 @@ export function startIguanaInstance(mode, coin) {
       },
       body: JSON.stringify({
         mode,
-        coin
+        coin,
       }),
     })
     .catch(function(error) {

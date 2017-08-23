@@ -69,7 +69,7 @@ class WalletsNativeSend extends React.Component {
 
   setRecieverFromScan(receiver) {
     this.setState({
-      sendTo: receiver
+      sendTo: receiver,
     });
 
     document.getElementById('kmdWalletSendTo').focus();
@@ -153,7 +153,7 @@ class WalletsNativeSend extends React.Component {
       );
     } else {
       return (
-        <span>Transparent funds</span>
+        <span>{ translate('INDEX.T_FUNDS') }</span>
       );
     }
   }

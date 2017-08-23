@@ -278,7 +278,7 @@ export const SendCoinRender = function() {
                 <div className="col-lg-12">
                   <strong>
                     { translate('INDEX.TOTAL') }&nbsp;
-                    ({ translate('INDEX.AMOUNT_SM') } - fee):
+                    ({ translate('INDEX.AMOUNT_SM') } - { translate('INDEX.FEE') }):
                   </strong>&nbsp;
                   { this.getTotalAmount() } { this.props.ActiveCoin.coin }
                 </div>
