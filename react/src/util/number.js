@@ -3,5 +3,5 @@ export function isNumber(value) {
 }
 
 export function isPositiveNumber(value) {
-    return isNumber(value) && (+value) > 0;
+  return isNumber(value) && (+value) > 0;
 }

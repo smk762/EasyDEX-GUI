@@ -99,7 +99,7 @@ class Settings extends React.Component {
 
     try {
       const _appConfigSchema = window.require('electron').remote.getCurrentWindow().appConfigSchema;
-      const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : window.require('electron').remote.getCurrentWindow().appConfig;
+      const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, window.require('electron').remote.getCurrentWindow().appConfig);
 
       this.setState(Object.assign({}, this.state, {
         appConfigSchema: _appConfigSchema,
@@ -422,14 +422,19 @@ class Settings extends React.Component {
   }
 
   updateInputSettings(e, parentKey, childKey) {
-    console.warn(parentKey + ' | ' + childKey);
     let _appSettings = this.state.appSettings;
-    console.warn(this.state.appSettings);
+    let _appSettingsPrev = Object.assign({}, _appSettings);
 
     if (!childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
       _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
-    } else if (childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
+    } else if (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'boolean') {
       _appSettings[parentKey][childKey] = typeof _appSettings[parentKey][childKey] !== undefined ? !_appSettings[parentKey][childKey] : !this.state.appSettings[parentKey][childKey];
+    } else if ((!childKey && this.state.appConfigSchema[parentKey].type === 'number') || (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'number')) {
+      if (e.target.value === '') {
+        _appSettings[e.target.name] = _appSettingsPrev[e.target.name];
+      } else {
+        _appSettings[e.target.name] = e.target.value.replace(/[^0-9]+/g, '');
+      }
     } else {
       _appSettings[e.target.name] = e.target.value;
     }
@@ -494,8 +499,15 @@ class Settings extends React.Component {
                       pattern="[0-9]*"
                       type="text"
                       name={ `${key}__${_key}` }
-                      defaultValue={ _appConfig[key][_key] }
-                      onChange={ this.updateInputSettings } />
+                      value={ _appConfig[key][_key] }
+                      onChange={ (event) => this.updateInputSettings(event, key, _key) } />
+                  }
+                  { this.state.appConfigSchema[key][_key].type === 'string' &&
+                    <input
+                      type="text"
+                      name={ `${key}__${_key}` }
+                      value={ _appConfig[key][_key] }
+                      onChange={ (event) => this.updateInputSettings(event, key, _key) } />
                   }
                   { this.state.appConfigSchema[key][_key].type === 'boolean' &&
                     <span className="pointer toggle">
@@ -534,15 +546,15 @@ class Settings extends React.Component {
                     type="number"
                     pattern="[0-9]*"
                     name={ `${key}` }
-                    defaultValue={ _appConfig[key] }
-                    onChange={ this.updateInputSettings } />
+                    value={ _appConfig[key] }
+                    onChange={ (event) => this.updateInputSettings(event, key) } />
                 }
                 { this.state.appConfigSchema[key].type === 'string' &&
                   <input
                     type="text"
                     name={ `${key}` }
-                    defaultValue={ _appConfig[key] }
-                    onChange={ this.updateInputSettings } />
+                    value={ _appConfig[key] }
+                    onChange={ (event) => this.updateInputSettings(event, key) } />
                 }
                 { this.state.appConfigSchema[key].type === 'boolean' &&
                   <span className="pointer toggle">
