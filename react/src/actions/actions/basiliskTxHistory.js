@@ -38,7 +38,7 @@ export function getBasiliskTransactionsList(coin, address) {
 
       json = json.result.basilisk;
       if (json[coin][address].listtransactions) {
-        dispatch(getNativeTxHistoryState({ 'result': json[coin][address].listtransactions.data }));
+        dispatch(getNativeTxHistoryState({ result: json[coin][address].listtransactions.data }));
       }
     })
   }

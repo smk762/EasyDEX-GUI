@@ -36,7 +36,7 @@ import '../../../util/crypto/gen/crypto-scrypt.js';
 import { Bitcoin } from '../../../util/crypto/gen/bitcoin.js';
 
 if (!window.jumblrPasshrase) { // gen jumblr passphrase
-  window.jumblrPasshrase = 'jumblr ' + PassPhraseGenerator.generatePassPhrase(256);
+  window.jumblrPasshrase = `jumblr ${PassPhraseGenerator.generatePassPhrase(256)}`;
 }
 
 class Jumblr extends React.Component {
@@ -141,7 +141,7 @@ class Jumblr extends React.Component {
     if (this.state.secretAddressCount === '') {
       Store.dispatch(
         triggerToaster(
-          'Enter a correct address count value',
+          translate('TOASTR.ENTER_CORRECT_ADDR_COUNT'),
           'Jumblr',
           'error'
         )
@@ -164,8 +164,11 @@ class Jumblr extends React.Component {
           _genKeys = this.generateKeys();
         }
 
-        setJumblrAddress(this.props.ActiveCoin.coin, 'secret', _genKeys.address)
-        .then((json) => {
+        setJumblrAddress(
+          this.props.ActiveCoin.coin,
+          'secret',
+          _genKeys.address
+        ).then((json) => {
           if (json.error &&
               json.error.code) {
             Store.dispatch(
@@ -184,7 +187,7 @@ class Jumblr extends React.Component {
             if (_apiSuccessCount === this.state.secretAddressCount - 1) {
               Store.dispatch(
                 triggerToaster(
-                  this.state.secretAddressCount > 1 ? 'Jumblr secret addresses are set' : 'Jumblr secret address is set',
+                  this.state.secretAddressCount > 1 ? translate('TOASTR.JUMBLR_SECRET_ADDRESSES_SET') : translate('TOASTR.JUMBLR_SECRET_ADDRESS_SET'),
                   'Jumblr',
                   'success'
                 )
@@ -237,7 +240,7 @@ class Jumblr extends React.Component {
         _errors.prefix) {
       Store.dispatch(
         triggerToaster(
-          'Provided passphrase has wrong format',
+          translate('TOASTR.JUMBLR_WRONG_PASSPHRASE'),
           'Jumblr',
           'error',
           false
@@ -257,7 +260,7 @@ class Jumblr extends React.Component {
     if (this.state.secretAddressCountImport === '') {
       Store.dispatch(
         triggerToaster(
-          'Enter a correct address count value',
+          translate('TOASTR.ENTER_CORRECT_ADDR_COUNT'),
           'Jumblr',
           'error'
         )
@@ -290,7 +293,7 @@ class Jumblr extends React.Component {
               if (_apiSuccessCount === this.state.secretAddressCountImport - 1) {
                 Store.dispatch(
                   triggerToaster(
-                    this.state.secretAddressCountImport > 1 ? 'Jumblr secret addresses imported' : 'Jumblr secret address imported',
+                    this.state.secretAddressCountImport > 1 ? translate('TOASTR.JUMBLR_SECRET_ADDRESSES_IMPORTED') : translate('TOASTR.JUMBLR_SECRET_ADDRESS_IMPORTED'),
                     'Jumblr',
                     'success'
                   )
@@ -343,8 +346,11 @@ class Jumblr extends React.Component {
     .then((json) => {
       if (!json.id && !json.result && !json.error) {
         // console.warn('importPrivkey', json);
-        setJumblrAddress(this.props.ActiveCoin.coin, 'deposit', _genKeys.address)
-        .then((json) => {
+        setJumblrAddress(
+          this.props.ActiveCoin.coin,
+          'deposit',
+          _genKeys.address
+        ).then((json) => {
           if (json.error &&
               json.error.code) {
             Store.dispatch(
@@ -363,7 +369,7 @@ class Jumblr extends React.Component {
             }));
             Store.dispatch(
               triggerToaster(
-                'Jumblr deposit address is set',
+                translate('TOASTR.JUMBLR_DEPOSIT_ADDRESS_SET'),
                 'Jumblr',
                 'success'
               )
@@ -400,7 +406,7 @@ class Jumblr extends React.Component {
   }
 
   copyPassphrase() {
-    Store.dispatch(copyString(this.state.randomSeed, 'Passphrase copied'));
+    Store.dispatch(copyString(this.state.randomSeed, translate('JUMBLR.PASSPHRASE_COPIED')));
   }
 
   renderLB(_translationID) {

@@ -1,33 +1,33 @@
 export function secondsToString(seconds, skipMultiply, showSeconds) {
-  const a = new Date(seconds * (skipMultiply ? 1 : 1000)),
-        months = [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec'
-        ],
-        year = a.getFullYear(),
-        month = months[a.getMonth()],
-        date = a.getDate(),
-        hour = a.getHours() < 10 ? `0${a.getHours()}` : a.getHours(),
-        min = a.getMinutes() < 10 ? `0${a.getMinutes()}` : a.getMinutes(),
-        sec = a.getSeconds(),
-        time = `${date} ${month} ${year} ${hour}:${min}${(showSeconds ? ':' + sec : '')}`;
+  const a = new Date(seconds * (skipMultiply ? 1 : 1000));
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+  const year = a.getFullYear();
+  const month = months[a.getMonth()];
+  const date = a.getDate();
+  const hour = a.getHours() < 10 ? `0${a.getHours()}` : a.getHours();
+  const min = a.getMinutes() < 10 ? `0${a.getMinutes()}` : a.getMinutes();
+  const sec = a.getSeconds();
+  const time = `${date} ${month} ${year} ${hour}:${min}${(showSeconds ? ':' + sec : '')}`;
 
   return time;
 }
 
 export function checkTimestamp(dateToCheck) {
-  const currentEpochTime = new Date(Date.now()) / 1000,
-        secondsElapsed = Number(currentEpochTime) - Number(dateToCheck / 1000);
+  const currentEpochTime = new Date(Date.now()) / 1000;
+  const secondsElapsed = Number(currentEpochTime) - Number(dateToCheck / 1000);
 
   return Math.floor(secondsElapsed);
 }

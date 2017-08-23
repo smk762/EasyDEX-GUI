@@ -8,10 +8,10 @@ import Config from '../../config';
 
 export function iguanaEdexBalance(coin) {
   const _payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'bitcoinrpc',
-    'method': 'getbalance',
-    'coin': coin,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'bitcoinrpc',
+    method: 'getbalance',
+    coin: coin,
   };
 
   return dispatch => {
@@ -19,12 +19,12 @@ export function iguanaEdexBalance(coin) {
       const _timestamp = Date.now();
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'function': 'iguanaEdexBalance',
-          'type': 'post',
-          'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-          'payload': _payload,
-          'status': 'pending',
+          timestamp: _timestamp,
+          function: 'iguanaEdexBalance',
+          type: 'post',
+          url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+          payload: _payload,
+          status: 'pending',
         }));
       }
 
@@ -36,9 +36,9 @@ export function iguanaEdexBalance(coin) {
         console.log(error);
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'error',
-            'response': error,
+            timestamp: _timestamp,
+            status: 'error',
+            response: error,
           }));
         }
         dispatch(
@@ -65,23 +65,23 @@ function iguanaEdexBalanceState(json) {
 export function getDexBalance(coin, mode, addr) {
   Promise.all(addr.map((_addr, index) => {
     const payload = {
-      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      'agent': 'dex',
-      'method': 'listunspent',
-      'address': _addr,
-      'symbol': coin,
+      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+      agent: 'dex',
+      method: 'listunspent',
+      address: _addr,
+      symbol: coin,
     };
 
     return new Promise((resolve, reject) => {
       const _timestamp = Date.now();
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'function': 'getDexBalance',
-          'type': 'post',
-          'url': `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
-          'payload': payload,
-          'status': 'pending',
+          timestamp: _timestamp,
+          function: 'getDexBalance',
+          type: 'post',
+          url: `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
+          payload: payload,
+          status: 'pending',
         }));
       }
 
@@ -93,9 +93,9 @@ export function getDexBalance(coin, mode, addr) {
         console.log(error);
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'error',
-            'response': error,
+            timestamp: _timestamp,
+            status: 'error',
+            response: error,
           }));
         }
         dispatch(
@@ -111,9 +111,9 @@ export function getDexBalance(coin, mode, addr) {
         console.log(json);
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'success',
-            'response': json,
+            timestamp: _timestamp,
+            status: 'success',
+            response: json,
           }));
         }
       })

@@ -8,23 +8,23 @@ import Config from '../../config';
 
 export function checkAddressBasilisk(coin, address) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'dex',
-    'method': 'checkaddress',
-    'address': address,
-    'symbol': coin,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'dex',
+    method: 'checkaddress',
+    address: address,
+    symbol: coin,
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'checkAddressBasilisk',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'checkAddressBasilisk',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -36,9 +36,9 @@ export function checkAddressBasilisk(coin, address) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -53,9 +53,9 @@ export function checkAddressBasilisk(coin, address) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(checkAddressBasiliskHandle(json));
@@ -94,23 +94,23 @@ function checkAddressBasiliskHandle(json) {
 
 export function validateAddressBasilisk(coin, address) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'dex',
-    'method': 'validateaddress',
-    'address': address,
-    'symbol': coin,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'dex',
+    method: 'validateaddress',
+    address: address,
+    symbol: coin,
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'validateAddressBasilisk',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'validateAddressBasilisk',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -122,9 +122,9 @@ export function validateAddressBasilisk(coin, address) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -139,9 +139,9 @@ export function validateAddressBasilisk(coin, address) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(validateAddressBasiliskHandle(json));

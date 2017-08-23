@@ -248,7 +248,8 @@ export const SendCoinRender = function() {
                       { this.props.ActiveCoin.coin }
                   </label>
                   <input
-                    type="text"
+                    type="number"
+                    min="0"
                     className="form-control"
                     id="edexcoinAmount"
                     name="amount"
@@ -264,7 +265,8 @@ export const SendCoinRender = function() {
                       { translate('INDEX.FEE') }
                   </label>
                   <input
-                    type="text"
+                    type="number"
+                    min="0"
                     className="form-control"
                     id="edexcoinFee"
                     name="fee"
@@ -276,9 +278,9 @@ export const SendCoinRender = function() {
                 <div className="col-lg-12">
                   <strong>
                     { translate('INDEX.TOTAL') }&nbsp;
-                    ({ translate('INDEX.AMOUNT_SM') } - fee):
+                    ({ translate('INDEX.AMOUNT_SM') } - { translate('INDEX.FEE') }):
                   </strong>&nbsp;
-                  { Number(this.state.amount) - Number(this.state.fee) } { this.props.ActiveCoin.coin }
+                  { this.getTotalAmount() } { this.props.ActiveCoin.coin }
                 </div>
                 <div className={ this.state.sendApiType ? 'hide' : 'col-lg-10 margin-top-30' }>
                   <span className="pointer">

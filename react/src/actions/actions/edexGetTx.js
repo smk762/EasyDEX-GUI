@@ -7,24 +7,24 @@ import Config from '../../config';
 
 export function edexGetTransaction(data, dispatch) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'symbol': data.coin,
-    'agent': 'dex',
-    'method': 'gettransaction',
-    'vout': 1,
-    'txid': data.txid
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    symbol: data.coin,
+    agent: 'dex',
+    method: 'gettransaction',
+    vout: 1,
+    txid: data.txid
   };
 
   return new Promise((resolve, reject) => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'edexGetTransaction',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'edexGetTransaction',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -36,9 +36,9 @@ export function edexGetTransaction(data, dispatch) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -53,9 +53,9 @@ export function edexGetTransaction(data, dispatch) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       resolve(json);

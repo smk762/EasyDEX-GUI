@@ -14,20 +14,20 @@ export function getNativeTxHistory(coin) {
 
   if (getPassthruAgent(coin) === 'iguana') {
     payload = {
-      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      'agent': 'iguana',
-      'method': 'passthru',
-      'asset': coin,
-      'function': 'listtransactions',
-      'hex': '',
+      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+      agent: 'iguana',
+      method: 'passthru',
+      asset: coin,
+      function: 'listtransactions',
+      hex: '',
     };
   } else {
     payload = {
-      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      'agent': getPassthruAgent(coin),
-      'method': 'passthru',
-      'function': 'listtransactions',
-      'hex': '',
+      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+      agent: getPassthruAgent(coin),
+      method: 'passthru',
+      function: 'listtransactions',
+      hex: '',
     };
   }
 
@@ -35,12 +35,12 @@ export function getNativeTxHistory(coin) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getNativeTxHistory',
-        'type': 'post',
-        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getNativeTxHistory',
+        type: 'post',
+        url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -53,7 +53,7 @@ export function getNativeTxHistory(coin) {
       payload = {
         mode: null,
         chain: coin,
-        cmd: 'listtransactions'
+        cmd: 'listtransactions',
       };
 
       _fetchConfig = {
@@ -61,7 +61,7 @@ export function getNativeTxHistory(coin) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'payload': payload }),
+        body: JSON.stringify({ payload: payload }),
       };
     }
 
@@ -73,9 +73,9 @@ export function getNativeTxHistory(coin) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -90,9 +90,9 @@ export function getNativeTxHistory(coin) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(getNativeTxHistoryState(json));

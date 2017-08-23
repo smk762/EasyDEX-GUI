@@ -21,7 +21,7 @@ export const AddressListRender = function() {
             className="selected"
             onClick={ () => this.updateAddressSelection(null, 'public', null) }>
             <a>
-              <span className="text">Transparent funds</span>
+              <span className="text">{ translate('INDEX.T_FUNDS') }</span>
               <span
                 className="glyphicon glyphicon-ok check-mark pull-right"
                 style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>

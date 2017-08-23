@@ -11,12 +11,12 @@ export function atomic(payload) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'atomic',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'atomic',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -28,9 +28,9 @@ export function atomic(payload) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -45,9 +45,9 @@ export function atomic(payload) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(atomicState(json));

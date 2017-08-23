@@ -30,8 +30,8 @@ import {
   SendCoinRender
 } from './sendCoin.render';
 
-import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
+import { isPositiveNumber } from '../../../util/number';
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 // TODO: prevent any cache updates rather than utxo while on send coin form
@@ -139,11 +139,11 @@ class SendCoin extends React.Component {
 
   _fetchNewUTXOData() {
     Store.dispatch(fetchUtxoCache({
-      'pubkey': this.props.Dashboard.activeHandle.pubkey,
-      'allcoins': false,
-      'coin': this.props.ActiveCoin.coin,
-      'calls': 'refresh',
-      'address': this.state.sendFrom,
+      pubkey: this.props.Dashboard.activeHandle.pubkey,
+      allcoins: false,
+      coin: this.props.ActiveCoin.coin,
+      calls: 'refresh',
+      address: this.state.sendFrom,
     }));
   }
 
@@ -153,10 +153,10 @@ class SendCoin extends React.Component {
         !this.state.sendApiType &&
         this.props.ActiveCoin.cache &&
         this.props.ActiveCoin.cache[this.props.ActiveCoin.coin][this.state.sendFrom]) {
-        let refreshCacheData,
-            timestamp,
-            isReadyToUpdate,
-            waitUntilCallIsFinished = this.state.currentStackLength > 1 ? true : false;
+        let refreshCacheData;
+        let timestamp;
+        let isReadyToUpdate;
+        let waitUntilCallIsFinished = this.state.currentStackLength > 1 ? true : false;
         const _cache = this.props.ActiveCoin.cache;
         const _coin = this.props.ActiveCoin.coin;
         const _sendFrom = this.state.sendFrom;
@@ -312,7 +312,7 @@ class SendCoin extends React.Component {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          title={ `-${translate('SEND.SELECT_T_OR_Z_ADDR')}-` }
+          title={ `${translate('SEND.SELECT_T_OR_Z_ADDR')}` }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">
             { this.renderSelectorCurrentLabel() }&nbsp;&nbsp;
@@ -381,6 +381,12 @@ class SendCoin extends React.Component {
       });
     }
 
+    if (step === 1) {
+      if (!this.validateSendFormData()) {
+        return;
+      }
+    }
+
     if (step === 1 ||
         step === 2) {
       this.setState(Object.assign({}, this.state, {
@@ -433,14 +439,14 @@ class SendCoin extends React.Component {
     const forceUpdateCache = this._fetchNewUTXOData;
     const _sendFrom = this.state.sendFrom;
     const sendData = {
-            'coin': this.props.ActiveCoin.coin,
-            'sendfrom': this.state.sendFrom,
-            'sendtoaddr': this.state.sendTo,
-            'amount': this.state.amount,
-            'txfee': this.state.fee,
-            'sendsig': this.state.sendSig === true ? 0 : 1,
-            'utxos': utxoSet
-          };
+      coin: this.props.ActiveCoin.coin,
+      sendfrom: this.state.sendFrom,
+      sendtoaddr: this.state.sendTo,
+      amount: this.state.amount,
+      txfee: this.state.fee,
+      sendsig: this.state.sendSig === true ? 0 : 1,
+      utxos: utxoSet,
+    };
 
     // TODO: es arrows
     iguanaUTXORawTX(sendData, Store.dispatch)
@@ -457,8 +463,8 @@ class SendCoin extends React.Component {
 
         if (sendData.sendsig === 1) {
           const dexrawtxData = {
-            'signedtx': json.signedtx,
-            'coin': sendData.coin
+            signedtx: json.signedtx,
+            coin: sendData.coin,
           };
           dexSendRawTX(
             dexrawtxData,
@@ -467,7 +473,7 @@ class SendCoin extends React.Component {
             if (dexRawTxJSON.indexOf('"error":{"code"') > -1) {
               Store.dispatch(
                 triggerToaster(
-                  'Transaction failed',
+                  translate('TOASTR.TRANSACTION_FAILED'),
                   translate('TOASTR.WALLET_NOTIFICATION'),
                   'error'
                 )
@@ -498,8 +504,8 @@ class SendCoin extends React.Component {
                   );
 
                   edexGetTransaction({
-                    'coin': sendData.coin,
-                    'txid': dexRawTxJSON.txid ? dexRawTxJSON.txid : dexRawTxJSON
+                    coin: sendData.coin,
+                    txid: dexRawTxJSON.txid ? dexRawTxJSON.txid : dexRawTxJSON,
                   }, Store.dispatch)
                   .then(function(json) {
                     resolve(json);
@@ -610,7 +616,7 @@ class SendCoin extends React.Component {
         }));
       }
 
-      console.log(json);
+      // console.log(json);
     }.bind(this));
   }
 
@@ -756,6 +762,106 @@ class SendCoin extends React.Component {
     }
 
     return null;
+  }
+
+  // TODO same as in walletsNav and receiveCoin, find a way to reuse it?
+  checkTotalBalance() {
+    let _balance = '0';
+    const _mode = this.props.ActiveCoin.mode;
+
+    if (_mode === 'full') {
+      _balance = this.props.ActiveCoin.balance || 0;
+    } else if (_mode === 'basilisk') {
+      if (this.props.ActiveCoin.cache) {
+        const _cache = this.props.ActiveCoin.cache;
+        const _coin = this.props.ActiveCoin.coin;
+        const _address = this.props.ActiveCoin.activeAddress;
+
+        if (_address &&
+          _cache[_coin] &&
+          _cache[_coin][_address] &&
+          _cache[_coin][_address].getbalance &&
+          _cache[_coin][_address].getbalance.data &&
+          (_cache[_coin][_address].getbalance.data.balance ||
+            _cache[_coin][_address].getbalance.data.interest)) {
+          const _regBalance = _cache[_coin][_address].getbalance.data.balance ? _cache[_coin][_address].getbalance.data.balance : 0;
+          const _regInterest = _cache[_coin][_address].getbalance.data.interest ? _cache[_coin][_address].getbalance.data.interest : 0;
+
+          _balance = _regBalance + _regInterest;
+        }
+      }
+    } else if (_mode === 'native') {
+      if (this.props.ActiveCoin.balance &&
+        this.props.ActiveCoin.balance.total) {
+        _balance = this.props.ActiveCoin.balance.total;
+      }
+    }
+
+    return +_balance;
+  }
+
+  validateSendFormData() {
+    let valid = true;
+    if (!this.state.sendTo || this.state.sendTo.length < 34) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.SEND_TO_ADDRESS_MIN_LENGTH'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (!isPositiveNumber(this.state.amount)) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.AMOUNT_POSITIVE_NUMBER'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (!isPositiveNumber(this.state.fee)) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.FEE_POSITIVE_NUMBER'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (!isPositiveNumber(this.getTotalAmount())) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.TOTAL_AMOUNT_POSITIVE_NUMBER'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (this.state.amount > this.checkTotalBalance()) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.INSUFFICIENT_FUNDS'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  getTotalAmount() {
+    return Number(this.state.amount) - Number(this.state.fee);
   }
 
   render() {

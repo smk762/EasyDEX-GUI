@@ -17,12 +17,12 @@ class Toaster extends React.Component {
         props.toasts) {
       this.setState({
         toasts: props.toasts,
-        toastId: props.toasts.length
+        toastId: props.toasts.length,
       });
     } else {
       this.setState({
         toasts: [],
-        toastId: 0
+        toastId: 0,
       });
     }
   }
@@ -37,7 +37,9 @@ class Toaster extends React.Component {
         }
 
         return (
-          <ToasterItem key={ toast.toastId } {...toast} />
+          <ToasterItem
+            key={ toast.toastId }
+            {...toast} />
         );
       });
     } else {

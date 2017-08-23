@@ -91,9 +91,9 @@ function parseImportPrivKeyResponse(json, dispatch) {
 
 export function importPrivKey(wifKey) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'method': 'importprivkey',
-    'params': [
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    method: 'importprivkey',
+    params: [
       wifKey,
       'imported'
     ],
@@ -103,12 +103,12 @@ export function importPrivKey(wifKey) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'importPrivKey',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'importPrivKey',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -120,9 +120,9 @@ export function importPrivKey(wifKey) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -137,9 +137,9 @@ export function importPrivKey(wifKey) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(
@@ -151,7 +151,7 @@ export function importPrivKey(wifKey) {
     })
     .catch(function(ex) {
       dispatch(parseImportPrivKeyResponse({
-        'error': 'privkey already in wallet'
+        error: 'privkey already in wallet',
       }, dispatch));
       console.log('parsing failed', ex);
     })
@@ -169,8 +169,8 @@ function getDebugLogState(json) {
 
 export function getDebugLog(target, linesCount, acName) {
   const payload = {
-    'herdname': target,
-    'lastLines': linesCount
+    herdname: target,
+    lastLines: linesCount,
   };
 
   if (acName) {
@@ -202,22 +202,22 @@ export function getDebugLog(target, linesCount, acName) {
 
 export function getPeersList(coin) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'SuperNET',
-    'method': 'getpeers',
-    'activecoin': coin,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'SuperNET',
+    method: 'getpeers',
+    activecoin: coin,
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getPeersList',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getPeersList',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -229,9 +229,9 @@ export function getPeersList(coin) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -246,9 +246,9 @@ export function getPeersList(coin) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(getPeersListState(json, dispatch));
@@ -323,23 +323,23 @@ function addPeerNodeState(json, dispatch) {
 
 export function addPeerNode(coin, ip) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'iguana',
-    'method': 'addnode',
-    'activecoin': coin,
-    'ipaddr': ip,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'iguana',
+    method: 'addnode',
+    activecoin: coin,
+    ipaddr: ip,
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'addPeerNode',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'addPeerNode',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -351,9 +351,9 @@ export function addPeerNode(coin, ip) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -368,9 +368,9 @@ export function addPeerNode(coin, ip) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(addPeerNodeState(json, dispatch));
@@ -385,7 +385,7 @@ export function saveAppConfig(_payload) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': _payload }),
+      body: JSON.stringify({ payload: _payload }),
     })
     .catch(function(error) {
       console.log(error);
@@ -402,7 +402,7 @@ export function saveAppConfig(_payload) {
       dispatch(getAppConfig());
       dispatch(
         triggerToaster(
-          'Settings are saved',
+          translate('TOASTR.SETTINGS_SAVED'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'success'
         )
@@ -464,7 +464,7 @@ export function resetAppConfig() {
       dispatch(getAppConfig());
       dispatch(
         triggerToaster(
-          'Settings are reset to default',
+          translate('TOASTR.SETTINGS_RESET'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'success'
         )

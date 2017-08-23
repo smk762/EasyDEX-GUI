@@ -146,17 +146,17 @@ class Login extends React.Component {
     if (props &&
         props.Main &&
         props.Main.isLoggedIn) {
-        this.setState({
-          display: false,
-        });
+      this.setState({
+        display: false,
+      });
     }
 
     if (props &&
         props.Main &&
         !props.Main.isLoggedIn) {
-        this.setState({
-          display: true,
-        });
+      this.setState({
+        display: true,
+      });
 
       if (!this.props.Interval.interval.activeCoins) {
         // only start a new 'activeCoins' interval if a previous one doesn't exist

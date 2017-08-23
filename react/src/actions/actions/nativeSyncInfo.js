@@ -18,12 +18,12 @@ export function getSyncInfoNativeKMD(skipDebug, json) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getSyncInfoNativeKMD',
-        'type': 'post',
-        'url': Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`,
-        'payload': '',
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getSyncInfoNativeKMD',
+        type: 'post',
+        url: Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`,
+        payload: '',
+        status: 'pending',
       }));
     }
 
@@ -35,9 +35,9 @@ export function getSyncInfoNativeKMD(skipDebug, json) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       /*dispatch(
@@ -47,19 +47,19 @@ export function getSyncInfoNativeKMD(skipDebug, json) {
           'error'
         )
       );*/
-    console.warn('remote kmd node fetch failed', true);
-      dispatch(getSyncInfoNativeState({ 'remoteKMDNode': null }));
+      console.warn('remote kmd node fetch failed', true);
+      dispatch(getSyncInfoNativeState({ remoteKMDNode: null }));
     })
     .then(response => response.json())
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': Config.iguanaLessMode ? json.info : json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: Config.iguanaLessMode ? json.info : json,
         }));
       }
-      dispatch(getSyncInfoNativeState({ 'remoteKMDNode': Config.iguanaLessMode ? json.info : json }));
+      dispatch(getSyncInfoNativeState({ remoteKMDNode: Config.iguanaLessMode ? json.info : json }));
     })
     .then(function() {
       if (!skipDebug) {
@@ -94,19 +94,19 @@ function getSyncInfoNativeState(json, coin, skipDebug) {
 
 export function getSyncInfoNative(coin, skipDebug) {
   let payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': getPassthruAgent(coin),
-    'method': 'passthru',
-    'asset': coin,
-    'function': 'getinfo',
-    'hex': '',
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: getPassthruAgent(coin),
+    method: 'passthru',
+    asset: coin,
+    function: 'getinfo',
+    hex: '',
   };
 
   if (Config.cli.default) {
     payload = {
       mode: null,
       chain: coin,
-      cmd: 'getinfo'
+      cmd: 'getinfo',
     };
   }
 
@@ -114,12 +114,12 @@ export function getSyncInfoNative(coin, skipDebug) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getSyncInfo',
-        'type': 'post',
-        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getSyncInfo',
+        type: 'post',
+        url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
     let _fetchConfig = {
@@ -133,7 +133,7 @@ export function getSyncInfoNative(coin, skipDebug) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'payload': payload }),
+        body: JSON.stringify({ payload: payload }),
       };
     }
 
@@ -145,9 +145,9 @@ export function getSyncInfoNative(coin, skipDebug) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -166,7 +166,11 @@ export function getSyncInfoNative(coin, skipDebug) {
       if (json === 'Work queue depth exceeded') {
         dispatch(
           getSyncInfoNativeState(
-            { result: 'daemon is busy', error: null, id: null },
+            {
+              result: 'daemon is busy',
+              error: null,
+              id: null
+            },
             coin,
             skipDebug
           )
@@ -204,9 +208,9 @@ export function getSyncInfoNative(coin, skipDebug) {
 
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'status': 'success',
-            'response': json,
+            timestamp: _timestamp,
+            status: 'success',
+            response: json,
           }));
         }
         dispatch(

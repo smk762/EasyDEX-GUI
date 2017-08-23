@@ -162,10 +162,10 @@ const CoinSelectorsRender = function(item, coin, i) {
             name="daemonParam"
             onChange={ (event) => this.updateDaemonParam(event, i) }
             autoFocus>
-            <option>Daemon param: none</option>
-            <option value="silent">Daemon param: background process</option>
-            <option value="reindex">Daemon param: reindex</option>
-            <option value="rescan">Daemon param: rescan</option>
+            <option>{ translate('INDEX.DAEMON_PARAM') }: none</option>
+            <option value="silent">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.BACKGROUND_PROCESS') }</option>
+            <option value="reindex">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.REINDEX') }</option>
+            <option value="rescan">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.RESCAN') }</option>
           </select>
         </div>
       </div>
@@ -180,7 +180,7 @@ const CoinSelectorsRender = function(item, coin, i) {
                 className="slider"
                 onClick={ () => this.toggleSyncOnlyMode(i) }></div>
             </label>
-            <div 
+            <div
               className="toggle-label"
               onClick={ () => this.toggleSyncOnlyMode(i) }>
                 { translate('ADD_COIN.SYNC_ONLY') }

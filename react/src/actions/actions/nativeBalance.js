@@ -15,20 +15,20 @@ export function getKMDBalanceTotal(coin) {
   if (coin !== 'KMD' &&
       coin !== 'ZEC') {
     payload = {
-      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      'agent': 'iguana',
-      'method': 'passthru',
-      'asset': coin,
-      'function': 'z_gettotalbalance',
-      'hex': '3000',
+      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+      agent: 'iguana',
+      method: 'passthru',
+      asset: coin,
+      function: 'z_gettotalbalance',
+      hex: '3000',
     };
   } else {
     payload = {
-      'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      'agent': getPassthruAgent(coin),
-      'method': 'passthru',
-      'function': 'z_gettotalbalance',
-      'hex': '3000',
+      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+      agent: getPassthruAgent(coin),
+      method: 'passthru',
+      function: 'z_gettotalbalance',
+      hex: '3000',
     };
   }
 
@@ -44,12 +44,12 @@ export function getKMDBalanceTotal(coin) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getKMDBalanceTotal',
-        'type': 'post',
-        'url': Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getKMDBalanceTotal',
+        type: 'post',
+        url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -64,7 +64,7 @@ export function getKMDBalanceTotal(coin) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'payload': payload }),
+        body: JSON.stringify({ payload: payload }),
       };
     }
 
@@ -76,9 +76,9 @@ export function getKMDBalanceTotal(coin) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -93,9 +93,9 @@ export function getKMDBalanceTotal(coin) {
     .then(function(json) { // TODO: figure out why komodod spits out "parse error"
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       if (json &&

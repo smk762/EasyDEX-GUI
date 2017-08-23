@@ -193,7 +193,7 @@ class AddCoin extends React.Component {
     };
 
     this.setState(Object.assign({}, this.state, {
-      coins: _coins
+      coins: _coins,
     }));
   }
 
@@ -347,6 +347,7 @@ class AddCoin extends React.Component {
             'error'
           )
         );
+
         return true;
       }
     }

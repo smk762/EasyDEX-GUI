@@ -23,22 +23,22 @@ function getSyncInfoState(json) {
 
 export function getSyncInfo(coin) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'coin': coin,
-    'agent': 'bitcoinrpc',
-    'method': 'getinfo',
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    coin: coin,
+    agent: 'bitcoinrpc',
+    method: 'getinfo',
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getSyncInfo',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getSyncInfo',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -50,9 +50,9 @@ export function getSyncInfo(coin) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -71,9 +71,9 @@ export function getSyncInfo(coin) {
     .then(function(json) {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       if (json.indexOf('coin is busy processing') === -1) {

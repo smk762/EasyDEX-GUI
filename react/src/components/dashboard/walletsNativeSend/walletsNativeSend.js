@@ -17,6 +17,7 @@ import {
   WalletsNativeSendFormRender,
   _WalletsNativeSendFormRender
 } from './walletsNativeSend.render';
+import { isPositiveNumber } from "../../../util/number";
 
 class WalletsNativeSend extends React.Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class WalletsNativeSend extends React.Component {
 
   setRecieverFromScan(receiver) {
     this.setState({
-      sendTo: receiver
+      sendTo: receiver,
     });
 
     document.getElementById('kmdWalletSendTo').focus();
@@ -153,7 +154,7 @@ class WalletsNativeSend extends React.Component {
       );
     } else {
       return (
-        <span>Transparent funds</span>
+        <span>{ translate('INDEX.T_FUNDS') }</span>
       );
     }
   }
@@ -270,6 +271,10 @@ class WalletsNativeSend extends React.Component {
   }
 
   handleSubmit() {
+    if (!this.validateSendFormData()) {
+      return;
+    }
+
     Store.dispatch(
       sendNativeTx(
         this.props.ActiveCoin.coin,
@@ -348,6 +353,55 @@ class WalletsNativeSend extends React.Component {
 
     return null;
   }
+
+  checkTotalBalance() {
+    let _balance = 0;
+    if (this.props.ActiveCoin.balance &&
+      this.props.ActiveCoin.balance.total) {
+      _balance = this.props.ActiveCoin.balance.total;
+    }
+
+    return _balance;
+  }
+
+  validateSendFormData() {
+    let valid = true;
+    if (!this.state.sendTo || this.state.sendTo.length < 34) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.SEND_TO_ADDRESS_MIN_LENGTH'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (!isPositiveNumber(this.state.amount)) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.AMOUNT_POSITIVE_NUMBER'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (this.state.amount > this.checkTotalBalance()) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.INSUFFICIENT_FUNDS'),
+          '',
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    return valid;
+  }
+
 
   render() {
     if (this.props &&

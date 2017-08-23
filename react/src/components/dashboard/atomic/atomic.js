@@ -27,55 +27,55 @@ class Atomic extends React.Component {
 
   updateSelectedAPI(e) {
     this.setState(Object.assign({}, this.state, {
-      'api': e.target.value,
+      api: e.target.value,
     }));
   }
 
   updateSelectedCoin(e) {
     this.setState(Object.assign({}, this.state, {
-      'coin': e.target.value.split('|')[0],
+      coin: e.target.value.split('|')[0],
     }));
   }
 
   updateInput(e) {
     this.setState(Object.assign({}, this.state, {
-      'input': e.target.value,
+      input: e.target.value,
     }));
   }
 
   getAtomicData() {
     const tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
-    let ExplorerInputData;
+    let explorerInputData;
     const _coin = this.state.coin;
     const _input = this.state.input;
 
     switch (this.state.api) {
       case 'history':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'timeout': 20000,
-          'agent': 'basilisk',
-          'method': 'history',
-          'vals': {
-            'coin': _coin,
-            'addresses': [ _input ],
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          timeout: 20000,
+          agent: 'basilisk',
+          method: 'history',
+          vals: {
+            coin: _coin,
+            addresses: [ _input ],
           }
         };
         break;
       case 'getbalance':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'coin': _coin,
-          'method': 'getbalance',
-          'params': [ _input ],
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          coin: _coin,
+          method: 'getbalance',
+          params: [ _input ],
         };
         break;
       case 'listunspent':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'coin': _coin,
-          'method': 'listunspent',
-          'params': [
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          coin: _coin,
+          method: 'listunspent',
+          params: [
             1,
             9999999,
             [ _input ],
@@ -83,253 +83,254 @@ class Atomic extends React.Component {
         };
         break;
       case 'txid':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'coin': _coin,
-          'method': 'getrawtransaction',
-          'params': [ _input ],
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          coin: _coin,
+          method: 'getrawtransaction',
+          params: [ _input ],
         };
         break;
       case 'blockash':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'coin': _coin,
-          'agent': 'bitcoinrpc',
-          'method': 'getblockhash',
-          'height': _input,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          coin: _coin,
+          agent: 'bitcoinrpc',
+          method: 'getblockhash',
+          height: _input,
         };
         break;
       case 'chaintip':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'coin': _coin,
-          'agent': 'bitcoinrpc',
-          'method': 'getbestblockhash',
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          coin: _coin,
+          agent: 'bitcoinrpc',
+          method: 'getbestblockhash',
         };
         break;
       case 'activehandle':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'SuperNET',
-          'method': 'activehandle',
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'SuperNET',
+          method: 'activehandle',
         };
         break;
       case 'gettransaction':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'coin': _coin,
-          'agent': 'bitcoinrpc',
-          'method': 'gettransaction',
-          'txid': _input,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          coin: _coin,
+          agent: 'bitcoinrpc',
+          method: 'gettransaction',
+          txid: _input,
         };
         break;
       case 'dex_getinfo':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'getinfo',
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'getinfo',
+          symbol: _coin,
         };
         break;
       case 'dex_getnotaries':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'getnotaries',
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'getnotaries',
+          symbol: _coin,
         };
         break;
       case 'dex_alladdresses':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'alladdresses',
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'alladdresses',
+          symbol: _coin,
         };
         break;
       case 'dex_importaddress':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'importaddress',
-          'address': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'importaddress',
+          address: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_checkaddress':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'checkaddress',
-          'ddress': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'checkaddress',
+          address: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_validateaddress':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'validateaddress',
-          'address': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'validateaddress',
+          address: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_getbestblockhash':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'getbestblockhash',
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'getbestblockhash',
+          symbol: _coin,
         };
         break;
       case 'dex_listtransactions':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'listtransactions',
-          'address': _input,
-          'count': 100,
-          'skip': 0,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'listtransactions',
+          address: _input,
+          count: 100,
+          skip: 0,
+          symbol: _coin,
         };
         break;
       case 'dex_listtransactions2':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'listtransactions2',
-          'address': _input,
-          'count': 100,
-          'skip': 0,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'listtransactions2',
+          address: _input,
+          count: 100,
+          skip: 0,
+          symbol: _coin,
         };
         break;
       case 'dex_listunspent':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'listunspent',
-          'address': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'listunspent',
+          address: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_listspent':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'listspent',
-          'address': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'listspent',
+          address: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_listunspent2':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'listunspent2',
-          'address': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'listunspent2',
+          address: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_getblockhash':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'getblockhash',
-          'height': 100,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'getblockhash',
+          height: 100,
+          symbol: _coin,
         };
         break;
       case 'dex_getblock':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'getblock',
-          'hash': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'getblock',
+          hash: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_gettxin':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'gettxin',
-          'vout': 0,
-          'txid': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'gettxin',
+          vout: 0,
+          txid: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_gettxout':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'gettxout',
-          'vout': 0,
-          'txid': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'gettxout',
+          vout: 0,
+          txid: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_gettransaction':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'gettransaction',
-          'txid': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'gettransaction',
+          txid: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_getbalance':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'getbalance',
-          'address': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'getbalance',
+          address: _input,
+          symbol: _coin,
         };
         break;
       case 'dex_getsupply':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'getbalance',
-          'address': '*',
-          'symbol': _coin,
-          'timeout': 600000,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'getbalance',
+          address: '*',
+          symbol: _coin,
+          timeout: 600000,
         };
         break;
       case 'dex_sendrawtransaction':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'dex',
-          'method': 'sendrawtransaction',
-          'signedtx': _input,
-          'symbol': _coin,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'dex',
+          method: 'sendrawtransaction',
+          signedtx: _input,
+          symbol: _coin,
         };
         break;
       case 'basilisk_refresh':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'basilisk',
-          'method': 'refresh',
-          'address': _input,
-          'symbol': _coin,
-          'timeout': 600000,
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'basilisk',
+          method: 'refresh',
+          address: _input,
+          symbol: _coin,
+          timeout: 600000,
         };
         break;
       case 'jumblr_status':
-        ExplorerInputData = {
-          'userpass': tmpIguanaRPCAuth,
-          'agent': 'jumblr',
-          'method': 'status',
+        explorerInputData = {
+          userpass: tmpIguanaRPCAuth,
+          agent: 'jumblr',
+          method: 'status',
         };
         break;
     }
 
-    Store.dispatch(atomic(ExplorerInputData));
+    Store.dispatch(atomic(explorerInputData));
   }
 
   componentWillReceiveProps(props) {
-    if (props && props.Atomic.response) {
+    if (props &&
+        props.Atomic.response) {
       const _api = this.state.api;
       const _propsAtomicRes = props.Atomic.response;
 
@@ -338,18 +339,18 @@ class Atomic extends React.Component {
           _api === 'dex_sendrawtransaction' ||
           _api === 'dex_getblockhash') {
         this.setState(Object.assign({}, this.state, {
-          'output': _propsAtomicRes,
+          output: _propsAtomicRes,
         }));
       } else {
         this.setState(Object.assign({}, this.state, {
-          'output': JSON.stringify(_propsAtomicRes, null, '\t'),
+          output: JSON.stringify(_propsAtomicRes, null, '\t'),
         }));
       }
 
       if (_propsAtomicRes.error === 'less than required responses') {
         Store.dispatch(
           triggerToaster(
-            'Basilisk connection error',
+            translate('TOASTR.BASILISK_CONN_ERROR'),
             translate('TOASTR.SERVICE_NOTIFICATION'),
             'error'
           )

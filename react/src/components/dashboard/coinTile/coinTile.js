@@ -26,14 +26,14 @@ class CoinTile extends React.Component {
     if (allCoins) {
       modes.map(function(mode) {
         allCoins[mode].map(function(coin) {
-          const _coinMode = getModeInfo(mode),
-                modecode = _coinMode.code,
-                modetip = _coinMode.tip,
-                modecolor = _coinMode.color;
+          const _coinMode = getModeInfo(mode);
+          const modecode = _coinMode.code;
+          const modetip = _coinMode.tip;
+          const modecolor = _coinMode.color;
 
-          const _coinTitle = getCoinTitle(coin),
-                coinlogo = _coinTitle.logo,
-                coinname = _coinTitle.name;
+          const _coinTitle = getCoinTitle(coin);
+          const coinlogo = _coinTitle.logo;
+          const coinname = _coinTitle.name;
 
           items.push({
             coinlogo,

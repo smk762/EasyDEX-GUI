@@ -12,8 +12,8 @@ export function getAddressesByAccountState(json, coin, mode) {
 
     for (let i = 0; i < json.result.length; i++) {
       publicAddressArray.push({
-        'address': json.result[i],
-        'amount': 'N/A'
+        address: json.result[i],
+        amount: 'N/A',
       });
     }
 
@@ -22,29 +22,29 @@ export function getAddressesByAccountState(json, coin, mode) {
 
   return {
     type: ACTIVE_COIN_GET_ADDRESSES,
-    addresses: { 'public': json.result },
+    addresses: { public: json.result },
   }
 }
 
 export function getAddressesByAccount(coin, mode) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'coin': coin,
-    'agent': 'bitcoinrpc',
-    'method': 'getaddressesbyaccount',
-    'account': '*',
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    coin: coin,
+    agent: 'bitcoinrpc',
+    method: 'getaddressesbyaccount',
+    account: '*',
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getAddressesByAccount',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getAddressesByAccount',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
 
@@ -56,9 +56,9 @@ export function getAddressesByAccount(coin, mode) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(updateErrosStack('activeHandle'));
@@ -74,9 +74,9 @@ export function getAddressesByAccount(coin, mode) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(

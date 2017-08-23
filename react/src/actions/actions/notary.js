@@ -14,23 +14,23 @@ function initNotaryNodesConSequence(nodes) {
   return dispatch => {
     Promise.all(nodes.map((node, index) => {
       const payload = {
-        'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-        'agent': 'dex',
-        'method': 'getinfo',
-        'symbol': node,
-        'timeout': 10000
+        userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+        agent: 'dex',
+        method: 'getinfo',
+        symbol: node,
+        timeout: 10000,
       };
 
       return new Promise((resolve, reject) => {
         const _timestamp = Date.now();
         if (Config.debug) {
           dispatch(logGuiHttp({
-            'timestamp': _timestamp,
-            'function': `initNotaryNodesConSequence+${node}`,
-            'type': 'post',
-            'url': `http://127.0.0.1:${Config.iguanaCorePort}`,
-            'payload': payload,
-            'status': 'pending',
+            timestamp: _timestamp,
+            function: `initNotaryNodesConSequence+${node}`,
+            type: 'post',
+            url: `http://127.0.0.1:${Config.iguanaCorePort}`,
+            payload: payload,
+            status: 'pending',
           }));
         }
 
@@ -41,9 +41,9 @@ function initNotaryNodesConSequence(nodes) {
           console.log(error);
           if (Config.debug) {
             dispatch(logGuiHttp({
-              'timestamp': _timestamp,
-              'status': 'error',
-              'response': error,
+              timestamp: _timestamp,
+              status: 'error',
+              response: error,
             }));
           }
           dispatch(
@@ -58,9 +58,9 @@ function initNotaryNodesConSequence(nodes) {
         .then(json => {
           if (Config.debug) {
             dispatch(logGuiHttp({
-              'timestamp': _timestamp,
-              'status': 'success',
-              'response': json,
+              timestamp: _timestamp,
+              status: 'success',
+              response: json,
             }));
           }
           dispatch(
@@ -119,9 +119,9 @@ function connectAllNotaryNodes(json, dispatch) {
 
 export function connectNotaries() {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'dpow',
-    'method': 'notarychains',
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'dpow',
+    method: 'notarychains',
   };
 
   return dispatch => {
@@ -169,22 +169,22 @@ function getDexNotariesState(json) {
 
 export function getDexNotaries(coin) {
   const payload = {
-    'userpass': `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    'agent': 'dex',
-    'method': 'getnotaries',
-    'symbol': coin,
+    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
+    agent: 'dex',
+    method: 'getnotaries',
+    symbol: coin,
   };
 
   return dispatch => {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'getDexNotaries',
-        'type': 'post',
-        'url': `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
-        'payload': payload,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'getDexNotaries',
+        type: 'post',
+        url: `http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`,
+        payload: payload,
+        status: 'pending',
       }));
     }
     return fetch(`http://127.0.0.1:${Config.useBasiliskInstance ? Config.iguanaCorePort + 1 : Config.iguanaCorePort}`, {
@@ -195,9 +195,9 @@ export function getDexNotaries(coin) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -212,9 +212,9 @@ export function getDexNotaries(coin) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(getDexNotariesState(json));

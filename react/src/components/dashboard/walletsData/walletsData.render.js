@@ -80,7 +80,7 @@ export const AddressListRender = function() {
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
             <li className="no--hover">
-              <a><span className="text">{ this.props.ActiveCoin.mode === 'basilisk' ? 'Filter by address' : translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
+              <a><span className="text">{ this.props.ActiveCoin.mode === 'basilisk' ? translate('INDEX.FILTER_BY_ADDRESS') : translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
             </li>
             { this.props.ActiveCoin.mode === 'native' &&
               <li className={ !this.state.currentAddress ? 'selected' : '' }>
@@ -181,6 +181,8 @@ export const TxHistoryListRender = function() {
 };
 
 export const WalletsDataRender = function() {
+  let _basiliskProgressBarWidth = 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength);
+  _basiliskProgressBarWidth = _basiliskProgressBarWidth < 20 ? 20 : _basiliskProgressBarWidth;
 
   return (
     <span>
@@ -198,7 +200,7 @@ export const WalletsDataRender = function() {
                     <div className={ 'margin-bottom-3 basilisk-progress-bar ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
                       <div
                         className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-                        style={{ width: 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength) + '%' }}>
+                        style={{ width: _basiliskProgressBarWidth + '%' }}>
                         { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
                       </div>
                     </div>

@@ -99,12 +99,12 @@ export function iguanaAddCoin(coin, mode, acData, port) {
     const _timestamp = Date.now();
     if (Config.debug) {
       dispatch(logGuiHttp({
-        'timestamp': _timestamp,
-        'function': 'iguanaAddCoin',
-        'type': 'post',
-        'url': `http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`,
-        'payload': acData,
-        'status': 'pending',
+        timestamp: _timestamp,
+        function: 'iguanaAddCoin',
+        type: 'post',
+        url: `http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`,
+        payload: acData,
+        status: 'pending',
       }));
     }
 
@@ -116,9 +116,9 @@ export function iguanaAddCoin(coin, mode, acData, port) {
       console.log(error);
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'error',
-          'response': error,
+          timestamp: _timestamp,
+          status: 'error',
+          response: error,
         }));
       }
       dispatch(
@@ -133,9 +133,9 @@ export function iguanaAddCoin(coin, mode, acData, port) {
     .then(json => {
       if (Config.debug) {
         dispatch(logGuiHttp({
-          'timestamp': _timestamp,
-          'status': 'success',
-          'response': json,
+          timestamp: _timestamp,
+          status: 'success',
+          response: json,
         }));
       }
       dispatch(
@@ -238,7 +238,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       },
       body: JSON.stringify({
         'herd': coin !== 'ZEC' ? 'komodod' : 'zcashd',
-        'options': herdData
+        'options': herdData,
       }),
     })
     .catch(function(error) {
@@ -279,7 +279,7 @@ export function addCoinResult(coin, mode) {
   const modeToValue = {
     '1': 'full',
     '0': 'basilisk',
-    '-1': 'native'
+    '-1': 'native',
   };
 
   return dispatch => {
@@ -302,7 +302,7 @@ export function _shepherdGetConfig(coin, mode, startupParams) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'chain': 'komodod' })
+      body: JSON.stringify({ chain: 'komodod' })
     })
     .catch(function(error) {
       console.log(error);
@@ -364,7 +364,7 @@ export function shepherdGetConfig(coin, mode, startupParams) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'chain': 'komodod' })
+        body: JSON.stringify({ chain: 'komodod' })
       })
       .catch(function(error) {
         console.log(error);

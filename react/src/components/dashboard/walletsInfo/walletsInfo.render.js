@@ -46,8 +46,8 @@ const WalletsInfoRender = function() {
             <button
               type="button"
               className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-              onClick={ () => this.openClaimInterestModal() }>Claim interest</button>
-            <ClaimInterestModal />
+              onClick={ () => this.openClaimInterestModal() }>{ translate('CLAIM_INTEREST.CLAIM_INTEREST') }</button>
+            <ClaimInterestModal {...this.props} />
           </div>
         }
       </div>
@@ -82,7 +82,7 @@ const WalletsInfoRender = function() {
                 </tr>
                 <tr>
                   <td>
-                    { translate('INDEX.NOTARIZED') } Hash
+                    { translate('INDEX.NOTARIZED') } { translate('INDEX.HASH') }
                   </td>
                   <td>
                     { this.props.Dashboard.progress.notarizedhash ?
