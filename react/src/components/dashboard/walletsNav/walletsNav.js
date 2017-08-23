@@ -131,7 +131,7 @@ const mapStateToProps = (state) => {
       receive: state.ActiveCoin.receive,
       balance: state.ActiveCoin.balance,
       cache: state.ActiveCoin.cache,
-      ativeSection: state.ActiveCoin.activeSection,
+      activeSection: state.ActiveCoin.activeSection,
       activeAddress: state.ActiveCoin.activeAddress
     },
     ActiveHandle: state.Dashboard.activeHandle,
