@@ -450,10 +450,10 @@ class Settings extends React.Component {
 
     for (let key in _appSettings) {
       if (key.indexOf('__') === -1) {
-        _appSettingsPristine[key] = _appSettings[key];
+        _appSettingsPristine[key] = this.state.appConfigSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
       } else {
         const _nestedKey = key.split('__');
-        _appSettingsPristine[_nestedKey[0]][_nestedKey[1]] = _appSettings[key];
+        _appSettingsPristine[_nestedKey[0]][_nestedKey[1]] = this.state.appConfigSchema[_nestedKey[0]][_nestedKey[1]].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
       }
     }
 
