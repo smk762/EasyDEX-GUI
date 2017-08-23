@@ -704,8 +704,8 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		'WLC': {
 			'name': 'WIRELESS',
 			'supply': 210000000,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'WLC','conf':'WLC.conf','path':confpath,'RELAY':-1,'VALIDATE':0,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'WLC','name':'WIRELESS','netmagic':'62071ed3','p2p':assetChainPorts.WIRELESS - 1,'rpc':assetChainPorts.WIRELESS}) : {},
-			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,'RELAY':mode,'VALIDATE':mode,'startpend':tmpPendValue,'endpend':tmpPendValue,'maxpeers':8,'newcoin':'WLC','name':'WIRELESS','netmagic':'62071ed3','p2p':assetChainPorts.WIRELESS - 1,'rpc':assetChainPorts.WIRELESS})
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'WLC','conf':'WLC.conf','path':confpath,'RELAY':-1,'VALIDATE':0,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'WLC','name':'WIRELESS','netmagic':'62071ed3','p2p':assetChainPorts.WLC - 1,'rpc':assetChainPorts.WLC}) : {},
+			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,'RELAY':mode,'VALIDATE':mode,'startpend':tmpPendValue,'endpend':tmpPendValue,'maxpeers':8,'newcoin':'WLC','name':'WIRELESS','netmagic':'62071ed3','p2p':assetChainPorts.WLC - 1,'rpc':assetChainPorts.WLC})
 		},
 		'PANGEA': {
 			'name': 'PANGEA',
