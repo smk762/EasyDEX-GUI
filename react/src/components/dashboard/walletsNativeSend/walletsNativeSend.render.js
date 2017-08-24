@@ -27,6 +27,7 @@ export const AddressListRender = function() {
                 style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
             </a>
           </li>
+          { this.renderAddressByType('public') }
           { this.renderAddressByType('private') }
         </ul>
       </div>
@@ -74,7 +75,7 @@ export const _WalletsNativeSendFormRender = function() {
       { this.state.renderAddressDropdown &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
-            <label className="control-label">{ translate('INDEX.SEND_FROM') }</label>
+            <label className="control-label padding-bottom-10">{ translate('INDEX.SEND_FROM') }</label>
             { this.renderAddressList() }
           </div>
         </div>
@@ -111,6 +112,23 @@ export const _WalletsNativeSendFormRender = function() {
             id="kmdWalletAmount"
             placeholder="0.000"
             autoComplete="off" />
+        </div>
+        <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() ? '' : ' hide') }>
+          <span className="pointer">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={ this.state.substractFee } />
+              <div
+                className="slider"
+                onClick={ () => this.toggleSubstractFee() }></div>
+            </label>
+            <div
+              className="toggle-label"
+              onClick={ () => this.toggleSubstractFee() }>
+                Substract fee from amount
+            </div>
+          </span>
         </div>
         <div className="col-lg-6 form-group form-material hide">
           <label

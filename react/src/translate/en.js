@@ -544,6 +544,7 @@ export const _lang = {
       'MESSAGE': 'Message',
       'EXECUTION_SECONDS': 'Execution Seconds',
       'WAIT_UNTIL_SYNCED': 'Transaction history is unavailable during synchronization progresss',
+      'TXID': 'Transaction ID',
     },
     'LOGIN': {
       'QUICK_ACCESS': 'Quick access',
@@ -638,6 +639,7 @@ export const _lang = {
       'FEE_POSITIVE_NUMBER': 'Fee must be a positive number',
       'TOTAL_AMOUNT_POSITIVE_NUMBER': 'Total amount (amount - fee) must be a positive number',
       'INSUFFICIENT_FUNDS': 'You don\'t have the necessary funds to make this transaction',
+      'SELECT_SOURCE_ADDRESS': 'Select source (from) address',
     },
     'FIAT_CURRENCIES': {
       'AUD': 'Australian Dollar (AUD)',

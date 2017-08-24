@@ -31,6 +31,7 @@ class WalletsNativeSend extends React.Component {
       fee: 0,
       addressSelectorOpen: false,
       renderAddressDropdown: true,
+      substractFee: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,10 +42,18 @@ class WalletsNativeSend extends React.Component {
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
     this.renderOPIDListCheck = this.renderOPIDListCheck.bind(this);
     this.WalletsNativeSendFormRender = _WalletsNativeSendFormRender.bind(this);
+    this.isTransparentTx = this.isTransparentTx.bind(this);
+    this.toggleSubstractFee = this.toggleSubstractFee.bind(this);
   }
 
   WalletsNativeSendFormRender() {
-    return this._WalletsNativeSendFormRender();
+    return _WalletsNativeSendFormRender.call(this);
+  }
+
+  toggleSubstractFee() {
+    this.setState({
+      substractFee: !this.state.substractFee,
+    });
   }
 
   componentWillMount() {
@@ -166,20 +175,20 @@ class WalletsNativeSend extends React.Component {
     const _satatusDef = {
       queued: {
         icon: 'warning',
-        label: 'QUEUED'
+        label: 'QUEUED',
       },
       executing: {
         icon: 'info',
-        label: 'EXECUTING'
+        label: 'EXECUTING',
       },
       failed: {
         icon: 'danger',
-        label: 'FAILED'
+        label: 'FAILED',
       },
       success: {
         icon: 'success',
-        label: 'SUCCESS'
-      }
+        label: 'SUCCESS',
+      },
     };
 
     return (
@@ -219,7 +228,7 @@ class WalletsNativeSend extends React.Component {
       isWaitingStatus = false;
       return (
         <span>
-          <strong>txid:</strong> <span>{ opid.result.txid }</span>
+          <strong>{ translate('KMD_NATIVE.TXID') }:</strong> <span>{ opid.result.txid }</span>
           <br />
           <strong>{ translate('KMD_NATIVE.EXECUTION_SECONDS') }:</strong> <span>{ opid.execution_secs }</span>
         </span>
@@ -302,6 +311,7 @@ class WalletsNativeSend extends React.Component {
       fee: 0,
       addressSelectorOpen: false,
       renderAddressDropdown: true,
+      substractFee: false,
     });
   }
 
@@ -365,11 +375,12 @@ class WalletsNativeSend extends React.Component {
 
   validateSendFormData() {
     let valid = true;
-    if (!this.state.sendTo || this.state.sendTo.length < 34) {
+    if (!this.state.sendTo ||
+        this.state.sendTo.length < 34) {
       Store.dispatch(
         triggerToaster(
           translate('SEND.SEND_TO_ADDRESS_MIN_LENGTH'),
-          '',
+          translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
       );
@@ -380,7 +391,7 @@ class WalletsNativeSend extends React.Component {
       Store.dispatch(
         triggerToaster(
           translate('SEND.AMOUNT_POSITIVE_NUMBER'),
-          '',
+          translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
       );
@@ -391,7 +402,19 @@ class WalletsNativeSend extends React.Component {
       Store.dispatch(
         triggerToaster(
           translate('SEND.INSUFFICIENT_FUNDS'),
-          '',
+          translate('TOASTR.WALLET_NOTIFICATION'),
+          'error'
+        )
+      );
+      valid = false;
+    }
+
+    if (this.state.sendTo.length > 34 &&
+        (!this.state.sendFrom || this.state.sendFrom.length < 34)) {
+      Store.dispatch(
+        triggerToaster(
+          translate('SEND.SELECT_SOURCE_ADDRESS'),
+          translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
       );
@@ -401,6 +424,14 @@ class WalletsNativeSend extends React.Component {
     return valid;
   }
 
+  isTransparentTx() {
+    if (((this.state.sendFrom && this.state.sendFrom.length === 34) || !this.state.sendFrom) &&
+        (this.state.sendTo && this.state.sendTo.length === 34)) {
+      return true;
+    }
+
+    return false;
+  }
 
   render() {
     if (this.props &&

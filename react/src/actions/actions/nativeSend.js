@@ -71,10 +71,20 @@ export function sendNativeTx(coin, _payload) {
           cmd: payload.function,
           params:
             (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
-            [
-              _payload.sendTo,
-              _payload.amount
-            ]
+            (_payload.substractFee ?
+              [
+                _payload.sendTo,
+                _payload.amount,
+                '',
+                '',
+                true
+              ]
+              :
+              [
+                _payload.sendTo,
+                _payload.amount
+              ]
+            )
             :
             [
               _payload.sendFrom,
@@ -134,23 +144,29 @@ export function sendNativeTx(coin, _payload) {
             json.indexOf('"},"id":"jl777"')
           );
 
-          dispatch(
-            triggerToaster(
-              true,
-              _message,
-              translate('TOASTR.WALLET_NOTIFICATION'),
-              'error'
-            )
-          );
-
           if (json.indexOf('"code":-4') > -1) {
             dispatch(
               triggerToaster(
-                true,
-                translate('TOASTR.WALLET_NOTIFICATION'),
                 translate('API.WALLETDAT_MISMATCH'),
+                translate('TOASTR.WALLET_NOTIFICATION'),
                 'info',
                 false
+              )
+            );
+          } else if (json.indexOf('"code":-5') > -1) {
+            dispatch(
+              triggerToaster(
+                `Invalid ${coin} address`,
+                translate('TOASTR.WALLET_NOTIFICATION'),
+                'error',
+              )
+            );
+          } else {
+            dispatch(
+              triggerToaster(
+                _message,
+                translate('TOASTR.WALLET_NOTIFICATION'),
+                'error'
               )
             );
           }
