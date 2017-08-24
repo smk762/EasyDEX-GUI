@@ -445,6 +445,8 @@ export const _lang = {
       'QR_ERR_UNKNOWN': 'Error: unknown error!',
     },
     'TOASTR': {
+      'KOMODO_DATADIR_INVALID': 'Komodo datadir path is invalid',
+      'KOMODO_DATADIR_NOT_DIR': 'Komodo datadir path is not a directory',
       'INVALID_ADDRESS': 'Invalid @template@ address',
       'RESTART_AGAMA_WITH_REINDEX_PARAM': 'Restart Agama and run Komodo with -reindex param',
       'JUMBLR_DEPOSIT_ADDRESS_SET': 'Jumblr deposit address is set',

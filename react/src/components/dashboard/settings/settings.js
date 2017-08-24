@@ -106,8 +106,6 @@ class Settings extends React.Component {
         appConfigSchema: _appConfigSchema,
         appSettings: _appSettings,
       }));
-
-      console.warn(_appSettings);
     } catch(e) {}
   }
 
@@ -263,14 +261,15 @@ class Settings extends React.Component {
   renderUpdateStatus() {
     let items = [];
     let patchProgressBar = null;
+    const _updateLogLength = this.state.updateLog.length;
 
-    for (let i = 0; i < this.state.updateLog.length; i++) {
+    for (let i = 0; i < _updateLogLength; i++) {
       items.push(
         <div key={ `settings-update-log-${i}` }>{ this.state.updateLog[i] }</div>
       );
     }
 
-    if (this.state.updateLog.length) {
+    if (_updateLogLength) {
       return (
         <div style={{ minHeight: '200px' }}>
           <hr />
@@ -279,7 +278,7 @@ class Settings extends React.Component {
           <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
             <div
               className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-              style={{ width: updateProgressBar.patch + '%' }}>
+              style={{ width: `${updateProgressBar.patch}%` }}>
             </div>
           </div>
         </div>
@@ -467,7 +466,7 @@ class Settings extends React.Component {
               isError = true;
               Store.dispatch(
                 triggerToaster(
-                  'Komodo datadir path is invalid',
+                  translate('TOASTR.KOMODO_DATADIR_INVALID'),
                   translate('INDEX.SETTINGS'),
                   'error'
                 )
@@ -476,7 +475,7 @@ class Settings extends React.Component {
               isError = true;
               Store.dispatch(
                 triggerToaster(
-                  'Komodo datadir path is not a directory',
+                  translate('TOASTR.KOMODO_DATADIR_NOT_DIR'),
                   translate('INDEX.SETTINGS'),
                   'error'
                 )
