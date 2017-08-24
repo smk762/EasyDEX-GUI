@@ -27,14 +27,17 @@ class Main extends React.Component {
   componentDidMount() {
     let appVersion;
     let zcashParamsExist;
+    let appConfig;
 
     try {
       appVersion = window.require('electron').remote.getCurrentWindow().appBasicInfo;
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
       zcashParamsExist = window.require('electron').remote.getCurrentWindow().zcashParamsExist;
     } catch (e) {}
 
     if (appVersion) {
-      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
+      const _appMode = `${appConfig.iguanaLessMode ? ' - ' + translate('INDEX.NATIVE_ONLY_MODE') : ' - ' + translate('INDEX.NORMAL_MODE')}`;
+      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)${_appMode}`;
     }
 
     if (!zcashParamsExist) {

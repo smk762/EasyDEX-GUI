@@ -46,6 +46,8 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'NATIVE_ONLY_MODE': 'Native only mode',
+      'NORMAL_MODE': 'Normal mode',
       'T_FUNDS': 'Transparent funds',
       'HASH': 'Hash',
       'SYNC_IN_PROGRESS': 'Synchronization is in progress',
