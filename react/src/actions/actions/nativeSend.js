@@ -156,7 +156,7 @@ export function sendNativeTx(coin, _payload) {
           } else if (json.indexOf('"code":-5') > -1) {
             dispatch(
               triggerToaster(
-                `Invalid ${coin} address`,
+                translate('TOASTR.INVALID_ADDRESS', coin),
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 'error',
               )

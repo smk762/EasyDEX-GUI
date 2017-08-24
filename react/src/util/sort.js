@@ -1,4 +1,4 @@
-export function sortByDate(data, sortKey) {
+export function sortByDate(data, sortKey) { // deprecated
   return data.sort(function(a, b) {
     if (a[sortKey] < b[sortKey]) {
       return -1;

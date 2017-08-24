@@ -13,7 +13,8 @@ export const AddressTypeRender = function() {
   return (
     <span>
       <span className="label label-default">
-        <i className="icon fa-eye"></i> { translate('IAPI.PUBLIC_SM') }
+        <i className="icon fa-eye"></i>&nbsp;
+        { translate('IAPI.PUBLIC_SM') }
       </span>
     </span>
   );
@@ -34,7 +35,7 @@ export const AddressRender = function(tx) {
   if (!tx.address) {
     return (
       <span>
-        <i className="icon fa-bullseye"></i>
+        <i className="icon fa-bullseye"></i>&nbsp;
         <span className="label label-dark">
           { translate('DASHBOARD.ZADDR_NOT_LISTED') }
         </span>
@@ -200,7 +201,7 @@ export const WalletsDataRender = function() {
                     <div className={ 'margin-bottom-3 basilisk-progress-bar ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
                       <div
                         className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-                        style={{ width: _basiliskProgressBarWidth + '%' }}>
+                        style={{ width: `${_basiliskProgressBarWidth}%` }}>
                         { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
                       </div>
                     </div>

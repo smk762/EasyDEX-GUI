@@ -443,6 +443,7 @@ export const _lang = {
       'QR_ERR_UNKNOWN': 'Error: unknown error!',
     },
     'TOASTR': {
+      'INVALID_ADDRESS': 'Invalid @template@ address',
       'RESTART_AGAMA_WITH_REINDEX_PARAM': 'Restart Agama and run Komodo with -reindex param',
       'JUMBLR_DEPOSIT_ADDRESS_SET': 'Jumblr deposit address is set',
       'JUMBLR_SECRET_ADDRESSES_IMPORTED': 'Jumblr secret addresses imported',
@@ -545,6 +546,7 @@ export const _lang = {
       'EXECUTION_SECONDS': 'Execution Seconds',
       'WAIT_UNTIL_SYNCED': 'Transaction history is unavailable during synchronization progresss',
       'TXID': 'Transaction ID',
+      'ZCASH_PARAMS_MISSING': 'Zcash params are missing',
     },
     'LOGIN': {
       'QUICK_ACCESS': 'Quick access',

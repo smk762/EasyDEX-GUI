@@ -2,6 +2,7 @@ import React from 'react';
 import WalletMain from './walletMain';
 import { iguanaSetRPCAuth } from '../../util/auth';
 import Store from '../../store';
+import { translate } from '../../translate/translate';
 import {
   Config,
   getDexCoins,
@@ -39,7 +40,7 @@ class Main extends React.Component {
     if (!zcashParamsExist) {
       Store.dispatch(
         triggerToaster(
-          'Zcash params are missing',
+          translate('KMD_NATIVE.ZCASH_PARAMS_MISSING'),
           'Komodo',
           'error',
           false
