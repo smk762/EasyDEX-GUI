@@ -126,7 +126,7 @@ export const _WalletsNativeSendFormRender = function() {
             <div
               className="toggle-label"
               onClick={ () => this.toggleSubstractFee() }>
-                Substract fee from amount
+                Subtract fee from amount
             </div>
           </span>
         </div>
