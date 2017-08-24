@@ -177,6 +177,11 @@ export const TxHistoryListRender = function() {
       previousText={ translate('INDEX.PREVIOUS_PAGE') }
       showPaginationBottom={ this.state.showPagination }
       pageSize={ this.pageSize }
+      defaultSortMethod={ this.tableSorting }
+      defaultSorted={[{ // default sort
+        id: 'timestamp',
+        desc: true,
+      }]}
       onPageSizeChange={ (pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex) } />
   );
 };
