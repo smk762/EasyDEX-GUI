@@ -385,7 +385,7 @@ class WalletsData extends React.Component {
             itemsList: this.props.ActiveCoin.txhistory,
             filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
             txhistory: this.props.ActiveCoin.txhistory,
-            showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize
+            showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize,
           }));
       }
     }
@@ -402,7 +402,7 @@ class WalletsData extends React.Component {
     }
 
     this.setState({
-      itemsListColumns: this.generateItemsListColumns()
+      itemsListColumns: this.generateItemsListColumns(),
     });
   }
 
@@ -509,7 +509,7 @@ class WalletsData extends React.Component {
           }
 
           if (_amount !== 'N/A') {
-            _amount = formatValue('round', _amount, -6);
+            _amount = formatValue(_amount);
           }
 
           items.push(
@@ -546,7 +546,7 @@ class WalletsData extends React.Component {
             let _amount = _addresses.public[i].amount;
 
             if (_amount !== 'N/A') {
-              _amount = formatValue('round', _amount, -6);
+              _amount = formatValue(_amount);
             }
 
             return _amount;
@@ -561,7 +561,7 @@ class WalletsData extends React.Component {
             }
 
             if (_amount !== 'N/A') {
-              _amount = formatValue('round', _amount, -6);
+              _amount = formatValue(_amount);
             }
 
             return _amount;

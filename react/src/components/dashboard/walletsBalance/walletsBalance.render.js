@@ -38,7 +38,7 @@ const WalletsBalanceRender = function() {
                   <span
                     className="pull-right padding-top-10 font-size-22"
                     title={ this.renderBalance('transparent') }>
-                    { Config.roundValues ? formatValue('round', this.renderBalance('transparent'), -6) : this.renderBalance('transparent') }
+                    { Config.roundValues ? formatValue(this.renderBalance('transparent')) : this.renderBalance('transparent') }
                   </span>
                 </div>
               </div>
@@ -58,7 +58,7 @@ const WalletsBalanceRender = function() {
                   <span
                     className="pull-right padding-top-10 font-size-22"
                     title={ this.renderBalance('private') }>
-                    { Config.roundValues ? formatValue('round', this.renderBalance('private'), -6) : this.renderBalance('private') }
+                    { Config.roundValues ? formatValue(this.renderBalance('private')) : this.renderBalance('private') }
                   </span>
                 </div>
               </div>
@@ -79,7 +79,7 @@ const WalletsBalanceRender = function() {
                   <span
                     className="pull-right padding-top-10 font-size-22"
                     title={ this.renderBalance('interest') }>
-                    { Config.roundValues ? formatValue('round', this.renderBalance('interest'), -6) : this.renderBalance('interest') }
+                    { Config.roundValues ? formatValue(this.renderBalance('interest')) : this.renderBalance('interest') }
                   </span>
                 </div>
               </div>
@@ -100,7 +100,7 @@ const WalletsBalanceRender = function() {
                   <span
                     className="pull-right padding-top-10 font-size-22"
                     title={ this.renderBalance('total') }>
-                    { Config.roundValues ? formatValue('round', this.renderBalance('total'), -6) : this.renderBalance('total') }
+                    { Config.roundValues ? formatValue(this.renderBalance('total')) : this.renderBalance('total') }
                   </span>
                 </div>
               </div>

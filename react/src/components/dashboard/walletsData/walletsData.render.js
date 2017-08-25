@@ -155,7 +155,7 @@ export const TxAmountRender = function(tx) {
 
   if (Config.roundValues) {
     return (
-      <span title={ tx.amount * _amountNegative }>{ formatValue('round', tx.amount, -6) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+      <span title={ tx.amount * _amountNegative }>{ formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
     );
   }
 
