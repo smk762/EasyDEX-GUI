@@ -35,7 +35,7 @@ export const _lang = {
       'ADDRESS_ALREADY_REG': 'Address already registered',
       'COULDNT_COPY_ADDRESS': 'Couldn\'t copy address to clipboard',
       'COULDNT_CREATE_SEED': 'Couldn\'t create new wallet seed',
-      'WALLETDAT_MISMATCH': 'Your wallet.dat is not matching the blockchain. Please resync from the scratch.',
+      'WALLETDAT_MISMATCH': 'Your wallet.dat is not matching the blockchain. Please restart the wallet with -reindex param.',
       'PEER_ADDED': 'Peer is added',
       'ADDNODE_ALREADY_PENDING': 'Addnode connection was already pending',
       'PEER_ALREADY_CONN': 'Peer was already connected',

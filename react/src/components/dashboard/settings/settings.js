@@ -299,7 +299,7 @@ class Settings extends React.Component {
       shepherdCli(
         'passthru',
         this.state.cliCoin,
-        this.state.cliCmd
+        this.state.cliCmdString
       )
     );
   }

@@ -605,7 +605,7 @@ export const SettingsRender = function() {
                               <button
                                 type="button"
                                 className="btn btn-primary waves-effect waves-light"
-                                disabled={ !this.state.cliCoin || !this.state.cliCmd }
+                                disabled={ !this.state.cliCoin || !this.state.cliCmdString }
                                 onClick={ () => this.execCliCmd() }>{ translate('INDEX.EXECUTE') }</button>
                             </div>
                             <div className="col-sm-12 col-xs-12 text-align-left">
