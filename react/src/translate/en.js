@@ -35,7 +35,7 @@ export const _lang = {
       'ADDRESS_ALREADY_REG': 'Address already registered',
       'COULDNT_COPY_ADDRESS': 'Couldn\'t copy address to clipboard',
       'COULDNT_CREATE_SEED': 'Couldn\'t create new wallet seed',
-      'WALLETDAT_MISMATCH': 'Your wallet.dat is not matching the blockchain. Please resync from the scratch.',
+      'WALLETDAT_MISMATCH': 'Your wallet.dat is not matching the blockchain. Please restart the wallet with -reindex param.',
       'PEER_ADDED': 'Peer is added',
       'ADDNODE_ALREADY_PENDING': 'Addnode connection was already pending',
       'PEER_ALREADY_CONN': 'Peer was already connected',
@@ -46,6 +46,8 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'NATIVE_ONLY_MODE': 'Native only mode',
+      'NORMAL_MODE': 'Normal mode',
       'T_FUNDS': 'Transparent funds',
       'HASH': 'Hash',
       'SYNC_IN_PROGRESS': 'Synchronization is in progress',
@@ -443,6 +445,8 @@ export const _lang = {
       'QR_ERR_UNKNOWN': 'Error: unknown error!',
     },
     'TOASTR': {
+      'KOMODO_DATADIR_INVALID': 'Komodo datadir path is invalid',
+      'KOMODO_DATADIR_NOT_DIR': 'Komodo datadir path is not a directory',
       'INVALID_ADDRESS': 'Invalid @template@ address',
       'RESTART_AGAMA_WITH_REINDEX_PARAM': 'Restart Agama and run Komodo with -reindex param',
       'JUMBLR_DEPOSIT_ADDRESS_SET': 'Jumblr deposit address is set',

@@ -155,7 +155,7 @@ export const TxAmountRender = function(tx) {
 
   if (Config.roundValues) {
     return (
-      <span title={ tx.amount * _amountNegative }>{ formatValue('round', tx.amount, -6) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+      <span title={ tx.amount * _amountNegative }>{ formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
     );
   }
 
@@ -177,6 +177,11 @@ export const TxHistoryListRender = function() {
       previousText={ translate('INDEX.PREVIOUS_PAGE') }
       showPaginationBottom={ this.state.showPagination }
       pageSize={ this.pageSize }
+      defaultSortMethod={ this.tableSorting }
+      defaultSorted={[{ // default sort
+        id: 'timestamp',
+        desc: true,
+      }]}
       onPageSizeChange={ (pageSize, pageIndex) => this.onPageSizeChange(pageSize, pageIndex) } />
   );
 };
