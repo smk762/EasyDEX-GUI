@@ -575,7 +575,8 @@ export const _lang = {
       'NXT_SEED': 'NXT',
       'SEED_COPIED': 'Seed copied',
       'SEED_SUCCESSFULLY_COPIED': 'The seed was successfully copied',
-      'ENCRYPT_PASSWORD': 'Encrypt password',
+      'ENCRYPT_SEED': 'Encrypt login seed',
+      'PUBKEY': 'pubkey',
       'ENCRYPT_KEY': 'Encrypt key',
       'DECRYPT_KEY': 'Decrypt key'
     },

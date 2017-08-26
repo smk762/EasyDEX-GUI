@@ -45,8 +45,9 @@ class Login extends React.Component {
       trimPassphraseTimer: null,
       displayLoginSettingsDropdown: false,
       displayLoginSettingsDropdownSection: null,
-      shouldEncryptPassword: false,
+      shouldEncryptSeed: false,
       encryptKey: '',
+      pubKey: '',
       decryptKey: '',
       selectedPin: ''
     };
@@ -63,6 +64,7 @@ class Login extends React.Component {
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
     this.updateEncryptKey = this.updateEncryptKey.bind(this);
+    this.updatePubKey = this.updatePubKey.bind(this);
     this.updateDecryptKey = this.updateDecryptKey.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
   }
@@ -104,13 +106,13 @@ class Login extends React.Component {
     });
   }
 
-  shouldEncryptPassword() {
-    return this.state.shouldEncryptPassword;
+  shouldEncryptSeed() {
+    return this.state.shouldEncryptSeed;
   }
 
-  toggleShouldEncryptPassword() {
+  toggleShouldEncryptSeed() {
     this.setState({
-      shouldEncryptPassword: !this.state.shouldEncryptPassword
+      shouldEncryptSeed: !this.state.shouldEncryptSeed
     });
   }
 
@@ -119,6 +121,13 @@ class Login extends React.Component {
       encryptKey: e.target.value
     });
   }
+
+  updatePubKey(e) {
+    this.setState({
+      pubKey: e.target.value
+    });
+  }
+
 
   updateDecryptKey(e) {
     this.setState({
@@ -173,6 +182,9 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    if (props.login.pinList === "no pins") {
+      props.login.pinList = [];
+    }
     if (props &&
         props.Main &&
         props.Main.isLoggedIn) {
@@ -275,15 +287,12 @@ class Login extends React.Component {
       loginPassPhraseSeedType: null,
     });
 
-    console.log('LOGIN SEED', this.state.shouldEncryptPassword, this.state.encryptKey);
-
-    if (this.state.shouldEncryptPassword) {
-      Store.dispatch(encryptPassphrase(this.state.loginPassphrase, this.state.encryptKey, 'blabla'));
+    if (this.state.shouldEncryptSeed) {
+      Store.dispatch(encryptPassphrase(this.state.loginPassphrase, this.state.encryptKey, this.state.pubKey));
     }
 
-    console.log('selected pin', this.state.selectedPin);
     if (this.state.selectedPin) {
-      Store.dispatch(loginWithPin(this.state.decryptKey, 'blabla'));
+      Store.dispatch(loginWithPin(this.state.decryptKey, this.state.selectedPin));
     } else {
       Store.dispatch(
         iguanaWalletPassphrase(this.state.loginPassphrase)

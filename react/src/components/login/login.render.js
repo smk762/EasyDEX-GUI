@@ -89,44 +89,67 @@ const LoginRender = function () {
 
             { this.state.loginPassphrase &&
             <div className="row">
-              <div className="toggle-box vertical-padding-20 col-sm-3">
+              <div className="toggle-box padding-top-30 col-sm-3">
                     <span className="pointer">
                       <label className="switch">
                         <input
                           type="checkbox"
-                          checked={ this.shouldEncryptPassword() } />
+                          checked={ this.shouldEncryptSeed() } />
                         <div
                           className="slider"
-                          onClick={ () => this.toggleShouldEncryptPassword() }></div>
+                          onClick={ () => this.toggleShouldEncryptSeed() }></div>
                       </label>
                       <div
                         className="toggle-label white"
-                        onClick={ () => this.toggleShouldEncryptPassword() }>
-                          { translate('LOGIN.ENCRYPT_PASSWORD') }
+                        onClick={ () => this.toggleShouldEncryptSeed() }>
+                          { translate('LOGIN.ENCRYPT_SEED') }
                       </div>
                     </span>
               </div>
 
-              <div className="form-group form-material floating col-sm-8 horizontal-padding-0">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="encryptKey"
-                  placeholder={ translate('LOGIN.ENCRYPT_KEY') }
-                  disabled={ !this.shouldEncryptPassword() }
-                  onChange={ this.updateEncryptKey }
-                  value={ this.state.encryptKey } />
+              <div className="col-sm-9">
+                <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right-0">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="encryptKey"
+                    placeholder={ translate('LOGIN.ENCRYPT_KEY') }
+                    onChange={ this.updateEncryptKey }
+                    value={ this.state.encryptKey }
+                    disabled={ !this.shouldEncryptSeed() } />
+                </div>
+
+                <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="pubKey"
+                    placeholder={ translate('LOGIN.PUBKEY') }
+                    onChange={ this.updatePubKey }
+                    value={ this.state.pubKey }
+                    disabled={ !this.shouldEncryptSeed() } />
+                </div>
               </div>
             </div>
             }
 
-            <hr />
-
+            { this.props.login.pinList.length > 0 &&
+            <div className="row margin-top-30">
+              <div className="col-xs-12">
+                <div style={{width: "10%", float: "left", marginLeft: "38%"}}>
+                  <hr/>
+                </div>
+                <div style={{width: "4%", float: "left", marginTop: "10px"}}><span>OR</span></div>
+                <div style={{width: "10%", float: "left"}}>
+                  <hr/>
+                </div>
+              </div>
+            </div>
+            }
             { this.props.login.pinList.length > 0 &&
             <div className="row">
               <div className="form-group form-material floating col-sm-8 padding-left-10 horizontal-padding-0">
                 <select
-                  placeholder="Pls"
                   className="form-control form-material"
                   name="storedPins"
                   value={ this.state.selectedPin }
@@ -153,7 +176,7 @@ const LoginRender = function () {
 
             <button
               type="button"
-              className="btn btn-primary btn-block"
+              className="btn btn-primary btn-block margin-top-20"
               onClick={ this.loginSeed }
               disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
             <div className="form-group form-material floating">
