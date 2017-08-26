@@ -21,6 +21,11 @@ UI:
 - zcashparams folder check
 - claim interest modal
 - renewed transactions history look
+- prevent app from closing while komodod is still loading/processing data
+- send form validation
+- coin daemon port check on addcoin
+- updated application settings
+- komodo datadir
 
 v0.2.0.21a-beta
 --------------

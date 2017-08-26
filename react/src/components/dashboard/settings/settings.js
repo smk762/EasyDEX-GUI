@@ -17,6 +17,7 @@ import {
   shepherdCli,
   checkForUpdateUIPromise,
   updateUIPromise,
+  triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -106,8 +107,6 @@ class Settings extends React.Component {
         appConfigSchema: _appConfigSchema,
         appSettings: _appSettings,
       }));
-
-      console.warn(_appSettings);
     } catch(e) {}
   }
 
@@ -263,14 +262,15 @@ class Settings extends React.Component {
   renderUpdateStatus() {
     let items = [];
     let patchProgressBar = null;
+    const _updateLogLength = this.state.updateLog.length;
 
-    for (let i = 0; i < this.state.updateLog.length; i++) {
+    for (let i = 0; i < _updateLogLength; i++) {
       items.push(
         <div key={ `settings-update-log-${i}` }>{ this.state.updateLog[i] }</div>
       );
     }
 
-    if (this.state.updateLog.length) {
+    if (_updateLogLength) {
       return (
         <div style={{ minHeight: '200px' }}>
           <hr />
@@ -279,7 +279,7 @@ class Settings extends React.Component {
           <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
             <div
               className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-              style={{ width: updateProgressBar.patch + '%' }}>
+              style={{ width: `${updateProgressBar.patch}%` }}>
             </div>
           </div>
         </div>
@@ -300,7 +300,7 @@ class Settings extends React.Component {
       shepherdCli(
         'passthru',
         this.state.cliCoin,
-        this.state.cliCmd
+        this.state.cliCmdString
       )
     );
   }
@@ -448,17 +448,53 @@ class Settings extends React.Component {
   _saveAppConfig() {
     const _appSettings = this.state.appSettings;
     let _appSettingsPristine = Object.assign({}, this.props.Settings.appSettings);
+    let isError = false;
+    let saveAfterPathCheck = false;
 
     for (let key in _appSettings) {
       if (key.indexOf('__') === -1) {
         _appSettingsPristine[key] = this.state.appConfigSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
+
+        if (this.state.appConfigSchema[key].type === 'folder' &&
+            _appSettings[key] &&
+            _appSettings[key].length) {
+          const _testLocation = window.require('electron').remote.getCurrentWindow().testLocation;
+          saveAfterPathCheck = true;
+
+          _testLocation(_appSettings[key])
+          .then((res) => {
+            if (res === -1) {
+              isError = true;
+              Store.dispatch(
+                triggerToaster(
+                  translate('TOASTR.KOMODO_DATADIR_INVALID'),
+                  translate('INDEX.SETTINGS'),
+                  'error'
+                )
+              );
+            } else if (res === false) {
+              isError = true;
+              Store.dispatch(
+                triggerToaster(
+                  translate('TOASTR.KOMODO_DATADIR_NOT_DIR'),
+                  translate('INDEX.SETTINGS'),
+                  'error'
+                )
+              );
+            } else {
+              Store.dispatch(saveAppConfig(_appSettingsPristine));
+            }
+          });
+        }
       } else {
         const _nestedKey = key.split('__');
         _appSettingsPristine[_nestedKey[0]][_nestedKey[1]] = this.state.appConfigSchema[_nestedKey[0]][_nestedKey[1]].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
       }
     }
 
-    Store.dispatch(saveAppConfig(_appSettingsPristine));
+    if (!saveAfterPathCheck) {
+      Store.dispatch(saveAppConfig(_appSettingsPristine));
+    }
   }
 
   renderConfigEditForm() {
@@ -503,11 +539,12 @@ class Settings extends React.Component {
                       value={ _appConfig[key][_key] }
                       onChange={ (event) => this.updateInputSettings(event, key, _key) } />
                   }
-                  { this.state.appConfigSchema[key][_key].type === 'string' &&
+                  { (this.state.appConfigSchema[key][_key].type === 'string' || this.state.appConfigSchema[key][_key].type === 'folder') &&
                     <input
                       type="text"
                       name={ `${key}__${_key}` }
                       value={ _appConfig[key][_key] }
+                      className={ this.state.appConfigSchema[key][_key].type === 'folder' ? 'full-width': '' }
                       onChange={ (event) => this.updateInputSettings(event, key, _key) } />
                   }
                   { this.state.appConfigSchema[key][_key].type === 'boolean' &&
@@ -550,11 +587,12 @@ class Settings extends React.Component {
                     value={ _appConfig[key] }
                     onChange={ (event) => this.updateInputSettings(event, key) } />
                 }
-                { this.state.appConfigSchema[key].type === 'string' &&
+                { (this.state.appConfigSchema[key].type === 'string' || this.state.appConfigSchema[key].type === 'folder') &&
                   <input
                     type="text"
                     name={ `${key}` }
                     value={ _appConfig[key] }
+                    className={ this.state.appConfigSchema[key].type === 'folder' ? 'full-width': '' }
                     onChange={ (event) => this.updateInputSettings(event, key) } />
                 }
                 { this.state.appConfigSchema[key].type === 'boolean' &&

@@ -159,6 +159,17 @@ export function iguanaAddCoin(coin, mode, acData, port) {
   }
 }
 
+function handleErrors(response) {
+  let _parsedResponse;
+
+  if (!response.ok) {
+    return null;
+  } else {
+    _parsedResponse = response.text().then(function(text) { return text; });
+    return _parsedResponse;
+  }
+}
+
 export function shepherdHerd(coin, mode, path, startupParams) {
   let acData;
   let herdData = {
@@ -251,23 +262,35 @@ export function shepherdHerd(coin, mode, path, startupParams) {
         )
       );
     })
-    .then(response => response.json())
+    .then(handleErrors)
     .then(function(json) {
-      if (Config.iguanaLessMode) {
-        dispatch(
-          addCoinResult(coin, mode)
-        );
-        setTimeout(() => {
+      if (json) {
+        if (Config.iguanaLessMode) {
           dispatch(
-            iguanaActiveHandleBypass()
+            addCoinResult(coin, mode)
           );
-        }, 1000);
+          setTimeout(() => {
+            dispatch(
+              iguanaActiveHandleBypass()
+            );
+          }, 1000);
+        } else {
+          dispatch(
+            iguanaAddCoin(
+              coin,
+              mode,
+              acData
+            )
+          );
+        }
       } else {
+        console.warn(acData);
         dispatch(
-          iguanaAddCoin(
-            coin,
-            mode,
-            acData
+          triggerToaster(
+            `Error starting ${coin} daemon. Port ${acData.rpc} is already taken!`,
+            translate('TOASTR.SERVICE_NOTIFICATION'),
+            'error',
+            false
           )
         );
       }

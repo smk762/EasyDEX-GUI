@@ -103,6 +103,31 @@ class WalletsData extends React.Component {
     socket.removeAllListeners('messages');
   }
 
+  // https://react-table.js.org/#/custom-sorting
+  tableSorting(a, b) { // ugly workaround, override default sort
+    if (Date.parse(a)) { // convert date to timestamp
+      a = Date.parse(a);
+    }
+    if (Date.parse(b)) {
+      b = Date.parse(b);
+    }
+    // force null and undefined to the bottom
+    a = (a === null || a === undefined) ? -Infinity : a;
+    b = (b === null || b === undefined) ? -Infinity : b;
+    // force any string values to lowercase
+    a = typeof a === 'string' ? a.toLowerCase() : a;
+    b = typeof b === 'string' ? b.toLowerCase() : b;
+    // Return either 1 or -1 to indicate a sort priority
+    if (a > b) {
+      return 1;
+    }
+    if (a < b) {
+      return -1;
+    }
+    // returning 0 or undefined will use any subsequent column sorting methods or the row index as a tiebreaker
+    return 0;
+  }
+
   generateItemsListColumns() {
     let columns = [];
 
@@ -357,13 +382,11 @@ class WalletsData extends React.Component {
         if (!this.state.itemsList ||
             (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) ||
             (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {
-          const sortedItemsList = this.indexTxHistory(sortByDate(this.props.ActiveCoin.txhistory, this.props.ActiveCoin.mode === 'basilisk' ? 'index' : 'confirmations'));
-
           this.setState(Object.assign({}, this.state, {
-            itemsList: sortedItemsList,
-            filteredItemsList: this.filterTransactions(sortedItemsList, this.state.searchTerm),
+            itemsList: this.props.ActiveCoin.txhistory,
+            filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
             txhistory: this.props.ActiveCoin.txhistory,
-            showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize
+            showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize,
           }));
       }
     }
@@ -380,7 +403,7 @@ class WalletsData extends React.Component {
     }
 
     this.setState({
-      itemsListColumns: this.generateItemsListColumns()
+      itemsListColumns: this.generateItemsListColumns(),
     });
   }
 
@@ -429,7 +452,7 @@ class WalletsData extends React.Component {
   onPageSizeChange(pageSize, pageIndex) {
     this.setState(Object.assign({}, this.state, {
       pageSize: pageSize,
-      showPagination: this.state.itemsList && this.state.itemsList.length >= defaultPageSize,
+      showPagination: this.state.itemsList && this.state.itemsList.length >= this.state.defaultPageSize,
     }))
   }
 
@@ -487,7 +510,7 @@ class WalletsData extends React.Component {
           }
 
           if (_amount !== 'N/A') {
-            _amount = formatValue('round', _amount, -6);
+            _amount = formatValue(_amount);
           }
 
           items.push(
@@ -524,7 +547,7 @@ class WalletsData extends React.Component {
             let _amount = _addresses.public[i].amount;
 
             if (_amount !== 'N/A') {
-              _amount = formatValue('round', _amount, -6);
+              _amount = formatValue(_amount);
             }
 
             return _amount;
@@ -539,7 +562,7 @@ class WalletsData extends React.Component {
             }
 
             if (_amount !== 'N/A') {
-              _amount = formatValue('round', _amount, -6);
+              _amount = formatValue(_amount);
             }
 
             return _amount;
@@ -552,13 +575,15 @@ class WalletsData extends React.Component {
   }
 
   renderSelectorCurrentLabel() {
-    if (this.state.currentAddress) {
+    const _currentAddress = this.state.currentAddress;
+
+    if (_currentAddress) {
       return (
         <span>
           <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
           <span className="text">
             [ { this.renderAddressAmount() } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
-            { this.state.currentAddress }
+            { _currentAddress }
           </span>
         </span>
       );

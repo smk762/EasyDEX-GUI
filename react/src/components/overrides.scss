@@ -1071,6 +1071,13 @@ select{
     top: 4px;
   }
   table {
-    width: 80%;
+    width: 100%;
+
+    td:first-child {
+      width: 40%;
+    }
+    td:last-child {
+      width: 60%;
+    }
   }
 }

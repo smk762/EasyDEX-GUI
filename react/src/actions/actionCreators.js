@@ -193,7 +193,7 @@ export function triggerToaster(message, title, _type, autoClose = true) {
     message,
     title,
     _type,
-    autoClose
+    autoClose,
   }
 }
 
@@ -201,7 +201,7 @@ export function triggerToaster(message, title, _type, autoClose = true) {
 export function dismissToaster(toastId) {
   return {
     type: REMOVE_TOASTER_MESSAGE,
-    toastId: toastId
+    toastId: toastId,
   }
 }
 
@@ -217,7 +217,7 @@ export function dashboardCoinsState(json) {
   return {
     type: GET_ACTIVE_COINS,
     coins: json,
-    activeCoins: Object.keys(json.native).length || Object.keys(json.basilisk).length || Object.keys(json.full).length ? true : false
+    activeCoins: Object.keys(json.native).length || Object.keys(json.basilisk).length || Object.keys(json.full).length ? true : false,
   }
 }
 
@@ -291,7 +291,13 @@ export function rpcErrorHandler(json, dispatch) {
   if (json &&
       json.error) {
     if (json.error === 'bitcoinrpc needs coin that is active') {
-      dispatch(triggerToaster(translate('API.NO_ACTIVE_COIN'), translate('TOASTR.SERVICE_NOTIFICATION'), 'error'));
+      dispatch(
+        triggerToaster(
+          translate('API.NO_ACTIVE_COIN'),
+          translate('TOASTR.SERVICE_NOTIFICATION'),
+          'error'
+        )
+      );
     }
   }
 }
@@ -302,8 +308,8 @@ export function setBasiliskMainAddress(json, coin, mode) {
 
     for (let i = 0; i < json.result.length; i++) {
       publicAddressArray.push({
-        'address': json.result[i],
-        'amount': 'N/A'
+        address: json.result[i],
+        amount: 'N/A',
       });
     }
 
@@ -320,7 +326,7 @@ export function setBasiliskMainAddress(json, coin, mode) {
 
   return {
     type: ACTIVE_COIN_GET_ADDRESSES,
-    addresses: { 'public': [] },
+    addresses: { public: [] },
   }
 }
 
@@ -330,7 +336,7 @@ export function getNativeTxHistoryState(json) {
     json = null;
   } else if (json && json.result && json.result.length) {
     json = json.result;
-  } else if (!json || !json.result.length) {
+  } else if (!json || (!json.result || !json.result.length)) {
     json = 'no data';
   }
 
