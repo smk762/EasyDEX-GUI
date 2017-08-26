@@ -6,8 +6,7 @@ const LoginRender = function () {
   return (
     <div>
       <LoginSettingsModal
-        {...this.props}
-        section={ this.state.displayLoginSettingsDropdownSection } />
+         section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
@@ -61,14 +60,14 @@ const LoginRender = function () {
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase } />
+                value={ this.state.loginPassphrase || '' } />
               <textarea
                 className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 id="loginPassphrase"
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase }></textarea>
+                value={ this.state.loginPassphrase || '' }></textarea>
               <i
                 className={ 'seed-toggle fa fa-eye' +  (!this.state.seedInputVisibility ? '-slash' : '') }
                 onClick={ this.toggleSeedInputVisibility }></i>

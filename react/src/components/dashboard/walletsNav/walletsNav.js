@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   copyCoinAddress,
   iguanaEdexBalance,
@@ -15,11 +16,8 @@ import {
 } from './walletsNav.render';
 
 class WalletsNav extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      nativeOnly: Config.iguanaLessMode,
-    };
+  constructor() {
+    super();
     this.toggleSendReceiveCoinForms = this.toggleSendReceiveCoinForms.bind(this);
     this.toggleNativeWalletInfo = this.toggleNativeWalletInfo.bind(this);
     this.toggleNativeWalletTransactions = this.toggleNativeWalletTransactions.bind(this);
@@ -124,4 +122,22 @@ class WalletsNav extends React.Component {
   }
 }
 
-export default WalletsNav;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+      send: state.ActiveCoin.send,
+      receive: state.ActiveCoin.receive,
+      balance: state.ActiveCoin.balance,
+      cache: state.ActiveCoin.cache,
+      activeSection: state.ActiveCoin.activeSection,
+      activeAddress: state.ActiveCoin.activeAddress
+    },
+    ActiveHandle: state.Dashboard.activeHandle,
+    nativeOnly: Config.iguanaLessMode,
+  };
+ 
+};
+
+export default connect(mapStateToProps)(WalletsNav);

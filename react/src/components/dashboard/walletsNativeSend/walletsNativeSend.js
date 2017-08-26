@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Config from '../../../config';
 import { translate } from '../../../translate/translate';
 import { secondsToString } from '../../../util/time';
@@ -444,4 +445,17 @@ class WalletsNativeSend extends React.Component {
   }
 }
 
-export default WalletsNativeSend;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      addresses: state.ActiveCoin.addresses,
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+      opids: state.ActiveCoin.opids,
+      activeSection: state.ActiveCoin.activeSection,
+    }
+  };
+ 
+};
+
+export default connect(mapStateToProps)(WalletsNativeSend);

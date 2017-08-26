@@ -23,33 +23,33 @@ const DashboardRender = function() {
       <div
         className={ this.isSectionActive('wallets') ? 'page-main' : '' }
         id="section-dashboard">
-        <Navbar {...this.props} />
-        <CoindDownModal {...this.props} />
+        <Navbar />
+        <CoindDownModal />
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
-          <CoinTile {...this.props} />
-          <WalletsNav {...this.props} />
-          { !this.isNativeMode() && <WalletsProgress {...this.props} /> }
-          { !this.isNativeMode() && <WalletsBalance {...this.props} />}
-          <SendCoin {...this.props} />
-          { !this.isNativeMode() && <ReceiveCoin {...this.props.ActiveCoin} /> }
-          { !this.isNativeMode() && <WalletsData {...this.props} /> }
-          <WalletsTxInfo {...this.props} />
-          <WalletsNative {...this.props} />
+          <CoinTile />
+          <WalletsNav />
+          { !this.isNativeMode() && <WalletsProgress /> }
+          { !this.isNativeMode() && <WalletsBalance />}
+          <SendCoin />
+          { !this.isNativeMode() && <ReceiveCoin /> }
+          { !this.isNativeMode() && <WalletsData /> }
+          <WalletsTxInfo />
+          <WalletsNative />
         </div>
         { this.isSectionActive('edex') &&
-          <EDEX {...this.props} />
+          <EDEX />
         }
         { this.isSectionActive('atomic') &&
-          <Atomic {...this.props} />
+          <Atomic />
         }
         { this.isSectionActive('jumblr') &&
-          <Jumblr {...this.props} />
+          <Jumblr  />
         }
         { this.isSectionActive('settings') &&
-          <Settings {...this.props} />
+          <Settings />
         }
         { this.isSectionActive('about') &&
-          <About {...this.props} />
+          <About />
         }
       </div>
     </div>

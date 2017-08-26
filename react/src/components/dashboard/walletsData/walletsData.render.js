@@ -192,10 +192,10 @@ export const WalletsDataRender = function() {
 
   return (
     <span>
-      <WalletsBasiliskRefresh {...this.props} />
-      <WalletsBasiliskConnection {...this.props} />
-      <WalletsNotariesList {...this.props} />
-      <WalletsCacheData {...this.props} />
+      <WalletsBasiliskRefresh />
+      <WalletsBasiliskConnection />
+      <WalletsNotariesList />
+      <WalletsCacheData />
       <div id="edexcoin_dashboardinfo">
         <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">

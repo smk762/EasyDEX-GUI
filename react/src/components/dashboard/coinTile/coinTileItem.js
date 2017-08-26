@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   dashboardChangeActiveCoin,
   iguanaActiveHandle,
@@ -30,10 +31,8 @@ const IGUNA_ACTIVE_HANDLE_TIMEOUT_KMD_NATIVE = 15000;
 const NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD = 90;
 
 class CoinTileItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
+  constructor() {
+    super();
   }
 
   // TODO: 1) cache native/full node data to file
@@ -201,5 +200,19 @@ class CoinTileItem extends React.Component {
     return CoinTileItemRender.call(this);
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      addresses: state.ActiveCoin.addresses,
+      mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress
+    },
+    Dashboard: state.Dashboard,
+    Interval: {
+      interval: state.Interval.interval
+    }
+  };
+ 
+};
 
-export default CoinTileItem;
+export default connect(mapStateToProps)(CoinTileItem);

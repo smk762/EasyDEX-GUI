@@ -1,11 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { basiliskConnection } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsBasiliskConnectionRender from './walletsBasiliskConnection.render';
 
 class WalletsBasiliskConnection extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.basiliskConnectionAction = this.basiliskConnectionAction.bind(this);
   }
 
@@ -33,4 +34,13 @@ class WalletsBasiliskConnection extends React.Component {
   }
 }
 
-export default WalletsBasiliskConnection;
+const mapStateToProps = (state) => {
+  return {
+    Dashboard: {
+      basiliskConnection: state.Dashboard.basiliskConnection,
+      connectedNotaries: state.Dashboard.connectedNotaries,
+    }
+  };
+};
+
+export default connect(mapStateToProps)(WalletsBasiliskConnection);

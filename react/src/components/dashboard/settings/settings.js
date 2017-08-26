@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import Config from '../../../config';
 import {
@@ -42,8 +43,8 @@ let updateProgressBar = {
   4) batch export/import wallet addresses
 */
 class Settings extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       activeTab: 0,
       debugLinesCount: 10,
@@ -119,7 +120,7 @@ class Settings extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(props) {
     if (!this.props.disableWalletSpecificUI) {
       Store.dispatch(iguanaActiveHandle());
     }
@@ -846,4 +847,18 @@ class Settings extends React.Component {
   }
 }
 
-export default Settings;
+const mapStateToProps = (state) => {
+  return {
+    Main: {
+      coins: state.Main.coins,
+      activeHandle: state.Main.activeHandle,
+    },
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+    },
+    Settings: state.Settings,      
+  };
+
+};
+
+export default connect(mapStateToProps)(Settings);

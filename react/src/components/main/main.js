@@ -69,7 +69,7 @@ class Main extends React.Component {
 
   isWalletUnlocked() {
     return (
-      <WalletMain {...this.props} />
+      <WalletMain />
     );
   }
 

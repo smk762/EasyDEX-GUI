@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import {
   dashboardChangeActiveCoin,
@@ -39,8 +40,8 @@ if (!window.jumblrPasshrase) { // gen jumblr passphrase
 }
 
 class Jumblr extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       activeTab: 0,
       randomSeed: window.jumblrPasshrase,
@@ -424,4 +425,13 @@ class Jumblr extends React.Component {
   }
 }
 
-export default Jumblr;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+    }
+  };
+ 
+};
+
+export default connect(mapStateToProps)(Jumblr);

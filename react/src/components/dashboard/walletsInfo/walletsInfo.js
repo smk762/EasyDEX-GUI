@@ -1,11 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import WalletsNativeInfoRender from './walletsInfo.render';
 import { toggleClaimInterestModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
-class WalletsNativeInfo extends React.Component {
-  constructor(props) {
-    super(props);
+class WalletsInfo extends React.Component {
+  constructor() {
+    super();
     this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
   }
 
@@ -25,4 +26,17 @@ class WalletsNativeInfo extends React.Component {
   }
 }
 
-export default WalletsNativeInfo;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      activeSection: state.ActiveCoin.activeSection,
+    },
+    Dashboard: {
+      progress: state.Dashboard.progress
+    }
+  };
+ 
+};
+
+export default connect(mapStateToProps)(WalletsInfo);

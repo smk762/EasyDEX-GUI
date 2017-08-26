@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import DashboardRender from './dashboard.render';
 
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
     };
     this.renderDashboard = this.renderDashboard.bind(this);
@@ -38,4 +39,17 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+  return {
+    Main: state.Main,
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+    },
+    Dashboard: {
+      activeSection: state.Dashboard.activeSection, 
+    }     
+  };
+
+};
+
+export default connect(mapStateToProps)(Dashboard);

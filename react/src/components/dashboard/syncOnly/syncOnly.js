@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { getCoinTitle } from '../../../util/coinHelper';
 import { translate } from '../../../translate/translate';
 import {
@@ -17,8 +18,8 @@ import {
 } from './syncOnly.render';
 
 class SyncOnly extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       autoRestartedForks: {},
     };
@@ -157,4 +158,20 @@ class SyncOnly extends React.Component {
   }
 }
 
-export default SyncOnly;
+const mapStateToProps = (state) => {
+  return {
+    SyncOnly: {
+      display: state.SyncOnly.display,
+      forks: state.SyncOnly.forks,
+      send: state.ActiveCoin.send,
+      receive: state.ActiveCoin.receive,
+      balance: state.ActiveCoin.balance,
+    },
+    Interval: {
+      interval: state.Interval.interval,
+    }
+  };
+ 
+};
+
+export default connect(mapStateToProps)(SyncOnly);

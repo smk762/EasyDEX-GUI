@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   getCoinTitle,
   getModeInfo
@@ -8,10 +9,8 @@ import CoinTileItem from './coinTileItem';
 import CoinTileRender from './coinTile.render';
 
 class CoinTile extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
+  constructor() {
+    super();
     this.renderTiles = this.renderTiles.bind(this);
   }
 
@@ -21,11 +20,10 @@ class CoinTile extends React.Component {
       'basilisk',
       'full'
     ];
-    const allCoins = this.props.Main.coins;
+    const allCoins = this.props.allCoins;
     let items = [];
 
-    if (this.props.Main &&
-        allCoins) {
+    if (allCoins) {
       modes.map(function(mode) {
         allCoins[mode].map(function(coin) {
           const _coinMode = getModeInfo(mode);
@@ -56,7 +54,7 @@ class CoinTile extends React.Component {
           key={ i }
           i={ i }
           item={ item }
-          {...this.props} />)
+       />)
     );
   }
 
@@ -64,5 +62,12 @@ class CoinTile extends React.Component {
     return CoinTileRender.call(this);
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    allCoins: state.Main.coins,
+  };
+ 
+};
 
-export default CoinTile;
+export default connect(mapStateToProps)(CoinTile);
+

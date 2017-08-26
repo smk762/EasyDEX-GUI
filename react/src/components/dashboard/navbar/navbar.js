@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   dashboardChangeSection,
   toggleAddcoinModal,
@@ -15,8 +16,8 @@ import { checkAC } from '../../addcoin/payload';
 import NavbarRender from './navbar.render';
 
 class Navbar extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       openDropMenu: false,
       nativeOnly: Config.iguanaLessMode,
@@ -114,5 +115,22 @@ class Navbar extends React.Component {
     return NavbarRender.call(this);
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+      coin: state.ActiveCoin.coin,
+    },
+    Dashboard: {
+      activeSection: state.Dashboard.activeSection,
+    },
+    Interval: {
+      interval: state.Interval.interval,
+    },
+    nativeOnly: Config.iguanaLessMode
+  };
+ 
+};
 
-export default Navbar;
+export default connect(mapStateToProps)(Navbar);
+

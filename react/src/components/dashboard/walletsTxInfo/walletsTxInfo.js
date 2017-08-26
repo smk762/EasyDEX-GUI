@@ -1,12 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { sortByDate } from '../../../util/sort';
 import { toggleDashboardTxInfoModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
 
 class WalletsTxInfo extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       activeTab: 0,
     };
@@ -52,4 +53,18 @@ class WalletsTxInfo extends React.Component {
   }
 }
 
-export default WalletsTxInfo;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+      txhistory: state.ActiveCoin.txhistory,
+      showTransactionInfo: state.ActiveCoin.showTransactionInfo,
+      activeSection: state.ActiveCoin.activeSection,
+      activeAddress: state.ActiveCoin.activeAddress,
+      showTransactionInfoTxIndex: state.ActiveCoin.showTransactionInfoTxIndex,
+    }
+  };
+ 
+};
+
+export default connect(mapStateToProps)(WalletsTxInfo);

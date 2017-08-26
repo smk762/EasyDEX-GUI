@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import {
   fetchNewCacheData,
@@ -10,8 +11,8 @@ import Store from '../../../store';
 import WalletsBalanceRender from './walletsBalance.render';
 
 class WalletsBalance extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       currentAddress: null,
     };
@@ -187,5 +188,23 @@ class WalletsBalance extends React.Component {
     return null;
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+      send: state.ActiveCoin.send,
+      receive: state.ActiveCoin.receive,
+      balance: state.ActiveCoin.balance,
+      cache: state.ActiveCoin.cache,
+      activeSection: state.ActiveCoin.activeSection,
+      activeAddress: state.ActiveCoin.activeAddress
+    },
+    Dashboard: {
+      progress: state.Dashboard.progress,
+    }
+  };
+ 
+};
 
-export default WalletsBalance;
+export default connect(mapStateToProps)(WalletsBalance);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Toaster from '../toaster/toaster';
 import AddCoin from '../addcoin/addcoin';
 import Login from '../login/login';
@@ -11,15 +12,23 @@ class WalletMain extends React.Component {
     return (
       <div className="full-height">
         <input type="text" id="js-copytextarea" />
-        <SyncOnly {...this.props} />
-        <Dashboard {...this.props} />
-        <AddCoin {...this.props} />
-        <Login {...this.props} />
+        <SyncOnly />
+        <Dashboard />
+        <AddCoin />
+        <Login />
         <Toaster {...this.props.toaster} />
-        <Notifications {...this.props} />
+        <Notifications />
       </div>
     );
   }
 }
 
-export default WalletMain;
+const mapStateToProps = (state) => {
+  return {
+    toaster: state.toaster
+  };
+
+};
+
+export default connect(mapStateToProps)(WalletMain);
+

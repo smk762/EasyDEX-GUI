@@ -359,7 +359,6 @@ export const JumblrRender = function() {
                     <p>{ translate('JUMBLR.DEPOSIT_FORM_P1') }</p>
                     <p className="padding-bottom-20">{ translate('JUMBLR.DEPOSIT_FORM_P2') }</p>
                     <WalletsNativeSend
-                      {...this.props}
                       renderFormOnly="true"
                       activeSection="send" />
                   </div>
@@ -461,7 +460,6 @@ export const JumblrRender = function() {
                   </div>
                   <div className={ 'tab-pane' + (this.state.activeTab === 1 ? ' active' : '') }>
                     <ReceiveCoin
-                      {...this.props.ActiveCoin}
                       activeSection="receive"
                       renderTableOnly="true" />
                   </div>

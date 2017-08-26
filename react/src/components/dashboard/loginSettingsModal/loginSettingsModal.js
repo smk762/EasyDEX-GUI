@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { getCoinTitle } from '../../../util/coinHelper';
 import { translate } from '../../../translate/translate';
 import { toggleLoginSettingsModal } from '../../../actions/actionCreators';
@@ -29,4 +30,11 @@ class LoginSettingsModal extends React.Component {
   }
 }
 
-export default LoginSettingsModal;
+const mapStateToProps = (state) => {
+  return {
+    Main: state.Main
+  };
+
+};
+
+export default connect(mapStateToProps)(LoginSettingsModal);
