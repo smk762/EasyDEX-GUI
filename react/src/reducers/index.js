@@ -11,10 +11,12 @@ import { Settings } from './settings';
 import { Interval } from './interval';
 import { SyncOnly } from './syncOnly';
 import { Errors } from './errors';
+import { login } from "./login";
 
 const appReducer = combineReducers({
   AddCoin,
   toaster,
+  login,
   Main,
   Dashboard,
   ActiveCoin,

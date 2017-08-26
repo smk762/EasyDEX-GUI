@@ -54,6 +54,9 @@ const LoginRender = function () {
             <h4 className="color-white">
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
+            { this.props.login.pinList.length > 0 &&
+             <span>You can login be entering a login seed or by selecting a pin</span>
+            }
             <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
                 type="password"
@@ -83,6 +86,71 @@ const LoginRender = function () {
                 <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
               </div>
             }
+
+            { this.state.loginPassphrase &&
+            <div className="row">
+              <div className="toggle-box vertical-padding-20 col-sm-3">
+                    <span className="pointer">
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={ this.shouldEncryptPassword() } />
+                        <div
+                          className="slider"
+                          onClick={ () => this.toggleShouldEncryptPassword() }></div>
+                      </label>
+                      <div
+                        className="toggle-label white"
+                        onClick={ () => this.toggleShouldEncryptPassword() }>
+                          { translate('LOGIN.ENCRYPT_PASSWORD') }
+                      </div>
+                    </span>
+              </div>
+
+              <div className="form-group form-material floating col-sm-8 horizontal-padding-0">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="encryptKey"
+                  placeholder={ translate('LOGIN.ENCRYPT_KEY') }
+                  disabled={ !this.shouldEncryptPassword() }
+                  onChange={ this.updateEncryptKey }
+                  value={ this.state.encryptKey } />
+              </div>
+            </div>
+            }
+
+            <hr />
+
+            { this.props.login.pinList.length > 0 &&
+            <div className="row">
+              <div className="form-group form-material floating col-sm-8 padding-left-10 horizontal-padding-0">
+                <select
+                  placeholder="Pls"
+                  className="form-control form-material"
+                  name="storedPins"
+                  value={ this.state.selectedPin }
+                  onChange={ (event) => this.updateSelectedPin(event) }
+                  autoFocus>
+                  <option className="login-option" value="">{ translate('INDEX.SELECT') }</option>
+                  {this.props.login.pinList.map(function(pin) {
+                    return <option className="login-option" value={pin} key={pin}>{ pin }</option>
+                  })}
+                </select>
+              </div>
+              <div className="form-group form-material floating col-sm-4 padding-left-10 margin-top-20">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="decryptKey"
+                  placeholder={ translate('LOGIN.DECRYPT_KEY') }
+                  disabled={ false }
+                  onChange={ this.updateDecryptKey }
+                  value={ this.state.decryptKey } />
+              </div>
+            </div>
+            }
+
             <button
               type="button"
               className="btn btn-primary btn-block"

@@ -571,6 +571,9 @@ export const _lang = {
       'NXT_SEED': 'NXT',
       'SEED_COPIED': 'Seed copied',
       'SEED_SUCCESSFULLY_COPIED': 'The seed was successfully copied',
+      'ENCRYPT_PASSWORD': 'Encrypt password',
+      'ENCRYPT_KEY': 'Encrypt key',
+      'DECRYPT_KEY': 'Decrypt key'
     },
     'SIDEBAR': {
       'EDEX_MOTTO': 'Most Secure, Easy and Native Decentralised Exchange',
