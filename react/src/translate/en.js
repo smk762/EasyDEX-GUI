@@ -2,10 +2,10 @@ export const _lang = {
   'EN': {
     'CLAIM_INTEREST': {
       'REQ_P1': 'Requirements to accrue interest',
-      'REQ_P2': 'locktime field is set and amount is greater than',
+      'REQ_P2': 'spend transaction was made at least 1 hour ago, locktime field is set and amount is greater than',
       'CLAIM_INTEREST': 'Claim interest',
       'LOADING': 'Loading interest data',
-      'NO_DATA': 'No data'
+      'NO_DATA': 'No data',
     },
     'ABOUT': {
       'ABOUT_AGAMA': 'About Agama',

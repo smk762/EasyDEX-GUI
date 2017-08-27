@@ -17,7 +17,7 @@ import {
   WalletsNativeSendFormRender,
   _WalletsNativeSendFormRender
 } from './walletsNativeSend.render';
-import { isPositiveNumber } from "../../../util/number";
+import { isPositiveNumber } from '../../../util/number';
 
 class WalletsNativeSend extends React.Component {
   constructor(props) {
@@ -376,6 +376,7 @@ class WalletsNativeSend extends React.Component {
 
   validateSendFormData() {
     let valid = true;
+
     if (!this.state.sendTo ||
         this.state.sendTo.length < 34) {
       Store.dispatch(
@@ -455,7 +456,7 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
     }
   };
- 
+
 };
 
 export default connect(mapStateToProps)(WalletsNativeSend);

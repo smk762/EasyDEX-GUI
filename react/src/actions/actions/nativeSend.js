@@ -251,7 +251,7 @@ export function getKMDOPID(opid, coin) {
         payload = {
           mode: null,
           chain: coin,
-          cmd: 'z_getoperationstatus'
+          cmd: 'z_getoperationstatus',
         };
 
         _fetchConfig = {
@@ -342,6 +342,6 @@ export function sendToAddressPromise(coin, address, amount) {
     .then(response => response.json())
     .then(json => {
       resolve(json);
-    })
+    });
   });
 }
