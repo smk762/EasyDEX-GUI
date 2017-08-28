@@ -99,11 +99,17 @@ class ReceiveCoin extends React.Component {
   }
 
   renderAddressActions(address, type) {
+    let qrContent = {
+      qrAddress: address, 
+      qrAmount: address.amount, 
+      qrCoin: this.props.coin,
+    };
+    console.log(qrContent);
     if (this.isBasiliskMode()) {
       return AddressActionsBasiliskModeRender.call(this, address);
     }
 
-    return AddressActionsNonBasiliskModeRender.call(this, address, type);
+    return AddressActionsNonBasiliskModeRender.call(this, address, type, qrContent);
   }
 
   hasNoAmount(address) {
