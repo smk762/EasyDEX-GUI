@@ -47,6 +47,9 @@ class WalletsNativeSend extends React.Component {
     this.toggleSubstractFee = this.toggleSubstractFee.bind(this);
   }
 
+  // TODO: 1) t -> z amount validation
+  //       2) z -> z amount validation
+
   WalletsNativeSendFormRender() {
     return _WalletsNativeSendFormRender.call(this);
   }
@@ -366,8 +369,9 @@ class WalletsNativeSend extends React.Component {
 
   checkTotalBalance() {
     let _balance = 0;
+
     if (this.props.ActiveCoin.balance &&
-      this.props.ActiveCoin.balance.total) {
+        this.props.ActiveCoin.balance.total) {
       _balance = this.props.ActiveCoin.balance.total;
     }
 

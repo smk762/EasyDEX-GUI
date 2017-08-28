@@ -6,6 +6,13 @@ import AddCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
 
 const CoinSelectorsRender = function(item, coin, i) {
   const isWindows = this.props.Settings && this.props.Settings.appInfo && this.props.Settings.appInfo.sysInfo && this.props.Settings.appInfo.sysInfo.platform === 'win32';
+  let appConfig;
+
+  try {
+    appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+  } catch (e) {}
+
+  const hideFullModeBtn = item && item.selectedCoin && item.selectedCoin.indexOf('|full') === -1 || !appConfig.experimentalFeatures ? true : false;
 
   return (
     <div
@@ -54,7 +61,7 @@ const CoinSelectorsRender = function(item, coin, i) {
         </button>
       </div>
       <div className="col-sm-11 text-center add-coin-modes">
-        <div className={ this.state.nativeOnly || isWindows ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
+        <div className={ this.state.nativeOnly || hideFullModeBtn ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
           <input
             type="radio"
             className="to-labelauty labelauty"

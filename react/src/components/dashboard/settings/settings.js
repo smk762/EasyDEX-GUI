@@ -534,7 +534,6 @@ class Settings extends React.Component {
                     <input
                       type="number"
                       pattern="[0-9]*"
-                      type="text"
                       name={ `${key}__${_key}` }
                       value={ _appConfig[key][_key] }
                       onChange={ (event) => this.updateInputSettings(event, key, _key) } />
@@ -856,7 +855,7 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
     },
-    Settings: state.Settings,      
+    Settings: state.Settings,
   };
 
 };
