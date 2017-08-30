@@ -308,6 +308,9 @@ export const _lang = {
       'NEXT_PAGE': 'Next Page',
       'PREVIOUS_PAGE': 'Previous Page',
       'CREATE_INVOICE': 'Create Invoice',
+      'CREATE_INVOICE_QR': 'Create Invoice QR Code',
+      'QR_CONTENT': 'QR Content',
+      'CHOOSE_RECEIVING_ADDRESS': 'Choose Address',
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',

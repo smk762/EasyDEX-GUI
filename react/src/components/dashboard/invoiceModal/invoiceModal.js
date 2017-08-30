@@ -7,6 +7,7 @@ import BodyEnd from '../bodyBottom/bodyBottom';
 import {
   InvoiceModalRender,
   InvoiceModalButtonRender,
+  AddressItemRender,
 } from './invoiceModal.render';
 
 class InvoiceModal extends React.Component {
@@ -15,14 +16,14 @@ class InvoiceModal extends React.Component {
     this.state = {
       modalIsOpen: false,
       content: '',
-      amount: 0,
-      addressSelectorOpen: false,
+      qrAddress: '',
+      qrAmount: 0,
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.renderAddressList = this.renderAddressList.bind(this);
-    this.openDropMenu = this.openDropMenu.bind(this);
+    this.updateQRContent = this.updateQRContent.bind(this);
   }
 
   openModal() {
@@ -32,152 +33,76 @@ class InvoiceModal extends React.Component {
   }
 
   updateInput(e) {
-    console.log(e.target.value);
     this.setState({
-      [e.target.name]: e.target.value,
-      content: e.target.value,
+      [e.target.name]: e.target.value
+    }, this.updateQRContent);
+   }
+   
+  updateQRContent() {
+    this.setState({
+      content: JSON.stringify({ "address":this.state.qrAddress, "amount": this.state.qrAmount, "coin": this.props.ActiveCoin.coin}),
     });
   }
-
-  closeModal() {
+  
+   closeModal() {
     this.setState({
       modalIsOpen: false,
     });
   }
 
-  openDropMenu() {
-    this.setState(Object.assign({}, this.state, {
-      addressSelectorOpen: !this.state.addressSelectorOpen,
-    }));
+  hasNoAmount(address) {
+    return address.amount === 'N/A' || address.amount === 0;
   }
 
-  renderAddressByType(type) {
+  hasNoInterest(address) {
+    return address.interest === 'N/A' || address.interest === 0 || !address.interest;
+  }
+
+  isBasiliskMode() {
+    return this.props.ActiveCoin.mode === 'basilisk';
+  }
+
+  isNativeMode() {
+    return this.props.ActiveCoin.mode == 'native';
+  }
+
+  renderAddressList(type) {
     const _addresses = this.props.ActiveCoin.addresses;
+    const _cache = this.props.ActiveCoin.cache;
+    const _coin = this.props.ActiveCoin.coin;
 
     if (_addresses &&
         _addresses[type] &&
         _addresses[type].length) {
-      if (this.state.sendApiType) {
-        const mainAddress = this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
-        const mainAddressAmount = this.renderAddressAmount(mainAddress);
+      let items = [];
 
-        return(
-          <li
-            key={ mainAddress }
-            className={ mainAddressAmount <= 0 ? 'hide' : '' }>
-            <a onClick={ () => this.updateAddressSelection(mainAddress, type, mainAddressAmount) }>
-              <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-              <span className="text">
-                [ { mainAddressAmount } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
-                { mainAddress }
-              </span>
-              <span className="glyphicon glyphicon-ok check-mark"></span>
-            </a>
-          </li>
-        );
-      } else {
-        let items = [];
-        const _addresses = this.props.ActiveCoin.addresses;
-        const _cache = this.props.ActiveCoin.cache;
-        const _coin = this.props.ActiveCoin.coin;
+      for (let i = 0; i < _addresses[type].length; i++) {
+        let address = _addresses[type][i];
 
-        for (let i = 0; i < _addresses[type].length; i++) {
-          const address = _addresses[type][i].address;
-          let _amount = address.amount;
-
-          if (this.props.ActiveCoin.mode === 'basilisk' &&
-              _cache) {
-            _amount = _cache[_coin][address] && _cache[_coin][address].getbalance.data && _cache[_coin][address].getbalance.data.balance ? _cache[_coin][address].getbalance.data.balance : 'N/A';
-          }
-
-          if (_amount !== 'N/A') {
-            items.push(
-              <li
-                key={ address }
-                className={ _amount <= 0 ? 'hide' : '' }>
-                <a onClick={ () => this.updateAddressSelection(address, type, _amount) }>
-                  <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-                  <span className="text">[ { _amount } { _coin } ]  { address }</span>
-                  <span className="glyphicon glyphicon-ok check-mark"></span>
-                </a>
-              </li>
-            );
-          }
+        if (this.isBasiliskMode() &&
+            this.hasNoAmount(address)) {
+          address.amount = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
+        }
+        if (this.isBasiliskMode() &&
+            this.hasNoInterest(address)) {
+          address.interest = _cache && _cache[_coin][address.address] &&
+            _cache[_coin][address.address].getbalance &&
+            _cache[_coin][address.address].getbalance.data &&
+            _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
         }
 
-        return items;
+        items.push(
+            AddressItemRender.call(this, address, type)
+        );
       }
+
+      return items;
     } else {
       return null;
     }
-  }
-
-  renderSelectorCurrentLabel() {
-    if (this.state.sendFrom) {
-      let _amount;
-      const _cache = this.props.ActiveCoin.cache;
-      const _coin = this.props.ActiveCoin.coin;
-      const _sendFrom = this.state.sendFrom;
-
-      if (this.state.sendFromAmount === 0 &&
-          this.props.ActiveCoin.mode === 'basilisk' &&
-          _cache) {
-        _amount = _cache[_coin][_sendFrom].getbalance.data && _cache[_coin][_sendFrom].getbalance.data.balance ? _cache[_coin][_sendFrom].getbalance.data.balance : 'N/A';
-      } else {
-        _amount = this.state.sendFromAmount;
-      }
-
-      return (
-        <span>
-          <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-          <span className="text">[ { _amount } { _coin } ]  { _sendFrom }</span>
-        </span>
-      );
-    } else if (this.state.sendApiType) {
-      const mainAddress = this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin];
-      const mainAddressAmount = this.renderAddressAmount(mainAddress);
-
-      return (
-        <span>
-          <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-          <span className="text">[ { mainAddressAmount } { this.props.ActiveCoin.coin } ]  { mainAddress }</span>
-        </span>
-      );
-    } else {
-      return (
-        <span>{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
-      );
-    }
-  }
-
-  renderAddressList() {
-    return (
-      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
-        <button
-          type="button"
-          className="btn dropdown-toggle btn-info"
-          title={ `${translate('SEND.SELECT_T_OR_Z_ADDR')}` }
-          onClick={ this.openDropMenu }>
-          <span className="filter-option pull-left">
-            { this.renderSelectorCurrentLabel() }&nbsp;&nbsp;
-          </span>
-          <span className="bs-caret">
-            <span className="caret"></span>
-          </span>
-        </button>
-        <div className="dropdown-menu open">
-          <ul className="dropdown-menu inner">
-            <li className="selected">
-              <a>
-                <span className="text">{ translate('SEND.SELECT_T_OR_Z_ADDR') }</span>
-                <span className="glyphicon glyphicon-ok check-mark"></span>
-              </a>
-            </li>
-            { this.renderAddressByType('public') }
-          </ul>
-        </div>
-      </div>
-    );
   }
 
   render() {

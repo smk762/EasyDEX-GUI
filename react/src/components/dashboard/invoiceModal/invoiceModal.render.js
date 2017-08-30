@@ -17,39 +17,60 @@ export const InvoiceModalRender = function () {
                 onClick={ this.closeModal }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white text-left">{ translate('INDEX.SCAN_QR_CODE') }</h4>
+              <h4 className="modal-title white text-left">{ translate('INDEX.CREATE_INVOICE_QR') }</h4>
             </div>
             <div className="modal-body">
-              <div className="animsition vertical-align fade-in">
+              <div className="animsition fade-in">
                 <div className="page-content">
                   <div className="row">
                     <div className="col-lg-8 form-group form-material vertical-align-middle">
-                      <label
-                      className="control-label"
-                      htmlFor="edexcoinSendFrom">
-                        { translate('INDEX.RECEIVE') }
-                      </label>
-                      { this.renderAddressList() }
-                      <label
-                      className="control-label margin-top-20"
-                      htmlFor="edexcoinAmount">
-                        { this.props.ActiveCoin.coin }
-                      </label>
-                      <input
-                      type="number"
-                      min="0"
-                      className="form-control"
-                      id="edexcoinAmount"
-                      name="amount"
-                      placeholder="0.001"
-                      autoComplete="off"
-                      value={ this.state.amount }
-                      onChange={ this.updateInput } />
+                      <form>
+                        <label
+                        className="control-label"
+                        htmlFor="qrAddress">
+                          { translate('INDEX.RECEIVING_ADDRESS') }
+                        </label>
+                        <select
+                        className="form-control"
+                        name="qrAddress"
+                        id="qrAddress"
+                        value={ this.state.qrAddress }
+                        onChange={ this.updateInput }>
+                        <option value="-1">
+                        { translate('INDEX.CHOOSE_RECEIVING_ADDRESS') }
+                        </option>
+                        { this.renderAddressList('public') }
+                        { this.isNativeMode() && this.renderAddressList('private') }
+                        </select>
+                        <label
+                        className="control-label margin-top-20"
+                        htmlFor="qrCoinAmount">
+                          { this.props.ActiveCoin.coin }
+                        </label>
+                        <input
+                        type="number"
+                        min="0"
+                        className="form-control"
+                        id="qrCoinAmount"
+                        name="qrAmount"
+                        placeholder="0"
+                        autoComplete="off"
+                        value={ this.state.qrAmount }
+                        onChange={ this.updateInput } />
+                      </form>
                     </div>
                     <div className="col-lg-4">
                       <QRCode
                         value={ this.state.content }
                         size={ 198 } />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <p className="help-block">
+                      { translate('INDEX.QR_CONTENT') }:<br />
+                        { this.state.content }
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -73,5 +94,14 @@ export const InvoiceModalButtonRender = function () {
           { translate('INDEX.CREATE_INVOICE') }
       </button>
     </span>
+  );
+};
+
+export const AddressItemRender = function(address, type) {
+  return (
+   <option key={ address.address } value={ address.address }>
+      { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
+       &nbsp; (Balance: { address.amount })
+    </option>
   );
 };
