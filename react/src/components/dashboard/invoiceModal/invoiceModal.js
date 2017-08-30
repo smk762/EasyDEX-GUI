@@ -40,7 +40,11 @@ class InvoiceModal extends React.Component {
    
   updateQRContent() {
     this.setState({
-      content: JSON.stringify({ "address":this.state.qrAddress, "amount": this.state.qrAmount, "coin": this.props.ActiveCoin.coin}),
+      content: JSON.stringify({ 
+        "address": this.state.qrAddress, 
+        "amount": this.state.qrAmount, 
+        "coin": this.props.ActiveCoin.coin,
+      }),
     });
   }
   
