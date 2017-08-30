@@ -32,7 +32,7 @@ export const AddressActionsBasiliskModeRender = function(address) {
   );
 };
 
-export const AddressActionsNonBasiliskModeRender = function(address, type,qrContent) {
+export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
     <td>
       <span className={ 'label label-' + (type === 'public' ? 'default' : 'dark') }>
