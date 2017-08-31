@@ -34,4 +34,12 @@
 @import '../components/dashboard/main/dashboard.scss';
 @import '../components/login/login.scss';
 @import '../components/overrides.scss';
+@import '../components/dashboard/settings/settings.scss';
+@import '../components/dashboard/walletsData/walletsData.scss';
+@import '../components/dashboard/claimInterestModal/claimInterestModal.scss';
+@import '../components/dashboard/jumblr/jumblr.scss';
+@import '../components/dashboard/qrModal/qrModal.scss';
+@import '../components/dashboard/coindDownModal/coindDownModal.scss';
+@import '../components/dashboard/syncOnly/syncOnly.scss';
+@import '../components/toaster/toaster.scss';
 @import '~react-table/react-table.css';

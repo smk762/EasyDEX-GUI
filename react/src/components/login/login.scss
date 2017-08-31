@@ -103,7 +103,7 @@ input[type="password"] {
     z-index: 1;
     top: -5px;
     left: 105%;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -152,4 +152,10 @@ input[type="password"] {
   a {
     color: #fb8c00;
   }
+}
+
+.login-form,
+.register-form {
+  width: 540px;
+  margin: 30px 0;
 }
