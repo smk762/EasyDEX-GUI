@@ -753,6 +753,8 @@ select{
 
 #toast-container {
   > div {
+    padding: 15px 15px 15px 60px;
+    width: 310px;
     opacity: 1;
   }
 }
@@ -980,9 +982,10 @@ select{
       color: #757575;
       background-color: #efefef;
       border: 1px solid #e0e0e0;
-    }
-    .-btn:hover {
-      color: #fff;
+
+      &:hover {
+        color: #fff;
+      }
     }
     .-btn[disabled]:hover {
       color: #757575;
@@ -1073,11 +1076,13 @@ select{
   table {
     width: 100%;
 
-    td:first-child {
-      width: 40%;
-    }
-    td:last-child {
-      width: 60%;
+    td {
+      &:first-child {
+        width: 40%;
+      }
+      &:last-child {
+        width: 60%;
+      }
     }
   }
 }
