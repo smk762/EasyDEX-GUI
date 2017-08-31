@@ -550,7 +550,12 @@ export const _lang = {
       'EXECUTION_SECONDS': 'Execution Seconds',
       'WAIT_UNTIL_SYNCED': 'Transaction history is unavailable during synchronization progresss',
       'TXID': 'Transaction ID',
-      'ZCASH_PARAMS_MISSING': 'Zcash params are missing',
+      'ZCASH_PARAMS_MISSING': 'Zcash params are missing or incomplete:',
+      'ZCASH_PARAMS_MISSING_ROOT_DIR': '- missing root folder',
+      'ZCASH_PARAMS_MISSING_PROVING_KEY': '- missing proving key',
+      'ZCASH_PARAMS_MISSING_VERIFYING_KEY': '- missing verifying key',
+      'ZCASH_PARAMS_MISSING_PROVING_KEY_SIZE': '- proving key size is incorrect',
+      'ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE': '- verifying key size is incorrect',
     },
     'LOGIN': {
       'QUICK_ACCESS': 'Quick access',

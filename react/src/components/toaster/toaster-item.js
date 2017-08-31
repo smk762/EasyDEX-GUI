@@ -28,7 +28,7 @@ class ToasterItem extends React.Component {
 
   componentWillReceiveProps(props) {
     if (props &&
-      props.message) {
+        props.message) {
       this.setState({
         message: props.message,
         type: props._type,

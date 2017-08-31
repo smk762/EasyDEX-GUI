@@ -40,10 +40,28 @@ class Main extends React.Component {
       document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)${_appMode}`;
     }
 
-    if (!zcashParamsExist) {
+    if (zcashParamsExist.errors) {
+      let _errors = [translate('KMD_NATIVE.ZCASH_PARAMS_MISSING'), ''];
+
+      if (!zcashParamsExist.rootDir) {
+        _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_ROOT_DIR'));
+      }
+      if (!zcashParamsExist.provingKey) {
+        _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_PROVING_KEY'));
+      }
+      if (!zcashParamsExist.provingKey) {
+        _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_VERIFYING_KEY'));
+      }
+      if (!zcashParamsExist.provingKeySize) {
+        _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_PROVING_KEY_SIZE'));
+      }
+      if (!zcashParamsExist.verifyingKeySize) {
+        _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE'));
+      }
+
       Store.dispatch(
         triggerToaster(
-          translate('KMD_NATIVE.ZCASH_PARAMS_MISSING'),
+          _errors,
           'Komodo',
           'error',
           false

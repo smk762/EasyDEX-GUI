@@ -24,7 +24,9 @@ class AddCoinOptionsAC extends React.Component {
 
     for (let i = 0; i < _assetChains.length; i++) {
       _items.push(
-        <option value={ `${_assetChains[i].toUpperCase()}|basilisk|native` }>{ translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) }</option>
+        <option
+          key={ _assetChains[i] }
+          value={ `${_assetChains[i].toUpperCase()}|basilisk|native` }>{ translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) }</option>
       );
     }
 
