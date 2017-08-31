@@ -102,7 +102,7 @@ class Settings extends React.Component {
     try {
       const _appConfigSchema = window.require('electron').remote.getCurrentWindow().appConfigSchema;
       const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, window.require('electron').remote.getCurrentWindow().appConfig);
-
+      console.warn(_appConfigSchema);
       this.setState(Object.assign({}, this.state, {
         appConfigSchema: _appConfigSchema,
         appSettings: _appSettings,
@@ -503,7 +503,7 @@ class Settings extends React.Component {
 
     for (let key in _appConfig) {
       if (typeof _appConfig[key] === 'object') {
-        if (this.state.appConfigSchema[key].display) {
+        if (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
@@ -567,7 +567,7 @@ class Settings extends React.Component {
           }
         }
       } else {
-        if (this.state.appConfigSchema[key].display) {
+        if (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
