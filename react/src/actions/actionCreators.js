@@ -107,34 +107,6 @@ export function toggleDashboardTxInfoModal(display, txIndex) {
   }
 }
 
-export function basiliskConnectionState(display, json) {
-  return {
-    type: BASILISK_CONNECTION,
-    basiliskConnection: display,
-    progress: json,
-  }
-}
-
-export function basiliskRefreshState(display, json) {
-  return {
-    type: BASILISK_REFRESH,
-    basiliskRefresh: display,
-    progress: json,
-  }
-}
-
-export function basiliskRefresh(display) {
-  return dispatch => {
-    dispatch(basiliskRefreshState(display));
-  }
-}
-
-export function basiliskConnection(display) {
-  return dispatch => {
-    dispatch(basiliskConnectionState(display));
-  }
-}
-
 export function syncingNativeModeState(display, json) {
   return {
     type: SYNCING_NATIVE_MODE,

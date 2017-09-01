@@ -10,7 +10,6 @@ import {
 import {
   resolveOpenAliasAddress,
   triggerToaster,
-  basiliskRefresh,
   shepherdGroomPostPromise,
   edexGetTransaction,
   getCacheFile,
@@ -127,13 +126,6 @@ class SendCoin extends React.Component {
       this.setState(Object.assign({}, this.state, {
         currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
       }));
-    }
-    if (data &&
-        data.message &&
-        data.message.shepherd.method &&
-        data.message.shepherd.method === 'cache-one' &&
-        data.message.shepherd.status === 'done') {
-      Store.dispatch(basiliskRefresh(false));
     }
   }
 
@@ -893,7 +885,7 @@ const mapStateToProps = (state) => {
     }
 
   };
- 
+
 };
 
 export default connect(mapStateToProps)(SendCoin);

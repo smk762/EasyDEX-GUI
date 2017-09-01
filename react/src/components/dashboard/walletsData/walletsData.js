@@ -5,8 +5,6 @@ import { sortByDate } from '../../../util/sort';
 import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
 import {
-  basiliskRefresh,
-  basiliskConnection,
   toggleDashboardTxInfoModal,
   getBasiliskTransactionsList,
   changeMainBasiliskAddress,
@@ -234,13 +232,6 @@ class WalletsData extends React.Component {
         stateObj = Object.assign(stateObj, {
           currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
         });
-      }
-      if (data &&
-          data.message &&
-          data.message.shepherd.method &&
-          data.message.shepherd.method === 'cache-one' &&
-          data.message.shepherd.status === 'done') {
-        Store.dispatch(basiliskRefresh(false));
       }
 
       if (Object.keys(stateObj).length) {
@@ -657,7 +648,6 @@ const mapStateToProps = (state) => {
     Dashboard: {
       activeHandle: state.Dashboard.activeHandle,
       displayViewCacheModal: state.Dashboard.displayViewCacheModal,
-      basiliskConnection: state.Dashboard.basiliskConnection,
       progress: state.Dashboard.progress,
     },
     Main: {
