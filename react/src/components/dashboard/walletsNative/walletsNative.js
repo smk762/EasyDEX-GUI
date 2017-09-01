@@ -79,9 +79,8 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
       mode: state.ActiveCoin.mode,
-    }
+    },
   };
-
 };
 
 export default connect(mapStateToProps)(WalletsNative);

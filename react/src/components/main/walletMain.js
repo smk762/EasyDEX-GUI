@@ -23,9 +23,8 @@ class WalletMain extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    toaster: state.toaster
+    toaster: state.toaster,
   };
-
 };
 
 export default connect(mapStateToProps)(WalletMain);

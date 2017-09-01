@@ -45,7 +45,7 @@ class QRModal extends React.Component {
 
   openModal() {
     this.setState({
-      modalIsOpen: true
+      modalIsOpen: true,
     });
 
     if (this.props.mode === 'scan') {

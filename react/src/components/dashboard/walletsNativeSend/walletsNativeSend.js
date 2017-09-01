@@ -458,9 +458,8 @@ const mapStateToProps = (state) => {
       mode: state.ActiveCoin.mode,
       opids: state.ActiveCoin.opids,
       activeSection: state.ActiveCoin.activeSection,
-    }
+    },
   };
-
 };
 
 export default connect(mapStateToProps)(WalletsNativeSend);

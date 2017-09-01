@@ -32,9 +32,8 @@ class LoginSettingsModal extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    Main: state.Main
+    Main: state.Main,
   };
-
 };
 
 export default connect(mapStateToProps)(LoginSettingsModal);

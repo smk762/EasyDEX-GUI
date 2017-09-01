@@ -204,7 +204,7 @@ const mapStateToProps = (state) => {
     Dashboard: {
       progress: state.Dashboard.progress,
       activeHandle: state.Dashboard.activeHandle,
-    }
+    },
   };
 };
 

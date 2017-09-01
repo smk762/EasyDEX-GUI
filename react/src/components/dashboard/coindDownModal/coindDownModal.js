@@ -38,9 +38,8 @@ class CoindDownModal extends React.Component {
 const mapStateToProps = (state) => {
   return {
     displayCoindDownModal: state.Dashboard.displayCoindDownModal,
-    debugLog: state.Settings.debugLog
+    debugLog: state.Settings.debugLog,
   };
- 
 };
 
 export default connect(mapStateToProps)(CoindDownModal);

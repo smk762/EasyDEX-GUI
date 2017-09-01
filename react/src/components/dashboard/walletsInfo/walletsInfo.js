@@ -33,10 +33,9 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
     },
     Dashboard: {
-      progress: state.Dashboard.progress
-    }
+      progress: state.Dashboard.progress,
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsInfo);

@@ -363,9 +363,8 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
     },
-    AddCoin: state.AddCoin,      
+    AddCoin: state.AddCoin,
   };
-
 };
 
 export default connect(mapStateToProps)(AddCoin);

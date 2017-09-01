@@ -127,9 +127,8 @@ const mapStateToProps = (state) => {
     Interval: {
       interval: state.Interval.interval,
     },
-    nativeOnly: Config.iguanaLessMode
+    nativeOnly: Config.iguanaLessMode,
   };
- 
 };
 
 export default connect(mapStateToProps)(Navbar);

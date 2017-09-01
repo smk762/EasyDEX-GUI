@@ -139,7 +139,6 @@ const mapStateToProps = (state) => {
     },
     nativeOnly: Config.iguanaLessMode,
   };
-
 };
 
 export default connect(mapStateToProps)(WalletsNav);

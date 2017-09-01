@@ -882,10 +882,8 @@ const mapStateToProps = (state) => {
     },
     Dashboard: {
       activeHandle: state.Dashboard.activeHandle,
-    }
-
+    },
   };
-
 };
 
 export default connect(mapStateToProps)(SendCoin);

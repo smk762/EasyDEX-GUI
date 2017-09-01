@@ -857,7 +857,6 @@ const mapStateToProps = (state) => {
     },
     Settings: state.Settings,
   };
-
 };
 
 export default connect(mapStateToProps)(Settings);

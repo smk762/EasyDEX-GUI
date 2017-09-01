@@ -239,9 +239,8 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       mode: state.ActiveCoin.mode,
       coin: state.coin,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsProgress);
