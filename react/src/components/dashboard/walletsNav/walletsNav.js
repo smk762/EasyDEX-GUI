@@ -134,10 +134,12 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
       activeAddress: state.ActiveCoin.activeAddress
     },
-    ActiveHandle: state.Dashboard.activeHandle,
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+    },
     nativeOnly: Config.iguanaLessMode,
   };
- 
+
 };
 
 export default connect(mapStateToProps)(WalletsNav);

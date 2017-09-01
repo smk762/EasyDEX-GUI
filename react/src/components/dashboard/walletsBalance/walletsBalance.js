@@ -188,6 +188,7 @@ class WalletsBalance extends React.Component {
     return null;
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
@@ -202,9 +203,9 @@ const mapStateToProps = (state) => {
     },
     Dashboard: {
       progress: state.Dashboard.progress,
+      activeHandle: state.Dashboard.activeHandle,
     }
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsBalance);
