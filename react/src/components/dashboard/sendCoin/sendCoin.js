@@ -789,7 +789,7 @@ class SendCoin extends React.Component {
       }
     }
 
-    return +_balance;
+    return _balance;
   }
 
   validateSendFormData() {

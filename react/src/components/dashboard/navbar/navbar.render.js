@@ -99,7 +99,7 @@ const NavbarRender = function() {
                     <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
                   </a>
                 </li>
-                <li className={ this.state.nativeOnly ? 'hide' : '' }>
+                <li className={ this.state.nativeOnly || !this.state.isExperimentalOn ? 'hide' : '' }>
                   <a onClick={ () => this.openSyncOnlyModal() }>
                     <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
                   </a>

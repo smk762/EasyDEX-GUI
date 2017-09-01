@@ -5,14 +5,8 @@ import AddCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
 
 const CoinSelectorsRender = function(item, coin, i) {
-  const isWindows = this.props.Settings && this.props.Settings.appInfo && this.props.Settings.appInfo.sysInfo && this.props.Settings.appInfo.sysInfo.platform === 'win32';
-  let appConfig;
-
-  try {
-    appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-  } catch (e) {}
-
-  const hideFullModeBtn = item && item.selectedCoin && item.selectedCoin.indexOf('|full') === -1 || !appConfig.experimentalFeatures ? true : false;
+  // const isWindows = this.props.Settings && this.props.Settings.appInfo && this.props.Settings.appInfo.sysInfo && this.props.Settings.appInfo.sysInfo.platform === 'win32';
+  const hideFullModeBtn = item && item.selectedCoin && item.selectedCoin.indexOf('|full') === -1 || !this.state.isExperimentalOn ? true : false;
 
   return (
     <div
@@ -176,7 +170,7 @@ const CoinSelectorsRender = function(item, coin, i) {
           </select>
         </div>
       </div>
-      <div className={ item.mode === '1' || item.mode === 1 ? 'col-sm-12' : 'hide' }>
+      <div className={ (item.mode === '1' || item.mode === 1) && this.state.isExperimentalOn ? 'col-sm-12' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">
           <span className="pointer">
             <label className="switch">
@@ -198,4 +192,5 @@ const CoinSelectorsRender = function(item, coin, i) {
     </div>
   )
 };
+
 export default CoinSelectorsRender;

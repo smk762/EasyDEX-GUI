@@ -43,6 +43,7 @@ class AddCoin extends React.Component {
       display: false,
       actionsMenu: false,
       modalClassName: 'hide',
+      isExperimentalOn: false,
     };
     this.existingCoins = null;
     this.activateCoin = this.activateCoin.bind(this);
@@ -113,6 +114,16 @@ class AddCoin extends React.Component {
 
   componentWillMount() {
     this.addNewItem();
+
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
   }
 
   componentWillReceiveProps(props) {
