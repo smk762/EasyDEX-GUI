@@ -5,7 +5,6 @@ import {
   SYNCING_FULL_MODE,
   SYNCING_NATIVE_MODE,
   BASILISK_CONNECTION,
-  DASHBOARD_CONNECT_NOTARIES,
   VIEW_CACHE_DATA,
   TOGGLE_NOTIFICATIONS_MODAL,
   DISPLAY_COIND_DOWN_MODAL,
@@ -18,12 +17,6 @@ export function Dashboard(state = {
   basiliskRefresh: false,
   basiliskConnection: false,
   displayViewCacheModal: false,
-  connectedNotaries: {
-    total: 0,
-    current: 0,
-    currentNodeName: null,
-    failedToConnectNodes: null,
-  },
   guiLog: {},
   displayCoindDownModal: false,
   displayClaimInterestModal: false,
@@ -56,15 +49,6 @@ export function Dashboard(state = {
       return Object.assign({}, state, {
         syncingNativeMode: action.syncingNativeMode,
         progress: action.progress,
-      });
-    case DASHBOARD_CONNECT_NOTARIES:
-      return Object.assign({}, state, {
-        connectedNotaries: {
-          total: action.total,
-          current: action.current,
-          currentNodeName: action.name,
-          failedToConnectNodes: action.failedNode,
-        }
       });
     case VIEW_CACHE_DATA:
       return Object.assign({}, state, {

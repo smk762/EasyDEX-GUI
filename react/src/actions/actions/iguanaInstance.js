@@ -24,22 +24,6 @@ export function restartIguanaInstance(pmid) {
   });
 }
 
-export function restartBasiliskInstance() {
-  return dispatch => {
-    getIguanaInstancesList()
-    .then(function(json) {
-      for (let port in json.result) {
-        if (json.result[port].mode === 'basilisk') {
-          restartIguanaInstance(json.result[port].pmid)
-          .then(function(json) {
-            console.log('restartBasiliskInstance', json);
-          });
-        }
-      }
-    });
-  }
-}
-
 export function startIguanaInstance(mode, coin) {
   return new Promise((resolve, reject) => {
     fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/forks`, {

@@ -13,8 +13,6 @@ import {
   DASHBOARD_ACTIVE_COIN_SENDTO,
   DASHBOARD_ACTIVE_COIN_GET_CACHE,
   DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
-  DASHBOARD_GET_NOTARIES_LIST,
-  DASHBOARD_DISPLAY_NOTARIES_MODAL,
   DASHBOARD_ACTIVE_ADDRESS,
 } from '../actions/storeType';
 
@@ -35,8 +33,6 @@ export function ActiveCoin(state = {
   lastSendToResponse: null,
   cache: null,
   mainBasiliskAddress: null,
-  notaries: null,
-  displayNotariesModal: false,
   activeAddress: null,
 }, action) {
   switch (action.type) {
@@ -181,14 +177,6 @@ export function ActiveCoin(state = {
     case DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR:
       return Object.assign({}, state, {
         mainBasiliskAddress: action.address,
-      });
-    case DASHBOARD_GET_NOTARIES_LIST:
-      return Object.assign({}, state, {
-        notaries: action.notaries,
-      });
-    case DASHBOARD_DISPLAY_NOTARIES_MODAL:
-      return Object.assign({}, state, {
-        displayNotariesModal: action.display,
       });
     case DASHBOARD_ACTIVE_ADDRESS:
       return Object.assign({}, state, {

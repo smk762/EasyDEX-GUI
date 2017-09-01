@@ -10,12 +10,8 @@ import {
   toggleDashboardTxInfoModal,
   getBasiliskTransactionsList,
   changeMainBasiliskAddress,
-  displayNotariesModal,
   toggleViewCacheModal,
   changeActiveAddress,
-  restartBasiliskInstance,
-  connectNotaries,
-  getDexNotaries,
   deleteCacheFile,
   fetchNewCacheData,
   fetchUtxoCache,
@@ -64,14 +60,10 @@ class WalletsData extends React.Component {
 
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
     this.basiliskRefreshAction = this.basiliskRefreshAction.bind(this);
-    this.basiliskConnectionAction = this.basiliskConnectionAction.bind(this);
-    this.getDexNotariesAction = this.getDexNotariesAction.bind(this);
     this.openDropMenu = this.openDropMenu.bind(this);
     this.removeAndFetchNewCache = this.removeAndFetchNewCache.bind(this);
     this._toggleViewCacheModal = this._toggleViewCacheModal.bind(this);
-    this.toggleCacheApi = this.toggleCacheApi.bind(this);
     this._fetchUtxoCache = this._fetchUtxoCache.bind(this);
-    this.restartBasiliskInstance = this.restartBasiliskInstance.bind(this);
     this.basiliskRefreshActionOne = this.basiliskRefreshActionOne.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
@@ -219,20 +211,6 @@ class WalletsData extends React.Component {
     }
   }
 
-  // deprecated
-  toggleCacheApi() {
-    const _useCache = !this.state.useCache;
-
-    sessionStorage.setItem('useCache', _useCache);
-    this.setState(Object.assign({}, this.state, {
-      useCache: _useCache,
-    }));
-  }
-
-  restartBasiliskInstance() {
-    Store.dispatch(restartBasiliskInstance());
-  }
-
   _toggleViewCacheModal() {
     Store.dispatch(toggleViewCacheModal(!this.props.Dashboard.displayViewCacheModal));
   }
@@ -338,18 +316,6 @@ class WalletsData extends React.Component {
       calls: 'listtransactions:getbalance',
       address: this.props.ActiveCoin.activeAddress,
     }));
-  }
-
-  basiliskConnectionAction() {
-    if (this.props.Dashboard) {
-      Store.dispatch(basiliskConnection(!this.props.Dashboard.basiliskConnection));
-      Store.dispatch(connectNotaries());
-    }
-  }
-
-  getDexNotariesAction() {
-    Store.dispatch(getDexNotaries(this.props.ActiveCoin.coin));
-    Store.dispatch(displayNotariesModal(true));
   }
 
   toggleTxInfoModal(display, txIndex) {
@@ -697,9 +663,7 @@ const mapStateToProps = (state) => {
     Main: {
       coins: state.Main.coins,
     }
-
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsData);

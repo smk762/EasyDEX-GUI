@@ -6,7 +6,6 @@ import {
   GET_ACTIVE_COINS,
   DASHBOARD_ACTIVE_ADDRESS,
   VIEW_CACHE_DATA,
-  DASHBOARD_DISPLAY_NOTARIES_MODAL,
   DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
   DASHBOARD_ACTIVE_SECTION,
   DASHBOARD_ACTIVE_TXINFO_MODAL,
@@ -47,7 +46,6 @@ export * from './actions/sendFullBasilisk';
 export * from './actions/settings';
 export * from './actions/syncOnly';
 export * from './actions/iguanaInstance';
-export * from './actions/notary';
 export * from './actions/edexBalance';
 export * from './actions/addCoin';
 export * from './actions/addressBalance';
@@ -83,13 +81,6 @@ export function updateErrosStack(method) {
 export function toggleViewCacheModal(display) {
   return {
     type: VIEW_CACHE_DATA,
-    display,
-  }
-}
-
-export function displayNotariesModal(display) {
-  return {
-    type: DASHBOARD_DISPLAY_NOTARIES_MODAL,
     display,
   }
 }
