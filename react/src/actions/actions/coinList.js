@@ -1,8 +1,4 @@
 import { triggerToaster } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 export function shepherdGetCoinList() {

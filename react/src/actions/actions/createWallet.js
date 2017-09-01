@@ -1,9 +1,5 @@
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 function createNewWalletState(json) {
@@ -41,31 +37,12 @@ export function createNewWallet(_passphrase) {
   };
 
   return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'createNewWallet',
-        type: 'post',
-        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
-        payload: payload,
-        status: 'pending',
-      }));
-    }
-
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
       body: JSON.stringify(payload),
     })
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
       dispatch(
         triggerToaster(
           'createNewWallet',
@@ -76,13 +53,6 @@ export function createNewWallet(_passphrase) {
     })
     .then(response => response.json())
     .then(json => {
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: json,
-        }));
-      }
       dispatch(createNewWalletState(json));
     })
   }

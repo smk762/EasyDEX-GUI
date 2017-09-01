@@ -7,23 +7,10 @@ import {
   BASILISK_CONNECTION,
   DASHBOARD_CONNECT_NOTARIES,
   VIEW_CACHE_DATA,
-  LOG_GUI_HTTP,
   TOGGLE_NOTIFICATIONS_MODAL,
   DISPLAY_COIND_DOWN_MODAL,
   DISPLAY_CLAIM_INTEREST_MODAL
 } from '../actions/storeType';
-
-const HTTP_STACK_MAX_ENTRIES = 150; // limit stack mem length to N records per type
-
-const trimHTTPLogs = (logObject) => {
-  const logObjectArray = Object.keys(logObject);
-
-  if (logObjectArray.length - HTTP_STACK_MAX_ENTRIES === 1) {
-    delete logObject[logObjectArray.shift()];
-  }
-
-  return logObject;
-};
 
 export function Dashboard(state = {
   activeSection: 'wallets',
@@ -82,24 +69,6 @@ export function Dashboard(state = {
     case VIEW_CACHE_DATA:
       return Object.assign({}, state, {
         displayViewCacheModal: action.display,
-      });
-    case LOG_GUI_HTTP:
-      const logState = state.guiLog;
-      const actionTS = action.timestamp;
-      let newLogState = {};
-
-      if (logState[actionTS]) {
-        const logItem = { [actionTS]: logState[actionTS] };
-        logItem[actionTS].status = action.log.status;
-        logItem[actionTS].response = action.log.response;
-        newLogState = trimHTTPLogs(Object.assign({}, logState, logItem));
-      } else {
-        const logItem = { [actionTS]: action.log };
-        newLogState = trimHTTPLogs(Object.assign({}, logState, logItem));
-      }
-
-      return Object.assign({}, state, {
-        guiLog: newLogState,
       });
     case DISPLAY_COIND_DOWN_MODAL:
       return Object.assign({}, state, {

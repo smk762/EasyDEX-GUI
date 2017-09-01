@@ -41,7 +41,6 @@ export const SAVE_APP_CONFIG = 'SAVE_APP_CONFIG';
 export const SERVICE_ERROR = 'SERVICE_ERROR';
 export const DASHBOARD_ACTIVE_ADDRESS = 'DASHBOARD_ACTIVE_ADDRESS';
 export const LOAD_APP_INFO = 'LOAD_APP_INFO';
-export const LOG_GUI_HTTP = 'LOG_GUI_HTTP';
 export const CLI = 'CLI';
 export const LOGOUT = 'LOGOUT';
 export const DISPLAY_COIND_DOWN_MODAL = 'DISPLAY_COIND_DOWN_MODAL';

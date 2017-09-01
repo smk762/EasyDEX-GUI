@@ -239,141 +239,6 @@ input:checked + .slider:before {
   display: none;
 }
 
-.notifications-modal {
-  color: #757575;
-}
-
-.notifications {
-  .notice {
-    position: relative;
-    margin: 1em;
-    background: #F9F9F9;
-    padding: 1em 1em 1em 2em;
-    border-left: 4px solid #DDD;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.125);
-
-    &:before {
-      position: absolute;
-      top: 50%;
-      margin-top: -17px;
-      left: -17px;
-      background-color: #DDD;
-      color: #FFF;
-      width: 30px;
-      height: 30px;
-      border-radius: 100%;
-      text-align: center;
-      line-height: 30px;
-      font-weight: bold;
-      font-family: Georgia;
-      text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
-    }
-  }
-
-  .info {
-    border-color: #0074D9;
-
-    &:before {
-      content: 'i';
-      background-color: #0074D9;
-    }
-  }
-
-  .success {
-    border-color: #2ECC40;
-
-    &:before {
-      content: '√';
-      background-color: #2ECC40;
-    }
-  }
-
-  .warning {
-    border-color: #FFDC00;
-
-    &:before {
-      content: '!';
-      background-color: #FFDC00;
-    }
-  }
-
-  .error {
-    border-color: #FF4136;
-
-    &:before {
-      content: 'X';
-      background-color: #FF4136;
-    }
-  }
-}
-
-.notifications-badge {
-  position: fixed;
-  bottom: 10px;
-  left: 5px;
-  cursor: pointer;
-  height: 20px;
-  z-index: 20;
-
-  .badge {
-    margin-left: 2px;
-    font-weight: bold;
-
-    &.success {
-      color: #3c763d;
-      background-color: #dff0d8;
-      border-color: #d6e9c6;
-    }
-    &.pending {
-      color: #8a6d3b;
-      background-color: #fcf8e3;
-      border-color: #faebcc;
-    }
-    &.error {
-      color: #a94442;
-      background-color: #f2dede;
-      border-color: #ebccd1;
-    }
-  }
-
-  .spinner-hide {
-    >div {
-      display: none;
-    }
-  }
-
-  .spinner {
-    position: absolute;
-    left: 60px;
-    bottom: -12px;
-
-    >div {
-      background-color: #fff;
-      margin-right: 1px;
-      width: 3px;
-    }
-  }
-
-  &.stick-to-top {
-    top: -3px;
-    left: 400px;
-    z-index: 1500;
-
-    .spinner {
-      display: inline-block;
-      position: relative;
-      left: -4px;
-      bottom: -16px;
-
-      >div {
-        background-color: #00bcd4;
-        margin-right: 1px;
-        width: 3px;
-      }
-    }
-  }
-}
-
 #js-copytextarea {
   opacity: 0;
   height: 10px;
@@ -533,21 +398,6 @@ select{
   }
 }
 
-.coin-logo-wide {
-  padding: 8px 30px 0;
-  position: relative;
-  top: 0;
-
-  .header-easydex-section {
-    img {
-      width: inherit;
-      max-width: inherit;
-      position: relative;
-      top: -5px;
-    }
-  }
-}
-
 .native-coin-logo {
   float: left;
   position: absolute;
@@ -562,11 +412,26 @@ select{
 }
 
 .coin-logo-wide {
+  padding: 8px 30px 0;
+  position: relative;
+  top: 0;
+
+  .header-easydex-section {
+    img {
+      width: inherit;
+      max-width: inherit;
+      position: relative;
+      top: -5px;
+    }
+  }
+
   &.native-coin-logo {
     top: -93px;
 
-    .header-easydex-section img {
-      width: inherit;
+    .header-easydex-section {
+      img {
+        width: inherit;
+      }
     }
   }
 }

@@ -31,11 +31,6 @@ import {
   START_INTERVAL,
   STOP_INTERVAL
 } from './storeType';
-import {
-  logGuiHttp,
-  getAgamaLog,
-  guiLogState
-} from './actions/log';
 
 export * from './actions/nativeSyncInfo';
 export * from './actions/basiliskCache';

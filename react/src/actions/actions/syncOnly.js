@@ -5,10 +5,6 @@ import {
 import { translate } from '../../translate/translate';
 import Config from '../../config';
 import { triggerToaster } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 
 export function toggleSyncOnlyModal(display) {
   return {

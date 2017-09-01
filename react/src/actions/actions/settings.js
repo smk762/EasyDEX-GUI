@@ -8,10 +8,6 @@ import {
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 
 function getAppInfoState(json) {
   return {
@@ -100,31 +96,12 @@ export function importPrivKey(wifKey) {
   };
 
   return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'importPrivKey',
-        type: 'post',
-        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
-        payload: payload,
-        status: 'pending',
-      }));
-    }
-
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
       body: JSON.stringify(payload),
     })
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
       dispatch(
         triggerToaster(
           'importPrivKey',
@@ -135,13 +112,6 @@ export function importPrivKey(wifKey) {
     })
     .then(response => response.json())
     .then(json => {
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: json,
-        }));
-      }
       dispatch(
         parseImportPrivKeyResponse(
           json,
@@ -209,31 +179,12 @@ export function getPeersList(coin) {
   };
 
   return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'getPeersList',
-        type: 'post',
-        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
-        payload: payload,
-        status: 'pending',
-      }));
-    }
-
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
       body: JSON.stringify(payload),
     })
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
       dispatch(
         triggerToaster(
           'getPeersList',
@@ -244,13 +195,6 @@ export function getPeersList(coin) {
     })
     .then(response => response.json())
     .then(json => {
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: json,
-        }));
-      }
       dispatch(getPeersListState(json, dispatch));
     })
   }
@@ -331,31 +275,12 @@ export function addPeerNode(coin, ip) {
   };
 
   return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'addPeerNode',
-        type: 'post',
-        url: `http://127.0.0.1:${Config.iguanaCorePort}`,
-        payload: payload,
-        status: 'pending',
-      }));
-    }
-
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
       body: JSON.stringify(payload),
     })
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
       dispatch(
         triggerToaster(
           'addPeerNode',
@@ -366,13 +291,6 @@ export function addPeerNode(coin, ip) {
     })
     .then(response => response.json())
     .then(json => {
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: json,
-        }));
-      }
       dispatch(addPeerNodeState(json, dispatch));
     })
   }

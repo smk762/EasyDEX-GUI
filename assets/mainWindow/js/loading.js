@@ -102,6 +102,14 @@ function setDefaultAppSettings() {
   showToast('success', 'App settings are reset to default');
 }
 
+function testBins(binName) {
+  const remote = require('electron').remote;
+  remote.getCurrentWindow().testBins(binName).
+  then(function(res) {
+    $('#debugOut').html(JSON.stringify(res, null, '\t'));
+  });
+}
+
 function handleSaveSettings() {
   if (_configCopy.dataDir &&
       _configCopy.dataDir.length) {

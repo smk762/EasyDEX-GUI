@@ -2,10 +2,6 @@ import {
   triggerToaster,
   getNewKMDAddresses
 } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 function getNewAddress(coin) { // TODO: remove(?)
