@@ -367,17 +367,7 @@ class WalletsNativeSend extends React.Component {
     return null;
   }
 
-  checkTotalBalance() {
-    let _balance = 0;
-
-    if (this.props.ActiveCoin.balance &&
-        this.props.ActiveCoin.balance.total) {
-      _balance = this.props.ActiveCoin.balance.total;
-    }
-
-    return _balance;
-  }
-
+  // TODO: reduce to a single toast
   validateSendFormData() {
     let valid = true;
 
@@ -404,7 +394,20 @@ class WalletsNativeSend extends React.Component {
       valid = false;
     }
 
-    if (this.state.amount > this.checkTotalBalance()) {
+    if (((!this.state.sendFrom || this.state.addressType === 'public') &&
+        this.state.sendTo &&
+        this.state.sendTo.length === 34 &&
+        this.props.ActiveCoin.balance &&
+        this.props.ActiveCoin.balance.transparent &&
+        Number(this.state.amount) > Number(this.props.ActiveCoin.balance.transparent)) ||
+        (this.state.addressType === 'public' &&
+        this.state.sendTo &&
+        this.state.sendTo.length > 34 &&
+        Number(this.state.amount) > Number(this.state.sendFromAmount)) ||
+        (this.state.addressType === 'private' &&
+        this.state.sendTo &&
+        this.state.sendTo.length >= 34 &&
+        Number(this.state.amount) > Number(this.state.sendFromAmount))) {
       Store.dispatch(
         triggerToaster(
           translate('SEND.INSUFFICIENT_FUNDS'),
@@ -426,6 +429,8 @@ class WalletsNativeSend extends React.Component {
       );
       valid = false;
     }
+
+    valid = false;
 
     return valid;
   }
@@ -457,6 +462,7 @@ const mapStateToProps = (state) => {
       coin: state.ActiveCoin.coin,
       mode: state.ActiveCoin.mode,
       opids: state.ActiveCoin.opids,
+      balance: state.ActiveCoin.balance,
       activeSection: state.ActiveCoin.activeSection,
     },
   };
