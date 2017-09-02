@@ -14,6 +14,7 @@ class QRModal extends React.Component {
     this.state = {
       modalIsOpen: false,
       error: null,
+      errorShown: false,
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -65,6 +66,7 @@ class QRModal extends React.Component {
   closeModal() {
     this.setState({
       modalIsOpen: false,
+      errorShown: this.state.error ? true : false,
     });
   }
 
