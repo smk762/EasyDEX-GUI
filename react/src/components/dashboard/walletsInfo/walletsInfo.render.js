@@ -3,6 +3,8 @@ import { translate } from '../../../translate/translate';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 
 const WalletsInfoRender = function() {
+  const _progress = this.props.ActiveCoin.progress;
+
   return (
     <div>
       <div className="col-xlg-6 col-md-4">
@@ -16,13 +18,13 @@ const WalletsInfoRender = function() {
                 <tr>
                   <td>{ translate('INDEX.WALLET_VERSION') }</td>
                   <td>
-                    { this.props.Dashboard.progress.walletversion }
+                    { _progress.walletversion }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.BALANCE') }</td>
                   <td>
-                    { this.props.Dashboard.progress.balance }
+                    { _progress.balance }
                   </td>
                 </tr>
                 <tr>
@@ -65,19 +67,19 @@ const WalletsInfoRender = function() {
                 <tr>
                   <td>{ translate('INDEX.VERSION') }</td>
                   <td>
-                    { this.props.Dashboard.progress.KMDversion }
+                    { _progress.KMDversion }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.PROTOCOL_VERSION') }</td>
                   <td>
-                    { this.props.Dashboard.progress.protocolversion }
+                    { _progress.protocolversion }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.NOTARIZED') }</td>
                   <td>
-                    { this.props.Dashboard.progress.notarized }
+                    { _progress.notarized }
                   </td>
                 </tr>
                 <tr>
@@ -85,15 +87,15 @@ const WalletsInfoRender = function() {
                     { translate('INDEX.NOTARIZED') } { translate('INDEX.HASH') }
                   </td>
                   <td>
-                    { this.props.Dashboard.progress.notarizedhash ?
-                      this.props.Dashboard.progress.notarizedhash.substring(
+                    { _progress.notarizedhash ?
+                      _progress.notarizedhash.substring(
                         0,
-                        Math.floor(this.props.Dashboard.progress.notarizedhash.length / 2)
+                        Math.floor(_progress.notarizedhash.length / 2)
                       ) +
                       '\t' +
-                      this.props.Dashboard.progress.notarizedhash.substring(
-                        Math.floor(this.props.Dashboard.progress.notarizedhash.length / 2),
-                        this.props.Dashboard.progress.notarizedhash.length
+                      _progress.notarizedhash.substring(
+                        Math.floor(_progress.notarizedhash.length / 2),
+                        _progress.notarizedhash.length
                       )
                       : ''
                     }
@@ -108,43 +110,43 @@ const WalletsInfoRender = function() {
                 <tr>
                   <td>{ translate('INDEX.BLOCKS') }</td>
                   <td>
-                    { this.props.Dashboard.progress.blocks }
+                    { _progress.blocks }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.CONNECTIONS') }</td>
                   <td>
-                    { this.props.Dashboard.progress.connections }
+                    { _progress.connections }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.DIFFICULTY') }</td>
                   <td>
-                    { this.props.Dashboard.progress.difficulty }
+                    { _progress.difficulty }
                   </td>
                 </tr>
                 <tr>
                   <td>Testnet</td>
                   <td>
-                    { this.props.Dashboard.progress.testnet }
+                    { _progress.testnet }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.PAY_TX_FEE') }</td>
                   <td>
-                    { this.props.Dashboard.progress.paytxfee }
+                    { _progress.paytxfee }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.RELAY_FEE') }</td>
                   <td>
-                    { this.props.Dashboard.progress.relayfee }
+                    { _progress.relayfee }
                   </td>
                 </tr>
                 <tr>
                   <td>{ translate('INDEX.ERRORS') }</td>
                   <td>
-                    { this.props.Dashboard.progress.errors }
+                    { _progress.errors }
                   </td>
                 </tr>
               </tbody>

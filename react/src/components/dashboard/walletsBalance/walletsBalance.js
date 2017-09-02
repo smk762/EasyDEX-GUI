@@ -30,11 +30,13 @@ class WalletsBalance extends React.Component {
   }
 
   isFullySynced() {
-    if (this.props.Dashboard.progress &&
-        (Number(this.props.Dashboard.progress.balances) +
-        Number(this.props.Dashboard.progress.validated) +
-        Number(this.props.Dashboard.progress.bundles) +
-        Number(this.props.Dashboard.progress.utxo)) / 4 === 100) {
+    const _progress = this.props.ActiveCoin.progress;
+
+    if (_progress &&
+        (Number(_progress.balances) +
+        Number(_progress.validated) +
+        Number(_progress.bundles) +
+        Number(_progress.utxo)) / 4 === 100) {
       return true;
     } else {
       return false;
@@ -119,9 +121,9 @@ class WalletsBalance extends React.Component {
       }
 
       if (type === 'interest' &&
-          this.props.Dashboard.progress &&
-          this.props.Dashboard.progress.interest) {
-        _balance = this.props.Dashboard.progress.interest;
+          this.props.ActiveCoin.progress &&
+          this.props.ActiveCoin.progress.interest) {
+        _balance = this.props.ActiveCoin.progress.interest;
       }
 
       if (type === 'private' &&
@@ -199,10 +201,10 @@ const mapStateToProps = (state) => {
       balance: state.ActiveCoin.balance,
       cache: state.ActiveCoin.cache,
       activeSection: state.ActiveCoin.activeSection,
-      activeAddress: state.ActiveCoin.activeAddress
+      activeAddress: state.ActiveCoin.activeAddress,
+      progress: state.ActiveCoin.progress,
     },
     Dashboard: {
-      progress: state.Dashboard.progress,
       activeHandle: state.Dashboard.activeHandle,
     },
   };

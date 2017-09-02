@@ -365,11 +365,13 @@ class WalletsData extends React.Component {
   }
 
   isFullySynced() {
-    if (this.props.Dashboard.progress &&
-        (Number(this.props.Dashboard.progress.balances) +
-        Number(this.props.Dashboard.progress.validated) +
-        Number(this.props.Dashboard.progress.bundles) +
-        Number(this.props.Dashboard.progress.utxo)) / 4 === 100) {
+    const _progress = this.props.ActiveCoin.progress;
+
+    if (_progress &&
+        (Number(_progress.balances) +
+        Number(_progress.validated) +
+        Number(_progress.bundles) +
+        Number(_progress.utxo)) / 4 === 100) {
       return true;
     } else {
       return false;
@@ -644,15 +646,15 @@ const mapStateToProps = (state) => {
       addresses: state.ActiveCoin.addresses,
       txhistory: state.ActiveCoin.txhistory,
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
+      progress: state.ActiveCoin.progress,
     },
     Dashboard: {
       activeHandle: state.Dashboard.activeHandle,
       displayViewCacheModal: state.Dashboard.displayViewCacheModal,
-      progress: state.Dashboard.progress,
     },
     Main: {
       coins: state.Main.coins,
-    }
+    },
   };
 };
 

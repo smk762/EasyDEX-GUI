@@ -14,6 +14,9 @@ import {
   DASHBOARD_ACTIVE_COIN_GET_CACHE,
   DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
   DASHBOARD_ACTIVE_ADDRESS,
+  SYNCING_FULL_MODE,
+  SYNCING_NATIVE_MODE,
+  DASHBOARD_UPDATE,
 } from '../actions/storeType';
 
 // TODO: refactor
@@ -34,6 +37,7 @@ export function ActiveCoin(state = {
   cache: null,
   mainBasiliskAddress: null,
   activeAddress: null,
+  progress: null,
 }, action) {
   switch (action.type) {
     case DASHBOARD_ACTIVE_COIN_CHANGE:
@@ -54,6 +58,7 @@ export function ActiveCoin(state = {
           mainBasiliskAddress: state.mainBasiliskAddress,
           opids: state.opids,
           activeBasiliskAddress: state.activeBasiliskAddress,
+          progress: state.progress,
         };
         let _coins = state.coins;
         _coins[state.coin] = _coinDataToStore;
@@ -74,6 +79,7 @@ export function ActiveCoin(state = {
           mainBasiliskAddress: _coinData.mainBasiliskAddress,
           opids: _coinData.opids,
           activeBasiliskAddress: _coinData.activeBasiliskAddress,
+          progress: _coinData.progress,
         });
       } else {
         if (state.coin) {
@@ -92,6 +98,7 @@ export function ActiveCoin(state = {
             mainBasiliskAddress: state.mainBasiliskAddress,
             opids: state.opids,
             activeBasiliskAddress: state.activeBasiliskAddress,
+            progress: state.progress,
           };
           let _coins = state.coins;
           _coins[state.coin] = _coinData;
@@ -107,6 +114,7 @@ export function ActiveCoin(state = {
             showTransactionInfo: false,
             showTransactionInfoTxIndex: null,
             activeSection: 'default',
+            progress: null,
           });
         } else {
           return Object.assign({}, state, {
@@ -119,6 +127,7 @@ export function ActiveCoin(state = {
             showTransactionInfo: false,
             showTransactionInfoTxIndex: null,
             activeSection: 'default',
+            progress: null,
           });
         }
       }
@@ -181,6 +190,21 @@ export function ActiveCoin(state = {
     case DASHBOARD_ACTIVE_ADDRESS:
       return Object.assign({}, state, {
         activeAddress: action.address,
+      });
+    case SYNCING_FULL_MODE:
+      return Object.assign({}, state, {
+        progress: action.progress,
+      });
+    case SYNCING_NATIVE_MODE:
+      return Object.assign({}, state, {
+        progress: action.progress,
+      });
+    case DASHBOARD_UPDATE:
+      return Object.assign({}, state, {
+        progress: action.progress,
+        opids: action.opids,
+        txhistory: action.txhistory,
+        balance: action.balance,
       });
     default:
       return state;

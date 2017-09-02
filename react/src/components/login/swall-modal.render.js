@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
 
-const SwallModalRender = function () {
+const SwallModalRender = function() {
   return (
     <div className="swal2-container">
       <div className="swal2-overlay full-opacity display-block"></div>
