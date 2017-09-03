@@ -7,12 +7,13 @@ import {
 } from '../actionCreators';
 import Config from '../../config';
 
+// TODO: use debug.log instead
 export function getSyncInfoNativeKMD(skipDebug, json) {
   const coin = 'KMD';
   // https://www.kmd.host/
   return dispatch => {
     return fetch(
-      Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
+      Config.iguanaLessMode ? 'https://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
       method: 'GET',
     })
     .catch(function(error) {
