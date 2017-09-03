@@ -8,10 +8,11 @@ export function AddCoin(state = {
 }, action) {
   switch (action.type) {
     case DISPLAY_ADDCOIN_MODAL:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         display: action.display,
         isLogin: action.isLogin,
-      });
+      };
     default:
       return state;
 	}

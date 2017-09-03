@@ -17,31 +17,37 @@ export function Settings(state = {
 }, action) {
   switch (action.type) {
     case GET_WIF_KEY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         wifkey: action.wifkey,
         address: action.address,
-      });
+      };
     case GET_PEERS_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         supernetPeers: action.supernetPeers,
         rawPeers: action.rawPeers,
-      });
+      };
     case GET_DEBUG_LOG:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         debugLog: action.data,
-      });
+      };
     case LOAD_APP_CONFIG:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         appSettings: action.config,
-      });
+      };
     case LOAD_APP_INFO:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         appInfo: action.info,
-      });
+      };
     case CLI:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         cli: action.data,
-      });
+      };
     default:
       return state;
   }
