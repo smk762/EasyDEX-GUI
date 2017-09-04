@@ -18,7 +18,8 @@ import {
   getNativeTxHistory,
   getKMDBalanceTotal,
   getSyncInfoNative,
-  getDebugLog
+  getDebugLog,
+  getDashboardUpdate
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -42,8 +43,8 @@ class CoinTileItem extends React.Component {
   dispatchCoinActions(coin, mode) {
     if (mode === 'native') {
       Store.dispatch(iguanaActiveHandle(true));
-      const _propsDashboard = this.props.Dashboard;
-      const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
+      const _propsDashboard = this.props.ActiveCoin;
+      const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
       if (syncPercentage < 100 &&
           !this.props.Dashboard.displayCoindDownModal) {
@@ -56,10 +57,7 @@ class CoinTileItem extends React.Component {
           syncPercentage &&
           (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
         Store.dispatch(getSyncInfoNative(coin, true));
-        Store.dispatch(getKMDBalanceTotal(coin));
-        Store.dispatch(getNativeTxHistory(coin));
-        Store.dispatch(getKMDAddressesNative(coin, mode));
-        Store.dispatch(getKMDOPID(null, coin));
+        Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
       } else {
         Store.dispatch(getSyncInfoNative(coin));
       }
@@ -205,14 +203,15 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
       addresses: state.ActiveCoin.addresses,
-      mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress
+      mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress,
+      progress: state.ActiveCoin.progress,
     },
     Dashboard: state.Dashboard,
     Interval: {
       interval: state.Interval.interval
     }
   };
- 
+
 };
 
 export default connect(mapStateToProps)(CoinTileItem);

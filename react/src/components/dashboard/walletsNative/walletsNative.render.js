@@ -27,7 +27,7 @@ const WalletsNativeRender = function() {
             </li>
           </ol>
         </div>
-        <div className="page-content">
+        <div className={ 'page-content' + (this.state.nativeOnly ? ' page-content-native' : '') }>
           <WalletsProgress />
           <div className="row">
             <WalletsBalance />

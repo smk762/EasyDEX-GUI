@@ -430,8 +430,6 @@ class WalletsNativeSend extends React.Component {
       valid = false;
     }
 
-    valid = false;
-
     return valid;
   }
 

@@ -56,15 +56,13 @@ export const CoinIsBusyRender = function() {
 
 export const ChainActivationNotificationRender = function() {
   return (
-    <div className="alert alert-info alert-dismissible margin-bottom-40">
+    <div className="alert alert-info alert-dismissible margin-bottom-50 margin-top-40">
       <button
         className="close"
         type="button">
         <span>×</span>
       </button>
-      <h4>
-        { translate('INDEX.ACTIVATING_CHAIN') }
-        { this.renderActivatingBestChainProgress() }
+      <h4>{ translate('INDEX.ACTIVATING_CHAIN') } { this.renderActivatingBestChainProgress() }
       </h4>
       <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
     </div>
@@ -75,7 +73,7 @@ export const WalletsProgressRender = function() {
   return (
     <div
       id="edex-footer"
-      className="margin-bottom-20">
+      className="margin-bottom-30 margin-top-10">
       { !this.isNativeMode() &&
         this.props.ActiveCoin.progress &&
         <div className="row no-space">

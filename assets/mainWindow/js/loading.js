@@ -22,7 +22,7 @@ function initSettingsForm() {
           <div
             class="settings-help"
             title="${appConfSchema[key].info}">
-            <img src="EasyDEX-GUI/assets/mainWindow/img/fa-question.png" />
+            <img src="../EasyDEX-GUI/assets/mainWindow/img/fa-question.png" />
           </div>`;
       }
 
@@ -174,6 +174,8 @@ function closeMainWindow() {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
+  disableModeButtons();
+
   window.createWindow('open');
   window.hide();
 }
@@ -185,10 +187,18 @@ function quitApp() {
   window.forseCloseApp();
 }
 
+function disableModeButtons() {
+  $('#nativeOnlyBtn').attr('disabled', true);
+  $('#normalStartBtn').attr('disabled', true);
+  $('#settingsBtn').attr('disabled', true);
+}
+
 function normalStart() {
   const remote = require('electron').remote;
   let appConf = remote.getCurrentWindow().appConfig;
   appConf.iguanaLessMode = false;
+
+  disableModeButtons();
 
   // run iguana-less mode with no daemons startup
   if (appConf &&
