@@ -146,10 +146,9 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
     },
     Dashboard: {
-      displayClaimInterestModal: state.Dashboard.displayClaimInterestModal
-    }
+      displayClaimInterestModal: state.Dashboard.displayClaimInterestModal,
+    },
   };
-
 };
 
 export default connect(mapStateToProps)(ClaimInterestModal);

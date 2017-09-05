@@ -53,8 +53,7 @@ class CoinTile extends React.Component {
         <CoinTileItem
           key={ i }
           i={ i }
-          item={ item }
-       />)
+          item={ item } />)
     );
   }
 
@@ -66,7 +65,6 @@ const mapStateToProps = (state) => {
   return {
     allCoins: state.Main.coins,
   };
- 
 };
 
 export default connect(mapStateToProps)(CoinTile);

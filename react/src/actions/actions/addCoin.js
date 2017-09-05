@@ -257,7 +257,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
         console.warn(acData);
         dispatch(
           triggerToaster(
-            `Error starting ${coin} daemon. Port ${acData.rpc} is already taken!`,
+            `Error starting ${coin} daemon. Port ${acData.rpc} is already taken!`, // translate
             translate('TOASTR.SERVICE_NOTIFICATION'),
             'error',
             false

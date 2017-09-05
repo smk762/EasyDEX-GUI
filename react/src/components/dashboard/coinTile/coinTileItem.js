@@ -40,6 +40,27 @@ class CoinTileItem extends React.Component {
   //       2) limit amount of req per update e.g. list of addresses don't change too often
   //       3) limit req in basilisk as much as possible incl. activehandle
 
+  componentWillMount() {
+    if (!this.props.ActiveCoin.coin) {
+      const modes = [
+        'native',
+        'basilisk',
+        'full'
+      ];
+      const allCoins = this.props.Main.coins;
+
+      if (allCoins) {
+        modes.map((mode) => {
+          allCoins[mode].map((coin) => {
+            setTimeout(() => {
+              this.dashboardChangeActiveCoin(coin, mode);
+            }, 100);
+          });
+        });
+      }
+    }
+  }
+
   dispatchCoinActions(coin, mode) {
     if (mode === 'native') {
       Store.dispatch(iguanaActiveHandle(true));
@@ -208,10 +229,10 @@ const mapStateToProps = (state) => {
     },
     Dashboard: state.Dashboard,
     Interval: {
-      interval: state.Interval.interval
-    }
+      interval: state.Interval.interval,
+    },
+    Main: state.Main,
   };
-
 };
 
 export default connect(mapStateToProps)(CoinTileItem);
