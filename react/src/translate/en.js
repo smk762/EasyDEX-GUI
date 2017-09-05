@@ -3,9 +3,11 @@ export const _lang = {
     'CLAIM_INTEREST': {
       'REQ_P1': 'Requirements to accrue interest',
       'REQ_P2': 'spend transaction was made at least 1 hour ago, locktime field is set and amount is greater than',
-      'CLAIM_INTEREST': 'Claim interest',
+      'CLAIM_INTEREST': 'Claim @template@ interest',
       'LOADING': 'Loading interest data',
       'NO_DATA': 'No data',
+      'TIP': 'Tip',
+      'TIP_DESC': 'don\'t attempt to claim interest smaller than 0.01 KMD. A fee you have to pay for transaction will be more or equal to the interest amount.',
     },
     'ABOUT': {
       'ABOUT_AGAMA': 'About Agama',

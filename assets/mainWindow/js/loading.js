@@ -1,5 +1,15 @@
 let _configCopy;
 
+function toggleDropdown() {
+  const _dropdown = $('.dropdown-menu');
+
+  if (_dropdown.hasClass('hide')) {
+    _dropdown.removeClass('hide');
+  } else {
+    _dropdown.addClass('hide');
+  }
+}
+
 function initSettingsForm() {
   const remote = require('electron').remote;
   let appConf = remote.getCurrentWindow().appConfig;
@@ -153,6 +163,7 @@ function closeSettingsWindow() {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
+  toggleDropdown();
   window.destroyAppSettingsWindow();
 }
 
@@ -167,6 +178,7 @@ function openSettingsWindow() {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
+  toggleDropdown();
   window.createAppSettingsWindow();
 }
 
@@ -174,6 +186,7 @@ function closeMainWindow() {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
+  toggleDropdown();
   disableModeButtons();
 
   window.createWindow('open');

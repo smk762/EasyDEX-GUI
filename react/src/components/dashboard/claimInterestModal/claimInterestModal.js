@@ -24,6 +24,7 @@ class ClaimInterestModal extends React.Component {
       isLoading: true,
       transactionsList: [],
       showZeroInterest: true,
+      totalInterest: 0,
     };
     this.claimInterestTableRender = this.claimInterestTableRender.bind(this);
     this.toggleZeroInterest = this.toggleZeroInterest.bind(this);
@@ -37,6 +38,7 @@ class ClaimInterestModal extends React.Component {
 
   loadListUnspent() {
     let _transactionsList = [];
+    let _totalInterest = 0;
 
     getListUnspent(this.props.ActiveCoin.coin)
     .then((json) => {
@@ -52,11 +54,13 @@ class ClaimInterestModal extends React.Component {
               interest: json[i].interest,
               txid: json[i].txid,
             });
+            _totalInterest =+ json[i].interest;
 
             if (i === json.length - 1) {
               this.setState({
                 transactionsList: _transactionsList,
                 isLoading: false,
+                totalInterest: _totalInterest,
               });
             }
           });
@@ -145,7 +149,7 @@ const mapStateToProps = (state) => {
       displayClaimInterestModal: state.Dashboard.displayClaimInterestModal
     }
   };
- 
+
 };
 
 export default connect(mapStateToProps)(ClaimInterestModal);

@@ -396,3 +396,56 @@ button.toast-close-button {
   margin-top: 10px;
   margin-left: 30px;
 }
+
+.btn-caret {
+  display: inline-block;
+  position: relative;
+  left: -4px;
+  height: 36px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  box-shadow: none;
+  width: 38px;
+}
+
+.btn-caret:before {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  height: 25px;
+  background: #fff;
+  width: 1px;
+  left: -2px;
+  top: 4px;
+}
+
+.btn-caret img {
+  height: 14px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.btn-native {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.btn-native:hover + .btn-caret:before {
+  display: none;
+}
+.btn-caret:hover:before {
+  display: none;
+}
+
+.dropdown-menu {
+  display: inherit;
+  top: inherit;
+  left: inherit;
+  right: 49.2%;
+  padding: 5px 2px;
+}
+
+.dropdown-menu li {
+  cursor: pointer;
+}
