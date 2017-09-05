@@ -340,19 +340,6 @@ select{
   }
 }
 
-.native-coin-logo {
-  float: left;
-  position: absolute;
-  top: -105px;
-  z-index: 100;
-
-  .header-easydex-section {
-    img {
-      width: 60px;
-    }
-  }
-}
-
 .coin-logo-wide {
   padding: 8px 30px 0;
   position: relative;
@@ -378,6 +365,19 @@ select{
   }
 }
 
+.native-coin-logo {
+  float: left;
+  position: absolute;
+  top: -105px;
+  z-index: 100;
+
+  .header-easydex-section {
+    img {
+      width: 60px;
+    }
+  }
+}
+
 .page-header--native {
   height: 75px;
 }
@@ -397,5 +397,5 @@ select{
 
 .page-content-native {
   position: relative;
-  top: -72px;
+  top: -20px;
 }
