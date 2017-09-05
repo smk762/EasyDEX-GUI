@@ -324,44 +324,46 @@ class WalletsData extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    let _stateChange = {};
+
     if (!this.state.currentAddress &&
       this.props.ActiveCoin.activeAddress &&
       this.props.ActiveCoin.mode === 'basilisk') {
-      this.setState(Object.assign({}, this.state, {
+      _stateChange = Object.assign({}, this.state, {
         currentAddress: this.props.ActiveCoin.activeAddress,
-      }));
+      });
     }
 
+    // TODO: clean
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
         this.props.ActiveCoin.txhistory.length) {
-        if (!this.state.itemsList ||
+        /*if (!this.state.itemsList || this.state.itemsList === 'no data' ||
             (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) ||
-            (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {
-          this.setState(Object.assign({}, this.state, {
+            (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {*/
+          _stateChange = Object.assign({}, this.state, {
             itemsList: this.props.ActiveCoin.txhistory,
             filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
             txhistory: this.props.ActiveCoin.txhistory,
             showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize,
-          }));
-      }
+            itemsListColumns: this.generateItemsListColumns(),
+          });
+        //}
     }
 
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory === 'no data') {
-        this.setState(Object.assign({}, this.state, {
-          itemsList: 'no data',
-        }));
+      _stateChange = Object.assign({}, this.state, {
+        itemsList: 'no data',
+      });
     } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
-      this.setState(Object.assign({}, this.state, {
+      _stateChange = Object.assign({}, this.state, {
         itemsList: 'loading',
-      }));
+      });
     }
 
-    this.setState({
-      itemsListColumns: this.generateItemsListColumns(),
-    });
+    this.setState(Object.assign({}, this.state, _stateChange));
   }
 
   isFullySynced() {
@@ -380,8 +382,7 @@ class WalletsData extends React.Component {
 
   // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
-    if (this.state.itemsList === 'loading' ||
-        this.state.itemsList.length == 0) {
+    if (this.state.itemsList === 'loading') {
       if (this.isFullySynced()) {
         return (
           <tr className="hover--none">
@@ -401,7 +402,7 @@ class WalletsData extends React.Component {
           <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.NO_DATA') }</td>
         </tr>
       );
-    } else if (this.state.itemsList) {
+    } else if (this.state.itemsList && this.state.itemsList.length) {
       return TxHistoryListRender.call(this);
     }
 

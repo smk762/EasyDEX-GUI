@@ -256,7 +256,7 @@ export const WalletsDataRender = function() {
                           { this.renderAddressList() }
                         </div>
                       }
-                      { this.props.ActiveCoin.txhistory !== 'loading' &&
+                      { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data') &&
                         <div className="col-sm-4 search-box">
                           <input
                             className="form-control"
