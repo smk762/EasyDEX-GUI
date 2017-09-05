@@ -182,12 +182,13 @@ function openSettingsWindow() {
   window.createAppSettingsWindow();
 }
 
-function closeMainWindow() {
+function closeMainWindow(isKmdOnly) {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
   toggleDropdown();
   disableModeButtons();
+  window.startKMDNative(isKmdOnly ? 'kmd' : null);
 
   window.createWindow('open');
   window.hide();
@@ -204,6 +205,7 @@ function disableModeButtons() {
   $('#nativeOnlyBtn').attr('disabled', true);
   $('#normalStartBtn').attr('disabled', true);
   $('#settingsBtn').attr('disabled', true);
+  $('#nativeOnlyBtnCarret').attr('disabled', true);
 }
 
 function normalStart() {
@@ -211,6 +213,7 @@ function normalStart() {
   let appConf = remote.getCurrentWindow().appConfig;
   appConf.iguanaLessMode = false;
 
+  toggleDropdown();
   disableModeButtons();
 
   // run iguana-less mode with no daemons startup

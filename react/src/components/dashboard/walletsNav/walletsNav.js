@@ -115,7 +115,7 @@ class WalletsNav extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         !this.props.ActiveCoin.coin) {
-      return WalletsNavNoWalletRender.call(this);
+      return null; //WalletsNavNoWalletRender.call(this);
     }
 
     return WalletsNavWithWalletRender.call(this);

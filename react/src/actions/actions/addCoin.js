@@ -342,7 +342,7 @@ export function iguanaActiveHandleBypass() {
     .then(response => response.json())
     .then(
       json => dispatch(
-        iguanaWalletPassphraseState(json, dispatch)
+        iguanaWalletPassphraseState(json, dispatch, true)
       )
     )
   }

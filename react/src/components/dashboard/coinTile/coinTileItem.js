@@ -42,6 +42,9 @@ class CoinTileItem extends React.Component {
 
   componentWillMount() {
     if (!this.props.ActiveCoin.coin) {
+      let _coinSelected = false;
+      let _mode;
+      let _coin;
       const modes = [
         'native',
         'basilisk',
@@ -52,11 +55,16 @@ class CoinTileItem extends React.Component {
       if (allCoins) {
         modes.map((mode) => {
           allCoins[mode].map((coin) => {
-            setTimeout(() => {
-              this.dashboardChangeActiveCoin(coin, mode);
-            }, 100);
+            if (!_coinSelected) {
+              _coinSelected = true;
+              _coin = coin;
+              _mode = mode;
+            }
           });
         });
+        setTimeout(() => {
+          this._dashboardChangeActiveCoin(_coin, _mode);
+        }, 100);
       }
     }
   }
@@ -123,7 +131,7 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  dashboardChangeActiveCoin(coin, mode) {
+  _dashboardChangeActiveCoin(coin, mode) {
     if (coin !== this.props.ActiveCoin.coin) {
       Store.dispatch(dashboardChangeActiveCoin(coin, mode));
       setTimeout(() => {
