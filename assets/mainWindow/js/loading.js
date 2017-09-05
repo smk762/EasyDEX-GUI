@@ -178,17 +178,20 @@ function openSettingsWindow() {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
-  toggleDropdown();
+  $('.dropdown-menu').addClass('hide');
   window.createAppSettingsWindow();
 }
 
-function closeMainWindow(isKmdOnly) {
+function closeMainWindow(isKmdOnly, isCustom) {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
-  toggleDropdown();
+  $('.dropdown-menu').addClass('hide');
   disableModeButtons();
-  window.startKMDNative(isKmdOnly ? 'kmd' : null);
+
+  if (!isCustom) {
+    window.startKMDNative(isKmdOnly ? 'KMD' : null);
+  }
 
   window.createWindow('open');
   window.hide();
@@ -213,7 +216,7 @@ function normalStart() {
   let appConf = remote.getCurrentWindow().appConfig;
   appConf.iguanaLessMode = false;
 
-  toggleDropdown();
+  $('.dropdown-menu').addClass('hide');
   disableModeButtons();
 
   // run iguana-less mode with no daemons startup

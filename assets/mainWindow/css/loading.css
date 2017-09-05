@@ -442,10 +442,11 @@ button.toast-close-button {
   display: inherit;
   top: inherit;
   left: inherit;
-  right: 49.2%;
-  padding: 5px 2px;
+  right: 48%;
+  padding: 2px 0;
 }
 
 .dropdown-menu li {
   cursor: pointer;
+  margin: 5px 0;
 }

@@ -329,7 +329,7 @@ class WalletsData extends React.Component {
     if (!this.state.currentAddress &&
       this.props.ActiveCoin.activeAddress &&
       this.props.ActiveCoin.mode === 'basilisk') {
-      _stateChange = Object.assign({}, this.state, {
+      _stateChange = Object.assign({}, _stateChange, {
         currentAddress: this.props.ActiveCoin.activeAddress,
       });
     }
@@ -342,7 +342,7 @@ class WalletsData extends React.Component {
         /*if (!this.state.itemsList || this.state.itemsList === 'no data' ||
             (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) ||
             (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {*/
-          _stateChange = Object.assign({}, this.state, {
+          _stateChange = Object.assign({}, _stateChange, {
             itemsList: this.props.ActiveCoin.txhistory,
             filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
             txhistory: this.props.ActiveCoin.txhistory,
@@ -354,16 +354,16 @@ class WalletsData extends React.Component {
 
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory === 'no data') {
-      _stateChange = Object.assign({}, this.state, {
+      _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'no data',
       });
     } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
-      _stateChange = Object.assign({}, this.state, {
+      _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'loading',
       });
     }
 
-    this.setState(Object.assign({}, this.state, _stateChange));
+    this.setState(Object.assign({}, _stateChange));
   }
 
   isFullySynced() {
