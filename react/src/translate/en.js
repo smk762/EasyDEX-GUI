@@ -143,7 +143,7 @@ export const _lang = {
                            'This mode uses the',
       'NATIVE_MODE_DESC2': 'instead of the',
       'NATIVE_MODE_DESC3': 'to query blockchain data',
-      'NATIVE_MODE_DESC4': 'is the so far mode which will allow you to do',
+      'NATIVE_MODE_DESC4': 'is the only mode which allows you to make',
       'NATIVE_MODE_DESC5': 'Z Transactions',
       'NATIVE_MODE_DESC6': 'Private Transactions',
       'UNSUPPORTED_BROWSER': 'Uh Oh! Unsupported Web Browser :-(',
