@@ -30,20 +30,20 @@ export function getDashboardUpdate(coin, activeCoinProps) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(getDashboardUpdateState(json));
+      dispatch(getDashboardUpdateState(json, coin));
 
       // dirty hack to trigger dashboard render
       if (!activeCoinProps.balance &&
           !activeCoinProps.addresses) {
         setTimeout(() => {
-          dispatch(getDashboardUpdateState(json));
+          dispatch(getDashboardUpdateState(json, coin));
         }, 100);
       }
     })
   }
 }
 
-export function getDashboardUpdateState(json) {
+export function getDashboardUpdateState(json, coin) {
   let _listtransactions = json.result['listtransactions'];
 
   if (_listtransactions &&
@@ -62,5 +62,6 @@ export function getDashboardUpdateState(json) {
     txhistory: _listtransactions,
     balance: json.result['z_gettotalbalance'].result,
     addresses: json.result['addresses'],
+    coin: coin,
   };
 }

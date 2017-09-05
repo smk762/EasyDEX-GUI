@@ -219,14 +219,16 @@ export function ActiveCoin(state = {
         progress: action.progress,
       };
     case DASHBOARD_UPDATE:
-      return {
-        ...state,
-        progress: action.progress,
-        opids: action.opids,
-        txhistory: action.txhistory,
-        balance: action.balance,
-        addresses: action.addresses,
-      };
+      if (state.coin === action.coin) {
+        return {
+          ...state,
+          progress: action.progress,
+          opids: action.opids,
+          txhistory: action.txhistory,
+          balance: action.balance,
+          addresses: action.addresses,
+        };
+      }
     default:
       return state;
   }
