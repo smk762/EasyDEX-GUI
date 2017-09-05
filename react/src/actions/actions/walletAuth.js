@@ -158,15 +158,17 @@ export function iguanaActiveHandle(getMainAddress) {
   }
 }
 
-export function iguanaWalletPassphraseState(json, dispatch) {
+export function iguanaWalletPassphraseState(json, dispatch, skipToastr) {
   sessionStorage.setItem('IguanaActiveAccount', JSON.stringify(json));
-  dispatch(
-    triggerToaster(
-      translate('TOASTR.LOGIN_SUCCESSFULL'),
-      translate('TOASTR.ACCOUNT_NOTIFICATION'),
-      'success'
-    )
-  );
+  if (!skipToastr) {
+    dispatch(
+      triggerToaster(
+        translate('TOASTR.LOGIN_SUCCESSFULL'),
+        translate('TOASTR.ACCOUNT_NOTIFICATION'),
+        'success'
+      )
+    );
+  }
   dispatch(getMainAddressState(json));
   dispatch(iguanaActiveHandleState(json));
 

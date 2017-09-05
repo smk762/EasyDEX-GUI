@@ -7,7 +7,8 @@ import {
   Config,
   getDexCoins,
   iguanaActiveHandle,
-  triggerToaster
+  triggerToaster,
+  iguanaActiveHandleBypass
 } from '../../actions/actionCreators';
 
 const IGUANA_ACTIVE_HANDLE_TIMEOUT = 30000;
@@ -80,9 +81,19 @@ class Main extends React.Component {
   }
 
   componentWillMount() {
+    let appConfig;
     // set userpass param
     Store.dispatch(getDexCoins());
     iguanaSetRPCAuth();
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+
+    if (appConfig.iguanaLessMode) {
+      Store.dispatch(iguanaActiveHandleBypass());
+    }
   }
 
   isWalletUnlocked() {
