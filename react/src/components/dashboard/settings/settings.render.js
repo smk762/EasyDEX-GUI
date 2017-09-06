@@ -1,146 +1,5 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
-import AddCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
-import AddCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
-import AddCoinOptionsACFiat from '../../addcoin/addcoinOptionsACFiat';
-
-export const AppUpdateTabRender = function() {
-  return (
-    <div
-      className="panel"
-      id="AppUpdate"
-      onClick={ () => this.openTab('AppUpdate', 10) }>
-      <div className="panel-heading">
-        <a className={ 'panel-title' + (this.state.activeTab === 10 ? '' : ' collapsed') }>
-          <i className="icon fa fa-cloud-download"></i> { translate('INDEX.UPDATE') }
-        </a>
-      </div>
-      <div
-        className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }
-        style={{ height: this.state.activeTab === 10 ? `${this.state.activeTabHeight}px` : '0' }}>
-        <div className="panel-body">
-          <div className="col-sm-4 padding-top-15">
-            <h5>{ translate('INDEX.UI_UPDATE') }</h5>
-            <div className="padding-top-15">
-              <button
-                type="button"
-                className="btn btn-info waves-effect waves-light"
-                onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
-              <button
-                type="button"
-                className="btn btn-primary waves-effect waves-light margin-left-20"
-                onClick={ this._updateUIPromise }
-                disabled={ !this.state.updatePatch }>{ translate('INDEX.UPDATE_UI_NOW') }</button>
-            </div>
-          </div>
-          <div className="col-sm-4 padding-top-15 hide">
-            <h5>{ translate('INDEX.BINS_UPDATE') }</h5>
-            <div className="padding-top-15">
-              <button
-                type="button"
-                className="btn btn-info waves-effect waves-light"
-                onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
-              <button
-                type="button"
-                className="btn btn-primary waves-effect waves-light margin-left-20"
-                onClick={ this.checkNodes }>{ translate('INDEX.UPDATE_BINS_NOW') }</button>
-            </div>
-          </div>
-          <div className="col-sm-12 padding-top-15">
-            { this.renderUpdateStatus() }
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const AppInfoTabRender = function() {
-  return (
-    <div
-      className="panel"
-      id="AppInfo"
-      onClick={ () => this.openTab('AppInfo', 8) }>
-      <div className="panel-heading">
-        <a className={ 'panel-title' + (this.state.activeTab === 8 ? '' : ' collapsed') }>
-          <i className="icon md-info"></i>{ translate('SETTINGS.APP_INFO') }
-        </a>
-      </div>
-      <div
-        className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }
-        style={{ height: this.state.activeTab === 8 ? `${this.state.activeTabHeight}px` : '0' }}>
-        <div className="panel-body">
-          <div className="col-sm-12 padding-top-15">
-            <div className="row">
-              <h5>{ translate('SETTINGS.APP_RELEASE') }</h5>
-              <div>
-                { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
-              </div>
-              <div>
-                { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}-beta` }
-              </div>
-              <div>
-                { translate('SETTINGS.APP_SESSION') }: { this.props.Settings.appInfo.appSession }
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 padding-top-20">
-            <div className="row">
-              <h5>{ translate('SETTINGS.SYS_INFO') }</h5>
-              <div>
-                { translate('SETTINGS.ARCH') }: { this.props.Settings.appInfo.sysInfo.arch }
-              </div>
-              <div>
-                { translate('SETTINGS.OS_TYPE') }: { this.props.Settings.appInfo.sysInfo.os_type }
-              </div>
-              <div>
-                { translate('SETTINGS.OS_PLATFORM') }: { this.props.Settings.appInfo.sysInfo.platform }
-              </div>
-              <div>
-                { translate('SETTINGS.OS_RELEASE') }: { this.props.Settings.appInfo.sysInfo.os_release }
-              </div>
-              <div>
-                { translate('SETTINGS.CPU') }: { this.props.Settings.appInfo.sysInfo.cpu }
-              </div>
-              <div>
-                { translate('SETTINGS.CPU_CORES') }: { this.props.Settings.appInfo.sysInfo.cpu_cores }
-              </div>
-              <div>
-                { translate('SETTINGS.MEM') }: { this.props.Settings.appInfo.sysInfo.totalmem_readable }
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 padding-top-20">
-            <div className="row">
-              <h5>{ translate('SETTINGS.LOCATIONS') }</h5>
-              <div>
-                { translate('SETTINGS.CACHE') }: { this.props.Settings.appInfo.dirs.cacheLocation }
-              </div>
-              <div>
-                { translate('SETTINGS.CONFIG') }: { this.props.Settings.appInfo.dirs.configLocation }
-              </div>
-              <div>
-                Iguana { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.iguanaBin }
-              </div>
-              <div>
-                Iguana { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.iguanaDir }
-              </div>
-              <div>
-                Komodo { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.komododBin }
-              </div>
-              <div>
-                Komodo { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.komodoDir }
-              </div>
-              <div>
-                Komodo wallet.dat: { this.props.Settings.appInfo.dirs.komodoDir }
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const SettingsRender = function() {
   return (
@@ -156,6 +15,7 @@ export const SettingsRender = function() {
                 <div
                   className="panel-group"
                   id="SettingsAccordion">
+
                   { !this.props.disableWalletSpecificUI &&
                     <div
                       id="WalletInfo"
@@ -169,42 +29,7 @@ export const SettingsRender = function() {
                       <div
                         className={ 'panel-collapse collapse' + (this.state.activeTab === 0 ? ' in' : '') }
                         style={{ height: this.state.activeTab === 0 ? `${this.state.activeTabHeight}px` : '0' }}>
-                        <div className="panel-body">
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th width="10%">{ translate('INDEX.KEY') }</th>
-                                <th>{ translate('INDEX.VALUE') }</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td className="wallet-info-key">pubkey</td>
-                                <td>{ this.props.Main.activeHandle.pubkey }</td>
-                              </tr>
-                              <tr>
-                                <td className="wallet-info-key">btcpubkey</td>
-                                <td>{ this.props.Main.activeHandle.btcpubkey }</td>
-                              </tr>
-                              <tr>
-                                <td className="wallet-info-key">rmd160</td>
-                                <td>{ this.props.Main.activeHandle.rmd160 }</td>
-                              </tr>
-                              <tr>
-                                <td className="wallet-info-key">NXT</td>
-                                <td>{ this.props.Main.activeHandle.NXT }</td>
-                              </tr>
-                              <tr>
-                                <td className="wallet-info-key">notary</td>
-                                <td>{ this.props.Main.activeHandle.notary }</td>
-                              </tr>
-                              <tr>
-                                <td className="wallet-info-key">status</td>
-                                <td>{ this.props.Main.activeHandle.status }</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        { this.renderWalletInfo() }
                       </div>
                     </div>
                   }
@@ -221,77 +46,7 @@ export const SettingsRender = function() {
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 1 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 1 ? `${this.state.activeTabHeight}px` : '0' }}>
-                      <div className="panel-body">
-                        <div className="row">
-                          <div className="col-sm-6">
-                            <div className="col-sm-12">
-                              <p>{ translate('INDEX.USE_THIS_SECTION') }</p>
-                            </div>
-                            <div className="col-sm-8 col-xs-12">
-                              <div className="form-group">
-                                <select
-                                  className="form-control form-material"
-                                  name="getPeersCoin"
-                                  onChange={ this.updateInput }>
-                                  <option>{ translate('INDEX.SELECT_COIN') }</option>
-                                  <AddCoinOptionsCrypto />
-                                  <AddCoinOptionsAC />
-                                  <AddCoinOptionsACFiat />
-                                </select>
-                              </div>
-                            </div>
-                            <div className="col-sm-4 col-xs-12 text-align-center">
-                              <button
-                                type="button"
-                                className="btn btn-primary waves-effect waves-light"
-                                onClick={ this.checkNodes }>{ translate('INDEX.CHECK_NODES') }</button>
-                            </div>
-                            <div className="col-sm-12">
-                              <h5>
-                                SuperNET Peers:
-                              </h5>
-                              <p>{ this.renderSNPeersList() }</p>
-                              <h5>
-                                Raw Peers:
-                              </h5>
-                              <p>{ this.renderPeersList() }</p>
-                            </div>
-                          </div>
-
-                          <div className="col-sm-6">
-                            <div className="col-sm-12">
-                              <p>{ translate('INDEX.USE_THIS_SECTION_PEER') }</p>
-                            </div>
-                            <div className="col-sm-8 col-xs-12">
-                              <div className="form-group">
-                                <select
-                                  className="form-control form-material"
-                                  name="addNodeCoin"
-                                  onChange={ this.updateInput }>
-                                  <option>{ translate('INDEX.SELECT_COIN') }</option>
-                                  <AddCoinOptionsCrypto />
-                                  <AddCoinOptionsAC />
-                                  <AddCoinOptionsACFiat />
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  name="addPeerIP"
-                                  placeholder={ translate('SETTINGS.ADD_PEER_IP') }
-                                  onChange={ this.updateInput } />
-                              </div>
-                            </div>
-                            <div className="col-sm-4 col-xs-12 text-align-center">
-                              <button
-                                type="button"
-                                className="btn btn-primary waves-effect waves-light"
-                                onClick={ this.addNode }>{ translate('INDEX.ADD_NODE') }</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      { this.renderAddNode() }
                     </div>
                   </div>
                   }
@@ -308,8 +63,8 @@ export const SettingsRender = function() {
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 2 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 2 ? `${this.state.activeTabHeight}px` : '0' }}>
-                      <div className="panel-body">Wallet Backup section to be updated soon.</div>
-                    </div>
+                      { this.renderWalletBackup() }
+                  </div>
                   </div>
                   }
                   { !this.props.disableWalletSpecificUI &&
@@ -325,8 +80,7 @@ export const SettingsRender = function() {
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 3 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 3 ? `${this.state.activeTabHeight}px` : '0' }}>
-                      <div className="panel-body">Fiat currency settings section to be updated soon.</div>
-                    </div>
+                      { this.renderFiatCurrency() }  </div>
                   </div>
                   }
                   { !this.props.disableWalletSpecificUI &&
@@ -553,7 +307,22 @@ export const SettingsRender = function() {
                       </div>
                     </div>
                   </div>
-                  { this.renderAppInfoTab() }
+
+                  <div
+                    className="panel"
+                    id="AppInfo"
+                    onClick={ () => this.openTab('AppInfo', 8) }>
+                    <div className="panel-heading">
+                      <a className={ 'panel-title' + (this.state.activeTab === 8 ? '' : ' collapsed') }>
+                        <i className="icon md-info"></i>{ translate('SETTINGS.APP_INFO') }
+                      </a>
+                    </div>
+                    <div
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 8 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      { this.renderAppInfoTab() }
+                    </div>
+                  </div>
 
                   { this.props.Main && this.props.Main.coins.native &&
                     <div
@@ -619,8 +388,22 @@ export const SettingsRender = function() {
                     </div>
                   }
 
-                  { this.renderAppUpdateTab() }
-
+                  <div
+                    className="panel"
+                    id="AppUpdate"
+                    onClick={ () => this.openTab('AppUpdate', 10) }>
+                    <div className="panel-heading">
+                      <a className={ 'panel-title' + (this.state.activeTab === 10 ? '' : ' collapsed') }>
+                        <i className="icon fa fa-cloud-download"></i> { translate('INDEX.UPDATE') }
+                      </a>
+                    </div>
+                    <div
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }
+                      style={{ height: this.state.activeTab === 10 ? `${this.state.activeTabHeight}px` : '0' }}>
+                        { this.renderAppUpdateTab() }
+                    </div>
+                  </div>
+                  
                   <div
                     className="panel"
                     id="Support"

@@ -22,10 +22,15 @@ import {
 import Store from '../../../store';
 
 import {
-  AppInfoTabRender,
   SettingsRender,
-  AppUpdateTabRender,
 } from './settings.render';
+
+import AppUpdateTab from  './settings.appUpdateTab';
+import AppInfoTab from  './settings.appInfoTab';
+import WalletInfoTab from './settings.walletInfo';
+import AddNodeTab from './settings.addNodeTab';
+import WalletBackupTab from './settings.walletBackupTab';
+import FiatCurrencyTab from './settings.fiatCurrency';
 
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -72,10 +77,6 @@ class Settings extends React.Component {
     // this.updateInputSettings = this.updateInputSettings.bind(this);
     this.importWifKey = this.importWifKey.bind(this);
     this.readDebugLog = this.readDebugLog.bind(this);
-    this.checkNodes = this.checkNodes.bind(this);
-    this.addNode = this.addNode.bind(this);
-    this.renderPeersList = this.renderPeersList.bind(this);
-    this.renderSNPeersList = this.renderSNPeersList.bind(this);
     this._saveAppConfig = this._saveAppConfig.bind(this);
     this._resetAppConfig = this._resetAppConfig.bind(this);
     this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
@@ -83,6 +84,10 @@ class Settings extends React.Component {
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
     this.updateTabDimensions = this.updateTabDimensions.bind(this);
+    this.renderWalletInfo = this.renderWalletInfo.bind(this);
+    this.renderAddNode = this.renderAddNode.bind(this);
+    this.renderWalletBackup = this.renderWalletBackup.bind(this);
+    this.renderFiatCurrency = this.renderFiatCurrency.bind(this);
   }
 
   updateTabDimensions() {
@@ -102,7 +107,7 @@ class Settings extends React.Component {
     try {
       const _appConfigSchema = window.require('electron').remote.getCurrentWindow().appConfigSchema;
       const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, window.require('electron').remote.getCurrentWindow().appConfig);
-      console.warn(_appConfigSchema);
+
       this.setState(Object.assign({}, this.state, {
         appConfigSchema: _appConfigSchema,
         appSettings: _appSettings,
@@ -351,75 +356,33 @@ class Settings extends React.Component {
     );
   }
 
-  checkNodes() {
-    if (this.state.getPeersCoin) {
-      Store.dispatch(getPeersList(this.state.getPeersCoin.split('|')[0]));
-    }
-  }
-
-  addNode() {
-    if (this.state.addNodeCoin) {
-      Store.dispatch(
-        addPeerNode(
-          this.state.addNodeCoin.split('|')[0],
-          this.state.addPeerIP
-        )
-      );
-    }
-  }
-
-  renderPeersList() {
-    if (this.state.getPeersCoin) {
-      const _getPeersCoin = this.state.getPeersCoin;
-      const _rawPeers = this.props.Settings.rawPeers;
-      const coin = _getPeersCoin.split('|')[0];
-
-      if (_rawPeers &&
-          _getPeersCoin &&
-          _rawPeers[coin]) {
-        return _rawPeers[coin].map((ip) =>
-          <div key={ ip }>{ ip }</div>
-        );
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-
   renderAppInfoTab() {
     const releaseInfo = this.props.Settings.appInfo && this.props.Settings.appInfo.releaseInfo;
 
     if (releaseInfo) {
-      return AppInfoTabRender.call(this);
+      return <AppInfoTab />
     }
 
     return null;
   }
 
   renderAppUpdateTab() {
-    return AppUpdateTabRender.call(this);
+    return <AppUpdateTab />
   }
 
-  renderSNPeersList() {
-    if (this.state.getPeersCoin) {
-      const _getPeersCoin = this.state.getPeersCoin;
-      const _supernetPeers = this.props.Settings.supernetPeers;
-      const coin = _getPeersCoin.split('|')[0];
+  renderWalletInfo() {
+    return <WalletInfoTab />
+  }
+  renderAddNode() {
+    return <AddNodeTab />
+  }
 
-      if (_supernetPeers &&
-          _getPeersCoin &&
-          _supernetPeers[coin]) {
-        return _supernetPeers[coin].map((ip) =>
-          <div key={ ip }>{ ip }</div>
-        );
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
+  renderWalletBackup() {
+    return <WalletBackupTab />
+  }
+
+  renderFiatCurrency() {
+    return <FiatCurrencyTab />
   }
 
   updateInputSettings(e, parentKey, childKey) {
@@ -500,10 +463,9 @@ class Settings extends React.Component {
   renderConfigEditForm() {
     let items = [];
     const _appConfig = this.state.appSettings;
-
     for (let key in _appConfig) {
-      if (typeof _appConfig[key] === 'object') {
-        if (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display) {
+       if (this.state.appConfigSchema[key] && typeof _appConfig[key] === 'object') {
+        if (this.state.appConfigSchema[key].display) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">

@@ -269,7 +269,7 @@ export function getPeersListState(json) {
 
   return {
     type: GET_PEERS_LIST,
-    supernetPeers: json && json.supernet[0] ? json.supernet : null,
+    supernetPeers: json && !json.error && json.supernet[0] ? json.supernet : null,
     rawPeers: peersList,
   }
 }
