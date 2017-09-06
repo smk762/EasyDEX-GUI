@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-export const ProgressRender = function (fork) {
+export const ProgressRender = function(fork) {
   return (
     <div>
       <div>
@@ -46,7 +46,7 @@ export const ProgressRender = function (fork) {
   );
 };
 
-export const ForkItemRender = function (forkInfo, port) {
+export const ForkItemRender = function(forkInfo, port) {
   return (
     <div
       key={ port }

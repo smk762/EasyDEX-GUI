@@ -46,10 +46,9 @@ const mapStateToProps = (state) => {
       mode: state.ActiveCoin.mode,
     },
     Dashboard: {
-      activeSection: state.Dashboard.activeSection, 
-    }     
+      activeSection: state.Dashboard.activeSection,
+    },
   };
-
 };
 
 export default connect(mapStateToProps)(Dashboard);

@@ -193,9 +193,8 @@ const mapStateToProps = (state) => {
     },
     Dashboard: {
       displayViewCacheModal: state.Dashboard.displayViewCacheModal,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsCacheData);

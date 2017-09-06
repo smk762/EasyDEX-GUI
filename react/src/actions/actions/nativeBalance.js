@@ -4,10 +4,6 @@ import {
   getPassthruAgent
 } from '../actionCreators';
 import Config from '../../config';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 
 export function getKMDBalanceTotal(coin) {
   let payload;
@@ -41,18 +37,6 @@ export function getKMDBalanceTotal(coin) {
   }
 
   return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'getKMDBalanceTotal',
-        type: 'post',
-        url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        payload: payload,
-        status: 'pending',
-      }));
-    }
-
     let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -74,13 +58,6 @@ export function getKMDBalanceTotal(coin) {
     )
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
       dispatch(
         triggerToaster(
           'getKMDBalanceTotal',
@@ -91,13 +68,6 @@ export function getKMDBalanceTotal(coin) {
     })
     .then(response => response.json())
     .then(function(json) { // TODO: figure out why komodod spits out "parse error"
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: json,
-        }));
-      }
       if (json &&
           !json.error) {
         dispatch(getNativeBalancesState(json));

@@ -62,9 +62,8 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
       activeAddress: state.ActiveCoin.activeAddress,
       showTransactionInfoTxIndex: state.ActiveCoin.showTransactionInfoTxIndex,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsTxInfo);

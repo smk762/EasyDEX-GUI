@@ -5,10 +5,6 @@ import {
   getKMDAddressesNative
 } from '../actionCreators';
 import Config from '../../config';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 
 export function getNewKMDAddresses(coin, pubpriv, mode) {
   let payload;
@@ -34,18 +30,6 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
   }
 
   return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'getNewKMDAddresses',
-        type: 'post',
-        url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        payload: payload,
-        status: 'pending',
-      }));
-    }
-
     let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -73,13 +57,6 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
     )
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
       dispatch(
         triggerToaster(
           'getNewKMDAddresses',
@@ -92,13 +69,6 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
     .then(json => {
       if (Config.cli.default) {
         json = json.result;
-      }
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: json,
-        }));
       }
       dispatch(
         triggerToaster(

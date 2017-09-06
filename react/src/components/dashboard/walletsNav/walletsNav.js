@@ -115,7 +115,7 @@ class WalletsNav extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         !this.props.ActiveCoin.coin) {
-      return WalletsNavNoWalletRender.call(this);
+      return null; //WalletsNavNoWalletRender.call(this);
     }
 
     return WalletsNavWithWalletRender.call(this);
@@ -134,10 +134,11 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
       activeAddress: state.ActiveCoin.activeAddress
     },
-    ActiveHandle: state.Dashboard.activeHandle,
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+    },
     nativeOnly: Config.iguanaLessMode,
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsNav);

@@ -12,15 +12,17 @@ export function Interval(state = {
     case START_INTERVAL:
       newIntervalState[action.name] = action.handle;
 
-      return Object.assign({}, state, {
+      return {
+        ...state,
         interval: newIntervalState,
-      });
+      };
     case STOP_INTERVAL:
       newIntervalState[action.name] = null;
 
-      return Object.assign({}, state, {
+      return {
+        ...state,
         interval: newIntervalState,
-      });
+      };
     default:
       return state;
   }

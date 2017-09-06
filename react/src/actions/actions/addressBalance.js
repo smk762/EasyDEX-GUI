@@ -5,10 +5,6 @@ import {
   getPassthruAgent,
   iguanaHashHex
 } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 function getKMDAddressesNativeState(json) {
@@ -105,18 +101,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
             };
           }
 
-          const _timestamp = Date.now();
-          if (Config.debug) {
-            dispatch(logGuiHttp({
-              timestamp: _timestamp,
-              function: 'getKMDAddressesNative',
-              type: 'post',
-              url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-              payload: payload,
-              status: 'pending',
-            }));
-          }
-
           let _fetchConfig = {
             method: 'POST',
             body: JSON.stringify(payload),
@@ -139,13 +123,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           )
           .catch(function(error) {
             console.log(error);
-            if (Config.debug) {
-              dispatch(logGuiHttp({
-                timestamp: _timestamp,
-                status: 'error',
-                response: error,
-              }));
-            }
             dispatch(
               triggerToaster(
                 'getKMDAddressesNative',
@@ -156,13 +133,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           })
           .then(response => response.json())
           .then(json => {
-            if (Config.debug) {
-              dispatch(logGuiHttp({
-                timestamp: _timestamp,
-                status: 'success',
-                response: json,
-              }));
-            }
             resolve(Config.cli.default && mode === 'native' ? json.result : json);
           })
         }
@@ -307,16 +277,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                     hex: hashHexJson,
                   };
                 }
-                if (Config.debug) {
-                  dispatch(logGuiHttp({
-                    timestamp: _timestamp,
-                    function: 'getKMDAddressesNative+ZBalance',
-                    type: 'post',
-                    url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-                    payload: payload,
-                    status: 'pending',
-                  }));
-                }
 
                 let _fetchConfig = {
                   method: 'POST',
@@ -349,13 +309,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                 )
                 .catch(function(error) {
                   console.log(error);
-                  if (Config.debug) {
-                    dispatch(logGuiHttp({
-                      timestamp: _timestamp,
-                      status: 'error',
-                      response: error,
-                    }));
-                  }
                   dispatch(
                     triggerToaster(
                       'getKMDAddressesNative+ZBalance',
@@ -369,13 +322,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                   if (json &&
                       json.error) {
                     resolve(0);
-                    if (Config.debug) {
-                      dispatch(logGuiHttp({
-                        timestamp: _timestamp,
-                        status: 'error',
-                        response: json,
-                      }));
-                    }
                     dispatch(
                       triggerToaster(
                         'getKMDAddressesNative+ZBalance',
@@ -394,13 +340,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
                       amount: json,
                       type: 'private',
                     };
-                    if (Config.debug) {
-                      dispatch(logGuiHttp({
-                        timestamp: _timestamp,
-                        status: 'success',
-                        response: json,
-                      }));
-                    }
                   }
                 });
               });
@@ -448,31 +387,12 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           if (json[coin][currentAddress].refresh) {
             calcBalance(result, json[coin][currentAddress].refresh.data, dispatch, mode);
           } else {
-            const _timestamp = Date.now();
-            if (Config.debug) {
-              dispatch(logGuiHttp({
-                timestamp: _timestamp,
-                function: 'getKMDAddressesNative+Balance',
-                type: 'post',
-                url: `http://127.0.0.1:${(Config.useBasiliskInstance && mode === 'basilisk' ? Config.iguanaCorePort + 1 : Config.iguanaCorePort)}`,
-                payload: payload,
-                status: 'pending',
-              }));
-            }
-
             fetch(`http://127.0.0.1:${(Config.useBasiliskInstance && mode === 'basilisk' ? Config.iguanaCorePort + 1 : Config.iguanaCorePort)}`, {
               method: 'POST',
               body: JSON.stringify(payload),
             })
             .catch(function(error) {
               console.log(error);
-              if (Config.debug) {
-                dispatch(logGuiHttp({
-                  timestamp: _timestamp,
-                  status: 'error',
-                  response: error,
-                }));
-              }
               dispatch(
                 triggerToaster(
                   'getKMDAddressesNative+Balance',
@@ -483,13 +403,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
             })
             .then(response => response.json())
             .then(function(json) {
-              if (Config.debug) {
-                dispatch(logGuiHttp({
-                  timestamp: _timestamp,
-                  status: 'success',
-                  response: json,
-                }));
-              }
               updatedCache.basilisk[coin][currentAddress].refresh = {
                 data: json,
                 status: 'done',
@@ -506,18 +419,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           }
         })
       } else {
-        const _timestamp = Date.now();
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            function: 'getKMDAddressesNative+Balance',
-            type: 'post',
-            url: `http://127.0.0.1:${(Config.useBasiliskInstance && mode === 'basilisk' ? Config.iguanaCorePort + 1 : Config.iguanaCorePort)}`,
-            payload: payload,
-            status: 'pending',
-          }));
-        }
-
         let _fetchConfig = {
           method: 'POST',
           body: JSON.stringify(payload),
@@ -547,13 +448,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
         )
         .catch(function(error) {
           console.log(error);
-          if (Config.debug) {
-            dispatch(logGuiHttp({
-              timestamp: _timestamp,
-              status: 'error',
-              response: error,
-            }));
-          }
           dispatch(
             triggerToaster(
               'getKMDAddressesNative+Balance',
@@ -567,13 +461,6 @@ export function getKMDAddressesNative(coin, mode, currentAddress) {
           if (Config.cli.default &&
               mode === 'native') {
             json = json.result;
-          }
-          if (Config.debug) {
-            dispatch(logGuiHttp({
-              timestamp: _timestamp,
-              status: 'success',
-              response: json,
-            }));
           }
           calcBalance(
             result,

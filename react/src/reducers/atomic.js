@@ -7,9 +7,10 @@ export function Atomic(state = {
 }, action) {
   switch (action.type) {
     case ATOMIC:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         response: action.response,
-      });
+      };
     default:
       return state;
   }

@@ -57,7 +57,7 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
-            { this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' && (this._checkAC() || this.props.ActiveCoin.coin === 'KMD') &&
+            { this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' && (/*this._checkAC() || */this.props.ActiveCoin.coin === 'KMD') &&
               <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr
@@ -99,7 +99,7 @@ const NavbarRender = function() {
                     <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
                   </a>
                 </li>
-                <li className={ this.state.nativeOnly ? 'hide' : '' }>
+                <li className={ this.state.nativeOnly || !this.state.isExperimentalOn ? 'hide' : '' }>
                   <a onClick={ () => this.openSyncOnlyModal() }>
                     <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
                   </a>

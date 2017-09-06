@@ -5,8 +5,7 @@ import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsMod
 const LoginRender = function () {
   return (
     <div>
-      <LoginSettingsModal
-         section={ this.state.displayLoginSettingsDropdownSection } />
+      <LoginSettingsModal section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
@@ -35,7 +34,7 @@ const LoginRender = function () {
                     <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
                   </a>
                 </li>
-                <li className={ this.state.nativeOnly ? 'hide' : '' }>
+                <li className={ this.state.nativeOnly || !this.state.isExperimentalOn ? 'hide' : '' }>
                   <a onClick={ this.openSyncOnlyModal }>
                     <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
                   </a>

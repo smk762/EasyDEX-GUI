@@ -10,7 +10,6 @@ import {
 import {
   resolveOpenAliasAddress,
   triggerToaster,
-  basiliskRefresh,
   shepherdGroomPostPromise,
   edexGetTransaction,
   getCacheFile,
@@ -127,13 +126,6 @@ class SendCoin extends React.Component {
       this.setState(Object.assign({}, this.state, {
         currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
       }));
-    }
-    if (data &&
-        data.message &&
-        data.message.shepherd.method &&
-        data.message.shepherd.method === 'cache-one' &&
-        data.message.shepherd.status === 'done') {
-      Store.dispatch(basiliskRefresh(false));
     }
   }
 
@@ -765,7 +757,7 @@ class SendCoin extends React.Component {
   }
 
   // TODO same as in walletsNav and receiveCoin, find a way to reuse it?
-  checkTotalBalance() {
+  checkBalance() {
     let _balance = '0';
     const _mode = this.props.ActiveCoin.mode;
 
@@ -785,21 +777,16 @@ class SendCoin extends React.Component {
           (_cache[_coin][_address].getbalance.data.balance ||
             _cache[_coin][_address].getbalance.data.interest)) {
           const _regBalance = _cache[_coin][_address].getbalance.data.balance ? _cache[_coin][_address].getbalance.data.balance : 0;
-          const _regInterest = _cache[_coin][_address].getbalance.data.interest ? _cache[_coin][_address].getbalance.data.interest : 0;
 
-          _balance = _regBalance + _regInterest;
+          _balance = _regBalance;
         }
-      }
-    } else if (_mode === 'native') {
-      if (this.props.ActiveCoin.balance &&
-        this.props.ActiveCoin.balance.total) {
-        _balance = this.props.ActiveCoin.balance.total;
       }
     }
 
-    return +_balance;
+    return _balance;
   }
 
+  // TODO: reduce to a single toast
   validateSendFormData() {
     let valid = true;
     if (!this.state.sendTo || this.state.sendTo.length < 34) {
@@ -846,7 +833,8 @@ class SendCoin extends React.Component {
       valid = false;
     }
 
-    if (this.state.amount > this.checkTotalBalance()) {
+    if ((this.props.ActiveCoin.mode === 'basilisk' && Number(this.state.amount) > Number(this.state.sendFromAmount)) ||
+        (this.props.ActiveCoin.mode === 'full' && Number(this.state.amount) > Number(this.checkBalance()))) {
       Store.dispatch(
         triggerToaster(
           translate('SEND.INSUFFICIENT_FUNDS'),
@@ -890,10 +878,8 @@ const mapStateToProps = (state) => {
     },
     Dashboard: {
       activeHandle: state.Dashboard.activeHandle,
-    }
-
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(SendCoin);

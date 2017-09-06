@@ -18,7 +18,8 @@ import {
   getNativeTxHistory,
   getKMDBalanceTotal,
   getSyncInfoNative,
-  getDebugLog
+  getDebugLog,
+  getDashboardUpdate
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -39,11 +40,40 @@ class CoinTileItem extends React.Component {
   //       2) limit amount of req per update e.g. list of addresses don't change too often
   //       3) limit req in basilisk as much as possible incl. activehandle
 
+  componentWillMount() {
+    if (!this.props.ActiveCoin.coin) {
+      let _coinSelected = false;
+      let _mode;
+      let _coin;
+      const modes = [
+        'native',
+        'basilisk',
+        'full'
+      ];
+      const allCoins = this.props.Main.coins;
+
+      if (allCoins) {
+        modes.map((mode) => {
+          allCoins[mode].map((coin) => {
+            if (!_coinSelected) {
+              _coinSelected = true;
+              _coin = coin;
+              _mode = mode;
+            }
+          });
+        });
+        setTimeout(() => {
+          this._dashboardChangeActiveCoin(_coin, _mode);
+        }, 100);
+      }
+    }
+  }
+
   dispatchCoinActions(coin, mode) {
     if (mode === 'native') {
       Store.dispatch(iguanaActiveHandle(true));
-      const _propsDashboard = this.props.Dashboard;
-      const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(this.props.Dashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
+      const _propsDashboard = this.props.ActiveCoin;
+      const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
       if (syncPercentage < 100 &&
           !this.props.Dashboard.displayCoindDownModal) {
@@ -56,10 +86,7 @@ class CoinTileItem extends React.Component {
           syncPercentage &&
           (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
         Store.dispatch(getSyncInfoNative(coin, true));
-        Store.dispatch(getKMDBalanceTotal(coin));
-        Store.dispatch(getNativeTxHistory(coin));
-        Store.dispatch(getKMDAddressesNative(coin, mode));
-        Store.dispatch(getKMDOPID(null, coin));
+        Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
       } else {
         Store.dispatch(getSyncInfoNative(coin));
       }
@@ -104,7 +131,7 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  dashboardChangeActiveCoin(coin, mode) {
+  _dashboardChangeActiveCoin(coin, mode) {
     if (coin !== this.props.ActiveCoin.coin) {
       Store.dispatch(dashboardChangeActiveCoin(coin, mode));
       setTimeout(() => {
@@ -205,14 +232,15 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
       addresses: state.ActiveCoin.addresses,
-      mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress
+      mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress,
+      progress: state.ActiveCoin.progress,
     },
     Dashboard: state.Dashboard,
     Interval: {
-      interval: state.Interval.interval
-    }
+      interval: state.Interval.interval,
+    },
+    Main: state.Main,
   };
- 
 };
 
 export default connect(mapStateToProps)(CoinTileItem);

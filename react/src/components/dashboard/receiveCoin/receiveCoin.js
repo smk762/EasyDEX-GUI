@@ -226,9 +226,8 @@ const mapStateToProps = (state) => {
     cache: state.ActiveCoin.cache,
     activeSection: state.ActiveCoin.activeSection,
     activeAddress: state.ActiveCoin.activeAddress,
-    addresses: state.ActiveCoin.addresses
+    addresses: state.ActiveCoin.addresses,
   };
- 
 };
 
 export default connect(mapStateToProps)(ReceiveCoin);

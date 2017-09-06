@@ -169,9 +169,8 @@ const mapStateToProps = (state) => {
     },
     Interval: {
       interval: state.Interval.interval,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(SyncOnly);

@@ -8,7 +8,7 @@ const CoinTileItemRender = function() {
       <div className={ 'widget widget-shadow' + (this.props.ActiveCoin.coin === item.coin ? ' active' : '') }>
         <div
           className="widget-content text-center bg-white padding-20"
-          onClick={ () => this.dashboardChangeActiveCoin(item.coin, item.mode) }>
+          onClick={ () => this._dashboardChangeActiveCoin(item.coin, item.mode) }>
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"

@@ -13,12 +13,13 @@ import {
   DASHBOARD_ACTIVE_COIN_SENDTO,
   DASHBOARD_ACTIVE_COIN_GET_CACHE,
   DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
-  DASHBOARD_GET_NOTARIES_LIST,
-  DASHBOARD_DISPLAY_NOTARIES_MODAL,
   DASHBOARD_ACTIVE_ADDRESS,
+  SYNCING_FULL_MODE,
+  SYNCING_NATIVE_MODE,
+  DASHBOARD_UPDATE,
 } from '../actions/storeType';
 
-// TODO: refactor
+// TODO: refactor current coin props copy on change
 
 export function ActiveCoin(state = {
   coins: {},
@@ -35,9 +36,8 @@ export function ActiveCoin(state = {
   lastSendToResponse: null,
   cache: null,
   mainBasiliskAddress: null,
-  notaries: null,
-  displayNotariesModal: false,
   activeAddress: null,
+  progress: null,
 }, action) {
   switch (action.type) {
     case DASHBOARD_ACTIVE_COIN_CHANGE:
@@ -58,11 +58,13 @@ export function ActiveCoin(state = {
           mainBasiliskAddress: state.mainBasiliskAddress,
           opids: state.opids,
           activeBasiliskAddress: state.activeBasiliskAddress,
+          progress: state.progress,
         };
         let _coins = state.coins;
         _coins[state.coin] = _coinDataToStore;
 
-        return Object.assign({}, state, {
+        return {
+          ...state,
           coins: _coins,
           addresses: _coinData.addresses,
           coin: _coinData.coin,
@@ -78,7 +80,8 @@ export function ActiveCoin(state = {
           mainBasiliskAddress: _coinData.mainBasiliskAddress,
           opids: _coinData.opids,
           activeBasiliskAddress: _coinData.activeBasiliskAddress,
-        });
+          progress: _coinData.progress,
+        };
       } else {
         if (state.coin) {
           const _coinData = {
@@ -96,11 +99,13 @@ export function ActiveCoin(state = {
             mainBasiliskAddress: state.mainBasiliskAddress,
             opids: state.opids,
             activeBasiliskAddress: state.activeBasiliskAddress,
+            progress: state.progress,
           };
           let _coins = state.coins;
           _coins[state.coin] = _coinData;
 
-          return Object.assign({}, state, {
+          return {
+            ...state,
             coins: _coins,
             coin: action.coin,
             mode: action.mode,
@@ -111,9 +116,11 @@ export function ActiveCoin(state = {
             showTransactionInfo: false,
             showTransactionInfoTxIndex: null,
             activeSection: 'default',
-          });
+            progress: null,
+          };
         } else {
-          return Object.assign({}, state, {
+          return {
+            ...state,
             coin: action.coin,
             mode: action.mode,
             balance: 0,
@@ -123,77 +130,105 @@ export function ActiveCoin(state = {
             showTransactionInfo: false,
             showTransactionInfoTxIndex: null,
             activeSection: 'default',
-          });
+            progress: null,
+          };
         }
       }
     case DASHBOARD_ACTIVE_COIN_BALANCE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         balance: action.balance,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_SEND_FORM:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         send: action.send,
         receive: false,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_RECEIVE_FORM:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         send: false,
         receive: action.receive,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_RESET_FORMS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         send: false,
         receive: false,
-      });
+      };
     case ACTIVE_COIN_GET_ADDRESSES:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         addresses: action.addresses,
-      });
+      };
     case DASHBOARD_ACTIVE_SECTION:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         activeSection: action.section,
-      });
+      };
     case DASHBOARD_ACTIVE_TXINFO_MODAL:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         showTransactionInfo: action.showTransactionInfo,
         showTransactionInfoTxIndex: action.showTransactionInfoTxIndex,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         balance: action.balance,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         txhistory: action.txhistory,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_NATIVE_OPIDS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         opids: action.opids,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_SENDTO:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         lastSendToResponse: action.lastSendToResponse,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_GET_CACHE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         cache: action.cache,
-      });
+      };
     case DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         mainBasiliskAddress: action.address,
-      });
-    case DASHBOARD_GET_NOTARIES_LIST:
-      return Object.assign({}, state, {
-        notaries: action.notaries,
-      });
-    case DASHBOARD_DISPLAY_NOTARIES_MODAL:
-      return Object.assign({}, state, {
-        displayNotariesModal: action.display,
-      });
+      };
     case DASHBOARD_ACTIVE_ADDRESS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         activeAddress: action.address,
-      });
+      };
+    case SYNCING_FULL_MODE:
+      return {
+        ...state,
+        progress: action.progress,
+      };
+    case SYNCING_NATIVE_MODE:
+      return {
+        ...state,
+        progress: action.progress,
+      };
+    case DASHBOARD_UPDATE:
+      if (state.coin === action.coin) {
+        return {
+          ...state,
+          progress: action.progress,
+          opids: action.opids,
+          txhistory: action.txhistory,
+          balance: action.balance,
+          addresses: action.addresses,
+        };
+      }
     default:
       return state;
   }

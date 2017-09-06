@@ -429,9 +429,8 @@ const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(Jumblr);

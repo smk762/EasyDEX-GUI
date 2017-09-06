@@ -22,7 +22,7 @@ export const SyncPercentageRender = function(syncPercentage) {
     <div
       className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
       style={{ width: syncPercentage }}>
-      <span style={{ width: syncPercentage }}>{ syncPercentage }</span> | { this.props.Dashboard.progress.blocks } / { this.props.Dashboard.progress.longestchain } | { translate('INDEX.CONNECTIONS') }: { this.props.Dashboard.progress.connections }
+      <span style={{ width: syncPercentage }}>{ syncPercentage }</span> | { this.props.ActiveCoin.progress.blocks } / { this.props.ActiveCoin.progress.longestchain } | { translate('INDEX.CONNECTIONS') }: { this.props.ActiveCoin.progress.connections }
     </div>
   );
 };
@@ -56,15 +56,13 @@ export const CoinIsBusyRender = function() {
 
 export const ChainActivationNotificationRender = function() {
   return (
-    <div className="alert alert-info alert-dismissible margin-bottom-40">
+    <div className="alert alert-info alert-dismissible margin-bottom-50 margin-top-40">
       <button
         className="close"
         type="button">
         <span>×</span>
       </button>
-      <h4>
-        { translate('INDEX.ACTIVATING_CHAIN') }
-        { this.renderActivatingBestChainProgress() }
+      <h4>{ translate('INDEX.ACTIVATING_CHAIN') } { this.renderActivatingBestChainProgress() }
       </h4>
       <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
     </div>
@@ -75,24 +73,24 @@ export const WalletsProgressRender = function() {
   return (
     <div
       id="edex-footer"
-      className="margin-bottom-20">
+      className="margin-bottom-30 margin-top-10">
       { !this.isNativeMode() &&
-        this.props.Dashboard.progress &&
+        this.props.ActiveCoin.progress &&
         <div className="row no-space">
           <div id="currency-progressbars">
             <div className="progress progress-sm">
               <div className={ 'full-width font-size-80-percent '
               + (this.isFullySynced() ? 'progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success' : 'hide') }>
                 { translate('INDEX.BUNDLES') }&nbsp;
-                <span id="currency-bundles-percent">({ this.props.ActiveCoin.coin }) 100.00% - ( { this.props.Dashboard.progress.blocks }
-                / { this.props.Dashboard.progress.blocks } ) ==&gt;&gt;
-                RT{ this.props.Dashboard.progress.RTheight }</span>
+                <span id="currency-bundles-percent">({ this.props.ActiveCoin.coin }) 100.00% - ( { this.props.ActiveCoin.progress.blocks }
+                / { this.props.ActiveCoin.progress.blocks } ) ==&gt;&gt;
+                RT{ this.props.ActiveCoin.progress.RTheight }</span>
               </div>
               <div
                 className={ 'font-size-80-percent '
                 + (this.isFullySynced() ? 'hide' : 'progress-bar progress-bar-info progress-bar-striped active') }
-                style={{ width: `${this.props.Dashboard.progress.bundles}%` }}>
-                { translate('INDEX.BUNDLES') } { this.props.Dashboard.progress.bundles }%
+                style={{ width: `${this.props.ActiveCoin.progress.bundles}%` }}>
+                { translate('INDEX.BUNDLES') } { this.props.ActiveCoin.progress.bundles }%
               </div>
             </div>
           </div>
@@ -100,22 +98,22 @@ export const WalletsProgressRender = function() {
             <div className="progress progress-sm">
               <div
                 className="progress-bar progress-bar-warning progress-bar-striped active font-size-80-percent"
-                style={{ width: `${this.props.Dashboard.progress.utxo}%` }}>
-                utxo { this.props.Dashboard.progress.utxo }%
+                style={{ width: `${this.props.ActiveCoin.progress.utxo}%` }}>
+                utxo { this.props.ActiveCoin.progress.utxo }%
               </div>
             </div>
             <div className="progress progress-sm">
               <div
                 className="progress-bar progress-bar-danger progress-bar-striped active font-size-80-percent"
-                style={{ width: `${this.props.Dashboard.progress.balances}%` }}>
-                { translate('INDEX.BALANCES') } { this.props.Dashboard.progress.balances }%
+                style={{ width: `${this.props.ActiveCoin.progress.balances}%` }}>
+                { translate('INDEX.BALANCES') } { this.props.ActiveCoin.progress.balances }%
               </div>
             </div>
             <div className="progress progress-sm">
               <div
                 className="progress-bar progress-bar-success progress-bar-striped active font-size-80-percent"
-                style={{ width: `${this.props.Dashboard.progress.validated}%` }}>
-                { translate('INDEX.VALIDATED') } { this.props.Dashboard.progress.validated }%
+                style={{ width: `${this.props.ActiveCoin.progress.validated}%` }}>
+                { translate('INDEX.VALIDATED') } { this.props.ActiveCoin.progress.validated }%
               </div>
             </div>
           </div>

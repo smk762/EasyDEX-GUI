@@ -45,6 +45,7 @@ class Login extends React.Component {
       trimPassphraseTimer: null,
       displayLoginSettingsDropdown: false,
       displayLoginSettingsDropdownSection: null,
+      isExperimentalOn: false,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -118,6 +119,15 @@ class Login extends React.Component {
 
   componentDidMount() {
     Store.dispatch(iguanaActiveHandle(true));
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
   }
 
   toggleSeedInputVisibility() {

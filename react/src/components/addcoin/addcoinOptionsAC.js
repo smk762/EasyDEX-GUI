@@ -3,25 +3,37 @@ import { translate } from '../../translate/translate';
 
 class AddCoinOptionsAC extends React.Component {
   render() {
+    const _assetChains = [
+      'bet',
+      'bots',
+      'ceal',
+      'coqui',
+      'crypto',
+      'hodl',
+      'dex',
+      'jumblr',
+      'kv',
+      'mgw',
+      //'mvp',
+      'pangea',
+      'revs',
+      'shark',
+      'supernet',
+      'wlc'
+    ];
+    let _items = [];
+
+    for (let i = 0; i < _assetChains.length; i++) {
+      _items.push(
+        <option
+          key={ _assetChains[i] }
+          value={ `${_assetChains[i].toUpperCase()}|basilisk|native` }>{ translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) }</option>
+      );
+    }
+
     return (
       <optgroup label={ translate('ADD_COIN.ASSETCHAINS') }>
-        <option value="BET|basilisk|native">BET (BET)</option>
-        <option value="BOTS|basilisk|native">BOTS (BOTS)</option>
-        <option value="CEAL|basilisk|native">CEAL NET (CEAL)</option>
-        <option value="COQUI|basilisk|native">COQUI (COQUI)</option>
-        <option value="CRYPTO|basilisk|native">CRYPTO (CRYPTO)</option>
-        <option value="HODL|basilisk|native">HODL (HODL)</option>
-        <option value="DEX|basilisk|native">InstantDEX (DEX)</option>
-        <option value="JUMBLR|basilisk|native">JUMBLR (JUMBLR)</option>
-        <option value="KV|basilisk|native">KV (KV)</option>
-        <option value="MGW|basilisk|native">MultiGateway (MGW)</option>
-        <option value="MVP|basilisk|native" className="hide">MVP Lineup (MVP)</option>
-        <option value="PANGEA|basilisk|native">PANGEA (PANGEA)</option>
-        <option value="REVS|basilisk|native">REVS (REVS)</option>
-        <option value="SHARK|basilisk|native">SHARK (SHARK)</option>
-        <option value="MESH|basilisk|native">SpaceMesh (MESH)</option>
-        <option value="SUPERNET|basilisk|native">SUPERNET (SUPERNET)</option>
-        <option value="WLC|basilisk|native">WIRELESS (WIRELESS)</option>
+      { _items }
       </optgroup>
     );
   }
