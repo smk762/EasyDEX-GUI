@@ -33,7 +33,11 @@ body.agamaMode {
   background-color: rgba(33, 33, 33, 0.85);
   padding-top: 40px;
   color: #fff;
-  height: 335px;
+  height: 300px;
+}
+
+body.loading-window {
+  height: 355px;
 }
 
 body.agama-default-window-height {

@@ -35,8 +35,6 @@ export const AddressListRender = function() {
   );
 };
 
-// { this.renderAddressByType('public') }
-
 export const OASendUIRender = function() {
   return (
     <div className="row">

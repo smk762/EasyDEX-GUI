@@ -28,7 +28,8 @@ import {
   DISPLAY_COIND_DOWN_MODAL,
   DISPLAY_CLAIM_INTEREST_MODAL,
   START_INTERVAL,
-  STOP_INTERVAL
+  STOP_INTERVAL,
+  DASHBOARD_SYNC_ONLY_UPDATE,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -340,5 +341,12 @@ export function toggleClaimInterestModal(display) {
   return {
     type: DISPLAY_CLAIM_INTEREST_MODAL,
     displayClaimInterestModal: display,
+  }
+}
+
+export function skipFullDashboardUpdate(skip) {
+  return {
+    type: DASHBOARD_SYNC_ONLY_UPDATE,
+    skipFullDashboardUpdate: skip,
   }
 }

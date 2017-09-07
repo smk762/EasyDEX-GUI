@@ -46,27 +46,29 @@ export const _ClaimInterestTableRender = function() {
           <strong>{ translate('CLAIM_INTEREST.TIP') }:</strong> { translate('CLAIM_INTEREST.TIP_DESC') }
         </p>
       </div>
-      <div className="text-left padding-top-10 padding-bottom-10">
-        <label className="switch">
-          <input
-            type="checkbox"
-            checked={ this.state.showZeroInterest } />
+      { this.state.totalInterest > 0 &&
+        <div className="text-left padding-top-10 padding-bottom-10">
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={ this.state.showZeroInterest } />
+            <div
+              className="slider"
+              onClick={ this.toggleZeroInterest }></div>
+          </label>
           <div
-            className="slider"
-            onClick={ this.toggleZeroInterest }></div>
-        </label>
-        <div
-          className="toggle-label margin-right-15 pointer"
-          onClick={ this.toggleZeroInterest }>
-          Show zero interest
+            className="toggle-label margin-right-15 pointer"
+            onClick={ this.toggleZeroInterest }>
+            Show zero interest
+          </div>
+          <button
+            type="button"
+            className="btn btn-success waves-effect waves-light claim-btn"
+            onClick={ () => this.claimInterest() }>
+            <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', `${this.state.totalInterest} KMD `) }
+          </button>
         </div>
-        <button
-          type="button"
-          className="btn btn-success waves-effect waves-light claim-btn"
-          onClick={ () => this.claimInterest() }>
-          <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', `${this.state.totalInterest} KMD `) }
-        </button>
-      </div>
+      }
       <div className="table-scroll">
         <table className="table table-hover dataTable table-striped">
           <thead>
@@ -109,7 +111,7 @@ export const ClaimInterestModalRender = function() {
                 onClick={ this.closeModal }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white text-left">{ translate('CLAIM_INTEREST.CLAIM_INTEREST') }</h4>
+              <h4 className="modal-title white text-left">{ translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }</h4>
             </div>
             <div className="modal-body">
               <i

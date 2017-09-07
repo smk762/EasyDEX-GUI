@@ -468,7 +468,7 @@ const mapStateToProps = (state, props) => {
   if (props &&
       props.activeSection &&
       props.renderFormOnly) {
-    _mappedProps.ActiveCoin.activeSection = props.activeSection,
+    _mappedProps.ActiveCoin.activeSection = props.activeSection;
     _mappedProps.renderFormOnly = props.renderFormOnly;
   }
 

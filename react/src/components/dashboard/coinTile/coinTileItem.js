@@ -86,7 +86,10 @@ class CoinTileItem extends React.Component {
           syncPercentage &&
           (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
         Store.dispatch(getSyncInfoNative(coin, true));
-        Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
+
+        if (!this.props.Dashboard.skipFullDashboardUpdate) {
+          Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
+        }
       } else {
         Store.dispatch(getSyncInfoNative(coin));
       }

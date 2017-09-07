@@ -18,6 +18,7 @@ import {
   checkForUpdateUIPromise,
   updateUIPromise,
   triggerToaster,
+  skipFullDashboardUpdate,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -69,7 +70,6 @@ class Settings extends React.Component {
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
-    // this.updateInputSettings = this.updateInputSettings.bind(this);
     this.importWifKey = this.importWifKey.bind(this);
     this.readDebugLog = this.readDebugLog.bind(this);
     this.checkNodes = this.checkNodes.bind(this);
@@ -83,6 +83,11 @@ class Settings extends React.Component {
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
     this.updateTabDimensions = this.updateTabDimensions.bind(this);
+    this._skipFullDashboardUpdate = this._skipFullDashboardUpdate.bind(this);
+  }
+
+  _skipFullDashboardUpdate() {
+    Store.dispatch(skipFullDashboardUpdate(!this.props.Dashboard.skipFullDashboardUpdate));
   }
 
   updateTabDimensions() {
@@ -615,6 +620,31 @@ class Settings extends React.Component {
       }
     }
 
+    items.push(
+      <tr key={ `kmd-main-sync-only` }>
+        <td className="padding-15">
+          KMD main sync only
+          <i
+            className="icon fa-question-circle settings-help"
+            title="Fetch block synchronization data only. Skip any other requests that can deteriorate sync speed."></i>
+        </td>
+        <td className="padding-15">
+          <span className="pointer toggle">
+            <label className="switch">
+              <input
+                type="checkbox"
+                name={ `kmd-main-sync-only` }
+                value={ this.props.Dashboard.skipFullDashboardUpdate }
+                checked={ this.props.Dashboard.skipFullDashboardUpdate } />
+              <div
+                className="slider"
+                onClick={ this._skipFullDashboardUpdate }></div>
+            </label>
+          </span>
+        </td>
+      </tr>
+    );
+
     return items;
   }
 
@@ -856,6 +886,7 @@ const mapStateToProps = (state) => {
       coin: state.ActiveCoin.coin,
     },
     Settings: state.Settings,
+    Dashboard: state.Dashboard,
   };
 };
 

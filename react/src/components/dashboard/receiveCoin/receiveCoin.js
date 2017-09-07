@@ -217,33 +217,27 @@ class ReceiveCoin extends React.Component {
     return null;
   }
 }
+
 const mapStateToProps = (state, props) => {
+  let _mappedProps = {
+    coin: state.ActiveCoin.coin,
+    mode: state.ActiveCoin.mode,
+    receive: state.ActiveCoin.receive,
+    balance: state.ActiveCoin.balance,
+    cache: state.ActiveCoin.cache,
+    activeSection: state.ActiveCoin.activeSection,
+    activeAddress: state.ActiveCoin.activeAddress,
+    addresses: state.ActiveCoin.addresses,
+  };
+
   if (props &&
       props.activeSection &&
       props.renderTableOnly) {
-    return {
-      coin: state.ActiveCoin.coin,
-      mode: state.ActiveCoin.mode,
-      receive: state.ActiveCoin.receive,
-      balance: state.ActiveCoin.balance,
-      cache: state.ActiveCoin.cache,
-      activeSection: props.activeSection,
-      activeAddress: state.ActiveCoin.activeAddress,
-      addresses: state.ActiveCoin.addresses,
-      renderTableOnly: props.renderTableOnly,
-    };
-  } else {
-    return {
-      coin: state.ActiveCoin.coin,
-      mode: state.ActiveCoin.mode,
-      receive: state.ActiveCoin.receive,
-      balance: state.ActiveCoin.balance,
-      cache: state.ActiveCoin.cache,
-      activeSection: state.ActiveCoin.activeSection,
-      activeAddress: state.ActiveCoin.activeAddress,
-      addresses: state.ActiveCoin.addresses,
-    };
+    _mappedProps.ActiveCoin.activeSection = props.activeSection;
+    _mappedProps.renderTableOnly = props.renderTableOnly;
   }
+
+  return _mappedProps;
 };
 
 export default connect(mapStateToProps)(ReceiveCoin);

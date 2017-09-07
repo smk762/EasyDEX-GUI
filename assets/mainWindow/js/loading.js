@@ -182,6 +182,21 @@ function openSettingsWindow() {
   window.createAppSettingsWindow();
 }
 
+function startKMDPassive() {
+  const remote = require('electron').remote;
+  const window = remote.getCurrentWindow();
+
+  $('.dropdown-menu').addClass('hide');
+  disableModeButtons();
+
+  window.startKMDNative('KMD', true);
+
+  setTimeout(function() {
+    window.createWindow('open');
+    window.hide();
+  }, 1000);
+}
+
 function closeMainWindow(isKmdOnly, isCustom) {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
@@ -193,8 +208,10 @@ function closeMainWindow(isKmdOnly, isCustom) {
     window.startKMDNative(isKmdOnly ? 'KMD' : null);
   }
 
-  window.createWindow('open');
-  window.hide();
+  setTimeout(function() {
+    window.createWindow('open');
+    window.hide();
+  }, 3000);
 }
 
 function quitApp() {
