@@ -46,7 +46,7 @@ const DashboardRender = function() {
           <Jumblr  />
         }
         { this.isSectionActive('settings') &&
-          <Settings />
+          <Settings disableWalletSpecificUI={false} />
         }
         { this.isSectionActive('about') &&
           <About />

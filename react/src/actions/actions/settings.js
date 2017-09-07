@@ -52,7 +52,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          transalte('API.ILLEGAL_PRIVKEY'),
+          translate('API.ILLEGAL_PRIVKEY'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'error'
         )
@@ -63,7 +63,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          transalte('API.PRIVKEY_IN_WALLET'),
+          translate('API.PRIVKEY_IN_WALLET'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
@@ -213,7 +213,7 @@ export function getPeersListState(json) {
 
   return {
     type: GET_PEERS_LIST,
-    supernetPeers: json && !json.error && json.supernet[0] ? json.supernet : null,
+    supernetPeers: json && json.supernet[0] ? json.supernet : null,
     rawPeers: peersList,
   }
 }
