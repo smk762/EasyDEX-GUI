@@ -104,7 +104,7 @@ export const SettingsRender = function() {
                   <div
                     id="ImportKeys"
                     onClick={ () => this.openTab('ImportKeys', 5) }
-                    className={ 'panel' + (!this.state.nativeOnly ? ' hide' : '') }>
+                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
                       <a className={ 'panel-title' + (this.state.activeTab === 5 ? '' : ' collapsed') }>
                         <i className="icon md-key"></i>{ translate('INDEX.IMPORT_KEYS') }
