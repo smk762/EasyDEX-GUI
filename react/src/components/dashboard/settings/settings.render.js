@@ -96,68 +96,7 @@ export const SettingsRender = function() {
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 4 ? `${this.state.activeTabHeight}px` : '0' }}>
-                      <div className="panel-body">
-                        <div>
-                          <div className="padding-bottom-20">{ this.renderLB('INDEX.ONLY_ACTIVE_WIF_KEYS') }</div>
-                          <div className="padding-bottom-20">
-                            <i>{ this.renderLB('SETTINGS.EXPORT_KEYS_NOTE') }</i>
-                          </div>
-                          <strong>
-                            <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
-                          </strong>
-                        </div>
-                        <div className="col-sm-12"></div>
-                        <form
-                          className="wifkeys-form"
-                          method="post"
-                          action="javascript:"
-                          autoComplete="off">
-                          <div className="form-group form-material floating">
-                            <input
-                              type="password"
-                              className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                              name="wifkeysPassphrase"
-                              id="wifkeysPassphrase"
-                              onChange={ this.updateInput }
-                              value={ this.state.wifkeysPassphrase } />
-                            <textarea
-                              className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                              id="wifkeysPassphraseTextarea"
-                              name="wifkeysPassphrase"
-                              onChange={ this.updateInput }
-                              value={ this.state.wifkeysPassphrase }></textarea>
-                            <i
-                              className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
-                              onClick={ this.toggleSeedInputVisibility }></i>
-                            <label
-                              className="floating-label"
-                              htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') }</label>
-                          </div>
-                          <div className="col-sm-12 col-xs-12 text-align-center">
-                            <button
-                              type="button"
-                              className="btn btn-primary waves-effect waves-light"
-                              onClick={ this.exportWifKeys }>{ translate('INDEX.GET_WIF_KEYS') }</button>
-                          </div>
-                        </form>
-
-                        <div className="col-sm-12 padding-top-15">
-                          <div className="row">
-                            <table className="table">
-                              { this.renderWifKeys() }
-                            </table>
-                            <div className={ this.props.Settings.wifkey ? 'col-sm-12 col-xs-12 text-align-center' : 'hide' }>
-                              <button
-                                type="button"
-                                className="btn btn-primary waves-effect waves-light"
-                                onClick={ this.exportWifKeysRaw }>{ this.state.exportWifKeysRaw ? 'Hide' : 'Show' } raw data</button>
-                            </div>
-                            <div className={ this.state.exportWifKeysRaw ? 'col-sm-12 col-xs-12 text-align-center' : 'hide' }>
-                              { this.renderExportWifKeysRaw() }
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      { this.renderExportKeys() }
                     </div>
                   </div>
                   }
@@ -165,7 +104,7 @@ export const SettingsRender = function() {
                   <div
                     id="ImportKeys"
                     onClick={ () => this.openTab('ImportKeys', 5) }
-                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
+                    className={ 'panel' + (!this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
                       <a className={ 'panel-title' + (this.state.activeTab === 5 ? '' : ' collapsed') }>
                         <i className="icon md-key"></i>{ translate('INDEX.IMPORT_KEYS') }
@@ -174,40 +113,7 @@ export const SettingsRender = function() {
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 5 ? ' in' : '') }
                       style={{ height: this.state.activeTab === 5 ? `${this.state.activeTabHeight}px` : '0' }}>
-                      <div className="panel-body">
-                        <div>{ translate('INDEX.IMPORT_KEYS_DESC_P1') }</div><br/>
-                        <div>{ translate('INDEX.IMPORT_KEYS_DESC_P2') }</div><br/>
-                        <div>{ translate('INDEX.IMPORT_KEYS_DESC_P3') }</div><br/>
-                        <div>
-                          <strong>
-                            <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
-                          </strong>
-                        </div>
-                        <div className="col-sm-12"></div>
-                        <form
-                          className="wifkeys-import-form"
-                          method="post"
-                          action="javascript:"
-                          autoComplete="off">
-                          <div className="form-group form-material floating">
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="importWifKey"
-                              id="importWifkey"
-                              onChange={ this.updateInput } />
-                            <label
-                              className="floating-label"
-                              htmlFor="importWifkey">{ translate('INDEX.INPUT_PRIV_KEY') }</label>
-                          </div>
-                          <div className="col-sm-12 col-xs-12 text-align-center">
-                            <button
-                              type="button"
-                              className="btn btn-primary waves-effect waves-light"
-                              onClick={ this.importWifKey }>{ translate('INDEX.IMPORT_PRIV_KEY') }</button>
-                          </div>
-                        </form>
-                      </div>
+                      { this.renderImportKeys() }
                     </div>
                   </div>
                   }

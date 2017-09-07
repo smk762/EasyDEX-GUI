@@ -4,9 +4,6 @@ import { translate } from '../../../translate/translate';
 import Config from '../../../config';
 import {
   iguanaActiveHandle,
-  encryptWallet,
-  settingsWifkeyState,
-  importPrivKey,
   getDebugLog,
   getPeersList,
   addPeerNode,
@@ -31,6 +28,8 @@ import WalletInfoTab from './settings.walletInfo';
 import AddNodeTab from './settings.addNodeTab';
 import WalletBackupTab from './settings.walletBackupTab';
 import FiatCurrencyTab from './settings.fiatCurrency';
+import ExportKeysTab from './settings.exportKeys';
+import ImportKeysTab from './settings.importKeys';
 
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -61,39 +60,31 @@ class Settings extends React.Component {
       cliCmdString: '',
       cliCoin: null,
       cliResponse: null,
-      exportWifKeysRaw: false,
       seedInputVisibility: false,
       nativeOnly: Config.iguanaLessMode,
       updatePatch: null,
       updateBins: null,
       updateLog: [],
       updateProgressPatch: null,
-      wifkeysPassphrase: '',
-      trimPassphraseTimer: null,
-      disableWalletSpecificUI: null,
+      disableWalletSpecificUI: false,
     };
-    this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
     // this.updateInputSettings = this.updateInputSettings.bind(this);
-    this.importWifKey = this.importWifKey.bind(this);
     this.readDebugLog = this.readDebugLog.bind(this);
     this._saveAppConfig = this._saveAppConfig.bind(this);
     this._resetAppConfig = this._resetAppConfig.bind(this);
-    this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
-    this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
     this.updateTabDimensions = this.updateTabDimensions.bind(this);
-    this.renderWalletInfo = this.renderWalletInfo.bind(this);
-    this.renderAddNode = this.renderAddNode.bind(this);
-    this.renderWalletBackup = this.renderWalletBackup.bind(this);
-    this.renderFiatCurrency = this.renderFiatCurrency.bind(this);
   }
 
   updateTabDimensions() {
     setTimeout(() => {
+      if(document.querySelector(`#${this.state.tabElId} .panel-collapse .panel-body`)){
       const _height = document.querySelector(`#${this.state.tabElId} .panel-collapse .panel-body`).offsetHeight;
-
+      } else {
+        _height = '100%';
+      }
       this.setState(Object.assign({}, this.state, {
         activeTabHeight: _height,
       }));
@@ -142,7 +133,7 @@ class Settings extends React.Component {
         activeTab: this.state.activeTab,
         activeTabHeight: _height,
         tabElId: this.state.tabElId,
-        disableWalletSpecificUI: props.disableWalletSpecificUI,
+        disableWalletSpecificUI: this.props.disableWalletSpecificUI,
       }));
     }
   }
@@ -168,16 +159,6 @@ class Settings extends React.Component {
 
   _resetAppConfig() {
     Store.dispatch(resetAppConfig());
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   updateSocketsData(data) {
@@ -294,12 +275,6 @@ class Settings extends React.Component {
     }
   }
 
-  toggleSeedInputVisibility() {
-    this.setState({
-      seedInputVisibility: !this.state.seedInputVisibility,
-    });
-  }
-
   execCliCmd() {
     Store.dispatch(
       shepherdCli(
@@ -332,21 +307,7 @@ class Settings extends React.Component {
       }
     }, 100);
   }
-
-  exportWifKeys() {
-    Store.dispatch(
-      encryptWallet(
-        this.state.wifkeysPassphrase,
-        settingsWifkeyState,
-        this.props.ActiveCoin.coin
-      )
-    );
-  }
-
-  importWifKey() {
-    Store.dispatch(importPrivKey(this.state.importWifKey));
-  }
-
+ 
   readDebugLog() {
     Store.dispatch(
       getDebugLog(
@@ -383,6 +344,14 @@ class Settings extends React.Component {
 
   renderFiatCurrency() {
     return <FiatCurrencyTab />
+  }
+
+  renderExportKeys() {
+    return <ExportKeysTab />
+  }
+
+  renderImportKeys() {
+    return <ImportKeysTab />
   }
 
   updateInputSettings(e, parentKey, childKey) {
@@ -581,29 +550,9 @@ class Settings extends React.Component {
   }
 
   updateInput(e) {
-    if (e.target.name === 'wifkeysPassphrase') {
-      // remove any empty chars from the start/end of the string
-      const newValue = e.target.value;
-
-      clearTimeout(this.state.trimPassphraseTimer);
-
-      const _trimPassphraseTimer = setTimeout(() => {
-        this.setState({
-          wifkeysPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
-        });
-      }, 2000);
-
-      this.resizeLoginTextarea();
-
-      this.setState({
-        trimPassphraseTimer: _trimPassphraseTimer,
-        [e.target.name]: newValue,
-      });
-    } else {
       this.setState({
         [e.target.name]: e.target.value,
       });
-    }
   }
 
   renderDebugLogData() {
@@ -625,17 +574,6 @@ class Settings extends React.Component {
     } else {
       return null;
     }
-  }
-
-  renderLB(_translationID) {
-    const _translationComponents = translate(_translationID).split('<br>');
-
-    return _translationComponents.map((_translation) =>
-      <span key={ `settings-label-${Math.random(0, 9) * 10}` }>
-        { _translation }
-        <br />
-      </span>
-    );
   }
 
   // TODO: rerender only if prop is changed
@@ -745,62 +683,6 @@ class Settings extends React.Component {
     } else {
       return null;
     }
-  }
-
-  renderExportWifKeysRaw() {
-    const _wifKeysResponse = this.props.Settings.wifkey;
-
-    if (_wifKeysResponse &&
-        this.state.exportWifKeysRaw) {
-      return (
-        <div className="padding-bottom-30 padding-top-30">
-          { JSON.stringify(_wifKeysResponse, null, '\t') }
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
-
-  renderWifKeys() {
-    let items = [];
-
-    if (this.props.Settings.wifkey) {
-      const _wifKeys = this.props.Settings.wifkey;
-
-      for (let i = 0; i < 2; i++) {
-        items.push(
-          <tr key={ `wif-export-table-header-${i}` }>
-            <td className="padding-bottom-10 padding-top-10">
-              <strong>{ i === 0 ? translate('SETTINGS.ADDRESS_LIST') : translate('SETTINGS.WIF_KEY_LIST') }</strong>
-            </td>
-            <td className="padding-bottom-10 padding-top-10"></td>
-          </tr>
-        );
-
-        for (let _key in _wifKeys) {
-          if ((i === 0 && _key.length === 3 && _key !== 'tag') ||
-              (i === 1 && _key.indexOf('wif') > -1)) {
-            items.push(
-              <tr key={ _key }>
-                <td>{ _key }</td>
-                <td className="padding-left-15">{ _wifKeys[_key] }</td>
-              </tr>
-            );
-          }
-        }
-      }
-
-      return items;
-    } else {
-      return null;
-    }
-  }
-
-  exportWifKeysRaw() {
-    this.setState(Object.assign({}, this.state, {
-      exportWifKeysRaw: !this.state.exportWifKeysRaw,
-    }));
   }
 
   render() {
