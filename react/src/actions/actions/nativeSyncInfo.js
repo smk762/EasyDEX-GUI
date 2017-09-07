@@ -8,44 +8,54 @@ import {
 import Config from '../../config';
 
 // TODO: use debug.log instead
-export function getSyncInfoNativeKMD(skipDebug, json) {
-  const coin = 'KMD';
-  // https://www.kmd.host/
-  return dispatch => {
-    return fetch(
-      Config.iguanaLessMode ? 'https://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
-      method: 'GET',
-    })
-    .catch(function(error) {
-      console.log(error);
-      /*dispatch(
-        triggerToaster(
-          'getSyncInfoNativeKMD',
-          'Error',
-          'error'
-        )
-      );*/
-      console.warn('remote kmd node fetch failed', true);
-      dispatch(getSyncInfoNativeState({ remoteKMDNode: null }));
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(getSyncInfoNativeState({ remoteKMDNode: Config.iguanaLessMode ? json.info : json }));
-    })
-    .then(function() {
+export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
+  if (skipRemote) {
+    return dispatch => {
+      dispatch(getSyncInfoNativeState(Config.iguanaLessMode ? json.info : json ));
+
       if (!skipDebug) {
         dispatch(getDebugLog('komodo', 1));
       }
-    })
+    }
+  } else {
+    const coin = 'KMD';
+    // https://www.kmd.host/
+    return dispatch => {
+      return fetch(
+        Config.iguanaLessMode ? 'https://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
+        method: 'GET',
+      })
+      .catch(function(error) {
+        console.log(error);
+        /*dispatch(
+          triggerToaster(
+            'getSyncInfoNativeKMD',
+            'Error',
+            'error'
+          )
+        );*/
+        console.warn('remote kmd node fetch failed', true);
+        dispatch(getSyncInfoNativeState({ remoteKMDNode: null }));
+      })
+      .then(response => response.json())
+      .then(json => {
+        dispatch(getSyncInfoNativeState({ remoteKMDNode: Config.iguanaLessMode ? json.info : json }));
+      })
+      .then(function() {
+        if (!skipDebug) {
+          dispatch(getDebugLog('komodo', 1));
+        }
+      })
+    }
   }
 }
 
-function getSyncInfoNativeState(json, coin, skipDebug) {
+function getSyncInfoNativeState(json, coin, skipDebug, skipRemote) {
   if (coin === 'KMD' &&
       json &&
       json.error &&
       json.error.message.indexOf('Activating best') === -1) {
-    return getSyncInfoNativeKMD(skipDebug, json);
+    return getSyncInfoNativeKMD(skipDebug, json, skipRemote);
   } else {
     if (json &&
         json.error &&
@@ -63,7 +73,7 @@ function getSyncInfoNativeState(json, coin, skipDebug) {
   }
 }
 
-export function getSyncInfoNative(coin, skipDebug) {
+export function getSyncInfoNative(coin, skipDebug, skipRemote) {
   let payload = {
     userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
     agent: getPassthruAgent(coin),
@@ -125,7 +135,8 @@ export function getSyncInfoNative(coin, skipDebug) {
               id: null
             },
             coin,
-            skipDebug
+            skipDebug,
+            skipRemote
           )
         );
       } else {
@@ -163,7 +174,8 @@ export function getSyncInfoNative(coin, skipDebug) {
           getSyncInfoNativeState(
             json,
             coin,
-            skipDebug
+            skipDebug,
+            skipRemote
           )
         );
       }

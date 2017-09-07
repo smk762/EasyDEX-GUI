@@ -453,8 +453,8 @@ class WalletsNativeSend extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = (state, props) => {
+  let _mappedProps = {
     ActiveCoin: {
       addresses: state.ActiveCoin.addresses,
       coin: state.ActiveCoin.coin,
@@ -464,6 +464,15 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
     },
   };
+
+  if (props &&
+      props.activeSection &&
+      props.renderFormOnly) {
+    _mappedProps.ActiveCoin.activeSection = props.activeSection;
+    _mappedProps.renderFormOnly = props.renderFormOnly;
+  }
+
+  return _mappedProps;
 };
 
 export default connect(mapStateToProps)(WalletsNativeSend);

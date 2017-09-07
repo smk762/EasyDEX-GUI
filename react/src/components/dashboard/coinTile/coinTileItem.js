@@ -85,10 +85,13 @@ class CoinTileItem extends React.Component {
           _propsDashboard.progress.longestchain &&
           syncPercentage &&
           (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
-        Store.dispatch(getSyncInfoNative(coin, true));
-        Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
+        Store.dispatch(getSyncInfoNative(coin, true, this.props.Dashboard.skipFullDashboardUpdate));
+
+        if (!this.props.Dashboard.skipFullDashboardUpdate) {
+          Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
+        }
       } else {
-        Store.dispatch(getSyncInfoNative(coin));
+        Store.dispatch(getSyncInfoNative(coin, null, this.props.Dashboard.skipFullDashboardUpdate));
       }
     }
     if (mode === 'full') {

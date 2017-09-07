@@ -4,7 +4,8 @@ import {
   VIEW_CACHE_DATA,
   TOGGLE_NOTIFICATIONS_MODAL,
   DISPLAY_COIND_DOWN_MODAL,
-  DISPLAY_CLAIM_INTEREST_MODAL
+  DISPLAY_CLAIM_INTEREST_MODAL,
+  DASHBOARD_SYNC_ONLY_UPDATE
 } from '../actions/storeType';
 
 export function Dashboard(state = {
@@ -14,6 +15,7 @@ export function Dashboard(state = {
   guiLog: {},
   displayCoindDownModal: false,
   displayClaimInterestModal: false,
+  skipFullDashboardUpdate: false,
 }, action) {
   switch (action.type) {
     case DASHBOARD_SECTION_CHANGE:
@@ -43,6 +45,11 @@ export function Dashboard(state = {
         displayClaimInterestModal: action.displayClaimInterestModal,
       };
       break;
+    case DASHBOARD_SYNC_ONLY_UPDATE:
+      return {
+        ...state,
+        skipFullDashboardUpdate: action.skipFullDashboardUpdate,
+      };
     default:
       return state;
   }

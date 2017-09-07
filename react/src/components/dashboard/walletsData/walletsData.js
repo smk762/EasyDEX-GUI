@@ -335,6 +335,7 @@ class WalletsData extends React.Component {
     }
 
     // TODO: clean
+    // TODO: figure out why changing ActiveCoin props doesn't trigger comp update
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
