@@ -52,7 +52,7 @@ export const WalletsNavWithWalletRender = function() {
               onClick={ this.props.ActiveCoin.mode !== 'native' ? this.toggleSendReceiveCoinForms : this.toggleNativeWalletTransactions }>
               <i className="icon md-view-dashboard"></i> { translate('INDEX.TRANSACTIONS') }
             </button>
-            { this.checkTotalBalance() > 0 &&
+            { ((this.props.ActiveCoin.mode === 'full' && this.checkTotalBalance() > 0) || this.props.ActiveCoin.mode === 'basilisk') &&
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light"

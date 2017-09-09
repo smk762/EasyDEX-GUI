@@ -191,10 +191,8 @@ function startKMDPassive() {
 
   window.startKMDNative('KMD', true);
 
-  setTimeout(function() {
-    window.createWindow('open');
-    window.hide();
-  }, 1000);
+  window.createWindow('open');
+  window.hide();
 }
 
 function closeMainWindow(isKmdOnly, isCustom) {
@@ -206,12 +204,15 @@ function closeMainWindow(isKmdOnly, isCustom) {
 
   if (!isCustom) {
     window.startKMDNative(isKmdOnly ? 'KMD' : null);
+
+    setTimeout(function() {
+      window.createWindow('open');
+      window.hide();
+    }, 3000);
   }
 
-  setTimeout(function() {
-    window.createWindow('open');
-    window.hide();
-  }, 3000);
+  window.createWindow('open');
+  window.hide();
 }
 
 function quitApp() {
