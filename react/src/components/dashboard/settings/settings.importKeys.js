@@ -1,6 +1,5 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
-import { connect } from 'react-redux';
 import {
   importPrivKey,
 } from '../../../actions/actionCreators';

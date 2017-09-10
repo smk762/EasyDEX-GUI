@@ -1,0 +1,322 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { translate } from '../../../translate/translate';
+import Config from '../../../config';
+import {
+  iguanaActiveHandle,
+  getAppConfig,
+  getAppInfo,
+  resetAppConfig,
+  saveAppConfig,
+  skipFullDashboardUpdate,
+  triggerToaster,
+} from '../../../actions/actionCreators';
+import Store from '../../../store';
+
+class AppSettingsPanel extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      appSettings: {},
+      appConfigSchema: {},
+    };
+    this._saveAppConfig = this._saveAppConfig.bind(this);
+    this._resetAppConfig = this._resetAppConfig.bind(this);
+    this._skipFullDashboardUpdate = this._skipFullDashboardUpdate.bind(this);
+    this.updateInput = this.updateInput.bind(this);
+  }
+
+  componentWillMount() {
+    try {
+      const _appConfigSchema = window.require('electron').remote.getCurrentWindow().appConfigSchema;
+      const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, window.require('electron').remote.getCurrentWindow().appConfig);
+
+      this.setState(Object.assign({}, this.state, {
+        appConfigSchema: _appConfigSchema,
+        appSettings: _appSettings,
+      }));
+    } catch(e) {}
+  }
+
+  componentDidMount(props) {
+    if (!this.props.disableWalletSpecificUI) {
+      Store.dispatch(iguanaActiveHandle());
+    }
+
+    Store.dispatch(getAppConfig());
+    Store.dispatch(getAppInfo());
+  }
+
+  _skipFullDashboardUpdate() {
+    Store.dispatch(skipFullDashboardUpdate(!this.props.Dashboard.skipFullDashboardUpdate));
+  }
+
+  _resetAppConfig() {
+    Store.dispatch(resetAppConfig());
+  }
+
+  _saveAppConfig() {
+    const _appSettings = this.state.appSettings;
+    let _appSettingsPristine = Object.assign({}, this.props.Settings.appSettings);
+    let isError = false;
+    let saveAfterPathCheck = false;
+
+    for (let key in _appSettings) {
+      if (key.indexOf('__') === -1) {
+        _appSettingsPristine[key] = this.state.appConfigSchema[key] && this.state.appConfigSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
+
+        if (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].type === 'folder' &&
+            _appSettings[key] &&
+            _appSettings[key].length) {
+          const _testLocation = window.require('electron').remote.getCurrentWindow().testLocation;
+          saveAfterPathCheck = true;
+
+          _testLocation(_appSettings[key])
+          .then((res) => {
+            if (res === -1) {
+              isError = true;
+              Store.dispatch(
+                triggerToaster(
+                  translate('TOASTR.KOMODO_DATADIR_INVALID'),
+                  translate('INDEX.SETTINGS'),
+                  'error'
+                )
+              );
+            } else if (res === false) {
+              isError = true;
+              Store.dispatch(
+                triggerToaster(
+                  translate('TOASTR.KOMODO_DATADIR_NOT_DIR'),
+                  translate('INDEX.SETTINGS'),
+                  'error'
+                )
+              );
+            } else {
+              Store.dispatch(saveAppConfig(_appSettingsPristine));
+            }
+          });
+        }
+      } else {
+        const _nestedKey = key.split('__');
+        _appSettingsPristine[_nestedKey[0]][_nestedKey[1]] = this.state.appConfigSchema[_nestedKey[0]][_nestedKey[1]].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
+      }
+    }
+
+    if (!saveAfterPathCheck) {
+      Store.dispatch(saveAppConfig(_appSettingsPristine));
+    }
+  }
+ 
+
+  renderConfigEditForm() {
+    let items = [];
+    const _appConfig = this.state.appSettings;
+    for (let key in _appConfig) {
+       if (this.state.appConfigSchema[key] && typeof _appConfig[key] === 'object') {
+        if (this.state.appConfigSchema[key].display) {
+          items.push(
+            <tr key={ `app-settings-${key}` }>
+              <td className="padding-15">
+                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
+                { this.state.appConfigSchema[key].info &&
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    title={ this.state.appConfigSchema[key].info }></i>
+                }
+              </td>
+              <td className="padding-15"></td>
+            </tr>
+          );
+
+          for (let _key in _appConfig[key]) {
+            items.push(
+              <tr key={ `app-settings-${key}-${_key}` }>
+                <td className="padding-15 padding-left-30">
+                  { this.state.appConfigSchema[key][_key].displayName ? this.state.appConfigSchema[key][_key].displayName : _key }
+                  { this.state.appConfigSchema[key][_key].info &&
+                    <i
+                      className="icon fa-question-circle settings-help"
+                      title={ this.state.appConfigSchema[key][_key].info }></i>
+                  }
+                </td>
+                <td className="padding-15">
+                  { this.state.appConfigSchema[key][_key].type === 'number' &&
+                    <input
+                      type="number"
+                      pattern="[0-9]*"
+                      name={ `${key}__${_key}` }
+                      value={ _appConfig[key][_key] }
+                      onChange={ (event) => this.updateInputSettings(event, key, _key) } />
+                  }
+                  { (this.state.appConfigSchema[key][_key].type === 'string' || this.state.appConfigSchema[key][_key].type === 'folder') &&
+                    <input
+                      type="text"
+                      name={ `${key}__${_key}` }
+                      value={ _appConfig[key][_key] }
+                      className={ this.state.appConfigSchema[key][_key].type === 'folder' ? 'full-width': '' }
+                      onChange={ (event) => this.updateInputSettings(event, key, _key) } />
+                  }
+                  { this.state.appConfigSchema[key][_key].type === 'boolean' &&
+                    <span className="pointer toggle">
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          name={ `${key}__${_key}` }
+                          value={ _appConfig[key] }
+                          checked={ _appConfig[key][_key] } />
+                        <div
+                          className="slider"
+                          onClick={ (event) => this.updateInputSettings(event, key, _key) }></div>
+                      </label>
+                    </span>
+                  }
+                </td>
+              </tr>
+            );
+          }
+        }
+      } else {
+        if (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display) {
+          items.push(
+            <tr key={ `app-settings-${key}` }>
+              <td className="padding-15">
+                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
+                { this.state.appConfigSchema[key].info &&
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    title={ this.state.appConfigSchema[key].info }></i>
+                }
+              </td>
+              <td className="padding-15">
+                { this.state.appConfigSchema[key].type === 'number' &&
+                  <input
+                    type="number"
+                    pattern="[0-9]*"
+                    name={ `${key}` }
+                    value={ _appConfig[key] }
+                    onChange={ (event) => this.updateInputSettings(event, key) } />
+                }
+                { (this.state.appConfigSchema[key].type === 'string' || this.state.appConfigSchema[key].type === 'folder') &&
+                  <input
+                    type="text"
+                    name={ `${key}` }
+                    value={ _appConfig[key] }
+                    className={ this.state.appConfigSchema[key].type === 'folder' ? 'full-width': '' }
+                    onChange={ (event) => this.updateInputSettings(event, key) } />
+                }
+                { this.state.appConfigSchema[key].type === 'boolean' &&
+                  <span className="pointer toggle">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        name={ `${key}` }
+                        value={ _appConfig[key] }
+                        checked={ _appConfig[key] } />
+                      <div
+                        className="slider"
+                        onClick={ (event) => this.updateInputSettings(event, key) }></div>
+                    </label>
+                  </span>
+                }
+              </td>
+            </tr>
+          );
+        }
+      }
+    }
+
+    items.push(
+      <tr key={ `kmd-main-sync-only` }>
+        <td className="padding-15">
+          KMD main sync only
+          <i
+            className="icon fa-question-circle settings-help"
+            title="Fetch block synchronization data only. Skip any other requests that can deteriorate sync speed."></i>
+        </td>
+        <td className="padding-15">
+          <span className="pointer toggle">
+            <label className="switch">
+              <input
+                type="checkbox"
+                name={ `kmd-main-sync-only` }
+                value={ this.props.Dashboard.skipFullDashboardUpdate }
+                checked={ this.props.Dashboard.skipFullDashboardUpdate } />
+              <div
+                className="slider"
+                onClick={ this._skipFullDashboardUpdate }></div>
+            </label>
+          </span>
+        </td>
+      </tr>
+    );
+
+    return items;
+  }
+
+  updateInput(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  updateInputSettings(e, parentKey, childKey) {
+    let _appSettings = this.state.appSettings;
+    let _appSettingsPrev = Object.assign({}, _appSettings);
+
+    if (!childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
+      _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
+    } else if (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'boolean') {
+      _appSettings[parentKey][childKey] = typeof _appSettings[parentKey][childKey] !== undefined ? !_appSettings[parentKey][childKey] : !this.state.appSettings[parentKey][childKey];
+    } else if ((!childKey && this.state.appConfigSchema[parentKey].type === 'number') || (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'number')) {
+      if (e.target.value === '') {
+        _appSettings[e.target.name] = _appSettingsPrev[e.target.name];
+      } else {
+        _appSettings[e.target.name] = e.target.value.replace(/[^0-9]+/g, '');
+      }
+    } else {
+      _appSettings[e.target.name] = e.target.value;
+    }
+
+    this.setState({
+      appSettings: _appSettings,
+    });
+  }
+
+  render() {
+    return (
+      <div className="panel-body">
+        <p>
+          <strong>{ translate('SETTINGS.CONFIG_RESTART_REQUIRED') }</strong>
+        </p>
+        <div className="col-sm-12 padding-top-15">
+          <table>
+            <tbody>
+            { this.renderConfigEditForm() }
+            </tbody>
+          </table>
+        </div>
+        <div className="col-sm-12 col-xs-12 text-align-center padding-top-35 padding-bottom-30">
+          <button
+            type="button"
+            className="btn btn-primary waves-effect waves-light"
+            onClick={ this._saveAppConfig }>{ translate('SETTINGS.SAVE_APP_CONFIG') }</button>
+          <button
+            type="button"
+            className="btn btn-primary waves-effect waves-light margin-left-30"
+            onClick={ this._resetAppConfig }>Reset to default</button>
+        </div>
+      </div>
+);
+  };
+}
+
+const mapStateToProps = (state) => {
+  return {
+    Settings: state.Settings,
+    Dashboard: {
+      skipFullDashboardUpdate: state.Dashboard.skipFullDashboardUpdate,
+    }
+  };
+};
+
+export default connect(mapStateToProps)(AppSettingsPanel);
