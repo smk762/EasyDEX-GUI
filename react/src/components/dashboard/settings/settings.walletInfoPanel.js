@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import { connect } from 'react-redux';
 
-class WalletInfoTab extends React.Component {
+class WalletInfoPanel extends React.Component {
   constructor() {
     super();
   }
@@ -58,4 +58,4 @@ const mapStateToProps = (state) => {
 
 };
 
-export default connect(mapStateToProps)(WalletInfoTab);
+export default connect(mapStateToProps)(WalletInfoPanel);

@@ -13,7 +13,7 @@ import AddCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import AddCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../../addcoin/addcoinOptionsACFiat';
 
-class AppNodeTab extends React.Component {
+class AddNodePanel extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -198,4 +198,4 @@ const mapStateToProps = (state) => {
 
 };
 
-export default connect(mapStateToProps)(AppNodeTab);
+export default connect(mapStateToProps)(AddNodePanel);

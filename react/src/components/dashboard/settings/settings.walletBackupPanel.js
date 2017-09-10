@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import { connect } from 'react-redux';
 
-class WalletBackupTab extends React.Component {
+class WalletBackupPanel extends React.Component {
   constructor() {
     super();
   }
@@ -21,4 +21,4 @@ const mapStateToProps = (state) => {
 
 };
 
-export default connect(mapStateToProps)(WalletBackupTab);
+export default connect(mapStateToProps)(WalletBackupPanel);

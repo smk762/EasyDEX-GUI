@@ -7,7 +7,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
-class ExportKeysTab extends React.Component {
+class ExportKeysPanel extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -219,4 +219,4 @@ const mapStateToProps = (state) => {
 
 };
 
-export default connect(mapStateToProps)(ExportKeysTab);
+export default connect(mapStateToProps)(ExportKeysPanel);

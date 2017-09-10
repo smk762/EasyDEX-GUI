@@ -19,18 +19,18 @@ import {
   SettingsRender,
 } from './settings.render';
 
-import AppUpdateTab from  './settings.appUpdateTab';
-import AppInfoTab from  './settings.appInfoTab';
-import WalletInfoTab from './settings.walletInfo';
-import AddNodeTab from './settings.addNodeTab';
-import WalletBackupTab from './settings.walletBackupTab';
-import FiatCurrencyTab from './settings.fiatCurrency';
-import ExportKeysTab from './settings.exportKeys';
-import ImportKeysTab from './settings.importKeys';
-import DebugLogPanel from './settings.debugLogPanel';
-import AppSettingsPanel from './settings.appSettings';
+import AppUpdatePanel from  './settings.appUpdatePanel';
+import AppInfoPanel from  './settings.appInfoPanel';
+import AddNodePanel from './settings.addNodePanel';
+import AppSettingsPanel from './settings.appSettingsPanel';
 import CliPanel from './settings.cliPanel';
+import DebugLogPanel from './settings.debugLogPanel';
+import FiatCurrencyPanel from './settings.fiatCurrencyPanel';
+import ExportKeysPanel from './settings.exportKeysPanel';
+import ImportKeysPanel from './settings.importKeysPanel';
 import SupportPanel from './settings.supportPanel';
+import WalletInfoPanel from './settings.walletInfoPanel';
+import WalletBackupPanel from './settings.walletBackupPanel';
 
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -259,37 +259,37 @@ class Settings extends React.Component {
     const releaseInfo = this.props.Settings.appInfo && this.props.Settings.appInfo.releaseInfo;
 
     if (releaseInfo) {
-      return <AppInfoTab />
+      return <AppInfoPanel />
     }
 
     return null;
   }
 
   renderAppUpdateTab() {
-    return <AppUpdateTab />
+    return <AppUpdatePanel />
   }
 
   renderWalletInfo() {
-    return <WalletInfoTab />
+    return <WalletInfoPanel />
   }
   renderAddNode() {
-    return <AddNodeTab />
+    return <AddNodePanel />
   }
 
   renderWalletBackup() {
-    return <WalletBackupTab />
+    return <WalletBackupPanel />
   }
 
   renderFiatCurrency() {
-    return <FiatCurrencyTab />
+    return <FiatCurrencyPanel />
   }
 
   renderExportKeys() {
-    return <ExportKeysTab />
+    return <ExportKeysPanel />
   }
 
   renderImportKeys() {
-    return <ImportKeysTab />
+    return <ImportKeysPanel />
   }
 
   renderDebugLog() {

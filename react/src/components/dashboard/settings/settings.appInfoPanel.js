@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import { connect } from 'react-redux';
 
-class AppInfoTab extends React.Component {
+class AppInfoPanel extends React.Component {
   constructor() {
     super();
   }
@@ -88,4 +88,4 @@ const mapStateToProps = (state) => {
 
 };
 
-export default connect(mapStateToProps)(AppInfoTab);
+export default connect(mapStateToProps)(AppInfoPanel);

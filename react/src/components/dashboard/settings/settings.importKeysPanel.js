@@ -5,7 +5,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
-class ImportKeysTab extends React.Component {
+class ImportKeysPanel extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -64,4 +64,4 @@ class ImportKeysTab extends React.Component {
   };
 }
 
-export default ImportKeysTab;
+export default ImportKeysPanel;

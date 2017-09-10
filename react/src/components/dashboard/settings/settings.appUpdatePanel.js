@@ -11,7 +11,7 @@ let updateProgressBar = {
   patch: -1,
 };
 
-class AppUpdateTab extends React.Component {
+class AppUpdatePanel extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -133,4 +133,4 @@ const mapStateToProps = (state) => {
 
 };
 
-export default connect(mapStateToProps)(AppUpdateTab);
+export default connect(mapStateToProps)(AppUpdatePanel);
