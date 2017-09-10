@@ -5,7 +5,13 @@ import Config from '../../../config';
 import {
   getPeersList,
   checkForUpdateUIPromise,
+  updateUIPromise,
 } from '../../../actions/actionCreators';
+
+import { SocketProvider } from 'socket.io-react';
+import io from 'socket.io-client';
+
+const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
 let updateProgressBar = {
   patch: -1,
@@ -17,11 +23,22 @@ class AppUpdatePanel extends React.Component {
     this.state = {
       updatePatch: null,
       updateLog: [],
+      updateProgressPatch: null,
+      updatePatch: null,
+      updateBins: null,
     };
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
     this.checkNodes = this.checkNodes.bind(this);
 
+  }
+
+  componentWillMount() {
+    socket.on('patch', msg => this.updateSocketsData = (msg) => {});
+  }
+
+  componentWillUnmount() {
+    socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
   }
 
   checkNodes() {
