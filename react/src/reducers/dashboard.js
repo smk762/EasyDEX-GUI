@@ -5,7 +5,8 @@ import {
   TOGGLE_NOTIFICATIONS_MODAL,
   DISPLAY_COIND_DOWN_MODAL,
   DISPLAY_CLAIM_INTEREST_MODAL,
-  DASHBOARD_SYNC_ONLY_UPDATE
+  DASHBOARD_SYNC_ONLY_UPDATE,
+  DISPLAY_IMPORT_KEY_MODAL,
 } from '../actions/storeType';
 
 export function Dashboard(state = {
@@ -16,6 +17,7 @@ export function Dashboard(state = {
   displayCoindDownModal: false,
   displayClaimInterestModal: false,
   skipFullDashboardUpdate: false,
+  displayImportKeyModal: false,
 }, action) {
   switch (action.type) {
     case DASHBOARD_SECTION_CHANGE:
@@ -43,6 +45,12 @@ export function Dashboard(state = {
       return {
         ...state,
         displayClaimInterestModal: action.displayClaimInterestModal,
+      };
+      break;
+    case DISPLAY_IMPORT_KEY_MODAL:
+      return {
+        ...state,
+        displayImportKeyModal: action.displayImportKeyModal,
       };
       break;
     case DASHBOARD_SYNC_ONLY_UPDATE:

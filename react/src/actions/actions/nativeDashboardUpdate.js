@@ -43,25 +43,44 @@ export function getDashboardUpdate(coin, activeCoinProps) {
   }
 }
 
-export function getDashboardUpdateState(json, coin) {
-  let _listtransactions = json.result['listtransactions'];
+export function getDashboardUpdateState(json, coin, fakeResponse) {
+  // rescan or similar resource heavy process
+  if (fakeResponse ||
+      ((json.result['getinfo'].error && json.result['getinfo'].error === 'daemon is busy') &&
+      (json.result['z_getoperationstatus'].error && json.result['z_getoperationstatus'].error === 'daemon is busy') &&
+      (json.result['listtransactions'].error && json.result['listtransactions'].error === 'daemon is busy') &&
+      (json.result['listtransactions'].error && json.result['listtransactions'].error === 'daemon is busy'))) {
+    return {
+      type: DASHBOARD_UPDATE,
+      progress: null,
+      opids: null,
+      txhistory: null,
+      balance: null,
+      addresses: null,
+      coin: coin,
+      rescanInProgress: true,
+    };
+  } else {
+    let _listtransactions = json.result['listtransactions'];
 
-  if (_listtransactions &&
-      _listtransactions.error) {
-    _listtransactions = null;
-  } else if (_listtransactions && _listtransactions.result && _listtransactions.result.length) {
-    _listtransactions = _listtransactions.result;
-  } else if (!_listtransactions || (!_listtransactions.result || !_listtransactions.result.length)) {
-    _listtransactions = 'no data';
+    if (_listtransactions &&
+        _listtransactions.error) {
+      _listtransactions = null;
+    } else if (_listtransactions && _listtransactions.result && _listtransactions.result.length) {
+      _listtransactions = _listtransactions.result;
+    } else if (!_listtransactions || (!_listtransactions.result || !_listtransactions.result.length)) {
+      _listtransactions = 'no data';
+    }
+
+    return {
+      type: DASHBOARD_UPDATE,
+      progress: json.result['getinfo'].result,
+      opids: json.result['z_getoperationstatus'].result,
+      txhistory: _listtransactions,
+      balance: json.result['z_gettotalbalance'].result,
+      addresses: json.result['addresses'],
+      coin: coin,
+      rescanInProgress: false,
+    };
   }
-
-  return {
-    type: DASHBOARD_UPDATE,
-    progress: json.result['getinfo'].result,
-    opids: json.result['z_getoperationstatus'].result,
-    txhistory: _listtransactions,
-    balance: json.result['z_gettotalbalance'].result,
-    addresses: json.result['addresses'],
-    coin: coin,
-  };
 }

@@ -7,6 +7,7 @@ import {
   startInterval,
   toggleSyncOnlyModal,
   getSyncOnlyForks,
+  displayImportKeyModal,
   logout,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -65,6 +66,10 @@ class Navbar extends React.Component {
         openDropMenu: false,
       });
     }
+  }
+
+  openImportKeyModal() {
+    Store.dispatch(displayImportKeyModal(true));
   }
 
   openDropMenu() {
@@ -126,6 +131,7 @@ class Navbar extends React.Component {
     return NavbarRender.call(this);
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {

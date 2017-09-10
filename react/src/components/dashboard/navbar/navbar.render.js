@@ -64,6 +64,13 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
+            { this.state.nativeOnly &&
+              <li className="nav-top-menu">
+                <a onClick={ this.openImportKeyModal }>
+                  <i className="site-menu-icon"></i> Import key
+                </a>
+              </li>
+            }
             <li className={ this.state.nativeOnly ? 'hide' : (this.isSectionActive('atomic') ? 'active nav-top-menu' : 'nav-top-menu') }>
               <a onClick={ () => this.dashboardChangeSection('atomic') }>
                 <i className="site-menu-icon"></i> Atomic Explorer

@@ -76,7 +76,7 @@ export const _lang = {
       'RESCAN_SM': 'rescanning blocks',
       'REINDEX': 'reindexing blocks from disk',
       'BLOCKS_SM': 'blocks',
-      'LOADING_BLOCKS': 'Loading blocks...it can take up to 15 min to load blocks',
+      'LOADING_BLOCKS': 'Loading data please wait...',
       'WEAK_SEED': 'Weak seed!',
       'YOUR_SEED_MUST_CONTAIN': 'Your seed must contain:',
       'YOUR_SEED_MUST_CONTAIN1': '- at least 1 upper case letter',
@@ -707,5 +707,6 @@ export const _lang = {
       'SUPERNET': 'SUPERNET (SUPERNET)',
       'WLC': 'WIRELESS (WIRELESS)',
     },
+    // 'CHIPS': 'CHIPS (CHIPS)',
   },
 };

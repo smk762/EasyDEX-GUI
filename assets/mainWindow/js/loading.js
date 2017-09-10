@@ -209,10 +209,10 @@ function closeMainWindow(isKmdOnly, isCustom) {
       window.createWindow('open');
       window.hide();
     }, 3000);
+  } else {
+    window.createWindow('open');
+    window.hide();
   }
-
-  window.createWindow('open');
-  window.hide();
 }
 
 function quitApp() {

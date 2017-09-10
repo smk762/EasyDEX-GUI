@@ -44,11 +44,16 @@ class WalletsProgress extends React.Component {
 
     if (_progress) {
       if ((!_progress.blocks && !_progress.longestchain) ||
-          (_progress.blocks < _progress.longestchain)) {
+          (_progress.blocks < _progress.longestchain) ||
+          this.props.ActiveCoin.rescanInProgress) {
         return ChainActivationNotificationRender.call(this);
       }
     } else {
-      return null;
+      if (this.props.ActiveCoin.rescanInProgress) {
+        return ChainActivationNotificationRender.call(this);
+      } else {
+        return null;
+      }
     }
   }
 
@@ -131,9 +136,28 @@ class WalletsProgress extends React.Component {
     return TranslationComponentsRender.call(this, translationID);
   }
 
+  renderRescanProgress() {
+    if (this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
+        this.props.ActiveCoin.rescanInProgress) {
+      const temp = this.props.Settings.debugLog.split(' ');
+      let currentProgress;
+
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i].indexOf('Progress=') > -1) {
+          currentProgress = Number(temp[i].replace('Progress=', '')) * 100;
+        }
+      }
+
+      return currentProgress;
+    } else {
+      return null;
+    }
+  }
+
   renderActivatingBestChainProgress() {
     if (this.props.Settings &&
-        this.props.Settings.debugLog) {
+        this.props.Settings.debugLog &&
+        !this.props.ActiveCoin.rescanInProgress) {
       if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1 &&
           !this.props.ActiveCoin.progress &&
           !this.props.ActiveCoin.progress.blocks) {
@@ -246,6 +270,7 @@ const mapStateToProps = (state) => {
       mode: state.ActiveCoin.mode,
       coin: state.ActiveCoin.coin,
       progress: state.ActiveCoin.progress,
+      rescanInProgress: state.ActiveCoin.rescanInProgress,
     },
   };
 };

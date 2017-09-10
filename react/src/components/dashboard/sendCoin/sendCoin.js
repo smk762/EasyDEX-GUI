@@ -833,7 +833,7 @@ class SendCoin extends React.Component {
       valid = false;
     }
 
-    if ((this.props.ActiveCoin.mode === 'basilisk' && Number(this.state.amount) > Number(this.state.sendFromAmount)) ||
+    /*if ((this.props.ActiveCoin.mode === 'basilisk' && Number(this.state.amount) > Number(this.state.sendFromAmount)) ||
         (this.props.ActiveCoin.mode === 'full' && Number(this.state.amount) > Number(this.checkBalance()))) {
       Store.dispatch(
         triggerToaster(
@@ -843,7 +843,7 @@ class SendCoin extends React.Component {
         )
       );
       valid = false;
-    }
+    }*/
 
     return valid;
   }

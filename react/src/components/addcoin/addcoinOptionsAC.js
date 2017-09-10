@@ -19,7 +19,7 @@ class AddCoinOptionsAC extends React.Component {
       'revs',
       'shark',
       'supernet',
-      'wlc'
+      'wlc',
     ];
     let _items = [];
 
