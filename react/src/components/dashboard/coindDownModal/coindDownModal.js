@@ -11,12 +11,25 @@ class CoindDownModal extends React.Component {
     this.state = {
       display: false,
       debugLogCrash: null,
+      kmdMainPassiveMode: false,
     };
     this.dismiss = this.dismiss.bind(this);
   }
 
   dismiss() {
     Store.dispatch(toggleCoindDownModal(false));
+  }
+
+  componentWillMount() {
+    let _kmdMainPassiveMode;
+
+    try {
+      _kmdMainPassiveMode = window.require('electron').remote.getCurrentWindow().kmdMainPassiveMode;
+    } catch (e) {}
+
+    this.setState(Object.assign({}, this.state, {
+      kmdMainPassiveMode: _kmdMainPassiveMode,
+    }));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,13 +41,15 @@ class CoindDownModal extends React.Component {
   }
 
   render() {
-    if (this.state.display) {
+    if (this.state.display &&
+        !this.state.kmdMainPassiveMode) {
       return CoindDownModalRender.call(this);
     }
 
     return null;
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {

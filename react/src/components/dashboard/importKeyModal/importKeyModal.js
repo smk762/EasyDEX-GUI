@@ -142,7 +142,7 @@ class ImportKeyModal extends React.Component {
           Store.dispatch(getDashboardUpdateState(null, this.props.ActiveCoin.coin, true));
           Store.dispatch(
             triggerToaster(
-              'Address imported. Wallet rescan is in progress. Please wait until it\s finished.',
+              'Address imported. Wallet rescan is in progress. Please wait until it is finished.',
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false

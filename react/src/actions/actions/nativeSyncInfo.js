@@ -149,14 +149,31 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
       } else {
         if (!json &&
           Config.cli.default) {
-          dispatch(
-            triggerToaster(
-              'Komodod is down',
-              'Critical Error',
-              'error',
-              true
-            )
-          );
+          let _kmdMainPassiveMode;
+
+          try {
+            _kmdMainPassiveMode = window.require('electron').remote.getCurrentWindow().kmdMainPassiveMode;
+          } catch (e) {}
+
+          if (!_kmdMainPassiveMode) {
+            dispatch(
+              triggerToaster(
+                'Komodod is down',
+                'Critical Error',
+                'error',
+                true
+              )
+            );
+          } else {
+            dispatch(
+              triggerToaster(
+                'Please make sure to run komodod manually',
+                'Connection error',
+                'warning',
+                true
+              )
+            );
+          }
 
           if (coin === 'KMD') {
             dispatch(getDebugLog('komodo', 50));
