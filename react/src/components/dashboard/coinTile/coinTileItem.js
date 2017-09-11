@@ -45,6 +45,7 @@ class CoinTileItem extends React.Component {
       let _coinSelected = false;
       let _mode;
       let _coin;
+      let _coinMode = {};
       const modes = [
         'native',
         'basilisk',
@@ -60,8 +61,16 @@ class CoinTileItem extends React.Component {
               _coin = coin;
               _mode = mode;
             }
+            _coinMode[coin] = mode;
           });
+
+          if (_coinMode['KMD'] &&
+              _coinMode['KMD'] === 'native') {
+            _coin = 'KMD';
+            _mode = 'native';
+          }
         });
+
         setTimeout(() => {
           this._dashboardChangeActiveCoin(_coin, _mode);
         }, 100);
