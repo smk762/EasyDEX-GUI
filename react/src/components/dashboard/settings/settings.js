@@ -13,7 +13,6 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
-import { secondsToString } from '../../../util/time';
 import {
   SettingsRender,
 } from './settings.render';

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import Config from '../../../config';
+import { secondsToString } from '../../../util/time';
 import {
   getDebugLog,
 } from '../../../actions/actionCreators';
