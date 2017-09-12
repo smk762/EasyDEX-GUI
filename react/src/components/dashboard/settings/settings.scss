@@ -69,6 +69,12 @@
   .toggle {
     position: relative;
     top: 4px;
+
+    .title {
+      position: relative;
+      top: -12px;
+      left: 12px;
+    }
   }
   table {
     width: 100%;

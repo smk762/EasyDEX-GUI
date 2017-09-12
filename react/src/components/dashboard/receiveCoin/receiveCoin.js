@@ -233,7 +233,7 @@ const mapStateToProps = (state, props) => {
   if (props &&
       props.activeSection &&
       props.renderTableOnly) {
-    _mappedProps.ActiveCoin.activeSection = props.activeSection;
+    _mappedProps.activeSection = props.activeSection;
     _mappedProps.renderTableOnly = props.renderTableOnly;
   }
 

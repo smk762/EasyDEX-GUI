@@ -113,7 +113,7 @@ const NavbarRender = function() {
                 </li>
                 <li>
                   <a onClick={ () => this.dashboardChangeSection('about') }>
-                    <i className="icon fa-users"></i> { translate('INDEX.ABOUT_IGUANA') }
+                    <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                   </a>
                 </li>
                 <li className={ this.state.nativeOnly ? 'hide' : 'divider' }></li>

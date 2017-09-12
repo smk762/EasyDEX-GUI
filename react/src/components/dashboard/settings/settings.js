@@ -21,7 +21,7 @@ import {
   skipFullDashboardUpdate,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-
+import { secondsToString } from '../../../util/time';
 import {
   AppInfoTabRender,
   SettingsRender,
@@ -67,6 +67,8 @@ class Settings extends React.Component {
       wifkeysPassphrase: '',
       trimPassphraseTimer: null,
       disableWalletSpecificUI: null,
+      appRuntimeLog: [],
+      toggleAppRuntimeLog: false,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -84,6 +86,48 @@ class Settings extends React.Component {
     this._updateUIPromise = this._updateUIPromise.bind(this);
     this.updateTabDimensions = this.updateTabDimensions.bind(this);
     this._skipFullDashboardUpdate = this._skipFullDashboardUpdate.bind(this);
+    this.getAppRuntimeLog = this.getAppRuntimeLog.bind(this);
+    this.toggleAppRuntimeLog = this.toggleAppRuntimeLog.bind(this);
+    this.renderAppRuntimeLog = this.renderAppRuntimeLog.bind(this);
+  }
+
+  renderAppRuntimeLog() {
+    let _items = [];
+    const _appRuntimeLog = this.state.appRuntimeLog;
+
+    for (let i = 0; i < _appRuntimeLog.length; i++) {
+      _items.push(
+        <p key={ `app-runtime-log-entry-${i}` }>
+          <span>{ secondsToString(_appRuntimeLog[i].time, true) }</span>
+          <span className="padding-left-30">{ JSON.stringify(_appRuntimeLog[i].msg, null, '').replace('\\n', ' ') }</span>
+        </p>
+      );
+    }
+
+    return _items;
+  }
+
+  toggleAppRuntimeLog() {
+    this.setState(Object.assign({}, this.state, {
+      toggleAppRuntimeLog: !this.state.toggleAppRuntimeLog,
+    }));
+
+    this.getAppRuntimeLog();
+  }
+
+  getAppRuntimeLog() {
+    let _appRuntimeLog;
+
+    try {
+      _appRuntimeLog = window.require('electron').remote.getCurrentWindow().getAppRuntimeLog;
+    } catch (e) {}
+
+    _appRuntimeLog()
+    .then((json) => {
+      this.setState(Object.assign({}, this.state, {
+        appRuntimeLog: json,
+      }));
+    });
   }
 
   _skipFullDashboardUpdate() {
