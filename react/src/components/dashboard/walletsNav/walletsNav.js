@@ -132,7 +132,7 @@ const mapStateToProps = (state) => {
       balance: state.ActiveCoin.balance,
       cache: state.ActiveCoin.cache,
       activeSection: state.ActiveCoin.activeSection,
-      activeAddress: state.ActiveCoin.activeAddress
+      activeAddress: state.ActiveCoin.activeAddress,
     },
     Dashboard: {
       activeHandle: state.Dashboard.activeHandle,

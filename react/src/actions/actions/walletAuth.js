@@ -160,6 +160,7 @@ export function iguanaActiveHandle(getMainAddress) {
 
 export function iguanaWalletPassphraseState(json, dispatch, skipToastr) {
   sessionStorage.setItem('IguanaActiveAccount', JSON.stringify(json));
+
   if (!skipToastr) {
     dispatch(
       triggerToaster(

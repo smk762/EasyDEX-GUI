@@ -73,7 +73,7 @@ function getSyncInfoNativeState(json, coin, skipDebug, skipRemote) {
   }
 }
 
-export function getSyncInfoNative(coin, skipDebug, skipRemote) {
+export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
   let payload = {
     userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
     agent: getPassthruAgent(coin),
@@ -113,13 +113,15 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote) {
     )
     .catch(function(error) {
       console.log(error);
-      dispatch(
-        triggerToaster(
-          'getSyncInfo',
-          'Error',
-          'error'
-        )
-      );
+      if (!suppressErrors) { // rescan case
+        dispatch(
+          triggerToaster(
+            'getSyncInfo',
+            'Error',
+            'error'
+          )
+        );
+      }
     })
     .then(function(response) {
       const _response = response.text().then(function(text) { return text; });
@@ -127,6 +129,11 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote) {
     })
     .then(json => {
       if (json === 'Work queue depth exceeded') {
+        if (coin === 'KMD') {
+          dispatch(getDebugLog('komodo', 100));
+        } else {
+          dispatch(getDebugLog('komodo', 100, coin));
+        }
         dispatch(
           getSyncInfoNativeState(
             {
@@ -135,21 +142,38 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote) {
               id: null
             },
             coin,
-            skipDebug,
+            true,
             skipRemote
           )
         );
       } else {
         if (!json &&
           Config.cli.default) {
-          dispatch(
-            triggerToaster(
-              'Komodod is down',
-              'Critical Error',
-              'error',
-              true
-            )
-          );
+          let _kmdMainPassiveMode;
+
+          try {
+            _kmdMainPassiveMode = window.require('electron').remote.getCurrentWindow().kmdMainPassiveMode;
+          } catch (e) {}
+
+          if (!_kmdMainPassiveMode) {
+            dispatch(
+              triggerToaster(
+                'Komodod is down',
+                'Critical Error',
+                'error',
+                true
+              )
+            );
+          } else {
+            dispatch(
+              triggerToaster(
+                'Please make sure to run komodod manually',
+                'Connection error',
+                'warning',
+                true
+              )
+            );
+          }
 
           if (coin === 'KMD') {
             dispatch(getDebugLog('komodo', 50));

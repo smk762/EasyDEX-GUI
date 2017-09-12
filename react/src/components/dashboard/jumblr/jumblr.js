@@ -285,7 +285,9 @@ class Jumblr extends React.Component {
 
           importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
           .then((json) => {
-            if (!json.id && !json.result && !json.error) {
+            if (!json.id &&
+                !json.result &&
+                !json.error) {
               _jumblrSecretAddress.push(_genKeys);
               this.setState(Object.assign({}, this.state, {
                 jumblrSecretAddressImport: _jumblrSecretAddress,
@@ -344,7 +346,9 @@ class Jumblr extends React.Component {
 
     importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
     .then((json) => {
-      if (!json.id && !json.result && !json.error) {
+      if (!json.id &&
+          !json.result &&
+          !json.error) {
         // console.warn('importPrivkey', json);
         setJumblrAddress(
           this.props.ActiveCoin.coin,

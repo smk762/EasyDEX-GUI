@@ -30,6 +30,7 @@ import {
   START_INTERVAL,
   STOP_INTERVAL,
   DASHBOARD_SYNC_ONLY_UPDATE,
+  DISPLAY_IMPORT_KEY_MODAL,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -348,5 +349,12 @@ export function skipFullDashboardUpdate(skip) {
   return {
     type: DASHBOARD_SYNC_ONLY_UPDATE,
     skipFullDashboardUpdate: skip,
+  }
+}
+
+export function displayImportKeyModal(display) {
+  return {
+    type: DISPLAY_IMPORT_KEY_MODAL,
+    displayImportKeyModal: display,
   }
 }

@@ -64,6 +64,13 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
+            { this.state.nativeOnly &&
+              <li className="nav-top-menu">
+                <a onClick={ this.openImportKeyModal }>
+                  <i className="site-menu-icon"></i> Import key
+                </a>
+              </li>
+            }
             <li className={ this.state.nativeOnly ? 'hide' : (this.isSectionActive('atomic') ? 'active nav-top-menu' : 'nav-top-menu') }>
               <a onClick={ () => this.dashboardChangeSection('atomic') }>
                 <i className="site-menu-icon"></i> Atomic Explorer
@@ -106,7 +113,7 @@ const NavbarRender = function() {
                 </li>
                 <li>
                   <a onClick={ () => this.dashboardChangeSection('about') }>
-                    <i className="icon fa-users"></i> { translate('INDEX.ABOUT_IGUANA') }
+                    <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                   </a>
                 </li>
                 <li className={ this.state.nativeOnly ? 'hide' : 'divider' }></li>

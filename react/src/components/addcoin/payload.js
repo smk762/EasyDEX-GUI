@@ -688,6 +688,7 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		'seedipaddr': '78.47.196.146'
 	};
 
+	// TODO: move netmagic to node
 	const acConfig = {
 		'SUPERNET': {
 			'name': 'SUPERNET',
@@ -790,7 +791,7 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 			'supply': 72000000,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'COQUI','conf':'COQUI.conf','path':confpath,'RELAY':-1,'VALIDATE':1,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'COQUI','name':'COQUI','netmagic':'4cbd5ef4','p2p':assetChainPorts.COQUI - 1,'rpc':assetChainPorts.COQUI}) : {},
 			'AddCoinDataVar': Object.assign({}, _acPayloadOrigin, {'userpass':tmpIguanaRPCAuth,'RELAY':mode,'VALIDATE':mode,'startpend':tmpPendValue,'endpend':tmpPendValue,'maxpeers':8,'newcoin':'COQUI','name':'COQUI','netmagic':'4cbd5ef4','p2p':assetChainPorts.COQUI - 1,'rpc':assetChainPorts.COQUI})
-		}
+		},
 	};
 
 	if (mode === '-1') {

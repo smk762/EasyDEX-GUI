@@ -45,9 +45,7 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       mode: state.ActiveCoin.mode,
     },
-    Dashboard: {
-      activeSection: state.Dashboard.activeSection,
-    },
+    Dashboard: state.Dashboard,
   };
 };
 

@@ -45,6 +45,7 @@ class CoinTileItem extends React.Component {
       let _coinSelected = false;
       let _mode;
       let _coin;
+      let _coinMode = {};
       const modes = [
         'native',
         'basilisk',
@@ -60,8 +61,16 @@ class CoinTileItem extends React.Component {
               _coin = coin;
               _mode = mode;
             }
+            _coinMode[coin] = mode;
           });
+
+          if (_coinMode['KMD'] &&
+              _coinMode['KMD'] === 'native') {
+            _coin = 'KMD';
+            _mode = 'native';
+          }
         });
+
         setTimeout(() => {
           this._dashboardChangeActiveCoin(_coin, _mode);
         }, 100);
@@ -75,23 +84,43 @@ class CoinTileItem extends React.Component {
       const _propsDashboard = this.props.ActiveCoin;
       const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
-      if (syncPercentage < 100 &&
-          !this.props.Dashboard.displayCoindDownModal) {
-        Store.dispatch(getDebugLog('komodo', 10));
+      if ((syncPercentage < 100 &&
+          !this.props.Dashboard.displayCoindDownModal) ||
+          this.props.ActiveCoin.rescanInProgress) {
+        if (coin === 'KMD') {
+          Store.dispatch(getDebugLog('komodo', 50));
+        } else {
+          Store.dispatch(getDebugLog('komodo', 50, coin));
+        }
       }
+
       if (!this.props.Dashboard.displayCoindDownModal &&
           _propsDashboard.progress &&
           _propsDashboard.progress.blocks &&
           _propsDashboard.progress.longestchain &&
           syncPercentage &&
           (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
-        Store.dispatch(getSyncInfoNative(coin, true, this.props.Dashboard.skipFullDashboardUpdate));
+        Store.dispatch(
+          getSyncInfoNative(
+            coin,
+            true,
+            this.props.Dashboard.skipFullDashboardUpdate,
+            this.props.ActiveCoin.rescanInProgress
+          )
+        );
 
         if (!this.props.Dashboard.skipFullDashboardUpdate) {
           Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
         }
       } else {
-        Store.dispatch(getSyncInfoNative(coin, null, this.props.Dashboard.skipFullDashboardUpdate));
+        Store.dispatch(
+          getSyncInfoNative(
+            coin,
+            null,
+            this.props.Dashboard.skipFullDashboardUpdate,
+            this.props.ActiveCoin.rescanInProgress
+          )
+        );
       }
     }
     if (mode === 'full') {
@@ -237,6 +266,7 @@ const mapStateToProps = (state) => {
       addresses: state.ActiveCoin.addresses,
       mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress,
       progress: state.ActiveCoin.progress,
+      rescanInProgress: state.ActiveCoin.rescanInProgress,
     },
     Dashboard: state.Dashboard,
     Interval: {

@@ -38,6 +38,7 @@ export function ActiveCoin(state = {
   mainBasiliskAddress: null,
   activeAddress: null,
   progress: null,
+  rescanInProgress: false,
 }, action) {
   switch (action.type) {
     case DASHBOARD_ACTIVE_COIN_CHANGE:
@@ -59,6 +60,7 @@ export function ActiveCoin(state = {
           opids: state.opids,
           activeBasiliskAddress: state.activeBasiliskAddress,
           progress: state.progress,
+          rescanInProgress: state.rescanInProgress,
         };
         let _coins = state.coins;
         _coins[state.coin] = _coinDataToStore;
@@ -81,6 +83,7 @@ export function ActiveCoin(state = {
           opids: _coinData.opids,
           activeBasiliskAddress: _coinData.activeBasiliskAddress,
           progress: _coinData.progress,
+          rescanInProgress: _coinData.rescanInProgress,
         };
       } else {
         if (state.coin) {
@@ -100,6 +103,7 @@ export function ActiveCoin(state = {
             opids: state.opids,
             activeBasiliskAddress: state.activeBasiliskAddress,
             progress: state.progress,
+            rescanInProgress: state.rescanInProgress,
           };
           let _coins = state.coins;
           _coins[state.coin] = _coinData;
@@ -117,6 +121,7 @@ export function ActiveCoin(state = {
             showTransactionInfoTxIndex: null,
             activeSection: 'default',
             progress: null,
+            rescanInProgress: false,
           };
         } else {
           return {
@@ -131,6 +136,7 @@ export function ActiveCoin(state = {
             showTransactionInfoTxIndex: null,
             activeSection: 'default',
             progress: null,
+            rescanInProgress: false,
           };
         }
       }
@@ -227,6 +233,7 @@ export function ActiveCoin(state = {
           txhistory: action.txhistory,
           balance: action.balance,
           addresses: action.addresses,
+          rescanInProgress: action.rescanInProgress,
         };
       }
     default:

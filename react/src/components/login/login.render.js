@@ -41,7 +41,7 @@ const LoginRender = function () {
                 </li>
                 <li>
                   <a onClick={ () => this.toggleLoginSettingsDropdownSection('about') }>
-                    <i className="icon fa-users"></i> { translate('INDEX.ABOUT_IGUANA') }
+                    <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                   </a>
                 </li>
               </ul>

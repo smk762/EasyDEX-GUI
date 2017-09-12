@@ -90,6 +90,10 @@ export function getCoinTitle(coin) {
       coinlogo = 'SUPERNET';
       coinname = 'SUPERNET';
       break;
+    case 'CHIPS':
+      coinlogo = 'SUPERNET';
+      coinname = 'CHIPS';
+      break;
     case 'REVS':
       coinlogo = 'REVS';
       coinname = 'REVS';
