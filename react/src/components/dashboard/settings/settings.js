@@ -42,40 +42,12 @@ class Settings extends React.Component {
     super();
     this.state = {
       activeTab: 0,
-      activeTabHeight: '0',
       tabElId: null,
       seedInputVisibility: false,
       nativeOnly: Config.iguanaLessMode,
       disableWalletSpecificUI: false,
     };
     this.updateInput = this.updateInput.bind(this);
-    this.updateTabDimensions = this.updateTabDimensions.bind(this);
-  }
-
-  updateTabDimensions() {
-    setTimeout(() => {
-      if(document.querySelector(`#${this.state.tabElId} .panel-collapse .panel-body`)){
-      const _height = document.querySelector(`#${this.state.tabElId} .panel-collapse .panel-body`).offsetHeight;
-      } else {
-        _height = '100%';
-      }
-      this.setState(Object.assign({}, this.state, {
-        activeTabHeight: _height,
-      }));
-    }, 100);
-  }
-
-  componentWillMount() {
-    window.addEventListener('resize', this.updateTabDimensions);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateTabDimensions);
-
-    if (!this.state.disableWalletSpecificUI) {
-      document.documentElement.style.height = '100%';
-      document.body.style.height = '100%';
-    }
   }
 
   componentDidMount(props) {
@@ -85,15 +57,14 @@ class Settings extends React.Component {
 
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
+
+    document.getElementById('section-iguana-wallet-settings').setAttribute("style", "height:auto; min-height: 100%");
   }
 
   componentWillReceiveProps(props) {
     if (this.state.tabElId) {
-      const _height = document.querySelector(`#${this.state.tabElId} .panel-collapse .panel-body`).offsetHeight;
-
       this.setState(Object.assign({}, this.state, {
         activeTab: this.state.activeTab,
-        activeTabHeight: _height,
         tabElId: this.state.tabElId,
         disableWalletSpecificUI: this.props.disableWalletSpecificUI,
       }));
@@ -101,26 +72,17 @@ class Settings extends React.Component {
   }
 
   openTab(elemId, tab) {
-    setTimeout(() => {
-      const _height = document.querySelector(`#${elemId} .panel-collapse .panel-body`).offsetHeight;
-
-      this.setState(Object.assign({}, this.state, {
+       this.setState(Object.assign({}, this.state, {
         activeTab: tab,
-        activeTabHeight: _height,
         tabElId: elemId,
       }));
 
-      // body size hack
-      if (!this.state.disableWalletSpecificUI) {
-        document.documentElement.style.height = '100%';
-        document.body.style.height = '100%';
+  }
 
-        setTimeout(() => {
-          document.documentElement.style.height = _height <= 200 ? '100%' : 'inherit';
-          document.body.style.height = _height <= 200 ? '100%' : 'inherit';
-        }, 100);
-      }
-    }, 100);
+  updateInput(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   }
  
   renderAppInfoTab() {
@@ -174,12 +136,6 @@ class Settings extends React.Component {
 
   renderSupportPanel() {
     return <SupportPanel />
-  }
-
-  updateInput(e) {
-      this.setState({
-        [e.target.name]: e.target.value,
-      });
   }
 
   render() {

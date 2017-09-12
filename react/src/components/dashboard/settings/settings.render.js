@@ -28,7 +28,7 @@ export const SettingsRender = function() {
                       </div>
                       <div
                         className={ 'panel-collapse collapse' + (this.state.activeTab === 0 ? ' in' : '') }
-                        style={{ height: this.state.activeTab === 0 ? `${this.state.activeTabHeight}px` : '0' }}>
+                        style={{ height: this.state.activeTab === 0 ? `auto` : '0' }}>
                         { this.renderWalletInfo() }
                       </div>
                     </div>
@@ -45,7 +45,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 1 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 1 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 1 ? `auto` : '0' }}>
                       { this.renderAddNode() }
                     </div>
                   </div>
@@ -62,7 +62,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 2 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 2 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 2 ? `auto` : '0' }}>
                       { this.renderWalletBackup() }
                   </div>
                   </div>
@@ -79,7 +79,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 3 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 3 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 3 ? `auto` : '0' }}>
                       { this.renderFiatCurrency() }  </div>
                   </div>
                   }
@@ -95,7 +95,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 4 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 4 ? `auto` : '0' }}>
                       { this.renderExportKeys() }
                     </div>
                   </div>
@@ -112,7 +112,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 5 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 5 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 5 ? `auto` : '0' }}>
                       { this.renderImportKeys() }
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 6 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 6 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 6 ? `auto` : '0' }}>
                       { this.renderDebugLog() }
                     </div>
                   </div>
@@ -145,7 +145,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 7 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 7 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 7 ? `auto` : '0' }}>
                       { this.renderAppSettings() }
                     </div>
                   </div>
@@ -161,7 +161,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 8 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 8 ? `auto` : '0' }}>
                       { this.renderAppInfoTab() }
                     </div>
                   </div>
@@ -178,7 +178,7 @@ export const SettingsRender = function() {
                       </div>
                       <div
                         className={ 'panel-collapse collapse' + (this.state.activeTab === 9 ? ' in' : '') }
-                        style={{ height: this.state.activeTab === 9 ? `${this.state.activeTabHeight}px` : '0' }}>
+                        style={{ height: this.state.activeTab === 9 ? `auto` : '0' }}>
                         { this.renderCliPanel() }
                       </div>
                     </div>
@@ -195,7 +195,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 10 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 10 ? `auto` : '0' }}>
                       { this.renderAppUpdateTab() }
                     </div>
                   </div>
@@ -211,7 +211,7 @@ export const SettingsRender = function() {
                     </div>
                     <div
                       className={ 'panel-collapse collapse' + (this.state.activeTab === 11 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 11 ? `${this.state.activeTabHeight}px` : '0' }}>
+                      style={{ height: this.state.activeTab === 11 ? `auto` : '0' }}>
                       { this.renderSupportPanel() }
                     </div>
                   </div>
