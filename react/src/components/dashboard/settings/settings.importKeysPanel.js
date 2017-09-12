@@ -18,7 +18,7 @@ class ImportKeysPanel extends React.Component {
     Store.dispatch(importPrivKey(this.state.importWifKey));
   }
 
-  updateInput(e) {
+  updateInput = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
     });

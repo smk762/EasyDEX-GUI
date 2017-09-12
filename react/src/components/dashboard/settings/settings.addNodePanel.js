@@ -78,7 +78,7 @@ class AddNodePanel extends React.Component {
   }
 
   addNode() {
-    if (this.state.addNodeCoin) {
+    if (this.state.addNodeCoin && this.state.addPeerIP) {
       Store.dispatch(
         addPeerNode(
           this.state.addNodeCoin.split('|')[0],
@@ -89,29 +89,9 @@ class AddNodePanel extends React.Component {
   }
 
   updateInput(e) {
-    if (e.target.name === 'wifkeysPassphrase') {
-      // remove any empty chars from the start/end of the string
-      const newValue = e.target.value;
-
-      clearTimeout(this.state.trimPassphraseTimer);
-
-      const _trimPassphraseTimer = setTimeout(() => {
-        this.setState({
-          wifkeysPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
-        });
-      }, 2000);
-
-      this.resizeLoginTextarea();
-
-      this.setState({
-        trimPassphraseTimer: _trimPassphraseTimer,
-        [e.target.name]: newValue,
-      });
-    } else {
       this.setState({
         [e.target.name]: e.target.value,
       });
-    }
   }
 
   render() {
@@ -145,11 +125,11 @@ class AddNodePanel extends React.Component {
               <h5>
                 SuperNET Peers:
               </h5>
-              <p>{ this.renderSNPeersList() }</p>
+              <div>{ this.renderSNPeersList() }</div>
               <h5>
                 Raw Peers:
               </h5>
-              <p>{ this.renderPeersList() }</p>
+              <div>{ this.renderPeersList() }</div>
             </div>
           </div>
 
