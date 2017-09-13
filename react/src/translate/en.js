@@ -278,12 +278,12 @@ export const _lang = {
       'WALLET_BACKUP': 'Wallet Backup',
       'FIAT_CURRENCY': 'Fiat Currency',
       'EXPORT_KEYS': 'Export Keys',
-      'ONLY_ACTIVE_WIF_KEYS': 'Only the active coin wallet wif keys will be shown here.<br>' +
-                              'If you don\'t see a wif key for the coin you are looking for please active it by adding it from EasyDEX Dashboard.<br>' +
-                              'You can use these wif keys to import to another coin wallets.',
+      'ONLY_ACTIVE_WIF_KEYS': 'Only the active coin wallet WIF keys will be shown here.<br>' +
+                              'If you don\'t see a WIF key for the coin you are looking for please active it by adding it from EasyDEX Dashboard.<br>' +
+                              'You can use these WIF keys to import to another coin wallets.',
       'PLEASE_KEEP_KEYS_SAFE': 'Please keep these keys extra safe and secure.',
       'PASSPHRASE': 'Passphrase',
-      'GET_WIF_KEYS': 'Get Wif Keys',
+      'GET_WIF_KEYS': 'Get WIF Keys',
       'IMPORT_KEYS': 'Import Keys',
       'IMPORT_KEYS_DESC_P1': 'This section allows you to import private key of all iguana supported coins, Assetchain, Geckochain, or PAXchain by the wallet.',
       'IMPORT_KEYS_DESC_P2': 'It is not mandatory to have that coin active in the wallet for which you are executing import private key process.',
@@ -590,7 +590,7 @@ export const _lang = {
       'SUPPORT_TICKETS': 'Support tickets',
       'GET_SLACK_INVITE': 'Get Slack invite',
       'ADDRESS_LIST': 'Address list',
-      'WIF_KEY_LIST': 'Wif key list',
+      'WIF_KEY_LIST': 'WIF (Wallet Import Format) key list',
       'CLI_RESPONSE': 'CLI response',
       'PASSPHRASE_REQ': 'Passphrase is required.',
       'SAVE_APP_CONFIG': 'Save app config',

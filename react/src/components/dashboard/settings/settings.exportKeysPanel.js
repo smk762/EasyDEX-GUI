@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {
   encryptWallet,
   settingsWifkeyState,
+  copyCoinAddress,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -19,6 +20,7 @@ class ExportKeysPanel extends React.Component {
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
+    this._copyCoinAddress = this._copyCoinAddress.bind(this);
     this.updateInput = this.updateInput.bind(this);
   }
 
@@ -59,6 +61,10 @@ class ExportKeysPanel extends React.Component {
     }
   }
 
+  _copyCoinAddress(address) {
+    Store.dispatch(copyCoinAddress(address));
+  }
+
   renderWifKeys() {
     let items = [];
 
@@ -80,8 +86,16 @@ class ExportKeysPanel extends React.Component {
               (i === 1 && _key.indexOf('wif') > -1)) {
             items.push(
               <tr key={ _key }>
-                <td>{ _key }</td>
-                <td className="padding-left-15">{ _wifKeys[_key] }</td>
+                <td className="padding-bottom-20">{ _key.replace('wif', ' WIF') }</td>
+                <td className="padding-bottom-20 padding-left-15">
+                { _wifKeys[_key] }
+                <button
+                  className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                  title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                  onClick={ () => this._copyCoinAddress(_wifKeys[_key]) }>
+                    <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                </button>
+                </td>
               </tr>
             );
           }
