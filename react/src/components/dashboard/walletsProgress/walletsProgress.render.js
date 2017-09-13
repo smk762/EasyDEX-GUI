@@ -1,14 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-export const SyncErrorLongestChainRender = function() {
-  return (
-    <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">
-      <span className="full-width">{ translate('INDEX.SYNC_ERR_LONGESTCHAIN') }</span>
-    </div>
-  );
-};
-
 export const SyncErrorBlocksRender = function() {
   return (
     <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">
@@ -27,13 +19,23 @@ export const SyncPercentageRender = function(syncPercentage) {
       </div>
     );
   } else {
-    return (
-      <div
-        className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
-        style={{ width: syncPercentage }}>
-        <span style={{ width: syncPercentage }}>{ syncPercentage } | { this.props.ActiveCoin.progress.blocks } / { this.props.ActiveCoin.progress.longestchain } | { translate('INDEX.CONNECTIONS') }: { this.props.ActiveCoin.progress.connections }</span>
-      </div>
-    );
+    if (syncPercentage === 'Infinity%') {
+      return (
+        <div
+          className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
+          style={{ width: syncPercentage }}>
+          <span style={{ width: syncPercentage }}>Blocks: { this.props.ActiveCoin.progress.blocks } | { translate('INDEX.CONNECTIONS') }: { this.props.ActiveCoin.progress.connections }</span>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
+          style={{ width: syncPercentage }}>
+          <span style={{ width: syncPercentage }}>{ syncPercentage === '100.00%' ? '100%' : syncPercentage } | { this.props.ActiveCoin.progress.blocks } / { this.props.ActiveCoin.progress.longestchain } | { translate('INDEX.CONNECTIONS') }: { this.props.ActiveCoin.progress.connections }</span>
+        </div>
+      );
+    }
   }
 };
 

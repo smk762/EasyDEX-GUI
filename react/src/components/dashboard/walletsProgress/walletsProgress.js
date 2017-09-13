@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import {
-  SyncErrorLongestChainRender,
   SyncErrorBlocksRender,
   SyncPercentageRender,
   LoadingBlocksRender,
@@ -15,7 +14,31 @@ import {
 class WalletsProgress extends React.Component {
   constructor() {
     super();
+    this.state = {
+      prevProgress: {},
+    };
     this.isFullySynced = this.isFullySynced.bind(this);
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.ActiveCoin &&
+        props.ActiveCoin.progress &&
+        Number(props.ActiveCoin.progress.longestchain) === 0) {
+      let _progress = props.ActiveCoin.progress;
+
+      if (this.state.prevProgress &&
+          this.state.prevProgress.longestchain &&
+          Number(this.state.prevProgress.longestchain) > 0) {
+        _progress.longestchain = this.state.prevProgress.longestchain;
+      }
+      this.setState(Object.assign({}, this.state, {
+        prevProgress: _progress,
+      }));
+    } else {
+      this.setState(Object.assign({}, this.state, {
+        prevProgress: props.ActiveCoin.progress,
+      }));
+    }
   }
 
   isFullySynced() {
@@ -96,6 +119,7 @@ class WalletsProgress extends React.Component {
 
   renderSyncPercentagePlaceholder() {
     const _progress = this.props.ActiveCoin.progress;
+    console.warn('renderSyncPercentagePlaceholder', _progress);
 
     // activating best chain
     if (_progress &&
@@ -113,19 +137,13 @@ class WalletsProgress extends React.Component {
     }
 
     if (_progress &&
-        _progress.blocks > 0 &&
-        _progress.longestchain === 0) {
-      return SyncErrorLongestChainRender.call(this);
-    }
-
-    if (_progress &&
         _progress.blocks === 0) {
       return SyncErrorBlocksRender.call(this);
     }
 
     if (_progress &&
         _progress.blocks) {
-      const syncPercentage = (parseFloat(parseInt(_progress.blocks, 10) * 100 / parseInt(_progress.longestchain, 10)).toFixed(2) + '%').replace('NaN', 0);
+      const syncPercentage = (parseFloat(parseInt(_progress.blocks, 10) * 100 / parseInt(Number(_progress.longestchain) || Number(this.state.prevProgress.longestchain), 10)).toFixed(2) + '%').replace('NaN', 0);
       return SyncPercentageRender.call(this, syncPercentage === 1000 ? 100 : syncPercentage);
     }
 
