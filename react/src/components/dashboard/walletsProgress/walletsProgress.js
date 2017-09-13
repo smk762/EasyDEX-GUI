@@ -126,7 +126,7 @@ class WalletsProgress extends React.Component {
         _progress.code &&
         _progress.code === -28 &&
         this.props.Settings.debugLog) {
-      if (_progress.message !== 'Verifying blocks...') {
+      if (_progress.message == 'Activating best chain...') {
         const _parseProgress = this.parseActivatingBestChainProgress();
 
         if (_parseProgress &&
@@ -135,7 +135,7 @@ class WalletsProgress extends React.Component {
         } else {
           return LoadingBlocksRender.call(this);
         }
-      } else {
+      } else if (_progress.message === 'Verifying blocks...') {
         return VerifyingBlocksRender.call(this);
       }
     }
@@ -146,7 +146,8 @@ class WalletsProgress extends React.Component {
     }
 
     if (_progress &&
-        _progress.blocks) {
+        _progress.blocks &&
+        _progress.blocks > 0) {
       const syncPercentage = (parseFloat(parseInt(_progress.blocks, 10) * 100 / parseInt(Number(_progress.longestchain) || Number(this.state.prevProgress.longestchain), 10)).toFixed(2) + '%').replace('NaN', 0);
       return SyncPercentageRender.call(this, syncPercentage === 1000 ? 100 : syncPercentage);
     }
