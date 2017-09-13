@@ -214,9 +214,8 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
     },
-    Settings: state.Settings,      
+    Settings: state.Settings,
   };
-
 };
 
 export default connect(mapStateToProps)(ExportKeysPanel);

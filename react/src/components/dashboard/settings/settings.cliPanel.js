@@ -134,7 +134,7 @@ class CliPanel extends React.Component {
       )
     );
   }
-  
+
   updateInput = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -190,7 +190,7 @@ class CliPanel extends React.Component {
           </div>
         </form>
       </div>
-);
+    );
   };
 }
 

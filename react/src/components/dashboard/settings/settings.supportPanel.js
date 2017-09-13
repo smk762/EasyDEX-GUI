@@ -75,7 +75,7 @@ class SupportPanel extends React.Component {
           </div>
         </div>
       </div>
-);
+    );
   };
 }
 

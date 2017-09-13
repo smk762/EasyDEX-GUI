@@ -53,9 +53,8 @@ const mapStateToProps = (state) => {
   return {
     Main: {
       activeHandle: state.Main.activeHandle,
-    }    
+    },
   };
-
 };
 
 export default connect(mapStateToProps)(WalletInfoPanel);

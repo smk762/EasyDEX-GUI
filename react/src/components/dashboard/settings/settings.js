@@ -58,7 +58,7 @@ class Settings extends React.Component {
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
 
-    document.getElementById('section-iguana-wallet-settings').setAttribute("style", "height:auto; min-height: 100%");
+    document.getElementById('section-iguana-wallet-settings').setAttribute('style', 'height:auto; min-height: 100%');
   }
 
   componentWillReceiveProps(props) {
@@ -72,11 +72,10 @@ class Settings extends React.Component {
   }
 
   openTab(elemId, tab) {
-       this.setState(Object.assign({}, this.state, {
-        activeTab: tab,
-        tabElId: elemId,
-      }));
-
+     this.setState(Object.assign({}, this.state, {
+      activeTab: tab,
+      tabElId: elemId,
+    }));
   }
 
   updateInput(e) {
@@ -84,7 +83,7 @@ class Settings extends React.Component {
       [e.target.name]: e.target.value,
     });
   }
- 
+
   renderAppInfoTab() {
     const releaseInfo = this.props.Settings.appInfo && this.props.Settings.appInfo.releaseInfo;
 
@@ -129,9 +128,9 @@ class Settings extends React.Component {
   renderAppSettings() {
     return <AppSettingsPanel />
   }
-  
+
   renderCliPanel() {
-    return <CliPanel />  
+    return <CliPanel />
   }
 
   renderSupportPanel() {

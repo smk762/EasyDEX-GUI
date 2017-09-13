@@ -16,9 +16,8 @@ class WalletBackupPanel extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    Settings: state.Settings,      
+    Settings: state.Settings,
   };
-
 };
 
 export default connect(mapStateToProps)(WalletBackupPanel);

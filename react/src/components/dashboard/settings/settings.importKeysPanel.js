@@ -60,8 +60,8 @@ class ImportKeysPanel extends React.Component {
           </div>
         </form>
       </div>
-);
-  };
+    );
+  }
 }
 
 export default ImportKeysPanel;

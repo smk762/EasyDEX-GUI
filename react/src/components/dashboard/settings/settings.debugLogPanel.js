@@ -167,13 +167,13 @@ class DebugLogPanel extends React.Component {
           <div className="margin-top-20">{ this.renderAppRuntimeLog() }</div>
         }
       </div>
-);
+    );
   };
 }
 
 const mapStateToProps = (state) => {
   return {
-    Settings: state.Settings
+    Settings: state.Settings,
   };
 };
 

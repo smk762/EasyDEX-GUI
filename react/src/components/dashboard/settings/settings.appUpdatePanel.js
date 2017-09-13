@@ -30,7 +30,6 @@ class AppUpdatePanel extends React.Component {
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
     this.checkNodes = this.checkNodes.bind(this);
-
   }
 
   componentWillMount() {
@@ -108,46 +107,45 @@ class AppUpdatePanel extends React.Component {
 
   render() {
     return (
-          <div className="panel-body">
-            <div className="col-sm-4 padding-top-15">
-              <h5>{ translate('INDEX.UI_UPDATE') }</h5>
-              <div className="padding-top-15">
-                <button
-                  type="button"
-                  className="btn btn-info waves-effect waves-light"
-                  onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
-                <button
-                  type="button"
-                  className="btn btn-primary waves-effect waves-light margin-left-20"
-                  onClick={ this._updateUIPromise }
-                  disabled={ !this.state.updatePatch }>{ translate('INDEX.UPDATE_UI_NOW') }</button>
-              </div>
-            </div>
-            <div className="col-sm-4 padding-top-15 hide">
-              <h5>{ translate('INDEX.BINS_UPDATE') }</h5>
-              <div className="padding-top-15">
-                <button
-                  type="button"
-                  className="btn btn-info waves-effect waves-light"
-                  onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
-                <button
-                  type="button"
-                  className="btn btn-primary waves-effect waves-light margin-left-20"
-                  onClick={ this.checkNodes }>{ translate('INDEX.UPDATE_BINS_NOW') }</button>
-              </div>
-            </div>
-            <div className="col-sm-12 padding-top-15">
-              { this.renderUpdateStatus() }
-            </div>
+      <div className="panel-body">
+        <div className="col-sm-4 padding-top-15">
+          <h5>{ translate('INDEX.UI_UPDATE') }</h5>
+          <div className="padding-top-15">
+            <button
+              type="button"
+              className="btn btn-info waves-effect waves-light"
+              onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
+            <button
+              type="button"
+              className="btn btn-primary waves-effect waves-light margin-left-20"
+              onClick={ this._updateUIPromise }
+              disabled={ !this.state.updatePatch }>{ translate('INDEX.UPDATE_UI_NOW') }</button>
           </div>
+        </div>
+        <div className="col-sm-4 padding-top-15 hide">
+          <h5>{ translate('INDEX.BINS_UPDATE') }</h5>
+          <div className="padding-top-15">
+            <button
+              type="button"
+              className="btn btn-info waves-effect waves-light"
+              onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
+            <button
+              type="button"
+              className="btn btn-primary waves-effect waves-light margin-left-20"
+              onClick={ this.checkNodes }>{ translate('INDEX.UPDATE_BINS_NOW') }</button>
+          </div>
+        </div>
+        <div className="col-sm-12 padding-top-15">
+          { this.renderUpdateStatus() }
+        </div>
+      </div>
     );
   };
 }
 const mapStateToProps = (state) => {
   return {
-    Settings: state.Settings,      
+    Settings: state.Settings,
   };
-
 };
 
 export default connect(mapStateToProps)(AppUpdatePanel);

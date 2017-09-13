@@ -106,7 +106,6 @@ class AppSettingsPanel extends React.Component {
       Store.dispatch(saveAppConfig(_appSettingsPristine));
     }
   }
- 
 
   renderConfigEditForm() {
     let items = [];
@@ -306,7 +305,7 @@ class AppSettingsPanel extends React.Component {
             onClick={ this._resetAppConfig }>Reset to default</button>
         </div>
       </div>
-);
+    );
   };
 }
 
@@ -315,7 +314,7 @@ const mapStateToProps = (state) => {
     Settings: state.Settings,
     Dashboard: {
       skipFullDashboardUpdate: state.Dashboard.skipFullDashboardUpdate,
-    }
+    },
   };
 };
 
