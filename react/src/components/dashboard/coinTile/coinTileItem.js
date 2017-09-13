@@ -79,86 +79,89 @@ class CoinTileItem extends React.Component {
   }
 
   dispatchCoinActions(coin, mode) {
-    if (mode === 'native') {
-      Store.dispatch(iguanaActiveHandle(true));
-      const _propsDashboard = this.props.ActiveCoin;
-      const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
+    if (this.props.Dashboard &&
+        this.props.Dashboard.activeSection === 'wallets') {
+      if (mode === 'native') {
+        Store.dispatch(iguanaActiveHandle(true));
+        const _propsDashboard = this.props.ActiveCoin;
+        const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
-      if ((syncPercentage < 100 &&
-          !this.props.Dashboard.displayCoindDownModal) ||
-          this.props.ActiveCoin.rescanInProgress) {
-        if (coin === 'KMD') {
-          Store.dispatch(getDebugLog('komodo', 50));
+        if ((syncPercentage < 100 &&
+            !this.props.Dashboard.displayCoindDownModal) ||
+            this.props.ActiveCoin.rescanInProgress) {
+          if (coin === 'KMD') {
+            Store.dispatch(getDebugLog('komodo', 50));
+          } else {
+            Store.dispatch(getDebugLog('komodo', 50, coin));
+          }
+        }
+
+        if (!this.props.Dashboard.displayCoindDownModal &&
+            _propsDashboard.progress &&
+            _propsDashboard.progress.blocks &&
+            _propsDashboard.progress.longestchain &&
+            syncPercentage &&
+            (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
+          Store.dispatch(
+            getSyncInfoNative(
+              coin,
+              true,
+              this.props.Dashboard.skipFullDashboardUpdate,
+              this.props.ActiveCoin.rescanInProgress
+            )
+          );
+
+          if (!this.props.Dashboard.skipFullDashboardUpdate) {
+            Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
+          }
         } else {
-          Store.dispatch(getDebugLog('komodo', 50, coin));
+          Store.dispatch(
+            getSyncInfoNative(
+              coin,
+              null,
+              this.props.Dashboard.skipFullDashboardUpdate,
+              this.props.ActiveCoin.rescanInProgress
+            )
+          );
         }
       }
+      if (mode === 'full') {
+        Store.dispatch(iguanaActiveHandle(true));
+        Store.dispatch(getSyncInfo(coin));
+        Store.dispatch(iguanaEdexBalance(coin, mode));
+        Store.dispatch(getAddressesByAccount(coin, mode));
+        Store.dispatch(getFullTransactionsList(coin));
+      }
+      if (mode === 'basilisk') {
+        const useAddress = this.props.ActiveCoin.mainBasiliskAddress ? this.props.ActiveCoin.mainBasiliskAddress : this.props.Dashboard.activeHandle[coin];
 
-      if (!this.props.Dashboard.displayCoindDownModal &&
-          _propsDashboard.progress &&
-          _propsDashboard.progress.blocks &&
-          _propsDashboard.progress.longestchain &&
-          syncPercentage &&
-          (Config.iguanaLessMode || syncPercentage >= NATIVE_MIN_SYNC_PERCENTAGE_THRESHOLD)) {
+        Store.dispatch(iguanaActiveHandle(true));
+
         Store.dispatch(
-          getSyncInfoNative(
+          getKMDAddressesNative(
             coin,
-            true,
-            this.props.Dashboard.skipFullDashboardUpdate,
-            this.props.ActiveCoin.rescanInProgress
+            mode,
+            useAddress
           )
         );
 
-        if (!this.props.Dashboard.skipFullDashboardUpdate) {
-          Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
-        }
-      } else {
         Store.dispatch(
-          getSyncInfoNative(
-            coin,
-            null,
-            this.props.Dashboard.skipFullDashboardUpdate,
-            this.props.ActiveCoin.rescanInProgress
+          getShepherdCache(
+            JSON.parse(sessionStorage.getItem('IguanaActiveAccount')).pubkey,
+            coin
           )
         );
-      }
-    }
-    if (mode === 'full') {
-      Store.dispatch(iguanaActiveHandle(true));
-      Store.dispatch(getSyncInfo(coin));
-      Store.dispatch(iguanaEdexBalance(coin, mode));
-      Store.dispatch(getAddressesByAccount(coin, mode));
-      Store.dispatch(getFullTransactionsList(coin));
-    }
-    if (mode === 'basilisk') {
-      const useAddress = this.props.ActiveCoin.mainBasiliskAddress ? this.props.ActiveCoin.mainBasiliskAddress : this.props.Dashboard.activeHandle[coin];
 
-      Store.dispatch(iguanaActiveHandle(true));
+        if (this.props &&
+            this.props.Dashboard &&
+            this.props.Dashboard.activeHandle &&
+            this.props.Dashboard.activeHandle[coin]) {
+          if (!this.props.ActiveCoin.addresses) {
+            Store.dispatch(getAddressesByAccount(coin, mode));
+          }
 
-      Store.dispatch(
-        getKMDAddressesNative(
-          coin,
-          mode,
-          useAddress
-        )
-      );
-
-      Store.dispatch(
-        getShepherdCache(
-          JSON.parse(sessionStorage.getItem('IguanaActiveAccount')).pubkey,
-          coin
-        )
-      );
-
-      if (this.props &&
-          this.props.Dashboard &&
-          this.props.Dashboard.activeHandle &&
-          this.props.Dashboard.activeHandle[coin]) {
-        if (!this.props.ActiveCoin.addresses) {
-          Store.dispatch(getAddressesByAccount(coin, mode));
+          Store.dispatch(getBasiliskTransactionsList(coin, useAddress));
         }
-
-        Store.dispatch(getBasiliskTransactionsList(coin, useAddress));
       }
     }
   }
