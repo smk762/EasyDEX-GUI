@@ -52,7 +52,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          transalte('API.ILLEGAL_PRIVKEY'),
+          translate('API.ILLEGAL_PRIVKEY'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'error'
         )
@@ -63,7 +63,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
     return dispatch => {
       dispatch(
         triggerToaster(
-          transalte('API.PRIVKEY_IN_WALLET'),
+          translate('API.PRIVKEY_IN_WALLET'),
           translate('TOASTR.SETTINGS_NOTIFICATION'),
           'warning'
         )
