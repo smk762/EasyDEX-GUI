@@ -1,6 +1,14 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
+export const VerifyingBlocksRender = function() {
+  return (
+    <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">
+      <span className="full-width">Verifying blocks...</span>
+    </div>
+  );
+};
+
 export const SyncErrorBlocksRender = function() {
   return (
     <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">

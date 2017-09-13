@@ -8,6 +8,7 @@ import {
   TranslationComponentsRender,
   CoinIsBusyRender,
   ChainActivationNotificationRender,
+  VerifyingBlocksRender,
   WalletsProgressRender
 } from './walletsProgress.render';
 
@@ -119,20 +120,23 @@ class WalletsProgress extends React.Component {
 
   renderSyncPercentagePlaceholder() {
     const _progress = this.props.ActiveCoin.progress;
-    console.warn('renderSyncPercentagePlaceholder', _progress);
 
     // activating best chain
     if (_progress &&
         _progress.code &&
         _progress.code === -28 &&
         this.props.Settings.debugLog) {
-      const _parseProgress = this.parseActivatingBestChainProgress();
+      if (_progress.message !== 'Verifying blocks...') {
+        const _parseProgress = this.parseActivatingBestChainProgress();
 
-      if (_parseProgress &&
-          _parseProgress[1]) {
-        return SyncPercentageRender.call(this, _parseProgress[1] === 1000 ? 100 : _parseProgress[1].toFixed(2));
+        if (_parseProgress &&
+            _parseProgress[1]) {
+          return SyncPercentageRender.call(this, _parseProgress[1] === 1000 ? 100 : _parseProgress[1].toFixed(2));
+        } else {
+          return LoadingBlocksRender.call(this);
+        }
       } else {
-        return LoadingBlocksRender.call(this);
+        return VerifyingBlocksRender.call(this);
       }
     }
 
