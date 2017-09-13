@@ -52,10 +52,9 @@ export const SettingsRender = function() {
                   }
                   { !this.props.disableWalletSpecificUI &&
                   <div
-                    className="hide"
                     id="DumpWallet"
                     onClick={ () => this.openTab('DumpWallet', 2) }
-                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
+                    className={ 'hide panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
                       <a className={ 'panel-title' + (this.state.activeTab === 2 ? '' : ' collapsed') }>
                         <i className="icon wb-briefcase"></i>{ translate('INDEX.WALLET_BACKUP') }
@@ -70,10 +69,9 @@ export const SettingsRender = function() {
                   }
                   { !this.props.disableWalletSpecificUI &&
                   <div
-                    className="hide"
                     id="FiatCurrencySettings"
                     onClick={ () => this.openTab('FiatCurrencySettings', 3) }
-                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
+                    className={ 'hide panel' + (this.state.nativeOnly ? ' hide' : '') }>
                     <div className="panel-heading">
                       <a className={ 'panel-title' + (this.state.activeTab === 3 ? '' : ' collapsed') }>
                         <i className="icon fa-money"></i>{ translate('INDEX.FIAT_CURRENCY') }
