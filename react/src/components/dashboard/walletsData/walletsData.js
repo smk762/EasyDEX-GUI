@@ -54,6 +54,7 @@ class WalletsData extends React.Component {
       searchTerm: null,
       coin: null,
       txhistory: null,
+      isExplorerData: false,
     };
 
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
@@ -344,6 +345,7 @@ class WalletsData extends React.Component {
             (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) ||
             (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {*/
           _stateChange = Object.assign({}, _stateChange, {
+            isExplorerData: this.props.ActiveCoin.txhistory[0].source ? true : false,
             itemsList: this.props.ActiveCoin.txhistory,
             filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
             txhistory: this.props.ActiveCoin.txhistory,

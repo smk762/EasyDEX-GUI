@@ -15,15 +15,36 @@ class WalletsBalance extends React.Component {
     super();
     this.state = {
       currentAddress: null,
+      isExplorerData: false,
     };
     this.isFullySynced = this.isFullySynced.bind(this);
     this.refreshBalance = this.refreshBalance.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    if (!this.state.currentAddress &&
-        this.props.ActiveCoin.activeAddress) {
+    if (this.props.ActiveCoin.activeAddress) {
+      const _mode = this.props.ActiveCoin.mode;
+      let _isExplorerData = false;
+
+      if (_mode === 'basilisk') {
+        if (this.props.ActiveCoin.cache) {
+          const _cache = this.props.ActiveCoin.cache;
+          const _coin = this.props.ActiveCoin.coin;
+          const _address = this.props.ActiveCoin.activeAddress;
+
+          if (_address &&
+              _cache[_coin] &&
+              _cache[_coin][_address] &&
+              _cache[_coin][_address].getbalance &&
+              _cache[_coin][_address].getbalance.data &&
+              _cache[_coin][_address].getbalance.data.source) {
+            _isExplorerData = true;
+          }
+        }
+      }
+
       this.setState(Object.assign({}, this.state, {
+        isExplorerData: _isExplorerData,
         currentAddress: this.props.ActiveCoin.activeAddress,
       }));
     }

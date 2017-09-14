@@ -3,6 +3,11 @@ $(document).ready(function() {
   var window = remote.getCurrentWindow();
   var appConf = remote.getCurrentWindow().appConfig;
 
+  if (!appConf.experimentalFeatures) {
+    $('#normalStartBtn').hide();
+    $('.dropdown-menu').css('right', '34.8%');
+  }
+
   $('#pulse').jRoll({
     radius: 100,
     animation: 'pulse'
