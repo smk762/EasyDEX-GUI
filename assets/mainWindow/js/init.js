@@ -6,6 +6,7 @@ $(document).ready(function() {
   if (!appConf.experimentalFeatures) {
     $('#normalStartBtn').hide();
     $('.dropdown-menu').css('right', '34.8%');
+    $('#nativeOnlyBtnCarret').css('margin-right', '0');
   }
 
   $('#pulse').jRoll({

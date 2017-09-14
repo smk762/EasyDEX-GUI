@@ -16,13 +16,17 @@ function initSettingsForm() {
   let appConfSchema = remote.getCurrentWindow().appConfigSchema;
   _configCopy = Object.assign({}, appConf);
 
+  if (!appConf.experimentalFeatures) {
+    $('.agama-app-settings-window').addClass('iguana-less');
+  }
+
   let _htmlOut = '<table class="settings-table">';
   for (let key in appConf) {
     if (appConfSchema[key] &&
         appConfSchema[key].initDisplay) {
       _htmlOut = `
         ${_htmlOut}
-        <tr>
+        <tr id="${key}">
           <td class="left">
             ${appConfSchema[key].displayName}`;
 
