@@ -72,7 +72,7 @@ class Settings extends React.Component {
   }
 
   openTab(elemId, tab) {
-     this.setState(Object.assign({}, this.state, {
+    this.setState(Object.assign({}, this.state, {
       activeTab: tab,
       tabElId: elemId,
     }));

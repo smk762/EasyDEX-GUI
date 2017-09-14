@@ -27,8 +27,7 @@ export const SettingsRender = function() {
                         </a>
                       </div>
                       <div
-                        className={ 'panel-collapse collapse' + (this.state.activeTab === 0 ? ' in' : '') }
-                        style={{ height: this.state.activeTab === 0 ? `auto` : '0' }}>
+                        className={ 'panel-collapse collapse' + (this.state.activeTab === 0 ? ' in' : '') }>
                         { this.renderWalletInfo() }
                       </div>
                     </div>
@@ -44,8 +43,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 1 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 1 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 1 ? ' in' : '') }>
                       { this.renderAddNode() }
                     </div>
                   </div>
@@ -61,8 +59,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 2 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 2 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 2 ? ' in' : '') }>
                       { this.renderWalletBackup() }
                     </div>
                   </div>
@@ -78,8 +75,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 3 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 3 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 3 ? ' in' : '') }>
                       { this.renderFiatCurrency() }
                     </div>
                   </div>
@@ -95,8 +91,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 4 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }>
                       { this.renderExportKeys() }
                     </div>
                   </div>
@@ -112,8 +107,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 5 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 5 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 5 ? ' in' : '') }>
                       { this.renderImportKeys() }
                     </div>
                   </div>
@@ -129,8 +123,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 6 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 6 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 6 ? ' in' : '') }>
                       { this.renderDebugLog() }
                     </div>
                   </div>
@@ -145,8 +138,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 7 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 7 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 7 ? ' in' : '') }>
                       { this.renderAppSettings() }
                     </div>
                   </div>
@@ -161,8 +153,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 8 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }>
                       { this.renderAppInfoTab() }
                     </div>
                   </div>
@@ -178,8 +169,7 @@ export const SettingsRender = function() {
                         </a>
                       </div>
                       <div
-                        className={ 'panel-collapse collapse' + (this.state.activeTab === 9 ? ' in' : '') }
-                        style={{ height: this.state.activeTab === 9 ? `auto` : '0' }}>
+                        className={ 'panel-collapse collapse' + (this.state.activeTab === 9 ? ' in' : '') }>
                         { this.renderCliPanel() }
                       </div>
                     </div>
@@ -195,8 +185,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 10 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }>
                       { this.renderAppUpdateTab() }
                     </div>
                   </div>
@@ -211,8 +200,7 @@ export const SettingsRender = function() {
                       </a>
                     </div>
                     <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 11 ? ' in' : '') }
-                      style={{ height: this.state.activeTab === 11 ? `auto` : '0' }}>
+                      className={ 'panel-collapse collapse' + (this.state.activeTab === 11 ? ' in' : '') }>
                       { this.renderSupportPanel() }
                     </div>
                   </div>
