@@ -128,12 +128,6 @@ class Jumblr extends React.Component {
     });
   }
 
-  /*toggleAddressGenMod() {
-    this.setState({
-      jumblrDepositAddressPBased: !this.state.jumblrDepositAddressPBased,
-    });
-  }*/
-
   generateJumblrSecretAddress() {
     let _jumblrSecretAddress = [];
     let _apiSuccessCount = 0;

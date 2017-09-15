@@ -249,6 +249,7 @@ export const WalletsDataRender = function() {
                     </div>
                     <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
+                  <div className={ !this.state.isExplorerData ? 'hide' : '' } style={{ display: 'block', textAlign: 'center', paddingTop: '10px' }}><strong>Notice:</strong> transactions list is fetched from KMD explorer as a fallback measure!</div>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
                       { this.shouldDisplayAddressList() &&

@@ -41,11 +41,11 @@ body.loading-window {
 }
 
 body.agama-default-window-height {
-  height: 300px !important;
+  height: 355px !important;
 }
 
 body.agama-app-settings-window {
-  height: 820px;
+  height: 700px;
 }
 
 .agama-logo {
@@ -453,4 +453,12 @@ button.toast-close-button {
 .dropdown-menu li {
   cursor: pointer;
   margin: 5px 0;
+}
+
+.iguana-less {
+  height: 570px !important;
+}
+.iguana-less #iguanaCorePort,
+.iguana-less #useBasiliskInstance {
+  display: none;
 }

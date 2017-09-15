@@ -42,7 +42,7 @@ class DebugLogPanel extends React.Component {
       _items.push(
         <p key={ `app-runtime-log-entry-${i}` }>
           <span>{ secondsToString(_appRuntimeLog[i].time, true) }</span>
-          <span className="padding-left-30">{ JSON.stringify(_appRuntimeLog[i].msg, null, '').replace('\\n', ' ') }</span>
+          <span className="padding-left-30">{ JSON.stringify(_appRuntimeLog[i].msg, null, '') }</span>
         </p>
       );
     }
