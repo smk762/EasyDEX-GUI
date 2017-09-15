@@ -693,7 +693,7 @@ export const _lang = {
       'COQUI': 'COQUI (COQUI)',
       'CRYPTO': 'CRYPTO (CRYPTO)',
       'HODL': 'HODL (HODL)',
-      'DEX': 'InstantDEX (DEX)',
+      'DEX': 'DEX (DEX)',
       'JUMBLR': 'JUMBLR (JUMBLR)',
       'KV': 'KV (KV)',
       'MGW': 'MultiGateway (MGW)',
