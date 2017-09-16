@@ -1,4 +1,7 @@
-import { SYNCING_NATIVE_MODE } from '../storeType';
+import {
+  SYNCING_NATIVE_MODE,
+  DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE
+} from '../storeType';
 import {
   triggerToaster,
   getPassthruAgent,
@@ -6,6 +9,12 @@ import {
   toggleCoindDownModal
 } from '../actionCreators';
 import Config from '../../config';
+
+export function nativeGetinfoFailureState() {
+  return {
+    type: DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE,
+  }
+}
 
 // TODO: use debug.log instead
 export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
@@ -156,14 +165,15 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           } catch (e) {}
 
           if (!_kmdMainPassiveMode) {
-            dispatch(
+            dispatch(nativeGetinfoFailureState());
+            /* dispatch(
               triggerToaster(
                 'Komodod is down',
                 'Critical Error',
                 'error',
                 true
               )
-            );
+            ); */
           } else {
             dispatch(
               triggerToaster(

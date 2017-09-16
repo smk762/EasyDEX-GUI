@@ -5,6 +5,8 @@ import Store from '../../../store';
 
 import CoindDownModalRender from './coindDownModal.render';
 
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 5;
+
 class CoindDownModal extends React.Component {
   constructor() {
     super();
@@ -42,7 +44,8 @@ class CoindDownModal extends React.Component {
 
   render() {
     if (this.state.display &&
-        !this.state.kmdMainPassiveMode) {
+        !this.state.kmdMainPassiveMode &&
+        this.props.ActiveCoin.getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) {
       return CoindDownModalRender.call(this);
     }
 
@@ -55,6 +58,7 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       mode: state.ActiveCoin.mode,
       coin: state.ActiveCoin.coin,
+      getinfoFetchFailures: state.ActiveCoin.getinfoFetchFailures,
     },
     displayCoindDownModal: state.Dashboard.displayCoindDownModal,
     debugLog: state.Settings.debugLog,
