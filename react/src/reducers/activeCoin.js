@@ -228,8 +228,6 @@ export function ActiveCoin(state = {
         getinfoFetchFailures: !action.progress ? state.getinfoFetchFailures + 1 : 0,
       };
     case DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE:
-      console.warn('_getinfoFetchFailures', state.getinfoFetchFailures + 1);
-
       return {
         ...state,
         getinfoFetchFailures: state.getinfoFetchFailures + 1,

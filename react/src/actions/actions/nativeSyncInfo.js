@@ -18,6 +18,8 @@ export function nativeGetinfoFailureState() {
 
 // TODO: use debug.log instead
 export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
+  let _json = json;
+
   if (skipRemote) {
     return dispatch => {
       dispatch(getSyncInfoNativeState(Config.iguanaLessMode ? json.info : json ));
@@ -44,11 +46,15 @@ export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
           )
         );*/
         console.warn('remote kmd node fetch failed', true);
-        dispatch(getSyncInfoNativeState({ remoteKMDNode: null }));
+        _json = _json.error;
+        _json['remoteKMDNode'] = null;
+        dispatch(getSyncInfoNativeState(_json));
       })
       .then(response => response.json())
       .then(json => {
-        dispatch(getSyncInfoNativeState({ remoteKMDNode: Config.iguanaLessMode ? json.info : json }));
+        _json = _json.error;
+        _json['remoteKMDNode'] = json.info;
+        dispatch(getSyncInfoNativeState(_json));
       })
       .then(function() {
         if (!skipDebug) {
@@ -60,23 +66,34 @@ export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
 }
 
 function getSyncInfoNativeState(json, coin, skipDebug, skipRemote) {
-  if (coin === 'KMD' &&
-      json &&
-      json.error &&
-      json.error.message.indexOf('Activating best') === -1) {
-    return getSyncInfoNativeKMD(skipDebug, json, skipRemote);
+  /*if (!json.remoteKMDNode) {
+    json = { error: { code: -28, message: 'Activating best chain...' } };
+  }*/
+
+  if (json.remoteKMDNode) {
+    return {
+      type: SYNCING_NATIVE_MODE,
+      progress: json,
+    }
   } else {
-    if (json &&
+    if (coin === 'KMD' &&
+        json &&
         json.error &&
-        Config.cli.default) {
-      return {
-        type: SYNCING_NATIVE_MODE,
-        progress: json.error,
-      }
+        json.error.message.indexOf('Activating best') > -1) {
+      return getSyncInfoNativeKMD(skipDebug, json, skipRemote);
     } else {
-      return {
-        type: SYNCING_NATIVE_MODE,
-        progress: json.result ? json.result : json,
+      if (json &&
+          json.error &&
+          Config.cli.default) {
+        return {
+          type: SYNCING_NATIVE_MODE,
+          progress: json.error,
+        }
+      } else {
+        return {
+          type: SYNCING_NATIVE_MODE,
+          progress: json.result ? json.result : json,
+        }
       }
     }
   }
