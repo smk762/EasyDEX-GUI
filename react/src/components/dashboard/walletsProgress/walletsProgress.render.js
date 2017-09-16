@@ -36,12 +36,11 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
         </div>
       );
     } else {
-      // if (this.props.ActiveCoin.progress)
       return (
         <div
           className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
           style={{ width: syncPercentage }}>
-          <span style={{ width: syncPercentage }}>{ syncPercentage === '100.00%' ? '100%' : syncPercentage } | { this.props.ActiveCoin.progress.blocks || currentBlock } / { this.props.ActiveCoin.progress.longestchain || maxHeight } <span className={ this.props.ActiveCoin.progress.connections ? '' : 'hide' }>| { translate('INDEX.CONNECTIONS') }: { this.props.ActiveCoin.progress.connections }</span></span>
+          <span style={{ width: syncPercentage }}>{ syncPercentage === '100.00%' ? '100%' : syncPercentage } <span className={ this.props.ActiveCoin.progress.blocks || currentBlock ? '' : 'hide' }>| { this.props.ActiveCoin.progress.blocks || currentBlock } <span className={ this.props.ActiveCoin.progress.longestchain || maxHeight ? '' : 'hide'}>/ { this.props.ActiveCoin.progress.longestchain || maxHeight }</span></span> <span className={ this.props.ActiveCoin.progress.connections ? '' : 'hide' }>| { translate('INDEX.CONNECTIONS') }: { this.props.ActiveCoin.progress.connections }</span></span>
         </div>
       );
     }
