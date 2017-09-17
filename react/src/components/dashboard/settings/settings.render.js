@@ -54,7 +54,7 @@ export const SettingsRender = function() {
                   }
                   { !this.props.disableWalletSpecificUI &&
                     <PanelSection
-                      title={ translate('INDEX.WALLET_BACKUP') }
+                      title={ translate('INDEX.FIAT_CURRENCY') }
                       icon="icon fa-money">
                       <FiatCurrencyPanel />
                     </PanelSection>
