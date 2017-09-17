@@ -117,12 +117,17 @@
     cursor: hand;
 
     &:before {
-      content: '\F273';
+      content: '\F278';
     }
     &.collapsed {
       &:before {
         content: '\F278';
       }
+    }
+  }
+  .panel.active {
+    .panel-title:before {
+      content: '\F273';
     }
   }
 }

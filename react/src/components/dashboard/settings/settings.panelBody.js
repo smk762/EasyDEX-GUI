@@ -61,12 +61,16 @@ class PanelSection extends React.Component {
       transition: 'height .25s ease',
     };
 
+    const triggerClasses = className('panel', {
+      active
+    });
+
     const contentClasses = className('panel-collapse', {
       active
     });
 
     return(
-      <div className="panel" onClick={() => this.toggleSection()}>
+      <div className={triggerClasses} onClick={() => this.toggleSection()}>
         <div className="panel-heading">
           <a className='panel-title'>
             <i className={icon}></i> {title}
