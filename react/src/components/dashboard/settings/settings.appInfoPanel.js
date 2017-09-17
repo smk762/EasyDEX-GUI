@@ -14,72 +14,48 @@ class AppInfoPanel extends React.Component {
       return null
     } else {
       return (
-        <div className="panel-body">
+        <div className="row">
           <div className="col-sm-12 padding-top-15">
-            <div className="row">
-              <h5>{ translate('SETTINGS.APP_RELEASE') }</h5>
-              <div>
-                { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
-              </div>
-              <div>
-                { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}-beta` }
-              </div>
-              <div>
-                { translate('SETTINGS.APP_SESSION') }: { this.props.Settings.appInfo.appSession }
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 padding-top-20">
-            <div className="row">
-              <h5>{ translate('SETTINGS.SYS_INFO') }</h5>
-              <div>
-                { translate('SETTINGS.ARCH') }: { this.props.Settings.appInfo.sysInfo.arch }
-              </div>
-              <div>
-                { translate('SETTINGS.OS_TYPE') }: { this.props.Settings.appInfo.sysInfo.os_type }
-              </div>
-              <div>
-                { translate('SETTINGS.OS_PLATFORM') }: { this.props.Settings.appInfo.sysInfo.platform }
-              </div>
-              <div>
-                { translate('SETTINGS.OS_RELEASE') }: { this.props.Settings.appInfo.sysInfo.os_release }
-              </div>
-              <div>
-                { translate('SETTINGS.CPU') }: { this.props.Settings.appInfo.sysInfo.cpu }
-              </div>
-              <div>
-                { translate('SETTINGS.CPU_CORES') }: { this.props.Settings.appInfo.sysInfo.cpu_cores }
-              </div>
-              <div>
-                { translate('SETTINGS.MEM') }: { this.props.Settings.appInfo.sysInfo.totalmem_readable }
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-12 padding-top-20">
-            <div className="row">
-              <h5>{ translate('SETTINGS.LOCATIONS') }</h5>
-              <div>
-                { translate('SETTINGS.CACHE') }: { this.props.Settings.appInfo.dirs.cacheLocation }
-              </div>
-              <div>
-                { translate('SETTINGS.CONFIG') }: { this.props.Settings.appInfo.dirs.configLocation }
-              </div>
-              <div>
-                Iguana { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.iguanaBin }
-              </div>
-              <div>
-                Iguana { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.iguanaDir }
-              </div>
-              <div>
-                Komodo { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.komododBin }
-              </div>
-              <div>
-                Komodo { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.komodoDir }
-              </div>
-              <div>
-                Komodo wallet.dat: { this.props.Settings.appInfo.dirs.komodoDir }
-              </div>
-            </div>
+            <h5>{ translate('SETTINGS.APP_RELEASE') }</h5>
+            <p>
+              { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
+              <br />
+              { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}-beta` }
+              <br />
+              { translate('SETTINGS.APP_SESSION') }: { this.props.Settings.appInfo.appSession }
+            </p>
+            <h5>{ translate('SETTINGS.SYS_INFO') }</h5>
+            <p>
+              { translate('SETTINGS.ARCH') }: { this.props.Settings.appInfo.sysInfo.arch }
+              <br />
+              { translate('SETTINGS.OS_TYPE') }: { this.props.Settings.appInfo.sysInfo.os_type }
+              <br />
+              { translate('SETTINGS.OS_PLATFORM') }: { this.props.Settings.appInfo.sysInfo.platform }
+              <br />
+              { translate('SETTINGS.OS_RELEASE') }: { this.props.Settings.appInfo.sysInfo.os_release }
+              <br />
+              { translate('SETTINGS.CPU') }: { this.props.Settings.appInfo.sysInfo.cpu }
+              <br />
+              { translate('SETTINGS.CPU_CORES') }: { this.props.Settings.appInfo.sysInfo.cpu_cores }
+              <br />
+              { translate('SETTINGS.MEM') }: { this.props.Settings.appInfo.sysInfo.totalmem_readable }
+            </p>
+            <h5>{ translate('SETTINGS.LOCATIONS') }</h5>
+            <p>
+              { translate('SETTINGS.CACHE') }: { this.props.Settings.appInfo.dirs.cacheLocation }
+              <br />
+              { translate('SETTINGS.CONFIG') }: { this.props.Settings.appInfo.dirs.configLocation }
+              <br />
+              Iguana { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.iguanaBin }
+              <br />
+              Iguana { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.iguanaDir }
+              <br />
+              Komodo { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.komododBin }
+              <br />
+              Komodo { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.komodoDir }
+              <br />
+              Komodo wallet.dat: { this.props.Settings.appInfo.dirs.komodoDir }
+            </p>
           </div>
         </div>
       );
