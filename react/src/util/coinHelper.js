@@ -36,7 +36,7 @@ export function getCoinTitle(coin) {
       break;
     case 'DEX':
       coinlogo = 'dex';
-      coinname = 'InstantDEX';
+      coinname = 'DEX';
       break;
     case 'DOGE':
       coinlogo = 'dogecoin';

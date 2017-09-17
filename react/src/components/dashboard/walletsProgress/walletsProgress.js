@@ -107,14 +107,27 @@ class WalletsProgress extends React.Component {
         }
         if (temp[i].indexOf('progress=') > -1) {
           currentProgress = Number(temp[i].replace('progress=', '')) * 1000;
-          currentProgress = currentProgress >= 100 ? 100 : currentProgress;
+          if (currentProgress > 100) {
+            currentProgress = Number(temp[i].replace('progress=', '')) * 100;
+          }
         }
       }
 
-      return [
-        currentBestChain,
-        currentProgress
-      ];
+      if (this.props.ActiveCoin.progress.remoteKMDNode &&
+          this.props.ActiveCoin.progress.remoteKMDNode.blocks) {
+        const longestHeight = this.props.ActiveCoin.progress.remoteKMDNode.blocks;
+
+        return [
+          currentBestChain,
+          currentProgress,
+          longestHeight
+        ];
+      } else {
+        return [
+          currentBestChain,
+          currentProgress
+        ];
+      }
     }
   }
 
@@ -131,7 +144,7 @@ class WalletsProgress extends React.Component {
 
         if (_parseProgress &&
             _parseProgress[1]) {
-          return SyncPercentageRender.call(this, _parseProgress[1] === 1000 ? 100 : _parseProgress[1].toFixed(2));
+          return SyncPercentageRender.call(this, _parseProgress[1].toFixed(2) + '%', _parseProgress[0], _parseProgress[2] ? _parseProgress[2] : null);
         } else {
           return LoadingBlocksRender.call(this);
         }

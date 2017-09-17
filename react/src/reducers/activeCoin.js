@@ -14,6 +14,7 @@ import {
   DASHBOARD_ACTIVE_COIN_GET_CACHE,
   DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
   DASHBOARD_ACTIVE_ADDRESS,
+  DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE,
   SYNCING_FULL_MODE,
   SYNCING_NATIVE_MODE,
   DASHBOARD_UPDATE,
@@ -39,6 +40,7 @@ export function ActiveCoin(state = {
   activeAddress: null,
   progress: null,
   rescanInProgress: false,
+  getinfoFetchFailures: 0,
 }, action) {
   switch (action.type) {
     case DASHBOARD_ACTIVE_COIN_CHANGE:
@@ -223,6 +225,12 @@ export function ActiveCoin(state = {
       return {
         ...state,
         progress: action.progress,
+        getinfoFetchFailures: !action.progress ? state.getinfoFetchFailures + 1 : 0,
+      };
+    case DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE:
+      return {
+        ...state,
+        getinfoFetchFailures: state.getinfoFetchFailures + 1,
       };
     case DASHBOARD_UPDATE:
       if (state.coin === action.coin) {

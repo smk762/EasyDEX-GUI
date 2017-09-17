@@ -378,7 +378,7 @@ export const _lang = {
       'THIS_SCREEN_DOESNT_REFRESH': 'This screen does not auto refresh. ' +
                                     'You will need to hit the Refresh button on the top right corner of the screen to get latest Jumblr data.',
       'FEW_SECURITY_NOTES': 'Few Security Notes for your Privacy and Anonymity of funds',
-      'FEW_SECURITY_NOTES_DESC1': 'Jumblr addresses addresses are your Private Addresses.',
+      'FEW_SECURITY_NOTES_DESC1': 'Jumblr addresses are your Private Addresses.',
       'FEW_SECURITY_NOTES_DESC2': 'DO NOT SHARE your Jumblr addresses with anyone.',
       'FEW_SECURITY_NOTES_DESC3': 'Jumblr addresses are like YOUR PASSWORD. Keep them safe, secure and hidden.',
       'FEW_SECURITY_NOTES_DESC4': 'Only YOU should know your Jumblr Address. Nobody else.',
@@ -693,7 +693,7 @@ export const _lang = {
       'COQUI': 'COQUI (COQUI)',
       'CRYPTO': 'CRYPTO (CRYPTO)',
       'HODL': 'HODL (HODL)',
-      'DEX': 'InstantDEX (DEX)',
+      'DEX': 'DEX (DEX)',
       'JUMBLR': 'JUMBLR (JUMBLR)',
       'KV': 'KV (KV)',
       'MGW': 'MultiGateway (MGW)',
