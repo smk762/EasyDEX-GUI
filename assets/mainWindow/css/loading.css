@@ -1,7 +1,5 @@
 body {
-  overflow: hidden !important;
   border: solid 1px #ccc;
-  height: 300px;
   user-select: none;
   cursor: default;
 }
@@ -21,27 +19,15 @@ body {
   margin: auto;
 }
 
-.pulse-loader {
-  position: absolute;
-  top: 10px;
-  left: -100px;
-  margin: 80px 50px;
-  width: 400px !important;
-}
-
 body.agamaMode {
   background-color: rgba(33, 33, 33, 0.85);
   padding-top: 40px;
   color: #fff;
-  height: 300px;
 }
 
-body.loading-window {
-  height: 355px;
-}
-
+body.loading-window,
 body.agama-default-window-height {
-  height: 355px !important;
+  height: 355px;
 }
 
 body.agama-app-settings-window {
@@ -455,8 +441,8 @@ button.toast-close-button {
   margin: 5px 0;
 }
 
-.iguana-less {
-  height: 570px !important;
+body.iguana-less {
+  height: 570px;
 }
 .iguana-less #iguanaCorePort,
 .iguana-less #useBasiliskInstance {
