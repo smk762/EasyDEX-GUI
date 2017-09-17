@@ -1,5 +1,20 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import PanelSection from './settings.panelBody';
+import Panel from './settings.panel';
+
+import AppUpdatePanel from  './settings.appUpdatePanel';
+import AppInfoPanel from  './settings.appInfoPanel';
+import AddNodePanel from './settings.addNodePanel';
+import AppSettingsPanel from './settings.appSettingsPanel';
+import CliPanel from './settings.cliPanel';
+import DebugLogPanel from './settings.debugLogPanel';
+import FiatCurrencyPanel from './settings.fiatCurrencyPanel';
+import ExportKeysPanel from './settings.exportKeysPanel';
+import ImportKeysPanel from './settings.importKeysPanel';
+import SupportPanel from './settings.supportPanel';
+import WalletInfoPanel from './settings.walletInfoPanel';
+import WalletBackupPanel from './settings.walletBackupPanel';
 
 export const SettingsRender = function() {
   return (
@@ -12,199 +27,86 @@ export const SettingsRender = function() {
             <div className="row">
               <div className="col-xlg-12 col-md-12">
                 <h4 className="font-size-14 text-uppercase">{ translate('INDEX.WALLET_SETTINGS') }</h4>
-                <div
-                  className="panel-group"
-                  id="SettingsAccordion">
-
+                <Panel
+                  uniqId={'SettingsAccordion'}
+                  singleOpen={true}>
                   { !this.props.disableWalletSpecificUI &&
-                    <div
-                      id="WalletInfo"
-                      onClick={ () => this.openTab('WalletInfo', 0) }
-                      className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
-                      <div className="panel-heading">
-                        <a className={ 'panel-title' + (this.state.activeTab === 0 ? '' : ' collapsed') }>
-                          <i className="icon md-balance-wallet"></i>{ translate('INDEX.WALLET_INFO') }
-                        </a>
-                      </div>
-                      <div
-                        className={ 'panel-collapse collapse' + (this.state.activeTab === 0 ? ' in' : '') }>
-                        { this.renderWalletInfo() }
-                      </div>
-                    </div>
+                    <PanelSection
+                      title={ translate('INDEX.WALLET_INFO') }
+                      icon="icon md-balance-wallet"
+                      openByDefault={!this.props.disableWalletSpecificUI}>
+                      <WalletInfoPanel />
+                    </PanelSection>
                   }
                   { !this.props.disableWalletSpecificUI &&
-                  <div
-                    id="AddNodeforCoin"
-                    onClick={ () => this.openTab('AddNodeforCoin', 1) }
-                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 1 ? '' : ' collapsed') }>
-                        <i className="icon md-plus-square"></i>{ translate('INDEX.ADD_NODE') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 1 ? ' in' : '') }>
-                      { this.renderAddNode() }
-                    </div>
-                  </div>
+                    <PanelSection
+                      title={ translate('INDEX.ADD_NODE') }
+                      icon="icon md-plus-square">
+                      <AddNodePanel />
+                    </PanelSection>
                   }
                   { !this.props.disableWalletSpecificUI &&
-                  <div
-                    id="DumpWallet"
-                    onClick={ () => this.openTab('DumpWallet', 2) }
-                    className={ 'hide panel' + (this.state.nativeOnly ? ' hide' : '') }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 2 ? '' : ' collapsed') }>
-                        <i className="icon wb-briefcase"></i>{ translate('INDEX.WALLET_BACKUP') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 2 ? ' in' : '') }>
-                      { this.renderWalletBackup() }
-                    </div>
-                  </div>
+                    <PanelSection
+                      title={ translate('INDEX.WALLET_BACKUP') }
+                      icon="icon wb-briefcase">
+                      <WalletBackupPanel />
+                    </PanelSection>
                   }
                   { !this.props.disableWalletSpecificUI &&
-                  <div
-                    id="FiatCurrencySettings"
-                    onClick={ () => this.openTab('FiatCurrencySettings', 3) }
-                    className={ 'hide panel' + (this.state.nativeOnly ? ' hide' : '') }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 3 ? '' : ' collapsed') }>
-                        <i className="icon fa-money"></i>{ translate('INDEX.FIAT_CURRENCY') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 3 ? ' in' : '') }>
-                      { this.renderFiatCurrency() }
-                    </div>
-                  </div>
+                    <PanelSection
+                      title={ translate('INDEX.WALLET_BACKUP') }
+                      icon="icon fa-money">
+                      <FiatCurrencyPanel />
+                    </PanelSection>
                   }
                   { !this.props.disableWalletSpecificUI &&
-                  <div
-                    id="ExportKeys"
-                    onClick={ () => this.openTab('ExportKeys', 4) }
-                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 4 ? '' : ' collapsed') }>
-                        <i className="icon md-key"></i>{ translate('INDEX.EXPORT_KEYS') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 4 ? ' in' : '') }>
-                      { this.renderExportKeys() }
-                    </div>
-                  </div>
+                    <PanelSection
+                      title={ translate('INDEX.EXPORT_KEYS') }
+                      icon="icon md-key">
+                      <ExportKeysPanel />
+                    </PanelSection>
                   }
                   { !this.props.disableWalletSpecificUI &&
-                  <div
-                    id="ImportKeys"
-                    onClick={ () => this.openTab('ImportKeys', 5) }
-                    className={ 'panel' + (this.state.nativeOnly ? ' hide' : '') }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 5 ? '' : ' collapsed') }>
-                        <i className="icon md-key"></i>{ translate('INDEX.IMPORT_KEYS') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 5 ? ' in' : '') }>
-                      { this.renderImportKeys() }
-                    </div>
-                  </div>
+                    <PanelSection
+                      title={ translate('INDEX.IMPORT_KEYS') }
+                      icon="icon md-key">
+                      <ImportKeysPanel />
+                    </PanelSection>
                   }
-
-                  <div
-                    className="panel"
-                    id="DebugLog"
-                    onClick={ () => this.openTab('DebugLog', 6) }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 6 ? '' : ' collapsed') }>
-                        <i className="icon fa-bug"></i>{ translate('INDEX.DEBUG_LOG') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 6 ? ' in' : '') }>
-                      { this.renderDebugLog() }
-                    </div>
-                  </div>
-
-                  <div
-                    className="panel"
-                    id="AppSettings"
-                    onClick={ () => this.openTab('AppSettings', 7) }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 7 ? '' : ' collapsed') }>
-                        <i className="icon fa-wrench"></i>{ translate('SETTINGS.APP_CONFIG') } (config.json)
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 7 ? ' in' : '') }>
-                      { this.renderAppSettings() }
-                    </div>
-                  </div>
-
-                  <div
-                    className="panel"
-                    id="AppInfo"
-                    onClick={ () => this.openTab('AppInfo', 8) }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 8 ? '' : ' collapsed') }>
-                        <i className="icon md-info"></i>{ translate('SETTINGS.APP_INFO') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 8 ? ' in' : '') }>
-                      { this.renderAppInfoTab() }
-                    </div>
-                  </div>
-
+                    <PanelSection
+                      title={ translate('INDEX.DEBUG_LOG') }
+                      icon="icon fa-bug"
+                      openByDefault={this.props.disableWalletSpecificUI}>                    
+                      <DebugLogPanel />
+                    </PanelSection>
+                    <PanelSection
+                        title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
+                        icon="icon fa-bug">
+                        <AppSettingsPanel />
+                    </PanelSection>
+                    <PanelSection
+                      title={ translate('SETTINGS.APP_INFO') }
+                      icon="icon md-info">
+                      <AppInfoPanel />
+                    </PanelSection>
                   { this.props.Main && this.props.Main.coins.native &&
-                    <div
-                      id="Cli"
-                      onClick={ () => this.openTab('Cli', 9) }
-                      className={ 'panel' + (!this.props.Main.coins.native.length ? ' hide' : '') }>
-                      <div className="panel-heading">
-                        <a className={ 'panel-title' + (this.state.activeTab === 9 ? '' : ' collapsed') }>
-                          <i className="icon fa-code"></i> CLI
-                        </a>
-                      </div>
-                      <div
-                        className={ 'panel-collapse collapse' + (this.state.activeTab === 9 ? ' in' : '') }>
-                        { this.renderCliPanel() }
-                      </div>
-                    </div>
+                    <PanelSection
+                      title="CLI"
+                      icon="icon fa-code">
+                      <CliPanel />
+                    </PanelSection>
                   }
-
-                  <div
-                    className="panel"
-                    id="AppUpdate"
-                    onClick={ () => this.openTab('AppUpdate', 10) }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 10 ? '' : ' collapsed') }>
-                        <i className="icon fa fa-cloud-download"></i> { translate('INDEX.UPDATE') }
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 10 ? ' in' : '') }>
-                      { this.renderAppUpdateTab() }
-                    </div>
-                  </div>
-
-                  <div
-                    className="panel"
-                    id="Support"
-                    onClick={ () => this.openTab('Support', 11) }>
-                    <div className="panel-heading">
-                      <a className={ 'panel-title' + (this.state.activeTab === 11 ? '' : ' collapsed') }>
-                        <i className="icon fa fa-life-ring"></i> Support
-                      </a>
-                    </div>
-                    <div
-                      className={ 'panel-collapse collapse' + (this.state.activeTab === 11 ? ' in' : '') }>
-                      { this.renderSupportPanel() }
-                    </div>
-                  </div>
-                </div>
+                    <PanelSection
+                      title={ translate('INDEX.UPDATE') }
+                      icon="icon fa fa-cloud-download">
+                      <AppUpdatePanel />
+                    </PanelSection>
+                    <PanelSection
+                      title="Support"
+                      icon="icon fa fa-life-ring">
+                      <SupportPanel />
+                    </PanelSection>
+                </Panel>
               </div>
             </div>
           </div>
