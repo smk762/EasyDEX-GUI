@@ -26,37 +26,37 @@ export const InvoiceModalRender = function () {
                     <div className="col-lg-8 form-group form-material vertical-align-middle">
                       <form>
                         <label
-                        className="control-label"
-                        htmlFor="qrAddress">
+                          className="control-label"
+                          htmlFor="qrAddress">
                           { translate('INDEX.RECEIVING_ADDRESS') }
                         </label>
                         <select
-                        className="form-control"
-                        name="qrAddress"
-                        id="qrAddress"
-                        value={ this.state.qrAddress }
-                        onChange={ this.updateInput }>
-                        <option value="-1">
-                        { translate('INDEX.CHOOSE_RECEIVING_ADDRESS') }
-                        </option>
-                        { this.renderAddressList('public') }
-                        { this.isNativeMode() && this.renderAddressList('private') }
+                          className="form-control"
+                          name="qrAddress"
+                          id="qrAddress"
+                          value={ this.state.qrAddress }
+                          onChange={ this.updateInput }>
+                          <option value="-1">
+                            { translate('INDEX.CHOOSE_RECEIVING_ADDRESS') }
+                          </option>
+                          { this.renderAddressList('public') }
+                          { this.isNativeMode() && this.renderAddressList('private') }
                         </select>
                         <label
-                        className="control-label margin-top-20"
-                        htmlFor="qrCoinAmount">
+                          className="control-label margin-top-20"
+                          htmlFor="qrCoinAmount">
                           { this.props.ActiveCoin.coin }
                         </label>
                         <input
-                        type="number"
-                        min="0"
-                        className="form-control"
-                        id="qrCoinAmount"
-                        name="qrAmount"
-                        placeholder="0"
-                        autoComplete="off"
-                        value={ this.state.qrAmount }
-                        onChange={ this.updateInput } />
+                          type="number"
+                          min="0"
+                          className="form-control"
+                          id="qrCoinAmount"
+                          name="qrAmount"
+                          placeholder="0"
+                          autoComplete="off"
+                          value={ this.state.qrAmount }
+                          onChange={ this.updateInput } />
                       </form>
                     </div>
                     <div className="col-lg-4">
@@ -65,10 +65,10 @@ export const InvoiceModalRender = function () {
                         size={ 198 } />
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row hide">
                     <div className="col-lg-12">
                       <p className="help-block">
-                      { translate('INDEX.QR_CONTENT') }:<br />
+                        { translate('INDEX.QR_CONTENT') }:<br />
                         { this.state.content }
                       </p>
                     </div>
@@ -87,10 +87,10 @@ export const InvoiceModalRender = function () {
 export const InvoiceModalButtonRender = function () {
   return (
     <span>
-      <button type="button" 
+      <button type="button"
         className="btn btn-success waves-effect waves-light margin-right-10"
         onClick={ this.openModal }>
-          <i className="icon fa-file-text-o"></i>
+          <i className="icon fa-file-text-o"></i>&nbsp;
           { translate('INDEX.CREATE_INVOICE') }
       </button>
     </span>

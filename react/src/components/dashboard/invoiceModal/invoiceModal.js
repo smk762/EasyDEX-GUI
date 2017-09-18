@@ -37,17 +37,17 @@ class InvoiceModal extends React.Component {
       [e.target.name]: e.target.value
     }, this.updateQRContent);
    }
-   
+
   updateQRContent() {
     this.setState({
-      content: JSON.stringify({ 
-        "address": this.state.qrAddress, 
-        "amount": this.state.qrAmount, 
-        "coin": this.props.ActiveCoin.coin,
+      content: JSON.stringify({
+        address: this.state.qrAddress,
+        amount: this.state.qrAmount,
+        coin: this.props.ActiveCoin.coin,
       }),
     });
   }
-  
+
    closeModal() {
     this.setState({
       modalIsOpen: false,
@@ -99,7 +99,7 @@ class InvoiceModal extends React.Component {
         }
 
         items.push(
-            AddressItemRender.call(this, address, type)
+          AddressItemRender.call(this, address, type)
         );
       }
 
@@ -115,7 +115,6 @@ class InvoiceModal extends React.Component {
     } else {
       return InvoiceModalButtonRender.call(this);
     }
-    
   }
 }
 
@@ -134,10 +133,8 @@ const mapStateToProps = (state) => {
     },
     Dashboard: {
       activeHandle: state.Dashboard.activeHandle,
-    }
-
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(InvoiceModal);
