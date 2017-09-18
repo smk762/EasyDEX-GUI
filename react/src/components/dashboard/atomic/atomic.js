@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { atomic } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -10,8 +11,8 @@ import AtomicRender from './atomic.render';
     2) validation
 */
 class Atomic extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       output: null,
       api: null,
@@ -497,5 +498,12 @@ class Atomic extends React.Component {
     return AtomicRender.call(this);
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    Atomic: {
+      response: state.Atomic.response,
+    },
+  };
+};
 
-export default Atomic;
+export default connect(mapStateToProps)(Atomic);

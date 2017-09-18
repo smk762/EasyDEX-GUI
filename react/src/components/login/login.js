@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   toggleAddcoinModal,
   iguanaWalletPassphrase,
@@ -17,7 +18,11 @@ import { PassPhraseGenerator } from '../../util/crypto/passphrasegenerator';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import { translate } from '../../translate/translate';
-import { encryptPassphrase, loadPinList, loginWithPin } from "../../actions/actions/pin";
+import {
+  encryptPassphrase,
+  loadPinList,
+  loginWithPin
+} from '../../actions/actions/pin';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
@@ -25,8 +30,8 @@ const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
 // TODO: remove duplicate activehandle and activecoins calls
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       display: false,
       activeLoginSection: 'activateCoin',
@@ -49,7 +54,8 @@ class Login extends React.Component {
       encryptKey: '',
       pubKey: '',
       decryptKey: '',
-      selectedPin: ''
+      selectedPin: '',
+      isExperimentalOn: false,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -156,7 +162,17 @@ class Login extends React.Component {
 
   componentDidMount() {
     Store.dispatch(iguanaActiveHandle(true));
-    this.loadPinList();
+    // this.loadPinList();
+
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
   }
 
   toggleSeedInputVisibility() {
@@ -182,8 +198,8 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.login.pinList === "no pins") {
-      props.login.pinList = [];
+    if (props.Login.pinList === 'no pins') {
+      props.Login.pinList = [];
     }
     if (props &&
         props.Main &&
@@ -447,4 +463,17 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    Main: state.Main,
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+    },
+    Interval: {
+      interval: state.Interval.interval,
+    },
+    Login: state.Login,
+  };
+};
+
+export default connect(mapStateToProps)(Login);

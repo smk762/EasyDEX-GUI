@@ -8,7 +8,7 @@ UI:
 - minor placeholders fixes
 - hide address dropdown if wallet has only one address
 - komodod crash report modal
-- values rounding (up to 6 decimals)
+- values clipping
 - add coin multi ui reflow fix
 - reset app setting to default
 - manual balance / transactions list refresh
@@ -26,6 +26,7 @@ UI:
 - coin daemon port check on addcoin
 - updated application settings
 - komodo datadir
+- windows bins path fix
 
 v0.2.0.21a-beta
 --------------

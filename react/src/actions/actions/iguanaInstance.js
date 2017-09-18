@@ -1,8 +1,4 @@
 import { triggerToaster } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 export function restartIguanaInstance(pmid) {
@@ -26,22 +22,6 @@ export function restartIguanaInstance(pmid) {
     .then(response => response.json())
     .then(json => resolve(json))
   });
-}
-
-export function restartBasiliskInstance() {
-  return dispatch => {
-    getIguanaInstancesList()
-    .then(function(json) {
-      for (let port in json.result) {
-        if (json.result[port].mode === 'basilisk') {
-          restartIguanaInstance(json.result[port].pmid)
-          .then(function(json) {
-            console.log('restartBasiliskInstance', json);
-          });
-        }
-      }
-    });
-  }
 }
 
 export function startIguanaInstance(mode, coin) {

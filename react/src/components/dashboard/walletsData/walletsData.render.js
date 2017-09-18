@@ -1,8 +1,5 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
-import WalletsBasiliskRefresh from '../walletsBasiliskRefresh/walletsBasiliskRefresh';
-import WalletsBasiliskConnection from '../walletsBasiliskConnection/walletsBasiliskConnection';
-import WalletsNotariesList from '../walletsNotariesList/walletsNotariesList';
 import WalletsCacheData from '../walletsCacheData/walletsCacheData';
 import ReactTable from 'react-table';
 import TablePaginationRenderer from './pagination';
@@ -192,10 +189,7 @@ export const WalletsDataRender = function() {
 
   return (
     <span>
-      <WalletsBasiliskRefresh {...this.props} />
-      <WalletsBasiliskConnection {...this.props} />
-      <WalletsNotariesList {...this.props} />
-      <WalletsCacheData {...this.props} />
+      <WalletsCacheData />
       <div id="edexcoin_dashboardinfo">
         <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">
@@ -225,16 +219,6 @@ export const WalletsDataRender = function() {
                             <span className="caret"></span>
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
-                            <li className="hide">
-                              <a onClick={ this.getDexNotariesAction }>
-                                <i className="icon fa-sitemap"></i> { translate('INDEX.GET_NOTARY_NODES_LIST') }
-                              </a>
-                            </li>
-                            <li className="hide">
-                              <a onClick={ this.basiliskConnectionAction }>
-                                <i className="icon wb-refresh"></i> { translate('INDEX.REFRESH_BASILISK_CONNECTIONS') }
-                              </a>
-                            </li>
                             <li className={ !this.state.useCache ? 'hide' : '' }>
                               <a onClick={ this.basiliskRefreshActionOne }>
                                 <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') }&nbsp;
@@ -252,11 +236,6 @@ export const WalletsDataRender = function() {
                                 <i className="icon fa-history"></i> { translate('INDEX.REFETCH_WALLET_DATA') }
                               </a>
                             </li>
-                            <li className={ 'hide ' + (!this.state.useCache ? 'hide' : '') }>
-                              <a onClick={ this.restartBasiliskInstance }>
-                                <i className="icon fa-refresh"></i> Restart Basilisk Instance (unsafe!)
-                              </a>
-                            </li>
                             <li className="hide">
                               <a onClick={ this._toggleViewCacheModal }>
                                 <i className="icon fa-list-alt"></i> { translate('INDEX.VIEW_CACHE_DATA') }
@@ -270,6 +249,7 @@ export const WalletsDataRender = function() {
                     </div>
                     <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
+                  <div className={ !this.state.isExplorerData ? 'hide' : '' } style={{ display: 'block', textAlign: 'center', paddingTop: '10px' }}><strong>Notice:</strong> transactions list is fetched from KMD explorer as a fallback measure!</div>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
                       { this.shouldDisplayAddressList() &&
@@ -277,7 +257,7 @@ export const WalletsDataRender = function() {
                           { this.renderAddressList() }
                         </div>
                       }
-                      { this.props.ActiveCoin.txhistory !== 'loading' &&
+                      { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data') &&
                         <div className="col-sm-4 search-box">
                           <input
                             className="form-control"

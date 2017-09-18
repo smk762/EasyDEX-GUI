@@ -1,20 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
 import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
 import {
-  basiliskRefresh,
-  basiliskConnection,
   toggleDashboardTxInfoModal,
   getBasiliskTransactionsList,
   changeMainBasiliskAddress,
-  displayNotariesModal,
   toggleViewCacheModal,
   changeActiveAddress,
-  restartBasiliskInstance,
-  connectNotaries,
-  getDexNotaries,
   deleteCacheFile,
   fetchNewCacheData,
   fetchUtxoCache,
@@ -59,18 +54,15 @@ class WalletsData extends React.Component {
       searchTerm: null,
       coin: null,
       txhistory: null,
+      isExplorerData: false,
     };
 
     this.toggleBasiliskActionsMenu = this.toggleBasiliskActionsMenu.bind(this);
     this.basiliskRefreshAction = this.basiliskRefreshAction.bind(this);
-    this.basiliskConnectionAction = this.basiliskConnectionAction.bind(this);
-    this.getDexNotariesAction = this.getDexNotariesAction.bind(this);
     this.openDropMenu = this.openDropMenu.bind(this);
     this.removeAndFetchNewCache = this.removeAndFetchNewCache.bind(this);
     this._toggleViewCacheModal = this._toggleViewCacheModal.bind(this);
-    this.toggleCacheApi = this.toggleCacheApi.bind(this);
     this._fetchUtxoCache = this._fetchUtxoCache.bind(this);
-    this.restartBasiliskInstance = this.restartBasiliskInstance.bind(this);
     this.basiliskRefreshActionOne = this.basiliskRefreshActionOne.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
@@ -218,20 +210,6 @@ class WalletsData extends React.Component {
     }
   }
 
-  // deprecated
-  toggleCacheApi() {
-    const _useCache = !this.state.useCache;
-
-    sessionStorage.setItem('useCache', _useCache);
-    this.setState(Object.assign({}, this.state, {
-      useCache: _useCache,
-    }));
-  }
-
-  restartBasiliskInstance() {
-    Store.dispatch(restartBasiliskInstance());
-  }
-
   _toggleViewCacheModal() {
     Store.dispatch(toggleViewCacheModal(!this.props.Dashboard.displayViewCacheModal));
   }
@@ -255,13 +233,6 @@ class WalletsData extends React.Component {
         stateObj = Object.assign(stateObj, {
           currentStackLength: data.message.shepherd.iguanaAPI.currentStackLength,
         });
-      }
-      if (data &&
-          data.message &&
-          data.message.shepherd.method &&
-          data.message.shepherd.method === 'cache-one' &&
-          data.message.shepherd.status === 'done') {
-        Store.dispatch(basiliskRefresh(false));
       }
 
       if (Object.keys(stateObj).length) {
@@ -339,18 +310,6 @@ class WalletsData extends React.Component {
     }));
   }
 
-  basiliskConnectionAction() {
-    if (this.props.Dashboard) {
-      Store.dispatch(basiliskConnection(!this.props.Dashboard.basiliskConnection));
-      Store.dispatch(connectNotaries());
-    }
-  }
-
-  getDexNotariesAction() {
-    Store.dispatch(getDexNotaries(this.props.ActiveCoin.coin));
-    Store.dispatch(displayNotariesModal(true));
-  }
-
   toggleTxInfoModal(display, txIndex) {
     Store.dispatch(toggleDashboardTxInfoModal(display, txIndex));
   }
@@ -366,52 +325,58 @@ class WalletsData extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    let _stateChange = {};
+
     if (!this.state.currentAddress &&
       this.props.ActiveCoin.activeAddress &&
       this.props.ActiveCoin.mode === 'basilisk') {
-      this.setState(Object.assign({}, this.state, {
+      _stateChange = Object.assign({}, _stateChange, {
         currentAddress: this.props.ActiveCoin.activeAddress,
-      }));
+      });
     }
 
+    // TODO: clean
+    // TODO: figure out why changing ActiveCoin props doesn't trigger comp update
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
         this.props.ActiveCoin.txhistory.length) {
-        if (!this.state.itemsList ||
+        /*if (!this.state.itemsList || this.state.itemsList === 'no data' ||
             (this.state.coin && this.state.coin !== this.props.ActiveCoin.coin) ||
-            (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {
-          this.setState(Object.assign({}, this.state, {
+            (JSON.stringify(this.props.ActiveCoin.txhistory) !== JSON.stringify(this.state.txhistory))) {*/
+          _stateChange = Object.assign({}, _stateChange, {
+            isExplorerData: this.props.ActiveCoin.txhistory[0].source ? true : false,
             itemsList: this.props.ActiveCoin.txhistory,
             filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
             txhistory: this.props.ActiveCoin.txhistory,
             showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize,
-          }));
-      }
+            itemsListColumns: this.generateItemsListColumns(),
+          });
+        //}
     }
 
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory === 'no data') {
-        this.setState(Object.assign({}, this.state, {
-          itemsList: 'no data',
-        }));
+      _stateChange = Object.assign({}, _stateChange, {
+        itemsList: 'no data',
+      });
     } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
-      this.setState(Object.assign({}, this.state, {
+      _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'loading',
-      }));
+      });
     }
 
-    this.setState({
-      itemsListColumns: this.generateItemsListColumns(),
-    });
+    this.setState(Object.assign({}, _stateChange));
   }
 
   isFullySynced() {
-    if (this.props.Dashboard.progress &&
-        (Number(this.props.Dashboard.progress.balances) +
-        Number(this.props.Dashboard.progress.validated) +
-        Number(this.props.Dashboard.progress.bundles) +
-        Number(this.props.Dashboard.progress.utxo)) / 4 === 100) {
+    const _progress = this.props.ActiveCoin.progress;
+
+    if (_progress &&
+        (Number(_progress.balances) +
+        Number(_progress.validated) +
+        Number(_progress.bundles) +
+        Number(_progress.utxo)) / 4 === 100) {
       return true;
     } else {
       return false;
@@ -420,28 +385,27 @@ class WalletsData extends React.Component {
 
   // TODO: add basilisk first run check, display no data if second run
   renderTxHistoryList() {
-    if (this.state.itemsList === 'loading' ||
-        this.state.itemsList.length == 0) {
+    if (this.state.itemsList === 'loading') {
       if (this.isFullySynced()) {
         return (
           <tr className="hover--none">
-            <td colSpan="7">{ translate('INDEX.LOADING_HISTORY') }...</td>
+            <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.LOADING_HISTORY') }...</td>
           </tr>
         );
       } else {
         return (
           <tr className="hover--none">
-            <td colSpan="7">{ translate('INDEX.SYNC_IN_PROGRESS') }...</td>
+            <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.SYNC_IN_PROGRESS') }...</td>
           </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
         <tr className="hover--none">
-          <td colSpan="7">{ translate('INDEX.NO_DATA') }</td>
+          <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.NO_DATA') }</td>
         </tr>
       );
-    } else if (this.state.itemsList) {
+    } else if (this.state.itemsList && this.state.itemsList.length) {
       return TxHistoryListRender.call(this);
     }
 
@@ -671,4 +635,31 @@ class WalletsData extends React.Component {
   }
 }
 
-export default WalletsData;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+      send: state.ActiveCoin.send,
+      receive: state.ActiveCoin.receive,
+      balance: state.ActiveCoin.balance,
+      cache: state.ActiveCoin.cache,
+      activeSection: state.ActiveCoin.activeSection,
+      activeAddress: state.ActiveCoin.activeAddress,
+      lastSendToResponse: state.ActiveCoin.lastSendToResponse,
+      addresses: state.ActiveCoin.addresses,
+      txhistory: state.ActiveCoin.txhistory,
+      showTransactionInfo: state.ActiveCoin.showTransactionInfo,
+      progress: state.ActiveCoin.progress,
+    },
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+      displayViewCacheModal: state.Dashboard.displayViewCacheModal,
+    },
+    Main: {
+      coins: state.Main.coins,
+    },
+  };
+};
+
+export default connect(mapStateToProps)(WalletsData);

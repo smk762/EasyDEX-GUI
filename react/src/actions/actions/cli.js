@@ -1,9 +1,5 @@
 import { triggerToaster } from '../actionCreators';
 import { CLI } from '../storeType';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 export function shepherdCliPromise(mode, chain, cmd) {

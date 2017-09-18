@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { secondsToString } from '../../../util/time';
 import { toggleViewCacheModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -8,8 +9,8 @@ import WalletsCacheDataRender from './walletsCacheData.render';
 // TODO: refresh data render
 
 class WalletsCacheData extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.closeViewCacheModal = this.closeViewCacheModal.bind(this);
   }
 
@@ -183,5 +184,17 @@ class WalletsCacheData extends React.Component {
     }
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      mode: state.ActiveCoin.mode,
+      cache: state.ActiveCoin.cache,
+      notaries: state.ActiveCoin.notaries,
+    },
+    Dashboard: {
+      displayViewCacheModal: state.Dashboard.displayViewCacheModal,
+    },
+  };
+};
 
-export default WalletsCacheData;
+export default connect(mapStateToProps)(WalletsCacheData);

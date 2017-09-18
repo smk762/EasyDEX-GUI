@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import QRCode from 'qrcode.react';
 
-export const QRModalRender = function () {
+export const QRModalRender = function() {
   return (
     <span>
       <span className="label label-default margin-left-10 action"
@@ -41,48 +41,46 @@ export const QRModalRender = function () {
   );
 };
 
-export const QRModalReaderRender = function () {
-  return (
-    <span>
-      <button type="button"
-        className="btn btn-default"
-        onClick={ this.openModal }>
-        <i className="icon fa-qrcode"></i>
-        { translate('INDEX.SCAN_QRCODE_WEBCAM') }
-      </button>
-      <div
-        className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }
-        id="QRReadModal">
-          <div className="modal-dialog modal-center modal-md">
-            <div className="modal-content">
-              <div className="modal-header bg-orange-a400 wallet-send-header">
-                <button
-                  type="button"
-                  className="close white"
-                  onClick={ this.closeModal }>
-                  <span>×</span>
-                </button>
-                <h4 className="modal-title white text-left">{ translate('INDEX.SCAN_QRCODE_WEBCAM') }</h4>
-              </div>
-              <div className="modal-body">
-                <div className="animsition vertical-align fade-in">
-                  <div
-                    className="page-content vertical-align-middle"
-                    style={{
-                      width: '100%',
-                      textAlign: 'center',
-                      fontSize: '16px'
-                    }}>
-                    <div id="webcam">
-                      { this.state.error }
+export const QRModalReaderRender = function() {
+  if (!this.state.errorShown) {
+    return (
+      <span>
+        <button type="button"
+          className="btn btn-default"
+          onClick={ this.openModal }>
+          <i className="icon fa-qrcode"></i>
+          { translate('INDEX.SCAN_QRCODE_WEBCAM') }
+        </button>
+        <div
+          className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }
+          id="QRReadModal">
+            <div className="modal-dialog modal-center modal-md">
+              <div className="modal-content">
+                <div className="modal-header bg-orange-a400 wallet-send-header">
+                  <button
+                    type="button"
+                    className="close white"
+                    onClick={ this.closeModal }>
+                    <span>×</span>
+                  </button>
+                  <h4 className="modal-title white text-left">{ translate('INDEX.SCAN_QRCODE_WEBCAM') }</h4>
+                </div>
+                <div className="modal-body">
+                  <div className="animsition vertical-align fade-in">
+                    <div className="page-content vertical-align-middle webcam-frame">
+                      <div id="webcam">
+                        { this.state.error }
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      <div className={ 'modal-backdrop ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }></div>
-    </span>
-  );
+        <div className={ 'modal-backdrop ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }></div>
+      </span>
+    );
+  } else {
+    return null;
+  }
 };

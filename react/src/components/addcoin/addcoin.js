@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../translate/translate';
 import Config from '../../config';
 import {
@@ -16,8 +17,8 @@ import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
 
 class AddCoin extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       nativeOnly: Config.iguanaLessMode,
       coins: [],
@@ -42,6 +43,7 @@ class AddCoin extends React.Component {
       display: false,
       actionsMenu: false,
       modalClassName: 'hide',
+      isExperimentalOn: false,
     };
     this.existingCoins = null;
     this.activateCoin = this.activateCoin.bind(this);
@@ -112,6 +114,16 @@ class AddCoin extends React.Component {
 
   componentWillMount() {
     this.addNewItem();
+
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -355,4 +367,15 @@ class AddCoin extends React.Component {
   }
 }
 
-export default AddCoin;
+
+const mapStateToProps = (state) => {
+  return {
+    Main: state.Main,
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+    },
+    AddCoin: state.AddCoin,
+  };
+};
+
+export default connect(mapStateToProps)(AddCoin);

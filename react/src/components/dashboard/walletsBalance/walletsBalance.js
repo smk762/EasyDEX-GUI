@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import {
   fetchNewCacheData,
@@ -10,30 +11,53 @@ import Store from '../../../store';
 import WalletsBalanceRender from './walletsBalance.render';
 
 class WalletsBalance extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       currentAddress: null,
+      isExplorerData: false,
     };
     this.isFullySynced = this.isFullySynced.bind(this);
     this.refreshBalance = this.refreshBalance.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    if (!this.state.currentAddress &&
-        this.props.ActiveCoin.activeAddress) {
+    if (this.props.ActiveCoin.activeAddress) {
+      const _mode = this.props.ActiveCoin.mode;
+      let _isExplorerData = false;
+
+      if (_mode === 'basilisk') {
+        if (this.props.ActiveCoin.cache) {
+          const _cache = this.props.ActiveCoin.cache;
+          const _coin = this.props.ActiveCoin.coin;
+          const _address = this.props.ActiveCoin.activeAddress;
+
+          if (_address &&
+              _cache[_coin] &&
+              _cache[_coin][_address] &&
+              _cache[_coin][_address].getbalance &&
+              _cache[_coin][_address].getbalance.data &&
+              _cache[_coin][_address].getbalance.data.source) {
+            _isExplorerData = true;
+          }
+        }
+      }
+
       this.setState(Object.assign({}, this.state, {
+        isExplorerData: _isExplorerData,
         currentAddress: this.props.ActiveCoin.activeAddress,
       }));
     }
   }
 
   isFullySynced() {
-    if (this.props.Dashboard.progress &&
-        (Number(this.props.Dashboard.progress.balances) +
-        Number(this.props.Dashboard.progress.validated) +
-        Number(this.props.Dashboard.progress.bundles) +
-        Number(this.props.Dashboard.progress.utxo)) / 4 === 100) {
+    const _progress = this.props.ActiveCoin.progress;
+
+    if (_progress &&
+        (Number(_progress.balances) +
+        Number(_progress.validated) +
+        Number(_progress.bundles) +
+        Number(_progress.utxo)) / 4 === 100) {
       return true;
     } else {
       return false;
@@ -118,9 +142,9 @@ class WalletsBalance extends React.Component {
       }
 
       if (type === 'interest' &&
-          this.props.Dashboard.progress &&
-          this.props.Dashboard.progress.interest) {
-        _balance = this.props.Dashboard.progress.interest;
+          this.props.ActiveCoin.progress &&
+          this.props.ActiveCoin.progress.interest) {
+        _balance = this.props.ActiveCoin.progress.interest;
       }
 
       if (type === 'private' &&
@@ -188,4 +212,23 @@ class WalletsBalance extends React.Component {
   }
 }
 
-export default WalletsBalance;
+const mapStateToProps = (state) => {
+  return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
+      send: state.ActiveCoin.send,
+      receive: state.ActiveCoin.receive,
+      balance: state.ActiveCoin.balance,
+      cache: state.ActiveCoin.cache,
+      activeSection: state.ActiveCoin.activeSection,
+      activeAddress: state.ActiveCoin.activeAddress,
+      progress: state.ActiveCoin.progress,
+    },
+    Dashboard: {
+      activeHandle: state.Dashboard.activeHandle,
+    },
+  };
+};
+
+export default connect(mapStateToProps)(WalletsBalance);

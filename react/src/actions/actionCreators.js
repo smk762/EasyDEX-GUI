@@ -6,7 +6,6 @@ import {
   GET_ACTIVE_COINS,
   DASHBOARD_ACTIVE_ADDRESS,
   VIEW_CACHE_DATA,
-  DASHBOARD_DISPLAY_NOTARIES_MODAL,
   DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
   DASHBOARD_ACTIVE_SECTION,
   DASHBOARD_ACTIVE_TXINFO_MODAL,
@@ -30,13 +29,10 @@ import {
   DISPLAY_CLAIM_INTEREST_MODAL,
   START_INTERVAL,
   STOP_INTERVAL,
-  GET_PIN_LIST
+  GET_PIN_LIST,
+  DASHBOARD_SYNC_ONLY_UPDATE,
+  DISPLAY_IMPORT_KEY_MODAL,
 } from './storeType';
-import {
-  logGuiHttp,
-  getAgamaLog,
-  guiLogState
-} from './actions/log';
 
 export * from './actions/nativeSyncInfo';
 export * from './actions/basiliskCache';
@@ -53,7 +49,6 @@ export * from './actions/sendFullBasilisk';
 export * from './actions/settings';
 export * from './actions/syncOnly';
 export * from './actions/iguanaInstance';
-export * from './actions/notary';
 export * from './actions/edexBalance';
 export * from './actions/addCoin';
 export * from './actions/addressBalance';
@@ -72,6 +67,7 @@ export * from './actions/cli';
 export * from './actions/update';
 export * from './actions/jumblr';
 export * from './actions/interest';
+export * from './actions/nativeDashboardUpdate';
 
 export function changeActiveAddress(address) {
   return {
@@ -89,13 +85,6 @@ export function updateErrosStack(method) {
 export function toggleViewCacheModal(display) {
   return {
     type: VIEW_CACHE_DATA,
-    display,
-  }
-}
-
-export function displayNotariesModal(display) {
-  return {
-    type: DASHBOARD_DISPLAY_NOTARIES_MODAL,
     display,
   }
 }
@@ -119,34 +108,6 @@ export function toggleDashboardTxInfoModal(display, txIndex) {
     type: DASHBOARD_ACTIVE_TXINFO_MODAL,
     showTransactionInfo: display,
     showTransactionInfoTxIndex: txIndex,
-  }
-}
-
-export function basiliskConnectionState(display, json) {
-  return {
-    type: BASILISK_CONNECTION,
-    basiliskConnection: display,
-    progress: json,
-  }
-}
-
-export function basiliskRefreshState(display, json) {
-  return {
-    type: BASILISK_REFRESH,
-    basiliskRefresh: display,
-    progress: json,
-  }
-}
-
-export function basiliskRefresh(display) {
-  return dispatch => {
-    dispatch(basiliskRefreshState(display));
-  }
-}
-
-export function basiliskConnection(display) {
-  return dispatch => {
-    dispatch(basiliskConnectionState(display));
   }
 }
 
@@ -388,6 +349,20 @@ export function toggleClaimInterestModal(display) {
 export function getPinList(pinList) {
   return {
     type: GET_PIN_LIST,
-    pinList: pinList
+    pinList: pinList,
+  }
+}
+
+export function skipFullDashboardUpdate(skip) {
+  return {
+    type: DASHBOARD_SYNC_ONLY_UPDATE,
+    skipFullDashboardUpdate: skip,
+  }
+}
+
+export function displayImportKeyModal(display) {
+  return {
+    type: DISPLAY_IMPORT_KEY_MODAL,
+    displayImportKeyModal: display,
   }
 }

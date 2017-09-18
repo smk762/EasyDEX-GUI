@@ -27,14 +27,14 @@ const WalletsNativeRender = function() {
             </li>
           </ol>
         </div>
-        <div className="page-content">
-          <WalletsProgress {...this.props} />
+        <div className={ 'page-content' + (this.state.nativeOnly ? ' page-content-native' : '') }>
+          <WalletsProgress />
           <div className="row">
-            <WalletsBalance {...this.props} />
-            <ReceiveCoin {...this.props.ActiveCoin} />
-            <WalletsData {...this.props} />
-            <WalletsNativeSend {...this.props} />
-            <WalletsInfo {...this.props} />
+            <WalletsBalance />
+            <ReceiveCoin />
+            <WalletsData />
+            <WalletsNativeSend />
+            <WalletsInfo />
           </div>
         </div>
       </div>

@@ -1,98 +1,105 @@
-import { SYNCING_NATIVE_MODE } from '../storeType';
+import {
+  SYNCING_NATIVE_MODE,
+  DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE
+} from '../storeType';
 import {
   triggerToaster,
   getPassthruAgent,
   getDebugLog,
   toggleCoindDownModal
 } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
-export function getSyncInfoNativeKMD(skipDebug, json) {
-  const coin = 'KMD';
-  // https://www.kmd.host/
-  return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'getSyncInfoNativeKMD',
-        type: 'post',
-        url: Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`,
-        payload: '',
-        status: 'pending',
-      }));
-    }
+export function nativeGetinfoFailureState() {
+  return {
+    type: DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE,
+  }
+}
 
-    return fetch(
-      Config.iguanaLessMode ? 'http://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
-      method: 'GET',
-    })
-    .catch(function(error) {
-      console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
-      /*dispatch(
-        triggerToaster(
-          'getSyncInfoNativeKMD',
-          'Error',
-          'error'
-        )
-      );*/
-      console.warn('remote kmd node fetch failed', true);
-      dispatch(getSyncInfoNativeState({ remoteKMDNode: null }));
-    })
-    .then(response => response.json())
-    .then(json => {
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: Config.iguanaLessMode ? json.info : json,
-        }));
-      }
-      dispatch(getSyncInfoNativeState({ remoteKMDNode: Config.iguanaLessMode ? json.info : json }));
-    })
-    .then(function() {
+// TODO: use debug.log instead
+export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
+  let _json = json;
+
+  if (skipRemote) {
+    return dispatch => {
+      dispatch(getSyncInfoNativeState(Config.iguanaLessMode ? json.info : json ));
+
       if (!skipDebug) {
         dispatch(getDebugLog('komodo', 1));
       }
-    })
+    }
+  } else {
+    const coin = 'KMD';
+    // https://www.kmd.host/
+    return dispatch => {
+      return fetch(
+        Config.iguanaLessMode ? 'https://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
+        method: 'GET',
+      })
+      .catch(function(error) {
+        console.log(error);
+        /*dispatch(
+          triggerToaster(
+            'getSyncInfoNativeKMD',
+            'Error',
+            'error'
+          )
+        );*/
+        console.warn('remote kmd node fetch failed', true);
+        _json = _json.error;
+        _json['remoteKMDNode'] = null;
+        dispatch(getSyncInfoNativeState(_json));
+      })
+      .then(response => response.json())
+      .then(json => {
+        _json = _json.error;
+        _json['remoteKMDNode'] = json.info;
+        dispatch(getSyncInfoNativeState(_json));
+      })
+      .then(function() {
+        if (!skipDebug) {
+          dispatch(getDebugLog('komodo', 1));
+        }
+      })
+    }
   }
 }
 
-function getSyncInfoNativeState(json, coin, skipDebug) {
-  if (coin === 'KMD' &&
-      json &&
-      json.error &&
-      json.error.message.indexOf('Activating best') === -1) {
-    return getSyncInfoNativeKMD(skipDebug, json);
+function getSyncInfoNativeState(json, coin, skipDebug, skipRemote) {
+  /*if (!json.remoteKMDNode) {
+    json = { error: { code: -28, message: 'Activating best chain...' } };
+  }*/
+
+  if (json.remoteKMDNode) {
+    return {
+      type: SYNCING_NATIVE_MODE,
+      progress: json,
+    }
   } else {
-    if (json &&
+    if (coin === 'KMD' &&
+        json &&
         json.error &&
-        Config.cli.default) {
-      return {
-        type: SYNCING_NATIVE_MODE,
-        progress: json.error,
-      }
+        json.error.message.indexOf('Activating best') > -1) {
+      return getSyncInfoNativeKMD(skipDebug, json, skipRemote);
     } else {
-      return {
-        type: SYNCING_NATIVE_MODE,
-        progress: json.result ? json.result : json,
+      if (json &&
+          json.error &&
+          Config.cli.default) {
+        return {
+          type: SYNCING_NATIVE_MODE,
+          progress: json.error,
+        }
+      } else {
+        return {
+          type: SYNCING_NATIVE_MODE,
+          progress: json.result ? json.result : json,
+        }
       }
     }
   }
 }
 
-export function getSyncInfoNative(coin, skipDebug) {
+export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
   let payload = {
     userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
     agent: getPassthruAgent(coin),
@@ -111,17 +118,6 @@ export function getSyncInfoNative(coin, skipDebug) {
   }
 
   return dispatch => {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'getSyncInfo',
-        type: 'post',
-        url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        payload: payload,
-        status: 'pending',
-      }));
-    }
     let _fetchConfig = {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -143,20 +139,15 @@ export function getSyncInfoNative(coin, skipDebug) {
     )
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
+      if (!suppressErrors) { // rescan case
+        dispatch(
+          triggerToaster(
+            'getSyncInfo',
+            'Error',
+            'error'
+          )
+        );
       }
-      dispatch(
-        triggerToaster(
-          'getSyncInfo',
-          'Error',
-          'error'
-        )
-      );
     })
     .then(function(response) {
       const _response = response.text().then(function(text) { return text; });
@@ -164,6 +155,11 @@ export function getSyncInfoNative(coin, skipDebug) {
     })
     .then(json => {
       if (json === 'Work queue depth exceeded') {
+        if (coin === 'KMD') {
+          dispatch(getDebugLog('komodo', 100));
+        } else {
+          dispatch(getDebugLog('komodo', 100, coin));
+        }
         dispatch(
           getSyncInfoNativeState(
             {
@@ -172,20 +168,39 @@ export function getSyncInfoNative(coin, skipDebug) {
               id: null
             },
             coin,
-            skipDebug
+            true,
+            skipRemote
           )
         );
       } else {
         if (!json &&
           Config.cli.default) {
-          dispatch(
-            triggerToaster(
-              'Komodod is down',
-              'Critical Error',
-              'error',
-              true
-            )
-          );
+          let _kmdMainPassiveMode;
+
+          try {
+            _kmdMainPassiveMode = window.require('electron').remote.getCurrentWindow().kmdMainPassiveMode;
+          } catch (e) {}
+
+          if (!_kmdMainPassiveMode) {
+            dispatch(nativeGetinfoFailureState());
+            /* dispatch(
+              triggerToaster(
+                'Komodod is down',
+                'Critical Error',
+                'error',
+                true
+              )
+            ); */
+          } else {
+            dispatch(
+              triggerToaster(
+                'Please make sure to run komodod manually',
+                'Connection error',
+                'warning',
+                true
+              )
+            );
+          }
 
           if (coin === 'KMD') {
             dispatch(getDebugLog('komodo', 50));
@@ -206,18 +221,12 @@ export function getSyncInfoNative(coin, skipDebug) {
           }
         }
 
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            status: 'success',
-            response: json,
-          }));
-        }
         dispatch(
           getSyncInfoNativeState(
             json,
             coin,
-            skipDebug
+            skipDebug,
+            skipRemote
           )
         );
       }

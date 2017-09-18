@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-const CoindDownModalRender = function () {
+const CoindDownModalRender = function() {
   return (
     <div>
       <div
@@ -24,8 +24,9 @@ const CoindDownModalRender = function () {
                   <strong>Debug.log ({ translate('INDEX.LAST_50_LINES') })</strong>
                   <div className="form-group form-material floating">
                     <textarea
+                      readOnly
                       className="form-control"
-                      value={ this.props.Settings.debugLog }></textarea>
+                      value={ this.props.debugLog || '' }></textarea>
                   </div>
                   <button
                     type="button"

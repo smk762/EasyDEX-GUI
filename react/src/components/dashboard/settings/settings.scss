@@ -1,0 +1,121 @@
+.support-box {
+  padding: 15px 20px;
+  width: 220px;
+  display: inline-block;
+  cursor: pointer;
+
+  &-title {
+    font-weight: bold;
+    padding-top: 12px;
+    padding-bottom: 3px;
+  }
+  img {
+    height: 50px;
+  }
+}
+
+.support-box-wrapper {
+  display: inline-block;
+  margin-right: 50px;
+
+  &:last-child, {
+    margin-right: 0;
+  }
+}
+
+.support-box:hover {
+  .support-box-link {
+    color: #5683ad;
+    font-weight: 500;
+  }
+}
+
+.login-settings-modal {
+  #AppUpdate {
+    .col-sm-4 {
+      width: 100%;
+    }
+  }
+  .modal-dialog {
+    width: 80%;
+  }
+  .modal-body {
+    background: #f3f4f5;
+    border-radius: 4px;
+  }
+  .modal-footer {
+    margin-top: 15px;
+  }
+  .page-content {
+    padding-top: 0;
+  }
+  .support-box-wrapper {
+    .support-box {
+      margin: 0;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.settings-help {
+  font-size: 20px;
+  position: relative;
+  top: 2px;
+  left: 10px;
+  color: #5683ad;
+}
+
+#SettingsAccordion {
+  .toggle {
+    position: relative;
+    top: 4px;
+
+    .title {
+      position: relative;
+      top: -12px;
+      left: 12px;
+    }
+  }
+  table {
+    width: 100%;
+
+    td {
+      &:first-child {
+        width: 40%;
+      }
+      &:last-child {
+        width: 60%;
+      }
+    }
+  }
+}
+
+#SettingsAccordion {
+  .panel {
+    .panel-collapse {
+      transition: all .3s;
+
+      &.collapse {
+        height: 0;
+      }
+    }
+  }
+}
+
+#section-iguana-wallet-settings {
+  background: #f3f4f5;
+
+  .panel-title {
+    cursor: pointer;
+    cursor: hand;
+
+    &:before {
+      content: '\F273';
+    }
+    &.collapsed {
+      &:before {
+        content: '\F278';
+      }
+    }
+  }
+}

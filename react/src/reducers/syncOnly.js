@@ -9,13 +9,15 @@ export function SyncOnly(state = {
 }, action) {
   switch (action.type) {
     case SYNC_ONLY_MODAL_TOGGLE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         display: action.display,
-      });
+      };
     case SYNC_ONLY_DATA:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         forks: action.forks,
-      });
+      };
     default:
       return state;
   }

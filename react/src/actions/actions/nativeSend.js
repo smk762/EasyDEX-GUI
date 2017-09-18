@@ -5,10 +5,6 @@ import {
   getPassthruAgent,
   iguanaHashHex
 } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 export function sendNativeTx(coin, _payload) {
@@ -45,18 +41,6 @@ export function sendNativeTx(coin, _payload) {
           function: _apiMethod,
           hex: hashHexJson,
         };
-      }
-
-      const _timestamp = Date.now();
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          function: 'sendNativeTx',
-          type: 'post',
-          url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-          payload: payload,
-          status: 'pending',
-        }));
       }
 
       let _fetchConfig = {
@@ -110,13 +94,6 @@ export function sendNativeTx(coin, _payload) {
       )
       .catch(function(error) {
         console.log(error);
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            status: 'error',
-            response: error,
-          }));
-        }
         dispatch(
           triggerToaster(
             'sendNativeTx',
@@ -130,14 +107,6 @@ export function sendNativeTx(coin, _payload) {
         return _response;
       })
       .then(function(json) {
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            status: 'success',
-            response: json,
-          }));
-        }
-
         if (json.indexOf('"code":') > -1) {
           const _message = json.substring(
             `${json.indexOf('"message":"')}11`,
@@ -230,18 +199,6 @@ export function getKMDOPID(opid, coin) {
         };
       }
 
-      const _timestamp = Date.now();
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          function: 'getKMDOPID',
-          type: 'post',
-          url: Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-          payload: payload,
-          status: 'pending',
-        }));
-      }
-
       let _fetchConfig = {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -251,7 +208,7 @@ export function getKMDOPID(opid, coin) {
         payload = {
           mode: null,
           chain: coin,
-          cmd: 'z_getoperationstatus'
+          cmd: 'z_getoperationstatus',
         };
 
         _fetchConfig = {
@@ -269,13 +226,6 @@ export function getKMDOPID(opid, coin) {
       )
       .catch(function(error) {
         console.log(error);
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            status: 'error',
-            response: error,
-          }));
-        }
         dispatch(
           triggerToaster(
             'getKMDOPID',
@@ -288,13 +238,6 @@ export function getKMDOPID(opid, coin) {
       .then(json => {
         if (Config.cli.default) {
           json = json.result;
-        }
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            status: 'success',
-            response: json,
-          }));
         }
         dispatch(getKMDOPIDState(json));
       })
@@ -342,6 +285,6 @@ export function sendToAddressPromise(coin, address, amount) {
     .then(response => response.json())
     .then(json => {
       resolve(json);
-    })
+    });
   });
 }

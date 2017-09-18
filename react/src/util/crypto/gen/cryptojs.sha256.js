@@ -34,6 +34,7 @@
 	// Public API
 	var SHA256 = C.SHA256 = function (message, options) {
 		var digestbytes = util.wordsToBytes(SHA256._sha256(message));
+
 		return options && options.asBytes ? digestbytes :
 	    options && options.asString ? Binary.bytesToString(digestbytes) :
 	    util.bytesToHex(digestbytes);

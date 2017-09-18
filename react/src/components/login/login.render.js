@@ -5,9 +5,7 @@ import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsMod
 const LoginRender = function () {
   return (
     <div>
-      <LoginSettingsModal
-        {...this.props}
-        section={ this.state.displayLoginSettingsDropdownSection } />
+      <LoginSettingsModal section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
@@ -36,14 +34,14 @@ const LoginRender = function () {
                     <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
                   </a>
                 </li>
-                <li className={ this.state.nativeOnly ? 'hide' : '' }>
+                <li className={ this.state.nativeOnly || !this.state.isExperimentalOn ? 'hide' : '' }>
                   <a onClick={ this.openSyncOnlyModal }>
                     <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
                   </a>
                 </li>
                 <li>
                   <a onClick={ () => this.toggleLoginSettingsDropdownSection('about') }>
-                    <i className="icon fa-users"></i> { translate('INDEX.ABOUT_IGUANA') }
+                    <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                   </a>
                 </li>
               </ul>
@@ -54,7 +52,7 @@ const LoginRender = function () {
             <h4 className="color-white">
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
-            { this.props.login.pinList.length > 0 &&
+            { this.props.Login.pinList.length > 0 &&
              <span>You can login be entering a login seed or by selecting a pin</span>
             }
             <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
@@ -64,14 +62,14 @@ const LoginRender = function () {
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase } />
+                value={ this.state.loginPassphrase || '' } />
               <textarea
                 className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 id="loginPassphrase"
                 name="loginPassphrase"
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase }></textarea>
+                value={ this.state.loginPassphrase || '' }></textarea>
               <i
                 className={ 'seed-toggle fa fa-eye' +  (!this.state.seedInputVisibility ? '-slash' : '') }
                 onClick={ this.toggleSeedInputVisibility }></i>
@@ -133,7 +131,7 @@ const LoginRender = function () {
             </div>
             }
 
-            { this.props.login.pinList.length > 0 &&
+            { this.props.Login.pinList.length > 0 &&
             <div className="row margin-top-30">
               <div className="col-xs-12">
                 <div style={{width: "10%", float: "left", marginLeft: "38%"}}>
@@ -146,7 +144,7 @@ const LoginRender = function () {
               </div>
             </div>
             }
-            { this.props.login.pinList.length > 0 &&
+            { this.props.Login.pinList.length > 0 &&
             <div className="row">
               <div className="form-group form-material floating col-sm-8 padding-left-10 horizontal-padding-0">
                 <select
@@ -156,7 +154,7 @@ const LoginRender = function () {
                   onChange={ (event) => this.updateSelectedPin(event) }
                   autoFocus>
                   <option className="login-option" value="">{ translate('INDEX.SELECT') }</option>
-                  {this.props.login.pinList.map(function(pin) {
+                  {this.props.Login.pinList.map(function(pin) {
                     return <option className="login-option" value={pin} key={pin}>{ pin }</option>
                   })}
                 </select>

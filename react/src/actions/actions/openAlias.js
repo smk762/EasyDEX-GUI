@@ -1,8 +1,4 @@
 import { triggerToaster } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 
 export function resolveOpenAliasAddress(email) {
   const url = email.replace('@', '.');

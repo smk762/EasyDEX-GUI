@@ -4,9 +4,9 @@ import { iguanaWalletPassphrase } from "./walletAuth";
 
 export function encryptPassphrase(passphrase, key, pubKey) {
   const payload = {
-    'string': passphrase,
-    'key': key,
-    'pubkey': pubKey
+    string: passphrase,
+    key: key,
+    pubkey: pubKey,
   };
 
   return dispatch => {
@@ -17,34 +17,33 @@ export function encryptPassphrase(passphrase, key, pubKey) {
       },
       body: JSON.stringify(payload),
     })
-      .catch(function(error) {
-        console.log(error);
-        dispatch(
-          triggerToaster(
-            'encryptKey',
-            'Error',
-            'error'
-          )
-        );
-      })
-      .then(response => response.json())
-      .then(json => {
-        console.log('encrypt result', json);
-        dispatch(
-          triggerToaster(
-            'passphrase successfully encrypted',
-            'Success',
-            'success'
-          )
-        );
-      })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'encryptKey',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(
+        triggerToaster(
+          'Passphrase successfully encrypted',
+          'Success',
+          'success'
+        )
+      );
+    })
   }
 }
 
 export function loginWithPin(key, pubKey) {
   const payload = {
-    'key': key,
-    'pubkey': pubKey
+    key: key,
+    pubkey: pubKey,
   };
 
   return dispatch => {
@@ -55,21 +54,20 @@ export function loginWithPin(key, pubKey) {
       },
       body: JSON.stringify(payload),
     })
-      .catch(function(error) {
-        console.log(error);
-        dispatch(
-          triggerToaster(
-            'decryptKey',
-            'Error',
-            'error'
-          )
-        );
-      })
-      .then(response => response.json())
-      .then(json => {
-        console.log('decrypt result', json);
-        dispatch(iguanaWalletPassphrase(json.result));
-      })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'decryptKey',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(iguanaWalletPassphrase(json.result));
+    })
   }
 }
 
@@ -81,30 +79,28 @@ export function loadPinList() {
         'Content-Type': 'application/json',
       }
     })
-      .catch(function(error) {
-        console.log(error);
-        dispatch(
-          triggerToaster(
-            'getPinList',
-            'Error',
-            'error'
-          )
-        );
-      })
-      .then(response => response.json())
-      .then(json => {
-        console.log('getpinlist result', json);
-        dispatch(
-          triggerToaster(
-            'getPinList',
-            'Success',
-            'success'
-          )
-        );
-
-        dispatch(
-          getPinList(json.result)
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'getPinList',
+          'Error',
+          'error'
         )
-      })
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(
+        triggerToaster(
+          'getPinList',
+          'Success',
+          'success'
+        )
+      );
+      dispatch(
+        getPinList(json.result)
+      )
+    })
   }
 }

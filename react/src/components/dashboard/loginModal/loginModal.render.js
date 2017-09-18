@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-const LoginModalRender = function () {
+const LoginModalRender = function() {
   return (
     <div>
       <div

@@ -2,10 +2,6 @@ import {
   triggerToaster,
   getNewKMDAddresses
 } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 function getNewAddress(coin) { // TODO: remove(?)
@@ -121,7 +117,7 @@ function dumpPrivkey(coin, key) {
   });
 }
 
-export function importPrivkey(coin, key) {
+export function importPrivkey(coin, key, rescan = false) {
   return new Promise((resolve, reject) => {
     const payload = {
       mode: null,
@@ -130,7 +126,7 @@ export function importPrivkey(coin, key) {
       params: [
         key,
         '',
-        false
+        rescan
       ],
     };
 

@@ -108,6 +108,8 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
       </div>
+
+      <div className={ !this.state.isExplorerData ? 'hide' : '' } style={{ display: 'block', textAlign: 'center', paddingTop: '94px' }}><strong>Notice:</strong> balance is fetched from KMD explorer as a fallback measure!</div>
     </div>
   );
 };

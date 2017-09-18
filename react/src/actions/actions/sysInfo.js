@@ -1,9 +1,5 @@
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 
 export function shepherdGetSysInfo() {
   return dispatch => {
