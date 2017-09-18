@@ -68,6 +68,8 @@ class QRModal extends React.Component {
       modalIsOpen: false,
       errorShown: this.state.error ? true : false,
     });
+    
+    ReactDOM.unmountComponentAtNode(document.getElementById('webcam'));
   }
 
   render() {

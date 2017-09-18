@@ -67,10 +67,29 @@ class SendCoin extends React.Component {
   }
 
   setRecieverFromScan(receiver) {
-    this.setState({
-      sendTo: receiver
-    });
-
+    try {
+      var o = JSON.parse(receiver);
+      if (o && typeof o === "object") {
+        if(o.coin === this.props.ActiveCoin.coin) {
+          if(o.amount) {
+            this.setState({
+              amount: o.amount
+            });  
+          }
+          if(o.address) {
+            this.setState({
+              sendTo: o.address
+            });  
+          }
+        }
+      }
+    }
+    catch (e) {
+      this.setState({
+        sendTo: receiver
+      });
+    }
+    
     document.getElementById('edexcoinSendTo').focus();
   }
 
