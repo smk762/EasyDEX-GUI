@@ -1,6 +1,10 @@
 import Config from '../../config';
-import { getDecryptedPassphrase, getPinList, triggerToaster } from "../actionCreators";
-import { iguanaWalletPassphrase } from "./walletAuth";
+import {
+  getDecryptedPassphrase,
+  getPinList,
+  triggerToaster
+} from '../actionCreators';
+import { iguanaWalletPassphrase } from './walletAuth';
 
 export function encryptPassphrase(passphrase, key, pubKey) {
   const payload = {
@@ -77,7 +81,7 @@ export function loadPinList() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch(function(error) {
       console.log(error);
@@ -100,7 +104,7 @@ export function loadPinList() {
       );
       dispatch(
         getPinList(json.result)
-      )
+      );
     })
   }
 }
