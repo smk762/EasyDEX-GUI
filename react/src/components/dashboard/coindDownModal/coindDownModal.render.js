@@ -1,7 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-const CoindDownModalRender = function () {
+const CoindDownModalRender = function() {
   return (
     <div>
       <div

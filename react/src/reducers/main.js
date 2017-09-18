@@ -12,23 +12,27 @@ export function Main(state = {
 }, action) {
   switch (action.type) {
     case GET_ACTIVE_COINS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         activeCoins: action.activeCoins,
         coins: action.coins,
-      });
+      };
     case LOGIN:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoggedIn: action.isLoggedIn,
-      });
+      };
     case ACTIVE_HANDLE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoggedIn: action.isLoggedIn,
         activeHandle: action.handle,
-      });
+      };
     case DISPLAY_LOGIN_SETTINGS_MODAL:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         displayLoginSettingsModal: action.displayLoginSettingsModal,
-      });
+      };
     default:
       return state;
   }

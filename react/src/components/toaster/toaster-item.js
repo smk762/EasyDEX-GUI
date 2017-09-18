@@ -22,12 +22,13 @@ class ToasterItem extends React.Component {
     };
 
     this.dismissToast = this.dismissToast.bind(this);
+    this.renderLB = this.renderLB.bind(this);
     this.timeoutHandler = null;
   }
 
   componentWillReceiveProps(props) {
     if (props &&
-      props.message) {
+        props.message) {
       this.setState({
         message: props.message,
         type: props._type,
@@ -50,6 +51,29 @@ class ToasterItem extends React.Component {
     Store.dispatch(dismissToasterMessage(toastId));
   }
 
+  renderLB() {
+    if (typeof this.state.message === 'object') {
+      let _items = [];
+      const _msg = this.state.message;
+
+      for (let i = 0; i < _msg.length; i++) {
+        if (_msg[i] === '') {
+          _items.push(
+            <div className="margin-top-5"></div>
+          );
+        } else {
+          _items.push(
+            <div key={ `toaster-msg-${i}` }>{ _msg[i] }</div>
+          );
+        }
+      }
+
+      return _items;
+    } else {
+      return this.state.message;
+    }
+  }
+
   renderToast() {
     // ensure that setTimeout is called only once for each toast message
     if (this.state.autoClose &&
@@ -66,7 +90,7 @@ class ToasterItem extends React.Component {
           onClick={ () => this.dismissToast(this.state.toastId) }>×
         </button>
         <div className="toast-title">{ this.state.title }</div>
-        <div className="toast-message">{ this.state.message }</div>
+        <div className="toast-message">{ this.renderLB() }</div>
       </div>
     );
   }

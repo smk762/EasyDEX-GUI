@@ -1,9 +1,5 @@
 import { DASHBOARD_ACTIVE_COIN_GET_CACHE } from '../storeType';
 import { triggerToaster } from '../actionCreators';
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 
 // TODO: rewrite cache API to use POST

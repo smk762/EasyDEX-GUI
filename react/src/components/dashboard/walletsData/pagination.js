@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PaginationRender from './pagination.render';
 
 export default class TablePaginationRenderer extends Component {
-  constructor (props) {
+  constructor(props) {
     super();
     this.state = {
       page: props.page

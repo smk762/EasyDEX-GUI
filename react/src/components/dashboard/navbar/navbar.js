@@ -7,6 +7,7 @@ import {
   startInterval,
   toggleSyncOnlyModal,
   getSyncOnlyForks,
+  displayImportKeyModal,
   logout,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -21,6 +22,7 @@ class Navbar extends React.Component {
     this.state = {
       openDropMenu: false,
       nativeOnly: Config.iguanaLessMode,
+      isExperimentalOn: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.logout = this.logout.bind(this);
@@ -34,6 +36,16 @@ class Navbar extends React.Component {
       this.handleClickOutside,
       false
     );
+
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
   }
 
   componentWillUnmount() {
@@ -54,6 +66,10 @@ class Navbar extends React.Component {
         openDropMenu: false,
       });
     }
+  }
+
+  openImportKeyModal() {
+    Store.dispatch(displayImportKeyModal(true));
   }
 
   openDropMenu() {
@@ -115,6 +131,7 @@ class Navbar extends React.Component {
     return NavbarRender.call(this);
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
@@ -127,9 +144,8 @@ const mapStateToProps = (state) => {
     Interval: {
       interval: state.Interval.interval,
     },
-    nativeOnly: Config.iguanaLessMode
+    nativeOnly: Config.iguanaLessMode,
   };
- 
 };
 
 export default connect(mapStateToProps)(Navbar);

@@ -12,50 +12,61 @@ class AddCoinOptionsCrypto extends React.Component {
   }
 
   render() {
-    const isWindows = this.props.appSettings && this.props.appSettings.appInfo && this.props.appSettings.appInfo.sysInfo && this.props.appSettings.appInfo.sysInfo.platform === 'win32';
+    // const isWindows = this.props.appSettings && this.props.appSettings.appInfo && this.props.appSettings.appInfo.sysInfo && this.props.appSettings.appInfo.sysInfo.platform === 'win32';
+    let appConfig;
 
-    //<option value="ANC|full">AnonCoin (ANC)</option>
-    //<option value="MZC|full">MazaCoin (MZC)</option>
-    //<option value="SYS|full">SysCoin (SYS)</option>
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
     return (
       <optgroup label={ translate('ADD_COIN.CRYPTO_CURRENCIES') }>
         <option
+          value="ANC|full"
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>AnonCoin (ANC)</option>
+        <option
           value="BTCD|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>BitcoinDark (BTCD)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>BitcoinDark (BTCD)</option>
         <option
           value="BTC|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Bitcoin (BTC)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Bitcoin (BTC)</option>
         <option
           value="BTM|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Bitmark (BTM)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Bitmark (BTM)</option>
         <option
           value="CARB|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Carboncoin (CARB)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Carboncoin (CARB)</option>
         <option
           value="DGB|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Digibyte (DGB)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Digibyte (DGB)</option>
         <option
           value="DOGE|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Dogecoin (DOGE)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Dogecoin (DOGE)</option>
         <option
           value="FRK|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Franko (FRK)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Franko (FRK)</option>
         <option
           value="GAME|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Gamecredits (GAME)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Gamecredits (GAME)</option>
         <option value="KMD|basilisk|native">Komodo (KMD)</option>
         <option
+          value="MZC|full"
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>MazaCoin (MZC)</option>
+        <option
           value="LTC|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Litecoin (LTC)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Litecoin (LTC)</option>
+        <option
+          value="SYS|full"
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>SysCoin (SYS)</option>
         <option
           value="UNO|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Unobtanium (UNO)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Unobtanium (UNO)</option>
         <option
           value="ZEC|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Zcash (ZEC)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Zcash (ZEC)</option>
         <option
           value="ZET|full"
-          className={ this.state.nativeOnly || isWindows ? 'hide' : '' }>Zetacoin (ZET)</option>
+          className={ this.state.nativeOnly || !appConfig.experimentalFeatures ? 'hide' : '' }>Zetacoin (ZET)</option>
       </optgroup>
     );
   }
@@ -65,7 +76,6 @@ const mapStateToProps = (state) => {
   return {
     appSettings:  state.appSettings,
   };
- 
 };
 
 export default connect(mapStateToProps)(AddCoinOptionsCrypto);

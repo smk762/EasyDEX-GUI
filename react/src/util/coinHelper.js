@@ -36,7 +36,7 @@ export function getCoinTitle(coin) {
       break;
     case 'DEX':
       coinlogo = 'dex';
-      coinname = 'InstantDEX';
+      coinname = 'DEX';
       break;
     case 'DOGE':
       coinlogo = 'dogecoin';
@@ -89,6 +89,10 @@ export function getCoinTitle(coin) {
       titleBG = true;
       coinlogo = 'SUPERNET';
       coinname = 'SUPERNET';
+      break;
+    case 'CHIPS':
+      coinlogo = 'SUPERNET';
+      coinname = 'CHIPS';
       break;
     case 'REVS':
       coinlogo = 'REVS';

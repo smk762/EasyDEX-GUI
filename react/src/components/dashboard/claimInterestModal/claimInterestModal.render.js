@@ -39,29 +39,36 @@ export const _ClaimInterestTableRender = function() {
   return (
     <span>
       <div className="padding-bottom-20">
-        <strong>{ translate('CLAIM_INTEREST.REQ_P1') }:</strong> { translate('CLAIM_INTEREST.REQ_P2') } <strong>10 KMD</strong>
+        <p>
+          <strong>{ translate('CLAIM_INTEREST.REQ_P1') }:</strong> { translate('CLAIM_INTEREST.REQ_P2') } <strong>10 KMD</strong>
+        </p>
+        <p>
+          <strong>{ translate('CLAIM_INTEREST.TIP') }:</strong> { translate('CLAIM_INTEREST.TIP_DESC') }
+        </p>
       </div>
-      <div className="text-left padding-top-10 padding-bottom-10">
-        <label className="switch">
-          <input
-            type="checkbox"
-            checked={ this.state.showZeroInterest } />
+      { this.state.totalInterest > 0 &&
+        <div className="text-left padding-top-10 padding-bottom-10">
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={ this.state.showZeroInterest } />
+            <div
+              className="slider"
+              onClick={ this.toggleZeroInterest }></div>
+          </label>
           <div
-            className="slider"
-            onClick={ this.toggleZeroInterest }></div>
-        </label>
-        <div
-          className="toggle-label margin-right-15 pointer"
-          onClick={ this.toggleZeroInterest }>
-          Show zero interest
+            className="toggle-label margin-right-15 pointer"
+            onClick={ this.toggleZeroInterest }>
+            Show zero interest
+          </div>
+          <button
+            type="button"
+            className="btn btn-success waves-effect waves-light claim-btn"
+            onClick={ () => this.claimInterest() }>
+            <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', `${this.state.totalInterest} KMD `) }
+          </button>
         </div>
-      </div>
-      <button
-        type="button"
-        className="btn btn-success waves-effect waves-light claim-btn"
-        onClick={ () => this.claimInterest() }>
-        <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST') }
-      </button>
+      }
       <div className="table-scroll">
         <table className="table table-hover dataTable table-striped">
           <thead>
@@ -69,7 +76,7 @@ export const _ClaimInterestTableRender = function() {
               <th></th>
               <th>{ translate('INDEX.ADDRESS') }</th>
               <th>{ translate('INDEX.AMOUNT') }</th>
-              <th>{ translate('INDEX.Address') }</th>
+              <th>{ translate('INDEX.INTEREST') }</th>
               <th>Locktime</th>
             </tr>
           </thead>
@@ -81,7 +88,7 @@ export const _ClaimInterestTableRender = function() {
               <th></th>
               <th>{ translate('INDEX.ADDRESS') }</th>
               <th>{ translate('INDEX.AMOUNT') }</th>
-              <th>{ translate('INDEX.Address') }</th>
+              <th>{ translate('INDEX.INTEREST') }</th>
               <th>Locktime</th>
             </tr>
           </tfoot>
@@ -104,7 +111,7 @@ export const ClaimInterestModalRender = function() {
                 onClick={ this.closeModal }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white text-left">{ translate('INDEX.CLAIM_INTEREST') }</h4>
+              <h4 className="modal-title white text-left">{ translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }</h4>
             </div>
             <div className="modal-body">
               <i

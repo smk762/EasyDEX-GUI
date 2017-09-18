@@ -1,0 +1,33 @@
+.modal-import-key {
+  .modal-dialog {
+    width: 70%;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .line {
+    padding: 50px 0 40px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .line:before {
+    content: '';
+    display: inline-block;
+    height: 1px;
+    width: 47%;
+    background: #ccc;
+    margin-right: 10px;
+    position: relative;
+    top: -4px;
+  }
+  .line:after {
+    content: '';
+    display: inline-block;
+    height: 1px;
+    width: 47%;
+    background: #ccc;
+    margin-left: 10px;
+    position: relative;
+    top: -4px;
+  }
+}

@@ -17,7 +17,7 @@ import {
   WalletsNativeSendFormRender,
   _WalletsNativeSendFormRender
 } from './walletsNativeSend.render';
-import { isPositiveNumber } from "../../../util/number";
+import { isPositiveNumber } from '../../../util/number';
 
 class WalletsNativeSend extends React.Component {
   constructor(props) {
@@ -46,6 +46,9 @@ class WalletsNativeSend extends React.Component {
     this.isTransparentTx = this.isTransparentTx.bind(this);
     this.toggleSubstractFee = this.toggleSubstractFee.bind(this);
   }
+
+  // TODO: 1) t -> z amount validation
+  //       2) z -> z amount validation
 
   WalletsNativeSendFormRender() {
     return _WalletsNativeSendFormRender.call(this);
@@ -364,18 +367,10 @@ class WalletsNativeSend extends React.Component {
     return null;
   }
 
-  checkTotalBalance() {
-    let _balance = 0;
-    if (this.props.ActiveCoin.balance &&
-      this.props.ActiveCoin.balance.total) {
-      _balance = this.props.ActiveCoin.balance.total;
-    }
-
-    return _balance;
-  }
-
+  // TODO: reduce to a single toast
   validateSendFormData() {
     let valid = true;
+
     if (!this.state.sendTo ||
         this.state.sendTo.length < 34) {
       Store.dispatch(
@@ -399,7 +394,20 @@ class WalletsNativeSend extends React.Component {
       valid = false;
     }
 
-    if (this.state.amount > this.checkTotalBalance()) {
+    if (((!this.state.sendFrom || this.state.addressType === 'public') &&
+        this.state.sendTo &&
+        this.state.sendTo.length === 34 &&
+        this.props.ActiveCoin.balance &&
+        this.props.ActiveCoin.balance.transparent &&
+        Number(this.state.amount) > Number(this.props.ActiveCoin.balance.transparent)) ||
+        (this.state.addressType === 'public' &&
+        this.state.sendTo &&
+        this.state.sendTo.length > 34 &&
+        Number(this.state.amount) > Number(this.state.sendFromAmount)) ||
+        (this.state.addressType === 'private' &&
+        this.state.sendTo &&
+        this.state.sendTo.length >= 34 &&
+        Number(this.state.amount) > Number(this.state.sendFromAmount))) {
       Store.dispatch(
         triggerToaster(
           translate('SEND.INSUFFICIENT_FUNDS'),
@@ -445,17 +453,26 @@ class WalletsNativeSend extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = (state, props) => {
+  let _mappedProps = {
     ActiveCoin: {
       addresses: state.ActiveCoin.addresses,
       coin: state.ActiveCoin.coin,
       mode: state.ActiveCoin.mode,
       opids: state.ActiveCoin.opids,
+      balance: state.ActiveCoin.balance,
       activeSection: state.ActiveCoin.activeSection,
-    }
+    },
   };
- 
+
+  if (props &&
+      props.activeSection &&
+      props.renderFormOnly) {
+    _mappedProps.ActiveCoin.activeSection = props.activeSection;
+    _mappedProps.renderFormOnly = props.renderFormOnly;
+  }
+
+  return _mappedProps;
 };
 
 export default connect(mapStateToProps)(WalletsNativeSend);

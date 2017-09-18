@@ -24,6 +24,7 @@ class ClaimInterestModal extends React.Component {
       isLoading: true,
       transactionsList: [],
       showZeroInterest: true,
+      totalInterest: 0,
     };
     this.claimInterestTableRender = this.claimInterestTableRender.bind(this);
     this.toggleZeroInterest = this.toggleZeroInterest.bind(this);
@@ -37,6 +38,7 @@ class ClaimInterestModal extends React.Component {
 
   loadListUnspent() {
     let _transactionsList = [];
+    let _totalInterest = 0;
 
     getListUnspent(this.props.ActiveCoin.coin)
     .then((json) => {
@@ -52,11 +54,13 @@ class ClaimInterestModal extends React.Component {
               interest: json[i].interest,
               txid: json[i].txid,
             });
+            _totalInterest += Number(json[i].interest);
 
             if (i === json.length - 1) {
               this.setState({
                 transactionsList: _transactionsList,
                 isLoading: false,
+                totalInterest: _totalInterest,
               });
             }
           });
@@ -80,7 +84,7 @@ class ClaimInterestModal extends React.Component {
       } else if (json.result && json.result.length && json.result.length === 64) {
         Store.dispatch(
           triggerToaster(
-            `translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1') ${this.state.transactionsList[0].address}. translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')`,
+            `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.transactionsList[0].address}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
             false
@@ -134,6 +138,7 @@ class ClaimInterestModal extends React.Component {
     return ClaimInterestModalRender.call(this);
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
@@ -142,10 +147,9 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
     },
     Dashboard: {
-      displayClaimInterestModal: state.Dashboard.displayClaimInterestModal
-    }
+      displayClaimInterestModal: state.Dashboard.displayClaimInterestModal,
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(ClaimInterestModal);

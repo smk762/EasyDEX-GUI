@@ -16,6 +16,7 @@ import About from '../about/about';
 import WalletsNative from '../walletsNative/walletsNative';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 import CoindDownModal from '../coindDownModal/coindDownModal';
+import ImportKeyModal from '../importKeyModal/importKeyModal';
 
 const DashboardRender = function() {
   return (
@@ -25,6 +26,9 @@ const DashboardRender = function() {
         id="section-dashboard">
         <Navbar />
         <CoindDownModal />
+        { this.props.Dashboard.displayImportKeyModal &&
+          <ImportKeyModal />
+        }
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile />
           <WalletsNav />
@@ -46,7 +50,7 @@ const DashboardRender = function() {
           <Jumblr  />
         }
         { this.isSectionActive('settings') &&
-          <Settings />
+          <Settings disableWalletSpecificUI={false} />
         }
         { this.isSectionActive('about') &&
           <About />

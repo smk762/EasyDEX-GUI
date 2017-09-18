@@ -16,8 +16,8 @@ class WalletsInfo extends React.Component {
 
   render() {
     if (this.props &&
-        this.props.Dashboard &&
-        this.props.Dashboard.progress &&
+        this.props.ActiveCoin &&
+        this.props.ActiveCoin.progress &&
         this.props.ActiveCoin.activeSection === 'settings') {
       return WalletsNativeInfoRender.call(this);
     }
@@ -31,12 +31,9 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
       activeSection: state.ActiveCoin.activeSection,
+      progress: state.ActiveCoin.progress,
     },
-    Dashboard: {
-      progress: state.Dashboard.progress
-    }
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsInfo);

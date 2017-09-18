@@ -5,7 +5,8 @@ import AddCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
 
 const CoinSelectorsRender = function(item, coin, i) {
-  const isWindows = this.props.Settings && this.props.Settings.appInfo && this.props.Settings.appInfo.sysInfo && this.props.Settings.appInfo.sysInfo.platform === 'win32';
+  // const isWindows = this.props.Settings && this.props.Settings.appInfo && this.props.Settings.appInfo.sysInfo && this.props.Settings.appInfo.sysInfo.platform === 'win32';
+  const hideFullModeBtn = item && item.selectedCoin && item.selectedCoin.indexOf('|full') === -1 || !this.state.isExperimentalOn ? true : false;
 
   return (
     <div
@@ -54,7 +55,7 @@ const CoinSelectorsRender = function(item, coin, i) {
         </button>
       </div>
       <div className="col-sm-11 text-center add-coin-modes">
-        <div className={ this.state.nativeOnly || isWindows ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
+        <div className={ this.state.nativeOnly || hideFullModeBtn ? 'hide' : 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' }>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -169,7 +170,7 @@ const CoinSelectorsRender = function(item, coin, i) {
           </select>
         </div>
       </div>
-      <div className={ item.mode === '1' || item.mode === 1 ? 'col-sm-12' : 'hide' }>
+      <div className={ (item.mode === '1' || item.mode === 1) && this.state.isExperimentalOn ? 'col-sm-12' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">
           <span className="pointer">
             <label className="switch">
@@ -191,4 +192,5 @@ const CoinSelectorsRender = function(item, coin, i) {
     </div>
   )
 };
+
 export default CoinSelectorsRender;

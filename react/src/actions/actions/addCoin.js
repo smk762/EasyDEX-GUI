@@ -8,10 +8,6 @@ import {
   iguanaWalletPassphraseState,
 } from '../actionCreators';
 import {
-  logGuiHttp,
-  guiLogState
-} from './log';
-import {
   startCurrencyAssetChain,
   startAssetChain,
   startCrypto,
@@ -96,31 +92,12 @@ export function addCoin(coin, mode, syncOnly, port, startupParams) {
 
 export function iguanaAddCoin(coin, mode, acData, port) {
   function _iguanaAddCoin(dispatch) {
-    const _timestamp = Date.now();
-    if (Config.debug) {
-      dispatch(logGuiHttp({
-        timestamp: _timestamp,
-        function: 'iguanaAddCoin',
-        type: 'post',
-        url: `http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`,
-        payload: acData,
-        status: 'pending',
-      }));
-    }
-
     return fetch(`http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`, {
       method: 'POST',
       body: JSON.stringify(acData),
     })
     .catch(function(error) {
       console.log(error);
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'error',
-          response: error,
-        }));
-      }
       dispatch(
         triggerToaster(
           translate('TOASTR.FAILED_TO_ADDCOIN'),
@@ -131,13 +108,6 @@ export function iguanaAddCoin(coin, mode, acData, port) {
     })
     .then(response => response.json())
     .then(json => {
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          status: 'success',
-          response: json,
-        }));
-      }
       dispatch(
         addCoinResult(
           coin,
@@ -287,7 +257,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
         console.warn(acData);
         dispatch(
           triggerToaster(
-            `Error starting ${coin} daemon. Port ${acData.rpc} is already taken!`,
+            `Error starting ${coin} daemon. Port ${acData.rpc} is already taken!`, // translate
             translate('TOASTR.SERVICE_NOTIFICATION'),
             'error',
             false
@@ -372,7 +342,7 @@ export function iguanaActiveHandleBypass() {
     .then(response => response.json())
     .then(
       json => dispatch(
-        iguanaWalletPassphraseState(json, dispatch)
+        iguanaWalletPassphraseState(json, dispatch, true)
       )
     )
   }

@@ -128,12 +128,6 @@ class Jumblr extends React.Component {
     });
   }
 
-  /*toggleAddressGenMod() {
-    this.setState({
-      jumblrDepositAddressPBased: !this.state.jumblrDepositAddressPBased,
-    });
-  }*/
-
   generateJumblrSecretAddress() {
     let _jumblrSecretAddress = [];
     let _apiSuccessCount = 0;
@@ -285,7 +279,9 @@ class Jumblr extends React.Component {
 
           importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
           .then((json) => {
-            if (!json.id && !json.result && !json.error) {
+            if (!json.id &&
+                !json.result &&
+                !json.error) {
               _jumblrSecretAddress.push(_genKeys);
               this.setState(Object.assign({}, this.state, {
                 jumblrSecretAddressImport: _jumblrSecretAddress,
@@ -344,7 +340,9 @@ class Jumblr extends React.Component {
 
     importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
     .then((json) => {
-      if (!json.id && !json.result && !json.error) {
+      if (!json.id &&
+          !json.result &&
+          !json.error) {
         // console.warn('importPrivkey', json);
         setJumblrAddress(
           this.props.ActiveCoin.coin,
@@ -429,9 +427,8 @@ const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(Jumblr);

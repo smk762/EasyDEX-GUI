@@ -502,9 +502,8 @@ const mapStateToProps = (state) => {
   return {
     Atomic: {
       response: state.Atomic.response,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(Atomic);

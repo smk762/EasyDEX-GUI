@@ -26,18 +26,18 @@ class WalletsNative extends React.Component {
     if (data &&
         data.komodod &&
         data.komodod.error) {
-        switch (data.komodod.error) {
-          case 'run -reindex':
-            Store.dispatch(
-              triggerToaster(
-                translate('TOASTR.RESTART_AGAMA_WITH_REINDEX_PARAM'),
-                translate('TOASTR.WALLET_NOTIFICATION'),
-                'info',
-                false
-              )
-            );
-            break;
-        }
+      switch (data.komodod.error) {
+        case 'run -reindex':
+          Store.dispatch(
+            triggerToaster(
+              translate('TOASTR.RESTART_AGAMA_WITH_REINDEX_PARAM'),
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'info',
+              false
+            )
+          );
+          break;
+      }
     }
   }
 
@@ -79,9 +79,8 @@ const mapStateToProps = (state) => {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
       mode: state.ActiveCoin.mode,
-    }
+    },
   };
- 
 };
 
 export default connect(mapStateToProps)(WalletsNative);

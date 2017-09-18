@@ -1,7 +1,3 @@
-import {
-  logGuiHttp,
-  guiLogState
-} from './log';
 import Config from '../../config';
 import { checkAC } from '../../components/addcoin/payload';
 
@@ -29,31 +25,12 @@ export function iguanaHashHex(data, dispatch) {
     if (Config.cli.default) {
       resolve(true);
     } else {
-      const _timestamp = Date.now();
-      if (Config.debug) {
-        dispatch(logGuiHttp({
-          timestamp: _timestamp,
-          function: 'iguanaHashHex',
-          type: 'post',
-          url: `http://127.0.0.1:${Config.iguanaCorePort}`,
-          payload: payload,
-          status: 'pending',
-        }));
-      }
-
       fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
         method: 'POST',
         body: JSON.stringify(payload),
       })
       .catch(function(error) {
         console.log(error);
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            status: 'error',
-            response: error,
-          }));
-        }
         dispatch(
           triggerToaster(
             'iguanaHashHex',
@@ -64,13 +41,6 @@ export function iguanaHashHex(data, dispatch) {
       })
       .then(response => response.json())
       .then(json => {
-        if (Config.debug) {
-          dispatch(logGuiHttp({
-            timestamp: _timestamp,
-            status: 'success',
-            response: json,
-          }));
-        }
         resolve(json.hex);
       })
     }
