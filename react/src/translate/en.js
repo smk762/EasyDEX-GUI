@@ -659,6 +659,10 @@ export const _lang = {
       'TOTAL_AMOUNT_POSITIVE_NUMBER': 'Total amount (amount - fee) must be a positive number',
       'INSUFFICIENT_FUNDS': 'You don\'t have the necessary funds to make this transaction',
       'SELECT_SOURCE_ADDRESS': 'Select source (from) address',
+      'QR_COIN_MISMATCH_MESSAGE_IMPORT_COIN': 'QR code had coin ',
+      'QR_COIN_MISMATCH_MESSAGE_ACTIVE_COIN': '. You have ',
+      'QR_COIN_MISMATCH_MESSAGE_END': ' active in your wallet. Please, check that you have same coin active that you try to import!',
+      'QR_COIN_MISMATCH_TITLE': 'Coin Mismatch',
     },
     'FIAT_CURRENCIES': {
       'AUD': 'Australian Dollar (AUD)',

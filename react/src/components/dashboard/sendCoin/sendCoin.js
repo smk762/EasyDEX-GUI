@@ -83,6 +83,18 @@ class SendCoin extends React.Component {
               sendTo: recObj.address,
             });
           }
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              translate('SEND.QR_COIN_MISMATCH_MESSAGE_IMPORT_COIN') + 
+              recObj.coin + 
+              translate('SEND.QR_COIN_MISMATCH_MESSAGE_ACTIVE_COIN') + 
+              this.props.ActiveCoin.coin + 
+              translate('SEND.QR_COIN_MISMATCH_MESSAGE_END'),
+              translate('SEND.QR_COIN_MISMATCH_TITLE'),
+              'warning'
+            )
+          );
         }
       }
     } catch (e) {
