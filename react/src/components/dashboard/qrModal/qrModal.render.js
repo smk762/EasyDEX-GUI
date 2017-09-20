@@ -26,10 +26,21 @@ export const QRModalRender = function() {
             </div>
             <div className="modal-body">
               <div className="animsition vertical-align fade-in">
-                <div className="page-content vertical-align-middle">
+                <div 
+                  id={ 'qrModalCanvas' + this.props.content }
+                  className="page-content vertical-align-middle text-center">
                   <QRCode
                     value={ this.props.content }
                     size={ 198 } />
+                  <p className="margin-top-10">
+                    <a href=""
+                      id={ 'saveModalImage' + this.props.content }
+                      className="btn btn-success waves-effect waves-light save-image-btn margin-right-10"
+                      onClick={ this.saveAsImage }>
+                        <i className="icon fa-picture-o"></i>&nbsp;
+                        { translate('INDEX.SAVE_AS_IMAGE') }
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>

@@ -59,10 +59,22 @@ export const InvoiceModalRender = function () {
                           onChange={ this.updateInput } />
                       </form>
                     </div>
-                    <div className="col-lg-4">
+                    <div 
+                      id="qrCanvas" 
+                      className="col-lg-4 text-center">
                       <QRCode
                         value={ this.state.content }
                         size={ 198 } />
+                        <p className="margin-top-10">
+                          <a href=""
+                            id="saveImage"
+                            className="btn btn-success waves-effect waves-light save-image-btn margin-right-10"
+                            disabled={ this.state.qrAddress === '-1' }
+                            onClick={ this.saveAsImage }>
+                              <i className="icon fa-picture-o"></i>&nbsp;
+                              { translate('INDEX.SAVE_AS_IMAGE') }
+                          </a>
+                        </p>
                     </div>
                   </div>
                   <div className="row hide">

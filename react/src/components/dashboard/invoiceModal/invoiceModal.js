@@ -16,7 +16,7 @@ class InvoiceModal extends React.Component {
     this.state = {
       modalIsOpen: false,
       content: '',
-      qrAddress: '',
+      qrAddress: '-1',
       qrAmount: 0,
     };
     this.openModal = this.openModal.bind(this);
@@ -24,6 +24,7 @@ class InvoiceModal extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.renderAddressList = this.renderAddressList.bind(this);
     this.updateQRContent = this.updateQRContent.bind(this);
+    this.saveAsImage = this.saveAsImage.bind(this);
   }
 
   openModal() {
@@ -32,11 +33,26 @@ class InvoiceModal extends React.Component {
     });
   }
 
+  saveAsImage(e) {
+    if (this.state.qrAddress !== '-1') {
+      const qrCanvas = document.getElementById("qrCanvas");
+      const canvas = qrCanvas.getElementsByTagName('canvas');
+      const dataURL = canvas[0].toDataURL();
+      const a = document.getElementById('saveImage');
+      const time = new Date().getTime();
+      a.href = dataURL;
+      a.download = this.state.qrAddress + '_' + time;
+    } else {
+      e.preventDefault();
+      return;
+    }
+  }
+  
   updateInput(e) {
     this.setState({
       [e.target.name]: e.target.value
     }, this.updateQRContent);
-   }
+  }
 
   updateQRContent() {
     this.setState({

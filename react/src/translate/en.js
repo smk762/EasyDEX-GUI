@@ -311,6 +311,7 @@ export const _lang = {
       'CREATE_INVOICE_QR': 'Create Invoice QR Code',
       'QR_CONTENT': 'QR Content',
       'CHOOSE_RECEIVING_ADDRESS': 'Choose Address',
+      'SAVE_AS_IMAGE': 'Save as Image'
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',
