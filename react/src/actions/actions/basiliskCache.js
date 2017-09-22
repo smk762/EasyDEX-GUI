@@ -1,3 +1,5 @@
+// remove
+
 import { DASHBOARD_ACTIVE_COIN_GET_CACHE } from '../storeType';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';

@@ -1,3 +1,5 @@
+// remove
+
 import { DASHBOARD_ACTIVE_COIN_SENDTO } from '../storeType';
 import { translate } from '../../translate/translate';
 import {

@@ -5,10 +5,7 @@ import {
   toggleAddcoinModal,
   stopInterval,
   startInterval,
-  toggleSyncOnlyModal,
-  getSyncOnlyForks,
   displayImportKeyModal,
-  logout,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -21,11 +18,9 @@ class Navbar extends React.Component {
     super();
     this.state = {
       openDropMenu: false,
-      nativeOnly: Config.iguanaLessMode,
       isExperimentalOn: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
-    this.logout = this.logout.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this._checkAC = this._checkAC.bind(this);
   }
@@ -90,39 +85,6 @@ class Navbar extends React.Component {
     return checkAC(this.props.ActiveCoin.coin);
   }
 
-  logout() {
-    Store.dispatch(
-      stopInterval(
-        'sync',
-        this.props.Interval.interval
-      )
-    );
-    Store.dispatch(
-      stopInterval(
-        'basilisk',
-        this.props.Interval.interval
-      )
-    );
-    Store.dispatch(logout());
-    location.reload();
-  }
-
-  openSyncOnlyModal() {
-    Store.dispatch(getSyncOnlyForks());
-
-    const _iguanaActiveHandle = setInterval(() => {
-      Store.dispatch(getSyncOnlyForks());
-    }, 3000);
-    Store.dispatch(
-      startInterval(
-        'syncOnly',
-        _iguanaActiveHandle
-      )
-    );
-
-    Store.dispatch(toggleSyncOnlyModal(true));
-  }
-
   isSectionActive(section) {
     return this.props.Dashboard.activeSection === section;
   }
@@ -144,9 +106,7 @@ const mapStateToProps = (state) => {
     Interval: {
       interval: state.Interval.interval,
     },
-    nativeOnly: Config.iguanaLessMode,
   };
 };
 
 export default connect(mapStateToProps)(Navbar);
-

@@ -28,13 +28,13 @@ class InvoiceModal extends React.Component {
 
   openModal() {
     this.setState({
-      modalIsOpen: true
+      modalIsOpen: true,
     });
   }
 
   updateInput(e) {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }, this.updateQRContent);
    }
 
@@ -62,17 +62,8 @@ class InvoiceModal extends React.Component {
     return address.interest === 'N/A' || address.interest === 0 || !address.interest;
   }
 
-  isBasiliskMode() {
-    return this.props.ActiveCoin.mode === 'basilisk';
-  }
-
-  isNativeMode() {
-    return this.props.ActiveCoin.mode == 'native';
-  }
-
   renderAddressList(type) {
     const _addresses = this.props.ActiveCoin.addresses;
-    const _cache = this.props.ActiveCoin.cache;
     const _coin = this.props.ActiveCoin.coin;
 
     if (_addresses &&
@@ -82,21 +73,6 @@ class InvoiceModal extends React.Component {
 
       for (let i = 0; i < _addresses[type].length; i++) {
         let address = _addresses[type][i];
-
-        if (this.isBasiliskMode() &&
-            this.hasNoAmount(address)) {
-          address.amount = _cache && _cache[_coin][address.address] &&
-            _cache[_coin][address.address].getbalance &&
-            _cache[_coin][address.address].getbalance.data &&
-            _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
-        }
-        if (this.isBasiliskMode() &&
-            this.hasNoInterest(address)) {
-          address.interest = _cache && _cache[_coin][address.address] &&
-            _cache[_coin][address.address].getbalance &&
-            _cache[_coin][address.address].getbalance.data &&
-            _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
-        }
 
         items.push(
           AddressItemRender.call(this, address, type)
@@ -111,7 +87,7 @@ class InvoiceModal extends React.Component {
 
   render() {
     if (this.state.modalIsOpen) {
-      return <BodyEnd>{ InvoiceModalRender.call(this) }</BodyEnd>
+      return <BodyEnd>{ InvoiceModalRender.call(this) }</BodyEnd>;
     } else {
       return InvoiceModalButtonRender.call(this);
     }

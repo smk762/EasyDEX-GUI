@@ -11,11 +11,8 @@ import {
   DASHBOARD_ACTIVE_COIN_NATIVE_TXHISTORY,
   DASHBOARD_ACTIVE_COIN_NATIVE_OPIDS,
   DASHBOARD_ACTIVE_COIN_SENDTO,
-  DASHBOARD_ACTIVE_COIN_GET_CACHE,
-  DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
   DASHBOARD_ACTIVE_ADDRESS,
   DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE,
-  SYNCING_FULL_MODE,
   SYNCING_NATIVE_MODE,
   DASHBOARD_UPDATE,
 } from '../actions/storeType';
@@ -35,8 +32,6 @@ export function ActiveCoin(state = {
   txhistory: [],
   opids: null,
   lastSendToResponse: null,
-  cache: null,
-  mainBasiliskAddress: null,
   activeAddress: null,
   progress: null,
   rescanInProgress: false,
@@ -58,7 +53,6 @@ export function ActiveCoin(state = {
           showTransactionInfoTxIndex: state.showTransactionInfoTxIndex,
           activeSection: state.activeSection,
           lastSendToResponse: state.lastSendToResponse,
-          mainBasiliskAddress: state.mainBasiliskAddress,
           opids: state.opids,
           activeBasiliskAddress: state.activeBasiliskAddress,
           progress: state.progress,
@@ -81,7 +75,6 @@ export function ActiveCoin(state = {
           showTransactionInfoTxIndex: _coinData.showTransactionInfoTxIndex,
           activeSection: _coinData.activeSection,
           lastSendToResponse: _coinData.lastSendToResponse,
-          mainBasiliskAddress: _coinData.mainBasiliskAddress,
           opids: _coinData.opids,
           activeBasiliskAddress: _coinData.activeBasiliskAddress,
           progress: _coinData.progress,
@@ -101,7 +94,6 @@ export function ActiveCoin(state = {
             showTransactionInfoTxIndex: state.showTransactionInfoTxIndex,
             activeSection: state.activeSection,
             lastSendToResponse: state.lastSendToResponse,
-            mainBasiliskAddress: state.mainBasiliskAddress,
             opids: state.opids,
             activeBasiliskAddress: state.activeBasiliskAddress,
             progress: state.progress,
@@ -201,25 +193,10 @@ export function ActiveCoin(state = {
         ...state,
         lastSendToResponse: action.lastSendToResponse,
       };
-    case DASHBOARD_ACTIVE_COIN_GET_CACHE:
-      return {
-        ...state,
-        cache: action.cache,
-      };
-    case DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR:
-      return {
-        ...state,
-        mainBasiliskAddress: action.address,
-      };
     case DASHBOARD_ACTIVE_ADDRESS:
       return {
         ...state,
         activeAddress: action.address,
-      };
-    case SYNCING_FULL_MODE:
-      return {
-        ...state,
-        progress: action.progress,
       };
     case SYNCING_NATIVE_MODE:
       return {

@@ -1,3 +1,5 @@
+// remove
+
 import { ACTIVE_COIN_GET_ADDRESSES } from '../storeType';
 import {
   triggerToaster,

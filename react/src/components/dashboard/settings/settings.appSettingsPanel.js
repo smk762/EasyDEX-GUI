@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import Config from '../../../config';
 import {
-  iguanaActiveHandle,
   getAppConfig,
   getAppInfo,
   resetAppConfig,
@@ -39,10 +38,6 @@ class AppSettingsPanel extends React.Component {
   }
 
   componentDidMount(props) {
-    if (!this.props.disableWalletSpecificUI) {
-      Store.dispatch(iguanaActiveHandle());
-    }
-
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
   }

@@ -6,7 +6,6 @@ import {
   SyncPercentageRender,
   LoadingBlocksRender,
   TranslationComponentsRender,
-  CoinIsBusyRender,
   ChainActivationNotificationRender,
   VerifyingBlocksRender,
   WalletsProgressRender
@@ -53,14 +52,6 @@ class WalletsProgress extends React.Component {
     } else {
       return false;
     }
-  }
-
-  isNativeMode() {
-    return this.props.ActiveCoin.mode === 'native';
-  }
-
-  isFullMode() {
-    return this.props.ActiveCoin.mode === 'full';
   }
 
   renderChainActivationNotification() {
@@ -144,7 +135,7 @@ class WalletsProgress extends React.Component {
 
         if (_parseProgress &&
             _parseProgress[1]) {
-          return SyncPercentageRender.call(this, _parseProgress[1].toFixed(2) + '%', _parseProgress[0], _parseProgress[2] ? _parseProgress[2] : null);
+          return SyncPercentageRender.call(this, `${_parseProgress[1].toFixed(2)}%`, _parseProgress[0], _parseProgress[2] ? _parseProgress[2] : null);
         } else {
           return LoadingBlocksRender.call(this);
         }
@@ -283,13 +274,7 @@ class WalletsProgress extends React.Component {
 
   render() {
     if (this.props &&
-        this.props.ActiveCoin &&
-        (this.isFullMode() || this.isNativeMode())) {
-      if (this.props.ActiveCoin.progress &&
-          this.props.ActiveCoin.progress.error) {
-        return CoinIsBusyRender.call(this);
-      }
-
+        this.props.ActiveCoin) {
       return WalletsProgressRender.call(this);
     }
 

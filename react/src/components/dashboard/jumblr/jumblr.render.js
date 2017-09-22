@@ -25,26 +25,6 @@ export const JumblrRenderSecretAddressList = function(type) {
   }
 };
 
-/* passphrase toggle
-  <div className={ 'toggle-box padding-top-20 padding-bottom-' + (this.state.jumblrDepositAddressPBased ? '10' : '30') }>
-    <span className="pointer">
-      <label className="switch">
-        <input
-          type="checkbox"
-          checked={ this.state.jumblrDepositAddressPBased } />
-        <div
-          className="slider"
-          onClick={ () => this.toggleAddressGenMod() }></div>
-      </label>
-      <div
-        className="toggle-label"
-        onClick={ () => this.toggleAddressGenMod() }>
-          Passphrase based address
-      </div>
-    </span>
-  </div>
-*/
-
 export const JumblrRender = function() {
   return (
     <div className="page margin-left-0 jumblr">

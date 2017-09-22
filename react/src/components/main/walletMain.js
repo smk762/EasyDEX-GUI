@@ -4,14 +4,14 @@ import Toaster from '../toaster/toaster';
 import AddCoin from '../addcoin/addcoin';
 import Login from '../login/login';
 import Dashboard from '../dashboard/main/dashboard';
-import SyncOnly from '../dashboard/syncOnly/syncOnly';
 
 class WalletMain extends React.Component {
   render() {
     return (
       <div className="full-height">
-        <input type="text" id="js-copytextarea" />
-        <SyncOnly />
+        <input
+          type="text"
+          id="js-copytextarea" />
         <Dashboard />
         <AddCoin />
         <Login />

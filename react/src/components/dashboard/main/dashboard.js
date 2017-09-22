@@ -20,18 +20,16 @@ class Dashboard extends React.Component {
     return DashboardRender.call(this);
   }
 
-  isLoggedIn() {
+  displayDashboard() {
     return this.props &&
       this.props.Main &&
-      this.props.Main.isLoggedIn;
-  }
-
-  isNativeMode() {
-    return this.props.ActiveCoin.mode === 'native';
+      this.props.Main.coins &&
+      this.props.Main.coins.native &&
+      this.props.Main.coins.native.length;
   }
 
   render() {
-    if (this.isLoggedIn()) {
+    if (this.displayDashboard()) {
       return this.renderDashboard();
     }
 

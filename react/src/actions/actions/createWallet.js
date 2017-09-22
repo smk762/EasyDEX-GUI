@@ -1,3 +1,5 @@
+// remove
+
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';

@@ -1,3 +1,5 @@
+// remove
+
 import { triggerToaster } from '../actionCreators';
 
 export function resolveOpenAliasAddress(email) {

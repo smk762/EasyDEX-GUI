@@ -11,8 +11,6 @@ import {
 } from '../../actions/actionCreators';
 import Store from '../../store';
 
-// TODO: refactor coin selector options renders
-
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
 
@@ -24,20 +22,11 @@ class AddCoin extends React.Component {
       coins: [],
       defaultCoinState: {
         selectedCoin: null,
-        fullMode: {
-          disabled: true,
-          checked: false,
-        },
-        basiliskMode: {
-          disabled: true,
-          checked: false,
-        },
         nativeMode: {
           disabled: true,
           checked: false,
         },
         mode: -2,
-        syncOnly: false,
         daemonParam: null,
       },
       display: false,
@@ -50,7 +39,6 @@ class AddCoin extends React.Component {
     this.dismiss = this.dismiss.bind(this);
     this.addNewItem = this.addNewItem.bind(this);
     this.activateAllCoins = this.activateAllCoins.bind(this);
-    this.toggleActionsMenu = this.toggleActionsMenu.bind(this);
     this.saveCoinSelection = this.saveCoinSelection.bind(this);
     this.loadCoinSelection = this.loadCoinSelection.bind(this);
   }
@@ -82,18 +70,6 @@ class AddCoin extends React.Component {
     });
   }
 
-  toggleSyncOnlyMode(index) {
-    let _coins = this.state.coins;
-
-    _coins[index] = Object.assign({}, _coins[index], {
-      syncOnly: !this.state.coins[index].syncOnly,
-    });
-
-    this.setState(Object.assign({}, this.state, {
-      coins: _coins,
-    }));
-  }
-
   updateDaemonParam(e, index) {
     let _coins = this.state.coins;
 
@@ -114,16 +90,6 @@ class AddCoin extends React.Component {
 
   componentWillMount() {
     this.addNewItem();
-
-    let appConfig;
-
-    try {
-      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-    } catch (e) {}
-
-    this.setState({
-      isExperimentalOn: appConfig.experimentalFeatures,
-    });
   }
 
   componentWillReceiveProps(props) {
@@ -149,31 +115,20 @@ class AddCoin extends React.Component {
 
   updateSelectedCoin(e, index) {
     const coin = e.target.value.split('|');
-    const defaultMode = Config.iguanaLessMode ? 'native' : coin[1];
+    const defaultMode = 'native';
     const modeToValue = { // TODO: move to utils
-      'full': 1,
-      'basilisk': 0,
-      'native': -1,
+      native: -1,
     };
     let _coins = this.state.coins;
     const _value = e.target.value;
 
     _coins[index] = {
       [e.target.name]: _value,
-      fullMode: {
-        disabled: _value.indexOf('full') > -1 ? false : true,
-        checked: defaultMode === 'full' ? true : false,
-      },
-      basiliskMode: {
-        disabled: _value.indexOf('basilisk') > -1 ? false : true,
-        checked: defaultMode === 'basilisk' ? true : false,
-      },
       nativeMode: {
         disabled: _value.indexOf('native') > -1 ? false : true,
         checked: defaultMode === 'native' ? true : false,
       },
       mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
-      syncOnly: this.state.coins[index].syncOnly,
     }
 
     this.setState(Object.assign({}, this.state, {
@@ -187,20 +142,11 @@ class AddCoin extends React.Component {
 
     _coins[index] = {
       selectedCoin: _selectedCoin,
-      fullMode: {
-        disabled: _selectedCoin.indexOf('full') > -1 ? false : true,
-        checked: _value === '1' ? true : false,
-      },
-      basiliskMode: {
-        disabled: _selectedCoin.indexOf('basilisk') > -1 ? false : true,
-        checked: _value === '0' ? true : false,
-      },
       nativeMode: {
         disabled: _selectedCoin.indexOf('native') > -1 ? false : true,
         checked: _value === '-1' ? true : false,
       },
       mode: _value,
-      syncOnly: _coins[index].syncOnly,
     };
 
     this.setState(Object.assign({}, this.state, {
@@ -226,14 +172,10 @@ class AddCoin extends React.Component {
     if (!_coin.daemonParam) {
       Store.dispatch(addCoin(
         coin,
-        _coin.mode,
-        _coin.syncOnly,
       ));
     } else {
       Store.dispatch(addCoin(
         coin,
-        _coin.mode,
-        _coin.syncOnly,
         null,
         { type: _coin.daemonParam } // TODO: custom param value
       ));
@@ -342,8 +284,6 @@ class AddCoin extends React.Component {
 
   isCoinAlreadyAdded(coin) {
     const modes = [
-      'basilisk',
-      'full',
       'native'
     ];
 

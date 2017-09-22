@@ -51,12 +51,6 @@ const AddCoinRender = function() {
                 </button>
               </div>
               <div className="col-sm-12">
-                <p className={ this.state.nativeOnly ? 'hide' : '' }>
-                  <strong>{ translate('INDEX.FULL_MODE') }:</strong> { translate('INDEX.FULL_MODE_DESC') }
-                </p>
-                <p className={ this.state.nativeOnly ? 'hide' : '' }>
-                  <strong>{ translate('INDEX.BASILISK_MODE') }:</strong> { translate('INDEX.BASILISK_MODE_DESC') }
-                </p>
                 <p>
                   <strong>{ translate('INDEX.NATIVE_MODE') }:</strong> { translate('INDEX.NATIVE_MODE_DESC1') }&nbsp;
                   <strong>Komodo Daemon</strong> { translate('INDEX.NATIVE_MODE_DESC2') }&nbsp;

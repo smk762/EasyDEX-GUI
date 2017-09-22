@@ -43,7 +43,7 @@ class AddCoinOptionsACFiat extends React.Component {
       _items.push(
         <option
           key={ _fiat[i] }
-          value={ `${_fiat[i].toUpperCase()}|basilisk|native` }>{ translate(`FIAT_CURRENCIES.${_fiat[i].toUpperCase()}`) }</option>
+          value={ `${_fiat[i].toUpperCase()}|native` }>{ translate(`FIAT_CURRENCIES.${_fiat[i].toUpperCase()}`) }</option>
       );
     }
 

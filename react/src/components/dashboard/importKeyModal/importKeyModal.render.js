@@ -1,9 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-/*export const _ClaimInterestTableRender = function() {
-};*/
-
 export const ImportKeyModalRender = function() {
   return (
     <span>
@@ -17,17 +14,17 @@ export const ImportKeyModalRender = function() {
                 onClick={ this.closeModal }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white text-left">Import key</h4>
+              <h4 className="modal-title white text-left">{ translate('IMPORT_KEY.IMPORT_KEY') }</h4>
             </div>
             <div className="modal-body">
               <div className="padding-bottom-40">
-                Two forms below allow you to import either <strong>Iguana Core / ICO</strong> passphrase (seed) or <strong>WIF (Wallet Import Format)</strong> key.
+                { translate('IMPORT_KEY.TWO_FORMS_BELOW_P1') } <strong>Iguana Core / ICO</strong> { translate('IMPORT_KEY.TWO_FORMS_BELOW_P2') } <strong>WIF (Wallet Import Format)</strong> { translate('IMPORT_KEY.TWO_FORMS_BELOW_P3') }.
               </div>
               <div>
-                <strong>Passphrase / seed</strong>
+                <strong>{ translate('IMPORT_KEY.PASSPHRASE') }</strong>
                 <p className="margin-top-10">
-                  <strong>Notice:</strong> importing a passphrase will trigger a full wallet rescan.&nbsp;
-                  <span className={ this.props.ActiveCoin.coin === 'KMD' ? '' : 'hide' }>This process can take hours to rescan the whole blockchain.</span>
+                  <strong>{ translate('IMPORT_KEY.NOTICE') }:</strong> { translate('IMPORT_KEY.NOTICE_DESC') }.&nbsp;
+                  <span className={ this.props.ActiveCoin.coin === 'KMD' ? '' : 'hide' }>{ translate('IMPORT_KEY.KMD_RESCAN_WARNING_TIME') }.</span>
                 </p>
                 <form
                   className="wifkeys-form"
@@ -59,17 +56,17 @@ export const ImportKeyModalRender = function() {
                     <button
                       type="button"
                       className="btn btn-primary waves-effect waves-light margin-right-20"
-                      onClick={ this.importFromPassphrase }>Import</button>
+                      onClick={ this.importFromPassphrase }>{ translate('IMPORT_KEY.IMPORT') }</button>
                     <button
                       type="button"
                       className="btn btn-primary waves-effect waves-light"
-                      onClick={ this.showPassphraseAddress }>Show address and WIF</button>
+                      onClick={ this.showPassphraseAddress }>{ translate('IMPORT_KEY.SHOW_ADDRESS_AND_WIF') }</button>
                   </div>
                 </form>
                 { this.state.passphraseAddress && this.state.passphraseWif &&
                   <div className="margin-top-60">
                     <p>
-                      <strong>Address: </strong> { this.state.passphraseAddress }
+                      <strong>{ translate('IMPORT_KEY.ADDRESS') }: </strong> { this.state.passphraseAddress }
                       <button
                         className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
                         title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -89,7 +86,7 @@ export const ImportKeyModalRender = function() {
                   </div>
                 }
               </div>
-              <div className="line">or</div>
+              <div className="line">{ translate('IMPORT_KEY.OR') }</div>
               <div>
                 <strong>WIF (Wallet Import Format)</strong>
                 <div className="toggle-box padding-top-20">
@@ -105,15 +102,17 @@ export const ImportKeyModalRender = function() {
                     <div
                       className="toggle-label"
                       onClick={ this.toggleImportWithRescan }>
-                        Trigger rescan
+                        { translate('IMPORT_KEY.TRIGGER_RESCAN') }
                         <i
                           className="icon fa-question-circle settings-help"
-                          title="Use this option if you want to trigger rescan after WIF is imported. If you have several addresses that you want to import add them one by one and toggle this option on the last address import."></i>
+                          title={ translate('IMPORT_KEY.RESCAN_TIP') }></i>
                     </div>
                   </span>
                 </div>
                 <div className="margin-top-20">
-                  <label htmlFor="wif" className="bold">Wif key</label>
+                  <label
+                    htmlFor="wif"
+                    className="bold">{ translate('IMPORT_KEY.WIF_KEY') }</label>
                   <input
                     type="text"
                     className="form-control"
@@ -124,7 +123,7 @@ export const ImportKeyModalRender = function() {
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light margin-top-10"
-                  onClick={ this.importFromWif }>{ this.state.importWithRescan ? 'Import and rescan' : 'Import' }</button>
+                  onClick={ this.importFromWif }>{ this.state.importWithRescan ? translate('IMPORT_KEY.IMPORT_AND_RESCAN') : translate('IMPORT_KEY.IMPORT') }</button>
               </div>
             </div>
           </div>

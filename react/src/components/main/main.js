@@ -1,27 +1,17 @@
 import React from 'react';
 import WalletMain from './walletMain';
-import { iguanaSetRPCAuth } from '../../util/auth';
 import Store from '../../store';
 import { translate } from '../../translate/translate';
 import {
-  Config,
   getDexCoins,
-  iguanaActiveHandle,
   triggerToaster,
-  iguanaActiveHandleBypass
 } from '../../actions/actionCreators';
-
-const IGUANA_ACTIVE_HANDLE_TIMEOUT = 30000;
 
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.isWalletUnlocked = this.isWalletUnlocked.bind(this);
     this.state = {
-      isLoggedIn: false,
       coins: null,
-      activeCoins: false,
-      activeHandleInterval: null,
     };
   }
 
@@ -37,8 +27,7 @@ class Main extends React.Component {
     } catch (e) {}
 
     if (appVersion) {
-      const _appMode = `${appConfig.iguanaLessMode ? ' - ' + translate('INDEX.NATIVE_ONLY_MODE') : ' - ' + translate('INDEX.NORMAL_MODE')}`;
-      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)${_appMode}`;
+      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
     }
 
     if (zcashParamsExist.errors) {
@@ -70,43 +59,23 @@ class Main extends React.Component {
       );
     }
 
-    Store.dispatch(iguanaActiveHandle());
+    /*Store.dispatch(iguanaActiveHandle());
     const _iguanaActiveHandle = setInterval(function() {
       Store.dispatch(iguanaActiveHandle());
     }, IGUANA_ACTIVE_HANDLE_TIMEOUT);
 
     this.setState(Object.assign({}, this.state, {
       activeHandleInterval: _iguanaActiveHandle,
-    }));
+    }));*/
   }
 
   componentWillMount() {
-    let appConfig;
-    // set userpass param
     Store.dispatch(getDexCoins());
-    iguanaSetRPCAuth();
-
-    try {
-      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-    } catch (e) {}
-
-
-    if (appConfig.iguanaLessMode) {
-      Store.dispatch(iguanaActiveHandleBypass());
-    }
-  }
-
-  isWalletUnlocked() {
-    return (
-      <WalletMain />
-    );
   }
 
   render() {
     return (
-      <div>
-        { this.isWalletUnlocked() }
-      </div>
+      <WalletMain />
     );
   }
 }

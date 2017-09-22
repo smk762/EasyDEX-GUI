@@ -1,8 +1,6 @@
 import {
   DASHBOARD_SECTION_CHANGE,
   GET_MAIN_ADDRESS,
-  VIEW_CACHE_DATA,
-  TOGGLE_NOTIFICATIONS_MODAL,
   DISPLAY_COIND_DOWN_MODAL,
   DISPLAY_CLAIM_INTEREST_MODAL,
   DASHBOARD_SYNC_ONLY_UPDATE,
@@ -12,8 +10,6 @@ import {
 export function Dashboard(state = {
   activeSection: 'wallets',
   activeHandle: null,
-  displayViewCacheModal: false,
-  guiLog: {},
   displayCoindDownModal: false,
   displayClaimInterestModal: false,
   skipFullDashboardUpdate: false,
@@ -29,11 +25,6 @@ export function Dashboard(state = {
       return {
         ...state,
         activeHandle: action.activeHandle,
-      };
-    case VIEW_CACHE_DATA:
-      return {
-        ...state,
-        displayViewCacheModal: action.display,
       };
     case DISPLAY_COIND_DOWN_MODAL:
       return {

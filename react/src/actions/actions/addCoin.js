@@ -4,8 +4,6 @@ import {
   triggerToaster,
   toggleAddcoinModal,
   getDexCoins,
-  startIguanaInstance,
-  iguanaWalletPassphraseState,
 } from '../actionCreators';
 import {
   startCurrencyAssetChain,
@@ -16,116 +14,8 @@ import {
 } from '../../components/addcoin/payload';
 
 export function addCoin(coin, mode, syncOnly, port, startupParams) {
-  if (mode === '-1' ||
-      mode === -1) {
-    return dispatch => {
-      dispatch(shepherdGetConfig(coin, '-1', startupParams));
-    }
-  } else {
-    if (checkCoinType(coin) === 'currency_ac') {
-      const _acData = startCurrencyAssetChain('', coin, mode);
-
-      return dispatch => {
-        dispatch(iguanaAddCoin(coin, mode, _acData));
-      }
-    }
-    if (checkCoinType(coin) === 'ac') {
-      const _acData = startAssetChain('', coin, mode);
-
-      return dispatch => {
-        dispatch(iguanaAddCoin(coin, mode, _acData));
-      }
-    }
-    if (checkCoinType(coin) === 'crypto') {
-      const _acData = startCrypto('', coin, mode);
-
-      if (syncOnly) {
-        const modeToValue = {
-          '1': 'full',
-          '0': 'basilisk',
-          '-1': 'native',
-        };
-
-        return dispatch => {
-          startIguanaInstance(`${modeToValue[mode]}/sync`, coin)
-          .then(function(json) {
-            setTimeout(function() {
-              console.log(`started ${coin} / ${modeToValue[mode]} fork`, json);
-              dispatch(
-                iguanaAddCoin(
-                  coin,
-                  mode,
-                  _acData,
-                  json.result
-                )
-              );
-            }, 2000);
-          });
-        }
-      } else {
-        if (port) {
-          return dispatch => {
-            dispatch(
-              iguanaAddCoin(
-                coin,
-                mode,
-                _acData,
-                port
-              )
-            );
-          }
-        } else {
-          return dispatch => {
-            dispatch(
-              iguanaAddCoin(
-                coin,
-                mode,
-                _acData
-              )
-            );
-          }
-        }
-      }
-    }
-  }
-}
-
-export function iguanaAddCoin(coin, mode, acData, port) {
-  function _iguanaAddCoin(dispatch) {
-    return fetch(`http://127.0.0.1:${(port ? port : Config.iguanaCorePort)}`, {
-      method: 'POST',
-      body: JSON.stringify(acData),
-    })
-    .catch(function(error) {
-      console.log(error);
-      dispatch(
-        triggerToaster(
-          translate('TOASTR.FAILED_TO_ADDCOIN'),
-          translate('TOASTR.ACCOUNT_NOTIFICATION'),
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(
-        addCoinResult(
-          coin,
-          mode,
-          acData
-        )
-      );
-    });
-  }
-
-  if (mode === 0) {
-    return dispatch => {
-      return _iguanaAddCoin(dispatch);
-    }
-  } else {
-    return dispatch => {
-      return _iguanaAddCoin(dispatch);
-    }
+  return dispatch => {
+    dispatch(shepherdGetConfig(coin, '-1', startupParams));
   }
 }
 
@@ -196,6 +86,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       mode
     );
   }
+
   if (checkCoinType(coin) === 'ac') {
     const supply = startAssetChain(
       path.result,
@@ -235,24 +126,9 @@ export function shepherdHerd(coin, mode, path, startupParams) {
     .then(handleErrors)
     .then(function(json) {
       if (json) {
-        if (Config.iguanaLessMode) {
-          dispatch(
-            addCoinResult(coin, mode)
-          );
-          setTimeout(() => {
-            dispatch(
-              iguanaActiveHandleBypass()
-            );
-          }, 1000);
-        } else {
-          dispatch(
-            iguanaAddCoin(
-              coin,
-              mode,
-              acData
-            )
-          );
-        }
+        dispatch(
+          addCoinResult(coin, mode)
+        );
       } else {
         console.warn(acData);
         dispatch(
@@ -270,8 +146,6 @@ export function shepherdHerd(coin, mode, path, startupParams) {
 
 export function addCoinResult(coin, mode) {
   const modeToValue = {
-    '1': 'full',
-    '0': 'basilisk',
     '-1': 'native',
   };
 
@@ -318,33 +192,6 @@ export function _shepherdGetConfig(coin, mode, startupParams) {
         )
       )
     );
-  }
-}
-
-export function iguanaActiveHandleBypass() {
-  return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .catch(function(error) {
-      console.log(error);
-      dispatch(
-        triggerToaster(
-          'iguanaActiveHandleBypass',
-          'Error',
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(
-      json => dispatch(
-        iguanaWalletPassphraseState(json, dispatch, true)
-      )
-    )
   }
 }
 

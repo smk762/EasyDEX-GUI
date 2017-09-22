@@ -1,3 +1,5 @@
+// TODO: rewire to work with coind
+
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
 

@@ -5,13 +5,8 @@ import { translate } from '../translate/translate';
 import {
   GET_ACTIVE_COINS,
   DASHBOARD_ACTIVE_ADDRESS,
-  VIEW_CACHE_DATA,
-  DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
   DASHBOARD_ACTIVE_SECTION,
   DASHBOARD_ACTIVE_TXINFO_MODAL,
-  BASILISK_CONNECTION,
-  BASILISK_REFRESH,
-  SYNCING_FULL_MODE,
   SYNCING_NATIVE_MODE,
   DASHBOARD_ACTIVE_COIN_SEND_FORM,
   DASHBOARD_ACTIVE_COIN_RECEIVE_FORM,
@@ -35,34 +30,25 @@ import {
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
-export * from './actions/basiliskCache';
 export * from './actions/nativeSend';
 export * from './actions/coinList';
-export * from './actions/createWallet';
-export * from './actions/nativeTxHistory';
-export * from './actions/nativeBalance';
+// export * from './actions/createWallet';
+//export * from './actions/nativeTxHistory';
+//export * from './actions/nativeBalance';
 export * from './actions/nativeNewAddress';
-export * from './actions/logout';
-export * from './actions/basiliskProcessAddress';
-export * from './actions/edexGetTx';
-export * from './actions/sendFullBasilisk';
+// export * from './actions/logout';
+//export * from './actions/edexGetTx';
 export * from './actions/settings';
-export * from './actions/syncOnly';
-export * from './actions/iguanaInstance';
-export * from './actions/edexBalance';
+// export * from './actions/edexBalance';
 export * from './actions/addCoin';
-export * from './actions/addressBalance';
-export * from './actions/syncInfo';
-export * from './actions/getAddrByAccount';
-export * from './actions/atomic';
-export * from './actions/walletAuth';
-export * from './actions/openAlias';
+//export * from './actions/addressBalance';
+//export * from './actions/syncInfo';
+//export * from './actions/getAddrByAccount';
+// export * from './actions/walletAuth';
 export * from './actions/copyAddress';
 export * from './actions/sysInfo';
 export * from './actions/dexCoins';
-export * from './actions/fullTxHistory';
-export * from './actions/basiliskTxHistory';
-export * from './actions/iguanaHelpers';
+//export * from './actions/fullTxHistory';
 export * from './actions/cli';
 export * from './actions/update';
 export * from './actions/jumblr';
@@ -72,26 +58,6 @@ export * from './actions/nativeDashboardUpdate';
 export function changeActiveAddress(address) {
   return {
     type: DASHBOARD_ACTIVE_ADDRESS,
-    address,
-  }
-}
-
-export function updateErrosStack(method) {
-  return {
-    apiMethod: method,
-  }
-}
-
-export function toggleViewCacheModal(display) {
-  return {
-    type: VIEW_CACHE_DATA,
-    display,
-  }
-}
-
-export function changeMainBasiliskAddress(address) {
-  return {
-    type: DASHBOARD_ACTIVE_COIN_MAIN_BASILISK_ADDR,
     address,
   }
 }
@@ -115,14 +81,6 @@ export function syncingNativeModeState(display, json) {
   return {
     type: SYNCING_NATIVE_MODE,
     syncingNativeMode: display,
-    progress: json,
-  }
-}
-
-export function syncingFullModeState(display, json) {
-  return {
-    type: SYNCING_FULL_MODE,
-    syncingFullMode: display,
     progress: json,
   }
 }
@@ -179,7 +137,7 @@ export function dashboardCoinsState(json) {
   return {
     type: GET_ACTIVE_COINS,
     coins: json,
-    activeCoins: Object.keys(json.native).length || Object.keys(json.basilisk).length || Object.keys(json.full).length ? true : false,
+    activeCoins: Object.keys(json.native).length ? true : false,
   }
 }
 
@@ -244,51 +202,6 @@ export function toggleAddcoinModal(display, isLogin) {
 export function dismissToasterMessage(toastId) {
   return dispatch => {
     dispatch(dismissToaster(toastId))
-  }
-}
-
-// TODO
-export function rpcErrorHandler(json, dispatch) {
-  console.log('json', json);
-  if (json &&
-      json.error) {
-    if (json.error === 'bitcoinrpc needs coin that is active') {
-      dispatch(
-        triggerToaster(
-          translate('API.NO_ACTIVE_COIN'),
-          translate('TOASTR.SERVICE_NOTIFICATION'),
-          'error'
-        )
-      );
-    }
-  }
-}
-
-export function setBasiliskMainAddress(json, coin, mode) {
-  if (mode === 'full') {
-    let publicAddressArray = [];
-
-    for (let i = 0; i < json.result.length; i++) {
-      publicAddressArray.push({
-        address: json.result[i],
-        amount: 'N/A',
-      });
-    }
-
-    json.result = publicAddressArray;
-  }
-
-  if (mode === 'basilisk') {
-    getDexBalance(
-      coin,
-      mode,
-      json.result
-    );
-  }
-
-  return {
-    type: ACTIVE_COIN_GET_ADDRESSES,
-    addresses: { public: [] },
   }
 }
 

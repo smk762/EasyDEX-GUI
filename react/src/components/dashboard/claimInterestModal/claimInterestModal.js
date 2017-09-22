@@ -70,8 +70,11 @@ class ClaimInterestModal extends React.Component {
   }
 
   claimInterest(address, amount) {
-    sendToAddressPromise(this.props.ActiveCoin.coin, this.state.transactionsList[0].address, this.props.ActiveCoin.balance.transparent)
-    .then((json) => {
+    sendToAddressPromise(
+      this.props.ActiveCoin.coin,
+      this.state.transactionsList[0].address,
+      this.props.ActiveCoin.balance.transparent
+    ).then((json) => {
       if (json.error &&
           json.error.code) {
         Store.dispatch(

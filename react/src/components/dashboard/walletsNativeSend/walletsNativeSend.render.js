@@ -35,35 +35,6 @@ export const AddressListRender = function() {
   );
 };
 
-export const OASendUIRender = function() {
-  return (
-    <div className="row">
-      <div className="col-lg-6 form-group form-material">
-        <label
-          className="control-label"
-          htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') } via Openalias address</label>
-        <input
-          type="text"
-          className="form-control"
-          name="sendToOA"
-          onChange={ this.updateInput }
-          id="kmdWalletSendTo"
-          placeholder="Enter an alias as address@site.com"
-          autoComplete="off"
-          required />
-      </div>
-      <div className="col-lg-6 form-group form-material">
-        <button
-          type="button"
-          className="btn btn-primary waves-effect waves-light"
-          onClick={ this.getOAdress }>
-          Get address
-        </button>
-      </div>
-    </div>
-  );
-};
-
 export const _WalletsNativeSendFormRender = function() {
   return (
     <form
@@ -78,7 +49,6 @@ export const _WalletsNativeSendFormRender = function() {
           </div>
         </div>
       }
-      { this.renderOASendUI() }
       <div className="row">
         <div className="col-xlg-12 form-group form-material">
           <label
@@ -124,7 +94,7 @@ export const _WalletsNativeSendFormRender = function() {
             <div
               className="toggle-label"
               onClick={ () => this.toggleSubstractFee() }>
-                Subtract fee from amount
+                { translate('DASHBOARD.SUBSTRACT_FEE') }
             </div>
           </span>
         </div>

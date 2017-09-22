@@ -1,59 +1,24 @@
 import { DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE } from '../storeType';
-import {
-  triggerToaster,
-  getPassthruAgent
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
 
 export function getKMDBalanceTotal(coin) {
-  let payload;
-
-  if (coin !== 'KMD' &&
-      coin !== 'ZEC') {
-    payload = {
-      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      agent: 'iguana',
-      method: 'passthru',
-      asset: coin,
-      function: 'z_gettotalbalance',
-      hex: '3000',
-    };
-  } else {
-    payload = {
-      userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-      agent: getPassthruAgent(coin),
-      method: 'passthru',
-      function: 'z_gettotalbalance',
-      hex: '3000',
-    };
-  }
-
-  if (Config.cli.default) {
-    payload = {
+  return dispatch => {
+    const payload = {
       mode: null,
       chain: coin,
-      cmd: 'z_gettotalbalance'
+      cmd: 'z_gettotalbalance',
     };
-  }
-
-  return dispatch => {
-    let _fetchConfig = {
+    const _fetchConfig = {
       method: 'POST',
-      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ payload: payload }),
     };
-
-    if (Config.cli.default) {
-      _fetchConfig = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ payload: payload }),
-      };
-    }
 
     return fetch(
-      Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
     .catch(function(error) {
@@ -79,6 +44,6 @@ export function getKMDBalanceTotal(coin) {
 export function getNativeBalancesState(json) {
   return {
     type: DASHBOARD_ACTIVE_COIN_NATIVE_BALANCE,
-    balance: json && !json.error ? (Config.cli.default ? json.result : json) : 0,
+    balance: json && !json.error ? json.result : 0,
   }
 }

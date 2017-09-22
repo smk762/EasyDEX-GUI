@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { translate } from '../../../translate/translate';
 
 class About extends React.Component {
@@ -9,14 +9,6 @@ class About extends React.Component {
           <h2>{ translate('ABOUT.ABOUT_AGAMA') }</h2>
           <p>{ translate('ABOUT.AGAMA_MODES') }</p>
           <ul>
-            <li>
-              <span className="font-weight-600">{ translate('INDEX.BASILISK_MODE') }</span>:&nbsp;
-              { translate('ABOUT.BASILISK_MODE_DESC') }
-            </li>
-            <li>
-              <span className="font-weight-600">{ translate('INDEX.FULL_MODE') }</span>:&nbsp;
-              { translate('ABOUT.FULL_MODE_DESC') }
-            </li>
             <li>
               <span className="font-weight-600">{ translate('INDEX.NATIVE_MODE') }</span>:&nbsp;
               { translate('ABOUT.NATIVE_MODE_DESC') }
@@ -31,10 +23,6 @@ class About extends React.Component {
               <a href="https://supernet.org/en/technology/whitepapers/easydex-a-practical-native-dex" target="_blank">
                 (BarterDEX – A Practical Native DEX)
               </a>
-            </li>
-            <li>
-              <span className="font-weight-600">Atomic Exporer</span>: &nbsp;
-              { translate('ABOUT.ATOMIC_EXPLORER_DESC') }
             </li>
           </ul>
 

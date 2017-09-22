@@ -1,3 +1,5 @@
+// remove
+
 import Config from '../../config';
 import { checkAC } from '../../components/addcoin/payload';
 

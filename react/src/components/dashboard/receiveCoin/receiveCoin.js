@@ -2,13 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   copyCoinAddress,
-  checkAddressBasilisk,
-  validateAddressBasilisk,
   getNewKMDAddresses
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
-  AddressActionsBasiliskModeRender,
   AddressActionsNonBasiliskModeRender,
   AddressItemRender,
   ReceiveCoinRender,
@@ -16,7 +13,6 @@ import {
 } from './receiveCoin.render';
 
 // TODO: implement balance/interest sorting
-// TODO: fallback to localstorage/stores data in case iguana is taking too long to respond
 
 class ReceiveCoin extends React.Component {
   constructor() {
@@ -68,41 +64,11 @@ class ReceiveCoin extends React.Component {
     }));
   }
 
-  _checkAddressBasilisk(address) {
-    Store.dispatch(
-      checkAddressBasilisk(
-        this.props.coin,
-        address
-      )
-    );
-  }
-
-  _validateAddressBasilisk(address) {
-    Store.dispatch(
-      validateAddressBasilisk(
-        this.props.coin,
-        address
-      )
-    );
-  }
-
   _copyCoinAddress(address) {
     Store.dispatch(copyCoinAddress(address));
   }
 
-  isBasiliskMode() {
-    return this.props.mode === 'basilisk';
-  }
-
-  isNativeMode() {
-    return this.props.mode == 'native';
-  }
-
   renderAddressActions(address, type) {
-    if (this.isBasiliskMode()) {
-      return AddressActionsBasiliskModeRender.call(this, address);
-    }
-
     return AddressActionsNonBasiliskModeRender.call(this, address, type);
   }
 
@@ -126,34 +92,10 @@ class ReceiveCoin extends React.Component {
 
   checkTotalBalance() {
     let _balance = '0';
-    const _mode = this.props.mode;
 
-    if (_mode === 'full') {
-      _balance = this.props.balance || 0;
-    } else if (_mode === 'basilisk') {
-      if (this.props.cache) {
-        const _cache = this.props.cache;
-        const _coin = this.props.coin;
-        const _address = this.props.activeAddress;
-
-        if (_address &&
-            _cache[_coin] &&
-            _cache[_coin][_address] &&
-            _cache[_coin][_address].getbalance &&
-            _cache[_coin][_address].getbalance.data &&
-            (_cache[_coin][_address].getbalance.data.balance ||
-             _cache[_coin][_address].getbalance.data.interest)) {
-          const _regBalance = _cache[_coin][_address].getbalance.data.balance ? _cache[_coin][_address].getbalance.data.balance : 0;
-          const _regInterest = _cache[_coin][_address].getbalance.data.interest ? _cache[_coin][_address].getbalance.data.interest : 0;
-
-          _balance = _regBalance + _regInterest;
-        }
-      }
-    } else if (_mode === 'native') {
-      if (this.props.balance &&
-          this.props.balance.total) {
-        _balance = this.props.balance.total;
-      }
+    if (this.props.balance &&
+        this.props.balance.total) {
+      _balance = this.props.balance.total;
     }
 
     return _balance;
@@ -161,8 +103,6 @@ class ReceiveCoin extends React.Component {
 
   renderAddressList(type) {
     const _addresses = this.props.addresses;
-    const _cache = this.props.cache;
-    const _coin = this.props.coin;
 
     if (_addresses &&
         _addresses[type] &&
@@ -171,21 +111,6 @@ class ReceiveCoin extends React.Component {
 
       for (let i = 0; i < _addresses[type].length; i++) {
         let address = _addresses[type][i];
-
-        if (this.isBasiliskMode() &&
-            this.hasNoAmount(address)) {
-          address.amount = _cache && _cache[_coin][address.address] &&
-            _cache[_coin][address.address].getbalance &&
-            _cache[_coin][address.address].getbalance.data &&
-            _cache[_coin][address.address].getbalance.data.balance ? _cache[_coin][address.address].getbalance.data.balance : 'N/A';
-        }
-        if (this.isBasiliskMode() &&
-            this.hasNoInterest(address)) {
-          address.interest = _cache && _cache[_coin][address.address] &&
-            _cache[_coin][address.address].getbalance &&
-            _cache[_coin][address.address].getbalance.data &&
-            _cache[_coin][address.address].getbalance.data.interest ? _cache[_coin][address.address].getbalance.data.interest : 'N/A';
-        }
 
         if (this.state.hideZeroAddresses) {
           if (!this.hasNoAmount(address)) {
@@ -210,7 +135,7 @@ class ReceiveCoin extends React.Component {
     // TODO activeSection === 'receive' should be removed when native mode is fully merged
     // into the rest of the components
     if (this.props &&
-       (this.props.receive || (this.isNativeMode() && this.props.activeSection === 'receive'))) {
+       (this.props.receive || this.props.activeSection === 'receive')) {
       return ReceiveCoinRender.call(this);
     }
 

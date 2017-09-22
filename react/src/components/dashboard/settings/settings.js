@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import {
-  iguanaActiveHandle,
   getAppConfig,
   getAppInfo,
 } from '../../../actions/actionCreators';
@@ -25,9 +24,6 @@ class Settings extends React.Component {
   }
 
   componentDidMount(props) {
-    if (!this.props.disableWalletSpecificUI) {
-      Store.dispatch(iguanaActiveHandle());
-    }
     Store.dispatch(getAppConfig());
     Store.dispatch(getAppInfo());
 

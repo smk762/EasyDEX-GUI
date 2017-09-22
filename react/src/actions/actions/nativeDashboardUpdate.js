@@ -1,6 +1,4 @@
-import {
-  triggerToaster,
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
 import { DASHBOARD_UPDATE } from '../storeType';
 

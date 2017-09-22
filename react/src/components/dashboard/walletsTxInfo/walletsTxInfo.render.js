@@ -19,20 +19,16 @@ const WalletsTxInfoRender = function(txInfo) {
                       <i className="icon md-balance-wallet"></i>TxID Info
                     </a>
                   </li>
-                  { this.isNativeMode() &&
-                    <li className={ this.state.activeTab === 1 ? 'hide active' : 'hide' }>
-                      <a onClick={ () => this.openTab(1) }>
-                        <i className="icon md-plus-square"></i>Vjointsplits, Details
-                      </a>
-                    </li>
-                  }
-                  { this.isNativeMode() &&
-                    <li className={ this.state.activeTab === 2 ? 'hide active' : 'hide' }>
-                      <a onClick={ () => this.openTab(2) }>
-                        <i className="icon wb-briefcase"></i>Hex
-                      </a>
-                    </li>
-                  }
+                  <li className={ this.state.activeTab === 1 ? 'hide active' : 'hide' }>
+                    <a onClick={ () => this.openTab(1) }>
+                      <i className="icon md-plus-square"></i>Vjointsplits, Details
+                    </a>
+                  </li>
+                  <li className={ this.state.activeTab === 2 ? 'hide active' : 'hide' }>
+                    <a onClick={ () => this.openTab(2) }>
+                      <i className="icon wb-briefcase"></i>Hex
+                    </a>
+                  </li>
                   <li className={ this.state.activeTab === 3 ? 'active' : '' }>
                     <a onClick={ () => this.openTab(3) }>
                       <i className="icon wb-file"></i>Raw info
@@ -48,7 +44,7 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tr>
                               <td>{ translate('TX_INFO.ADDRESS') }</td>
                               <td>
-                                { this.props.ActiveCoin.mode === 'basilisk' ? this.props.ActiveCoin.activeAddress : txInfo.address }
+                                { txInfo.address }
                               </td>
                             </tr>
                             <tr>
@@ -91,30 +87,24 @@ const WalletsTxInfoRender = function(txInfo) {
                                 { txInfo.txid }
                               </td>
                             </tr>
-                            { this.isNativeMode() &&
-                              <tr>
-                                <td>walletconflicts</td>
-                                <td>
-                                  { txInfo.walletconflicts.length }
-                                </td>
-                              </tr>
-                            }
-                            { this.isNativeMode() &&
-                              <tr>
-                                <td>time</td>
-                                <td>
-                                  { secondsToString(txInfo.time) }
-                                </td>
-                              </tr>
-                            }
-                            { this.isNativeMode() &&
-                              <tr>
-                                <td>timereceived</td>
-                                <td>
-                                  { secondsToString(txInfo.timereceived) }
-                                </td>
-                              </tr>
-                            }
+                            <tr>
+                              <td>walletconflicts</td>
+                              <td>
+                                { txInfo.walletconflicts.length }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>time</td>
+                              <td>
+                                { secondsToString(txInfo.time) }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>timereceived</td>
+                              <td>
+                                { secondsToString(txInfo.timereceived) }
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>

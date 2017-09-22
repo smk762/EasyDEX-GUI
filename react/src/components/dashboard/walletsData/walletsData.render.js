@@ -1,6 +1,5 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
-import WalletsCacheData from '../walletsCacheData/walletsCacheData';
 import ReactTable from 'react-table';
 import TablePaginationRenderer from './pagination';
 import { formatValue } from '../../../util/formatValue';
@@ -64,7 +63,7 @@ export const AddressListRender = function() {
   if (isMultiPublicAddress ||
       isMultiPrivateAddress) {
     return (
-      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open margin-bottom-10' : 'margin-bottom-10')}` }>
+      <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick margin-bottom-10${(this.state.addressSelectorOpen ? ' open ' : '')}` }>
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
@@ -78,16 +77,14 @@ export const AddressListRender = function() {
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
             <li className="no--hover">
-              <a><span className="text">{ this.props.ActiveCoin.mode === 'basilisk' ? translate('INDEX.FILTER_BY_ADDRESS') : translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
+              <a><span className="text">{ translate('KMD_NATIVE.SELECT_ADDRESS') }</span></a>
             </li>
-            { this.props.ActiveCoin.mode === 'native' &&
-              <li className={ !this.state.currentAddress ? 'selected' : '' }>
-                <a onClick={ () => this.updateAddressSelection('') }>
-                  <span className="text">All</span>
-                  <span className="glyphicon glyphicon-ok check-mark"></span>
-                </a>
-              </li>
-            }
+            <li className={ !this.state.currentAddress ? 'selected' : '' }>
+              <a onClick={ () => this.updateAddressSelection('') }>
+                <span className="text">{ translate('INDEX.ALL') }</span>
+                <span className="glyphicon glyphicon-ok check-mark"></span>
+              </a>
+            </li>
             { this.renderAddressByType('public') }
           </ul>
         </div>
@@ -184,79 +181,22 @@ export const TxHistoryListRender = function() {
 };
 
 export const WalletsDataRender = function() {
-  let _basiliskProgressBarWidth = 100 - (this.state.currentStackLength * 100 / this.state.totalStackLength);
-  _basiliskProgressBarWidth = _basiliskProgressBarWidth < 20 ? 20 : _basiliskProgressBarWidth;
-
   return (
     <span>
-      <WalletsCacheData />
       <div id="edexcoin_dashboardinfo">
         <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">
             <div>
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                 <div className="panel">
-                  { this.props.ActiveCoin.mode === 'basilisk' &&
-                    <div className={ 'margin-bottom-3 basilisk-progress-bar ' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? 'hide' : 'progress progress-sm') }>
-                      <div
-                        className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-                        style={{ width: `${_basiliskProgressBarWidth}%` }}>
-                        { translate('SEND.PROCESSING_REQ') }: { this.state.currentStackLength } / { this.state.totalStackLength }
-                      </div>
-                    </div>
-                  }
                   <header className="panel-heading z-index-10">
                     <i
-                      className={ 'icon fa-refresh manual-txhistory-refresh pointer' + (this.state.currentStackLength === 1 || (this.state.currentStackLength === 0 && this.state.totalStackLength === 0) ? '' : ' hide') }
+                      className="icon fa-refresh manual-txhistory-refresh pointer"
                       onClick={ this.refreshTxHistory }></i>
-                    <div className={ 'panel-actions' + (this.props.ActiveCoin.mode === 'basilisk' ? '' : ' hide') }>
-                      { !this.isNativeMode() ?
-                        <div
-                          className={ 'dropdown basilisk-actions' + (this.state.basiliskActionsMenu ? ' open' : '') }
-                          onClick={ this.toggleBasiliskActionsMenu }>
-                          <a className="dropdown-toggle btn-xs btn-default">
-                            <i className="icon fa-magic margin-right-10"></i> { translate('INDEX.BASILISK_ACTIONS') }
-                            <span className="caret"></span>
-                          </a>
-                          <ul className="dropdown-menu dropdown-menu-right">
-                            <li className={ !this.state.useCache ? 'hide' : '' }>
-                              <a onClick={ this.basiliskRefreshActionOne }>
-                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_WALLET_DATA') }&nbsp;
-                                ({ translate('INDEX.ACTIVE_ADDRESS') })
-                              </a>
-                            </li>
-                            <li className={ !this.state.useCache || this.props.ActiveCoin.addresses
-                            && this.props.ActiveCoin.addresses.public.length === 1 ? 'hide' : '' }>
-                              <a onClick={ this.basiliskRefreshAction }>
-                                <i className="icon fa-cloud-download"></i> { translate('INDEX.FETCH_ALL_ADDR') }
-                              </a>
-                            </li>
-                            <li className={ !this.state.useCache ? 'hide' : '' }>
-                              <a onClick={ this.removeAndFetchNewCache }>
-                                <i className="icon fa-history"></i> { translate('INDEX.REFETCH_WALLET_DATA') }
-                              </a>
-                            </li>
-                            <li className="hide">
-                              <a onClick={ this._toggleViewCacheModal }>
-                                <i className="icon fa-list-alt"></i> { translate('INDEX.VIEW_CACHE_DATA') }
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        :
-                        null
-                      }
-                    </div>
                     <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
-                  <div className={ !this.state.isExplorerData ? 'hide' : '' } style={{ display: 'block', textAlign: 'center', paddingTop: '10px' }}><strong>Notice:</strong> transactions list is fetched from KMD explorer as a fallback measure!</div>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
-                      { this.shouldDisplayAddressList() &&
-                        <div className="col-sm-8 no-padding-left">
-                          { this.renderAddressList() }
-                        </div>
-                      }
                       { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data') &&
                         <div className="col-sm-4 search-box">
                           <input

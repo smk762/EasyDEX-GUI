@@ -4,7 +4,6 @@ import Config from '../../../config';
 import { translate } from '../../../translate/translate';
 import { secondsToString } from '../../../util/time';
 import {
-  resolveOpenAliasAddress,
   triggerToaster,
   sendNativeTx,
   getKMDOPID
@@ -12,7 +11,6 @@ import {
 import Store from '../../../store';
 import {
   AddressListRender,
-  OASendUIRender,
   WalletsNativeSendRender,
   WalletsNativeSendFormRender,
   _WalletsNativeSendFormRender
@@ -27,7 +25,6 @@ class WalletsNativeSend extends React.Component {
       sendFrom: null,
       sendFromAmount: 0,
       sendTo: '',
-      sendToOA: null,
       amount: 0,
       fee: 0,
       addressSelectorOpen: false,
@@ -37,7 +34,6 @@ class WalletsNativeSend extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.openDropMenu = this.openDropMenu.bind(this);
-    this.getOAdress = this.getOAdress.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.checkZAddressCount = this.checkZAddressCount.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
@@ -116,6 +112,7 @@ class WalletsNativeSend extends React.Component {
         sendTo: receiver,
       });
     }
+
     document.getElementById('kmdWalletSendTo').focus();
   }
 
@@ -350,54 +347,6 @@ class WalletsNativeSend extends React.Component {
       renderAddressDropdown: true,
       substractFee: false,
     });
-  }
-
-  getOAdress() {
-    resolveOpenAliasAddress(this.state.sendToOA)
-    .then((json) => {
-      const reply = json.Answer;
-
-      if (reply &&
-          reply.length) {
-        for (let i = 0; i < reply.length; i++) {
-          const _address = reply[i].data.split(' ');
-          const coin = _address[0].replace('"oa1:', '');
-          const coinAddress = _address[1].replace('recipient_address=', '').replace(';', '');
-
-          if (coin.toUpperCase() === this.props.ActiveCoin.coin) {
-            this.setState(Object.assign({}, this.state, {
-              sendTo: coinAddress,
-            }));
-          }
-        }
-
-        if (this.state.sendTo === '') {
-          Store.dispatch(
-            triggerToaster(
-              'Couldn\'t find any ' + this.props.ActiveCoin.coin + ' addresses',
-              'OpenAlias',
-              'error'
-            )
-          );
-        }
-      } else {
-        Store.dispatch(
-          triggerToaster(
-            'Couldn\'t find any addresses',
-            'OpenAlias',
-            'error'
-          )
-        );
-      }
-    });
-  }
-
-  renderOASendUI() {
-    if (Config.openAlias) {
-      return OASendUIRender.call(this);
-    }
-
-    return null;
   }
 
   // TODO: reduce to a single toast

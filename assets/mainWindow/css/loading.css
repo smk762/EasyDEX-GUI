@@ -30,8 +30,12 @@ body.agama-default-window-height {
   height: 355px;
 }
 
+body.closing-window-height {
+  height: 300px;
+}
+
 body.agama-app-settings-window {
-  height: 700px;
+  height: 570px;
 }
 
 .agama-logo {
@@ -396,6 +400,7 @@ button.toast-close-button {
   border-top-left-radius: 0;
   box-shadow: none;
   width: 38px;
+  margin-right: 0;
 }
 
 .btn-caret:before {
@@ -432,19 +437,11 @@ button.toast-close-button {
   display: inherit;
   top: inherit;
   left: inherit;
-  right: 48%;
+  right: 33.1%;
   padding: 2px 0;
 }
 
 .dropdown-menu li {
   cursor: pointer;
   margin: 5px 0;
-}
-
-body.iguana-less {
-  height: 570px;
-}
-.iguana-less #iguanaCorePort,
-.iguana-less #useBasiliskInstance {
-  display: none;
 }

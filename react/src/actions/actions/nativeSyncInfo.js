@@ -4,7 +4,6 @@ import {
 } from '../storeType';
 import {
   triggerToaster,
-  getPassthruAgent,
   getDebugLog,
   toggleCoindDownModal
 } from '../actionCreators';
@@ -22,7 +21,7 @@ export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
 
   if (skipRemote) {
     return dispatch => {
-      dispatch(getSyncInfoNativeState(Config.iguanaLessMode ? json.info : json ));
+      dispatch(getSyncInfoNativeState(json.info));
 
       if (!skipDebug) {
         dispatch(getDebugLog('komodo', 1));
@@ -33,18 +32,11 @@ export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
     // https://www.kmd.host/
     return dispatch => {
       return fetch(
-        Config.iguanaLessMode ? 'https://kmd.explorer.supernet.org/api/status?q=getInfo' : `http://127.0.0.1:${Config.iguanaCorePort}/api/dex/getinfo?userpass=tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}&symbol=${coin}`, {
+        'https://kmd.explorer.supernet.org/api/status?q=getInfo', {
         method: 'GET',
       })
       .catch(function(error) {
         console.log(error);
-        /*dispatch(
-          triggerToaster(
-            'getSyncInfoNativeKMD',
-            'Error',
-            'error'
-          )
-        );*/
         console.warn('remote kmd node fetch failed', true);
         _json = _json.error;
         _json['remoteKMDNode'] = null;
@@ -83,8 +75,7 @@ function getSyncInfoNativeState(json, coin, skipDebug, skipRemote) {
       return getSyncInfoNativeKMD(skipDebug, json, skipRemote);
     } else {
       if (json &&
-          json.error &&
-          Config.cli.default) {
+          json.error) {
         return {
           type: SYNCING_NATIVE_MODE,
           progress: json.error,
@@ -100,41 +91,22 @@ function getSyncInfoNativeState(json, coin, skipDebug, skipRemote) {
 }
 
 export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
-  let payload = {
-    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    agent: getPassthruAgent(coin),
-    method: 'passthru',
-    asset: coin,
-    function: 'getinfo',
-    hex: '',
-  };
-
-  if (Config.cli.default) {
-    payload = {
+  return dispatch => {
+    const payload = {
       mode: null,
       chain: coin,
       cmd: 'getinfo',
     };
-  }
-
-  return dispatch => {
-    let _fetchConfig = {
+    const _fetchConfig = {
       method: 'POST',
-      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ payload: payload }),
     };
 
-    if (Config.cli.default) {
-      _fetchConfig = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ payload: payload }),
-      };
-    }
-
     return fetch(
-      Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
     .catch(function(error) {
@@ -173,8 +145,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           )
         );
       } else {
-        if (!json &&
-          Config.cli.default) {
+        if (!json) {
           let _kmdMainPassiveMode;
 
           try {
@@ -183,14 +154,6 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
 
           if (!_kmdMainPassiveMode) {
             dispatch(nativeGetinfoFailureState());
-            /* dispatch(
-              triggerToaster(
-                'Komodod is down',
-                'Critical Error',
-                'error',
-                true
-              )
-            ); */
           } else {
             dispatch(
               triggerToaster(

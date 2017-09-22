@@ -6,9 +6,8 @@ import EDEX from '../edex/edex';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
-import SendCoin from '../sendCoin/sendCoin';
+// import SendCoin from '../sendCoin/sendCoin';
 import WalletsData from '../walletsData/walletsData';
-import Atomic from '../atomic/atomic';
 import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
@@ -32,19 +31,11 @@ const DashboardRender = function() {
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile />
           <WalletsNav />
-          { !this.isNativeMode() && <WalletsProgress /> }
-          { !this.isNativeMode() && <WalletsBalance />}
-          <SendCoin />
-          { !this.isNativeMode() && <ReceiveCoin /> }
-          { !this.isNativeMode() && <WalletsData /> }
           <WalletsTxInfo />
           <WalletsNative />
         </div>
         { this.isSectionActive('edex') &&
           <EDEX />
-        }
-        { this.isSectionActive('atomic') &&
-          <Atomic />
         }
         { this.isSectionActive('jumblr') &&
           <Jumblr  />

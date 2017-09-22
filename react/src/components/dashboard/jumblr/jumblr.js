@@ -153,7 +153,6 @@ class Jumblr extends React.Component {
             _postfix = `0${i + 1}`;
           }
           _genKeys = this.generateKeys(`${this.state.randomSeed} ${_postfix}`);
-          // console.warn(`${this.state.randomSeed} ${_postfix}`);
         } else {
           _genKeys = this.generateKeys();
         }
@@ -219,7 +218,8 @@ class Jumblr extends React.Component {
           }
         }
 
-        if (_correctWords !== _passphraseWordsSplit.length - 1 || _correctWords !== 24) {
+        if (_correctWords !== _passphraseWordsSplit.length - 1 ||
+            _correctWords !== 24) {
           _errors.length = true;
         }
       } else {
@@ -286,6 +286,7 @@ class Jumblr extends React.Component {
               this.setState(Object.assign({}, this.state, {
                 jumblrSecretAddressImport: _jumblrSecretAddress,
               }));
+
               if (_apiSuccessCount === this.state.secretAddressCountImport - 1) {
                 Store.dispatch(
                   triggerToaster(
@@ -343,7 +344,6 @@ class Jumblr extends React.Component {
       if (!json.id &&
           !json.result &&
           !json.error) {
-        // console.warn('importPrivkey', json);
         setJumblrAddress(
           this.props.ActiveCoin.coin,
           'deposit',

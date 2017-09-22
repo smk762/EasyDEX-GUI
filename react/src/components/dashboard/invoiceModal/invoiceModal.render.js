@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import QRCode from 'qrcode.react';
 
-export const InvoiceModalRender = function () {
+export const InvoiceModalRender = function() {
   return (
     <span>
       <div
@@ -40,7 +40,7 @@ export const InvoiceModalRender = function () {
                             { translate('INDEX.CHOOSE_RECEIVING_ADDRESS') }
                           </option>
                           { this.renderAddressList('public') }
-                          { this.isNativeMode() && this.renderAddressList('private') }
+                          { this.renderAddressList('private') }
                         </select>
                         <label
                           className="control-label margin-top-20"
@@ -84,7 +84,7 @@ export const InvoiceModalRender = function () {
   );
 };
 
-export const InvoiceModalButtonRender = function () {
+export const InvoiceModalButtonRender = function() {
   return (
     <span>
       <button type="button"
@@ -99,9 +99,9 @@ export const InvoiceModalButtonRender = function () {
 
 export const AddressItemRender = function(address, type) {
   return (
-   <option key={ address.address } value={ address.address }>
+    <option key={ address.address } value={ address.address }>
       { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
-       &nbsp; (Balance: { address.amount })
+       &nbsp; ({ translate('INDEX.BALANCE') }: { address.amount })
     </option>
   );
 };

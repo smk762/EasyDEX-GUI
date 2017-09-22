@@ -11,8 +11,7 @@ export const LoginSettingsModalRender = function() {
           <div className="modal-content">
             <div className="modal-body modal-body-container">
               { this.props.section === 'settings' &&
-                <Settings
-                  disableWalletSpecificUI="true" />
+                <Settings disableWalletSpecificUI="true" />
               }
               { this.props.section === 'about' &&
                 <About />
