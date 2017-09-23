@@ -222,10 +222,10 @@ class AppSettingsPanel extends React.Component {
     items.push(
       <tr key={ `kmd-main-sync-only` }>
         <td className="padding-15">
-          KMD main sync only
+          { translate('SETTINGS.KMD_MAIN_SYNC_ONLY') }
           <i
             className="icon fa-question-circle settings-help"
-            title="Fetch block synchronization data only. Skip any other requests that can deteriorate sync speed."></i>
+            title={ translate('SETTINGS.RPC_FETCH_ONLY_DESC') }></i>
         </td>
         <td className="padding-15">
           <span className="pointer toggle">
@@ -300,7 +300,7 @@ class AppSettingsPanel extends React.Component {
             <button
               type="button"
               className="btn btn-primary waves-effect waves-light margin-left-30"
-              onClick={ this._resetAppConfig }>Reset to default</button>
+              onClick={ this._resetAppConfig }>{ translate('SETTINGS.RESET_TO_DEFAULT') }</button>
           </div>
         </div>
       </div>
