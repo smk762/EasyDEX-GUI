@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 
 import WalletsHeader from '../walletsHeader/walletsHeader';
-import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
+import SendCoin from '../sendCoin/sendCoin';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 
 export const JumblrRenderSecretAddressList = function(type) {
@@ -338,7 +338,7 @@ export const JumblrRender = function() {
                   <div className={ 'tab-pane' + (this.state.activeTab === 3 ? ' active' : '') }>
                     <p>{ translate('JUMBLR.DEPOSIT_FORM_P1') }</p>
                     <p className="padding-bottom-20">{ translate('JUMBLR.DEPOSIT_FORM_P2') }</p>
-                    <WalletsNativeSend
+                    <SendCoin
                       renderFormOnly="true"
                       activeSection="send" />
                   </div>

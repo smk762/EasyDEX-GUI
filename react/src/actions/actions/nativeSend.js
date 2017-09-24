@@ -1,4 +1,7 @@
-import { DASHBOARD_ACTIVE_COIN_NATIVE_OPIDS } from '../storeType';
+import {
+  DASHBOARD_ACTIVE_COIN_NATIVE_OPIDS,
+  DASHBOARD_ACTIVE_COIN_SENDTO
+} from '../storeType';
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
@@ -106,6 +109,7 @@ export function sendNativeTx(coin, _payload) {
           );
         }
       } else {
+        dispatch(sendToAddressState(JSON.parse(json).result));
         dispatch(
           triggerToaster(
             translate('TOASTR.TX_SENT_ALT'),
@@ -127,88 +131,41 @@ export function getKMDOPIDState(json) {
 
 // remove
 export function getKMDOPID(opid, coin) {
-  let tmpopidOutput = '';
-  let ajaxDataToHex;
-
-  if (opid === undefined) {
-    ajaxDataToHex = null;
-  } else {
-    ajaxDataToHex = `["${opid}"]`;
-  }
-
   return dispatch => {
-    return iguanaHashHex(ajaxDataToHex, dispatch).then((hashHexJson) => {
-      if (hashHexJson === '5b226e756c6c225d00') {
-        hashHexJson = '';
-      }
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'z_getoperationstatus',
+    };
 
-      let payload;
-      let passthruAgent = getPassthruAgent(coin);
-      let tmpIguanaRPCAuth = `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`;
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ payload: payload }),
+    };
 
-      if (passthruAgent === 'iguana') {
-        payload = {
-          userpass: tmpIguanaRPCAuth,
-          agent: passthruAgent,
-          method: 'passthru',
-          asset: coin,
-          function: 'z_getoperationstatus',
-          hex: hashHexJson,
-        };
-      } else {
-        payload = {
-          userpass: tmpIguanaRPCAuth,
-          agent: passthruAgent,
-          method: 'passthru',
-          function: 'z_getoperationstatus',
-          hex: hashHexJson,
-        };
-      }
-
-      let _fetchConfig = {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      };
-
-      if (Config.cli.default) {
-        payload = {
-          mode: null,
-          chain: coin,
-          cmd: 'z_getoperationstatus',
-        };
-
-        _fetchConfig = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ payload: payload }),
-        };
-      }
-
-      fetch(
-        Config.cli.default ? `http://127.0.0.1:${Config.agamaPort}/shepherd/cli` : `http://127.0.0.1:${Config.iguanaCorePort}`,
-        _fetchConfig
-      )
-      .catch(function(error) {
-        console.log(error);
-        dispatch(
-          triggerToaster(
-            'getKMDOPID',
-            'Error',
-            'error'
-          )
-        );
-      })
-      .then(response => response.json())
-      .then(json => {
-        if (Config.cli.default) {
-          json = json.result;
-        }
-        dispatch(getKMDOPIDState(json));
-      })
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'getKMDOPID',
+          'Error',
+          'error'
+        )
+      );
     })
-  }
+    .then(response => response.json())
+    .then(json => {
+      json = json.result;
+      dispatch(getKMDOPIDState(json));
+    })
+  };
 }
 
 export function sendToAddressPromise(coin, address, amount) {
@@ -253,4 +210,18 @@ export function sendToAddressPromise(coin, address, amount) {
       resolve(json);
     });
   });
+}
+
+export function sendToAddressState(json) {
+  return {
+    type: DASHBOARD_ACTIVE_COIN_SENDTO,
+    lastSendToResponse: json,
+  }
+}
+
+export function clearLastSendToResponseState() {
+  return {
+    type: DASHBOARD_ACTIVE_COIN_SENDTO,
+    lastSendToResponse: null,
+  }
 }

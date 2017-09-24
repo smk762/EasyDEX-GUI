@@ -1,7 +1,7 @@
 import React from 'react';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsInfo from '../walletsInfo/walletsInfo';
-import WalletsNativeSend from '../walletsNativeSend/walletsNativeSend';
+import SendCoin from '../sendCoin/sendCoin';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsData from '../walletsData/walletsData';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
@@ -33,7 +33,7 @@ const WalletsNativeRender = function() {
             <WalletsBalance />
             <ReceiveCoin />
             <WalletsData />
-            <WalletsNativeSend />
+            <SendCoin />
             <WalletsInfo />
           </div>
         </div>
