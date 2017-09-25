@@ -34,6 +34,11 @@ const WalletsTxInfoRender = function(txInfo) {
                       <i className="icon wb-file"></i>Raw info
                     </a>
                   </li>
+                  <li className="pull-right">
+                    <a onClick={ () => this.openExplorerWindow(txInfo.txid) }>
+                      <i className="icon fa-search"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER') }
+                    </a>
+                  </li>
                 </ul>
                 <div className="panel-body">
                   <div className="tab-content">

@@ -293,7 +293,8 @@ export const _lang = {
       'CREATE_INVOICE_QR': 'Create Invoice QR Code',
       'QR_CONTENT': 'QR Content',
       'CHOOSE_RECEIVING_ADDRESS': 'Choose Address',
-      'SAVE_AS_IMAGE': 'Save as Image'
+      'SAVE_AS_IMAGE': 'Save as Image',
+      'OPEN_TRANSACTION_IN_EPLORER': 'Open transaction in Explorer',
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',

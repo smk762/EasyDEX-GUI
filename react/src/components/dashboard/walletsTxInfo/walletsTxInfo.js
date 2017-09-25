@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
 import { toggleDashboardTxInfoModal } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -34,6 +35,29 @@ class WalletsTxInfo extends React.Component {
     }
   }
 
+  openExplorerWindow(txid) {
+    const url = 'http://' + this.props.ActiveCoin.coin + '.explorer.supernet.org/tx/' + txid;
+    const remote = window.require('electron').remote;
+    const BrowserWindow = remote.BrowserWindow;
+
+    const externalWindow = new BrowserWindow({
+      width: 1280,
+      height: 800,
+      title: `${translate('INDEX.LOADING')}...`,
+      icon: remote.getCurrentWindow().iguanaIcon,
+      webPreferences: {
+        "nodeIntegration": false
+      },
+    });
+
+    externalWindow.loadURL(url);
+    externalWindow.webContents.on('did-finish-load', function() {
+      setTimeout(function() {
+        externalWindow.show();
+      }, 40);
+    });
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin.showTransactionInfo &&
@@ -52,6 +76,7 @@ const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
       mode: state.ActiveCoin.mode,
+      coin: state.ActiveCoin.coin,
       txhistory: state.ActiveCoin.txhistory,
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
       activeSection: state.ActiveCoin.activeSection,
