@@ -36,7 +36,7 @@ const WalletsTxInfoRender = function(txInfo) {
                   </li>
                   <li className="pull-right">
                     <a onClick={ () => this.openExplorerWindow(txInfo.txid) }>
-                      <i className="icon fa-search"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER') }
+                      <i className="icon fa-search"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.props.ActiveCoin.coin) }
                     </a>
                   </li>
                 </ul>

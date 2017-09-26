@@ -294,7 +294,7 @@ export const _lang = {
       'QR_CONTENT': 'QR Content',
       'CHOOSE_RECEIVING_ADDRESS': 'Choose Address',
       'SAVE_AS_IMAGE': 'Save as Image',
-      'OPEN_TRANSACTION_IN_EPLORER': 'Open transaction in Explorer',
+      'OPEN_TRANSACTION_IN_EPLORER': 'Open transaction in @template@ Explorer',
     },
     'ATOMIC': {
       'RAW_OUTPUT': 'Raw Output',
