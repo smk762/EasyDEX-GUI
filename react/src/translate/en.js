@@ -609,6 +609,7 @@ export const _lang = {
       'UPDATE': 'Update',
       'SELECT_T_OR_Z_ADDR': 'Select Transparent or Private Address',
       'ENTER_T_OR_Z_ADDR': 'Enter Transparent or Private address',
+      'ENTER_ADDRESS': 'Enter address',
       'AWAITING': 'Awaiting in queue',
       'PROCESSING': 'Processing',
       'ERROR_CODE': 'Error Code',

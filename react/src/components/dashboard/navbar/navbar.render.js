@@ -52,7 +52,7 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
             </li>
-            <li className={ 'hide ' + (this.isSectionActive('edex') ? 'active nav-top-menu' : 'nav-top-menu') }>
+            <li className={ this.isSectionActive('edex') ? 'hide active nav-top-menu' : 'hide nav-top-menu' }>
               <a onClick={ () => this.dashboardChangeSection('edex') }>
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
@@ -64,11 +64,13 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
-            <li className="nav-top-menu">
-              <a onClick={ this.openImportKeyModal }>
-                <i className="site-menu-icon"></i> { translate('IMPORT_KEY.IMPORT_KEY') }
-              </a>
-            </li>
+            { this.props.ActiveCoin.coin !== 'CHIPS' &&
+              <li className="nav-top-menu">
+                <a onClick={ this.openImportKeyModal }>
+                  <i className="site-menu-icon"></i> { translate('IMPORT_KEY.IMPORT_KEY') }
+                </a>
+              </li>
+            }
           </ul>
           <ul className="nav navbar-toolbar navbar-right navbar-toolbar-right">
             <li>

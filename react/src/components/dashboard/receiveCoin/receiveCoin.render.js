@@ -104,7 +104,7 @@ export const ReceiveCoinRender = function() {
                               <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
                             </a>
                           </li>
-                          <li>
+                          <li className={ this.props.coin === 'CHIPS' ? 'hide' : '' }>
                             <a onClick={ () => this.getNewAddress('private') }>
                               <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
                             </a>

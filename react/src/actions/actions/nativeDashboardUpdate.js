@@ -70,15 +70,28 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
       _listtransactions = 'no data';
     }
 
-    return {
-      type: DASHBOARD_UPDATE,
-      progress: json.result['getinfo'].result,
-      opids: json.result['z_getoperationstatus'].result,
-      txhistory: _listtransactions,
-      balance: json.result['z_gettotalbalance'].result,
-      addresses: json.result['addresses'],
-      coin: coin,
-      rescanInProgress: false,
-    };
+    if (coin === 'CHIPS') {
+      return {
+        type: DASHBOARD_UPDATE,
+        progress: json.result['getinfo'].result,
+        opids: null,
+        txhistory: _listtransactions,
+        balance: { transparent: json.result['getbalance'].result, total: json.result['getbalance'].result },
+        addresses: json.result['addresses'],
+        coin: coin,
+        rescanInProgress: false,
+      };
+    } else {
+      return {
+        type: DASHBOARD_UPDATE,
+        progress: json.result['getinfo'].result,
+        opids: json.result['z_getoperationstatus'].result,
+        txhistory: _listtransactions,
+        balance: json.result['z_gettotalbalance'].result,
+        addresses: json.result['addresses'],
+        coin: coin,
+        rescanInProgress: false,
+      };
+    }
   }
 }

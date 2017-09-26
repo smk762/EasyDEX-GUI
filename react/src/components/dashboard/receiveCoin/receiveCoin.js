@@ -17,7 +17,6 @@ import {
 class ReceiveCoin extends React.Component {
   constructor() {
     super();
-
     this.state = {
       openDropMenu: false,
       hideZeroAdresses: false,

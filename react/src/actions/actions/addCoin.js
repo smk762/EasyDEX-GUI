@@ -103,13 +103,22 @@ export function shepherdHerd(coin, mode, path, startupParams) {
   }
 
   return dispatch => {
+    let _herd;
+
+    if (coin === 'CHIPS') {
+      _herd = 'chipsd';
+      herdData = {};
+    } else {
+      _herd = coin !== 'ZEC' ? 'komodod' : 'zcashd';
+    }
+
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/herd`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'herd': coin !== 'ZEC' ? 'komodod' : 'zcashd',
+        'herd': _herd,
         'options': herdData,
       }),
     })

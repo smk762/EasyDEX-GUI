@@ -61,7 +61,7 @@ export const _SendFormRender = function() {
             onChange={ this.updateInput }
             value={ this.state.sendTo }
             id="kmdWalletSendTo"
-            placeholder={ translate('SEND.ENTER_T_OR_Z_ADDR') }
+            placeholder={ this.props.ActiveCoin.coin === 'CHIPS' ? translate('SEND.ENTER_ADDRESS') : translate('SEND.ENTER_T_OR_Z_ADDR') }
             autoComplete="off"
             required />
         </div>

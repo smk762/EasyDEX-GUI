@@ -213,7 +213,7 @@ export function ActiveCoin(state = {
       if (state.coin === action.coin) {
         return {
           ...state,
-          progress: action.progress,
+          // progress: action.progress,
           opids: action.opids,
           txhistory: action.txhistory,
           balance: action.balance,

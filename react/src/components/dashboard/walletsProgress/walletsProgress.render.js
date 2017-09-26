@@ -96,15 +96,19 @@ export const TranslationComponentsRender = function(translationID) {
 };
 
 export const ChainActivationNotificationRender = function() {
-  return (
-    <div className="alert alert-info alert-dismissible margin-bottom-50 margin-top-40">
-      <h4>
-        { translate('INDEX.ACTIVATING_CHAIN') }&nbsp;
-        { this.props.ActiveCoin.rescanInProgress ? (this.renderRescanProgress() ? `: ${this.renderRescanProgress().toFixed(2)}% ${translate('INDEX.PROGRESS_RESCANNING_BLOCKS')}` : translate('INDEX.PROGRESS_RESCANNING_BLOCKS')) : this.renderActivatingBestChainProgress() }
-      </h4>
-      <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
-    </div>
-  );
+  if (this.props.ActiveCoin.coin !== 'CHIPS') {
+    return (
+      <div className="alert alert-info alert-dismissible margin-bottom-50">
+        <h4>
+          { translate('INDEX.ACTIVATING_CHAIN') }&nbsp;
+          { this.props.ActiveCoin.rescanInProgress ? (this.renderRescanProgress() ? `: ${this.renderRescanProgress().toFixed(2)}% ${translate('INDEX.PROGRESS_RESCANNING_BLOCKS')}` : translate('INDEX.PROGRESS_RESCANNING_BLOCKS')) : this.renderActivatingBestChainProgress() }
+        </h4>
+        <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
+      </div>
+    );
+  } else {
+    return null;
+  }
 };
 
 export const WalletsProgressRender = function() {
