@@ -34,11 +34,6 @@ const WalletsTxInfoRender = function(txInfo) {
                       <i className="icon wb-file"></i>Raw info
                     </a>
                   </li>
-                  <li className="pull-right">
-                    <a onClick={ () => this.openExplorerWindow(txInfo.txid) }>
-                      <i className="icon fa-search"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.props.ActiveCoin.coin) }
-                    </a>
-                  </li>
                 </ul>
                 <div className="panel-body">
                   <div className="tab-content">
@@ -159,6 +154,12 @@ const WalletsTxInfoRender = function(txInfo) {
               </div>
             </div>
             <div className="modal-footer">
+            <button
+                type="button"
+                className="btn btn-sm white btn-info waves-effect waves-light pull-left"
+                onClick={ () => this.openExplorerWindow(txInfo.txid) }>
+                <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.props.ActiveCoin.coin) }
+              </button>
               <button
                 type="button"
                 className="btn btn-default"
