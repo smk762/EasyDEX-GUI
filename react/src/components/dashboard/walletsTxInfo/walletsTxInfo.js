@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
-import { toggleDashboardTxInfoModal } from '../../../actions/actionCreators';
+import { 
+  toggleDashboardTxInfoModal,
+  getTxDetails,
+  getRawTxDetails,
+ } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
 
@@ -11,8 +15,12 @@ class WalletsTxInfo extends React.Component {
     super();
     this.state = {
       activeTab: 0,
+      txDetails: null,
+      rawTxDetails: null,
     };
     this.toggleTxInfoModal = this.toggleTxInfoModal.bind(this);
+    this.loadTxDetails = this.loadTxDetails.bind(this);
+    this.loadRawTxDetails = this.loadRawTxDetails.bind(this);
   }
 
   toggleTxInfoModal() {
@@ -21,6 +29,35 @@ class WalletsTxInfo extends React.Component {
     this.setState(Object.assign({}, this.state, {
       activeTab: 0,
     }));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const texInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
+    
+    if (texInfo && 
+      this.props.ActiveCoin.showTransactionInfoTxIndex !== nextProps.ActiveCoin.showTransactionInfoTxIndex) {
+      this.loadTxDetails(nextProps.ActiveCoin.coin, texInfo.txid);
+      this.loadRawTxDetails(nextProps.ActiveCoin.coin, texInfo.txid);
+    }
+    
+  }
+
+  loadTxDetails(coin, txid) {
+    getTxDetails(coin, txid)
+    .then((json) => {
+      this.setState(Object.assign({}, this.state, {
+        txDetails: json,
+      }));
+    });
+  }
+
+  loadRawTxDetails(coin, txid) {
+    getRawTxDetails(coin, txid)
+    .then((json) => {
+      this.setState(Object.assign({}, this.state, {
+        rawTxDetails: json,
+      }));
+    });
   }
 
   openTab(tab) {
