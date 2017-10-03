@@ -28,7 +28,9 @@ const WalletsNativeRender = function() {
           </ol>
         </div>
         <div className="page-content page-content-native">
-          <WalletsProgress />
+          { this.props.ActiveCoin.mode !== 'spv' &&
+            <WalletsProgress />
+          }
           <div className="row">
             <WalletsBalance />
             <ReceiveCoin />

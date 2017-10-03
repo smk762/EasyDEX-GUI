@@ -54,6 +54,7 @@ export * from './actions/update';
 export * from './actions/jumblr';
 export * from './actions/interest';
 export * from './actions/nativeDashboardUpdate';
+export * from './actions/electrum';
 
 export function changeActiveAddress(address) {
   return {
@@ -138,6 +139,7 @@ export function dashboardCoinsState(json) {
     type: GET_ACTIVE_COINS,
     coins: json,
     activeCoins: Object.keys(json.native).length ? true : false,
+    total: json.total,
   }
 }
 

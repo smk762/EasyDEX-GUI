@@ -13,7 +13,7 @@ const CoinSelectorsRender = function(item, coin, i) {
         className={ this.hasMoreThanOneCoin() ? 'col-sm-10' : 'col-sm-8' }
         style={{ paddingLeft: !this.hasMoreThanOneCoin() ? '0' : '15px' }}>
         <div
-          className={ this.hasMoreThanOneCoin() ? 'col-sm-6 form-group' : 'form-group' }
+          className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6 form-group' : 'form-group' }
           style={{ paddingLeft: this.hasMoreThanOneCoin() ? '0' : '15px' }}>
           <select
             className="form-control form-material"
@@ -22,12 +22,12 @@ const CoinSelectorsRender = function(item, coin, i) {
             onChange={ (event) => this.updateSelectedCoin(event, i) }
             autoFocus>
             <option>{ translate('INDEX.SELECT') }</option>
-            <AddCoinOptionsCrypto />
-            <AddCoinOptionsAC />
-            <AddCoinOptionsACFiat />
+            <AddCoinOptionsCrypto appSettings={ this.props.Settings } />
+            <AddCoinOptionsAC appSettings={ this.props.Settings } />
+            <AddCoinOptionsACFiat appSettings={ this.props.Settings } />
           </select>
         </div>
-        <div className={ this.hasMoreThanOneCoin() ? 'col-sm-6' : 'hide' }>
+        <div className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6' : 'hide' }>
           <div className="toggle-box padding-bottom-10">
             <select
               className="form-control form-material"
@@ -52,7 +52,39 @@ const CoinSelectorsRender = function(item, coin, i) {
         </button>
       </div>
       <div className="col-sm-11 text-center add-coin-modes">
-        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
+          <input
+            type="radio"
+            className="to-labelauty labelauty"
+            name={ `mode-${i}` }
+            id={ `addcoin_mdl_basilisk_mode_login-${i}` }
+            disabled={ item.spvMode.disabled }
+            checked={ item.spvMode.checked } />
+          <label
+            htmlFor={ `addcoin_mdl_basilisk_mode_login-${i}` }
+            onClick={ () => this.updateSelectedMode('0', i) }
+            style={{ pointerEvents: item.spvMode.disabled ? 'none' : 'all' }}>
+            <span
+              className="labelauty-unchecked-image"
+              style={{ display: item.spvMode.checked ? 'none' : 'inline-block' }}></span>
+            <span
+              className="labelauty-unchecked"
+              style={{ display: item.spvMode.checked ? 'none' : 'inline-block' }}>
+                { translate('INDEX.SPV_MODE') }
+            </span>
+            <span
+              className="labelauty-checked-image"
+              style={{ display: item.spvMode.checked ? 'inline-block' : 'none' }}></span>
+            <span
+              className="labelauty-checked"
+              style={{ display: item.spvMode.checked ? 'inline-block' : 'none' }}>
+                { translate('INDEX.SPV_MODE') }
+            </span>
+          </label>
+        </div>
+        <div
+          className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6"
+          style={{ paddingLeft: '0' }}>
           <input
             type="radio"
             className="to-labelauty labelauty"
@@ -91,7 +123,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             <i className="fa fa-trash-o"></i>
         </button>
       </div>
-      <div className={ !this.hasMoreThanOneCoin() ? 'col-sm-5 padding-bottom-30' : 'hide' }>
+      <div className={ !this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-5 padding-bottom-30' : 'hide' }>
         <div className="toggle-box padding-top-3 padding-bottom-10">
           <select
             className="form-control form-material"

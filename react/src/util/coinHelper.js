@@ -371,9 +371,9 @@ export function getModeInfo(mode) {
       modetip = 'Native';
       modecolor = 'primary';
       break;
-    case 'basilisk':
-      modecode = 'Basilisk';
-      modetip = 'Basilisk';
+    case 'spv':
+      modecode = 'SPV';
+      modetip = 'SPV';
       modecolor = 'info';
       break;
     case 'full':

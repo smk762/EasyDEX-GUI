@@ -1,3 +1,4 @@
+import { ACTIVE_HANDLE } from '../storeType';
 import { translate } from '../../translate/translate';
 import Config from '../../config';
 import {
@@ -13,9 +14,107 @@ import {
   checkAC
 } from '../../components/addcoin/payload';
 
-export function addCoin(coin, mode, syncOnly, port, startupParams) {
+function iguanaActiveHandleState(json) {
+  return {
+    type: ACTIVE_HANDLE,
+    isLoggedIn: json.status === 'unlocked' ? true : false,
+    handle: json,
+  }
+}
+
+export function activeHandle() {
   return dispatch => {
-    dispatch(shepherdGetConfig(coin, '-1', startupParams));
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/auth/status`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'activeHandle',
+          'Error',
+          'error'
+        )
+      )
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      dispatch(
+        iguanaActiveHandleState(json)
+      );
+    });
+  }
+}
+
+export function shepherdElectrumAuth(seed) {
+  return dispatch => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/login?seed=${seed}&iguana=true`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'shepherdElectrumAuth',
+          'Error',
+          'error'
+        )
+      )
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.warn(json);
+      dispatch(activeHandle());
+    });
+  }
+}
+
+export function shepherdElectrumAddCoin(coin) {
+  return dispatch => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/coins/add?coin=${coin}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'shepherdElectrumAddCoin',
+          'Error',
+          'error'
+        )
+      )
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+      dispatch(
+        addCoinResult(coin, '0')
+      );
+    });
+  }
+}
+
+export function addCoin(coin, mode, startupParams) {
+  console.warn(mode);
+  if (Number(mode) === 0) {
+    console.warn('spv');
+    return dispatch => {
+      dispatch(shepherdElectrumAddCoin(coin));
+    }
+  } else {
+    return dispatch => {
+      dispatch(shepherdGetConfig(coin, '-1', startupParams));
+    }
   }
 }
 
@@ -118,8 +217,8 @@ export function shepherdHerd(coin, mode, path, startupParams) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'herd': _herd,
-        'options': herdData,
+        herd: _herd,
+        options: herdData,
       }),
     })
     .catch(function(error) {
@@ -155,18 +254,22 @@ export function shepherdHerd(coin, mode, path, startupParams) {
 
 export function addCoinResult(coin, mode) {
   const modeToValue = {
+    '0': 'spv',
     '-1': 'native',
   };
 
   return dispatch => {
     dispatch(
       triggerToaster(
-        `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode]} ${translate('TOASTR.MODE')}`,
+        `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
         translate('TOASTR.COIN_NOTIFICATION'),
         'success'
       )
     );
     dispatch(toggleAddcoinModal(false, false));
+    if (Number(mode) === 0) {
+      dispatch(activeHandle());
+    }
     dispatch(getDexCoins());
   }
 }

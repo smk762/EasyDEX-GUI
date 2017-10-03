@@ -57,14 +57,14 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
-            { this.props.ActiveCoin && (/*this._checkAC() || */this.props.ActiveCoin.coin === 'KMD') &&
+            { this.props.ActiveCoin && (/*this._checkAC() || */this.props.ActiveCoin.coin === 'KMD' && this.props.ActiveCoin.mode === 'native') &&
               <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr
                 </a>
               </li>
             }
-            { this.props.ActiveCoin.coin !== 'CHIPS' &&
+            { this.props.ActiveCoin.coin !== 'CHIPS' && this.props.ActiveCoin.mode !== 'spv' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
                   <i className="site-menu-icon"></i> { translate('IMPORT_KEY.IMPORT_KEY') }

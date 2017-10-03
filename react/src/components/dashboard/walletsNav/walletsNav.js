@@ -32,8 +32,11 @@ class WalletsNav extends React.Component {
     const _mode = this.props.ActiveCoin.mode;
 
     if (this.props.ActiveCoin.balance &&
-        this.props.ActiveCoin.balance.total) {
+        this.props.ActiveCoin.balance.total &&
+        _mode === 'native') {
       _balance = this.props.ActiveCoin.balance.total;
+    } else if (_mode === 'spv' && this.props.ActiveCoin.balance.balance) {
+      _balance = this.props.ActiveCoin.balance.balance;
     }
 
     return _balance;
@@ -49,33 +52,33 @@ class WalletsNav extends React.Component {
 
   // TODO: merge toggle func into one
   toggleSendReceiveCoinForms() {
-    if (this.props.ActiveCoin.mode === 'native') {
+    //if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
           this.props.ActiveCoin.activeSection === 'settings' ? 'default' : 'settings'
         )
       );
-    }
+    //}
   }
 
   toggleSendCoinForm(display) {
-    if (this.props.ActiveCoin.mode === 'native') {
+    //if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
           this.props.ActiveCoin.activeSection === 'send' ? 'default' : 'send'
         )
       );
-    }
+    //}
   }
 
   toggleReceiveCoinForm(display) {
-    if (this.props.ActiveCoin.mode === 'native') {
+    //if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         toggleDashboardActiveSection(
           this.props.ActiveCoin.activeSection === 'receive' ? 'default' : 'receive'
         )
       );
-    }
+    //}
   }
 
   render() {

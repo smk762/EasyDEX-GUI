@@ -126,7 +126,18 @@ class ReceiveCoin extends React.Component {
 
       return items;
     } else {
-      return null;
+      if (this.props.electrumCoins &&
+          type === 'public') {
+        let items = [];
+
+        items.push(
+          AddressItemRender.call(this, { address: this.props.electrumCoins[this.props.coin].pub, amount: this.props.balance.balance }, 'public')
+        );
+
+        return items;
+      } else {
+        return null;
+      }
     }
   }
 
@@ -152,6 +163,7 @@ const mapStateToProps = (state, props) => {
     activeSection: state.ActiveCoin.activeSection,
     activeAddress: state.ActiveCoin.activeAddress,
     addresses: state.ActiveCoin.addresses,
+    electrumCoins: state.Dashboard.electrumCoins,
   };
 
   if (props &&

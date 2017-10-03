@@ -4,7 +4,9 @@ import Store from '../../store';
 import { translate } from '../../translate/translate';
 import {
   getDexCoins,
+  activeHandle,
   triggerToaster,
+  shepherdElectrumCoins,
 } from '../../actions/actionCreators';
 
 class Main extends React.Component {
@@ -71,6 +73,8 @@ class Main extends React.Component {
 
   componentWillMount() {
     Store.dispatch(getDexCoins());
+    Store.dispatch(activeHandle());
+    Store.dispatch(shepherdElectrumCoins());
   }
 
   render() {

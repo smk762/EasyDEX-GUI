@@ -8,6 +8,7 @@ import {
   toggleDashboardTxInfoModal,
   changeActiveAddress,
   getDashboardUpdate,
+  shepherdElectrumTransactions,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -182,7 +183,11 @@ class WalletsData extends React.Component {
   }
 
   refreshTxHistory() {
-    Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    if (this.props.ActiveCoin.mode === 'native') {
+      Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    } else if (this.props.ActiveCoin.mode === 'spv') {
+      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+    }
   }
 
   toggleTxInfoModal(display, txIndex) {
@@ -208,9 +213,7 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
         this.props.ActiveCoin.txhistory.length) {
-
       _stateChange = Object.assign({}, _stateChange, {
-        isExplorerData: this.props.ActiveCoin.txhistory[0].source ? true : false,
         itemsList: this.props.ActiveCoin.txhistory,
         filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
         txhistory: this.props.ActiveCoin.txhistory,
@@ -419,7 +422,7 @@ class WalletsData extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        this.props.ActiveCoin.mode === 'native' &&
+        //this.props.ActiveCoin.mode === 'native' &&
         this.props.ActiveCoin.activeSection === 'default'
         ) {
       return WalletsDataRender.call(this);
@@ -449,6 +452,7 @@ const mapStateToProps = (state) => {
     Main: {
       coins: state.Main.coins,
     },
+    Dashboard: state.Dashboard,
   };
 };
 

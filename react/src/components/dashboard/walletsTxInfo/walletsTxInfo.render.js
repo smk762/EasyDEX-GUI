@@ -90,19 +90,19 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tr>
                               <td>walletconflicts</td>
                               <td>
-                                { txInfo.walletconflicts.length }
+                                { txInfo.walletconflicts ? txInfo.walletconflicts.length : '' }
                               </td>
                             </tr>
                             <tr>
                               <td>time</td>
                               <td>
-                                { secondsToString(txInfo.time) }
+                                { txInfo.time ? secondsToString(txInfo.time) : '' }
                               </td>
                             </tr>
                             <tr>
                               <td>timereceived</td>
                               <td>
-                                { secondsToString(txInfo.timereceived) }
+                                { txInfo.timereceived ? secondsToString(txInfo.timereceived) : '' }
                               </td>
                             </tr>
                           </tbody>

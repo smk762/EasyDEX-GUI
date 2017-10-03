@@ -9,7 +9,7 @@ const WalletsBalanceRender = function() {
       id="wallet-widgets"
       className="wallet-widgets">
       <div className="col-xs-12 flex">
-        <div className={ this.props.ActiveCoin.coin === 'CHIPS' ? 'col-lg-12 col-xs-12' : 'col-lg-3 col-xs-12' }>
+        <div className={ this.props.ActiveCoin.coin === 'CHIPS' || this.props.ActiveCoin.mode === 'spv' ? 'col-lg-12 col-xs-12' : 'col-lg-3 col-xs-12' }>
           <div className="widget widget-shadow">
             <div className="widget-content">
               <i
@@ -18,8 +18,10 @@ const WalletsBalanceRender = function() {
               <div className="padding-20 padding-top-10">
                 <div className="clearfix">
                   <div className="pull-left padding-vertical-10">
-                    <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
-                    { this.props.ActiveCoin.coin === 'CHIPS' ? translate('INDEX.BALANCE') : translate('INDEX.TRANSPARENT_BALANCE') }
+                    { this.props.ActiveCoin.coin !== 'CHIPS' && this.props.ActiveCoin.mode !== 'spv' &&
+                      <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
+                    }
+                    { this.props.ActiveCoin.coin === 'CHIPS' || this.props.ActiveCoin.mode === 'spv' ? translate('INDEX.BALANCE') : translate('INDEX.TRANSPARENT_BALANCE') }
                   </div>
                   <span
                     className="pull-right padding-top-10 font-size-22"
@@ -32,7 +34,7 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
 
-        <div className={ this.props.ActiveCoin.coin !== 'CHIPS' ? 'col-lg-3 col-xs-12' : 'hide' }>
+        <div className={ this.props.ActiveCoin.coin !== 'CHIPS' && this.props.ActiveCoin.mode !== 'spv' ? 'col-lg-3 col-xs-12' : 'hide' }>
           <div className="widget widget-shadow">
             <div className="padding-20 padding-top-10">
               <div className="clearfix">
@@ -50,7 +52,7 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
 
-        <div className={ this.props.ActiveCoin.coin !== 'CHIPS' ? 'col-lg-3 col-xs-12' : 'hide' }>
+        <div className={ this.props.ActiveCoin.coin !== 'CHIPS' && this.props.ActiveCoin.mode !== 'spv' ? 'col-lg-3 col-xs-12' : 'hide' }>
           <div className="widget widget-shadow">
             <div className="widget-content">
               <div className="padding-20 padding-top-10">
@@ -70,7 +72,7 @@ const WalletsBalanceRender = function() {
           </div>
         </div>
 
-        <div className={ this.props.ActiveCoin.coin !== 'CHIPS' ? 'col-lg-3 col-xs-12' : 'hide' }>
+        <div className={ this.props.ActiveCoin.coin !== 'CHIPS' && this.props.ActiveCoin.mode !== 'spv' ? 'col-lg-3 col-xs-12' : 'hide' }>
           <div className="widget widget-shadow">
             <div className="widget-content">
               <div className="padding-20 padding-top-10">

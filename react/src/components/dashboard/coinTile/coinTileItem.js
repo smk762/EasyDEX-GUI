@@ -14,13 +14,17 @@ import {
   getKMDBalanceTotal,
   getSyncInfoNative,
   getDebugLog,
-  getDashboardUpdate
+  getDashboardUpdate,
+  shepherdElectrumBalance,
+  shepherdElectrumTransactions,
+  shepherdElectrumCoins,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
 
 import CoinTileItemRender from './coinTileItem.render';
 
+const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
 const IGUNA_ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
 const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 5;
 
@@ -41,6 +45,7 @@ class CoinTileItem extends React.Component {
       let _coinMode = {};
       const modes = [
         'native',
+        'spv',
       ];
       const allCoins = this.props.Main.coins;
 
@@ -115,6 +120,11 @@ class CoinTileItem extends React.Component {
           );
         }
       }
+
+      if (mode === 'spv') {
+        Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
+        Store.dispatch(shepherdElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
+      }
     }
   }
 
@@ -124,7 +134,7 @@ class CoinTileItem extends React.Component {
       setTimeout(() => {
         this.dispatchCoinActions(coin, mode);
       }, 100);
-      if (mode === 'native') { // faster coin data load if fully synced
+      if (mode === 'native' || mode === 'spv') { // faster coin data load if fully synced
         setTimeout(() => {
           this.dispatchCoinActions(coin, mode);
         }, 1000);
@@ -143,6 +153,12 @@ class CoinTileItem extends React.Component {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
         }, IGUNA_ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE);
+
+        Store.dispatch(startInterval('sync', _iguanaActiveHandle));
+      } else if (mode === 'spv') {
+        const _iguanaActiveHandle = setInterval(() => {
+          this.dispatchCoinActions(coin, mode);
+        }, SPV_DASHBOARD_UPDATE_TIMEOUT);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       }

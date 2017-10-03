@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
-import { getDashboardUpdate } from '../../../actions/actionCreators';
+import {
+  getDashboardUpdate,
+  shepherdElectrumBalance,
+} from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 import WalletsBalanceRender from './walletsBalance.render';
@@ -39,7 +42,11 @@ class WalletsBalance extends React.Component {
   }
 
   refreshBalance() {
-    Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    if (this.props.ActiveCoin.mode === 'native') {
+      Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    } else if (this.props.ActiveCoin.mode === 'spv') {
+      Store.dispatch(shepherdElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+    }
   }
 
   renderBalance(type) {
@@ -70,6 +77,8 @@ class WalletsBalance extends React.Component {
           this.props.ActiveCoin.balance.transparent) {
         _balance = this.props.ActiveCoin.balance.transparent;
       }
+    } else if (_mode === 'spv' && this.props.ActiveCoin.balance.balance) {
+      _balance = this.props.ActiveCoin.balance.balance;
     }
 
     return _balance;
@@ -118,9 +127,7 @@ const mapStateToProps = (state) => {
       activeAddress: state.ActiveCoin.activeAddress,
       progress: state.ActiveCoin.progress,
     },
-    Dashboard: {
-      activeHandle: state.Dashboard.activeHandle,
-    },
+    Dashboard: state.Dashboard,
   };
 };
 

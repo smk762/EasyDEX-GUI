@@ -21,7 +21,7 @@ export const AddressListRender = function() {
             className="selected"
             onClick={ () => this.updateAddressSelection(null, 'public', null) }>
             <a>
-              <span className="text">{ translate('INDEX.T_FUNDS') }</span>
+              <span className="text">{ this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }</span>
               <span
                 className="glyphicon glyphicon-ok check-mark pull-right"
                 style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
@@ -81,7 +81,7 @@ export const _SendFormRender = function() {
             placeholder="0.000"
             autoComplete="off" />
         </div>
-        <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() ? '' : ' hide') }>
+        <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() && this.props.ActiveCoin.mode === 'native' ? '' : ' hide') }>
           <span className="pointer">
             <label className="switch">
               <input
@@ -258,7 +258,7 @@ export const SendRender = function() {
                     </tr>
                     <tr>
                       <td>Transaction ID</td>
-                      <td>{ this.state.lastSendToResponse }</td>
+                      <td>{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : 'error') : this.state.lastSendToResponse }</td>
                     </tr>
                   </tbody>
                 </table>

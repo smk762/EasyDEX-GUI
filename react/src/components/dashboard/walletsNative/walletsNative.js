@@ -66,11 +66,15 @@ class WalletsNative extends React.Component {
   }
 
   render() {
-    if (this.isActiveCoinModeNative()) {
+    //if (this.isActiveCoinModeNative()) {
+    if (this.props.ActiveCoin && this.props.ActiveCoin.mode) {
       return WalletsNativeRender.call(this);
     } else {
       return null;
     }
+    /*} else {
+      return null;
+    }*/
   }
 }
 

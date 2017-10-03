@@ -10,8 +10,8 @@ class AddCoinOptionsCrypto extends React.Component {
   render() {
     return (
       <optgroup label={ translate('ADD_COIN.CRYPTO_CURRENCIES') }>
-        <option value="KMD|native">Komodo (KMD)</option>
-        <option value="CHIPS|native">Chips (CHIPS)</option>
+        <option value="KMD|native|spv">Komodo (KMD)</option>
+        <option value="CHIPS|native|spv">Chips (CHIPS)</option>
       </optgroup>
     );
   }

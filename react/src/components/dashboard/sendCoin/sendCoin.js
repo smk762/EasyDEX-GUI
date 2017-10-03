@@ -7,7 +7,8 @@ import {
   triggerToaster,
   sendNativeTx,
   getKMDOPID,
-  clearLastSendToResponseState
+  clearLastSendToResponseState,
+  shepherdElectrumSend
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -224,7 +225,7 @@ class SendCoin extends React.Component {
       );
     } else {
       return (
-        <span>{ translate('INDEX.T_FUNDS') }</span>
+        <span>{ this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }</span>
       );
     }
   }
@@ -388,28 +389,68 @@ class SendCoin extends React.Component {
       return;
     }
 
-    Store.dispatch(
-      sendNativeTx(
-        this.props.ActiveCoin.coin,
-        this.state
-      )
-    );
+    if (this.props.ActiveCoin.mode === 'native') {
+      Store.dispatch(
+        sendNativeTx(
+          this.props.ActiveCoin.coin,
+          this.state
+        )
+      );
 
-    if (this.state.addressType === 'private') {
-      setTimeout(() => {
+      if (this.state.addressType === 'private') {
+        setTimeout(() => {
+          Store.dispatch(
+            getKMDOPID(
+              null,
+              this.props.ActiveCoin.coin
+            )
+          );
+        }, 1000);
+      }
+    } else if (this.props.ActiveCoin.mode === 'spv') {
+      console.warn('spv send');
+      console.warn(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub);
+      // no op
+      if (this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) {
         Store.dispatch(
-          getKMDOPID(
-            null,
-            this.props.ActiveCoin.coin
+          shepherdElectrumSend(
+            this.props.ActiveCoin.coin,
+            this.state.amount * 100000000,
+            this.state.sendTo,
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
           )
         );
-      }, 1000);
+      }
     }
   }
 
   // TODO: reduce to a single toast
   validateSendFormData() {
     let valid = true;
+
+    if (this.props.ActiveCoin.mode === 'spv') {
+      const _amount = this.state.amount;
+      const _amountSats = this.state.amount * 100000000;
+      const _balanceSats = this.props.ActiveCoin.balance.sats;
+      const _fee = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].txfee;
+
+      if (_amountSats > (Number(_balanceSats) + Number(_fee))) {
+        Store.dispatch(
+          triggerToaster(
+            translate('SEND.INSUFFICIENT_FUNDS'),
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      }
+
+      console.warn('send val ' + this.state.amount);
+      console.warn('send val sats ' + (this.state.amount * 100000000));
+
+      console.warn(this.props.ActiveCoin.balance.sats);
+      console.warn(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].txfee);
+    }
 
     if (!this.state.sendTo ||
         this.state.sendTo.length < 34) {
@@ -504,6 +545,7 @@ const mapStateToProps = (state, props) => {
       activeSection: state.ActiveCoin.activeSection,
       lastSendToResponse: state.ActiveCoin.lastSendToResponse,
     },
+    Dashboard: state.Dashboard,
   };
 
   if (props &&

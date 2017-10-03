@@ -24,10 +24,12 @@ class AddCoinOptionsAC extends React.Component {
     let _items = [];
 
     for (let i = 0; i < _assetChains.length; i++) {
+      const availableModes = _assetChains[i] === 'revs' ? 'native|spv' : 'native';
+
       _items.push(
         <option
           key={ _assetChains[i] }
-          value={ `${_assetChains[i].toUpperCase()}|native` }>{ translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) }</option>
+          value={ `${_assetChains[i].toUpperCase()}|${availableModes}` }>{ translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) }</option>
       );
     }
 

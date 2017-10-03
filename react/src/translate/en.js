@@ -63,6 +63,7 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'SPV_MODE': 'SPV Mode',
       'PROGRESS_RESCANNING_BLOCKS': '(rescanning blocks)',
       'BLOCKS': 'Blocks',
       'PLEASE_WAIT_UNTIL_RESCAN_FINISHED': 'Please wait until rescan process is finished',
