@@ -5,7 +5,7 @@ import Config from '../../config';
 
 export function getTxDetails(coin, txid, type) {
   return new Promise((resolve, reject) => {
-    const payload = {
+    let payload = {
       mode: null,
       chain: coin,
       cmd: 'gettransaction',
@@ -13,44 +13,18 @@ export function getTxDetails(coin, txid, type) {
         txid
       ],
     };
-
-    fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ payload: payload })
-      },
-    )
-    .catch(function(error) {
-      console.log(error);
-      dispatch(
-        triggerToaster(
-          'getTransaction',
-          'Error',
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      resolve(json.result ? json.result : json);
-    })
-  });
-}
-
-export function getRawTxDetails(coin, txid) {
-  return new Promise((resolve, reject) => {
-    const payload = {
-      mode: null,
-      chain: coin,
-      cmd: 'getrawtransaction',
-      params: [
-        txid,
-        1
-      ],
-    };
+   
+    if(type==='raw') {
+      payload = {
+        mode: null,
+        chain: coin,
+        cmd: 'getrawtransaction',
+        params: [
+          txid,
+          1
+        ],
+      };
+    }
 
     fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {

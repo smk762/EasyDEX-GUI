@@ -5,7 +5,6 @@ import { sortByDate } from '../../../util/sort';
 import { 
   toggleDashboardTxInfoModal,
   getTxDetails,
-  getRawTxDetails,
  } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
@@ -52,7 +51,7 @@ class WalletsTxInfo extends React.Component {
   }
 
   loadRawTxDetails(coin, txid) {
-    getRawTxDetails(coin, txid)
+    getTxDetails(coin, txid, 'raw')
     .then((json) => {
       this.setState(Object.assign({}, this.state, {
         rawTxDetails: json,
