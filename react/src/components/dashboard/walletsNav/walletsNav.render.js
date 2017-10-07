@@ -21,9 +21,20 @@ export const WalletsNavWithWalletRender = function() {
   return (
     <div>
       <div
-        className="page-header page-header-bordered header-easydex padding-bottom-40 page-header--native"
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 ' + (this.props.ActiveCoin.mode === 'spv' ? 'page-header--spv' : 'page-header--native') }
         id="header-dashboard"
         style={{ marginBottom: '30px' }}>
+        { this.props.ActiveCoin && this.props.ActiveCoin.mode === 'spv' &&
+          <div>
+            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+            { this.props && this.props.Dashboard && this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin] && this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : '-' }
+            <button
+              className="btn btn-default btn-xs clipboard-edexaddr"
+              onClick={ () => this.copyMyAddress(this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) }>
+              <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+            </button>
+          </div>
+        }
         <div className="page-header-actions">
           <div id="kmd_header_button">
             <button

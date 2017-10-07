@@ -104,9 +104,7 @@ const mapStateToProps = (state) => {
       activeSection: state.ActiveCoin.activeSection,
       activeAddress: state.ActiveCoin.activeAddress,
     },
-    Dashboard: {
-      activeHandle: state.Dashboard.activeHandle,
-    },
+    Dashboard: state.Dashboard,
     nativeOnly: Config.iguanaLessMode,
   };
 };

@@ -50,7 +50,7 @@ class WalletsBalance extends React.Component {
   }
 
   renderBalance(type) {
-    let _balance = '0';
+    let _balance = 0;
     const _mode = this.props.ActiveCoin.mode;
 
     if (_mode === 'native') {
@@ -78,10 +78,30 @@ class WalletsBalance extends React.Component {
         _balance = this.props.ActiveCoin.balance.transparent;
       }
     } else if (_mode === 'spv' && this.props.ActiveCoin.balance.balance) {
-      _balance = this.props.ActiveCoin.balance.balance;
+      if (this.props.ActiveCoin.coin === 'KMD') {
+        if (type === 'total' &&
+            this.props.ActiveCoin.balance &&
+            this.props.ActiveCoin.balance.total) {
+          _balance = this.props.ActiveCoin.balance.total;
+        }
+
+        if (type === 'interest' &&
+            this.props.ActiveCoin.balance &&
+            this.props.ActiveCoin.balance.interest) {
+          _balance = this.props.ActiveCoin.balance.interest;
+        }
+
+        if (type === 'transparent' &&
+            this.props.ActiveCoin.balance &&
+            this.props.ActiveCoin.balance.balance) {
+          _balance = this.props.ActiveCoin.balance.balance;
+        }
+      } else {
+        _balance = this.props.ActiveCoin.balance.balance;
+      }
     }
 
-    return _balance;
+    return Number(_balance);
   }
 
   isActiveCoinMode(coinMode) {

@@ -138,7 +138,6 @@ export function dashboardCoinsState(json) {
   return {
     type: GET_ACTIVE_COINS,
     coins: json,
-    activeCoins: Object.keys(json.native).length ? true : false,
     total: json.total,
   }
 }

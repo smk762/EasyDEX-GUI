@@ -5,6 +5,7 @@ import {
   triggerToaster,
   toggleAddcoinModal,
   getDexCoins,
+  shepherdElectrumCoins,
 } from '../actionCreators';
 import {
   startCurrencyAssetChain,
@@ -72,6 +73,7 @@ export function shepherdElectrumAuth(seed) {
     .then(json => {
       console.warn(json);
       dispatch(activeHandle());
+      dispatch(shepherdElectrumCoins());
     });
   }
 }
@@ -269,6 +271,7 @@ export function addCoinResult(coin, mode) {
     dispatch(toggleAddcoinModal(false, false));
     if (Number(mode) === 0) {
       dispatch(activeHandle());
+      dispatch(shepherdElectrumCoins());
     }
     dispatch(getDexCoins());
   }

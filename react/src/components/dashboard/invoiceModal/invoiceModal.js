@@ -47,7 +47,7 @@ class InvoiceModal extends React.Component {
       return;
     }
   }
-  
+
   updateInput(e) {
     this.setState({
       [e.target.name]: e.target.value,
@@ -97,7 +97,18 @@ class InvoiceModal extends React.Component {
 
       return items;
     } else {
-      return null;
+      if (this.props.Dashboard.electrumCoins &&
+          type === 'public') {
+        let items = [];
+
+        items.push(
+          AddressItemRender.call(this, { address: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub, amount: this.props.ActiveCoin.balance.balance }, 'public')
+        );
+
+        return items;
+      } else {
+        return null;
+      }
     }
   }
 
@@ -123,9 +134,7 @@ const mapStateToProps = (state) => {
       lastSendToResponse: state.ActiveCoin.lastSendToResponse,
       addresses: state.ActiveCoin.addresses,
     },
-    Dashboard: {
-      activeHandle: state.Dashboard.activeHandle,
-    },
+    Dashboard: state.Dashboard,
   };
 };
 

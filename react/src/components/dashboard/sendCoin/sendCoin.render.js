@@ -258,7 +258,7 @@ export const SendRender = function() {
                     </tr>
                     <tr>
                       <td>Transaction ID</td>
-                      <td>{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : 'error') : this.state.lastSendToResponse }</td>
+                      <td>{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }</td>
                     </tr>
                   </tbody>
                 </table>

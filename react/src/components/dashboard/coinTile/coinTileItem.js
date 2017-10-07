@@ -134,13 +134,15 @@ class CoinTileItem extends React.Component {
       setTimeout(() => {
         this.dispatchCoinActions(coin, mode);
       }, 100);
-      if (mode === 'native' || mode === 'spv') { // faster coin data load if fully synced
+
+      if (mode === 'native' ||
+          mode === 'spv') { // faster coin data load if fully synced
         setTimeout(() => {
           this.dispatchCoinActions(coin, mode);
         }, 1000);
       }
 
-      if (!this.props.Interval.interval.sync) {
+      if (this.props.Interval.interval.sync) {
         Store.dispatch(
           stopInterval(
             'sync',
