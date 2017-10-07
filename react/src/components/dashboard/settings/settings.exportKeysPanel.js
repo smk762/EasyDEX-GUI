@@ -2,9 +2,9 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import { connect } from 'react-redux';
 import {
-  encryptWallet,
-  settingsWifkeyState,
   copyCoinAddress,
+  shepherdElectrumKeys,
+  triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -12,53 +12,50 @@ class ExportKeysPanel extends React.Component {
   constructor() {
     super();
     this.state = {
-      exportWifKeysRaw: false,
       seedInputVisibility: false,
       trimPassphraseTimer: null,
       wifkeysPassphrase: '',
+      keys: null,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
-    this.exportWifKeysRaw = this.exportWifKeysRaw.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._copyCoinAddress = this._copyCoinAddress.bind(this);
     this.updateInput = this.updateInput.bind(this);
   }
 
-  exportWifKeys() {
-    Store.dispatch(
-      encryptWallet(
-        this.state.wifkeysPassphrase,
-        settingsWifkeyState,
-        this.props.ActiveCoin.coin
-      )
-    );
+  componentWillReceiveProps(props) {
+    if (props.Dashboard &&
+        props.Dashboard.activeSection !== 'settings') {
+      this.setState(Object.assign({}, this.state, {
+        keys: null,
+      }));
+    }
   }
 
-  exportWifKeysRaw() {
-    this.setState(Object.assign({}, this.state, {
-      exportWifKeysRaw: !this.state.exportWifKeysRaw,
-    }));
+  exportWifKeys() {
+    shepherdElectrumKeys(this.state.wifkeysPassphrase)
+    .then((keys) => {
+      if (keys === 'error') {
+        Store.dispatch(
+          triggerToaster(
+            'Wrong passphrase!',
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+      } else {
+        this.setState(Object.assign({}, this.state, {
+          keys: keys.result,
+        }));
+        console.warn(keys);
+      }
+    })
   }
 
   toggleSeedInputVisibility() {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
     });
-  }
-
-  renderExportWifKeysRaw() {
-    const _wifKeysResponse = this.props.Settings.wifkey;
-
-    if (_wifKeysResponse &&
-        this.state.exportWifKeysRaw) {
-      return (
-        <div className="padding-bottom-30 padding-top-30">
-          { JSON.stringify(_wifKeysResponse, null, '\t') }
-        </div>
-      );
-    } else {
-      return null;
-    }
   }
 
   _copyCoinAddress(address) {
@@ -68,38 +65,32 @@ class ExportKeysPanel extends React.Component {
   renderWifKeys() {
     let items = [];
 
-    if (this.props.Settings.wifkey) {
-      const _wifKeys = this.props.Settings.wifkey;
+    if (this.state.keys) {
+      const _wifKeys = this.state.keys;
 
-      for (let i = 0; i < 2; i++) {
+      for (let _key in _wifKeys) {
         items.push(
-          <tr key={ `wif-export-table-header-${i}` }>
-            <td className="padding-bottom-10 padding-top-10">
-              <strong>{ i === 0 ? translate('SETTINGS.ADDRESS_LIST') : translate('SETTINGS.WIF_KEY_LIST') }</strong>
+          <tr key={ _key }>
+            <td className="padding-bottom-30">
+              <strong className="padding-right-20">{_key}</strong>{ _wifKeys[_key].pub }
+              <button
+                className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                onClick={ () => this._copyCoinAddress(_wifKeys[_key].pub) }>
+                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+              </button>
             </td>
-            <td className="padding-bottom-10 padding-top-10"></td>
+              <td className="padding-bottom-30 padding-left-15">
+              { _wifKeys[_key].priv }
+              <button
+                className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                onClick={ () => this._copyCoinAddress(_wifKeys[_key].priv) }>
+                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+              </button>
+            </td>
           </tr>
         );
-
-        for (let _key in _wifKeys) {
-          if ((i === 0 && _key.length === 3 && _key !== 'tag') ||
-              (i === 1 && _key.indexOf('wif') > -1)) {
-            items.push(
-              <tr key={ _key }>
-                <td className="padding-bottom-20">{ _key.replace('wif', ' WIF') }</td>
-                <td className="padding-bottom-20 padding-left-15">
-                { _wifKeys[_key] }
-                <button
-                  className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
-                  title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                  onClick={ () => this._copyCoinAddress(_wifKeys[_key]) }>
-                    <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
-                </button>
-                </td>
-              </tr>
-            );
-          }
-        }
       }
 
       return items;
@@ -206,22 +197,23 @@ class ExportKeysPanel extends React.Component {
             </form>
           </div>
         </div>
-        <div className="row">
-          <div className="col-sm-12 padding-top-15">
-            <table className="table">
-              { this.renderWifKeys() }
-            </table>
-            <div className={ this.props.wifkey ? 'col-sm-12 col-xs-12 text-align-center' : 'hide' }>
-              <button
-                type="button"
-                className="btn btn-primary waves-effect waves-light"
-                onClick={ this.exportWifKeysRaw }>{ this.state.exportWifKeysRaw ? 'Hide' : 'Show' } raw data</button>
-            </div>
-            <div className={ this.state.exportWifKeysRaw ? 'col-sm-12 col-xs-12 text-align-center' : 'hide' }>
-              { this.renderExportWifKeysRaw() }
+        { this.state.keys &&
+          <div className="row">
+            <div className="col-sm-12 padding-top-15">
+              <table className="table">
+                <tr key={ `wif-export-table-header-pub` }>
+                  <td className="padding-bottom-20 padding-top-20">
+                    <strong>{ translate('SETTINGS.ADDRESS_LIST') }</strong>
+                  </td>
+                  <td className="padding-bottom-20 padding-top-20">
+                    <strong>{ translate('SETTINGS.WIF_KEY_LIST') }</strong>
+                  </td>
+                </tr>
+                { this.renderWifKeys() }
+              </table>
             </div>
           </div>
-        </div>
+        }
       </div>
     );
   };

@@ -21,6 +21,19 @@ import {
 class Settings extends React.Component {
   constructor(props) {
     super(props);
+    this.displaySPVServerListTab = this.displaySPVServerListTab.bind(this);
+  }
+
+  displaySPVServerListTab() {
+    if (this.props.Main &&
+        this.props.Main.coins &&
+        this.props.Main.coins.spv) {
+      for (let i = 0; this.props.Main.coins.spv.length; i++) {
+        if (this.props.Dashboard.electrumCoins[this.props.Main.coins.spv[i]].serverList) {
+          return true;
+        }
+      }
+    }
   }
 
   componentDidMount(props) {
@@ -37,9 +50,8 @@ class Settings extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    Main: {
-      coins: state.Main.coins,
-    },
+    Main: state.Main,
+    Dashboard: state.Dashboard,
   };
 };
 
