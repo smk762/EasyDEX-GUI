@@ -34,11 +34,6 @@ const LoginRender = function () {
                     <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
                   </a>
                 </li>
-                <li className={ this.state.nativeOnly || !this.state.isExperimentalOn ? 'hide' : '' }>
-                  <a onClick={ this.openSyncOnlyModal }>
-                    <i className="icon fa-cubes"></i> { translate('ADD_COIN.SYNC_ONLY') }
-                  </a>
-                </li>
                 <li>
                   <a onClick={ () => this.toggleLoginSettingsDropdownSection('about') }>
                     <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
@@ -48,7 +43,7 @@ const LoginRender = function () {
             </div>
           </div>
 
-          <div className={ this.state.activeLoginSection === 'login' && !this.state.nativeOnly ? 'show' : 'hide' }>
+          <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
             <h4 className="color-white">
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
@@ -85,24 +80,24 @@ const LoginRender = function () {
               </div>
             }
 
-            { this.state.loginPassphrase &&
+            { this.state.loginPassphrase && this.state.enableEncryptSeed &&
             <div className="row">
               <div className="toggle-box padding-top-30 col-sm-3">
-                    <span className="pointer">
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          checked={ this.shouldEncryptSeed() } />
-                        <div
-                          className="slider"
-                          onClick={ () => this.toggleShouldEncryptSeed() }></div>
-                      </label>
-                      <div
-                        className="toggle-label white"
-                        onClick={ () => this.toggleShouldEncryptSeed() }>
-                          { translate('LOGIN.ENCRYPT_SEED') }
-                      </div>
-                    </span>
+                <span className="pointer">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={ this.shouldEncryptSeed() } />
+                    <div
+                      className="slider"
+                      onClick={ () => this.toggleShouldEncryptSeed() }></div>
+                  </label>
+                  <div
+                    className="toggle-label white"
+                    onClick={ () => this.toggleShouldEncryptSeed() }>
+                      { translate('LOGIN.ENCRYPT_SEED') }
+                  </div>
+                </span>
               </div>
 
               <div className="col-sm-9">

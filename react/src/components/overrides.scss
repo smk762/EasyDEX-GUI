@@ -382,6 +382,14 @@ select{
   height: 75px;
 }
 
+.page-header--spv {
+  height: 120px;
+
+  .page-header-actions {
+    top: 32%;
+  }
+}
+
 .toggle-filters:hover {
   background-color: #f3f1f1;
 }
@@ -418,5 +426,13 @@ select{
         opacity: 1;
       }
     }
+  }
+}
+
+.balance-placeholder--bold {
+  .pull-left {
+    font-weight: 500;
+    font-size: 16px;
+    padding-top: 16px !important;
   }
 }

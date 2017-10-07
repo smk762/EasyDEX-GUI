@@ -2,13 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   toggleAddcoinModal,
-  iguanaWalletPassphrase,
   shepherdElectrumAuth,
   shepherdElectrumCoins,
   //iguanaActiveHandle,
   startInterval,
   getDexCoins,
-  createNewWallet,
   triggerToaster,
   toggleLoginSettingsModal
 } from '../../actions/actionCreators';
@@ -56,6 +54,7 @@ class Login extends React.Component {
       decryptKey: '',
       selectedPin: '',
       isExperimentalOn: false,
+      enableEncryptSeed: false,
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -101,6 +100,7 @@ class Login extends React.Component {
           randomSeed: PassPhraseGenerator.generatePassPhrase(this.state.bitsOption),
           isSeedConfirmError: false,
           isSeedBlank: false,
+          isCustomSeedWeak: false,
         });
       } else {
         // if customWalletSeed is set to true, reset to seed to an empty string
@@ -160,9 +160,6 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
-    // Store.dispatch(iguanaActiveHandle(true));
-    // this.loadPinList();
-
     let appConfig;
 
     try {
@@ -218,21 +215,10 @@ class Login extends React.Component {
     if (props &&
         props.Main &&
         !props.Main.isLoggedIn) {
-      console.warn('display login');
       this.setState({
         display: true,
-        activeLoginSection: 'login',
+        activeLoginSection: this.state.activeLoginSection !== 'signup' ? 'login' : 'signup',
       });
-
-      /*if (!this.props.Interval.interval.activeCoins) {
-        // only start a new 'activeCoins' interval if a previous one doesn't exist
-        if (!this._iguanaActiveCoins) {
-          this._iguanaActiveCoins = setInterval(() => {
-            Store.dispatch(getDexCoins());
-          }, IGUNA_ACTIVE_COINS_TIMEOUT);
-          Store.dispatch(startInterval('activeCoins', this._iguanaActiveCoins));
-        }
-      }*/
 
       document.body.className = 'page-login layout-full page-dark';
     }
@@ -241,20 +227,10 @@ class Login extends React.Component {
         props &&
         props.Main &&
         props.Main.isLoggedIn) {
-      /*if (props &&
-          props.Main &&
-          props.Main.activeCoins) {
-        this.setState({
-          activeLoginSection: 'login',
-        });
-      } else {*/
         this.setState({
           activeLoginSection: 'activateCoin',
         });
-      //}
     }
-
-    console.warn(this.state);
   }
 
   toggleActivateCoinForm() {
@@ -323,9 +299,6 @@ class Login extends React.Component {
     if (this.state.selectedPin) {
       Store.dispatch(loginWithPin(this.state.decryptKey, this.state.selectedPin));
     } else {
-      /*Store.dispatch(
-        iguanaWalletPassphrase(this.state.loginPassphrase)
-      );*/
       Store.dispatch(
         shepherdElectrumAuth(this.state.loginPassphrase)
       );
@@ -389,11 +362,18 @@ class Login extends React.Component {
   }
 
   execWalletCreate() {
-    Store.dispatch(
+    /*Store.dispatch(
       createNewWallet(
         this.state.randomSeedConfirm,
         this.props.Dashboard.activeHandle
       )
+    );*/
+
+    Store.dispatch(
+      shepherdElectrumAuth(this.state.randomSeedConfirm)
+    );
+    Store.dispatch(
+      shepherdElectrumCoins()
     );
 
     this.setState({

@@ -7,7 +7,6 @@ import {
 
 export function Main(state = {
   isLoggedIn: false,
-  activeCoins: [],
   displayLoginSettingsModal: false,
   total: 0,
 }, action) {
@@ -15,7 +14,6 @@ export function Main(state = {
     case GET_ACTIVE_COINS:
       return {
         ...state,
-        activeCoins: action.activeCoins,
         coins: action.coins,
         total: action.total,
       };

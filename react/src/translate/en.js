@@ -262,7 +262,6 @@ export const _lang = {
       'FIAT_CURRENCY': 'Fiat Currency',
       'EXPORT_KEYS': 'Export Keys',
       'ONLY_ACTIVE_WIF_KEYS': 'Only the active coin wallet WIF keys will be shown here.<br>' +
-                              'If you don\'t see a WIF key for the coin you are looking for please active it by adding it from EasyDEX Dashboard.<br>' +
                               'You can use these WIF keys to import to another coin wallets.',
       'PLEASE_KEEP_KEYS_SAFE': 'Please keep these keys extra safe and secure.',
       'PASSPHRASE': 'Passphrase',
@@ -563,14 +562,17 @@ export const _lang = {
       'JUMBLR_MOTTO': 'Secure, Native and Decentralised Coin Anonymizer',
     },
     'SETTINGS': {
+      'SPV_SERVER_LIST_DESC': 'Server list selection is only available for active coins that have more than 1 server to connect to.',
+      'SPV_SERVERS': 'SPV servers list',
+      'SPV_SINGLE_SERVER_NOTICE': 'There is only one electrum server available. SPV verification is coming from the same server providing all remote data.',
       'KMD_MAIN_SYNC_ONLY': 'KMD main sync only',
       'RPC_FETCH_ONLY_DESC': 'Fetch block synchronization data only. Skip any other requests that can deteriorate sync speed.',
       'RESET_TO_DEFAULT': 'Reset to default',
       'PROGRESS': 'Progress',
       'SUPPORT_TICKETS': 'Support tickets',
       'GET_SLACK_INVITE': 'Get Slack invite',
-      'ADDRESS_LIST': 'Address list',
-      'WIF_KEY_LIST': 'WIF (Wallet Import Format) key list',
+      'ADDRESS_LIST': 'Address',
+      'WIF_KEY_LIST': 'WIF (Wallet Import Format) key',
       'CLI_RESPONSE': 'CLI response',
       'PASSPHRASE_REQ': 'Passphrase is required.',
       'SAVE_APP_CONFIG': 'Save app config',
@@ -595,8 +597,7 @@ export const _lang = {
       'DIR': 'Dir',
       'ADD_PEER_IP': 'Add Peer IP',
       'APP_SESSION': 'App Session',
-      'EXPORT_KEYS_NOTE': 'Note: it\'s important that you provide the same passphrase you used to login to the wallet!<br>' +
-                          'In case passphrases will not match wallet is going to log you out of current session.',
+      'EXPORT_KEYS_NOTE': 'Note: it\'s important that you provide the same passphrase you used to login to the wallet!',
     },
     'TX_INFO': {
       'ADDRESS': 'address',

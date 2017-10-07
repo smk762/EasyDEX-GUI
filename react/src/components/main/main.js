@@ -60,15 +60,6 @@ class Main extends React.Component {
         )
       );
     }
-
-    /*Store.dispatch(iguanaActiveHandle());
-    const _iguanaActiveHandle = setInterval(function() {
-      Store.dispatch(iguanaActiveHandle());
-    }, IGUANA_ACTIVE_HANDLE_TIMEOUT);
-
-    this.setState(Object.assign({}, this.state, {
-      activeHandleInterval: _iguanaActiveHandle,
-    }));*/
   }
 
   componentWillMount() {
