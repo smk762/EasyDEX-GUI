@@ -30,7 +30,7 @@ export const WalletsNavWithWalletRender = function() {
             { this.props && this.props.Dashboard && this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin] && this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : '-' }
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
-              onClick={ () => this.copyMyAddress(this.props.Dashboard.activeHandle[this.props.ActiveCoin.coin]) }>
+              onClick={ () => this.copyMyAddress(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) }>
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
             </button>
           </div>

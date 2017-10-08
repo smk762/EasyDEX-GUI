@@ -52,40 +52,34 @@ class WalletsNav extends React.Component {
 
   // TODO: merge toggle func into one
   toggleSendReceiveCoinForms() {
-    //if (this.props.ActiveCoin.mode === 'native') {
-      Store.dispatch(
-        toggleDashboardActiveSection(
-          this.props.ActiveCoin.activeSection === 'settings' ? 'default' : 'settings'
-        )
-      );
-    //}
+    Store.dispatch(
+      toggleDashboardActiveSection(
+        this.props.ActiveCoin.activeSection === 'settings' ? 'default' : 'settings'
+      )
+    );
   }
 
   toggleSendCoinForm(display) {
-    //if (this.props.ActiveCoin.mode === 'native') {
-      Store.dispatch(
-        toggleDashboardActiveSection(
-          this.props.ActiveCoin.activeSection === 'send' ? 'default' : 'send'
-        )
-      );
-    //}
+    Store.dispatch(
+      toggleDashboardActiveSection(
+        this.props.ActiveCoin.activeSection === 'send' ? 'default' : 'send'
+      )
+    );
   }
 
   toggleReceiveCoinForm(display) {
-    //if (this.props.ActiveCoin.mode === 'native') {
-      Store.dispatch(
-        toggleDashboardActiveSection(
-          this.props.ActiveCoin.activeSection === 'receive' ? 'default' : 'receive'
-        )
-      );
-    //}
+    Store.dispatch(
+      toggleDashboardActiveSection(
+        this.props.ActiveCoin.activeSection === 'receive' ? 'default' : 'receive'
+      )
+    );
   }
 
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
         !this.props.ActiveCoin.coin) {
-      return null; //WalletsNavNoWalletRender.call(this);
+      return null;
     }
 
     return WalletsNavWithWalletRender.call(this);

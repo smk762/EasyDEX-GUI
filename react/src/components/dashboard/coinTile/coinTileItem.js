@@ -25,17 +25,13 @@ import Config from '../../../config';
 import CoinTileItemRender from './coinTileItem.render';
 
 const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
-const IGUNA_ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
+const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
 const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 5;
 
 class CoinTileItem extends React.Component {
   constructor() {
     super();
   }
-
-  // TODO: 1) cache native/full node data to file
-  //       2) limit amount of req per update e.g. list of addresses don't change too often
-  //       3) limit req in basilisk as much as possible incl. activehandle
 
   componentWillMount() {
     if (!this.props.ActiveCoin.coin) {
@@ -154,7 +150,7 @@ class CoinTileItem extends React.Component {
       if (mode === 'native') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
-        }, IGUNA_ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE);
+        }, ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       } else if (mode === 'spv') {

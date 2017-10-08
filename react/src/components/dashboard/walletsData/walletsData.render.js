@@ -149,12 +149,22 @@ export const TxAmountRender = function(tx) {
 
   if (Config.roundValues) {
     return (
-      <span title={ tx.amount * _amountNegative }>{ formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+      <span title={ tx.amount * _amountNegative }>
+        { formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }
+        <span className={ formatValue(tx.interest) ? '' : 'hide' }>{ formatValue(tx.interest) }</span>
+      </span>
     );
   }
 
   return (
-    <span>{ tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+    <span>
+      { tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN') }
+      { tx.interest &&
+        <span
+          className="tx-interest"
+          title={ `Claimed interest ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
+      }
+    </span>
   );
 };
 
