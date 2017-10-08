@@ -443,3 +443,14 @@ select{
   font-size: 13px;
   padding-top: 5px;
 }
+
+.icon-spv-connection-warning {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+
+  &:before {
+    color: #f2a654;
+    font-size: 18px;
+  }
+}
