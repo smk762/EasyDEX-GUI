@@ -431,10 +431,9 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'spv') {
       const _amount = this.state.amount;
       const _amountSats = this.state.amount * 100000000;
-      const _balanceSats = this.props.ActiveCoin.balance.sats;
-      const _fee = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].txfee;
+      const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
 
-      if (_amountSats > (Number(_balanceSats) + Number(_fee))) {
+      if (_amountSats > _balanceSats) {
         Store.dispatch(
           triggerToaster(
             translate('SEND.INSUFFICIENT_FUNDS'),
@@ -446,9 +445,9 @@ class SendCoin extends React.Component {
       }
 
       console.warn('send val ' + this.state.amount);
-      console.warn('send val sats ' + (this.state.amount * 100000000));
+      console.warn('send val sats ' + _amountSats);
 
-      console.warn(this.props.ActiveCoin.balance.sats);
+      console.warn(`balance ${this.props.ActiveCoin.balance.balanceSats}`);
       console.warn(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].txfee);
     }
 
