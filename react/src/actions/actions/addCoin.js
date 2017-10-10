@@ -273,8 +273,20 @@ export function addCoinResult(coin, mode) {
     if (Number(mode) === 0) {
       dispatch(activeHandle());
       dispatch(shepherdElectrumCoins());
+    } else {
+      setTimeout(function() {
+        dispatch(activeHandle());
+        dispatch(getDexCoins());
+      }, 500);
+      setTimeout(function() {
+        dispatch(activeHandle());
+        dispatch(getDexCoins());
+      }, 1000);
+      setTimeout(function() {
+        dispatch(activeHandle());
+        dispatch(getDexCoins());
+      }, 5000);
     }
-    dispatch(getDexCoins());
   }
 }
 
