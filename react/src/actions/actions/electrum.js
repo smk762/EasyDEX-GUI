@@ -156,7 +156,7 @@ export function shepherdElectrumTransactions(coin, address) {
 }
 
 export function shepherdElectrumTransactionsState(json) {
-  json = json.result.listtransactions;
+  json = json.result;
 
   if (json &&
       json.error) {

@@ -273,3 +273,17 @@ function normalStart() {
   $('.dropdown-menu.native').addClass('hide');
   disableModeButtons();
 }
+
+function init() {
+  const remote = require('electron').remote;
+  var window = remote.getCurrentWindow();
+  var appConf = remote.getCurrentWindow().appConfig;
+
+  if (!appConf.experimentalFeatures) {
+    $('#spvBtn').hide();
+    $('#spvBtnCarret').hide();
+    $('.dropdown-menu.native').css('right', '165px');
+    $('#nativeOnlyBtnCarret').css('margin-right', '0');
+    $('#settingsBtn').css('margin', '0');
+  }
+}

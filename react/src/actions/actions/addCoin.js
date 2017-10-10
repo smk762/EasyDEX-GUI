@@ -108,7 +108,8 @@ export function shepherdElectrumAddCoin(coin) {
 
 export function addCoin(coin, mode, startupParams) {
   console.warn(mode);
-  if (Number(mode) === 0) {
+  if (mode === 0 ||
+      mode === '0') {
     console.warn('spv');
     return dispatch => {
       dispatch(shepherdElectrumAddCoin(coin));

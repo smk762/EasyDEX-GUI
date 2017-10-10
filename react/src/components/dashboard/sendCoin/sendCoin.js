@@ -21,6 +21,7 @@ import { isPositiveNumber } from '../../../util/number';
 
 // TODO: - add links to explorers
 //       - render z address trim
+// spv, request utxo and check if any failed to verify, display alert notice
 
 class SendCoin extends React.Component {
   constructor(props) {

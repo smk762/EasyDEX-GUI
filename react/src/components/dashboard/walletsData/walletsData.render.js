@@ -151,7 +151,11 @@ export const TxAmountRender = function(tx) {
     return (
       <span title={ tx.amount * _amountNegative }>
         { formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }
-        <span className={ formatValue(tx.interest) ? '' : 'hide' }>{ formatValue(tx.interest) }</span>
+        { tx.interest &&
+          <span
+            className="tx-interest"
+            title={ `Claimed interest ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
+        }
       </span>
     );
   }
