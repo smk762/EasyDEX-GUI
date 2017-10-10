@@ -211,6 +211,8 @@ class WalletsData extends React.Component {
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
+        this.props.ActiveCoin.txhistory !== 'connection error or incomplete data' &&
+        this.props.ActiveCoin.txhistory !== 'cant get current height' &&
         this.props.ActiveCoin.txhistory.length) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: this.props.ActiveCoin.txhistory,
@@ -229,6 +231,11 @@ class WalletsData extends React.Component {
     } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'loading',
+      });
+    } else if ((this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'connection error or incomplete data') ||
+      (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'cant get current height')) {
+      _stateChange = Object.assign({}, _stateChange, {
+        itemsList: 'connection error',
       });
     }
 
@@ -268,6 +275,17 @@ class WalletsData extends React.Component {
       return (
         <tr className="hover--none">
           <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.NO_DATA') }</td>
+        </tr>
+      );
+    } else if (this.state.itemsList === 'connection error') {
+      return (
+        <tr className="hover--none">
+          <td colSpan="7" className="table-cell-offset-16 color-warning">
+            Connection error!
+            <span className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
+            <br/>Try to connect to another SPV server.
+            </span>
+          </td>
         </tr>
       );
     } else if (this.state.itemsList && this.state.itemsList.length) {
@@ -448,9 +466,7 @@ const mapStateToProps = (state) => {
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
       progress: state.ActiveCoin.progress,
     },
-    Main: {
-      coins: state.Main.coins,
-    },
+    Main: state.Main,
     Dashboard: state.Dashboard,
   };
 };

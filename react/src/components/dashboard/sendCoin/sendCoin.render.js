@@ -216,6 +216,17 @@ export const SendRender = function() {
                   </div>
                 </div>
               }
+              { this.state.spvPreflightSendInProgress &&
+                <div className="padding-top-20">Verifying transaction data...</div>
+              }
+              { this.state.spvVerificationWarning &&
+                <div
+                  className="padding-top-20"
+                  style={{ fontSize: '15px' }}>
+                  <strong className="color-warning">Warning:</strong> your wallet data is verified only by a single server!<br />
+                  If you still want to continue press "Confirm".
+                </div>
+              }
               <div className="widget-body-footer">
                 <a
                   className="btn btn-default waves-effect waves-light"
@@ -240,28 +251,44 @@ export const SendRender = function() {
                 { translate('INDEX.TRANSACTION_RESULT') }
               </h4>
               <div>
-                <table className="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>{ translate('INDEX.KEY') }</th>
-                      <th>{ translate('INDEX.INFO') }</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                      Result
-                      </td>
-                      <td>
-                        <span className="label label-success">success</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Transaction ID</td>
-                      <td>{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }</td>
-                    </tr>
-                  </tbody>
-                </table>
+                { this.state.lastSendToResponse &&
+                  !this.state.lastSendToResponse.msg &&
+                  <table className="table table-hover table-striped">
+                    <thead>
+                      <tr>
+                        <th className="padding-left-30">{ translate('INDEX.KEY') }</th>
+                        <th className="padding-left-30">{ translate('INDEX.INFO') }</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="padding-left-30">
+                        Result
+                        </td>
+                        <td className="padding-left-30">
+                          <span className="label label-success">success</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="padding-left-30">Transaction ID</td>
+                        <td className="padding-left-30">{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                }
+                { !this.state.lastSendToResponse &&
+                  <div className="padding-left-30 padding-top-10">Processing transaction...</div>
+                }
+                { this.state.lastSendToResponse &&
+                  this.state.lastSendToResponse.msg &&
+                  this.state.lastSendToResponse.msg === 'error' &&
+                  <div className="padding-left-30 padding-top-10">
+                    <div>
+                      <strong>Error</strong>
+                    </div>
+                    <div>{ this.state.lastSendToResponse.result }</div>
+                  </div>
+                }
               </div>
               <div className="widget-body-footer">
                 <div className="widget-actions margin-bottom-15 margin-right-15">

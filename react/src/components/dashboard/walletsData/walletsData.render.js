@@ -211,7 +211,7 @@ export const WalletsDataRender = function() {
                   </header>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
-                      { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data') &&
+                      { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data' && this.props.ActiveCoin.txhistory !== 'connection error') &&
                         <div className="col-sm-4 search-box">
                           <input
                             className="form-control"

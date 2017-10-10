@@ -53,6 +53,10 @@ class WalletsBalance extends React.Component {
     let _balance = 0;
     const _mode = this.props.ActiveCoin.mode;
 
+    if (this.props.ActiveCoin.balance === 'connection error or incomplete data') {
+      _balance = '-777';
+    }
+
     if (_mode === 'native') {
       if (type === 'total' &&
           this.props.ActiveCoin.balance &&

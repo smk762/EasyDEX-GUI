@@ -206,10 +206,8 @@ export function shepherdElectrumCoinsState(json) {
 
 // value in sats
 export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) {
-  // console.log(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true`);
-
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=true`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=true&verify=true`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +226,38 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
     .then(response => response.json())
     .then(json => {
       console.warn(json);
-      dispatch(sendToAddressState(json.result));
+      if (json.msg === 'error') {
+        dispatch(sendToAddressState(json));
+      } else {
+        dispatch(sendToAddressState(json.result));
+      }
     });
   }
+}
+
+export function shepherdElectrumSendPreflight(coin, value, sendToAddress, changeAddress) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=false&verify=true`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'shepherdElectrumSendPreflight',
+          'Error',
+          'error'
+        )
+      )
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.warn(json);
+      resolve(json);
+      // dispatch(sendToAddressState(json.result));
+    });
+  });
 }

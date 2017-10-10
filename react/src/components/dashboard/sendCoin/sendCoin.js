@@ -8,7 +8,8 @@ import {
   sendNativeTx,
   getKMDOPID,
   clearLastSendToResponseState,
-  shepherdElectrumSend
+  shepherdElectrumSend,
+  shepherdElectrumSendPreflight
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -39,6 +40,8 @@ class SendCoin extends React.Component {
       substractFee: false,
       lastSendToResponse: null,
       coin: null,
+      spvVerificationWarning: false,
+      spvPreflightSendInProgress: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -347,6 +350,8 @@ class SendCoin extends React.Component {
       if (back) {
         this.setState({
           currentStep: 0,
+          spvVerificationWarning: false,
+          spvPreflightSendInProgress: false,
         });
       } else {
         Store.dispatch(clearLastSendToResponseState());
@@ -363,6 +368,8 @@ class SendCoin extends React.Component {
           addressSelectorOpen: false,
           renderAddressDropdown: true,
           substractFee: false,
+          spvVerificationWarning: false,
+          spvPreflightSendInProgress: false,
         });
       }
     }
@@ -370,17 +377,41 @@ class SendCoin extends React.Component {
     if (step === 1) {
       if (!this.validateSendFormData()) {
         return;
+      } else {
+        this.setState(Object.assign({}, this.state, {
+          spvPreflightSendInProgress: this.props.ActiveCoin.mode === 'spv' ? true : false,
+          currentStep: step,
+        }));
+
+        // spv pre tx push request
+        if (this.props.ActiveCoin.mode === 'spv') {
+          shepherdElectrumSendPreflight(
+            this.props.ActiveCoin.coin,
+            this.state.amount * 100000000,
+            this.state.sendTo,
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+          )
+          .then((sendPreflight) => {
+            if (sendPreflight &&
+                sendPreflight.msg === 'success') {
+              this.setState(Object.assign({}, this.state, {
+                spvVerificationWarning: !sendPreflight.result.utxoVerified,
+                spvPreflightSendInProgress: false,
+              }));
+            } else {
+              this.setState(Object.assign({}, this.state, {
+                spvPreflightSendInProgress: false,
+              }));
+            }
+          });
+        }
       }
     }
 
-    if (step === 1 ||
-        step === 2) {
+    if (step === 2) {
       this.setState(Object.assign({}, this.state, {
         currentStep: step,
       }));
-    }
-
-    if (step === 2) {
       this.handleSubmit();
     }
   }
