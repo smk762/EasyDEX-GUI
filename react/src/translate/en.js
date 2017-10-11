@@ -678,6 +678,7 @@ export const _lang = {
       'KV': 'KV (KV)',
       'MGW': 'MultiGateway (MGW)',
       'MVP': 'MVP Lineup (MVP)',
+      'MNZ': 'Monaize (MNZ)',
       'PANGEA': 'PANGEA (PANGEA)',
       'REVS': 'REVS (REVS)',
       'SHARK': 'SHARK (SHARK)',
@@ -685,6 +686,5 @@ export const _lang = {
       'SUPERNET': 'SUPERNET (SUPERNET)',
       'WLC': 'WIRELESS (WIRELESS)',
     },
-    // 'CHIPS': 'CHIPS (CHIPS)',
   },
 };

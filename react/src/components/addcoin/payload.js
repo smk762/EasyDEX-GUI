@@ -50,6 +50,7 @@ export function checkAC(coinVal) {
 			coinVal === 'THB' ||
 			coinVal === 'BGN' ||
 			coinVal === 'IDR' ||
+			coinVal === 'MNZ' ||
 			coinVal === 'HRK')	{
 		return true;
 	} else {
@@ -109,7 +110,8 @@ export function checkCoinType(coin) {
 			coin === 'KV' ||
 			coin === 'CEAL' ||
 			coin === 'MESH' ||
-			coin === 'WLC') {
+			coin === 'WLC' ||
+			coin === 'MNZ') {
 		return 'ac';
 	}
 
@@ -494,6 +496,11 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 			'name': 'COQUI',
 			'supply': 72000000,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'COQUI','conf':'COQUI.conf','path':confpath,'RELAY':-1,'VALIDATE':1,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'COQUI','name':'COQUI','netmagic':'4cbd5ef4','p2p':assetChainPorts.COQUI - 1,'rpc':assetChainPorts.COQUI}) : {},
+		},
+		'MNZ': {
+			'name': 'MNZ',
+			'supply': 257142858,
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'MNZ','conf':'MNZ.conf','path':confpath,'RELAY':-1,'VALIDATE':1,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'MNZ','name':'MNZ','netmagic':'4cbd5ef4','p2p':assetChainPorts.MNZ - 1,'rpc':assetChainPorts.MNZ}) : {},
 		},
 	};
 

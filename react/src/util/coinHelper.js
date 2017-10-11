@@ -62,6 +62,10 @@ export function getCoinTitle(coin) {
       coinlogo = 'zetacoin';
       coinname = 'Zetacoin';
       break;
+    case 'MNZ':
+      coinlogo = 'mnz';
+      coinname = 'Monaize';
+      break;
     case 'KMD':
       hideTitle = true;
       titleBG = true;

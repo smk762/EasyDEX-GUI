@@ -15,6 +15,7 @@ class AddCoinOptionsAC extends React.Component {
       'kv',
       'mgw',
       //'mvp',
+      'mnz',
       'pangea',
       'revs',
       'shark',
