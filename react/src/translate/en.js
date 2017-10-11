@@ -333,7 +333,7 @@ export const _lang = {
       'PLEASE_WRITE_DOWN_PASSPHRASE': 'Please write down your Jumblr passphrase and keept it safe.',
       'THIS_IS_YOUR_MAIN_RECOVERY': 'This is your main recovery passphrase.',
       'ALL_JUMBLR_ADDRESSES_CAN_BE': 'All Jumblr addresses can be regenrated based on it.',
-      'DONT_USE_SMART_EDITORS': 'do not use smart editors to store your passphrase as they tend to add extra characters.<br />This may result in passphrase mismatch with the original passphrase.',
+      'DONT_USE_SMART_EDITORS': 'do not use smart editors to store your passphrase as they tend to add extra characters.<br>This may result in passphrase mismatch with the original passphrase.',
       'PASSPHRASE_COPIED': 'Passphrase copied',
       'CREATE_JUMBLR_DEPOSIT_ADDRESS': 'Create Jumblr deposit address',
       'YOUR_JUMBLR_DEPOSIT_ADDRESS': 'Your Jumblr deposit address',
