@@ -126,7 +126,7 @@ class ReceiveCoin extends React.Component {
 
       return items;
     } else {
-      if (this.props.electrumCoins &&
+      if (this.props.electrumCoins && this.props.mode === 'spv' &&
           type === 'public') {
         let items = [];
 
