@@ -18,6 +18,7 @@ import {
   shepherdElectrumBalance,
   shepherdElectrumTransactions,
   shepherdElectrumCoins,
+  electrumServerChanged,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -163,14 +164,34 @@ class CoinTileItem extends React.Component {
     }
   }
 
+  componentWillReceiveProps(props) {
+    console.warn(props);
+    if (this.props &&
+        this.props.Dashboard &&
+        this.props.Dashboard.eletrumServerChanged &&
+        this.props.ActiveCoin.mode === 'spv' &&
+        this.props.Dashboard &&
+        this.props.Dashboard.activeSection === 'wallets') {
+      console.warn('trigger spv dashboard update');
+      Store.dispatch(shepherdElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(electrumServerChanged(false));
+      setTimeout(() => {
+        Store.dispatch(electrumServerChanged(false));
+      }, 100);
+    }
+  }
+
   render() {
     return CoinTileItemRender.call(this);
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
       addresses: state.ActiveCoin.addresses,
       mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress,
       progress: state.ActiveCoin.progress,

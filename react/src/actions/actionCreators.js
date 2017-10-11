@@ -27,6 +27,7 @@ import {
   GET_PIN_LIST,
   DASHBOARD_SYNC_ONLY_UPDATE,
   DISPLAY_IMPORT_KEY_MODAL,
+  ELECTRUM_SERVER_CHANGED,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -278,5 +279,12 @@ export function displayImportKeyModal(display) {
   return {
     type: DISPLAY_IMPORT_KEY_MODAL,
     displayImportKeyModal: display,
+  }
+}
+
+export function electrumServerChanged(isChanged) {
+  return {
+    type: ELECTRUM_SERVER_CHANGED,
+    eletrumServerChanged: isChanged,
   }
 }

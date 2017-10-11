@@ -6,6 +6,7 @@ import {
   DASHBOARD_SYNC_ONLY_UPDATE,
   DISPLAY_IMPORT_KEY_MODAL,
   DASHBOARD_ELECTRUM_COINS,
+  ELECTRUM_SERVER_CHANGED,
 } from '../actions/storeType';
 
 export function Dashboard(state = {
@@ -16,6 +17,7 @@ export function Dashboard(state = {
   skipFullDashboardUpdate: false,
   displayImportKeyModal: false,
   electrumCoins: {},
+  eletrumServerChanged: false,
 }, action) {
   switch (action.type) {
     case DASHBOARD_ELECTRUM_COINS:
@@ -55,6 +57,11 @@ export function Dashboard(state = {
       return {
         ...state,
         skipFullDashboardUpdate: action.skipFullDashboardUpdate,
+      };
+    case ELECTRUM_SERVER_CHANGED:
+      return {
+        ...state,
+        eletrumServerChanged: action.eletrumServerChanged,
       };
     default:
       return state;

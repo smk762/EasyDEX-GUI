@@ -283,7 +283,8 @@ class WalletsData extends React.Component {
           <td colSpan="7" className="table-cell-offset-16 color-warning">
             Connection error!
             <span className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
-            <br/>Try to connect to another SPV server. To do that go to "Settings" -> "SPV Server List" tab, choose new server and click "OK".
+            <br/>Try to connect to another SPV server.
+            <br/>To do that go to "Settings", select "SPV Server List" tab, choose new server and click "OK".
             </span>
           </td>
         </tr>

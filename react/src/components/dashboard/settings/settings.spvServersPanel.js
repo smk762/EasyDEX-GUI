@@ -5,6 +5,7 @@ import {
   shepherdElectrumCheckServerConnection,
   shepherdElectrumSetServer,
   shepherdElectrumCoins,
+  electrumServerChanged,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -47,6 +48,7 @@ class SPVServersPanel extends React.Component {
               'success'
             )
           );
+          Store.dispatch(electrumServerChanged(true));
           Store.dispatch(shepherdElectrumCoins());
         });
       } else {
