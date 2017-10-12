@@ -35,6 +35,8 @@ import '../../../util/crypto/gen/biginteger.js';
 import '../../../util/crypto/gen/crypto-scrypt.js';
 import { Bitcoin } from '../../../util/crypto/gen/bitcoin.js';
 
+// TODO: promises, move to backend crypto libs
+
 if (!window.jumblrPasshrase) { // gen jumblr passphrase
   window.jumblrPasshrase = `jumblr ${PassPhraseGenerator.generatePassPhrase(256)}`;
 }

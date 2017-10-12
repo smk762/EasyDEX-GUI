@@ -165,14 +165,12 @@ class CoinTileItem extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    console.warn(props);
     if (this.props &&
         this.props.Dashboard &&
         this.props.Dashboard.eletrumServerChanged &&
         this.props.ActiveCoin.mode === 'spv' &&
         this.props.Dashboard &&
         this.props.Dashboard.activeSection === 'wallets') {
-      console.warn('trigger spv dashboard update');
       Store.dispatch(shepherdElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
       Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
       Store.dispatch(electrumServerChanged(false));

@@ -16,6 +16,8 @@ import {
   _ClaimInterestTableRender
 } from './claimInterestModal.render';
 
+// TODO: promises
+
 class ClaimInterestModal extends React.Component {
   constructor() {
     super();
