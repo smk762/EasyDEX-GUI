@@ -160,7 +160,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
                 'Please make sure to run komodod manually',
                 'Connection error',
                 'warning',
-                true
+                false
               )
             );
           }
@@ -260,7 +260,8 @@ export function getBlockTemplate(_json, coin) {
           )
         );
       } else {
-        if (json.error && json.error.code === -10) {
+        if (json.error &&
+            json.error.code === -10) {
           console.log('debuglog');
           dispatch(
             getDebugLogProgress(_json, coin)
@@ -311,7 +312,9 @@ export function getDebugLogProgress(_json, coin) {
         json = JSON.parse(json);
       }
 
-      if (json.result && json.result.blocks && json.result.headers) {
+      if (json.result &&
+          json.result.blocks &&
+          json.result.headers) {
         _json.result.longestchain = json.result.headers;
         _json.result.progress = json.result.blocks * 100 / json.result.headers;
       } else if (json.result &&

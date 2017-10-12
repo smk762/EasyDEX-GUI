@@ -25,7 +25,7 @@ function initSettingsForm() {
         appConfSchema[key].initDisplay) {
       _htmlOut = `
         ${_htmlOut}
-        <tr id="${key}">
+        <tr>
           <td class="left">
             ${appConfSchema[key].displayName}`;
 
