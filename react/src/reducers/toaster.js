@@ -7,16 +7,29 @@ export function toaster(state = {
   toasts: [],
 }, action) {
   if (state === null) state = { toasts: [] };
-  
+
   switch (action.type) {
     case ADD_TOASTER_MESSAGE:
-      return {
-        ...state,
-        toasts: [
-          ...state.toasts,
-          action
-        ],
-      };
+      let _isSameToastTwice = false;
+
+      for (let i = 0; i < state.toasts.length; i++) {
+        if (state.toasts[i].title === action.title &&
+            state.toasts[i].message === action.message &&
+            state.toasts[i]['_type'] === action['_type']) {
+          _isSameToastTwice = true;
+          break;
+        }
+      }
+
+      if (!_isSameToastTwice) {
+        return {
+          ...state,
+          toasts: [
+            ...state.toasts,
+            action
+          ],
+        };
+      }
     case REMOVE_TOASTER_MESSAGE:
       // filter out the toastId that should be removed
       return {
