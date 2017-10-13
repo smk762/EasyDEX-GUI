@@ -28,11 +28,11 @@ class About extends React.Component {
 
           <span className="font-weight-600">{ translate('ABOUT.AGAMA_NOTE') }</span>
 
-          <br/><br/>
+          <br /><br />
 
           <div className="font-weight-600">{ translate('ABOUT.TESTERS') }</div>
           { translate('ABOUT.TESTERS_P1') } <a target="_blank" href="https://supernet.org/en/products/agama-wallet">{ translate('ABOUT.TESTERS_P2') }</a>.
-          { translate('ABOUT.TESTERS_P3') } <a target="_blank" href="https://sprnt.slack.com/messages/C0HT9MH96/">#testing-agama</a> Slack channel. <a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSdwe-xxs2VljYhmzkjD0egwwLKx83MzoO9DjH0N-JKG2MxqfQ/viewform">Get an invite</a> to our slack if you're not registered yet.
+          { translate('ABOUT.TESTERS_P3') } <a target="_blank" href="https://sprnt.slack.com/messages/C0HT9MH96/">#testing-agama</a> Slack channel. <a target="_blank" href="http://slackinvite.supernet.org/">Get an invite</a> to our slack if you're not registered yet.
           { translate('ABOUT.TESTERS_P4') }
 
           <br /><br />
