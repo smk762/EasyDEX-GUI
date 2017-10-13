@@ -32,8 +32,63 @@ class AppUpdatePanel extends React.Component {
     this.checkNodes = this.checkNodes.bind(this);
   }
 
+  updateSocketsData(data) {
+    if (data &&
+        data.msg &&
+        data.msg.type === 'ui') {
+
+      if (data.msg.status === 'progress' &&
+          data.msg.progress &&
+          data.msg.progress < 100) {
+        this.setState(Object.assign({}, this.state, {
+          updateProgressPatch: data.msg.progress,
+        }));
+        updateProgressBar.patch = data.msg.progress;
+      } else {
+        if (data.msg.status === 'progress' &&
+            data.msg.progress &&
+            data.msg.progress === 100) {
+          let _updateLog = [];
+          _updateLog.push(`${translate('INDEX.UI_UPDATE_DOWNLOADED')}...`);
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = 100;
+        }
+
+        if (data.msg.status === 'done') {
+          let _updateLog = [];
+          _updateLog.push(translate('INDEX.UI_UPDATED'));
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+            updatePatch: null,
+          }));
+          updateProgressBar.patch = -1;
+        }
+
+        if (data.msg.status === 'error') {
+          let _updateLog = [];
+          _updateLog.push(translate('INDEX.UI_UPDATE_ERROR'));
+          this.setState(Object.assign({}, this.state, {
+            updateLog: _updateLog,
+          }));
+          updateProgressBar.patch = -1;
+        }
+      }
+    } else {
+      if (data &&
+          data.msg) {
+        let _updateLog = this.state.updateLog;
+        _updateLog.push(data.msg);
+        this.setState(Object.assign({}, this.state, {
+          updateLog: _updateLog,
+        }));
+      }
+    }
+  }
+
   componentWillMount() {
-    socket.on('patch', msg => this.updateSocketsData = (msg) => {});
+    socket.on('patch', msg => this.updateSocketsData(msg));
   }
 
   componentWillUnmount() {
