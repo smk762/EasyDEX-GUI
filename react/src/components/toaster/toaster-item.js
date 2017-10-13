@@ -53,13 +53,15 @@ class ToasterItem extends React.Component {
 
   renderLB() {
     if (typeof this.state.message === 'object') {
-      let _items = [];
       const _msg = this.state.message;
+      let _items = [];
 
       for (let i = 0; i < _msg.length; i++) {
         if (_msg[i] === '') {
           _items.push(
-            <div className="margin-top-5"></div>
+            <div
+              key={ `toaster-msg-${i}` }
+              className="margin-top-5"></div>
           );
         } else {
           _items.push(
@@ -96,7 +98,11 @@ class ToasterItem extends React.Component {
   }
 
   render() {
-    return this.state.message ? this.renderToast() : null;
+    if (this.state.message) {
+      return this.renderToast();
+    } else {
+      return null;
+    }
   }
 }
 

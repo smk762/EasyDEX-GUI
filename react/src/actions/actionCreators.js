@@ -28,6 +28,7 @@ import {
   DASHBOARD_SYNC_ONLY_UPDATE,
   DISPLAY_IMPORT_KEY_MODAL,
   ELECTRUM_SERVER_CHANGED,
+  DISPLAY_ZCASH_PARAMS_FETCH,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -286,5 +287,12 @@ export function electrumServerChanged(isChanged) {
   return {
     type: ELECTRUM_SERVER_CHANGED,
     eletrumServerChanged: isChanged,
+  }
+}
+
+export function toggleZcparamsFetchModal(display) {
+  return {
+    type: DISPLAY_ZCASH_PARAMS_FETCH,
+    displayZcparamsModal: display,
   }
 }

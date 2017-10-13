@@ -16,6 +16,7 @@ import WalletsNative from '../walletsNative/walletsNative';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
+import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 
 const DashboardRender = function() {
   return (
@@ -27,6 +28,9 @@ const DashboardRender = function() {
         <CoindDownModal />
         { this.props.Dashboard.displayImportKeyModal &&
           <ImportKeyModal />
+        }
+        { this.props.Dashboard.displayZcparamsModal &&
+          <ZcparamsFetchModal />
         }
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile />
