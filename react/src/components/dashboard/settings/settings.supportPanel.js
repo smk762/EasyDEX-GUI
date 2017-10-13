@@ -54,12 +54,12 @@ class SupportPanel extends React.Component {
           <div className="support-box-wrapper">
             <div
               className="support-box"
-              onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org') }>
+              onClick={ () => this.openExternalWindow('https://docs.google.com/forms/d/e/1FAIpQLSdwe-xxs2VljYhmzkjD0egwwLKx83MzoO9DjH0N-JKG2MxqfQ/viewform') }>
               <img
                 src="assets/images/support/slack-invite-icon.png"
                 alt="Slack invite" />
               <div className="support-box-title">{ translate('SETTINGS.GET_SLACK_INVITE') }</div>
-              <div className="support-box-link">slackinvite.supernet.org</div>
+              <div className="support-box-link">Google forms</div>
             </div>
           </div>
           <div className="support-box-wrapper">
