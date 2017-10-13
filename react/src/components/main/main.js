@@ -33,7 +33,6 @@ class Main extends React.Component {
       document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
     }
 
-    console.warn(zcashParamsExist);
     // TODO: isolate check only when komodod is detected
     if (zcashParamsExist.errors) {
       let _errors = [translate('KMD_NATIVE.ZCASH_PARAMS_MISSING'), ''];
