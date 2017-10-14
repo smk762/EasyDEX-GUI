@@ -33,10 +33,14 @@ export function setupAccordion(info) {
   if (!singleChild) {
     info.kids.forEach((child, i) => {
       const { openByDefault } = child ? child.props : false;
-      if (singleOpen && activeSections.length === 0 && openByDefault) {
+
+      if (singleOpen &&
+          activeSections.length === 0 &&
+          openByDefault) {
         activeSections.push(`panel-sec-${i}`);
       }
-      if (!singleOpen && openByDefault) {
+      if (!singleOpen &&
+          openByDefault) {
         activeSections.push(`panel-sec-${i}`);
       }
     });

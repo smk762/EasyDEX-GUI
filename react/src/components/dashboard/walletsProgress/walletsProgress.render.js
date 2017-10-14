@@ -98,12 +98,32 @@ export const TranslationComponentsRender = function(translationID) {
 export const ChainActivationNotificationRender = function() {
   if (this.props.ActiveCoin.coin !== 'CHIPS') {
     return (
-      <div className="alert alert-info alert-dismissible margin-bottom-50">
-        <h4>
-          { translate('INDEX.ACTIVATING_CHAIN') }&nbsp;
-          { this.props.ActiveCoin.rescanInProgress ? (this.renderRescanProgress() ? `: ${this.renderRescanProgress().toFixed(2)}% ${translate('INDEX.PROGRESS_RESCANNING_BLOCKS')}` : translate('INDEX.PROGRESS_RESCANNING_BLOCKS')) : this.renderActivatingBestChainProgress() }
-        </h4>
-        <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
+      <div>
+        <div className={ 'alert alert-info alert-dismissible margin-bottom-' + (this.state.isWindows && !this.state.isWindowsWorkaroundEnabled && this.isWinSyncPercBelowThreshold() && this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin === 'KMD' ? 20 : 50) }>
+          <h4>
+            { translate('INDEX.ACTIVATING_CHAIN') }&nbsp;
+            { this.props.ActiveCoin.rescanInProgress ? (this.renderRescanProgress() ? `: ${this.renderRescanProgress().toFixed(2)}% ${translate('INDEX.PROGRESS_RESCANNING_BLOCKS')}` : translate('INDEX.PROGRESS_RESCANNING_BLOCKS')) : this.renderActivatingBestChainProgress() }
+          </h4>
+          <p>{ this.renderLB('INDEX.KMD_STARTED') }</p>
+        </div>
+        { this.state.isWindows &&
+          !this.state.isWindowsWorkaroundEnabled &&
+          this.isWinSyncPercBelowThreshold() &&
+          this.props.ActiveCoin &&
+          this.props.ActiveCoin.mode === 'native' &&
+          this.props.ActiveCoin.coin === 'KMD' &&
+          <div className="alert alert-warning alert-dismissible margin-bottom-50">
+            <p>Slow sync speed on Windows? Try this workaround.</p>
+            <p>It will add maxconnections=1 in komodo.conf file and force close the app.</p>
+            <p className="padding-bottom-15">Please run the app again after that.</p>
+            <button
+              type="button"
+              className="btn btn-info waves-effect waves-light win-sync-workaround-btn"
+              onClick={ this.applyWindowsSyncWorkaround }>
+              Apply workaround
+            </button>
+          </div>
+        }
       </div>
     );
   } else {

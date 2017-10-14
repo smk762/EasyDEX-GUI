@@ -85,6 +85,8 @@ class WalletsData extends React.Component {
 
   displayClaimInterestUI() {
     if (this.props.ActiveCoin &&
+        this.props.ActiveCoin.coin === 'KMD' &&
+        this.props.ActiveCoin.mode === 'native' &&
         this.props.ActiveCoin.balance &&
         this.props.ActiveCoin.balance.interest &&
         this.props.ActiveCoin.balance.interest > 0) {
