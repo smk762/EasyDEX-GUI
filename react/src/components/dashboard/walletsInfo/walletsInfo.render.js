@@ -1,6 +1,5 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
-import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 
 const WalletsInfoRender = function() {
   if (this.props.ActiveCoin.mode === 'native') {
@@ -44,13 +43,12 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { this.props.ActiveCoin.coin === 'KMD' &&
+          { this.props.ActiveCoin.coin === 'KMD' && this.displayClaimInterestUI() &&
             <div>
               <button
                 type="button"
                 className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
                 onClick={ () => this.openClaimInterestModal() }>{ translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }</button>
-              <ClaimInterestModal />
             </div>
           }
         </div>

@@ -9,6 +9,7 @@ import {
   changeActiveAddress,
   getDashboardUpdate,
   shepherdElectrumTransactions,
+  toggleClaimInterestModal,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -52,6 +53,8 @@ class WalletsData extends React.Component {
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
+    this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
+    this.displayClaimInterestUI = this.displayClaimInterestUI.bind(this);
   }
 
   componentWillMount() {
@@ -78,6 +81,19 @@ class WalletsData extends React.Component {
     );
 
     // socket.removeAllListeners('messages');
+  }
+
+  displayClaimInterestUI() {
+    if (this.props.ActiveCoin &&
+        this.props.ActiveCoin.balance &&
+        this.props.ActiveCoin.balance.interest &&
+        this.props.ActiveCoin.balance.interest > 0) {
+      return true;
+    }
+  }
+
+  openClaimInterestModal() {
+    Store.dispatch(toggleClaimInterestModal(true));
   }
 
   // https://react-table.js.org/#/custom-sorting

@@ -198,6 +198,25 @@ export const WalletsDataRender = function() {
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
+        { this.displayClaimInterestUI() &&
+          <div className="col-xs-12 margin-top-20 backround-gray">
+            <div className="panel no-margin">
+              <div>
+                <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
+                  <div className="panel no-margin padding-top-10 padding-bottom-10 center">
+                    You have <strong>{ this.props.ActiveCoin.balance.interest }</strong> KMD to claim.
+                    <button
+                      type="button"
+                      className="btn btn-success waves-effect waves-light dashboard-claim-interest-btn"
+                      onClick={ this.openClaimInterestModal }>
+                      <i className="icon fa-dollar"></i> Claim now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
         <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">
             <div>

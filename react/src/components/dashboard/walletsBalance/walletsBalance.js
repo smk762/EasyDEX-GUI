@@ -5,6 +5,7 @@ import {
   getDashboardUpdate,
   shepherdElectrumBalance,
 } from '../../../actions/actionCreators';
+
 import Store from '../../../store';
 
 import WalletsBalanceRender from './walletsBalance.render';

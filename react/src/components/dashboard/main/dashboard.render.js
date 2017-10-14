@@ -17,6 +17,7 @@ import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
+import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 
 const DashboardRender = function() {
   return (
@@ -37,6 +38,7 @@ const DashboardRender = function() {
           <WalletsNav />
           <WalletsTxInfo />
           <WalletsNative />
+          <ClaimInterestModal />
         </div>
         { this.isSectionActive('edex') &&
           <EDEX />

@@ -398,7 +398,8 @@ select{
   padding-left: 0;
 }
 
-.alert-info {
+.alert-info,
+.alert-warning {
   width: 97.1%;
   margin: 0 auto;
 }
@@ -462,4 +463,9 @@ select{
 .link {
   cursor: hand;
   cursor: pointer;
+}
+
+.dashboard-claim-interest-btn {
+  padding: 4px 14px 4px 7px;
+  margin-left: 20px;
 }

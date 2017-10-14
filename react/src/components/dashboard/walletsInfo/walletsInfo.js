@@ -8,10 +8,20 @@ class WalletsInfo extends React.Component {
   constructor() {
     super();
     this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
+    this.displayClaimInterestUI = this.displayClaimInterestUI.bind(this);
   }
 
   openClaimInterestModal() {
     Store.dispatch(toggleClaimInterestModal(true));
+  }
+
+  displayClaimInterestUI() {
+    if (this.props.ActiveCoin &&
+        this.props.ActiveCoin.balance &&
+        this.props.ActiveCoin.balance.balance &&
+        this.props.ActiveCoin.balance.balance > 0) {
+      return true;
+    }
   }
 
   render() {
