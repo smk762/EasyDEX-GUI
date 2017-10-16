@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import { sortByDate } from '../../../util/sort';
-import { 
+import {
   toggleDashboardTxInfoModal,
   getTxDetails,
  } from '../../../actions/actionCreators';
@@ -30,18 +30,32 @@ class WalletsTxInfo extends React.Component {
     }));
   }
 
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   componentWillReceiveProps(nextProps) {
-    const texInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
-    
-    if (texInfo && 
-      this.props.ActiveCoin.showTransactionInfoTxIndex !== nextProps.ActiveCoin.showTransactionInfoTxIndex) {
-      this.loadTxDetails(nextProps.ActiveCoin.coin, texInfo.txid);
-      this.loadRawTxDetails(nextProps.ActiveCoin.coin, texInfo.txid);
+    if (this.props.ActiveCoin.mode === 'spv') {
+      this.setState(Object.assign({}, this.state, {
+        txDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
+        rawTxDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
+      }));
+    } else {
+      const txInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
+
+      if (txInfo &&
+          this.props.ActiveCoin.showTransactionInfoTxIndex !== nextProps.ActiveCoin.showTransactionInfoTxIndex) {
+        this.loadTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
+        this.loadRawTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
+      }
     }
-    
   }
 
   loadTxDetails(coin, txid) {
+    this.setState(Object.assign({}, this.state, {
+      txDetails: null,
+    }));
+
     getTxDetails(coin, txid)
     .then((json) => {
       this.setState(Object.assign({}, this.state, {
@@ -72,7 +86,7 @@ class WalletsTxInfo extends React.Component {
   }
 
   openExplorerWindow(txid) {
-    const url = 'http://' + this.props.ActiveCoin.coin + '.explorer.supernet.org/tx/' + txid;
+    const url = `http://${this.props.ActiveCoin.coin}.explorer.supernet.org/tx/${txid}`;
     const remote = window.require('electron').remote;
     const BrowserWindow = remote.BrowserWindow;
 
@@ -82,13 +96,13 @@ class WalletsTxInfo extends React.Component {
       title: `${translate('INDEX.LOADING')}...`,
       icon: remote.getCurrentWindow().iguanaIcon,
       webPreferences: {
-        "nodeIntegration": false
+        nodeIntegration: false,
       },
     });
 
     externalWindow.loadURL(url);
-    externalWindow.webContents.on('did-finish-load', function() {
-      setTimeout(function() {
+    externalWindow.webContents.on('did-finish-load', () => {
+      setTimeout(() => {
         externalWindow.show();
       }, 40);
     });
@@ -97,11 +111,14 @@ class WalletsTxInfo extends React.Component {
   render() {
     if (this.props &&
         this.props.ActiveCoin.showTransactionInfo &&
-        // TODO the conditions below should be merged once the native mode components are fully merged
-        // into the rest of the components
         this.props.ActiveCoin.activeSection === 'default') {
-      const txInfo = sortByDate(this.props.ActiveCoin.txhistory)[this.props.ActiveCoin.showTransactionInfoTxIndex];
-      return WalletsTxInfoRender.call(this, txInfo);
+      if (this.props.ActiveCoin.mode === 'native') {
+        const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
+
+        return WalletsTxInfoRender.call(this, txInfo);
+      } else {
+        return WalletsTxInfoRender.call(this);
+      }
     }
 
     return null;

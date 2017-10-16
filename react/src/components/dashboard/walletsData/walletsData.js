@@ -178,15 +178,27 @@ class WalletsData extends React.Component {
       accessor: (tx) => AddressRender.call(this, tx),
     });
 
-    columns.push({
-      id: 'tx-detail',
-      Header: translate('INDEX.TX_DETAIL'),
-      Footer: translate('INDEX.TX_DETAIL'),
-      className: 'colum--txinfo',
-      headerClassName: 'colum--txinfo',
-      footerClassName: 'colum--txinfo',
-      Cell: props => TransactionDetailRender.call(this, props.index),
-    });
+    if (this.props.ActiveCoin.mode === 'spv') {
+      columns.push({
+        id: 'tx-detail',
+        Header: translate('INDEX.TX_DETAIL'),
+        Footer: translate('INDEX.TX_DETAIL'),
+        className: 'colum--txinfo',
+        headerClassName: 'colum--txinfo',
+        footerClassName: 'colum--txinfo',
+        accessor: (tx) => TransactionDetailRender.call(this, tx),
+      });
+    } else {
+      columns.push({
+        id: 'tx-detail',
+        Header: translate('INDEX.TX_DETAIL'),
+        Footer: translate('INDEX.TX_DETAIL'),
+        className: 'colum--txinfo',
+        headerClassName: 'colum--txinfo',
+        footerClassName: 'colum--txinfo',
+        Cell: props => TransactionDetailRender.call(this, props.index),
+      });
+    }
 
     return columns;
   }

@@ -13,8 +13,8 @@ export function getTxDetails(coin, txid, type) {
         txid
       ],
     };
-   
-    if(type==='raw') {
+
+    if (type === 'raw') {
       payload = {
         mode: null,
         chain: coin,
@@ -32,10 +32,10 @@ export function getTxDetails(coin, txid, type) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ payload: payload })
+        body: JSON.stringify({ payload: payload }),
       },
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
