@@ -22,7 +22,6 @@ import { isPositiveNumber } from '../../../util/number';
 
 // TODO: - add links to explorers
 //       - render z address trim
-// spv, request utxo and check if any failed to verify, display alert notice
 
 class SendCoin extends React.Component {
   constructor(props) {
@@ -53,6 +52,7 @@ class SendCoin extends React.Component {
     this.SendFormRender = _SendFormRender.bind(this);
     this.isTransparentTx = this.isTransparentTx.bind(this);
     this.toggleSubstractFee = this.toggleSubstractFee.bind(this);
+    this.isFullySynced = this.isFullySynced.bind(this);
   }
 
   SendFormRender() {
@@ -554,6 +554,17 @@ class SendCoin extends React.Component {
     return false;
   }
 
+  isFullySynced() {
+    if (this.props.ActiveCoin.progress &&
+        this.props.ActiveCoin.progress.longestchain &&
+        this.props.ActiveCoin.progress.blocks &&
+        this.props.ActiveCoin.progress.longestchain > 0 &&
+        this.props.ActiveCoin.progress.blocks > 0 &&
+        Number(this.state.prevProgress.blocks) * 100 / Number(this.state.prevProgress.longestchain) === 100) {
+      return true;
+    }
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
@@ -575,6 +586,7 @@ const mapStateToProps = (state, props) => {
       balance: state.ActiveCoin.balance,
       activeSection: state.ActiveCoin.activeSection,
       lastSendToResponse: state.ActiveCoin.lastSendToResponse,
+      progress: state.ActiveCoin.progress,
     },
     Dashboard: state.Dashboard,
   };

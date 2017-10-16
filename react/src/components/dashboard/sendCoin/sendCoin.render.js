@@ -121,6 +121,11 @@ export const _SendFormRender = function() {
             { this.props.ActiveCoin.coin }
           </span>
         </div>
+        { !this.isFullySynced() && this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' &&
+          <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
+            <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">Your wallet is not fully synced! Please wait until it reached 100% to avoid possible transaction send implications.</span>
+          </div>
+        }
         <div className="col-lg-12">
           <button
             type="button"

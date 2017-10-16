@@ -15,7 +15,7 @@ export function nativeGetinfoFailureState() {
   }
 }
 
-// TODO: use debug.log instead
+// TODO: use blockchaininfo rpc
 export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
   let _json = json;
 
