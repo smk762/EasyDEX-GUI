@@ -4,7 +4,10 @@ import Store from '../../store';
 import { translate } from '../../translate/translate';
 import {
   getDexCoins,
+  activeHandle,
   triggerToaster,
+  shepherdElectrumCoins,
+  toggleZcparamsFetchModal,
 } from '../../actions/actionCreators';
 
 class Main extends React.Component {
@@ -30,6 +33,7 @@ class Main extends React.Component {
       document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
     }
 
+    // TODO: isolate check only when komodod is detected
     if (zcashParamsExist.errors) {
       let _errors = [translate('KMD_NATIVE.ZCASH_PARAMS_MISSING'), ''];
 
@@ -39,13 +43,15 @@ class Main extends React.Component {
       if (!zcashParamsExist.provingKey) {
         _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_PROVING_KEY'));
       }
-      if (!zcashParamsExist.provingKey) {
+      if (!zcashParamsExist.verifyingKey) {
         _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_VERIFYING_KEY'));
       }
-      if (!zcashParamsExist.provingKeySize) {
+      if (!zcashParamsExist.provingKeySize &&
+          zcashParamsExist.provingKey) {
         _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_PROVING_KEY_SIZE'));
       }
-      if (!zcashParamsExist.verifyingKeySize) {
+      if (!zcashParamsExist.verifyingKeySize &&
+          zcashParamsExist.verifyingKey) {
         _errors.push(translate('KMD_NATIVE.ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE'));
       }
 
@@ -57,20 +63,14 @@ class Main extends React.Component {
           false
         )
       );
+      Store.dispatch(toggleZcparamsFetchModal(true));
     }
-
-    /*Store.dispatch(iguanaActiveHandle());
-    const _iguanaActiveHandle = setInterval(function() {
-      Store.dispatch(iguanaActiveHandle());
-    }, IGUANA_ACTIVE_HANDLE_TIMEOUT);
-
-    this.setState(Object.assign({}, this.state, {
-      activeHandleInterval: _iguanaActiveHandle,
-    }));*/
   }
 
   componentWillMount() {
     Store.dispatch(getDexCoins());
+    Store.dispatch(activeHandle());
+    Store.dispatch(shepherdElectrumCoins());
   }
 
   render() {

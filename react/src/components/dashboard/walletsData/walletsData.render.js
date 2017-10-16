@@ -149,12 +149,26 @@ export const TxAmountRender = function(tx) {
 
   if (Config.roundValues) {
     return (
-      <span title={ tx.amount * _amountNegative }>{ formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+      <span title={ tx.amount * _amountNegative }>
+        { formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }
+        { tx.interest &&
+          <span
+            className="tx-interest"
+            title={ `Claimed interest ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
+        }
+      </span>
     );
   }
 
   return (
-    <span>{ tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN') }</span>
+    <span>
+      { tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN') }
+      { tx.interest &&
+        <span
+          className="tx-interest"
+          title={ `Claimed interest ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
+      }
+    </span>
   );
 };
 
@@ -184,6 +198,25 @@ export const WalletsDataRender = function() {
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
+        { this.displayClaimInterestUI() &&
+          <div className="col-xs-12 margin-top-20 backround-gray">
+            <div className="panel no-margin">
+              <div>
+                <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
+                  <div className="panel no-margin padding-top-10 padding-bottom-10 center">
+                    You have <strong>{ this.props.ActiveCoin.balance.interest }</strong> KMD to claim.
+                    <button
+                      type="button"
+                      className="btn btn-success waves-effect waves-light dashboard-claim-interest-btn"
+                      onClick={ this.openClaimInterestModal }>
+                      <i className="icon fa-dollar"></i> Claim now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
         <div className="col-xs-12 margin-top-20 backround-gray">
           <div className="panel nav-tabs-horizontal">
             <div>
@@ -197,7 +230,7 @@ export const WalletsDataRender = function() {
                   </header>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
-                      { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data') &&
+                      { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data' && this.props.ActiveCoin.txhistory !== 'connection error') &&
                         <div className="col-sm-4 search-box">
                           <input
                             className="form-control"

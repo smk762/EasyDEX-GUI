@@ -382,6 +382,14 @@ select{
   height: 75px;
 }
 
+.page-header--spv {
+  height: 120px;
+
+  .page-header-actions {
+    top: 73%;
+  }
+}
+
 .toggle-filters:hover {
   background-color: #f3f1f1;
 }
@@ -390,7 +398,8 @@ select{
   padding-left: 0;
 }
 
-.alert-info {
+.alert-info,
+.alert-warning {
   width: 97.1%;
   margin: 0 auto;
 }
@@ -419,4 +428,48 @@ select{
       }
     }
   }
+}
+
+.balance-placeholder--bold {
+  .pull-left {
+    font-weight: 500;
+    font-size: 16px;
+    padding-top: 16px !important;
+  }
+}
+
+.tx-interest {
+  display: block;
+  color: #4caf50;
+  font-size: 13px;
+  padding-top: 5px;
+}
+
+.icon-spv-connection-warning {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+
+  &:before {
+    color: #f2a654;
+    font-size: 18px;
+  }
+}
+
+.color-warning {
+  color: #FF6600;
+}
+
+.link {
+  cursor: hand;
+  cursor: pointer;
+}
+
+.dashboard-claim-interest-btn {
+  padding: 4px 14px 4px 7px;
+  margin-left: 20px;
+}
+
+.win-sync-workaround-btn {
+  padding: 4px 7px;
 }

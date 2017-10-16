@@ -149,6 +149,9 @@ body.agama-app-settings-window {
 .margin-right-20 {
   margin-right: 20px;
 }
+.margin-left-20 {
+  margin-left: 20px;
+}
 .margin-top-15 {
   margin-top: 15px;
 }
@@ -437,8 +440,15 @@ button.toast-close-button {
   display: inherit;
   top: inherit;
   left: inherit;
-  right: 33.1%;
   padding: 2px 0;
+}
+
+.dropdown-menu.native {
+  right: 256px;
+}
+
+.dropdown-menu.lite {
+  right: 74px;
 }
 
 .dropdown-menu li {

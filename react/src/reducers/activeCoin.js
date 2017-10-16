@@ -15,6 +15,8 @@ import {
   DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE,
   SYNCING_NATIVE_MODE,
   DASHBOARD_UPDATE,
+  DASHBOARD_ELECTRUM_BALANCE,
+  DASHBOARD_ELECTRUM_TRANSACTIONS,
 } from '../actions/storeType';
 
 // TODO: refactor current coin props copy on change
@@ -134,6 +136,16 @@ export function ActiveCoin(state = {
           };
         }
       }
+    case DASHBOARD_ELECTRUM_BALANCE:
+      return {
+        ...state,
+        balance: action.balance,
+      };
+    case DASHBOARD_ELECTRUM_TRANSACTIONS:
+      return {
+        ...state,
+        txhistory: action.txhistory,
+      };
     case DASHBOARD_ACTIVE_COIN_BALANCE:
       return {
         ...state,
@@ -213,7 +225,7 @@ export function ActiveCoin(state = {
       if (state.coin === action.coin) {
         return {
           ...state,
-          progress: action.progress,
+          // progress: action.progress,
           opids: action.opids,
           txhistory: action.txhistory,
           balance: action.balance,

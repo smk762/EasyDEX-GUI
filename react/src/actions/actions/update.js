@@ -46,3 +46,26 @@ export function updateUIPromise() {
     .then(json => resolve(json))
   });
 }
+
+export function downloadZCashParamsPromise(dloption) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/zcparamsdl?dloption=${dloption}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'downloadZCashParamsPromise',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => resolve(json))
+  });
+}

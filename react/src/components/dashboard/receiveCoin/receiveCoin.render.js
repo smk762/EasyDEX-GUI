@@ -35,20 +35,24 @@ export const _ReceiveCoinTableRender = function() {
     <span>
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-10 padding-bottom-10">
-          <label className="switch">
-            <input
-              type="checkbox"
-              value="on"
-              checked={ this.state.hideZeroAddresses } />
-            <div
-              className="slider"
-              onClick={ this.toggleVisibleAddress }></div>
-          </label>
-          <div
-            className="toggle-label margin-right-15 pointer"
-            onClick={ this.toggleVisibleAddress }>
-            { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
-          </div>
+          { this.props.mode !== 'spv' &&
+            <div>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  value="on"
+                  checked={ this.state.hideZeroAddresses } />
+                <div
+                  className="slider"
+                  onClick={ this.toggleVisibleAddress }></div>
+              </label>
+              <div
+                className="toggle-label margin-right-15 pointer"
+                onClick={ this.toggleVisibleAddress }>
+                { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
+              </div>
+            </div>
+          }
         </div>
       }
       <table className="table table-hover dataTable table-striped">
@@ -91,6 +95,7 @@ export const ReceiveCoinRender = function() {
                   <header className="panel-heading">
                     <div className="panel-actions">
                       <InvoiceModal />
+                      { this.props.mode !== 'spv' &&
                       <div
                         className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
                         onClick={ this.openDropMenu }>
@@ -104,13 +109,14 @@ export const ReceiveCoinRender = function() {
                               <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
                             </a>
                           </li>
-                          <li>
+                          <li className={ this.props.coin === 'CHIPS' ? 'hide' : '' }>
                             <a onClick={ () => this.getNewAddress('private') }>
                               <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
                             </a>
                           </li>
                         </ul>
                       </div>
+                      }
                     </div>
                     <h4 className="panel-title">{ translate('INDEX.RECEIVING_ADDRESS') }</h4>
                   </header>

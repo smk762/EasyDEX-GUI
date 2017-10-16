@@ -160,7 +160,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
                 'Please make sure to run komodod manually',
                 'Connection error',
                 'warning',
-                true
+                false
               )
             );
           }
@@ -184,12 +184,164 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           }
         }
 
+        if (coin === 'CHIPS') {
+          dispatch(
+            getBlockTemplate(
+              json,
+              coin
+            )
+          );
+        } else {
+          dispatch(
+            getSyncInfoNativeState(
+              json,
+              coin,
+              skipDebug,
+              skipRemote
+            )
+          );
+        }
+      }
+    })
+  }
+}
+
+export function getBlockTemplate(_json, coin) {
+  const payload = {
+    mode: null,
+    chain: coin,
+    cmd: 'getblocktemplate',
+  };
+
+  return dispatch => {
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'payload': payload }),
+    };
+
+    return fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'getBlockTemplate',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(function(response) {
+      const _response = response.text().then(function(text) { return text; });
+      return _response;
+    })
+    .then(json => {
+      if (!json) {
+      } else {
+        json = JSON.parse(json);
+      }
+
+      if (_json.result &&
+          json.result) {
+        _json.result.longestchain = json.result.height - 1;
+      }
+
+      if (json.result) {
         dispatch(
           getSyncInfoNativeState(
-            json,
+            _json,
             coin,
-            skipDebug,
-            skipRemote
+            true
+          )
+        );
+      } else {
+        if (json.error &&
+            json.error.code === -10) {
+          console.log('debuglog');
+          dispatch(
+            getDebugLogProgress(_json, coin)
+          );
+        }
+      }
+    })
+  }
+}
+
+export function getDebugLogProgress(_json, coin) {
+  const payload = {
+    mode: null,
+    chain: coin,
+    cmd: 'debug',
+  };
+
+  return dispatch => {
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'payload': payload }),
+    };
+
+    return fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch(function(error) {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'getDebugLogProgress',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(function(response) {
+      const _response = response.text().then(function(text) { return text; });
+      return _response;
+    })
+    .then(json => {
+      if (!json) {
+      } else {
+        json = JSON.parse(json);
+      }
+
+      if (json.result &&
+          json.result.blocks &&
+          json.result.headers) {
+        _json.result.longestchain = json.result.headers;
+        _json.result.progress = json.result.blocks * 100 / json.result.headers;
+      } else if (json.result &&
+          json.result.indexOf('UpdateTip:') > -1) {
+        const _debugProgress = json.result.split(' ');
+        let _height = '';
+        let _progress = '';
+
+        for (let i = 0; i < _debugProgress.length; i++) {
+          if (_debugProgress[i].indexOf('height=') > -1) {
+            _height = Number(_debugProgress[i].replace('height=', ''));
+          }
+          if (_debugProgress[i].indexOf('progress=') > -1) {
+            _progress = Number(_debugProgress[i].replace('progress=', ''));
+          }
+
+          _json.result.progress = _progress * 100;
+        }
+      }
+
+      if (_json.result &&
+          _json.result.progress) {
+        dispatch(
+          getSyncInfoNativeState(
+            _json,
+            coin,
+            true
           )
         );
       }

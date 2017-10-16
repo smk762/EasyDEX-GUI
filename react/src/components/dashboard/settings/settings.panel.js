@@ -19,7 +19,8 @@ class Panel extends React.Component {
       singleOpen,
       openByDefault,
       uniqId,
-      children } = this.props;
+      children
+    } = this.props;
 
     const settings = {
       singleOpen,
@@ -37,9 +38,8 @@ class Panel extends React.Component {
       children,
     } = this.props;
 
-
-    const kids = React.Children.map(children, (child, i) => {
-      if(child) {
+    const _children = React.Children.map(children, (child, i) => {
+      if (child) {
         const unqId = `panel-sec-${i}`;
         return React.cloneElement(child, {
           toggle: (acId) => this.toggleSection(acId),
@@ -49,9 +49,8 @@ class Panel extends React.Component {
         });
       }
     });
-    
 
-    return kids;
+    return _children;
   }
 
   toggleSection(sectionId) {

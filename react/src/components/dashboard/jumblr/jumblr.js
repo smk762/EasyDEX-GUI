@@ -35,6 +35,8 @@ import '../../../util/crypto/gen/biginteger.js';
 import '../../../util/crypto/gen/crypto-scrypt.js';
 import { Bitcoin } from '../../../util/crypto/gen/bitcoin.js';
 
+// TODO: promises, move to backend crypto libs
+
 if (!window.jumblrPasshrase) { // gen jumblr passphrase
   window.jumblrPasshrase = `jumblr ${PassPhraseGenerator.generatePassPhrase(256)}`;
 }
@@ -358,7 +360,7 @@ class Jumblr extends React.Component {
                 'error'
               )
             );
-          } else if (json.result && json.result.result === 0) {
+          } else if (json.result && (json.result.result === 0 || json.result.result === null)) {
             this.setState(Object.assign({}, this.state, {
               jumblrDepositAddress: {
                 address: _genKeys.address,
@@ -367,9 +369,10 @@ class Jumblr extends React.Component {
             }));
             Store.dispatch(
               triggerToaster(
-                translate('TOASTR.JUMBLR_DEPOSIT_ADDRESS_SET'),
+                translate('TOASTR.JUMBLR_DEPOSIT_ADDRESS_SET') + ' to ' + _genKeys.address,
                 'Jumblr',
-                'success'
+                'success',
+                false
               )
             );
           }

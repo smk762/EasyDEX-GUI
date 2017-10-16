@@ -123,16 +123,31 @@ const WalletsTxInfoRender = function(txInfo) {
                         <div className="tab-pane active">
                           <table className="table table-striped">
                             <tbody>
+                            }
+                            <tr>
+                              <td>txid</td>
+                              <td>
+                                { txInfo.txid }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>walletconflicts</td>
+                              <td>
+                                { txInfo.walletconflicts ? txInfo.walletconflicts.length : '' }
+                              </td>
+                            </tr>
                             <tr>
                               <td>vjoinsplit</td>
                               <td>
-                                { txInfo.vjoinsplit }
+                                { txInfo.vjoinsplit } // native
+                                { txInfo.time ? secondsToString(txInfo.time) : '' } // electrum
                               </td>
                             </tr>
                             <tr>
                               <td>details</td>
                               <td>
-                                { txInfo.details }
+                                { txInfo.details } // native
+                                { txInfo.timereceived ? secondsToString(txInfo.timereceived) : '' } // electrum
                               </td>
                             </tr>
                             </tbody>

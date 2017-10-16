@@ -1,4 +1,5 @@
 import React from 'react';
+import { translate } from '../../../translate/translate';
 
 const CoinTileItemRender = function() {
   const { item } = this.props;
@@ -23,6 +24,15 @@ const CoinTileItemRender = function() {
           </div>
         </div>
       </div>
+      { this.props.Dashboard &&
+        this.props.Dashboard.electrumCoins &&
+        this.props.Dashboard.electrumCoins[item.coin] &&
+        this.props.Dashboard.electrumCoins[item.coin].serverList &&
+        this.props.Dashboard.electrumCoins[item.coin].serverList === 'none' &&
+        <i
+          title={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
+          className="icon fa-info-circle icon-spv-connection-warning"></i>
+      }
     </div>
   );
 };

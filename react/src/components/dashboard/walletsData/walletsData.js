@@ -8,6 +8,8 @@ import {
   toggleDashboardTxInfoModal,
   changeActiveAddress,
   getDashboardUpdate,
+  shepherdElectrumTransactions,
+  toggleClaimInterestModal,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -51,6 +53,8 @@ class WalletsData extends React.Component {
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
+    this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
+    this.displayClaimInterestUI = this.displayClaimInterestUI.bind(this);
   }
 
   componentWillMount() {
@@ -77,6 +81,21 @@ class WalletsData extends React.Component {
     );
 
     // socket.removeAllListeners('messages');
+  }
+
+  displayClaimInterestUI() {
+    if (this.props.ActiveCoin &&
+        this.props.ActiveCoin.coin === 'KMD' &&
+        this.props.ActiveCoin.mode === 'native' &&
+        this.props.ActiveCoin.balance &&
+        this.props.ActiveCoin.balance.interest &&
+        this.props.ActiveCoin.balance.interest > 0) {
+      return true;
+    }
+  }
+
+  openClaimInterestModal() {
+    Store.dispatch(toggleClaimInterestModal(true));
   }
 
   // https://react-table.js.org/#/custom-sorting
@@ -182,7 +201,11 @@ class WalletsData extends React.Component {
   }
 
   refreshTxHistory() {
-    Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    if (this.props.ActiveCoin.mode === 'native') {
+      Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+    } else if (this.props.ActiveCoin.mode === 'spv') {
+      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+    }
   }
 
   toggleTxInfoModal(display, txIndex) {
@@ -202,15 +225,14 @@ class WalletsData extends React.Component {
   componentWillReceiveProps(props) {
     let _stateChange = {};
 
-    // TODO: clean
     // TODO: figure out why changing ActiveCoin props doesn't trigger comp update
     if (this.props.ActiveCoin.txhistory &&
         this.props.ActiveCoin.txhistory !== 'loading' &&
         this.props.ActiveCoin.txhistory !== 'no data' &&
+        this.props.ActiveCoin.txhistory !== 'connection error or incomplete data' &&
+        this.props.ActiveCoin.txhistory !== 'cant get current height' &&
         this.props.ActiveCoin.txhistory.length) {
-
       _stateChange = Object.assign({}, _stateChange, {
-        isExplorerData: this.props.ActiveCoin.txhistory[0].source ? true : false,
         itemsList: this.props.ActiveCoin.txhistory,
         filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
         txhistory: this.props.ActiveCoin.txhistory,
@@ -227,6 +249,11 @@ class WalletsData extends React.Component {
     } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'loading',
+      });
+    } else if ((this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'connection error or incomplete data') ||
+      (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'cant get current height')) {
+      _stateChange = Object.assign({}, _stateChange, {
+        itemsList: 'connection error',
       });
     }
 
@@ -266,6 +293,18 @@ class WalletsData extends React.Component {
       return (
         <tr className="hover--none">
           <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.NO_DATA') }</td>
+        </tr>
+      );
+    } else if (this.state.itemsList === 'connection error') {
+      return (
+        <tr className="hover--none">
+          <td colSpan="7" className="table-cell-offset-16 color-warning">
+            Connection error!
+            <span className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
+            <br/>Try to connect to another SPV server.
+            <br/>To do that go to "Settings", select "SPV Server List" tab, choose new server and click "OK".
+            </span>
+          </td>
         </tr>
       );
     } else if (this.state.itemsList && this.state.itemsList.length) {
@@ -419,7 +458,7 @@ class WalletsData extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        this.props.ActiveCoin.mode === 'native' &&
+        //this.props.ActiveCoin.mode === 'native' &&
         this.props.ActiveCoin.activeSection === 'default'
         ) {
       return WalletsDataRender.call(this);
@@ -446,9 +485,8 @@ const mapStateToProps = (state) => {
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
       progress: state.ActiveCoin.progress,
     },
-    Main: {
-      coins: state.Main.coins,
-    },
+    Main: state.Main,
+    Dashboard: state.Dashboard,
   };
 };
 

@@ -1,14 +1,16 @@
 // TODO: merge into react app
 let _configCopy;
 
-function toggleDropdown() {
-  const _dropdown = $('.dropdown-menu');
+function toggleDropdown(type) {
+  const _dropdown = $('.dropdown-menu.' + (type === 'lite' ? 'lite' : 'native'));
 
   if (_dropdown.hasClass('hide')) {
     _dropdown.removeClass('hide');
   } else {
     _dropdown.addClass('hide');
   }
+
+  $('.dropdown-menu.' + (type === 'lite' ? 'native' : 'lite')).addClass('hide');;
 }
 
 function initSettingsForm() {
@@ -23,7 +25,7 @@ function initSettingsForm() {
         appConfSchema[key].initDisplay) {
       _htmlOut = `
         ${_htmlOut}
-        <tr id="${key}">
+        <tr>
           <td class="left">
             ${appConfSchema[key].displayName}`;
 
@@ -178,7 +180,8 @@ function openSettingsWindow() {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
-  $('.dropdown-menu').addClass('hide');
+  $('.dropdown-menu.lite').addClass('hide');
+  $('.dropdown-menu.native').addClass('hide');
   window.createAppSettingsWindow();
 }
 
@@ -186,10 +189,39 @@ function startKMDPassive() {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
-  $('.dropdown-menu').addClass('hide');
+  $('.dropdown-menu.lite').addClass('hide');
+  $('.dropdown-menu.native').addClass('hide');
   disableModeButtons();
 
   window.startKMDNative('KMD', true);
+
+  window.createWindow('open');
+  window.hide();
+}
+
+function startKMDPassive() {
+  const remote = require('electron').remote;
+  const window = remote.getCurrentWindow();
+
+  $('.dropdown-menu.lite').addClass('hide');
+  $('.dropdown-menu.native').addClass('hide');
+  disableModeButtons();
+
+  window.startKMDNative('KMD', true);
+
+  window.createWindow('open');
+  window.hide();
+}
+
+function startSPV(coin) {
+  const remote = require('electron').remote;
+  const window = remote.getCurrentWindow();
+
+  $('.dropdown-menu.lite').addClass('hide');
+  $('.dropdown-menu.native').addClass('hide');
+  disableModeButtons();
+
+  window.startSPV(coin);
 
   window.createWindow('open');
   window.hide();
@@ -199,7 +231,8 @@ function closeMainWindow(isKmdOnly, isCustom) {
   const remote = require('electron').remote;
   const window = remote.getCurrentWindow();
 
-  $('.dropdown-menu').addClass('hide');
+  $('.dropdown-menu.lite').addClass('hide');
+  $('.dropdown-menu.native').addClass('hide');
   disableModeButtons();
 
   if (!isCustom) {
@@ -227,6 +260,8 @@ function disableModeButtons() {
   $('#normalStartBtn').attr('disabled', true);
   $('#settingsBtn').attr('disabled', true);
   $('#nativeOnlyBtnCarret').attr('disabled', true);
+  $('#spvBtn').attr('disabled', true);
+  $('#spvBtnCarret').attr('disabled', true);
 }
 
 function normalStart() {
@@ -234,6 +269,21 @@ function normalStart() {
   let appConf = remote.getCurrentWindow().appConfig;
   appConf.iguanaLessMode = false;
 
-  $('.dropdown-menu').addClass('hide');
+  $('.dropdown-menu.lite').addClass('hide');
+  $('.dropdown-menu.native').addClass('hide');
   disableModeButtons();
+}
+
+function init() {
+  const remote = require('electron').remote;
+  var window = remote.getCurrentWindow();
+  var appConf = remote.getCurrentWindow().appConfig;
+
+  if (!appConf.experimentalFeatures) {
+    $('#spvBtn').hide();
+    $('#spvBtnCarret').hide();
+    $('.dropdown-menu.native').css('right', '165px');
+    $('#nativeOnlyBtnCarret').css('margin-right', '0');
+    $('#settingsBtn').css('margin', '0');
+  }
 }

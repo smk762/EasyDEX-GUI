@@ -6,6 +6,10 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'CHIPS':
+      coinlogo = 'chips';
+      coinname = 'Chips';
+      break;
     case 'BTC':
       coinlogo = 'bitcoin';
       coinname = 'Bitcoin';
@@ -57,6 +61,10 @@ export function getCoinTitle(coin) {
     case 'ZET':
       coinlogo = 'zetacoin';
       coinname = 'Zetacoin';
+      break;
+    case 'MNZ':
+      coinlogo = 'mnz';
+      coinname = 'Monaize';
       break;
     case 'KMD':
       hideTitle = true;
@@ -367,9 +375,9 @@ export function getModeInfo(mode) {
       modetip = 'Native';
       modecolor = 'primary';
       break;
-    case 'basilisk':
-      modecode = 'Basilisk';
-      modetip = 'Basilisk';
+    case 'spv':
+      modecode = 'SPV';
+      modetip = 'SPV';
       modecolor = 'info';
       break;
     case 'full':

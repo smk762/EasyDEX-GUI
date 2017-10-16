@@ -17,6 +17,7 @@ class CoinTile extends React.Component {
   renderTiles() {
     const modes = [
       'native',
+      'spv',
     ];
     const allCoins = this.props.allCoins;
     let items = [];

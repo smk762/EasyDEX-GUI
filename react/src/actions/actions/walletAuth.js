@@ -7,7 +7,6 @@ import Config from '../../config';
 import {
   triggerToaster,
   getMainAddressState,
-  updateErrosStack
 } from '../actionCreators';
 
 export function encryptWallet(_passphrase, cb, coin) {

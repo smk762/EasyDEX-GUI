@@ -22,6 +22,10 @@ class AddCoin extends React.Component {
       coins: [],
       defaultCoinState: {
         selectedCoin: null,
+        spvMode: {
+          disabled: true,
+          checked: false,
+        },
         nativeMode: {
           disabled: true,
           checked: false,
@@ -39,6 +43,7 @@ class AddCoin extends React.Component {
     this.dismiss = this.dismiss.bind(this);
     this.addNewItem = this.addNewItem.bind(this);
     this.activateAllCoins = this.activateAllCoins.bind(this);
+    this.toggleActionsMenu = this.toggleActionsMenu.bind(this);
     this.saveCoinSelection = this.saveCoinSelection.bind(this);
     this.loadCoinSelection = this.loadCoinSelection.bind(this);
   }
@@ -70,6 +75,18 @@ class AddCoin extends React.Component {
     });
   }
 
+  toggleSyncOnlyMode(index) {
+    let _coins = this.state.coins;
+
+    _coins[index] = Object.assign({}, _coins[index], {
+      syncOnly: !this.state.coins[index].syncOnly,
+    });
+
+    this.setState(Object.assign({}, this.state, {
+      coins: _coins,
+    }));
+  }
+
   updateDaemonParam(e, index) {
     let _coins = this.state.coins;
 
@@ -90,6 +107,16 @@ class AddCoin extends React.Component {
 
   componentWillMount() {
     this.addNewItem();
+
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -115,15 +142,20 @@ class AddCoin extends React.Component {
 
   updateSelectedCoin(e, index) {
     const coin = e.target.value.split('|');
-    const defaultMode = 'native';
+    const defaultMode = Config.iguanaLessMode ? 'native' : coin[1];
     const modeToValue = { // TODO: move to utils
-      native: -1,
+      'spv': 0,
+      'native': -1,
     };
     let _coins = this.state.coins;
     const _value = e.target.value;
 
     _coins[index] = {
       [e.target.name]: _value,
+      spvMode: {
+        disabled: _value.indexOf('spv') > -1 ? false : true,
+        checked: defaultMode === 'spv' ? true : false,
+      },
       nativeMode: {
         disabled: _value.indexOf('native') > -1 ? false : true,
         checked: defaultMode === 'native' ? true : false,
@@ -142,6 +174,11 @@ class AddCoin extends React.Component {
 
     _coins[index] = {
       selectedCoin: _selectedCoin,
+
+      spvMode: {
+        disabled: _selectedCoin.indexOf('spv') > -1 ? false : true,
+        checked: _value === '0' ? true : false,
+      },
       nativeMode: {
         disabled: _selectedCoin.indexOf('native') > -1 ? false : true,
         checked: _value === '-1' ? true : false,
@@ -172,12 +209,13 @@ class AddCoin extends React.Component {
     if (!_coin.daemonParam) {
       Store.dispatch(addCoin(
         coin,
+        _coin.mode,
       ));
     } else {
       Store.dispatch(addCoin(
         coin,
-        null,
-        { type: _coin.daemonParam } // TODO: custom param value
+        _coin.mode,
+        { type: _coin.daemonParam }
       ));
     }
 
@@ -221,7 +259,6 @@ class AddCoin extends React.Component {
         addCoin(
           coin,
           this.state.coins[0].mode,
-          this.state.coins[0].syncOnly
         )
       );
     }
@@ -236,7 +273,6 @@ class AddCoin extends React.Component {
             addCoin(
               itemCoin,
               _item.mode,
-              _item.syncOnly
             )
           );
         }
@@ -284,6 +320,7 @@ class AddCoin extends React.Component {
 
   isCoinAlreadyAdded(coin) {
     const modes = [
+      'spv',
       'native'
     ];
 

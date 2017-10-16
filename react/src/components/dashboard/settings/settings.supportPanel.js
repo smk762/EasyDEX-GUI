@@ -54,7 +54,7 @@ class SupportPanel extends React.Component {
           <div className="support-box-wrapper">
             <div
               className="support-box"
-              onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org') }>
+              onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>
               <img
                 src="assets/images/support/slack-invite-icon.png"
                 alt="Slack invite" />

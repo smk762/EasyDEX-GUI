@@ -63,6 +63,7 @@ export const _lang = {
       'NO_ACTIVE_COIN': 'No active coin',
     },
     'INDEX': {
+      'SPV_MODE': 'SPV Mode',
       'PROGRESS_RESCANNING_BLOCKS': '(rescanning blocks)',
       'BLOCKS': 'Blocks',
       'PLEASE_WAIT_UNTIL_RESCAN_FINISHED': 'Please wait until rescan process is finished',
@@ -261,7 +262,6 @@ export const _lang = {
       'FIAT_CURRENCY': 'Fiat Currency',
       'EXPORT_KEYS': 'Export Keys',
       'ONLY_ACTIVE_WIF_KEYS': 'Only the active coin wallet WIF keys will be shown here.<br>' +
-                              'If you don\'t see a WIF key for the coin you are looking for please active it by adding it from EasyDEX Dashboard.<br>' +
                               'You can use these WIF keys to import to another coin wallets.',
       'PLEASE_KEEP_KEYS_SAFE': 'Please keep these keys extra safe and secure.',
       'PASSPHRASE': 'Passphrase',
@@ -334,7 +334,7 @@ export const _lang = {
       'PLEASE_WRITE_DOWN_PASSPHRASE': 'Please write down your Jumblr passphrase and keept it safe.',
       'THIS_IS_YOUR_MAIN_RECOVERY': 'This is your main recovery passphrase.',
       'ALL_JUMBLR_ADDRESSES_CAN_BE': 'All Jumblr addresses can be regenrated based on it.',
-      'DONT_USE_SMART_EDITORS': 'do not use smart editors to store your passphrase as they tend to add extra characters.<br />This may result in passphrase mismatch with the original passphrase.',
+      'DONT_USE_SMART_EDITORS': 'do not use smart editors to store your passphrase as they tend to add extra characters.<br>This may result in passphrase mismatch with the original passphrase.',
       'PASSPHRASE_COPIED': 'Passphrase copied',
       'CREATE_JUMBLR_DEPOSIT_ADDRESS': 'Create Jumblr deposit address',
       'YOUR_JUMBLR_DEPOSIT_ADDRESS': 'Your Jumblr deposit address',
@@ -563,14 +563,17 @@ export const _lang = {
       'JUMBLR_MOTTO': 'Secure, Native and Decentralised Coin Anonymizer',
     },
     'SETTINGS': {
+      'SPV_SERVER_LIST_DESC': 'Server list selection is only available for active coins that have more than 1 server to connect to.',
+      'SPV_SERVERS': 'SPV servers list',
+      'SPV_SINGLE_SERVER_NOTICE': 'There is only one electrum server available. SPV verification is coming from the same server providing all remote data.',
       'KMD_MAIN_SYNC_ONLY': 'KMD main sync only',
       'RPC_FETCH_ONLY_DESC': 'Fetch block synchronization data only. Skip any other requests that can deteriorate sync speed.',
       'RESET_TO_DEFAULT': 'Reset to default',
       'PROGRESS': 'Progress',
       'SUPPORT_TICKETS': 'Support tickets',
       'GET_SLACK_INVITE': 'Get Slack invite',
-      'ADDRESS_LIST': 'Address list',
-      'WIF_KEY_LIST': 'WIF (Wallet Import Format) key list',
+      'ADDRESS_LIST': 'Address',
+      'WIF_KEY_LIST': 'WIF (Wallet Import Format) key',
       'CLI_RESPONSE': 'CLI response',
       'PASSPHRASE_REQ': 'Passphrase is required.',
       'SAVE_APP_CONFIG': 'Save app config',
@@ -595,8 +598,7 @@ export const _lang = {
       'DIR': 'Dir',
       'ADD_PEER_IP': 'Add Peer IP',
       'APP_SESSION': 'App Session',
-      'EXPORT_KEYS_NOTE': 'Note: it\'s important that you provide the same passphrase you used to login to the wallet!<br>' +
-                          'In case passphrases will not match wallet is going to log you out of current session.',
+      'EXPORT_KEYS_NOTE': 'Note: it\'s important that you provide the same passphrase you used to login to the wallet!',
     },
     'TX_INFO': {
       'ADDRESS': 'address',
@@ -610,6 +612,7 @@ export const _lang = {
       'UPDATE': 'Update',
       'SELECT_T_OR_Z_ADDR': 'Select Transparent or Private Address',
       'ENTER_T_OR_Z_ADDR': 'Enter Transparent or Private address',
+      'ENTER_ADDRESS': 'Enter address',
       'AWAITING': 'Awaiting in queue',
       'PROCESSING': 'Processing',
       'ERROR_CODE': 'Error Code',
@@ -676,6 +679,7 @@ export const _lang = {
       'KV': 'KV (KV)',
       'MGW': 'MultiGateway (MGW)',
       'MVP': 'MVP Lineup (MVP)',
+      'MNZ': 'Monaize (MNZ)',
       'PANGEA': 'PANGEA (PANGEA)',
       'REVS': 'REVS (REVS)',
       'SHARK': 'SHARK (SHARK)',
@@ -683,6 +687,5 @@ export const _lang = {
       'SUPERNET': 'SUPERNET (SUPERNET)',
       'WLC': 'WIRELESS (WIRELESS)',
     },
-    // 'CHIPS': 'CHIPS (CHIPS)',
   },
 };

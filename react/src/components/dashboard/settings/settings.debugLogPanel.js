@@ -100,11 +100,15 @@ class DebugLogPanel extends React.Component {
     });
   }
 
+  // TODO: extend to include asset chains
+
   render() {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
+          { this.props.Main.coins && this.props.Main.coins.native && Object.keys(this.props.Main.coins.native).length > 0 &&
+            <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
+          }
           <div className="margin-top-30">
             <span className="pointer toggle">
               <label className="switch">
@@ -122,7 +126,7 @@ class DebugLogPanel extends React.Component {
                 onClick={ this.toggleAppRuntimeLog }>Show app runtime log</span>
             </span>
           </div>
-          { !this.state.toggleAppRuntimeLog &&
+          { !this.state.toggleAppRuntimeLog && this.props.Main.coins && this.props.Main.coins.native && Object.keys(this.props.Main.coins.native).length > 0 &&
             <form
               className="read-debug-log-import-form"
               method="post"
@@ -146,7 +150,6 @@ class DebugLogPanel extends React.Component {
                   name="debugTarget"
                   id="settingsDelectDebugLogOptions"
                   onChange={ this.updateInput }>
-                  <option value="iguana" className={ this.state.nativeOnly ? 'hide' : '' }>Iguana</option>
                   <option value="komodo">Komodo</option>
                 </select>
                 <label
@@ -178,6 +181,7 @@ class DebugLogPanel extends React.Component {
 const mapStateToProps = (state) => {
   return {
     Settings: state.Settings,
+    Main: state.Main,
   };
 };
 

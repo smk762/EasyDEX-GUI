@@ -2,13 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import {
+  triggerToaster,
+} from '../../../actions/actionCreators';
+import Store from '../../../store';
+import {
   SyncErrorBlocksRender,
   SyncPercentageRender,
   LoadingBlocksRender,
   TranslationComponentsRender,
   ChainActivationNotificationRender,
   VerifyingBlocksRender,
-  WalletsProgressRender
+  WalletsProgressRender,
 } from './walletsProgress.render';
 
 class WalletsProgress extends React.Component {
@@ -16,8 +20,71 @@ class WalletsProgress extends React.Component {
     super();
     this.state = {
       prevProgress: {},
+      isWindows: false,
+      isWindowsWorkaroundEnabled: false,
     };
-    this.isFullySynced = this.isFullySynced.bind(this);
+    this.isWinSyncPercBelowThreshold = this.isWinSyncPercBelowThreshold.bind(this);
+    this.applyWindowsSyncWorkaround = this.applyWindowsSyncWorkaround.bind(this);
+  }
+
+  componentWillMount() {
+    const _mainWindow = window.require('electron').remote.getCurrentWindow();
+    let _isWindows;
+
+    try {
+      _isWindows = _mainWindow.isWindows;
+    } catch (e) {}
+
+    if (_isWindows) {
+      _mainWindow.getMaxconKMDConf()
+      .then((res) => {
+        if (!res ||
+            Number(res) !== 1) {
+          this.setState({
+            isWindowsWorkaroundEnabled: false,
+            isWindows: _isWindows,
+          });
+        } else {
+          this.setState({
+            isWindowsWorkaroundEnabled: true,
+            isWindows: _isWindows,
+          });
+        }
+      });
+    }
+  }
+
+  applyWindowsSyncWorkaround() {
+    const _mainWindow = window.require('electron').remote.getCurrentWindow();
+
+    _mainWindow.setMaxconKMDConf(1)
+    .then((res) => {
+      if (res) {
+        this.setState({
+          isWindowsWorkaroundEnabled: true,
+        });
+
+        Store.dispatch(
+          triggerToaster(
+            'Windows sync workaround is applied. Closing the app...',
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'success'
+          )
+        );
+
+        setTimeout(() => {
+          _mainWindow.appExit();
+        }, 2000);
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            'Unable to apply Windows sync workaround',
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+      }
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -31,6 +98,7 @@ class WalletsProgress extends React.Component {
           Number(this.state.prevProgress.longestchain) > 0) {
         _progress.longestchain = this.state.prevProgress.longestchain;
       }
+
       this.setState(Object.assign({}, this.state, {
         prevProgress: _progress,
       }));
@@ -39,18 +107,49 @@ class WalletsProgress extends React.Component {
         prevProgress: props.ActiveCoin.progress,
       }));
     }
+
+    if (this.isWinSyncPercBelowThreshold() !== -777 &&
+        this.state.isWindowsWorkaroundEnabled &&
+        !this.isWinSyncPercBelowThreshold()) {
+      const _mainWindow = window.require('electron').remote.getCurrentWindow();
+
+      _mainWindow.setMaxconKMDConf()
+      .then((res) => {
+        if (res) {
+          this.setState({
+            isWindowsWorkaroundEnabled: false,
+          });
+
+          Store.dispatch(
+            triggerToaster(
+              'Current sync state reached 80% level. Windows sync workaround is disabled. Changes will be applied next time you start the app.',
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'info',
+              false
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              'Unable to apply Windows sync workaround',
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
+        }
+      });
+    }
   }
 
-  isFullySynced() {
-    const _progress = this.props.ActiveCoin.progress;
-
-    if ((Number(_progress.balances) +
-        Number(_progress.validated) +
-        Number(_progress.bundles) +
-        Number(_progress.utxo)) / 4 === 100) {
-      return true;
+  isWinSyncPercBelowThreshold() {
+    if (this.state.prevProgress &&
+        this.state.prevProgress.longestchain &&
+        this.state.prevProgress.blocks) {
+      if (Number(this.state.prevProgress.blocks) * 100 / Number(this.state.prevProgress.longestchain) < 80) {
+        return true;
+      }
     } else {
-      return false;
+      return -777;
     }
   }
 

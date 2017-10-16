@@ -10,9 +10,10 @@ import AppSettingsPanel from './settings.appSettingsPanel';
 import CliPanel from './settings.cliPanel';
 import DebugLogPanel from './settings.debugLogPanel';
 // import FiatCurrencyPanel from './settings.fiatCurrencyPanel';
-// import ExportKeysPanel from './settings.exportKeysPanel';
+import ExportKeysPanel from './settings.exportKeysPanel';
 // import ImportKeysPanel from './settings.importKeysPanel';
 import SupportPanel from './settings.supportPanel';
+import SPVServersPanel from './settings.spvServersPanel';
 // import WalletInfoPanel from './settings.walletInfoPanel';
 // import WalletBackupPanel from './settings.walletBackupPanel';
 
@@ -48,13 +49,6 @@ import SupportPanel from './settings.supportPanel';
               }
               { !this.props.disableWalletSpecificUI &&
                 <PanelSection
-                  title={ translate('INDEX.EXPORT_KEYS') }
-                  icon="icon md-key">
-                  <ExportKeysPanel />
-                </PanelSection>
-              }
-              { !this.props.disableWalletSpecificUI &&
-                <PanelSection
                   title={ translate('INDEX.IMPORT_KEYS') }
                   icon="icon md-key">
                   <ImportKeysPanel />
@@ -80,20 +74,36 @@ export const SettingsRender = function() {
                   <DebugLogPanel />
                 </PanelSection>
                 <PanelSection
-                    title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
-                    icon="icon fa-bug">
-                    <AppSettingsPanel />
+                  title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
+                  icon="icon fa-bug">
+                  <AppSettingsPanel />
                 </PanelSection>
                 <PanelSection
                   title={ translate('SETTINGS.APP_INFO') }
                   icon="icon md-info">
                   <AppInfoPanel />
                 </PanelSection>
-                <PanelSection
-                  title="CLI"
-                  icon="icon fa-code">
-                  <CliPanel />
-                </PanelSection>
+                { this.props.Main.coins && this.props.Main.coins.spv && Object.keys(this.props.Main.coins.spv).length && this.props.Main.isLoggedIn &&
+                  <PanelSection
+                    title={ translate('INDEX.EXPORT_KEYS') }
+                    icon="icon md-key">
+                    <ExportKeysPanel />
+                  </PanelSection>
+                }
+                { this.props.Main.coins && this.props.Main.coins.spv && Object.keys(this.props.Main.coins.spv).length && this.displaySPVServerListTab() &&
+                  <PanelSection
+                    title={ translate('SETTINGS.SPV_SERVERS') }
+                    icon="icon fa-server">
+                    <SPVServersPanel />
+                  </PanelSection>
+                }
+                { this.props.Main.coins && this.props.Main.coins.native && Object.keys(this.props.Main.coins.native).length > 0 &&
+                  <PanelSection
+                    title="CLI"
+                    icon="icon fa-code">
+                    <CliPanel />
+                  </PanelSection>
+                }
                 <PanelSection
                   title={ translate('INDEX.UPDATE') }
                   icon="icon fa fa-cloud-download">

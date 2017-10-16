@@ -206,7 +206,7 @@ export const JumblrRender = function() {
                           <p>{ translate('JUMBLR.THIS_IS_YOUR_MAIN_RECOVERY') }</p>
                           <p>{ translate('JUMBLR.ALL_JUMBLR_ADDRESSES_CAN_BE') }</p>
                           <p>
-                            <strong>{ translate('JUMBLR.TIP') }:</strong> { translate('JUMBLR.DONT_USE_SMART_EDITORS') }
+                            <strong>{ translate('JUMBLR.TIP') }:</strong> { this.renderLB('JUMBLR.DONT_USE_SMART_EDITORS') }
                           </p>
                         </div>
                         <label>{ translate('INDEX.PASSPHRASE') }</label>

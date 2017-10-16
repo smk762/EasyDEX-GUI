@@ -14,24 +14,25 @@ import {
   getKMDBalanceTotal,
   getSyncInfoNative,
   getDebugLog,
-  getDashboardUpdate
+  getDashboardUpdate,
+  shepherdElectrumBalance,
+  shepherdElectrumTransactions,
+  shepherdElectrumCoins,
+  electrumServerChanged,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
 
 import CoinTileItemRender from './coinTileItem.render';
 
-const IGUNA_ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
+const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
+const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
 const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 5;
 
 class CoinTileItem extends React.Component {
   constructor() {
     super();
   }
-
-  // TODO: 1) cache native/full node data to file
-  //       2) limit amount of req per update e.g. list of addresses don't change too often
-  //       3) limit req in basilisk as much as possible incl. activehandle
 
   componentWillMount() {
     if (!this.props.ActiveCoin.coin) {
@@ -41,6 +42,7 @@ class CoinTileItem extends React.Component {
       let _coinMode = {};
       const modes = [
         'native',
+        'spv',
       ];
       const allCoins = this.props.Main.coins;
 
@@ -115,6 +117,11 @@ class CoinTileItem extends React.Component {
           );
         }
       }
+
+      if (mode === 'spv') {
+        Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
+        Store.dispatch(shepherdElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
+      }
     }
   }
 
@@ -124,13 +131,15 @@ class CoinTileItem extends React.Component {
       setTimeout(() => {
         this.dispatchCoinActions(coin, mode);
       }, 100);
-      if (mode === 'native') { // faster coin data load if fully synced
+
+      if (mode === 'native' ||
+          mode === 'spv') { // faster coin data load if fully synced
         setTimeout(() => {
           this.dispatchCoinActions(coin, mode);
         }, 1000);
       }
 
-      if (!this.props.Interval.interval.sync) {
+      if (this.props.Interval.interval.sync) {
         Store.dispatch(
           stopInterval(
             'sync',
@@ -142,10 +151,32 @@ class CoinTileItem extends React.Component {
       if (mode === 'native') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
-        }, IGUNA_ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE);
+        }, ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE);
+
+        Store.dispatch(startInterval('sync', _iguanaActiveHandle));
+      } else if (mode === 'spv') {
+        const _iguanaActiveHandle = setInterval(() => {
+          this.dispatchCoinActions(coin, mode);
+        }, SPV_DASHBOARD_UPDATE_TIMEOUT);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       }
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.props &&
+        this.props.Dashboard &&
+        this.props.Dashboard.eletrumServerChanged &&
+        this.props.ActiveCoin.mode === 'spv' &&
+        this.props.Dashboard &&
+        this.props.Dashboard.activeSection === 'wallets') {
+      Store.dispatch(shepherdElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(electrumServerChanged(false));
+      setTimeout(() => {
+        Store.dispatch(electrumServerChanged(false));
+      }, 100);
     }
   }
 
@@ -153,10 +184,12 @@ class CoinTileItem extends React.Component {
     return CoinTileItemRender.call(this);
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
       coin: state.ActiveCoin.coin,
+      mode: state.ActiveCoin.mode,
       addresses: state.ActiveCoin.addresses,
       mainBasiliskAddress: state.ActiveCoin.mainBasiliskAddress,
       progress: state.ActiveCoin.progress,
