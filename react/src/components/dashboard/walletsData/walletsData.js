@@ -20,8 +20,9 @@ import {
   TxTypeRender,
   TxAmountRender,
   TxHistoryListRender,
+  TxConfsRender,
   AddressListRender,
-  WalletsDataRender
+  WalletsDataRender,
 } from  './walletsData.render';
 import { secondsToString } from '../../../util/time';
 
@@ -126,14 +127,16 @@ class WalletsData extends React.Component {
   generateItemsListColumns() {
     let columns = [];
 
-    columns.push({
-      Header: translate('INDEX.TYPE'),
-      Footer: translate('INDEX.TYPE'),
-      className: 'colum--type',
-      headerClassName: 'colum--type',
-      footerClassName: 'colum--type',
-      Cell: AddressTypeRender(),
-    });
+    if (this.props.ActiveCoin.mode === 'native') {
+      columns.push({
+        Header: translate('INDEX.TYPE'),
+        Footer: translate('INDEX.TYPE'),
+        className: 'colum--type',
+        headerClassName: 'colum--type',
+        footerClassName: 'colum--type',
+        Cell: AddressTypeRender(),
+      });
+    }
 
     columns.push(...[
     {
@@ -146,12 +149,13 @@ class WalletsData extends React.Component {
       accessor: (tx) => TxTypeRender.call(this, tx.category || tx.type),
     },
     {
+      id: 'confirmations',
       Header: translate('INDEX.CONFIRMATIONS'),
       Footer: translate('INDEX.CONFIRMATIONS'),
       headerClassName: 'hidden-xs hidden-sm',
       footerClassName: 'hidden-xs hidden-sm',
       className: 'hidden-xs hidden-sm',
-      accessor: 'confirmations',
+      accessor: (tx) => TxConfsRender.call(this, tx.confirmations),
     },
     {
       id: 'amount',

@@ -195,8 +195,10 @@ class WalletsProgress extends React.Component {
         if (temp[i].indexOf('height=') > -1) {
           currentBestChain = temp[i].replace('height=', '');
         }
+
         if (temp[i].indexOf('progress=') > -1) {
           currentProgress = Number(temp[i].replace('progress=', '')) * 1000;
+
           if (currentProgress > 100) {
             currentProgress = Number(temp[i].replace('progress=', '')) * 100;
           }

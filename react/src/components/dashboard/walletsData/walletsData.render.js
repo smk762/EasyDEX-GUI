@@ -5,6 +5,20 @@ import TablePaginationRenderer from './pagination';
 import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
 
+export const TxConfsRender = function(confs) {
+  if (Number(confs) > -1) {
+    return (
+      <span>{ confs }</span>
+    );
+  } else {
+    return (
+      <i
+        className="icon fa-warning color-warning margin-right-5"
+        title="Transaction failed or block reindexing is in progress. Failed transactions usually rejected after a while resulting in your funds being credited back."></i>
+    );
+  }
+}
+
 export const AddressTypeRender = function() {
   return (
     <span>

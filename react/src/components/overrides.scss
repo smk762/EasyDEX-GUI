@@ -473,3 +473,13 @@ select{
 .win-sync-workaround-btn {
   padding: 4px 7px;
 }
+
+.send-coin-sync-warning {
+  .icon {
+    font-size: 18px;
+  }
+  .desc {
+    position: relative;
+    top: -2px;
+  }
+}
