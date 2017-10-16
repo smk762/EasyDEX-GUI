@@ -229,7 +229,7 @@ class WalletsProgress extends React.Component {
         _progress.code &&
         _progress.code === -28 &&
         this.props.Settings.debugLog) {
-      if (_progress.message == 'Activating best chain...') {
+      if (_progress.message === 'Activating best chain...') {
         const _parseProgress = this.parseActivatingBestChainProgress();
 
         if (_parseProgress &&
@@ -264,7 +264,7 @@ class WalletsProgress extends React.Component {
 
   renderRescanProgress() {
     if (this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
-        this.props.ActiveCoin.rescanInProgress) {
+        ((this.props.ActiveCoin.rescanInProgress) || (this.props.ActiveCoin.progress && this.props.ActiveCoin.progress.code && this.props.ActiveCoin.progress.code === -28 && this.props.ActiveCoin.progress.message === 'Rescanning...'))) {
       const temp = this.props.Settings.debugLog.split(' ');
       let currentProgress;
 
