@@ -483,3 +483,13 @@ select{
     top: -2px;
   }
 }
+
+.dropdown-toggle {
+  &.disabled {
+    opacity: 1;
+    cursor: default !important;
+  }
+  .bs-caret {
+    display: none;
+  }
+}

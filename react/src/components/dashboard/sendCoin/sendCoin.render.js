@@ -7,8 +7,7 @@ export const AddressListRender = function() {
     <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
       <button
         type="button"
-        className="btn dropdown-toggle btn-info"
-        title="Select private address"
+        className={ 'btn dropdown-toggle btn-info' + (this.props.ActiveCoin.mode === 'spv' ? ' disabled' : '') }
         onClick={ this.openDropMenu }>
         <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>
         <span className="bs-caret">
