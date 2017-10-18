@@ -131,7 +131,14 @@ class ReceiveCoin extends React.Component {
         let items = [];
 
         items.push(
-          AddressItemRender.call(this, { address: this.props.electrumCoins[this.props.coin].pub, amount: this.props.balance.balance }, 'public')
+          AddressItemRender.call(
+            this,
+            {
+              address: this.props.electrumCoins[this.props.coin].pub,
+              amount: this.props.balance.balance
+            },
+            'public'
+          )
         );
 
         return items;

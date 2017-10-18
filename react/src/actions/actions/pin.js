@@ -21,7 +21,7 @@ export function encryptPassphrase(passphrase, key, pubKey) {
       },
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -58,7 +58,7 @@ export function loginWithPin(key, pubKey) {
       },
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -83,7 +83,7 @@ export function loadPinList() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

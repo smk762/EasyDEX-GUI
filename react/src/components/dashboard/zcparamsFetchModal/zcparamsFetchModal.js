@@ -43,7 +43,7 @@ class ZcparamsFetchModal extends React.Component {
       proving: 0,
       verifying: 0,
     };
-    _updateLog.push(`Downloading Zcash keys...`);
+    _updateLog.push(`${ translate('ZCPARAMS_FETCH.DOWNLOADING_ZCASH_KEYS') }...`);
     this.setState(Object.assign({}, this.state, {
       updateLog: _updateLog,
       done: false,
@@ -107,8 +107,8 @@ class ZcparamsFetchModal extends React.Component {
 
           if (data.msg.file === 'proving') {
             _updateLog = [];
-            _updateLog.push('Both Zcash param keys are downloaded and verified!');
-            _updateLog.push('Please restart the app.');
+            _updateLog.push(translate('ZCPARAMS_FETCH.BOTH_KEYS_VERIFIED'));
+            _updateLog.push(translate('ZCPARAMS_FETCH.PLEASE_RESTART'));
             this.setState(Object.assign({}, this.state, {
               updateLog: _updateLog,
               done: true,
@@ -122,7 +122,7 @@ class ZcparamsFetchModal extends React.Component {
         } else if (data.msg.status === 'error') {
           let _updateLog = this.state.updateLog;
 
-          _updateLog.push(`Zcash param ${data.msg.file} verification error!`);
+          _updateLog.push(`${translate('ZCPARAMS_FETCH.ZCPARAMS_VERIFICATION_ERROR_P1')} ${data.msg.file} ${translate('ZCPARAMS_FETCH.ZCPARAMS_VERIFICATION_ERROR_P2')}`);
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
             done: true,

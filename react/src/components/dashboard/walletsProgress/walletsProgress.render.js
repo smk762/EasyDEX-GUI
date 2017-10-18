@@ -113,14 +113,14 @@ export const ChainActivationNotificationRender = function() {
           this.props.ActiveCoin.mode === 'native' &&
           this.props.ActiveCoin.coin === 'KMD' &&
           <div className="alert alert-warning alert-dismissible margin-bottom-50">
-            <p>Slow sync speed on Windows? Try this workaround.</p>
-            <p>It will add maxconnections=1 in komodo.conf file and force close the app.</p>
-            <p className="padding-bottom-15">Please run the app again after that.</p>
+            <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P1') }</p>
+            <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P2') }</p>
+            <p className="padding-bottom-15">{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P3') }</p>
             <button
               type="button"
               className="btn btn-info waves-effect waves-light win-sync-workaround-btn"
               onClick={ this.applyWindowsSyncWorkaround }>
-              Apply workaround
+              { translate('DASHBOARD.APPLY_WORKAROUND') }
             </button>
           </div>
         }

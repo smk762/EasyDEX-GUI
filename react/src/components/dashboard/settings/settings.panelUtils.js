@@ -7,13 +7,17 @@ export function toggleSection(sectionId, activeSections, singleOpen) {
   let newActiveSections = activeSections;
 
   newActiveSections.map((section) => {
-    if (section === sectionId) present = true;
+    if (section === sectionId) {
+      present = true;
+    }
+
     return true;
   });
 
   if (!singleOpen) {
     if (present) {
       const pos = newActiveSections.indexOf(sectionId);
+
       newActiveSections.splice(pos, 1);
     } else {
       newActiveSections.push(sectionId);

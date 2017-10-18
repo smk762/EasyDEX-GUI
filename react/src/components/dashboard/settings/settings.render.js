@@ -83,21 +83,29 @@ export const SettingsRender = function() {
                   icon="icon md-info">
                   <AppInfoPanel />
                 </PanelSection>
-                { this.props.Main.coins && this.props.Main.coins.spv && Object.keys(this.props.Main.coins.spv).length && this.props.Main.isLoggedIn &&
+                { this.props.Main.coins &&
+                  this.props.Main.coins.spv &&
+                  Object.keys(this.props.Main.coins.spv).length &&
+                  this.props.Main.isLoggedIn &&
                   <PanelSection
                     title={ translate('INDEX.EXPORT_KEYS') }
                     icon="icon md-key">
                     <ExportKeysPanel />
                   </PanelSection>
                 }
-                { this.props.Main.coins && this.props.Main.coins.spv && Object.keys(this.props.Main.coins.spv).length && this.displaySPVServerListTab() &&
+                { this.props.Main.coins &&
+                  this.props.Main.coins.spv &&
+                  Object.keys(this.props.Main.coins.spv).length &&
+                  this.displaySPVServerListTab() &&
                   <PanelSection
                     title={ translate('SETTINGS.SPV_SERVERS') }
                     icon="icon fa-server">
                     <SPVServersPanel />
                   </PanelSection>
                 }
-                { this.props.Main.coins && this.props.Main.coins.native && Object.keys(this.props.Main.coins.native).length > 0 &&
+                { this.props.Main.coins &&
+                  this.props.Main.coins.native &&
+                  Object.keys(this.props.Main.coins.native).length > 0 &&
                   <PanelSection
                     title="CLI"
                     icon="icon fa-code">
@@ -110,7 +118,7 @@ export const SettingsRender = function() {
                   <AppUpdatePanel />
                 </PanelSection>
                 <PanelSection
-                  title="Support"
+                  title={ translate('SETTINGS.SUPPORT') }
                   icon="icon fa fa-life-ring">
                   <SupportPanel />
                 </PanelSection>

@@ -30,7 +30,10 @@ class Panel extends React.Component {
     };
 
     const initialStateSections = Utils.setupAccordion(settings).activeSections;
-    this.setState({ activeSections: initialStateSections });
+
+    this.setState({
+      activeSections: initialStateSections,
+    });
   }
 
   getChildrenWithProps() {
@@ -41,11 +44,12 @@ class Panel extends React.Component {
     const _children = React.Children.map(children, (child, i) => {
       if (child) {
         const unqId = `panel-sec-${i}`;
+
         return React.cloneElement(child, {
           toggle: (acId) => this.toggleSection(acId),
           key: unqId,
           unq: unqId,
-          active: (this.state.activeSections && this.state.activeSections.lastIndexOf(unqId) !== -1)
+          active: (this.state.activeSections && this.state.activeSections.lastIndexOf(unqId) !== -1),
         });
       }
     });
@@ -57,11 +61,19 @@ class Panel extends React.Component {
     const newActive = Utils.toggleSection(
       sectionId,
       this.state.activeSections,
-      this.state.singleOpen);
+      this.state.singleOpen
+    );
 
-    this.setState({
-      activeSections: newActive
-    });
+    if (this.state.activeSections &&
+        this.state.activeSections[0] === sectionId) {
+      this.setState({
+        activeSections: [],
+      });
+    } else {
+      this.setState({
+        activeSections: newActive,
+      });
+    }
   }
 
   render() {
@@ -75,7 +87,9 @@ class Panel extends React.Component {
     const uniqId = propId || '';
 
     return(
-      <div className={accordionClasses} id={uniqId}>
+      <div
+        className={accordionClasses}
+        id={uniqId}>
         {childrenWithProps}
       </div>
     );

@@ -35,11 +35,12 @@ class InvoiceModal extends React.Component {
 
   saveAsImage(e) {
     if (this.state.qrAddress !== '-1') {
-      const qrCanvas = document.getElementById("qrCanvas");
+      const qrCanvas = document.getElementById('qrCanvas');
       const canvas = qrCanvas.getElementsByTagName('canvas');
       const dataURL = canvas[0].toDataURL();
       const a = document.getElementById('saveImage');
       const time = new Date().getTime();
+
       a.href = dataURL;
       a.download = this.state.qrAddress + '_' + time;
     } else {
@@ -102,7 +103,14 @@ class InvoiceModal extends React.Component {
         let items = [];
 
         items.push(
-          AddressItemRender.call(this, { address: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub, amount: this.props.ActiveCoin.balance.balance }, 'public')
+          AddressItemRender.call(
+            this,
+            {
+              address: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+              amount: this.props.ActiveCoin.balance.balance
+            },
+            'public'
+          )
         );
 
         return items;

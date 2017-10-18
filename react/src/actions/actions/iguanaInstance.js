@@ -11,7 +11,7 @@ export function restartIguanaInstance(pmid) {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -38,7 +38,7 @@ export function startIguanaInstance(mode, coin) {
         coin,
       }),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -61,7 +61,7 @@ export function getIguanaInstancesList() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

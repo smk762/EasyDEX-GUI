@@ -9,7 +9,7 @@ export function shepherdGetCoinList() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -33,7 +33,7 @@ export function shepherdPostCoinList(data) {
       },
       body: JSON.stringify({ 'payload': data }),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

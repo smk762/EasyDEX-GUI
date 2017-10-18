@@ -369,7 +369,7 @@ class Jumblr extends React.Component {
             }));
             Store.dispatch(
               triggerToaster(
-                translate('TOASTR.JUMBLR_DEPOSIT_ADDRESS_SET') + ' to ' + _genKeys.address,
+                `${translate('TOASTR.JUMBLR_DEPOSIT_ADDRESS_SET')} ${translate('JUMBLR.TO_SM')} ${_genKeys.address}`,
                 'Jumblr',
                 'success',
                 false

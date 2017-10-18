@@ -12,22 +12,29 @@ class PanelSection extends React.Component {
 
   componentDidMount() {
     const { active } = this.props;
-    if (active) this.setState({sectionHeight: this.accordionContent.scrollHeight});
+
+    if (active) {
+      this.setState({
+        sectionHeight: this.accordionContent.scrollHeight,
+      });
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(this.props.active) {
+  componentWillReceiveProps(props) {
+    if (this.props.active) {
       this.setState({
         sectionHeight: 'auto',
       });
     }
-    if (nextProps.active !== this.props.active) {
-      this.toggleOpen(nextProps.active);
+
+    if (props.active !== this.props.active) {
+      this.toggleOpen(props.active);
     }
   }
 
   getHeight() {
     const { active } = this.props;
+
     return (active) ? this.accordionContent.scrollHeight : 0;
   }
 
@@ -41,6 +48,7 @@ class PanelSection extends React.Component {
 
   toggleOpen(active) {
     const height = (active) ? `${this.accordionContent.scrollHeight}px` : 0;
+
     this.setState({
       sectionHeight: height,
     });
@@ -70,13 +78,18 @@ class PanelSection extends React.Component {
     });
 
     return(
-      <div className={triggerClasses} onClick={() => this.toggleSection()}>
+      <div
+        className={triggerClasses}
+        onClick={() => this.toggleSection()}>
         <div className="panel-heading">
-          <a className='panel-title'>
+          <a className="panel-title">
             <i className={icon}></i> {title}
           </a>
         </div>
-        <div className={contentClasses} style={contentStyles} ref={(ref) => this.accordionContent = ref}>
+        <div
+          className={contentClasses}
+          style={contentStyles}
+          ref={(ref) => this.accordionContent = ref}>
           <div className="panel-body">
             {children}
           </div>

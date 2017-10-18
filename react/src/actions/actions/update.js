@@ -9,7 +9,7 @@ export function checkForUpdateUIPromise() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -32,7 +32,7 @@ export function updateUIPromise() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -55,7 +55,7 @@ export function downloadZCashParamsPromise(dloption) {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

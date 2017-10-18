@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import WalletsNativeRender from './walletsNative.render';
+import WalletsMainRender from './walletsMain.render';
 import { translate } from '../../../translate/translate';
 import { triggerToaster } from '../../../actions/actionCreators';
 import { getCoinTitle } from '../../../util/coinHelper';
@@ -12,12 +12,9 @@ import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
-class WalletsNative extends React.Component {
+class WalletsMain extends React.Component {
   constructor() {
     super();
-    this.state = {
-      nativeOnly: Config.iguanaLessMode,
-    };
     this.getCoinStyle = this.getCoinStyle.bind(this);
     socket.on('service', msg => this.updateSocketsData(msg));
   }
@@ -59,22 +56,13 @@ class WalletsNative extends React.Component {
     }
   }
 
-  isActiveCoinModeNative() {
-    return this.props &&
-      this.props.ActiveCoin &&
-      this.props.ActiveCoin.mode === 'native';
-  }
-
   render() {
-    //if (this.isActiveCoinModeNative()) {
-    if (this.props.ActiveCoin && this.props.ActiveCoin.mode) {
-      return WalletsNativeRender.call(this);
+    if (this.props.ActiveCoin &&
+        this.props.ActiveCoin.mode) {
+      return WalletsMainRender.call(this);
     } else {
       return null;
     }
-    /*} else {
-      return null;
-    }*/
   }
 }
 
@@ -87,4 +75,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(WalletsNative);
+export default connect(mapStateToProps)(WalletsMain);

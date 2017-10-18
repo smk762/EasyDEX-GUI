@@ -22,11 +22,11 @@ const NavbarRender = function() {
             src="assets/images/agama-logo-side.svg"
             height="100"
             width="100"
-            title="Agama Wallet" />
+            title={ translate('ABOUT.AGAMA_WALLET') } />
           <img
             className="navbar-brand-logo hidden-md hidden-sm hidden-lg"
             src="assets/images/agama-icon.svg"
-            title="Agama Wallet white" />
+            title={ translate('ABOUT.AGAMA_WALLET') } />
           <span className="navbar-brand-text hidden-xs"></span>
         </div>
         <button
@@ -57,14 +57,17 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
-            { this.props.ActiveCoin && (/*this._checkAC() || */this.props.ActiveCoin.coin === 'KMD' && this.props.ActiveCoin.mode === 'native') &&
+            { this.props.ActiveCoin &&
+              (/*this._checkAC() || */this.props.ActiveCoin.coin === 'KMD' &&
+                this.props.ActiveCoin.mode === 'native') &&
               <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr
                 </a>
               </li>
             }
-            { this.props.ActiveCoin.coin !== 'CHIPS' && this.props.ActiveCoin.mode !== 'spv' &&
+            { this.props.ActiveCoin.coin !== 'CHIPS' &&
+              this.props.ActiveCoin.mode !== 'spv' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
                   <i className="site-menu-icon"></i> { translate('IMPORT_KEY.IMPORT_KEY') }
@@ -91,7 +94,7 @@ const NavbarRender = function() {
                 <span className="avatar avatar-online">
                   <img
                     src="assets/images/iguana_profile_02.jpg"
-                    alt="iguana profile pic" />
+                    alt="iguana" />
                   <i></i>
                 </span>
               </a>

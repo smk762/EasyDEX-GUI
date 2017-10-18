@@ -31,7 +31,7 @@ body.agama-default-window-height {
 }
 
 body.closing-window-height {
-  height: 300px;
+  height: 320px;
 }
 
 body.agama-app-settings-window {
@@ -454,4 +454,12 @@ button.toast-close-button {
 .dropdown-menu li {
   cursor: pointer;
   margin: 5px 0;
+}
+
+small {
+  display: block;
+  font-size: 14px;
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
 }

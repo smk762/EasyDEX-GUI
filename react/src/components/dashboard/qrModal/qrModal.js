@@ -63,21 +63,21 @@ class QRModal extends React.Component {
       modalIsOpen: false,
       errorShown: this.state.error ? true : false,
     });
-    
+
     if (this.props.mode === 'scan') {
       ReactDOM.unmountComponentAtNode(document.getElementById('webcam'));
     }
   }
 
   saveAsImage(e) {
-      const qrCanvas = document.getElementById("qrModalCanvas" + this.props.content);
+      const qrCanvas = document.getElementById('qrModalCanvas' + this.props.content);
       const canvas = qrCanvas.getElementsByTagName('canvas');
       const dataURL = canvas[0].toDataURL();
       const a = document.getElementById('saveModalImage' + this.props.content);
       a.href = dataURL;
       a.download = this.props.content;
   }
-  
+
   render() {
     if (this.props.mode === 'scan') {
       return QRModalReaderRender.call(this);

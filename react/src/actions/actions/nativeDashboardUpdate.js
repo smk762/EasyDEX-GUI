@@ -16,7 +16,7 @@ export function getDashboardUpdate(coin, activeCoinProps) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/native/dashboard/update`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

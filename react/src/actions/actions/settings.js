@@ -24,7 +24,7 @@ export function getAppInfo() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -58,8 +58,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
         )
       );
     }
-  }
-  if (json.error === 'privkey already in wallet') {
+  } else if (json.error === 'privkey already in wallet') {
     return dispatch => {
       dispatch(
         triggerToaster(
@@ -70,6 +69,7 @@ function parseImportPrivKeyResponse(json, dispatch) {
       );
     }
   }
+
   if (json &&
       json.result !== undefined &&
       json.result == 'success') {
@@ -100,7 +100,7 @@ export function importPrivKey(wifKey) {
       method: 'POST',
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -119,7 +119,7 @@ export function importPrivKey(wifKey) {
         )
       );
     })
-    .catch(function(ex) {
+    .catch((ex) => {
       dispatch(parseImportPrivKeyResponse({
         error: 'privkey already in wallet',
       }, dispatch));
@@ -144,7 +144,7 @@ export function getDebugLog(target, linesCount, acName) {
   };
 
   if (acName) {
-    payload['ac'] = acName;
+    payload.ac = acName;
   }
 
   return dispatch => {
@@ -155,7 +155,7 @@ export function getDebugLog(target, linesCount, acName) {
       },
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -183,7 +183,7 @@ export function getPeersList(coin) {
       method: 'POST',
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -229,8 +229,7 @@ function addPeerNodeState(json, dispatch) {
         )
       );
     }
-  }
-  if (json.result === 'peer was already connected') {
+  } else if (json.result === 'peer was already connected') {
     return dispatch => {
       dispatch(
         triggerToaster(
@@ -240,8 +239,7 @@ function addPeerNodeState(json, dispatch) {
         )
       );
     }
-  }
-  if (json.result === 'addnode connection was already pending') {
+  } else if (json.result === 'addnode connection was already pending') {
     return dispatch => {
       dispatch(
         triggerToaster(
@@ -251,8 +249,7 @@ function addPeerNodeState(json, dispatch) {
         )
       );
     }
-  }
-  if (json.result === 'addnode submitted') {
+  } else if (json.result === 'addnode submitted') {
     return dispatch => {
       dispatch(
         triggerToaster(
@@ -279,7 +276,7 @@ export function addPeerNode(coin, ip) {
       method: 'POST',
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -305,7 +302,7 @@ export function saveAppConfig(_payload) {
       },
       body: JSON.stringify({ payload: _payload }),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -344,7 +341,7 @@ export function getAppConfig() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -367,7 +364,7 @@ export function resetAppConfig() {
         'Content-Type': 'application/json',
       },
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

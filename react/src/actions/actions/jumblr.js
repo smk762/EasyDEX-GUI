@@ -24,7 +24,7 @@ function getNewAddress(coin) { // TODO: remove(?)
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -62,7 +62,7 @@ export function setJumblrAddress(coin, type, address) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -100,7 +100,7 @@ function dumpPrivkey(coin, key) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -142,7 +142,7 @@ export function importPrivkey(coin, key, rescan = false) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

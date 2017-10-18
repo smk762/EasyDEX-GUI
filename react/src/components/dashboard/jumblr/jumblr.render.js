@@ -228,7 +228,8 @@ export const JumblrRender = function() {
                       type="button"
                       className="btn btn-info waves-effect waves-light"
                       onClick={ this.generateJumblrDepositAddress }>{ translate('JUMBLR.CREATE_JUMBLR_DEPOSIT_ADDRESS') }</button>
-                    { this.state.jumblrDepositAddress && this.state.jumblrDepositAddress.address &&
+                    { this.state.jumblrDepositAddress &&
+                      this.state.jumblrDepositAddress.address &&
                       <div className="padding-top-40">
                         <strong>{ translate('JUMBLR.YOUR_JUMBLR_DEPOSIT_ADDRESS') }:</strong>
                         <p>
@@ -316,7 +317,8 @@ export const JumblrRender = function() {
                       </span>
                     </div>
                     <div className="col-xlg-12 col-md-12 padding-top-20 nofloat">
-                      { this.state.jumblrSecretAddressShow && this.checkJumblrSecretAddressListLength('gen') &&
+                      { this.state.jumblrSecretAddressShow &&
+                        this.checkJumblrSecretAddressListLength('gen') &&
                         <table className="table table-hover dataTable table-striped">
                           <thead>
                             <tr>
@@ -418,7 +420,8 @@ export const JumblrRender = function() {
                         </span>
                       </div>
                       <div className="col-xlg-12 col-md-12 padding-top-20 nofloat">
-                        { this.state.jumblrSecretAddressShowImport && this.checkJumblrSecretAddressListLength('import') &&
+                        { this.state.jumblrSecretAddressShowImport &&
+                          this.checkJumblrSecretAddressListLength('import') &&
                           <table className="table table-hover dataTable table-striped">
                             <thead>
                               <tr>

@@ -12,7 +12,7 @@ import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
-import WalletsNative from '../walletsNative/walletsNative';
+import WalletsMain from '../walletsMain/walletsMain';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
@@ -37,7 +37,7 @@ const DashboardRender = function() {
           <CoinTile />
           <WalletsNav />
           <WalletsTxInfo />
-          <WalletsNative />
+          <WalletsMain />
           <ClaimInterestModal />
         </div>
         { this.isSectionActive('edex') &&

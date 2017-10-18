@@ -9,7 +9,7 @@ export function shepherdGetSysInfo() {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

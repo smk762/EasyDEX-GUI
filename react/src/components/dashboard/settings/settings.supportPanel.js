@@ -35,7 +35,7 @@ class SupportPanel extends React.Component {
               onClick={ () => this.openExternalWindow('http://support.supernet.org') }>
               <img
                 src="assets/images/cryptologo/supernet.png"
-                alt="Support tickets" />
+                alt={ translate('SETTINGS.SUPPORT_TICKETS') } />
               <div className="support-box-title">{ translate('SETTINGS.SUPPORT_TICKETS') }</div>
               <div className="support-box-link">support.supernet.org</div>
             </div>
@@ -57,7 +57,7 @@ class SupportPanel extends React.Component {
               onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>
               <img
                 src="assets/images/support/slack-invite-icon.png"
-                alt="Slack invite" />
+                alt={ translate('SETTINGS.GET_SLACK_INVITE') } />
               <div className="support-box-title">{ translate('SETTINGS.GET_SLACK_INVITE') }</div>
               <div className="support-box-link">slackinvite.supernet.org</div>
             </div>

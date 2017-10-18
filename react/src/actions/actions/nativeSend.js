@@ -61,7 +61,7 @@ export function sendNativeTx(coin, _payload) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -71,11 +71,11 @@ export function sendNativeTx(coin, _payload) {
         )
       );
     })
-    .then(function(response) {
-      const _response = response.text().then(function(text) { return text; });
+    .then((response) => {
+      const _response = response.text().then((text) => { return text; });
       return _response;
     })
-    .then(function(json) {
+    .then((json) => {
       if (json.indexOf('"code":') > -1) {
         const _message = json.substring(
           `${json.indexOf('"message":"')}11`,
@@ -150,7 +150,7 @@ export function getKMDOPID(opid, coin) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -195,7 +195,7 @@ export function sendToAddressPromise(coin, address, amount) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

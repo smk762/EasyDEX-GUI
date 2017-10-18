@@ -31,7 +31,7 @@ export function activeHandle() {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -43,7 +43,6 @@ export function activeHandle() {
     })
     .then(response => response.json())
     .then(json => {
-      console.log(json);
       dispatch(
         iguanaActiveHandleState(json)
       );
@@ -59,7 +58,7 @@ export function shepherdElectrumAuth(seed) {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -71,7 +70,6 @@ export function shepherdElectrumAuth(seed) {
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       dispatch(activeHandle());
       dispatch(shepherdElectrumCoins());
     });
@@ -86,7 +84,7 @@ export function shepherdElectrumAddCoin(coin) {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -98,7 +96,6 @@ export function shepherdElectrumAddCoin(coin) {
     })
     .then(response => response.json())
     .then(json => {
-      console.log(json);
       dispatch(
         addCoinResult(coin, '0')
       );
@@ -107,10 +104,8 @@ export function shepherdElectrumAddCoin(coin) {
 }
 
 export function addCoin(coin, mode, startupParams) {
-  console.warn(mode);
   if (mode === 0 ||
       mode === '0') {
-    console.warn('spv');
     return dispatch => {
       dispatch(shepherdElectrumAddCoin(coin));
     }
@@ -127,7 +122,7 @@ function handleErrors(response) {
   if (!response.ok) {
     return null;
   } else {
-    _parsedResponse = response.text().then(function(text) { return text; });
+    _parsedResponse = response.text().then((text) => { return text; });
     return _parsedResponse;
   }
 }
@@ -224,7 +219,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
         options: herdData,
       }),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -235,7 +230,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       );
     })
     .then(handleErrors)
-    .then(function(json) {
+    .then((json) => {
       if (json) {
         dispatch(
           addCoinResult(coin, mode)
@@ -275,17 +270,17 @@ export function addCoinResult(coin, mode) {
       dispatch(shepherdElectrumCoins());
        dispatch(getDexCoins());
 
-      setTimeout(function() {
+      setTimeout(() => {
         dispatch(activeHandle());
         dispatch(shepherdElectrumCoins());
         dispatch(getDexCoins());
       }, 500);
-      setTimeout(function() {
+      setTimeout(() => {
         dispatch(activeHandle());
         dispatch(shepherdElectrumCoins());
         dispatch(getDexCoins());
       }, 1000);
-      setTimeout(function() {
+      setTimeout(() => {
         dispatch(activeHandle());
         dispatch(shepherdElectrumCoins());
         dispatch(getDexCoins());
@@ -294,15 +289,15 @@ export function addCoinResult(coin, mode) {
       dispatch(activeHandle());
       dispatch(getDexCoins());
 
-      setTimeout(function() {
+      setTimeout(() => {
         dispatch(activeHandle());
         dispatch(getDexCoins());
       }, 500);
-      setTimeout(function() {
+      setTimeout(() => {
         dispatch(activeHandle());
         dispatch(getDexCoins());
       }, 1000);
-      setTimeout(function() {
+      setTimeout(() => {
         dispatch(activeHandle());
         dispatch(getDexCoins());
       }, 5000);
@@ -319,7 +314,7 @@ export function _shepherdGetConfig(coin, mode, startupParams) {
       },
       body: JSON.stringify({ chain: 'komodod' })
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -354,7 +349,7 @@ export function shepherdGetConfig(coin, mode, startupParams) {
         },
         body: JSON.stringify({ chain: 'komodod' })
       })
-      .catch(function(error) {
+      .catch((error) => {
         console.log(error);
         dispatch(
           triggerToaster(
@@ -385,7 +380,7 @@ export function shepherdGetConfig(coin, mode, startupParams) {
         },
         body: JSON.stringify({ 'chain': coin })
       })
-      .catch(function(error) {
+      .catch((error) => {
         console.log(error);
         dispatch(
           triggerToaster(

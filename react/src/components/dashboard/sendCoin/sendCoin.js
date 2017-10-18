@@ -274,14 +274,12 @@ class SendCoin extends React.Component {
       return (
         <i>{ translate('SEND.AWAITING') }...</i>
       );
-    }
-    if (opid.status === 'executing') {
+    } else if (opid.status === 'executing') {
       isWaitingStatus = false;
       return (
         <i>{ translate('SEND.PROCESSING') }...</i>
       );
-    }
-    if (opid.status === 'failed') {
+    } else if (opid.status === 'failed') {
       isWaitingStatus = false;
       return (
         <span>
@@ -290,8 +288,7 @@ class SendCoin extends React.Component {
           <strong>{ translate('KMD_NATIVE.MESSAGE') }:</strong> <span>{ opid.error.message }</span>
         </span>
       );
-    }
-    if (opid.status === 'success') {
+    } else if (opid.status === 'success') {
       isWaitingStatus = false;
       return (
         <span>
@@ -301,6 +298,7 @@ class SendCoin extends React.Component {
         </span>
       );
     }
+
     if (isWaitingStatus) {
       return (
         <span>{ translate('SEND.WAITING') }...</span>
@@ -390,8 +388,7 @@ class SendCoin extends React.Component {
             this.state.amount * 100000000,
             this.state.sendTo,
             this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
-          )
-          .then((sendPreflight) => {
+          ).then((sendPreflight) => {
             if (sendPreflight &&
                 sendPreflight.msg === 'success') {
               this.setState(Object.assign({}, this.state, {
@@ -440,8 +437,6 @@ class SendCoin extends React.Component {
         }, 1000);
       }
     } else if (this.props.ActiveCoin.mode === 'spv') {
-      console.warn('spv send');
-      console.warn(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub);
       // no op
       if (this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) {
         Store.dispatch(
@@ -475,12 +470,6 @@ class SendCoin extends React.Component {
         );
         valid = false;
       }
-
-      console.warn('send val ' + this.state.amount);
-      console.warn('send val sats ' + _amountSats);
-
-      console.warn(`balance ${this.props.ActiveCoin.balance.balanceSats}`);
-      console.warn(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].txfee);
     }
 
     if (!this.state.sendTo ||
@@ -560,7 +549,7 @@ class SendCoin extends React.Component {
         this.props.ActiveCoin.progress.blocks &&
         this.props.ActiveCoin.progress.longestchain > 0 &&
         this.props.ActiveCoin.progress.blocks > 0 &&
-        Number(this.state.prevProgress.blocks) * 100 / Number(this.state.prevProgress.longestchain) === 100) {
+        Number(this.props.ActiveCoin.progress.blocks) * 100 / Number(this.props.ActiveCoin.progress.longestchain) === 100) {
       return true;
     }
   }

@@ -23,7 +23,7 @@ export function getListUnspent(coin) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -64,7 +64,7 @@ export function getRawTransaction(coin, txid) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

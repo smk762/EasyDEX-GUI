@@ -17,7 +17,7 @@ export function shepherdCliPromise(mode, chain, cmd) {
       },
       body: JSON.stringify({ payload: _payload }),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -47,7 +47,7 @@ export function shepherdCli(mode, chain, cmd) {
       },
       body: JSON.stringify({ 'payload': _payload }),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

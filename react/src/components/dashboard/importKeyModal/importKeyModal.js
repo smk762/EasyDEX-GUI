@@ -142,7 +142,7 @@ class ImportKeyModal extends React.Component {
           Store.dispatch(getDashboardUpdateState(null, this.props.ActiveCoin.coin, true));
           Store.dispatch(
             triggerToaster(
-              'Address imported. Wallet rescan is in progress. Please wait until it is finished.',
+              translate('INDEX.ADDRESS_IMPORTED_RESCAN_IN_PROGRESS'),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -163,10 +163,9 @@ class ImportKeyModal extends React.Component {
       if (!json.id &&
           !json.result &&
           !json.error) {
-        // console.warn('importPrivkey', json);
         Store.dispatch(
           triggerToaster(
-            rescan ? 'Wallet rescan finished' : 'Address imported',
+            rescan ? translate('INDEX.WALLET_RESCAN_FINISHED') : translate('INDEX.ADDRESS_IMPORTED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
             false
@@ -203,7 +202,7 @@ class ImportKeyModal extends React.Component {
     } else {
       Store.dispatch(
         triggerToaster(
-          'Empty passphrase field',
+          translate('INDEX.EMPTY_PASSPHRASE_FIELD'),
           'Error',
           'error'
         )

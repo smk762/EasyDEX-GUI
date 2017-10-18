@@ -120,9 +120,11 @@ export const _SendFormRender = function() {
             { this.props.ActiveCoin.coin }
           </span>
         </div>
-        { !this.isFullySynced() && this.props.ActiveCoin && this.props.ActiveCoin.mode === 'native' &&
+        { !this.isFullySynced() &&
+          this.props.ActiveCoin &&
+          this.props.ActiveCoin.mode === 'native' &&
           <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
-            <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">Your wallet is not fully synced! Please wait until it reached 100% to avoid possible transaction send implications.</span>
+            <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
           </div>
         }
         <div className="col-lg-12">
@@ -221,14 +223,14 @@ export const SendRender = function() {
                 </div>
               }
               { this.state.spvPreflightSendInProgress &&
-                <div className="padding-top-20">Verifying transaction data...</div>
+                <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
               }
               { this.state.spvVerificationWarning &&
                 <div
                   className="padding-top-20"
                   style={{ fontSize: '15px' }}>
-                  <strong className="color-warning">Warning:</strong> your wallet data is verified only by a single server!<br />
-                  If you still want to continue press "Confirm".
+                  <strong className="color-warning">{ translate('SEND.WARNING') }:</strong> { translate('SEND.WARNING_SPV_P1') }<br />
+                  { translate('SEND.WARNING_SPV_P2') }
                 </div>
               }
               <div className="widget-body-footer">
@@ -267,28 +269,28 @@ export const SendRender = function() {
                     <tbody>
                       <tr>
                         <td className="padding-left-30">
-                        Result
+                        { translate('SEND.RESULT') }
                         </td>
                         <td className="padding-left-30">
-                          <span className="label label-success">success</span>
+                          <span className="label label-success">{ translate('SEND.SUCCESS_SM') }</span>
                         </td>
                       </tr>
                       <tr>
-                        <td className="padding-left-30">Transaction ID</td>
+                        <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
                         <td className="padding-left-30">{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }</td>
                       </tr>
                     </tbody>
                   </table>
                 }
                 { !this.state.lastSendToResponse &&
-                  <div className="padding-left-30 padding-top-10">Processing transaction...</div>
+                  <div className="padding-left-30 padding-top-10">{ translate('SEND.PROCESSING_TX') }...</div>
                 }
                 { this.state.lastSendToResponse &&
                   this.state.lastSendToResponse.msg &&
                   this.state.lastSendToResponse.msg === 'error' &&
                   <div className="padding-left-30 padding-top-10">
                     <div>
-                      <strong>Error</strong>
+                      <strong>{ translate('INDEX.ERROR') }</strong>
                     </div>
                     <div>{ this.state.lastSendToResponse.result }</div>
                   </div>

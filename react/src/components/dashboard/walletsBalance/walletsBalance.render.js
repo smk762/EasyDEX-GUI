@@ -19,7 +19,8 @@ const WalletsBalanceRender = function() {
                 <div className="padding-20 padding-top-10">
                   <div className="clearfix">
                     <div className="pull-left padding-vertical-10">
-                      { this.props.ActiveCoin.coin !== 'CHIPS' && this.props.ActiveCoin.mode !== 'spv' &&
+                      { this.props.ActiveCoin.coin !== 'CHIPS' &&
+                        this.props.ActiveCoin.mode !== 'spv' &&
                         <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
                       }
                       { this.props.ActiveCoin.coin === 'CHIPS' || this.props.ActiveCoin.mode === 'spv' ? translate('INDEX.BALANCE') : translate('INDEX.TRANSPARENT_BALANCE') }

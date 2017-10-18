@@ -25,7 +25,7 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -48,7 +48,7 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
       );
       dispatch(getDashboardUpdate(coin, mode));
     })
-    .catch(function(ex) {
+    .catch((ex) => {
       dispatch(
         triggerToaster(
           json.result ? json.result : json,

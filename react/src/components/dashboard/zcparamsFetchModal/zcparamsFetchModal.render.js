@@ -14,14 +14,12 @@ const ZcparamsFetchModalRender = function() {
                 onClick={ this.dismiss }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white">ZCash Params Fetch</h4>
+              <h4 className="modal-title white">{ translate('ZCPARAMS_FETCH.ZCPARAMS_FETCH') }</h4>
             </div>
             <div className="modal-body">
               <div className="vertical-align text-center">
                 <div className="page-content vertical-align-middle">
-                  <div>
-                    Select resource to download Zcash params keys from
-                  </div>
+                  <div>{ translate('ZCPARAMS_FETCH.SELECT_ZCPARAMS_SOURCE') }</div>
                   <div className="form-group floating padding-top-15 padding-bottom-15">
                     <div className="col-sm-12 center padding-top-10">
                       <div className="col-sm-6">
@@ -40,7 +38,7 @@ const ZcparamsFetchModalRender = function() {
                         <button
                           type="button"
                           className="btn btn-primary btn-block"
-                          onClick={ this._downloadZCashParamsPromise }>Download</button>
+                          onClick={ this._downloadZCashParamsPromise }>{ translate('ZCPARAMS_FETCH.DOWNLOAD') }</button>
                       </div>
                     </div>
                   </div>

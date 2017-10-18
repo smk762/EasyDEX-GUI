@@ -18,7 +18,7 @@ export function shepherdElectrumSetServer(coin, address, port) {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -30,7 +30,6 @@ export function shepherdElectrumSetServer(coin, address, port) {
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       resolve(json);
     });
   });
@@ -44,7 +43,7 @@ export function shepherdElectrumCheckServerConnection(address, port) {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -56,7 +55,6 @@ export function shepherdElectrumCheckServerConnection(address, port) {
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       if (!json.result) {
         resolve('error');
       } else {
@@ -74,7 +72,7 @@ export function shepherdElectrumKeys(seed) {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -86,7 +84,6 @@ export function shepherdElectrumKeys(seed) {
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       if (!json.result) {
         resolve('error');
       } else {
@@ -104,7 +101,7 @@ export function shepherdElectrumBalance(coin, address) {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -116,7 +113,6 @@ export function shepherdElectrumBalance(coin, address) {
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       dispatch(shepherdElectrumBalanceState(json));
     });
   }
@@ -137,7 +133,7 @@ export function shepherdElectrumTransactions(coin, address) {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -149,7 +145,6 @@ export function shepherdElectrumTransactions(coin, address) {
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       dispatch(shepherdElectrumTransactionsState(json));
     });
   }
@@ -179,7 +174,7 @@ export function shepherdElectrumCoins() {
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -191,7 +186,6 @@ export function shepherdElectrumCoins() {
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       dispatch(shepherdElectrumCoinsState(json));
     });
   }
@@ -213,7 +207,7 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -225,7 +219,6 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       if (json.msg === 'error') {
         dispatch(sendToAddressState(json));
       } else {
@@ -243,7 +236,7 @@ export function shepherdElectrumSendPreflight(coin, value, sendToAddress, change
         'Content-Type': 'application/json',
       }
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -255,9 +248,7 @@ export function shepherdElectrumSendPreflight(coin, value, sendToAddress, change
     })
     .then(response => response.json())
     .then(json => {
-      console.warn(json);
       resolve(json);
-      // dispatch(sendToAddressState(json.result));
     });
   });
 }

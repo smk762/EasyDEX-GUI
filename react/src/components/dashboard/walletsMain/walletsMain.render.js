@@ -6,7 +6,7 @@ import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsData from '../walletsData/walletsData';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 
-const WalletsNativeRender = function() {
+const WalletsMainRender = function() {
   return (
     <div className="page margin-left-0">
       <div className="padding-top-0">
@@ -44,4 +44,4 @@ const WalletsNativeRender = function() {
   );
 };
 
-export default WalletsNativeRender;
+export default WalletsMainRender;

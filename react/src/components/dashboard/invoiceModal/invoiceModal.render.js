@@ -59,8 +59,8 @@ export const InvoiceModalRender = function() {
                           onChange={ this.updateInput } />
                       </form>
                     </div>
-                    <div 
-                      id="qrCanvas" 
+                    <div
+                      id="qrCanvas"
                       className="col-lg-4 text-center">
                       <QRCode
                         value={ this.state.content }
@@ -99,7 +99,8 @@ export const InvoiceModalRender = function() {
 export const InvoiceModalButtonRender = function() {
   return (
     <span>
-      <button type="button"
+      <button
+        type="button"
         className="btn btn-success waves-effect waves-light margin-right-10"
         onClick={ this.openModal }>
           <i className="icon fa-file-text-o"></i>&nbsp;
@@ -111,7 +112,9 @@ export const InvoiceModalButtonRender = function() {
 
 export const AddressItemRender = function(address, type) {
   return (
-    <option key={ address.address } value={ address.address }>
+    <option
+      key={ address.address }
+      value={ address.address }>
       { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
        &nbsp; ({ translate('INDEX.BALANCE') }: { address.amount })
     </option>

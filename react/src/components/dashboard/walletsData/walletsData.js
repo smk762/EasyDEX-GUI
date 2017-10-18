@@ -220,22 +220,17 @@ class WalletsData extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
     } else if (this.props.ActiveCoin.mode === 'spv') {
-      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(
+        shepherdElectrumTransactions(
+          this.props.ActiveCoin.coin,
+          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        )
+      );
     }
   }
 
   toggleTxInfoModal(display, txIndex) {
     Store.dispatch(toggleDashboardTxInfoModal(display, txIndex));
-  }
-
-  indexTxHistory(txhistoryArr) {
-    if (txhistoryArr.length > 1) {
-      for (let i = 0; i < txhistoryArr.length; i++) {
-        this.props.ActiveCoin.txhistory[i].index = i + 1;
-      }
-    }
-
-    return this.props.ActiveCoin.txhistory;
   }
 
   componentWillReceiveProps(props) {
@@ -315,10 +310,10 @@ class WalletsData extends React.Component {
       return (
         <tr className="hover--none">
           <td colSpan="7" className="table-cell-offset-16 color-warning">
-            Connection error!
+            { translate('DASHBOARD.SPV_CONN_ERROR') }
             <span className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
-            <br/>Try to connect to another SPV server.
-            <br/>To do that go to "Settings", select "SPV Server List" tab, choose new server and click "OK".
+            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_SPV1') }
+            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_SPV2') }
             </span>
           </td>
         </tr>
@@ -474,9 +469,7 @@ class WalletsData extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        //this.props.ActiveCoin.mode === 'native' &&
-        this.props.ActiveCoin.activeSection === 'default'
-        ) {
+        this.props.ActiveCoin.activeSection === 'default') {
       return WalletsDataRender.call(this);
     } else {
       return null;

@@ -46,7 +46,12 @@ class WalletsBalance extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
     } else if (this.props.ActiveCoin.mode === 'spv') {
-      Store.dispatch(shepherdElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(
+        shepherdElectrumBalance(
+          this.props.ActiveCoin.coin,
+          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        )
+      );
     }
   }
 
@@ -59,28 +64,9 @@ class WalletsBalance extends React.Component {
     }
 
     if (_mode === 'native') {
-      if (type === 'total' &&
-          this.props.ActiveCoin.balance &&
-          this.props.ActiveCoin.balance.total) {
-        _balance = this.props.ActiveCoin.balance.total;
-      }
-
-      if (type === 'interest' &&
-          this.props.ActiveCoin.progress &&
-          this.props.ActiveCoin.progress.interest) {
-        _balance = this.props.ActiveCoin.progress.interest;
-      }
-
-      if (type === 'private' &&
-          this.props.ActiveCoin.balance &&
-          this.props.ActiveCoin.balance.private) {
-        _balance = this.props.ActiveCoin.balance.private;
-      }
-
-      if (type === 'transparent' &&
-          this.props.ActiveCoin.balance &&
-          this.props.ActiveCoin.balance.transparent) {
-        _balance = this.props.ActiveCoin.balance.transparent;
+      if (this.props.ActiveCoin.balance &&
+          this.props.ActiveCoin.balance[type]) {
+        _balance = this.props.ActiveCoin.balance[type];
       }
     } else if (_mode === 'spv' && this.props.ActiveCoin.balance.balance) {
       if (this.props.ActiveCoin.coin === 'KMD') {
@@ -128,7 +114,6 @@ class WalletsBalance extends React.Component {
     if (this.props &&
         this.props.ActiveCoin &&
         this.props.ActiveCoin.coin &&
-        // TODO the conditions below should be merged when native mode is fully merged into the rest of the components
         this.props.ActiveCoin.activeSection === 'default' &&
         !this.props.ActiveCoin.send &&
         !this.props.ActiveCoin.receive) {

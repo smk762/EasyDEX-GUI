@@ -43,7 +43,8 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { this.props.ActiveCoin.coin === 'KMD' && this.displayClaimInterestUI() &&
+          { this.props.ActiveCoin.coin === 'KMD' &&
+            this.displayClaimInterestUI() &&
             <div>
               <button
                 type="button"
@@ -161,7 +162,7 @@ const WalletsInfoRender = function() {
 
     return (
       <div>
-        <div className="col-xlg-6 col-md-4">
+        <div className="col-xlg-6 col-md-6">
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">{ translate('INDEX.WALLET_INFO') }</h3>
@@ -170,19 +171,19 @@ const WalletsInfoRender = function() {
               <table className="table table-striped">
                 <tbody>
                   <tr>
-                    <td>Server IP</td>
+                    <td>{ translate('INDEX.SPV_SERVER_IP') }</td>
                     <td>
                       { _server.server.ip }
                     </td>
                   </tr>
                   <tr>
-                    <td>Server Port</td>
+                    <td>{ translate('INDEX.SPV_SERVER_PORT') }</td>
                     <td>
                       { _server.server.port }
                     </td>
                   </tr>
                   <tr>
-                    <td>Connection type</td>
+                    <td>{ translate('INDEX.SPV_SERVER_CON_TYPE') }</td>
                     <td>
                       TCP
                     </td>
@@ -209,7 +210,8 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { this.props.ActiveCoin.coin === 'KMD' && this.props.ActiveCoin.mode !== 'spv' &&
+          { this.props.ActiveCoin.coin === 'KMD' &&
+            this.props.ActiveCoin.mode !== 'spv' &&
             <div>
               <button
                 type="button"

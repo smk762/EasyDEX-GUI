@@ -96,26 +96,26 @@ export const ReceiveCoinRender = function() {
                     <div className="panel-actions">
                       <InvoiceModal />
                       { this.props.mode !== 'spv' &&
-                      <div
-                        className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
-                        onClick={ this.openDropMenu }>
-                        <a className="dropdown-toggle white btn btn-warning">
-                          <i className="icon md-arrows margin-right-10"></i> { translate('INDEX.GET_NEW_ADDRESS') }
-                          <span className="caret"></span>
-                        </a>
-                        <ul className="dropdown-menu dropdown-menu-right">
-                          <li>
-                            <a onClick={ () => this.getNewAddress('public') }>
-                              <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
-                            </a>
-                          </li>
-                          <li className={ this.props.coin === 'CHIPS' ? 'hide' : '' }>
-                            <a onClick={ () => this.getNewAddress('private') }>
-                              <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
+                        <div
+                          className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
+                          onClick={ this.openDropMenu }>
+                          <a className="dropdown-toggle white btn btn-warning">
+                            <i className="icon md-arrows margin-right-10"></i> { translate('INDEX.GET_NEW_ADDRESS') }
+                            <span className="caret"></span>
+                          </a>
+                          <ul className="dropdown-menu dropdown-menu-right">
+                            <li>
+                              <a onClick={ () => this.getNewAddress('public') }>
+                                <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
+                              </a>
+                            </li>
+                            <li className={ this.props.coin === 'CHIPS' ? 'hide' : '' }>
+                              <a onClick={ () => this.getNewAddress('private') }>
+                                <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
                       }
                     </div>
                     <h4 className="panel-title">{ translate('INDEX.RECEIVING_ADDRESS') }</h4>

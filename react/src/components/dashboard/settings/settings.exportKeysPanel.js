@@ -38,7 +38,7 @@ class ExportKeysPanel extends React.Component {
       if (keys === 'error') {
         Store.dispatch(
           triggerToaster(
-            'Wrong passphrase!',
+            translate('SETTINGS.WRONG_PASSPHRASE'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )

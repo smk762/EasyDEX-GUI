@@ -63,7 +63,8 @@ export const ImportKeyModalRender = function() {
                       onClick={ this.showPassphraseAddress }>{ translate('IMPORT_KEY.SHOW_ADDRESS_AND_WIF') }</button>
                   </div>
                 </form>
-                { this.state.passphraseAddress && this.state.passphraseWif &&
+                { this.state.passphraseAddress &&
+                  this.state.passphraseWif &&
                   <div className="margin-top-60">
                     <p>
                       <strong>{ translate('IMPORT_KEY.ADDRESS') }: </strong> { this.state.passphraseAddress }

@@ -1,4 +1,4 @@
-// remove
+// spv v2
 
 import { ATOMIC } from '../storeType';
 import { triggerToaster } from '../actionCreators';
@@ -10,7 +10,7 @@ export function atomic(payload) {
       method: 'POST',
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(

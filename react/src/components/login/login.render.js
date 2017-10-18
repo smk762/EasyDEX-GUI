@@ -15,7 +15,7 @@ const LoginRender = function () {
               src="assets/images/agama-login-logo.svg"
               width="200"
               height="160"
-              alt="SuperNET Iguana" />
+              alt="SuperNET Agama" />
           </div>
 
           <div className="login-settings-dropdown margin-bottom-30">
@@ -48,7 +48,7 @@ const LoginRender = function () {
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
             { this.props.Login.pinList.length > 0 &&
-             <span>You can login be entering a login seed or by selecting a pin</span>
+             <span>{ translate('LOGIN.PIN_LOGIN_INFO') }</span>
             }
             <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
@@ -127,44 +127,59 @@ const LoginRender = function () {
             }
 
             { this.props.Login.pinList.length > 0 &&
-            <div className="row margin-top-30">
-              <div className="col-xs-12">
-                <div style={{width: "10%", float: "left", marginLeft: "38%"}}>
-                  <hr/>
-                </div>
-                <div style={{width: "4%", float: "left", marginTop: "10px"}}><span>OR</span></div>
-                <div style={{width: "10%", float: "left"}}>
-                  <hr/>
+              <div className="row margin-top-30">
+                <div className="col-xs-12">
+                  <div style={{
+                      width: '10%',
+                      float: 'left',
+                      marginLeft: '38%'}}>
+                    <hr/>
+                  </div>
+                  <div style={{
+                    width: '4%',
+                    float: 'left',
+                    marginTop: '10px'}}>
+                    <span>{ translate('INDEX.OR') }</span></div>
+                  <div style={{
+                    width: '10%',
+                    float: 'left'}}>
+                    <hr/>
+                  </div>
                 </div>
               </div>
-            </div>
             }
             { this.props.Login.pinList.length > 0 &&
-            <div className="row">
-              <div className="form-group form-material floating col-sm-8 padding-left-10 horizontal-padding-0">
-                <select
-                  className="form-control form-material"
-                  name="storedPins"
-                  value={ this.state.selectedPin }
-                  onChange={ (event) => this.updateSelectedPin(event) }
-                  autoFocus>
-                  <option className="login-option" value="">{ translate('INDEX.SELECT') }</option>
-                  {this.props.Login.pinList.map(function(pin) {
-                    return <option className="login-option" value={pin} key={pin}>{ pin }</option>
-                  })}
-                </select>
+              <div className="row">
+                <div className="form-group form-material floating col-sm-8 padding-left-10 horizontal-padding-0">
+                  <select
+                    className="form-control form-material"
+                    name="storedPins"
+                    value={ this.state.selectedPin }
+                    onChange={ (event) => this.updateSelectedPin(event) }
+                    autoFocus>
+                    <option
+                      className="login-option"
+                      value="">{ translate('INDEX.SELECT') }</option>
+                    { this.props.Login.pinList.map((pin) => {
+                        return <option
+                                className="login-option"
+                                value={pin}
+                                key={pin}>{ pin }</option>
+                        })
+                    }
+                  </select>
+                </div>
+                <div className="form-group form-material floating col-sm-4 padding-left-10 margin-top-20">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="decryptKey"
+                    placeholder={ translate('LOGIN.DECRYPT_KEY') }
+                    disabled={ false }
+                    onChange={ this.updateDecryptKey }
+                    value={ this.state.decryptKey } />
+                </div>
               </div>
-              <div className="form-group form-material floating col-sm-4 padding-left-10 margin-top-20">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="decryptKey"
-                  placeholder={ translate('LOGIN.DECRYPT_KEY') }
-                  disabled={ false }
-                  onChange={ this.updateDecryptKey }
-                  value={ this.state.decryptKey } />
-              </div>
-            </div>
             }
 
             <button

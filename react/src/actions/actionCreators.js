@@ -34,18 +34,10 @@ import {
 export * from './actions/nativeSyncInfo';
 export * from './actions/nativeSend';
 export * from './actions/coinList';
-// export * from './actions/createWallet';
-//export * from './actions/nativeTxHistory';
-//export * from './actions/nativeBalance';
 export * from './actions/nativeNewAddress';
 // export * from './actions/logout';
-//export * from './actions/edexGetTx';
 export * from './actions/settings';
-// export * from './actions/edexBalance';
 export * from './actions/addCoin';
-//export * from './actions/addressBalance';
-//export * from './actions/syncInfo';
-//export * from './actions/getAddrByAccount';
 // export * from './actions/walletAuth';
 export * from './actions/copyAddress';
 export * from './actions/sysInfo';

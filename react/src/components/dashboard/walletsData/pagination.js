@@ -5,15 +5,17 @@ export default class TablePaginationRenderer extends Component {
   constructor(props) {
     super();
     this.state = {
-      page: props.page
-    }
+      page: props.page,
+    };
     this.getSafePage = this.getSafePage.bind(this);
     this.changePage = this.changePage.bind(this);
     this.applyPage = this.applyPage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ page: nextProps.page });
+    this.setState({
+      page: nextProps.page,
+    });
   }
 
   getSafePage(page) {
@@ -26,7 +28,9 @@ export default class TablePaginationRenderer extends Component {
 
   changePage(page) {
     page = this.getSafePage(page);
-    this.setState({ page });
+    this.setState({
+      page,
+    });
 
     if (this.props.page !== page) {
       this.props.onPageChange(page);

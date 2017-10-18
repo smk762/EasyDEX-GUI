@@ -55,7 +55,7 @@ class About extends React.Component {
 
           <div className="font-weight-600">{ translate('ABOUT.TESTERS') }</div>
           { translate('ABOUT.TESTERS_P1') } <a className="link" onClick={ () => this.openExternalWindow('https://supernet.org/en/products/agama-wallet') }>{ translate('ABOUT.TESTERS_P2') }</a>.
-          { translate('ABOUT.TESTERS_P3') } <a className="link" onClick={ () => this.openExternalWindow('https://sprnt.slack.com/messages/C0HT9MH96/') }>#testing-agama</a> Slack channel. <a className="link" onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>Get an invite</a> to our slack if you're not registered yet.
+          { translate('ABOUT.TESTERS_P3') } <a className="link" onClick={ () => this.openExternalWindow('https://sprnt.slack.com/messages/C0HT9MH96/') }>#testing-agama</a> Slack { translate('ABOUT.CHANNEL') }. <a className="link" onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>{ translate('ABOUT.GET_AN_INVITE') }</a> { translate('ABOUT.GET_AN_INVITE_P2') }.
           { translate('ABOUT.TESTERS_P4') }
 
           <br /><br />

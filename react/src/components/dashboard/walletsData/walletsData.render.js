@@ -14,7 +14,7 @@ export const TxConfsRender = function(confs) {
     return (
       <i
         className="icon fa-warning color-warning margin-right-5"
-        title="Transaction failed or block reindexing is in progress. Failed transactions usually rejected after a while resulting in your funds being credited back."></i>
+        title={ translate('DASHBOARD.FAILED_TX_INFO') }></i>
     );
   }
 }
@@ -117,30 +117,26 @@ export const TxTypeRender = function(category) {
         <i className="icon fa-arrow-circle-left"></i> <span>{ translate('DASHBOARD.OUT') }</span>
       </span>
     );
-  }
-  if (category === 'receive' ||
+  } else if (category === 'receive' ||
       category === 'received') {
     return (
       <span className="label label-success">
         <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') } &nbsp; &nbsp;</span>
       </span>
     );
-  }
-  if (category === 'generate') {
+  } else if (category === 'generate') {
     return (
       <span>
         <i className="icon fa-cogs"></i> <span>{ translate('DASHBOARD.MINED') }</span>
       </span>
     );
-  }
-  if (category === 'immature') {
+  } else if (category === 'immature') {
     return (
       <span>
         <i className="icon fa-clock-o"></i> <span>{ translate('DASHBOARD.IMMATURE') }</span>
       </span>
     );
-  }
-  if (category === 'unknown') {
+  } else if (category === 'unknown') {
     return (
       <span>
         <i className="icon fa-meh-o"></i> <span>{ translate('DASHBOARD.UNKNOWN') }</span>
@@ -168,7 +164,7 @@ export const TxAmountRender = function(tx) {
         { tx.interest &&
           <span
             className="tx-interest"
-            title={ `Claimed interest ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
+            title={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
         }
       </span>
     );
@@ -180,7 +176,7 @@ export const TxAmountRender = function(tx) {
       { tx.interest &&
         <span
           className="tx-interest"
-          title={ `Claimed interest ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
+          title={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
       }
     </span>
   );
@@ -218,12 +214,12 @@ export const WalletsDataRender = function() {
               <div>
                 <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                   <div className="panel no-margin padding-top-10 padding-bottom-10 center">
-                    You have <strong>{ this.props.ActiveCoin.balance.interest }</strong> KMD to claim.
+                    { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P1') } <strong>{ this.props.ActiveCoin.balance.interest }</strong> KMD { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P2') }.
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light dashboard-claim-interest-btn"
                       onClick={ this.openClaimInterestModal }>
-                      <i className="icon fa-dollar"></i> Claim now
+                      <i className="icon fa-dollar"></i> { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P3') }
                     </button>
                   </div>
                 </div>
@@ -244,12 +240,14 @@ export const WalletsDataRender = function() {
                   </header>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
-                      { (this.props.ActiveCoin.txhistory !== 'loading' && this.props.ActiveCoin.txhistory !== 'no data' && this.props.ActiveCoin.txhistory !== 'connection error') &&
+                      { this.props.ActiveCoin.txhistory !== 'loading' &&
+                        this.props.ActiveCoin.txhistory !== 'no data' &&
+                        this.props.ActiveCoin.txhistory !== 'connection error' &&
                         <div className="col-sm-4 search-box">
                           <input
                             className="form-control"
                             onChange={ e => this.onSearchTermChange(e.target.value) }
-                            placeholder="Search" />
+                            placeholder={ translate('DASHBOARD.SEARCH') } />
                         </div>
                       }
                     </div>

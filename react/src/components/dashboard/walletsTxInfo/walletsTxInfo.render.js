@@ -140,15 +140,13 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tr>
                               <td>{ this.capitalizeFirstLetter('vjoinsplit') }</td>
                               <td>
-                                { txInfo.vjoinsplit } // native
-                                { txInfo.time ? secondsToString(txInfo.time) : '' } // electrum
+                                { txInfo.vjoinsplit }
                               </td>
                             </tr>
                             <tr>
                               <td>{ this.capitalizeFirstLetter('details') }</td>
                               <td>
-                                { txInfo.details } // native
-                                { txInfo.timereceived ? secondsToString(txInfo.timereceived) : '' } // electrum
+                                { txInfo.details }
                               </td>
                             </tr>
                             </tbody>
@@ -158,8 +156,8 @@ const WalletsTxInfoRender = function(txInfo) {
                       { this.state.activeTab === 2 &&
                         <div className="tab-pane active">
                           <textarea
-                            className="full-width height-170"
-                            rows="10"
+                            className="full-width height-400"
+                            rows="20"
                             cols="80"
                             defaultValue={ this.state.rawTxDetails.hex }
                             disabled></textarea>
@@ -178,13 +176,13 @@ const WalletsTxInfoRender = function(txInfo) {
                     </div>
                   }
                   { !this.state.txDetails &&
-                    <div>Loading...</div>
+                    <div>{ translate('INDEX.LOADING') }...</div>
                   }
                 </div>
               </div>
             </div>
             <div className="modal-footer">
-              { this.state.txDetails &&
+              { this.state.txDetails && this.props.ActiveCoin.coin !== 'CHIPS' &&
                 <button
                   type="button"
                   className="btn btn-sm white btn-dark waves-effect waves-light pull-left"

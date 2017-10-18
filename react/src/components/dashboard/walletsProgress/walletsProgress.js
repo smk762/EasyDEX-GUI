@@ -66,7 +66,7 @@ class WalletsProgress extends React.Component {
 
         Store.dispatch(
           triggerToaster(
-            'Windows sync workaround is applied. Closing the app...',
+            translate('DASHBOARD.WIN_SYNC_WORKAROUND_APPLIED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success'
           )
@@ -78,7 +78,7 @@ class WalletsProgress extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            'Unable to apply Windows sync workaround',
+            translate('DASHBOARD.WIN_SYNC_WORKAROUND_APPLY_FAILED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -122,7 +122,7 @@ class WalletsProgress extends React.Component {
 
           Store.dispatch(
             triggerToaster(
-              'Current sync state reached 80% level. Windows sync workaround is disabled. Changes will be applied next time you start the app.',
+              translate('DASHBOARD.WIN_SYNC_WORKAROUND_REVERTED'),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -131,7 +131,7 @@ class WalletsProgress extends React.Component {
         } else {
           Store.dispatch(
             triggerToaster(
-              'Unable to apply Windows sync workaround',
+              translate('DASHBOARD.WIN_SYNC_WORKAROUND_APPLY_FAILED'),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -340,7 +340,7 @@ class WalletsProgress extends React.Component {
           if (_blocks &&
               _blocks[0]) {
             return (
-              `: ${_blocks[0]} (current block)`
+              `: ${_blocks[0]} ({ translate('DASHBOARD.CURRENT_BLOCK_SM') })`
             );
           } else {
             return null;
@@ -382,6 +382,7 @@ class WalletsProgress extends React.Component {
     return null;
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     Dashboard: state.Dashboard,

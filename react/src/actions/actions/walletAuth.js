@@ -22,7 +22,7 @@ export function encryptWallet(_passphrase, cb, coin) {
       method: 'POST',
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -60,7 +60,7 @@ export function walletPassphrase(_passphrase) {
       method: 'POST',
       body: JSON.stringify(payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -90,7 +90,7 @@ export function iguanaWalletPassphrase(_passphrase) {
       method: 'POST',
       body: JSON.stringify(_payload),
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
@@ -133,7 +133,7 @@ export function iguanaActiveHandle(getMainAddress) {
       Config.iguanaLessMode ? `http://127.0.0.1:${Config.agamaPort}/shepherd/SuperNET/activehandle` : `http://127.0.0.1:${Config.iguanaCorePort}`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       dispatch(updateErrosStack('activeHandle'));
       dispatch(

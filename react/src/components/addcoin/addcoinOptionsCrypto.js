@@ -26,7 +26,7 @@ class AddCoinOptionsCrypto extends React.Component {
       <optgroup label={ translate('ADD_COIN.CRYPTO_CURRENCIES') }>
         <option value="KMD|native|spv">Komodo (KMD)</option>
         <option
-          value="CHIPS|native|spv"
+          value="CHIPS|spv"
           className={ this.state.isExperimentalOn ? '' : 'hide' }>Chips (CHIPS)</option>
       </optgroup>
     );
