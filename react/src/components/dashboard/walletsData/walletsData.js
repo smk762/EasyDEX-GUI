@@ -88,10 +88,13 @@ class WalletsData extends React.Component {
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.coin === 'KMD' &&
         this.props.ActiveCoin.mode === 'native' &&
-        this.props.ActiveCoin.balance &&
-        this.props.ActiveCoin.balance.interest &&
+        this.props.ActiveCoin.balance) {
+      if (this.props.ActiveCoin.balance.interest &&
         this.props.ActiveCoin.balance.interest > 0) {
-      return true;
+        return 777;
+      } else if (this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent > 10) {
+        return -777;
+      }
     }
   }
 
