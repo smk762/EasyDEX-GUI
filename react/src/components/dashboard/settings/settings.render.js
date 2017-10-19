@@ -112,11 +112,13 @@ export const SettingsRender = function() {
                     <CliPanel />
                   </PanelSection>
                 }
-                <PanelSection
-                  title={ translate('INDEX.UPDATE') }
-                  icon="icon fa fa-cloud-download">
-                  <AppUpdatePanel />
-                </PanelSection>
+                { this.state.isExperimentalOn &&
+                  <PanelSection
+                    title={ translate('INDEX.UPDATE') }
+                    icon="icon fa fa-cloud-download">
+                    <AppUpdatePanel />
+                  </PanelSection>
+                }
                 <PanelSection
                   title={ translate('SETTINGS.SUPPORT') }
                   icon="icon fa fa-life-ring">

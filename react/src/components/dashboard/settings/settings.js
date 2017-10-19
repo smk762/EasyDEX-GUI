@@ -21,6 +21,9 @@ import {
 class Settings extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isExperimentalOn: false,
+    };
     this.displaySPVServerListTab = this.displaySPVServerListTab.bind(this);
   }
 
@@ -41,6 +44,18 @@ class Settings extends React.Component {
     Store.dispatch(getAppInfo());
 
     document.getElementById('section-iguana-wallet-settings').setAttribute('style', 'height:auto; min-height: 100%');
+  }
+
+  componentWillMount() {
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      isExperimentalOn: appConfig.experimentalFeatures,
+    });
   }
 
   render() {
