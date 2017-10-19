@@ -144,7 +144,9 @@ class WalletsProgress extends React.Component {
   isWinSyncPercBelowThreshold() {
     if (this.state.prevProgress &&
         this.state.prevProgress.longestchain &&
-        this.state.prevProgress.blocks) {
+        this.state.prevProgress.blocks &&
+        this.state.prevProgress.longestchain > 0 &&
+        this.state.prevProgress.blocks > 0) {
       if (Number(this.state.prevProgress.blocks) * 100 / Number(this.state.prevProgress.longestchain) < 80) {
         return true;
       }
