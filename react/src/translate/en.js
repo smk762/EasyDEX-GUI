@@ -614,7 +614,7 @@ export const _lang = {
       'CLI_RESPONSE': 'CLI response',
       'PASSPHRASE_REQ': 'Passphrase is required.',
       'SAVE_APP_CONFIG': 'Save app config',
-      'CONFIG_RESTART_REQUIRED': 'Most changes to app config require wallet restart!',
+      'CONFIG_RESTART_REQUIRED': 'Any changes to app config require app restart!',
       'APP_CONFIG': 'App Config',
       'APP_INFO': 'App Info',
       'APP_RELEASE': 'App Release',

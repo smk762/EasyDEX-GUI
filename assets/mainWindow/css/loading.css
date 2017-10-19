@@ -35,7 +35,7 @@ body.closing-window-height {
 }
 
 body.agama-app-settings-window {
-  height: 570px;
+  height: 610px;
 }
 
 .agama-logo {
@@ -211,7 +211,7 @@ body.agama-app-settings-window {
 }
 
 .settings-buttons-block {
-  margin-top: 50px;
+  margin-top: 40px;
   margin-right: 50px;
   text-align: right;
 }
@@ -462,4 +462,8 @@ small {
   width: 80%;
   text-align: center;
   margin: 0 auto;
+}
+
+.padding-top-40 {
+  padding-top: 40px;
 }
