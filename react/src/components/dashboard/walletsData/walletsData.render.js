@@ -194,7 +194,7 @@ export const TxHistoryListRender = function() {
       nextText={ translate('INDEX.NEXT_PAGE') }
       previousText={ translate('INDEX.PREVIOUS_PAGE') }
       showPaginationBottom={ this.state.showPagination }
-      pageSize={ this.pageSize }
+      pageSize={ this.state.pageSize }
       defaultSortMethod={ this.tableSorting }
       defaultSorted={[{ // default sort
         id: 'timestamp',

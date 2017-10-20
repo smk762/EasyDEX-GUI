@@ -31,7 +31,7 @@ import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);*/
 
-const BOTTOM_BAR_DISPLAY_THRESHOLD = 10;
+const BOTTOM_BAR_DISPLAY_THRESHOLD = 15;
 
 class WalletsData extends React.Component {
   constructor(props) {
@@ -45,8 +45,8 @@ class WalletsData extends React.Component {
       totalStackLength: 0,
       useCache: true,
       itemsListColumns: this.generateItemsListColumns(),
-      defaultPageSize: 10,
-      pageSize: 10,
+      defaultPageSize: 20,
+      pageSize: 20,
       showPagination: true,
       searchTerm: null,
       coin: null,
