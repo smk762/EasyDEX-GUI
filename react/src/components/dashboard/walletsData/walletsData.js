@@ -31,6 +31,8 @@ import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);*/
 
+const BOTTOM_BAR_DISPLAY_THRESHOLD = 10;
+
 class WalletsData extends React.Component {
   constructor(props) {
     super(props);
@@ -127,22 +129,28 @@ class WalletsData extends React.Component {
     return 0;
   }
 
-  generateItemsListColumns() {
+  generateItemsListColumns(itemsCount) {
     let columns = [];
+    let _col;
 
     if (this.props.ActiveCoin.mode === 'native') {
-      columns.push({
+      _col = {
         Header: translate('INDEX.TYPE'),
         Footer: translate('INDEX.TYPE'),
         className: 'colum--type',
         headerClassName: 'colum--type',
         footerClassName: 'colum--type',
         Cell: AddressTypeRender(),
-      });
+      };
+
+      if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
+        delete _col.Footer;
+      }
+
+      columns.push(_col);
     }
 
-    columns.push(...[
-    {
+    _col = [{
       id: 'direction',
       Header: translate('INDEX.DIRECTION'),
       Footer: translate('INDEX.DIRECTION'),
@@ -171,18 +179,32 @@ class WalletsData extends React.Component {
       Header: translate('INDEX.TIME'),
       Footer: translate('INDEX.TIME'),
       accessor: (tx) => secondsToString(tx.blocktime || tx.timestamp || tx.time),
-    }
-    ]);
+    }];
 
-    columns.push({
+    if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
+      delete _col[0].Footer;
+      delete _col[1].Footer;
+      delete _col[2].Footer;
+      delete _col[3].Footer;
+    }
+
+    columns.push(..._col);
+
+    _col = {
       id: 'destination-address',
       Header: translate('INDEX.DEST_ADDRESS'),
       Footer: translate('INDEX.DEST_ADDRESS'),
       accessor: (tx) => AddressRender.call(this, tx),
-    });
+    };
+
+    if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
+      delete _col.Footer;
+    }
+
+    columns.push(_col);
 
     if (this.props.ActiveCoin.mode === 'spv') {
-      columns.push({
+      _col = {
         id: 'tx-detail',
         Header: translate('INDEX.TX_DETAIL'),
         Footer: translate('INDEX.TX_DETAIL'),
@@ -190,9 +212,15 @@ class WalletsData extends React.Component {
         headerClassName: 'colum--txinfo',
         footerClassName: 'colum--txinfo',
         accessor: (tx) => TransactionDetailRender.call(this, tx),
-      });
+      };
+
+      if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
+        delete _col.Footer;
+      }
+
+      columns.push(_col);
     } else {
-      columns.push({
+      _col = {
         id: 'tx-detail',
         Header: translate('INDEX.TX_DETAIL'),
         Footer: translate('INDEX.TX_DETAIL'),
@@ -200,7 +228,13 @@ class WalletsData extends React.Component {
         headerClassName: 'colum--txinfo',
         footerClassName: 'colum--txinfo',
         Cell: props => TransactionDetailRender.call(this, props.index),
-      });
+      };
+
+      if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
+        delete _col.Footer;
+      }
+
+      columns.push(_col);
     }
 
     return columns;
@@ -251,7 +285,7 @@ class WalletsData extends React.Component {
         filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
         txhistory: this.props.ActiveCoin.txhistory,
         showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize,
-        itemsListColumns: this.generateItemsListColumns(),
+        itemsListColumns: this.generateItemsListColumns(this.props.ActiveCoin.txhistory.length),
       });
     }
 

@@ -439,7 +439,6 @@ export const _lang = {
       'SEND_FEE_REQ': 'Make sure you have fee entered. Default value is',
       'SEND_TOTAL_REQ': 'Make sure you have both amount and fee entered to calculate final total.',
       'SEND_TX_PROGRESS': 'The transaction submitted is processing. Once processed the transaction details will be displayed here.',
-      'SEND_NATIVE_SYNC_WARNING': 'Your wallet is not fully synced! Please wait until it reached 100% to avoid possible transaction send implications.',
       'SUBSTRACT_FEE': 'Subtract fee from amount',
       'UNKNOWN': 'Unknown',
       'IN': 'IN',
@@ -691,6 +690,7 @@ export const _lang = {
       'QR_COIN_MISMATCH_MESSAGE_ACTIVE_COIN': '. You have ',
       'QR_COIN_MISMATCH_MESSAGE_END': ' active in your wallet. Please, check that you have same coin active that you try to import!',
       'QR_COIN_MISMATCH_TITLE': 'Coin Mismatch',
+      'SEND_NATIVE_SYNC_WARNING': 'Your wallet is not fully synced! Please wait until it reached 100% to avoid possible transaction send implications.',
     },
     'FIAT_CURRENCIES': {
       'AUD': 'Australian Dollar (AUD)',
