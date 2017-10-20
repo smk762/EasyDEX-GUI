@@ -342,7 +342,7 @@ class WalletsProgress extends React.Component {
           if (_blocks &&
               _blocks[0]) {
             return (
-              `: ${_blocks[0]} ({ translate('DASHBOARD.CURRENT_BLOCK_SM') })`
+              `: ${_blocks[0]} (${ translate('DASHBOARD.CURRENT_BLOCK_SM') })`
             );
           } else {
             return null;
