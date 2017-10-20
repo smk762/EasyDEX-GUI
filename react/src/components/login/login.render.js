@@ -80,50 +80,51 @@ const LoginRender = function () {
               </div>
             }
 
-            { this.state.loginPassphrase && this.state.enableEncryptSeed &&
-            <div className="row">
-              <div className="toggle-box padding-top-30 col-sm-3">
-                <span className="pointer">
-                  <label className="switch">
-                    <input
-                      type="checkbox"
-                      checked={ this.shouldEncryptSeed() } />
+            { this.state.loginPassphrase &&
+              this.state.enableEncryptSeed &&
+              <div className="row">
+                <div className="toggle-box padding-top-30 col-sm-3">
+                  <span className="pointer">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={ this.shouldEncryptSeed() } />
+                      <div
+                        className="slider"
+                        onClick={ () => this.toggleShouldEncryptSeed() }></div>
+                    </label>
                     <div
-                      className="slider"
-                      onClick={ () => this.toggleShouldEncryptSeed() }></div>
-                  </label>
-                  <div
-                    className="toggle-label white"
-                    onClick={ () => this.toggleShouldEncryptSeed() }>
-                      { translate('LOGIN.ENCRYPT_SEED') }
+                      className="toggle-label white"
+                      onClick={ () => this.toggleShouldEncryptSeed() }>
+                        { translate('LOGIN.ENCRYPT_SEED') }
+                    </div>
+                  </span>
+                </div>
+
+                <div className="col-sm-9">
+                  <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right-0">
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="encryptKey"
+                      placeholder={ translate('LOGIN.ENCRYPT_KEY') }
+                      onChange={ this.updateEncryptKey }
+                      value={ this.state.encryptKey }
+                      disabled={ !this.shouldEncryptSeed() } />
                   </div>
-                </span>
-              </div>
 
-              <div className="col-sm-9">
-                <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right-0">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="encryptKey"
-                    placeholder={ translate('LOGIN.ENCRYPT_KEY') }
-                    onChange={ this.updateEncryptKey }
-                    value={ this.state.encryptKey }
-                    disabled={ !this.shouldEncryptSeed() } />
-                </div>
-
-                <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="pubKey"
-                    placeholder={ translate('LOGIN.PUBKEY') }
-                    onChange={ this.updatePubKey }
-                    value={ this.state.pubKey }
-                    disabled={ !this.shouldEncryptSeed() } />
+                  <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right">
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="pubKey"
+                      placeholder={ translate('LOGIN.PUBKEY') }
+                      onChange={ this.updatePubKey }
+                      value={ this.state.pubKey }
+                      disabled={ !this.shouldEncryptSeed() } />
+                  </div>
                 </div>
               </div>
-            </div>
             }
 
             { this.props.Login.pinList.length > 0 &&
@@ -311,7 +312,8 @@ const LoginRender = function () {
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN1') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN2') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN3') }<br />
-                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }<br />
+                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN5') }<br />
                 </span>
                 <label
                   className="floating-label"

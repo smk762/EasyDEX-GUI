@@ -402,7 +402,9 @@ class Login extends React.Component {
       isSeedBlank: isSeedBlank ? true : false,
     });
 
-    if (enteredSeedsMatch && !isSeedBlank && _customSeed !== null) {
+    if (enteredSeedsMatch &&
+        !isSeedBlank &&
+        _customSeed !== null) {
       this.toggleSeedBackupModal();
     }
   }
