@@ -6,7 +6,8 @@ class PanelSection extends React.Component {
     super(props);
     this.state = {
       sectionHeight: 0,
-    }
+    };
+    this.accordionResizeInterval = null;
     this.toggleSection = this.toggleSection.bind(this);
   }
 
@@ -18,6 +19,18 @@ class PanelSection extends React.Component {
         sectionHeight: this.accordionContent.scrollHeight,
       });
     }
+
+    this.accordionResizeInterval = setInterval(() => {
+      if (this.props.active) {
+        this.setState({
+          sectionHeight: `${this.accordionContent.scrollHeight}px`,
+        });
+      }
+    }, 500);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.accordionResizeInterval);
   }
 
   componentWillReceiveProps(props) {
@@ -78,10 +91,10 @@ class PanelSection extends React.Component {
     });
 
     return(
-      <div
-        className={triggerClasses}
-        onClick={() => this.toggleSection()}>
-        <div className="panel-heading">
+      <div className={triggerClasses}>
+        <div
+          onClick={() => this.toggleSection()}
+          className="panel-heading">
           <a className="panel-title">
             <i className={icon}></i> {title}
           </a>

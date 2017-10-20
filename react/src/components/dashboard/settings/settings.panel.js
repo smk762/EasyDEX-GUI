@@ -3,7 +3,6 @@ import className from 'classnames';
 import * as Utils from './settings.panelUtils';
 
 class Panel extends React.Component {
-
   constructor(props) {
     super(props);
     this.toggleSection = this.toggleSection.bind(this);

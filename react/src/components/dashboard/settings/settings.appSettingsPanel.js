@@ -60,7 +60,8 @@ class AppSettingsPanel extends React.Component {
       if (key.indexOf('__') === -1) {
         _appSettingsPristine[key] = this.state.appConfigSchema[key] && this.state.appConfigSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
 
-        if (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].type === 'folder' &&
+        if (this.state.appConfigSchema[key] &&
+            this.state.appConfigSchema[key].type === 'folder' &&
             _appSettings[key] &&
             _appSettings[key].length) {
           const _testLocation = window.require('electron').remote.getCurrentWindow().testLocation;
@@ -72,18 +73,20 @@ class AppSettingsPanel extends React.Component {
               isError = true;
               Store.dispatch(
                 triggerToaster(
-                  translate('TOASTR.KOMODO_DATADIR_INVALID'),
+                  this.renderLB('TOASTR.KOMODO_DATADIR_INVALID'),
                   translate('INDEX.SETTINGS'),
-                  'error'
+                  'error',
+                  false
                 )
               );
             } else if (res === false) {
               isError = true;
               Store.dispatch(
                 triggerToaster(
-                  translate('TOASTR.KOMODO_DATADIR_NOT_DIR'),
+                  this.renderLB('TOASTR.KOMODO_DATADIR_NOT_DIR'),
                   translate('INDEX.SETTINGS'),
-                  'error'
+                  'error',
+                  false
                 )
               );
             } else {
@@ -100,6 +103,17 @@ class AppSettingsPanel extends React.Component {
     if (!saveAfterPathCheck) {
       Store.dispatch(saveAppConfig(_appSettingsPristine));
     }
+  }
+
+  renderLB(_translationID) {
+    const _translationComponents = translate(_translationID).split('<br>');
+
+    return _translationComponents.map((_translation) =>
+      <span key={ `translate-${Math.random(0, 9) * 10}` }>
+        {_translation}
+        <br />
+      </span>
+    );
   }
 
   renderConfigEditForm() {
@@ -257,7 +271,8 @@ class AppSettingsPanel extends React.Component {
     let _appSettings = this.state.appSettings;
     let _appSettingsPrev = Object.assign({}, _appSettings);
 
-    if (!childKey && this.state.appConfigSchema[parentKey].type === 'boolean') {
+    if (!childKey &&
+        this.state.appConfigSchema[parentKey].type === 'boolean') {
       _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
     } else if (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'boolean') {
       _appSettings[parentKey][childKey] = typeof _appSettings[parentKey][childKey] !== undefined ? !_appSettings[parentKey][childKey] : !this.state.appSettings[parentKey][childKey];
