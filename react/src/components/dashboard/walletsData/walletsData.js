@@ -293,26 +293,34 @@ class WalletsData extends React.Component {
       if (this.isFullySynced()) {
         return (
           <tr className="hover--none">
-            <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.LOADING_HISTORY') }...</td>
+            <td
+              colSpan="7"
+              className="table-cell-offset-16">{ translate('INDEX.LOADING_HISTORY') }...</td>
           </tr>
         );
       } else {
         return (
           <tr className="hover--none">
-            <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.SYNC_IN_PROGRESS') }...</td>
+            <td
+              colSpan="7"
+              className="table-cell-offset-16">{ translate('INDEX.SYNC_IN_PROGRESS') }...</td>
           </tr>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
         <tr className="hover--none">
-          <td colSpan="7" className="table-cell-offset-16">{ translate('INDEX.NO_DATA') }</td>
+          <td
+            colSpan="7"
+            className="table-cell-offset-16">{ translate('INDEX.NO_DATA') }</td>
         </tr>
       );
     } else if (this.state.itemsList === 'connection error') {
       return (
         <tr className="hover--none">
-          <td colSpan="7" className="table-cell-offset-16 color-warning">
+          <td
+            colSpan="7"
+            className="table-cell-offset-16 color-warning">
             { translate('DASHBOARD.SPV_CONN_ERROR') }
             <span className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
             <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_SPV1') }

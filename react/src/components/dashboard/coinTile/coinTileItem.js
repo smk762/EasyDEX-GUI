@@ -61,6 +61,9 @@ class CoinTileItem extends React.Component {
               _coinMode['KMD'] === 'native') {
             _coin = 'KMD';
             _mode = 'native';
+          } else if (_coinMode['KMD'] && _coinMode['KMD'] === 'spv') {
+            _coin = 'KMD';
+            _mode = 'spv';
           }
         });
 
