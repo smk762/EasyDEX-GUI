@@ -131,9 +131,9 @@ function handleSaveSettings() {
     remote.getCurrentWindow().testLocation(_configCopy.dataDir)
     .then(function(res) {
       if (res === -1) {
-        showToast('error', 'Komodo datadir path is invalid');
+        showToast('error', 'Komodo datadir path is invalid.<br>It must be an absolute path to an existing folder that doesn\'t contain spaces and/or any special characters.');
       } else if (res === false) {
-        showToast('error', 'Komodo datadir path is not a directory');
+        showToast('error', 'Komodo datadir path is not a directory.<br>It must be an absolute path to an existing folder that doesn\'t contain spaces and/or any special characters.');
       } else {
         // save settings
         remote.getCurrentWindow().updateAppSettings(_configCopy);
