@@ -52,11 +52,15 @@ export function activeHandle() {
 
 export function shepherdElectrumAuth(seed) {
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/login?seed=${seed}&iguana=true`, {
-      method: 'GET',
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/login`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      body: JSON.stringify({
+        seed,
+        iguana: true,
+      })
     })
     .catch((error) => {
       console.log(error);

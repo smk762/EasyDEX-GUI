@@ -52,7 +52,6 @@ class WalletsData extends React.Component {
       coin: null,
       txhistory: null,
     };
-
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
