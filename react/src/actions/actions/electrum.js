@@ -66,11 +66,16 @@ export function shepherdElectrumCheckServerConnection(address, port) {
 
 export function shepherdElectrumKeys(seed) {
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/keys?seed=${seed}&active=true&iguana=true`, {
-      method: 'GET',
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/keys`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      body: JSON.stringify({
+        seed,
+        active: true,
+        iguana: true,
+      }),
     })
     .catch((error) => {
       console.log(error);

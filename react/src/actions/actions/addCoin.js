@@ -60,7 +60,7 @@ export function shepherdElectrumAuth(seed) {
       body: JSON.stringify({
         seed,
         iguana: true,
-      })
+      }),
     })
     .catch((error) => {
       console.log(error);
