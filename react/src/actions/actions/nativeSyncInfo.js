@@ -110,7 +110,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
       `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
       _fetchConfig
     )
-    .catch(function(error) {
+    .catch((error) => {
       console.log(error);
       if (!suppressErrors) { // rescan case
         dispatch(

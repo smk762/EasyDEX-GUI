@@ -35,18 +35,23 @@ class WalletsTxInfo extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.ActiveCoin.mode === 'spv') {
+    if (this.props.ActiveCoin.mode === 'spv' &&
+        nextProps.ActiveCoin) {
       this.setState(Object.assign({}, this.state, {
         txDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
         rawTxDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
       }));
     } else {
-      const txInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
+      if (nextProps.ActiveCoin &&
+          nextProps.ActiveCoin.txhistory &&
+          nextProps.ActiveCoin.showTransactionInfoTxIndex) {
+        const txInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
 
-      if (txInfo &&
-          this.props.ActiveCoin.showTransactionInfoTxIndex !== nextProps.ActiveCoin.showTransactionInfoTxIndex) {
-        this.loadTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
-        this.loadRawTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
+        if (txInfo &&
+            this.props.ActiveCoin.showTransactionInfoTxIndex !== nextProps.ActiveCoin.showTransactionInfoTxIndex) {
+          this.loadTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
+          this.loadRawTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
+        }
       }
     }
   }
@@ -110,12 +115,18 @@ class WalletsTxInfo extends React.Component {
 
   render() {
     if (this.props &&
+        this.props.ActiveCoin &&
         this.props.ActiveCoin.showTransactionInfo &&
         this.props.ActiveCoin.activeSection === 'default') {
       if (this.props.ActiveCoin.mode === 'native') {
-        const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
+        if (this.props.ActiveCoin.txhistory &&
+            this.props.ActiveCoin.showTransactionInfoTxIndex) {
+          const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
 
-        return WalletsTxInfoRender.call(this, txInfo);
+          return WalletsTxInfoRender.call(this, txInfo);
+        } else {
+          return null;
+        }
       } else {
         return WalletsTxInfoRender.call(this);
       }
