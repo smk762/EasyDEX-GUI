@@ -290,7 +290,7 @@ export const SendRender = function() {
                   this.state.lastSendToResponse.msg === 'error' &&
                   <div className="padding-left-30 padding-top-10">
                     <div>
-                      <strong>{ translate('INDEX.ERROR') }</strong>
+                      <strong>{ translate('API.ERROR_SM') }</strong>
                     </div>
                     <div>{ this.state.lastSendToResponse.result }</div>
                   </div>
