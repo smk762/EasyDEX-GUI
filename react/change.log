@@ -1,6 +1,5 @@
-v0.2.0.22a-beta
+v0.2.0.22-23a-beta
 --------------
-UI:
 - fixed activating best chain progress update
 - prevent running two agama instances
 - cli passphru fix
@@ -14,12 +13,14 @@ UI:
 - manual balance / transactions list refresh
 - quick access dropdown on login to open settings / about / sync only modals
 - qr code generator / scan
+- invoice generator
 - basilisk send form reset fix
 - added native wallet info button
 - added coqui assetchain
 - jumblr
 - zcashparams folder check
 - claim interest modal
+- claim interest button on dashboard
 - renewed transactions history look
 - prevent app from closing while komodod is still loading/processing data
 - send form validation
@@ -27,6 +28,17 @@ UI:
 - updated application settings
 - komodo datadir
 - windows bins path fix
+- slow windows sync workaround
+- transactions details sorting fix
+- configurable komodod graceful quit timeout param
+- zcash params fetch modal
+- mnz asset chain
+- deprecated full and basilisk modes
+- updated transaction details modal
+- new spv mode
+- mainstream add coin shortcuts dropdown
+- import seed / wif key modal
+- reduced resourse consumption
 
 v0.2.0.21a-beta
 --------------
