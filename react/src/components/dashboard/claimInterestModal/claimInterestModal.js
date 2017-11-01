@@ -72,31 +72,33 @@ class ClaimInterestModal extends React.Component {
   }
 
   claimInterest(address, amount) {
-    sendToAddressPromise(
-      this.props.ActiveCoin.coin,
-      this.state.transactionsList[0].address,
-      this.props.ActiveCoin.balance.transparent
-    ).then((json) => {
-      if (json.error &&
-          json.error.code) {
-        Store.dispatch(
-          triggerToaster(
-            json.error.message,
-            'Error',
-            'error'
-          )
-        );
-      } else if (json.result && json.result.length && json.result.length === 64) {
-        Store.dispatch(
-          triggerToaster(
-            `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.transactionsList[0].address}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
-            translate('TOASTR.WALLET_NOTIFICATION'),
-            'success',
-            false
-          )
-        );
-      }
-    });
+    if (this.props.ActiveCoin.coin === 'KMD') {
+      sendToAddressPromise(
+        this.props.ActiveCoin.coin,
+        this.state.transactionsList[0].address,
+        this.props.ActiveCoin.balance.transparent
+      ).then((json) => {
+        if (json.error &&
+            json.error.code) {
+          Store.dispatch(
+            triggerToaster(
+              json.error.message,
+              'Error',
+              'error'
+            )
+          );
+        } else if (json.result && json.result.length && json.result.length === 64) {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.transactionsList[0].address}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'success',
+              false
+            )
+          );
+        }
+      });
+    }
   }
 
   checkTransactionsListLength() {
@@ -140,7 +142,11 @@ class ClaimInterestModal extends React.Component {
   }
 
   render() {
-    return ClaimInterestModalRender.call(this);
+    if (coin === 'KMD') {
+      return ClaimInterestModalRender.call(this);
+    } else {
+      return null;
+    }
   }
 }
 
