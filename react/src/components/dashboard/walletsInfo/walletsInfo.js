@@ -18,8 +18,8 @@ class WalletsInfo extends React.Component {
   displayClaimInterestUI() {
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.balance &&
-        this.props.ActiveCoin.balance.balance &&
-        this.props.ActiveCoin.balance.balance > 0) {
+        this.props.ActiveCoin.balance.transparent &&
+        this.props.ActiveCoin.balance.transparent > 0) {
       return true;
     }
   }

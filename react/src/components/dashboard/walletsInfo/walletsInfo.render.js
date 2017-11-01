@@ -49,7 +49,9 @@ const WalletsInfoRender = function() {
               <button
                 type="button"
                 className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>{ translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }</button>
+                onClick={ () => this.openClaimInterestModal() }>
+                  <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
+                </button>
             </div>
           }
         </div>
