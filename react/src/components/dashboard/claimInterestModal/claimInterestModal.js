@@ -142,7 +142,9 @@ class ClaimInterestModal extends React.Component {
   }
 
   render() {
-    if (coin === 'KMD') {
+    if (this.props.ActiveCoin &&
+        this.props.ActiveCoin.coin &&
+        this.props.ActiveCoin.coin === 'KMD') {
       return ClaimInterestModalRender.call(this);
     } else {
       return null;
