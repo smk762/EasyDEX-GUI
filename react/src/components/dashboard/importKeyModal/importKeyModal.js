@@ -160,6 +160,12 @@ class ImportKeyModal extends React.Component {
     ).then((json) => {
       _rescanInProgress = false;
 
+      if (rescan) {
+        setTimeout(() => {
+          this.closeModal();
+        }, 2000);
+      }
+
       if (!json.id &&
           !json.result &&
           !json.error) {
