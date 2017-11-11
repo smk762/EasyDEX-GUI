@@ -255,7 +255,7 @@ const LoginRender = function () {
                     <div className="form-group form-material floating">
                       <div
                         className="radio-custom radio-default radio-inline"
-                        onClick={ () =>this.state.bitsOption !== 256 && this.generateNewSeed(256) }>
+                        onClick={ () => this.state.bitsOption !== 256 && this.generateNewSeed(256) }>
                         <input
                           type="radio"
                           name="PassPhraseOptions"

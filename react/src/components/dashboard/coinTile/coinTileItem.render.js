@@ -24,6 +24,30 @@ const CoinTileItemRender = function() {
           </div>
         </div>
       </div>
+      { item.mode === 'native' &&
+        this.props.Main &&
+        this.props.Main.coins &&
+        this.props.Main.coins.native &&
+        this.props.Main.coins.native.length &&
+        this.props.Main.coins.native.length > 1 &&
+        <i
+          onClick={ () => this.stopCoind(item.coin) }
+          title="Stop"
+          className="icon fa-stop-circle coind-stop-icon"></i>
+      }
+      { item.mode === 'native' &&
+        this.props.Main &&
+        this.props.Main.coins &&
+        this.props.Main.coins.native &&
+        this.props.Main.coins.native.length &&
+        this.props.Main.coins.native.length > 1 &&
+        this.state.appConfig &&
+        !this.state.appConfig.stopNativeDaemonsOnQuit &&
+        <i
+          onClick={ () => this.removeCoin(item.coin) }
+          title="Remove"
+          className="icon fa-plus-circle coind-remove-icon"></i>
+      }
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&
         this.props.Dashboard.electrumCoins[item.coin] &&

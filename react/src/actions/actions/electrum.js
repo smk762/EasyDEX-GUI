@@ -114,7 +114,7 @@ export function shepherdElectrumBalance(coin, address) {
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -146,7 +146,7 @@ export function shepherdElectrumTransactions(coin, address) {
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -187,7 +187,7 @@ export function shepherdElectrumCoins() {
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -220,7 +220,7 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -249,7 +249,7 @@ export function shepherdElectrumSendPreflight(coin, value, sendToAddress, change
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {

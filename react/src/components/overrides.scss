@@ -494,3 +494,21 @@ select{
     display: none;
   }
 }
+
+.coind-stop-icon,
+.coind-remove-icon {
+  font-size: 20px;
+  position: absolute;
+  top: 19px;
+  right: 12px;
+  color: #ccc !important;
+
+  &:hover {
+    color: #e9595b !important;
+  }
+}
+
+.coind-remove-icon {
+  transform: rotate(45deg);
+  top: 45px;
+}

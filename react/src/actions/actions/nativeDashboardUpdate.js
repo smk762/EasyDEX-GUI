@@ -31,8 +31,9 @@ export function getDashboardUpdate(coin, activeCoinProps) {
       dispatch(getDashboardUpdateState(json, coin));
 
       // dirty hack to trigger dashboard render
-      if (!activeCoinProps.balance &&
-          !activeCoinProps.addresses) {
+      if (!activeCoinProps || (activeCoinProps &&
+          !activeCoinProps.balance &&
+          !activeCoinProps.addresses)) {
         setTimeout(() => {
           dispatch(getDashboardUpdateState(json, coin));
         }, 100);

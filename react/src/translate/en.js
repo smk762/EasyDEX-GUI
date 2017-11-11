@@ -21,6 +21,7 @@ export const _lang = {
       'IMPORT_AND_RESCAN': 'Import and rescan',
     },
     'CLAIM_INTEREST': {
+      'SHOW_ZERO_INTEREST': 'Show zero interest',
       'REQ_P1': 'Requirements to accrue interest',
       'REQ_P2': 'spend transaction was made at least 1 hour ago, locktime field is set and amount is greater than',
       'CLAIM_INTEREST': 'Claim @template@ interest',

@@ -241,8 +241,8 @@ class Login extends React.Component {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-          document.querySelector('#loginPassphrase').style.height = '1px';
-          document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
+        document.querySelector('#loginPassphrase').style.height = '1px';
+        document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
       }
     }, 100);
   }

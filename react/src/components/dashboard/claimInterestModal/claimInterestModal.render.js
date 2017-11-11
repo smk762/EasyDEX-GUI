@@ -1,8 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
-const MIN_INTEREST_THRESHOLD = 0.001;
-
 export const _ClaimInterestTableRender = function() {
   const _transactionsList = this.state.transactionsList;
   let _items = [];
@@ -11,7 +9,7 @@ export const _ClaimInterestTableRender = function() {
     if ((_transactionsList[i].interest === 0 && this.state.showZeroInterest) ||
         (_transactionsList[i].amount > 0 && _transactionsList[i].interest > 0)) {
       _items.push(
-        <tr key={ `${_transactionsList[i].txid}${_transactionsList[i].address}` }>
+        <tr key={ `${_transactionsList[i].txid}-${_transactionsList[i].address}-${i}` }>
           <td>
             <button
               className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
@@ -59,7 +57,7 @@ export const _ClaimInterestTableRender = function() {
           <div
             className="toggle-label margin-right-15 pointer"
             onClick={ this.toggleZeroInterest }>
-            Show zero interest
+            { translate('CLAIM_INTEREST.SHOW_ZERO_INTEREST') }
           </div>
           <button
             type="button"

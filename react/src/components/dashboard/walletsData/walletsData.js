@@ -356,8 +356,8 @@ class WalletsData extends React.Component {
             className="table-cell-offset-16 color-warning">
             { translate('DASHBOARD.SPV_CONN_ERROR') }
             <span className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
-            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_SPV1') }
-            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_SPV2') }
+            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }
+            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_P2') }
             </span>
           </td>
         </tr>

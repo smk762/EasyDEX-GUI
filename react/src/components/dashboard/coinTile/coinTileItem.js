@@ -19,6 +19,11 @@ import {
   shepherdElectrumTransactions,
   shepherdElectrumCoins,
   electrumServerChanged,
+  shepherdStopCoind,
+  getDexCoins,
+  activeHandle,
+  triggerToaster,
+  shepherdRemoveCoin,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -27,51 +32,116 @@ import CoinTileItemRender from './coinTileItem.render';
 
 const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 5;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
 
 class CoinTileItem extends React.Component {
   constructor() {
     super();
+    this.state = {
+      appConfig: {},
+    };
+    this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
+  }
+
+  autoSetActiveCoin() {
+    const modes = [
+      'native',
+      'spv',
+    ];
+    const allCoins = this.props.Main.coins;
+    let _coinSelected = false;
+    let _mode;
+    let _coin;
+    let _coinMode = {};
+
+    if (allCoins) {
+      modes.map((mode) => {
+        allCoins[mode].map((coin) => {
+          if (!_coinSelected) {
+            _coinSelected = true;
+            _coin = coin;
+            _mode = mode;
+          }
+          _coinMode[coin] = mode;
+        });
+
+        if (_coinMode['KMD'] &&
+            _coinMode['KMD'] === 'native') {
+          _coin = 'KMD';
+          _mode = 'native';
+        } else if (_coinMode['KMD'] && _coinMode['KMD'] === 'spv') {
+          _coin = 'KMD';
+          _mode = 'spv';
+        }
+      });
+
+      setTimeout(() => {
+        this._dashboardChangeActiveCoin(_coin, _mode);
+      }, 100);
+    }
   }
 
   componentWillMount() {
     if (!this.props.ActiveCoin.coin) {
-      let _coinSelected = false;
-      let _mode;
-      let _coin;
-      let _coinMode = {};
-      const modes = [
-        'native',
-        'spv',
-      ];
-      const allCoins = this.props.Main.coins;
-
-      if (allCoins) {
-        modes.map((mode) => {
-          allCoins[mode].map((coin) => {
-            if (!_coinSelected) {
-              _coinSelected = true;
-              _coin = coin;
-              _mode = mode;
-            }
-            _coinMode[coin] = mode;
-          });
-
-          if (_coinMode['KMD'] &&
-              _coinMode['KMD'] === 'native') {
-            _coin = 'KMD';
-            _mode = 'native';
-          } else if (_coinMode['KMD'] && _coinMode['KMD'] === 'spv') {
-            _coin = 'KMD';
-            _mode = 'spv';
-          }
-        });
-
-        setTimeout(() => {
-          this._dashboardChangeActiveCoin(_coin, _mode);
-        }, 100);
-      }
+      this.autoSetActiveCoin();
     }
+
+    let appConfig;
+
+    try {
+      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
+    } catch (e) {}
+
+    this.setState({
+      appConfig,
+    });
+  }
+
+  removeCoin(coin) {
+    shepherdRemoveCoin(coin)
+    .then((res) => {
+      Store.dispatch(
+        triggerToaster(
+          `${coin} is removed`,
+          'Coin notification',
+          'success'
+        )
+      );
+      Store.dispatch(getDexCoins());
+      Store.dispatch(activeHandle());
+      setTimeout(() => {
+        this.autoSetActiveCoin();
+      }, 500);
+    });
+  }
+
+  stopCoind(coin) {
+    shepherdStopCoind(coin)
+    .then((res) => {
+      if (res.msg === 'error') {
+        Store.dispatch(
+          triggerToaster(
+            `Unable to stop ${coin}. Try again.`,
+            'Error',
+            'error'
+          )
+        );
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            `${coin} is stopped`,
+            'Coin notification',
+            'success'
+          )
+        );
+
+        Store.dispatch(getDexCoins());
+        Store.dispatch(activeHandle());
+        setTimeout(() => {
+          this.autoSetActiveCoin();
+        }, 500);
+      }
+    });
   }
 
   dispatchCoinActions(coin, mode) {
