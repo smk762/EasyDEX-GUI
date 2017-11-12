@@ -30,7 +30,7 @@ import Config from '../../../config';
 
 import CoinTileItemRender from './coinTileItem.render';
 
-const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
+const SPV_DASHBOARD_UPDATE_TIMEOUT = 10000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
 const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
 
@@ -41,6 +41,28 @@ class CoinTileItem extends React.Component {
       appConfig: {},
     };
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
+  }
+
+  renderStopCoinButton() {
+    if (this.props.Main &&
+        this.props.Main.coins &&
+        this.props.Main.coins.native &&
+        this.props.Main.coins.native.length) {
+      return true;
+    }
+  }
+
+  renderRemoveCoinButton() {
+    if (this.props.Main &&
+        this.props.Main.coins &&
+        ((this.props.Main.coins.native &&
+        this.props.Main.coins.native.length &&
+        this.state.appConfig &&
+        !this.state.appConfig.stopNativeDaemonsOnQuit) ||
+        (this.props.Main.coins.spv &&
+        this.props.Main.coins.spv.length))) {
+      return true;
+    }
   }
 
   autoSetActiveCoin() {
@@ -97,8 +119,8 @@ class CoinTileItem extends React.Component {
     });
   }
 
-  removeCoin(coin) {
-    shepherdRemoveCoin(coin)
+  removeCoin(coin, mode) {
+    shepherdRemoveCoin(coin, mode)
     .then((res) => {
       Store.dispatch(
         triggerToaster(
@@ -189,9 +211,7 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-      }
-
-      if (mode === 'spv') {
+      } else if (mode === 'spv') {
         Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
         Store.dispatch(shepherdElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
       }

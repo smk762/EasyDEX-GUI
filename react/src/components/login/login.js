@@ -10,6 +10,7 @@ import {
   triggerToaster,
   toggleLoginSettingsModal,
   stopInterval,
+  dashboardChangeActiveCoin,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -205,10 +206,12 @@ class Login extends React.Component {
       if (props.Main.total === 0) {
         this.setState({
           activeLoginSection: 'activateCoin',
+          loginPassphrase: '',
           display: true,
         });
       } else {
         this.setState({
+          loginPassphrase: '',
           display: false,
         });
       }
@@ -222,6 +225,7 @@ class Login extends React.Component {
       if (props.Interval &&
           props.Interval.interval &&
           props.Interval.interval.sync) {
+        Store.dispatch(dashboardChangeActiveCoin());
         Store.dispatch(
           stopInterval(
             'sync',
@@ -243,6 +247,7 @@ class Login extends React.Component {
       if (props.Interval &&
           props.Interval.interval &&
           props.Interval.interval.sync) {
+        Store.dispatch(dashboardChangeActiveCoin());
         Store.dispatch(
           stopInterval(
             'sync',
@@ -257,6 +262,7 @@ class Login extends React.Component {
         props.Main &&
         props.Main.isLoggedIn) {
       this.setState({
+        loginPassphrase: '',
         activeLoginSection: 'activateCoin',
       });
     }
@@ -293,7 +299,7 @@ class Login extends React.Component {
 
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name]: newValue,
+      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
       loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
     });
   }
@@ -315,6 +321,16 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    // reset the login pass phrase values so that when the user logs out, the values are clear
+    this.setState({
+      loginPassphrase: '',
+      loginPassPhraseSeedType: null,
+    });
+
+    // reset login input vals
+    this.refs.loginPassphrase.value = '';
+    this.refs.loginPassphraseTextarea.value = '';
+
     if (this.state.shouldEncryptSeed) {
       Store.dispatch(encryptPassphrase(this.state.loginPassphrase, this.state.encryptKey, this.state.pubKey));
     }
@@ -329,16 +345,6 @@ class Login extends React.Component {
         shepherdElectrumCoins()
       );
     }
-
-    // reset the login pass phrase values so that when the user logs out, the values are clear
-    this.setState({
-      loginPassphrase: '',
-      loginPassPhraseSeedType: null,
-    });
-
-    // reset login input vals
-    this.refs.loginPassphrase.value = '';
-    this.refs.loginPassphraseEdit.value = '';
   }
 
   loadPinList() {

@@ -35,7 +35,9 @@ class ClaimInterestModal extends React.Component {
   }
 
   componentWillMount() {
-    this.loadListUnspent();
+    if (this.props.ActiveCoin.mode === 'native') {
+      this.loadListUnspent();
+    }
   }
 
   loadListUnspent() {

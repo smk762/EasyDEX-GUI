@@ -128,7 +128,7 @@ class AddCoin extends React.Component {
         addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
         display: addCoinProps.display,
-        modalClassName: addCoinProps.display ? 'show fade' : 'show fade',
+        modalClassName: 'show fade',
       }));
 
       setTimeout(() => {

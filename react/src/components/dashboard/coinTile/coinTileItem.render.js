@@ -24,29 +24,17 @@ const CoinTileItemRender = function() {
           </div>
         </div>
       </div>
-      { item.mode === 'native' &&
-        this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.native &&
-        this.props.Main.coins.native.length &&
-        this.props.Main.coins.native.length > 1 &&
+      { this.renderStopCoinButton() &&
         <i
-          onClick={ () => this.stopCoind(item.coin) }
+          onClick={ () => this.stopCoind(item.coin, item.mode) }
           title="Stop"
           className="icon fa-stop-circle coind-stop-icon"></i>
       }
-      { item.mode === 'native' &&
-        this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.native &&
-        this.props.Main.coins.native.length &&
-        this.props.Main.coins.native.length > 1 &&
-        this.state.appConfig &&
-        !this.state.appConfig.stopNativeDaemonsOnQuit &&
+      { this.renderRemoveCoinButton() &&
         <i
-          onClick={ () => this.removeCoin(item.coin) }
+          onClick={ () => this.removeCoin(item.coin, item.mode) }
           title="Remove"
-          className="icon fa-plus-circle coind-remove-icon"></i>
+          className={ 'icon fa-plus-circle ' + (item.mode === 'spv' ? 'coind-remove-icon coind-remove-icon-spv' : 'coind-remove-icon') }></i>
       }
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&
