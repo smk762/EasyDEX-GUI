@@ -5,6 +5,7 @@ import SendCoin from '../sendCoin/sendCoin';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsData from '../walletsData/walletsData';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
+import { getCoinTitle } from '../../../util/coinHelper';
 
 const WalletsMainRender = function() {
   return (
@@ -22,7 +23,7 @@ const WalletsMainRender = function() {
               <span
                 className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? 'hide' : '')}` }
                 style={{ marginLeft: '20px' }}>
-                { this.props.ActiveCoin.coin }
+                { getCoinTitle(this.props.ActiveCoin.coin).name }
               </span>
             </li>
           </ol>
