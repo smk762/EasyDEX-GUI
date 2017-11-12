@@ -6,6 +6,10 @@ import {
   stopInterval,
   startInterval,
   displayImportKeyModal,
+  shepherdElectrumLock,
+  shepherdElectrumLogout,
+  getDexCoins,
+  activeHandle,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -23,6 +27,24 @@ class Navbar extends React.Component {
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this._checkAC = this._checkAC.bind(this);
+    this.spvLock = this.spvLock.bind(this);
+    this.spvLogout = this.spvLogout.bind(this);
+  }
+
+  spvLock() {
+    shepherdElectrumLock()
+    .then((res) => {
+      Store.dispatch(getDexCoins());
+      Store.dispatch(activeHandle());
+    });
+  }
+
+  spvLogout() {
+    shepherdElectrumLogout()
+    .then((res) => {
+      Store.dispatch(getDexCoins());
+      Store.dispatch(activeHandle());
+    });
   }
 
   componentWillMount() {
@@ -105,6 +127,9 @@ const mapStateToProps = (state) => {
     },
     Interval: {
       interval: state.Interval.interval,
+    },
+    Main: {
+      isLoggedIn: state.Main.isLoggedIn,
     },
   };
 };
