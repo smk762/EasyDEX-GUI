@@ -26,23 +26,25 @@ export const ImportKeyModalRender = function() {
                   <strong>{ translate('IMPORT_KEY.NOTICE') }:</strong> { translate('IMPORT_KEY.NOTICE_DESC') }.&nbsp;
                   <span className={ this.props.ActiveCoin.coin === 'KMD' ? '' : 'hide' }>{ translate('IMPORT_KEY.KMD_RESCAN_WARNING_TIME') }.</span>
                 </p>
-                <form
+                <div
                   className="wifkeys-form"
-                  method="post"
-                  action="javascript:"
                   autoComplete="off">
                   <div className="form-group form-material floating">
                     <input
+                      autoComplete="off"
                       type="password"
                       className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                       name="wifkeysPassphrase"
                       id="wifkeysPassphrase"
+                      ref="wifkeysPassphrase"
                       onChange={ this.updateInput }
                       value={ this.state.wifkeysPassphrase } />
                     <textarea
+                      autoComplete="off"
                       className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
                       id="wifkeysPassphraseTextarea"
                       name="wifkeysPassphrase"
+                      ref="wifkeysPassphraseTextarea"
                       onChange={ this.updateInput }
                       value={ this.state.wifkeysPassphrase }></textarea>
                     <i
@@ -62,7 +64,7 @@ export const ImportKeyModalRender = function() {
                       className="btn btn-primary waves-effect waves-light"
                       onClick={ this.showPassphraseAddress }>{ translate('IMPORT_KEY.SHOW_ADDRESS_AND_WIF') }</button>
                   </div>
-                </form>
+                </div>
                 { this.state.passphraseAddress &&
                   this.state.passphraseWif &&
                   <div className="margin-top-60">
@@ -118,6 +120,7 @@ export const ImportKeyModalRender = function() {
                     type="text"
                     className="form-control"
                     name="wif"
+                    ref="wif"
                     onChange={ this.updateInput }
                     value={ this.state.wif } />
                 </div>

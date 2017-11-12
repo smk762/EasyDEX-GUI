@@ -28,7 +28,12 @@ class ExportKeysPanel extends React.Component {
         props.Dashboard.activeSection !== 'settings') {
       this.setState(Object.assign({}, this.state, {
         keys: null,
+        wifkeysPassphrase: '',
       }));
+
+      // reset input vals
+      this.refs.wifkeysPassphrase.value = '';
+      this.refs.wifkeysPassphraseTextarea.value = '';
     }
   }
 
@@ -46,8 +51,12 @@ class ExportKeysPanel extends React.Component {
       } else {
         this.setState(Object.assign({}, this.state, {
           keys: keys.result,
+          wifkeysPassphrase: '',
         }));
-        console.warn(keys);
+
+        // reset input vals
+        this.refs.wifkeysPassphrase.value = '';
+        this.refs.wifkeysPassphraseTextarea.value = '';
       }
     })
   }
@@ -162,22 +171,24 @@ class ExportKeysPanel extends React.Component {
         </div>
         <div className="row">
           <div className="col-sm-12">
-            <form
+            <div
               className="wifkeys-form"
-              method="post"
-              action="javascript:"
               autoComplete="off">
               <div className="form-group form-material floating">
                 <input
                   type="password"
                   className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                  autoComplete="off"
                   name="wifkeysPassphrase"
+                  ref="wifkeysPassphrase"
                   id="wifkeysPassphrase"
                   onChange={ this.updateInput }
                   value={ this.state.wifkeysPassphrase } />
                 <textarea
                   className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                  autoComplete="off"
                   id="wifkeysPassphraseTextarea"
+                  ref="wifkeysPassphraseTextarea"
                   name="wifkeysPassphrase"
                   onChange={ this.updateInput }
                   value={ this.state.wifkeysPassphrase }></textarea>
@@ -191,25 +202,27 @@ class ExportKeysPanel extends React.Component {
               <div className="col-sm-12 col-xs-12 text-align-center">
                 <button
                   type="button"
-                  className="btn btn-primary waves-effect waves-light"
+                  className="btn btn-primary waves-effect waves-light margin-bottom-5"
                   onClick={ this.exportWifKeys }>{ translate('INDEX.GET_WIF_KEYS') }</button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
         { this.state.keys &&
           <div className="row">
             <div className="col-sm-12 padding-top-15">
-              <table className="table">
-                <tr key={ `wif-export-table-header-pub` }>
-                  <td className="padding-bottom-20 padding-top-20">
-                    <strong>{ translate('SETTINGS.ADDRESS_LIST') }</strong>
-                  </td>
-                  <td className="padding-bottom-20 padding-top-20">
-                    <strong>{ translate('SETTINGS.WIF_KEY_LIST') }</strong>
-                  </td>
-                </tr>
-                { this.renderWifKeys() }
+              <table className="table no-borders">
+                <tbody>
+                  <tr key={ `wif-export-table-header-pub` }>
+                    <td className="padding-bottom-20 padding-top-20">
+                      <strong>{ translate('SETTINGS.ADDRESS_LIST') }</strong>
+                    </td>
+                    <td className="padding-bottom-20 padding-top-20">
+                      <strong>{ translate('SETTINGS.WIF_KEY_LIST') }</strong>
+                    </td>
+                  </tr>
+                  { this.renderWifKeys() }
+                </tbody>
               </table>
             </div>
           </div>

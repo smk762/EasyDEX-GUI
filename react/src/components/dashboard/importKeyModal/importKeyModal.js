@@ -187,6 +187,19 @@ class ImportKeyModal extends React.Component {
         );
       }
     });
+
+    this.state({
+      passphraseWif: null,
+      passphraseAddress: null,
+      wifkeysPassphrase: null,
+      wifkeysPassphraseTextarea: null,
+      importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
+    });
+
+    // reset input vals
+    this.refs.wif
+    this.refs.wifkeysPassphrase.value = '';
+    this.refs.wifkeysPassphraseTextarea.value = '';
   }
 
   generateKeysFromPassphrase() {

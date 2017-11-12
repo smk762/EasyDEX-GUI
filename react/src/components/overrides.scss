@@ -512,3 +512,13 @@ select{
   transform: rotate(45deg);
   top: 45px;
 }
+
+.coind-remove-icon-spv {
+  top: 19px;
+}
+
+.no-borders {
+  tbody > tr > td {
+    border: none;
+  }
+}
