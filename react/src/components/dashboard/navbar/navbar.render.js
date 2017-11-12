@@ -111,6 +111,8 @@ const NavbarRender = function() {
                 </li>
                 { this.props.Main &&
                   this.props.Main.isLoggedIn &&
+                  this.props.Main.spv &&
+                  this.props.Main.spv.length &&
                   <li>
                     <a onClick={ this.spvLock }>
                       <i className="icon fa-lock"></i> Lock
@@ -119,6 +121,8 @@ const NavbarRender = function() {
                 }
                 { this.props.Main &&
                   this.props.Main.isLoggedIn &&
+                  this.props.Main.spv &&
+                  this.props.Main.spv.length &&
                   <li>
                     <a onClick={ this.spvLogout }>
                       <i className="icon fa-power-off"></i> Logout

@@ -174,7 +174,7 @@ class ImportKeyModal extends React.Component {
             rescan ? translate('INDEX.WALLET_RESCAN_FINISHED') : translate('INDEX.ADDRESS_IMPORTED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
-            false
+            rescan ? false : true,
           )
         );
       } else {
