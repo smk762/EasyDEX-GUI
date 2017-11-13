@@ -177,7 +177,7 @@ class WalletsData extends React.Component {
       id: 'timestamp',
       Header: translate('INDEX.TIME'),
       Footer: translate('INDEX.TIME'),
-      accessor: (tx) => secondsToString(tx.blocktime || tx.timestamp || tx.time),
+      accessor: (tx) => secondsToString(tx.timestamp || tx.time || tx.blocktime),
     }];
 
     if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
