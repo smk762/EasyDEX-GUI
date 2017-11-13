@@ -471,6 +471,8 @@ export const _lang = {
       'CURRENT_BLOCK_SM': 'current block',
     },
     'TOASTR': {
+      'PORT_IS_TAKEN': 'Port @template@ is already taken!',
+      'ERROR_STARTING_DAEMON': 'Error starting @template@ daemon.',
       'KOMODO_DATADIR_INVALID': 'Komodo datadir path is invalid.<br>It must be an absolute path to an existing folder that doesn\'t contain spaces and/or any special characters.',
       'KOMODO_DATADIR_NOT_DIR': 'Komodo datadir path is not a directory.<br>It must be an absolute path to an existing folder that doesn\'t contain spaces and/or any special characters.',
       'INVALID_ADDRESS': 'Invalid @template@ address',

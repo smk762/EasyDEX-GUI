@@ -130,6 +130,7 @@ const mapStateToProps = (state) => {
     },
     Main: {
       isLoggedIn: state.Main.isLoggedIn,
+      coins: state.Main.coins,
     },
   };
 };
