@@ -5,7 +5,6 @@ import {
 import {
   triggerToaster,
   getDebugLog,
-  toggleCoindDownModal
 } from '../actionCreators';
 import Config from '../../config';
 import { translate } from '../../translate/translate';
@@ -138,7 +137,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
             {
               result: 'daemon is busy',
               error: null,
-              id: null
+              id: null,
             },
             coin,
             true,
@@ -146,16 +145,15 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           )
         );
       } else {
-        if (!json) {
+        if (!json ||
+            json.indexOf('"code":-777') > -1) {
           let _kmdMainPassiveMode;
 
           try {
             _kmdMainPassiveMode = window.require('electron').remote.getCurrentWindow().kmdMainPassiveMode;
           } catch (e) {}
 
-          if (!_kmdMainPassiveMode) {
-            dispatch(nativeGetinfoFailureState());
-          } else {
+          if (_kmdMainPassiveMode) {
             dispatch(
               triggerToaster(
                 translate('API.KMD_PASSIVE_ERROR'),
@@ -171,7 +169,6 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           } else {
             dispatch(getDebugLog('komodo', 50, coin));
           }
-          dispatch(toggleCoindDownModal(true));
         } else {
           json = JSON.parse(json);
         }
