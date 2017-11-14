@@ -447,14 +447,21 @@ select{
   padding-top: 5px;
 }
 
-.icon-spv-connection-warning {
+.icon-spv-connection-warning,
+.icon-native-connection-warning {
   position: absolute;
-  bottom: 15px;
+  bottom: 20px;
   right: 15px;
 
   &:before {
     color: #f2a654;
     font-size: 18px;
+  }
+}
+
+.icon-native-connection-warning {
+  &:before {
+    color: #e9595b;
   }
 }
 

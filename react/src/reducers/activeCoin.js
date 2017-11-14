@@ -59,6 +59,7 @@ export function ActiveCoin(state = {
           activeBasiliskAddress: state.activeBasiliskAddress,
           progress: state.progress,
           rescanInProgress: state.rescanInProgress,
+          getinfoFetchFailures: state.getinfoFetchFailures,
         };
         let _coins = state.coins;
         _coins[state.coin] = _coinDataToStore;
@@ -81,6 +82,7 @@ export function ActiveCoin(state = {
           activeBasiliskAddress: _coinData.activeBasiliskAddress,
           progress: _coinData.progress,
           rescanInProgress: _coinData.rescanInProgress,
+          getinfoFetchFailures: _coinData.getinfoFetchFailures,
         };
       } else {
         if (state.coin) {
@@ -100,6 +102,7 @@ export function ActiveCoin(state = {
             activeBasiliskAddress: state.activeBasiliskAddress,
             progress: state.progress,
             rescanInProgress: state.rescanInProgress,
+            getinfoFetchFailures: state.getinfoFetchFailures,
           };
           let _coins = state.coins;
           _coins[state.coin] = _coinData;
@@ -214,7 +217,7 @@ export function ActiveCoin(state = {
       return {
         ...state,
         progress: action.progress,
-        getinfoFetchFailures: !action.progress ? state.getinfoFetchFailures + 1 : 0,
+        getinfoFetchFailures: typeof action.progress === 'string' && action.progress.indexOf('"code":-777') ? state.getinfoFetchFailures + 1 : 0,
       };
     case DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE:
       return {

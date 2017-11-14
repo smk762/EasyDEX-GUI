@@ -109,22 +109,14 @@ const NavbarRender = function() {
                     <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                   </a>
                 </li>
-                { this.props.Main &&
-                  this.props.Main.isLoggedIn &&
-                  this.props.Main.coins &&
-                  this.props.Main.coins.spv &&
-                  this.props.Main.coins.spv.length &&
+                { this.isRenderSpvLockLogout() &&
                   <li>
                     <a onClick={ this.spvLock }>
                       <i className="icon fa-lock"></i> Lock
                     </a>
                   </li>
                 }
-                { this.props.Main &&
-                  this.props.Main.isLoggedIn &&
-                  this.props.Main.coins &&
-                  this.props.Main.coins.spv &&
-                  this.props.Main.coins.spv.length &&
+                { this.isRenderSpvLockLogout() &&
                   <li>
                     <a onClick={ this.spvLogout }>
                       <i className="icon fa-power-off"></i> Logout

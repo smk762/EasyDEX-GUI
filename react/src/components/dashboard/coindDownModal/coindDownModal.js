@@ -5,7 +5,7 @@ import Store from '../../../store';
 
 import CoindDownModalRender from './coindDownModal.render';
 
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 2; //window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
 
 class CoindDownModal extends React.Component {
   constructor() {

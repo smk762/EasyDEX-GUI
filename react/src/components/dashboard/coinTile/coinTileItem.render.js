@@ -34,7 +34,7 @@ const CoinTileItemRender = function() {
         <i
           onClick={ () => this.removeCoin(item.coin, item.mode) }
           title="Remove"
-          className={ 'icon fa-plus-circle ' + (item.mode === 'spv' ? 'coind-remove-icon coind-remove-icon-spv' : 'coind-remove-icon') }></i>
+          className={ 'icon fa-plus-circle coind-remove-icon' + (item.mode === 'spv' ? ' coind-remove-icon-spv' : '') }></i>
       }
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&
@@ -44,6 +44,12 @@ const CoinTileItemRender = function() {
         <i
           title={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
           className="icon fa-info-circle icon-spv-connection-warning"></i>
+      }
+      { this.renderCoinConError(item) &&
+        <i
+          onClick={ this.openCoindDownModal }
+          title={ `Unable to establish RPC connection! Retries count: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
+          className="icon fa-warning icon-native-connection-warning"></i>
       }
     </div>
   );
