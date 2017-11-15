@@ -33,7 +33,7 @@ import CoinTileItemRender from './coinTileItem.render';
 
 const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 2; //window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
 
 class CoinTileItem extends React.Component {
   constructor() {

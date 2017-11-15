@@ -27,12 +27,36 @@ const CoindDownModalRender = function() {
             <div className="modal-body">
               <div className="vertical-align text-center">
                 <div className="page-content vertical-align-middle">
-                  <strong>Debug.log ({ translate('INDEX.LAST_50_LINES') })</strong>
+                  <i
+                    className="icon fa-refresh manual-debuglog-refresh pointer"
+                    onClick={ this.refreshDebugLog }></i>
+                  <div className="text-left">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        value="on"
+                        checked={ this.state.toggleDebugLog } />
+                      <div
+                        className="slider"
+                        onClick={ this.toggleDebugLog }></div>
+                    </label>
+                    <div
+                      className="toggle-label margin-right-15 pointer"
+                      onClick={ this.toggleDebugLog }>
+                      Show debug.log
+                    </div>
+                  </div>
+                  { !this.state.toggleDebugLog &&
+                    <strong>Debug.log ({ translate('INDEX.LAST_50_LINES') })</strong>
+                  }
+                  { this.state.toggleDebugLog &&
+                    <strong>{ this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin} stdout` }</strong>
+                  }
                   <div className="form-group form-material floating">
                     <textarea
                       readOnly
                       className="form-control"
-                      value={ _debuglog }></textarea>
+                      value={ !this.state.toggleDebugLog ? _debuglog : this.state.coindStdOut }></textarea>
                   </div>
                   <button
                     type="button"

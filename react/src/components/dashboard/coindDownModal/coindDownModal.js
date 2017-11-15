@@ -1,21 +1,58 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleCoindDownModal } from '../../../actions/actionCreators';
+import {
+  toggleCoindDownModal,
+  coindGetStdout,
+  getDebugLog,
+} from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 import CoindDownModalRender from './coindDownModal.render';
 
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = 2; //window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
 
 class CoindDownModal extends React.Component {
   constructor() {
     super();
     this.state = {
       display: false,
-      debugLogCrash: null,
       kmdMainPassiveMode: false,
+      coindStdOut: 'Loading...',
+      toggleDebugLog: true,
     };
     this.dismiss = this.dismiss.bind(this);
+    this.getCoindGetStdout = this.getCoindGetStdout.bind(this);
+    this.toggleDebugLog = this.toggleDebugLog.bind(this);
+    this.refreshDebugLog = this.refreshDebugLog.bind(this);
+  }
+
+  refreshDebugLog() {
+    const _coin = this.props.ActiveCoin.coin;
+
+    if (!this.state.toggleDebugLog) {
+      if (_coin === 'KMD') {
+        Store.dispatch(getDebugLog('komodo', 50));
+      } else {
+        Store.dispatch(getDebugLog('komodo', 50, _coin));
+      }
+    } else {
+      this.getCoindGetStdout();
+    }
+  }
+
+  toggleDebugLog() {
+    this.setState({
+      toggleDebugLog: !this.state.toggleDebugLog,
+    });
+  }
+
+  getCoindGetStdout() {
+    coindGetStdout(this.props.ActiveCoin.coin)
+    .then((res) => {
+      this.setState({
+        coindStdOut: res.msg === 'success' ? res.result : `Error reading ${this.props.ActiveCoin.coin} stdout`,
+      });
+    });
   }
 
   dismiss() {
@@ -39,6 +76,10 @@ class CoindDownModal extends React.Component {
       this.setState(Object.assign({}, this.state, {
         display: nextProps.displayCoindDownModal,
       }));
+
+      if (nextProps.displayCoindDownModal) {
+        this.getCoindGetStdout();
+      }
     }
   }
 

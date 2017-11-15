@@ -387,3 +387,30 @@ export function resetAppConfig() {
     })
   }
 }
+
+export function coindGetStdout(chain) {
+  const _chain = chain === 'KMD' ? 'komodod' : chain;
+
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/coind/stdout?chain=${chain}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'coindGetStdout',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
