@@ -14,6 +14,8 @@ import ExportKeysPanel from './settings.exportKeysPanel';
 // import ImportKeysPanel from './settings.importKeysPanel';
 import SupportPanel from './settings.supportPanel';
 import SPVServersPanel from './settings.spvServersPanel';
+import DaemonStdoutPanel from './settings.daemonStdoutPanel';
+
 // import WalletInfoPanel from './settings.walletInfoPanel';
 // import WalletBackupPanel from './settings.walletBackupPanel';
 
@@ -73,9 +75,18 @@ export const SettingsRender = function() {
                   openByDefault={this.props.disableWalletSpecificUI}>
                   <DebugLogPanel />
                 </PanelSection>
+                { this.props.Main.coins &&
+                  this.props.Main.coins.native &&
+                  Object.keys(this.props.Main.coins.native).length > 0 &&
+                  <PanelSection
+                    title={ 'Debug / Komodod stdout' }
+                    icon="icon fa-bug">
+                    <DaemonStdoutPanel />
+                  </PanelSection>
+                }
                 <PanelSection
                   title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
-                  icon="icon fa-bug">
+                  icon="icon fa-wrench">
                   <AppSettingsPanel />
                 </PanelSection>
                 <PanelSection

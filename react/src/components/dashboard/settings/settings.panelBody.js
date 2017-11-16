@@ -13,6 +13,7 @@ class PanelSection extends React.Component {
 
   componentDidMount() {
     const { active } = this.props;
+    let _pass = false;
 
     if (active) {
       this.setState({
@@ -22,14 +23,15 @@ class PanelSection extends React.Component {
 
     this.accordionResizeInterval = setInterval(() => {
       if (this.props.active) {
-        this.setState({
-          sectionHeight: `${this.accordionContent.scrollHeight}px`,
+        this.setState({ // auto resize hack
+          sectionHeight: _pass ? 'auto' : `${this.accordionContent.scrollHeight}px`,
         });
+        _pass = !_pass;
       }
     }, 500);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount() { // revise(?)
     clearInterval(this.accordionResizeInterval);
   }
 
