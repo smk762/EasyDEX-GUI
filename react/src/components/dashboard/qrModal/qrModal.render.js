@@ -5,10 +5,11 @@ import QRCode from 'qrcode.react';
 export const QRModalRender = function() {
   return (
     <span>
-      <span className="label label-default margin-left-10 action"
+      <span
+        className="qrcode-modal"
         title={ translate('INDEX.QRCODE') }
         onClick={ this.openModal }>
-        <i className="icon fa-qrcode"></i>
+        <i className="icon fa-qrcode margin-right-5"></i> generate QR-code
       </span>
       <div
         className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }
@@ -26,7 +27,7 @@ export const QRModalRender = function() {
             </div>
             <div className="modal-body">
               <div className="animsition vertical-align fade-in">
-                <div 
+                <div
                   id={ 'qrModalCanvas' + this.props.content }
                   className="page-content vertical-align-middle text-center">
                   <QRCode

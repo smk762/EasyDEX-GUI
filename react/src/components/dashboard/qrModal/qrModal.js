@@ -70,12 +70,12 @@ class QRModal extends React.Component {
   }
 
   saveAsImage(e) {
-      const qrCanvas = document.getElementById('qrModalCanvas' + this.props.content);
-      const canvas = qrCanvas.getElementsByTagName('canvas');
-      const dataURL = canvas[0].toDataURL();
-      const a = document.getElementById('saveModalImage' + this.props.content);
-      a.href = dataURL;
-      a.download = this.props.content;
+    const qrCanvas = document.getElementById('qrModalCanvas' + this.props.content);
+    const canvas = qrCanvas.getElementsByTagName('canvas');
+    const dataURL = canvas[0].toDataURL();
+    const a = document.getElementById('saveModalImage' + this.props.content);
+    a.href = dataURL;
+    a.download = this.props.content;
   }
 
   render() {

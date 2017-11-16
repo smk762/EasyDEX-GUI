@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   copyCoinAddress,
-  getNewKMDAddresses
+  getNewKMDAddresses,
+  dumpPrivKey,
+  copyString,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -20,12 +22,20 @@ class ReceiveCoin extends React.Component {
     this.state = {
       openDropMenu: false,
       hideZeroAdresses: false,
+      toggledAddressMenu: null,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.toggleVisibleAddress = this.toggleVisibleAddress.bind(this);
     this.checkTotalBalance = this.checkTotalBalance.bind(this);
     this.ReceiveCoinTableRender = _ReceiveCoinTableRender.bind(this);
+    this.toggleAddressMenu = this.toggleAddressMenu.bind(this);
+  }
+
+  toggleAddressMenu(address) {
+    this.setState({
+      toggledAddressMenu: this.state.toggledAddressMenu === address ? null : address,
+    });
   }
 
   ReceiveCoinTableRender() {
@@ -48,11 +58,30 @@ class ReceiveCoin extends React.Component {
     );
   }
 
+  dumpPrivKey(address) {
+    this.toggleAddressMenu(address);
+    dumpPrivKey(this.props.coin, address)
+    .then((json) => {
+      if (json.length &&
+          json.length > 10) {
+        Store.dispatch(copyString(json, 'WIF address copied to clipboard'));
+      }
+    });
+  }
+
   handleClickOutside(e) {
-    if (e.srcElement.className.indexOf('dropdown') === -1 &&
+    if (e &&
+        e.srcElement &&
+        e.srcElement.offsetParent &&
+        e.srcElement.offsetParent.className.indexOf('dropdown') === -1 &&
       (e.srcElement.offsetParent && e.srcElement.offsetParent.className.indexOf('dropdown') === -1)) {
       this.setState({
         openDropMenu: false,
+        toggledAddressMenu:
+          e.srcElement.className.indexOf('receive-address-context-menu-trigger') === -1 &&
+          e.srcElement.className.indexOf('fa-qrcode') === -1 &&
+          e.srcElement.className.indexOf('receive-address-context-menu-get-qr') === -1 &&
+          e.srcElement.className.indexOf('qrcode-modal') === -1 ? null : this.state.toggledAddressMenu,
       });
     }
   }
@@ -64,6 +93,7 @@ class ReceiveCoin extends React.Component {
   }
 
   _copyCoinAddress(address) {
+    this.toggleAddressMenu(address);
     Store.dispatch(copyCoinAddress(address));
   }
 

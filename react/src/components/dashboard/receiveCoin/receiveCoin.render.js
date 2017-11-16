@@ -7,15 +7,34 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
     <td>
       <span className={ 'label label-' + (type === 'public' ? 'default' : 'dark') }>
-        <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>
+        <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;
         { type === 'public' ? translate('IAPI.PUBLIC_SM') : translate('KMD_NATIVE.PRIVATE') }
       </span>
       <button
-        className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
-        onClick={ () => this._copyCoinAddress(address) }>
-          <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+        onClick={ () => this.toggleAddressMenu(address) }
+        className="btn btn-default btn-xs clipboard-edexaddr margin-left-10 receive-address-context-menu-trigger">
+        <i
+          title="Toggle address context menu"
+          className="fa fa-ellipsis-v receive-address-context-menu-trigger"></i>
       </button>
-      <QRModal content={ address } />
+      { this.state.toggledAddressMenu &&
+        this.state.toggledAddressMenu === address &&
+        <div className="receive-address-context-menu">
+          <ul>
+            <li onClick={ () => this._copyCoinAddress(address) }>
+              <i className="icon wb-copy margin-right-5"></i> { translate('INDEX.COPY') + ' pub key' }
+            </li>
+            { address[0] !== 'b' &&
+              <li onClick={ () => this.dumpPrivKey(address) }>
+                <i className="icon fa-key margin-right-5"></i> { translate('INDEX.COPY') + ' priv key (WIF)' }
+              </li>
+            }
+            <li className="receive-address-context-menu-get-qr">
+              <QRModal content={ address } />
+            </li>
+          </ul>
+        </div>
+      }
     </td>
   );
 };
