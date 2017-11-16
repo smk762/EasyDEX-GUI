@@ -15,6 +15,7 @@ import ExportKeysPanel from './settings.exportKeysPanel';
 import SupportPanel from './settings.supportPanel';
 import SPVServersPanel from './settings.spvServersPanel';
 import DaemonStdoutPanel from './settings.daemonStdoutPanel';
+import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
 
 // import WalletInfoPanel from './settings.walletInfoPanel';
 // import WalletBackupPanel from './settings.walletBackupPanel';
@@ -102,6 +103,15 @@ export const SettingsRender = function() {
                     title={ translate('INDEX.EXPORT_KEYS') }
                     icon="icon md-key">
                     <ExportKeysPanel />
+                  </PanelSection>
+                }
+                { this.props.Main.coins &&
+                  this.props.Main.coins.native &&
+                  Object.keys(this.props.Main.coins.native).length > 0 &&
+                  <PanelSection
+                    title={ 'Wallet.dat keys' }
+                    icon="icon md-key">
+                    <NativeWalletDatKeysPanel />
                   </PanelSection>
                 }
                 { this.props.Main.coins &&

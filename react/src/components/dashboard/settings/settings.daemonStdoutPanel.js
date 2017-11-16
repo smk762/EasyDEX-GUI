@@ -51,7 +51,7 @@ class DaemonStdoutPanel extends React.Component {
     for (let i = 0; i < _nativeCoins.length; i++) {
       _items.push(
         <option
-          key={ `coind-stdout-coins-${ coin }` }
+          key={ `coind-stdout-coins-${i}` }
           value={ `${_nativeCoins[i]}` }>{ `${_nativeCoins[i]}` }</option>
       );
     }

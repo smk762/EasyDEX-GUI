@@ -403,3 +403,30 @@ export function getModeInfo(mode) {
     color: modecolor,
   };
 }
+
+export function coindList() {
+  const _coins = [
+    'KMD',
+    'CHIPS',
+    'BET',
+    'BOTS',
+    'CEAL',
+    'COQUI',
+    'CRYPTO',
+    'HODL',
+    'DEX',
+    'JUMBLR',
+    'KV',
+    'MGW',
+    'MVP',
+    'MNZ',
+    'PANGEA',
+    'REVS',
+    'SHARK',
+    'MESH',
+    'SUPERNET',
+    'WLC',
+  ];
+
+  return _coins;
+}

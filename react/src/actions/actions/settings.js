@@ -396,13 +396,40 @@ export function coindGetStdout(chain) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
           'coindGetStdout',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export function getWalletDatKeys(chain, keyMatchPattern) {
+  const _chain = chain === 'KMD' ? null : chain;
+
+  return new Promise((resolve, reject) => {
+    fetch(keyMatchPattern ? `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}&search=${keyMatchPattern}` : `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'getWalletDatKeys',
           'Error',
           'error'
         )
