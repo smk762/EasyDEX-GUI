@@ -12,9 +12,18 @@ export function toaster(state = {
     case ADD_TOASTER_MESSAGE:
       let _isSameToastTwice = false;
 
+      function arrayToString(arr) {
+        if (typeof arr === 'object') {
+          return arr.join().toString();
+        } else {
+          return arr;
+        }
+      }
+
       for (let i = 0; i < state.toasts.length; i++) {
         if (state.toasts[i].title === action.title &&
-            state.toasts[i].message === action.message &&
+            (arrayToString(action.message) === arrayToString(state.toasts[i].message) ||
+            state.toasts[i].message === action.message) &&
             state.toasts[i]['_type'] === action['_type']) {
           _isSameToastTwice = true;
           break;

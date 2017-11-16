@@ -108,11 +108,17 @@ class ZcparamsFetchModal extends React.Component {
           if (data.msg.file === 'proving') {
             _updateLog = [];
             _updateLog.push(translate('ZCPARAMS_FETCH.BOTH_KEYS_VERIFIED'));
-            _updateLog.push(translate('ZCPARAMS_FETCH.PLEASE_RESTART'));
+            // _updateLog.push(translate('ZCPARAMS_FETCH.PLEASE_RESTART'));
             this.setState(Object.assign({}, this.state, {
               updateLog: _updateLog,
               done: true,
             }));
+
+            window.require('electron').remote.getCurrentWindow().zcashParamsExistPromise()
+            .then((res) => {
+              const _errors = zcashParamsCheckErrors(res);
+              window.require('electron').remote.getCurrentWindow().zcashParamsExist = res;
+            });
           } else {
             this.setState(Object.assign({}, this.state, {
               updateLog: _updateLog,

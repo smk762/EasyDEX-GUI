@@ -7,9 +7,11 @@ import {
   toggleAddcoinModal,
   triggerToaster,
   shepherdGetCoinList,
-  shepherdPostCoinList
+  shepherdPostCoinList,
+  toggleZcparamsFetchModal,
 } from '../../actions/actionCreators';
 import Store from '../../store';
+import { zcashParamsCheckErrors } from '../../util/zcashParams';
 
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
@@ -46,6 +48,43 @@ class AddCoin extends React.Component {
     this.toggleActionsMenu = this.toggleActionsMenu.bind(this);
     this.saveCoinSelection = this.saveCoinSelection.bind(this);
     this.loadCoinSelection = this.loadCoinSelection.bind(this);
+    this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
+  }
+
+  verifyZcashParamsExist(mode) {
+    return new Promise((resolve, reject) => {
+      if (Number(mode) === -1) {
+        const _res = window.require('electron').remote.getCurrentWindow().zcashParamsExist;
+        const __errors = zcashParamsCheckErrors(_res);
+
+        if (__errors) {
+          window.require('electron').remote.getCurrentWindow().zcashParamsExistPromise()
+          .then((res) => {
+            const _errors = zcashParamsCheckErrors(res);
+            window.require('electron').remote.getCurrentWindow().zcashParamsExist = res;
+
+            if (_errors) {
+              Store.dispatch(
+                triggerToaster(
+                  _errors,
+                  'Komodod',
+                  'error',
+                  false
+                )
+              );
+              Store.dispatch(toggleZcparamsFetchModal(true));
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          });
+        } else {
+          resolve(true);
+        }
+      } else {
+        resolve(true);
+      }
+    });
   }
 
   saveCoinSelection() {
@@ -206,23 +245,28 @@ class AddCoin extends React.Component {
       return;
     }
 
-    if (!_coin.daemonParam) {
-      Store.dispatch(addCoin(
-        coin,
-        _coin.mode,
-      ));
-    } else {
-      Store.dispatch(addCoin(
-        coin,
-        _coin.mode,
-        { type: _coin.daemonParam }
-      ));
-    }
+    this.verifyZcashParamsExist(_coin.mode)
+    .then((res) => {
+      if (res) {
+        if (!_coin.daemonParam) {
+          Store.dispatch(addCoin(
+            coin,
+            _coin.mode,
+          ));
+        } else {
+          Store.dispatch(addCoin(
+            coin,
+            _coin.mode,
+            { type: _coin.daemonParam }
+          ));
+        }
 
-    this.removeCoin();
-    this.addNewItem();
+        this.removeCoin();
+        this.addNewItem();
 
-    Store.dispatch(toggleAddcoinModal(false, false));
+        Store.dispatch(toggleAddcoinModal(false, false));
+      }
+    });
   }
 
   dismiss() {

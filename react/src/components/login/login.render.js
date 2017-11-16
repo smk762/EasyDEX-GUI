@@ -1,10 +1,14 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
 import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
+import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchModal';
 
 const LoginRender = function () {
   return (
     <div>
+      { this.props.Dashboard.displayZcparamsModal &&
+        <ZcparamsFetchModal />
+      }
       <LoginSettingsModal section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">

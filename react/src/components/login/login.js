@@ -499,9 +499,7 @@ class Login extends React.Component {
 const mapStateToProps = (state) => {
   return {
     Main: state.Main,
-    Dashboard: {
-      activeHandle: state.Dashboard.activeHandle,
-    },
+    Dashboard: state.Dashboard,
     Interval: {
       interval: state.Interval.interval,
     },
