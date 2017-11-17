@@ -105,15 +105,11 @@ export const SettingsRender = function() {
                     <ExportKeysPanel />
                   </PanelSection>
                 }
-                { this.props.Main.coins &&
-                  this.props.Main.coins.native &&
-                  Object.keys(this.props.Main.coins.native).length > 0 &&
-                  <PanelSection
-                    title={ 'Wallet.dat keys' }
-                    icon="icon md-key">
-                    <NativeWalletDatKeysPanel />
-                  </PanelSection>
-                }
+                <PanelSection
+                  title={ 'Wallet.dat keys' }
+                  icon="icon md-key">
+                  <NativeWalletDatKeysPanel />
+                </PanelSection>
                 { this.props.Main.coins &&
                   this.props.Main.coins.spv &&
                   Object.keys(this.props.Main.coins.spv).length &&
