@@ -25,7 +25,7 @@ class AddCoinOptionsAC extends React.Component {
     let _items = [];
 
     for (let i = 0; i < _assetChains.length; i++) {
-      const availableModes = _assetChains[i] === 'revs' || _assetChains[i] === 'jumblr' || _assetChains[i] === 'wlc' || _assetChains[i] === 'mnz' ? 'native|spv' : 'native';
+      const availableModes = _assetChains[i] === 'revs' || _assetChains[i] === 'jumblr' || _assetChains[i] === 'wlc' || _assetChains[i] === 'mnz' || _assetChains[i] === 'coqui' ? 'native|spv' : 'native';
 
       _items.push(
         <option
