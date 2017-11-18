@@ -1,6 +1,16 @@
 // TODO: merge into react app
 let _configCopy;
 
+function toggleMainWindowHelp() {
+  const _help = $('.agama-modes-help');
+
+  if (_help.is(':visible')) {
+    _help.hide();
+  } else {
+    _help.show();
+  }
+}
+
 function toggleDropdown(type) {
   const _dropdown = $('.dropdown-menu.' + (type === 'lite' ? 'lite' : 'native'));
 
@@ -10,7 +20,7 @@ function toggleDropdown(type) {
     _dropdown.addClass('hide');
   }
 
-  $('.dropdown-menu.' + (type === 'lite' ? 'native' : 'lite')).addClass('hide');;
+  $('.dropdown-menu.' + (type === 'lite' ? 'native' : 'lite')).addClass('hide');
 }
 
 function initSettingsForm() {

@@ -175,6 +175,7 @@ body.agama-app-settings-window {
   top: 0;
   right: 0;
   cursor: pointer;
+  z-index: 100;
 }
 
 .btn-close img {
@@ -466,4 +467,47 @@ small {
 
 .padding-top-40 {
   padding-top: 40px;
+}
+
+.agama-modes-help {
+  background: rgba(255, 255, 255, 0.85);
+  width: 420px;
+  height: auto;
+  position: absolute;
+  color: #000;
+  border-radius: 4px;
+  font-weight: normal;
+  font-size: 14px;
+  text-align: left;
+  padding: 10px;
+  top: 60px;
+  left: 40px;
+  z-index: 1000;
+}
+
+.agama-modes-help .close-btn {
+  float: right;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.mode-desc {
+  top: 173px;
+  position: absolute;
+}
+.mode-desc.native {
+  left: 88px;
+}
+.mode-desc.spv {
+  left: 293px;
+}
+
+.intro {
+  position: relative;
+  top: -15px;
 }
