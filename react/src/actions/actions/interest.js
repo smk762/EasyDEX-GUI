@@ -35,6 +35,20 @@ export function getListUnspent(coin) {
     })
     .then(response => response.json())
     .then(json => {
+      if (json &&
+          json.result &&
+          json.result.length) {
+        let _spendable = [];
+
+        for (let i = 0; i < json.result.length; i++) {
+          if (json.result[i].spendable) {
+            _spendable.push(json.result[i]);
+          }
+        }
+
+        json.result = _spendable;
+      }
+
       resolve(json.result ? json.result : json);
     })
   });

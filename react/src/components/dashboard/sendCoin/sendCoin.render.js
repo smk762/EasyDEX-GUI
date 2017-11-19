@@ -85,15 +85,15 @@ export const _SendFormRender = function() {
             <label className="switch">
               <input
                 type="checkbox"
-                checked={ this.state.substractFee } />
+                checked={ this.state.subtractFee } />
               <div
                 className="slider"
-                onClick={ () => this.toggleSubstractFee() }></div>
+                onClick={ () => this.toggleSubtractFee() }></div>
             </label>
             <div
               className="toggle-label"
-              onClick={ () => this.toggleSubstractFee() }>
-                { translate('DASHBOARD.SUBSTRACT_FEE') }
+              onClick={ () => this.toggleSubtractFee() }>
+                { translate('DASHBOARD.SUBTRACT_FEE') }
             </div>
           </span>
         </div>
@@ -206,7 +206,7 @@ export const SendRender = function() {
                 <div className="col-lg-6 col-sm-6 col-xs-6">
                   { this.state.amount } { this.props.ActiveCoin.coin }
                 </div>
-                <div className={ this.state.substractFee ? 'col-lg-6 col-sm-6 col-xs-12 padding-top-10 bold' : 'hide' }>{ translate('DASHBOARD.SUBSTRACT_FEE') }</div>
+                <div className={ this.state.subtractFee ? 'col-lg-6 col-sm-6 col-xs-12 padding-top-10 bold' : 'hide' }>{ translate('DASHBOARD.SUBTRACT_FEE') }</div>
               </div>
 
               { this.state.sendFrom &&

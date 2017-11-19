@@ -440,7 +440,7 @@ export const _lang = {
       'SEND_FEE_REQ': 'Make sure you have fee entered. Default value is',
       'SEND_TOTAL_REQ': 'Make sure you have both amount and fee entered to calculate final total.',
       'SEND_TX_PROGRESS': 'The transaction submitted is processing. Once processed the transaction details will be displayed here.',
-      'SUBSTRACT_FEE': 'Subtract fee from amount',
+      'SUBTRACT_FEE': 'Subtract fee from amount',
       'UNKNOWN': 'Unknown',
       'IN': 'IN',
       'OUT': 'OUT',

@@ -36,7 +36,7 @@ class SendCoin extends React.Component {
       fee: 0,
       addressSelectorOpen: false,
       renderAddressDropdown: true,
-      substractFee: false,
+      subtractFee: false,
       lastSendToResponse: null,
       coin: null,
       spvVerificationWarning: false,
@@ -51,7 +51,7 @@ class SendCoin extends React.Component {
     this.renderOPIDListCheck = this.renderOPIDListCheck.bind(this);
     this.SendFormRender = _SendFormRender.bind(this);
     this.isTransparentTx = this.isTransparentTx.bind(this);
-    this.toggleSubstractFee = this.toggleSubstractFee.bind(this);
+    this.toggleSubtractFee = this.toggleSubtractFee.bind(this);
     this.isFullySynced = this.isFullySynced.bind(this);
   }
 
@@ -59,9 +59,9 @@ class SendCoin extends React.Component {
     return _SendFormRender.call(this);
   }
 
-  toggleSubstractFee() {
+  toggleSubtractFee() {
     this.setState({
-      substractFee: !this.state.substractFee,
+      subtractFee: !this.state.subtractFee,
     });
   }
 
@@ -147,7 +147,7 @@ class SendCoin extends React.Component {
       fee: 0,
       addressSelectorOpen: false,
       renderAddressDropdown: true,
-      substractFee: false,
+      subtractFee: false,
       lastSendToResponse: null,
     };
     let updatedState;
@@ -365,7 +365,7 @@ class SendCoin extends React.Component {
           fee: 0,
           addressSelectorOpen: false,
           renderAddressDropdown: true,
-          substractFee: false,
+          subtractFee: false,
           spvVerificationWarning: false,
           spvPreflightSendInProgress: false,
         });
@@ -460,10 +460,10 @@ class SendCoin extends React.Component {
       const _amountSats = this.state.amount * 100000000;
       const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
 
-      if (_amountSats > _balanceSats) {
+      if (Number(_amountSats) + 10000 > _balanceSats) {
         Store.dispatch(
           triggerToaster(
-            translate('SEND.INSUFFICIENT_FUNDS'),
+            `${translate('SEND.INSUFFICIENT_FUNDS')} max available balance is ${(0.00000001 * (_balanceSats - 10000)).toFixed(8)} ${this.props.ActiveCoin.coin}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -500,18 +500,18 @@ class SendCoin extends React.Component {
         this.state.sendTo.length === 34 &&
         this.props.ActiveCoin.balance &&
         this.props.ActiveCoin.balance.transparent &&
-        Number(this.state.amount) > Number(this.props.ActiveCoin.balance.transparent)) ||
+        Number(Number(this.state.amount) + 0.0001) > Number(this.props.ActiveCoin.balance.transparent)) ||
         (this.state.addressType === 'public' &&
         this.state.sendTo &&
         this.state.sendTo.length > 34 &&
-        Number(this.state.amount) > Number(this.state.sendFromAmount)) ||
+        Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount)) ||
         (this.state.addressType === 'private' &&
         this.state.sendTo &&
         this.state.sendTo.length >= 34 &&
-        Number(this.state.amount) > Number(this.state.sendFromAmount))) {
+        Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
       Store.dispatch(
         triggerToaster(
-          translate('SEND.INSUFFICIENT_FUNDS'),
+          `${translate('SEND.INSUFFICIENT_FUNDS')} max available balance is ${Number(this.state.sendFromAmount || this.props.ActiveCoin.balance.transparent)} ${this.props.ActiveCoin.coin}`,
           translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
