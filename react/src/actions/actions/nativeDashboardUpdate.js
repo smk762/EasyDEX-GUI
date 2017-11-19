@@ -45,10 +45,10 @@ export function getDashboardUpdate(coin, activeCoinProps) {
 export function getDashboardUpdateState(json, coin, fakeResponse) {
   // rescan or similar resource heavy process
   if (fakeResponse ||
-      ((json.result['getinfo'].error && json.result['getinfo'].error === 'daemon is busy') &&
-      (json.result['z_getoperationstatus'].error && json.result['z_getoperationstatus'].error === 'daemon is busy') &&
-      (json.result['listtransactions'].error && json.result['listtransactions'].error === 'daemon is busy') &&
-      (json.result['listtransactions'].error && json.result['listtransactions'].error === 'daemon is busy'))) {
+      ((json.result.getinfo.error && json.result.getinfo.error === 'daemon is busy') &&
+      (json.result.z_getoperationstatus.error && json.result.z_getoperationstatus.error === 'daemon is busy') &&
+      (json.result.listtransactions.error && json.result.listtransactions.error === 'daemon is busy') &&
+      (json.result.listtransactions.error && json.result.listtransactions.error === 'daemon is busy'))) {
     return {
       type: DASHBOARD_UPDATE,
       progress: null,
@@ -60,7 +60,7 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
       rescanInProgress: true,
     };
   } else {
-    let _listtransactions = json.result['listtransactions'];
+    let _listtransactions = json.result.listtransactions;
 
     if (_listtransactions &&
         _listtransactions.error) {
@@ -74,22 +74,41 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
     if (coin === 'CHIPS') {
       return {
         type: DASHBOARD_UPDATE,
-        progress: json.result['getinfo'].result,
+        progress: json.result.getinfo.result,
         opids: null,
         txhistory: _listtransactions,
-        balance: { transparent: json.result['getbalance'].result, total: json.result['getbalance'].result },
-        addresses: json.result['addresses'],
+        balance: {
+          transparent: json.result.getbalance.result,
+          total: json.result.getbalance.result
+        },
+        addresses: json.result.addresses,
         coin: coin,
         rescanInProgress: false,
       };
     } else {
+      // calc transparent balance properly
+      let _tbalance = 0;
+
+      if (json.result.addresses &&
+          json.result.addresses.public &&
+          json.result.addresses.public.length) {
+        for (let i = 0; i < json.result.addresses.public.length; i++) {
+          _tbalance += json.result.addresses.public[i].spendable;
+        }
+      }
+
+      console.warn(_tbalance);
+
+      json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
+      json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.transparent + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
+
       return {
         type: DASHBOARD_UPDATE,
-        progress: json.result['getinfo'].result,
-        opids: json.result['z_getoperationstatus'].result,
+        progress: json.result.getinfo.result,
+        opids: json.result.z_getoperationstatus.result,
         txhistory: _listtransactions,
-        balance: json.result['z_gettotalbalance'].result,
-        addresses: json.result['addresses'],
+        balance: json.result.z_gettotalbalance.result,
+        addresses: json.result.addresses,
         coin: coin,
         rescanInProgress: false,
       };

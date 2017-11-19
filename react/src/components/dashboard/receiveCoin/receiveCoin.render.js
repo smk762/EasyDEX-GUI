@@ -40,20 +40,24 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
 };
 
 export const AddressItemRender = function(address, type) {
-  const _isBarterDexAddress = address.address[0] === 'b' ? true : false;
-  //fa-ban
   return (
     <tr key={ address.address }>
       { this.renderAddressActions(address.address, type) }
       <td>
         { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
-        { _isBarterDexAddress &&
+        { address.spendable === 0 &&
           <i
-            title="BarterDex address, you don't own its priv key"
+            title="You don't own priv keys for this address"
             className="fa fa-ban margin-left-10"></i>
         }
       </td>
-      <td>{ address.amount }</td>
+      <td>
+        <span>{ address.amount }</span>
+        { address.spendable === 0 &&
+          address.amount > 0 &&
+          <span title="Available amount to spend: 0"> (0)</span>
+        }
+      </td>
     </tr>
   );
 };
