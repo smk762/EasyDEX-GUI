@@ -23,6 +23,7 @@ class ReceiveCoin extends React.Component {
       openDropMenu: false,
       hideZeroAdresses: false,
       toggledAddressMenu: null,
+      toggleIsMine: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -30,6 +31,7 @@ class ReceiveCoin extends React.Component {
     this.checkTotalBalance = this.checkTotalBalance.bind(this);
     this.ReceiveCoinTableRender = _ReceiveCoinTableRender.bind(this);
     this.toggleAddressMenu = this.toggleAddressMenu.bind(this);
+    this.toggleIsMine = this.toggleIsMine.bind(this);
   }
 
   toggleAddressMenu(address) {
@@ -119,6 +121,12 @@ class ReceiveCoin extends React.Component {
     }));
   }
 
+  toggleIsMine() {
+    this.setState(Object.assign({}, this.state, {
+      toggleIsMine: !this.state.toggleIsMine,
+    }));
+  }
+
   checkTotalBalance() {
     let _balance = '0';
 
@@ -147,10 +155,20 @@ class ReceiveCoin extends React.Component {
               AddressItemRender.call(this, address, type)
             );
           }
+
+          if (!this.state.toggleIsMine &&
+            !address.canspend) {
+            items.pop();
+          }
         } else {
           items.push(
             AddressItemRender.call(this, address, type)
           );
+
+          if (!this.state.toggleIsMine &&
+            !address.canspend) {
+            items.pop();
+          }
         }
       }
 

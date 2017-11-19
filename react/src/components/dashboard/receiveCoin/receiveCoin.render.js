@@ -45,7 +45,7 @@ export const AddressItemRender = function(address, type) {
       { this.renderAddressActions(address.address, type) }
       <td>
         { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
-        { address.spendable === 0 &&
+        { !address.canspend &&
           <i
             title="You don't own priv keys for this address"
             className="fa fa-ban margin-left-10"></i>
@@ -53,8 +53,7 @@ export const AddressItemRender = function(address, type) {
       </td>
       <td>
         <span>{ address.amount }</span>
-        { address.spendable === 0 &&
-          address.amount > 0 &&
+        { !address.canspend &&
           <span title="Available amount to spend: 0"> (0)</span>
         }
       </td>
@@ -66,7 +65,7 @@ export const _ReceiveCoinTableRender = function() {
   return (
     <span>
       { this.checkTotalBalance() !== 0 &&
-        <div className="text-left padding-top-10 padding-bottom-10">
+        <div className="text-left padding-top-20 padding-bottom-15 push-left">
           { this.props.mode !== 'spv' &&
             <div>
               <label className="switch">
@@ -82,6 +81,28 @@ export const _ReceiveCoinTableRender = function() {
                 className="toggle-label margin-right-15 pointer"
                 onClick={ this.toggleVisibleAddress }>
                 { translate('INDEX.TOGGLE_ZERO_ADDRESSES') }
+              </div>
+            </div>
+          }
+        </div>
+      }
+      { this.checkTotalBalance() !== 0 &&
+        <div className="text-left padding-top-20 padding-bottom-15 push-right">
+          { this.props.mode !== 'spv' &&
+            <div title="Display all addresses including not mine (ismine:false)">
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  value="on"
+                  checked={ this.state.toggleIsMine } />
+                <div
+                  className="slider"
+                  onClick={ this.toggleIsMine }></div>
+              </label>
+              <div
+                className="toggle-label margin-right-15 pointer"
+                onClick={ this.toggleIsMine }>
+                Show all addresses
               </div>
             </div>
           }
