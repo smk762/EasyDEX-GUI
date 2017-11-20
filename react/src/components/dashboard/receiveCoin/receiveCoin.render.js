@@ -24,7 +24,7 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
             <li onClick={ () => this._copyCoinAddress(address) }>
               <i className="icon wb-copy margin-right-5"></i> { translate('INDEX.COPY') + ' pub key' }
             </li>
-            { address[0] !== 'b' &&
+            { !address.canspend &&
               <li onClick={ () => this.dumpPrivKey(address) }>
                 <i className="icon fa-key margin-right-5"></i> { translate('INDEX.COPY') + ' priv key (WIF)' }
               </li>

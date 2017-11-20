@@ -17,6 +17,7 @@ import {
   DASHBOARD_UPDATE,
   DASHBOARD_ELECTRUM_BALANCE,
   DASHBOARD_ELECTRUM_TRANSACTIONS,
+  DASHBOARD_REMOVE_COIN,
 } from '../actions/storeType';
 
 // TODO: refactor current coin props copy on change
@@ -40,6 +41,13 @@ export function ActiveCoin(state = {
   getinfoFetchFailures: 0,
 }, action) {
   switch (action.type) {
+    case DASHBOARD_REMOVE_COIN:
+      let _coins = state.coins;
+      delete _coins[action.coin];
+      return {
+        ...state,
+        coins: _coins,
+      }
     case DASHBOARD_ACTIVE_COIN_CHANGE:
       if (state.coins[action.coin]) {
         const _coinData = state.coins[action.coin];

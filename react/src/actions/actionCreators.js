@@ -29,6 +29,7 @@ import {
   DISPLAY_IMPORT_KEY_MODAL,
   ELECTRUM_SERVER_CHANGED,
   DISPLAY_ZCASH_PARAMS_FETCH,
+  DASHBOARD_REMOVE_COIN,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -287,5 +288,12 @@ export function toggleZcparamsFetchModal(display) {
   return {
     type: DISPLAY_ZCASH_PARAMS_FETCH,
     displayZcparamsModal: display,
+  }
+}
+
+export function dashboardRemoveCoin(coin) {
+  return {
+    type: DASHBOARD_REMOVE_COIN,
+    coin,
   }
 }
