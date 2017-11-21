@@ -100,8 +100,6 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
       json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
       json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
       json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);
-      json.result.z_gettotalbalance.result.total = 0;
-      json.result.z_gettotalbalance.result.interest = 0;
 
       return {
         type: DASHBOARD_UPDATE,
