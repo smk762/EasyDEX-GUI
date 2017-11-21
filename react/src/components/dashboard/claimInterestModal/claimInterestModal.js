@@ -8,7 +8,7 @@ import {
   getRawTransaction,
   copyString,
   sendToAddressPromise,
-  triggerToaster
+  triggerToaster,
 } from '../../../actions/actionCreators';
 import { translate } from '../../../translate/translate';
 import {

@@ -95,9 +95,9 @@ class CoinTileItem extends React.Component {
     ];
     const allCoins = this.props.Main.coins;
     let _coinSelected = false;
+    let _coinMode = {};
     let _mode;
     let _coin;
-    let _coinMode = {};
 
     if (allCoins) {
       modes.map((mode) => {

@@ -16,6 +16,7 @@ import SupportPanel from './settings.supportPanel';
 import SPVServersPanel from './settings.spvServersPanel';
 import DaemonStdoutPanel from './settings.daemonStdoutPanel';
 import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
+import CoindClearDataDirPanel from './settings.coindClearDataDirPanel';
 
 // import WalletInfoPanel from './settings.walletInfoPanel';
 // import WalletBackupPanel from './settings.walletBackupPanel';
@@ -109,6 +110,11 @@ export const SettingsRender = function() {
                   title={ 'Wallet.dat keys' }
                   icon="icon md-key">
                   <NativeWalletDatKeysPanel />
+                </PanelSection>
+                <PanelSection
+                  title={ 'Clear native coin data dir' }
+                  icon="icon fa-trash">
+                  <CoindClearDataDirPanel />
                 </PanelSection>
                 { this.props.Main.coins &&
                   this.props.Main.coins.spv &&

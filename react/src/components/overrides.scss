@@ -599,3 +599,21 @@ select{
 .push-left {
   float: left;
 }
+
+.col-lg-12 {
+  &.col-xs-12 {
+    &.balance-placeholder--bold {
+      .icon {
+        &.fa-eye {
+          position: relative;
+          top: -2px;
+          padding-right: 5px;
+        }
+      }
+    }
+  }
+}
+
+.col-red {
+  color: #f96868;
+}

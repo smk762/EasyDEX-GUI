@@ -148,3 +148,26 @@ export function shepherdPostCoinList(data) {
     .then(json => resolve(json))
   });
 }
+
+export function shepherdClearCoindFolder(coin, keepWalletDat) {
+  return new Promise((resolve, reject) => {
+    fetch(keepWalletDat ? `http://127.0.0.1:${Config.agamaPort}/shepherd/kick?coin=${coin}&keepwallet=true` : `http://127.0.0.1:${Config.agamaPort}/shepherd/kick?coin=${coin}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'shepherdClearCoindFolder',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => resolve(json))
+  });
+}
