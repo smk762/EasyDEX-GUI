@@ -36,10 +36,7 @@ export const AddressListRender = function() {
 
 export const _SendFormRender = function() {
   return (
-    <form
-      className="extcoin-send-form"
-      method="post"
-      autoComplete="off">
+    <div className="extcoin-send-form">
       { this.state.renderAddressDropdown &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
@@ -137,7 +134,7 @@ export const _SendFormRender = function() {
           </button>
         </div>
       </div>
-    </form>
+    </div>
   );
 }
 
@@ -277,7 +274,33 @@ export const SendRender = function() {
                       </tr>
                       <tr>
                         <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
-                        <td className="padding-left-30">{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }</td>
+                        <td className="padding-left-30">
+                          { this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }
+                          { ((this.props.ActiveCoin.mode === 'spv' &&
+                            this.state.lastSendToResponse &&
+                            this.state.lastSendToResponse.txid) ||
+                            (this.props.ActiveCoin.mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
+                            <button
+                              className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                              title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                              onClick={ () => this.copyTXID(this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse) }>
+                                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                            </button>
+                          }
+                          { ((this.props.ActiveCoin.mode === 'spv' &&
+                            this.state.lastSendToResponse &&
+                            this.state.lastSendToResponse.txid) ||
+                            (this.props.ActiveCoin.mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
+                            <div className="margin-top-10">
+                              <button
+                                type="button"
+                                className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                                onClick={ () => this.openExplorerWindow(this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse) }>
+                                <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.props.ActiveCoin.coin) }
+                              </button>
+                            </div>
+                          }
+                        </td>
                       </tr>
                     </tbody>
                   </table>

@@ -9,7 +9,8 @@ import {
   getKMDOPID,
   clearLastSendToResponseState,
   shepherdElectrumSend,
-  shepherdElectrumSendPreflight
+  shepherdElectrumSendPreflight,
+  copyString,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -53,6 +54,33 @@ class SendCoin extends React.Component {
     this.isTransparentTx = this.isTransparentTx.bind(this);
     this.toggleSubtractFee = this.toggleSubtractFee.bind(this);
     this.isFullySynced = this.isFullySynced.bind(this);
+  }
+
+  copyTXID(txid) {
+    Store.dispatch(copyString(txid, 'TXID copied to clipboard'));
+  }
+
+  openExplorerWindow(txid) {
+    const url = `http://${this.props.ActiveCoin.coin}.explorer.supernet.org/tx/${txid}`;
+    const remote = window.require('electron').remote;
+    const BrowserWindow = remote.BrowserWindow;
+
+    const externalWindow = new BrowserWindow({
+      width: 1280,
+      height: 800,
+      title: `${translate('INDEX.LOADING')}...`,
+      icon: remote.getCurrentWindow().iguanaIcon,
+      webPreferences: {
+        nodeIntegration: false,
+      },
+    });
+
+    externalWindow.loadURL(url);
+    externalWindow.webContents.on('did-finish-load', () => {
+      setTimeout(() => {
+        externalWindow.show();
+      }, 40);
+    });
   }
 
   SendFormRender() {
