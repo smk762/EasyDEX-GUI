@@ -10,7 +10,9 @@ import {
   setJumblrAddress,
   importPrivkey,
   copyCoinAddress,
-  copyString
+  copyString,
+  resumeJumblr,
+  pauseJumblr,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -69,7 +71,57 @@ class Jumblr extends React.Component {
     this.copyPassphrase = this.copyPassphrase.bind(this);
     this.checkPassphraseValid = this.checkPassphraseValid.bind(this);
     this.importJumblrSecretAddress = this.importJumblrSecretAddress.bind(this);
+    this._pauseJumblr = this._pauseJumblr.bind(this);
+    this._resumeJumblr = this._resumeJumblr.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  _pauseJumblr() {
+    pauseJumblr(this.props.ActiveCoin.coin)
+    .then((json) => {
+      if (json.error &&
+          json.error.code) {
+        Store.dispatch(
+          triggerToaster(
+            json.error.message,
+            'Error',
+            'error'
+          )
+        );
+      } else if (json.result && json.result.result && json.result.result === 'paused') {
+        Store.dispatch(
+          triggerToaster(
+            'Jumblr paused',
+            'Jumblr',
+            'success'
+          )
+        );
+      }
+    });
+  }
+
+  _resumeJumblr() {
+    resumeJumblr(this.props.ActiveCoin.coin)
+    .then((json) => {
+      if (json.error &&
+          json.error.code) {
+        Store.dispatch(
+          triggerToaster(
+            json.error.message,
+            'Error',
+            'error'
+          )
+        );
+      } else if (json.result && json.result.result && json.result.result === 'resumed') {
+        Store.dispatch(
+          triggerToaster(
+            'Jumblr resumed',
+            'Jumblr',
+            'success'
+          )
+        );
+      }
+    });
   }
 
   generateKeys(passphrase) {

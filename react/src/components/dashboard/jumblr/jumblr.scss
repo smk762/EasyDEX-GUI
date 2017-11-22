@@ -90,3 +90,15 @@
     }
   }
 }
+
+.btn-jumblr-warning {
+  background: rgba(255, 152, 0, 0.8);
+  color: #fff;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: #fff;
+    background: #ff9800;
+  }
+}

@@ -128,6 +128,25 @@ export const JumblrRender = function() {
                 </span>
               </label>
             </div>
+
+            <div
+              className="form-group col-lg-3 col-md-3 col-sm-3 col-xs-3"
+              style={{ padding: 0 }}>
+              <button
+                type="button"
+                className="btn btn-jumblr-warning waves-effect waves-light"
+                onClick={ this._pauseJumblr }>
+                <i className="fa fa-pause margin-right-10"></i>
+                Pause
+              </button>
+              <button
+                type="button"
+                className="btn btn-success waves-effect waves-light margin-left-20"
+                onClick={ this._resumeJumblr }>
+                <i className="fa fa-play margin-right-10"></i>
+                Resume
+              </button>
+            </div>
           </div>
 
           <div className="col-xlg-12 col-md-12">

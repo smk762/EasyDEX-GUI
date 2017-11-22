@@ -79,6 +79,82 @@ export function setJumblrAddress(coin, type, address) {
   });
 }
 
+export function pauseJumblr(coin) {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'jumblr_pause',
+      params: [],
+    };
+
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ payload: payload }),
+    };
+
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'pauseJumblr',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export function resumeJumblr(coin) {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'jumblr_resume',
+      params: [],
+    };
+
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ payload: payload }),
+    };
+
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'resumeJumblr',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
 function dumpPrivkey(coin, key) {
   return new Promise((resolve, reject) => {
     const payload = {

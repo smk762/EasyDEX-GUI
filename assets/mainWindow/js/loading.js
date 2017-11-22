@@ -295,5 +295,7 @@ function init() {
     $('.dropdown-menu.native').css('right', '165px');
     $('#nativeOnlyBtnCarret').css('margin-right', '0');
     $('#settingsBtn').css('margin', '0');
+    $('.mode-desc.spv').hide();
+    $('.mode-desc.native').css('left', '180px');
   }
 }
