@@ -4,6 +4,7 @@ import ReactTable from 'react-table';
 import TablePaginationRenderer from './pagination';
 import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
+import Spinner from '../spinner/spinner';
 
 export const TxConfsRender = function(confs) {
   if (Number(confs) > -1) {
@@ -248,9 +249,16 @@ export const WalletsDataRender = function() {
               <div className="col-xlg-12 col-lg-12 col-sm-12 col-xs-12">
                 <div className="panel">
                   <header className="panel-heading z-index-10">
-                    <i
-                      className="icon fa-refresh manual-txhistory-refresh pointer"
-                      onClick={ this.refreshTxHistory }></i>
+                    { this.state.loading &&
+                      <span className="spinner--small">
+                        <Spinner />
+                      </span>
+                    }
+                    { !this.state.loading &&
+                      <i
+                        className="icon fa-refresh manual-txhistory-refresh pointer"
+                        onClick={ this.refreshTxHistory }></i>
+                    }
                     <h4 className="panel-title">{ translate('INDEX.TRANSACTION_HISTORY') }</h4>
                   </header>
                   <div className="panel-body">

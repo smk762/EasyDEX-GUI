@@ -197,7 +197,6 @@ class ImportKeyModal extends React.Component {
     });
 
     // reset input vals
-    this.refs.wif
     this.refs.wifkeysPassphrase.value = '';
     this.refs.wifkeysPassphraseTextarea.value = '';
   }

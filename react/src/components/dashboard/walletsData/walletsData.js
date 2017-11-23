@@ -51,6 +51,7 @@ class WalletsData extends React.Component {
       searchTerm: null,
       coin: null,
       txhistory: null,
+      loading: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -252,6 +253,15 @@ class WalletsData extends React.Component {
   }
 
   refreshTxHistory() {
+    this.setState({
+      loading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+      });
+    }, 1000);
+
     if (this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
     } else if (this.props.ActiveCoin.mode === 'spv') {

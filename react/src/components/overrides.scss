@@ -617,3 +617,10 @@ select{
 .col-red {
   color: #f96868;
 }
+
+.spinner--small {
+  position: absolute;
+  right: 18px;
+  top: -15px;
+  transform: scale(0.4);
+}
