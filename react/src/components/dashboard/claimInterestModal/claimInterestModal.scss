@@ -16,7 +16,7 @@
       margin-bottom: 30px;
     }
     .table-scroll {
-      height: 366px;
+      max-height: 366px;
       overflow-y: auto;
       overflow-x: hidden;
       width: 100%;
@@ -42,6 +42,10 @@
       right: 20px;
       font-size: 20px;
       z-index: 100;
+    }
+
+    .bootstrap-select {
+      max-width: 400px;
     }
   }
 }

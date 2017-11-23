@@ -23,10 +23,14 @@ export const _ClaimInterestTableRender = function() {
           <td>{ _transactionsList[i].interest }</td>
           <td className="locktime center">
             { _transactionsList[i].locktime &&
-              <i className="fa-check-circle green"></i>
+              <i
+                title={ _transactionsList[i].locktime }
+                className="fa-check-circle green"></i>
             }
             { !_transactionsList[i].locktime &&
-              <i className="fa-exclamation-circle red"></i>
+              <i
+                title={ _transactionsList[i].locktime }
+                className="fa-exclamation-circle red"></i>
             }
           </td>
         </tr>
@@ -59,12 +63,52 @@ export const _ClaimInterestTableRender = function() {
             onClick={ this.toggleZeroInterest }>
             { translate('CLAIM_INTEREST.SHOW_ZERO_INTEREST') }
           </div>
-          <button
-            type="button"
-            className="btn btn-success waves-effect waves-light claim-btn"
-            onClick={ () => this.claimInterest() }>
-            <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', `${this.state.totalInterest} KMD `) }
-          </button>
+          { !this.state.spvVerificationWarning &&
+            <button
+              type="button"
+              className="btn btn-success waves-effect waves-light claim-btn"
+              onClick={ () => this.claimInterest() }
+              disabled={ this.state.spvPreflightSendInProgress }>
+              { !this.state.spvPreflightSendInProgress &&
+                <i className="icon fa-dollar margin-right-5"></i>
+              }
+              { !this.state.spvPreflightSendInProgress &&
+                <span>{ translate('CLAIM_INTEREST.CLAIM_INTEREST', `${this.state.totalInterest} KMD `) }</span>
+              }
+              { this.state.spvPreflightSendInProgress &&
+                <span>{ translate('SEND.SPV_VERIFYING') }...</span>
+              }
+            </button>
+          }
+          { this.state.spvVerificationWarning &&
+            <div
+              className="padding-top-20"
+              style={{ fontSize: '15px' }}>
+              <strong className="color-warning">{ translate('SEND.WARNING') }:</strong> { translate('SEND.WARNING_SPV_P1') } { translate('SEND.WARNING_SPV_P2') }
+              <div className="margin-top-15">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={ this.confirmClaimInterest }>
+                    { translate('INDEX.CONFIRM') }
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary margin-left-15"
+                  onClick={ this.cancelClaimInterest }>
+                    Cancel
+                </button>
+              </div>
+            </div>
+          }
+          { this.props.ActiveCoin.mode === 'native' &&
+            this.state.addressses &&
+            Object.keys(this.state.addressses).length > 0 &&
+            <div className="margin-top-20 margin-bottom-20">
+              <div className="margin-bottom-5">Send my balance to</div>
+              { this.addressDropdownRender() }
+            </div>
+          }
         </div>
       }
       <div className="table-scroll">
@@ -98,7 +142,7 @@ export const _ClaimInterestTableRender = function() {
 
 export const ClaimInterestModalRender = function() {
   return (
-    <span>
+    <span onClick={ this.closeDropMenu }>
       <div className={ 'modal modal-claim-interest modal-3d-sign ' + (this.state.open ? 'show in' : 'fade hide') }>
         <div className="modal-dialog modal-center modal-sm">
           <div className="modal-content">
@@ -120,10 +164,12 @@ export const ClaimInterestModalRender = function() {
                   { this.state.isLoading &&
                     <span>{ translate('INDEX.LOADING') }...</span>
                   }
-                  { !this.state.isLoading && this.checkTransactionsListLength() &&
+                  { !this.state.isLoading &&
+                    this.checkTransactionsListLength() &&
                     <div>{ this.claimInterestTableRender() }</div>
                   }
-                  { !this.state.isLoading && !this.checkTransactionsListLength() &&
+                  { !this.state.isLoading &&
+                    !this.checkTransactionsListLength() &&
                     <div>{ translate('INDEX.NO_DATA') }</div>
                   }
                 </div>

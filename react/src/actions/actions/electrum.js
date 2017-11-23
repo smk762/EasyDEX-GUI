@@ -233,6 +233,31 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
   }
 }
 
+export function shepherdElectrumSendPromise(coin, value, sendToAddress, changeAddress) {
+  return new Promise((resolve, reject) => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=true&verify=true`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'shepherdElectrumSendPromise',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
 export function shepherdElectrumSendPreflight(coin, value, sendToAddress, changeAddress) {
   return new Promise((resolve, reject) => {
     fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=false&verify=true`, {
@@ -254,6 +279,35 @@ export function shepherdElectrumSendPreflight(coin, value, sendToAddress, change
     .then(response => response.json())
     .then(json => {
       resolve(json);
+    });
+  });
+}
+
+export function shepherdElectrumListunspent(coin, address) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listunspent?coin=${coin}&address=${address}&full=true`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'shepherdElectrumListunspent',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      if (!json.result) {
+        resolve('error');
+      } else {
+        resolve(json);
+      }
     });
   });
 }

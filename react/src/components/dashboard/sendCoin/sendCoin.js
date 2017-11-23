@@ -23,6 +23,7 @@ import { isPositiveNumber } from '../../../util/number';
 
 // TODO: - add links to explorers
 //       - render z address trim
+//       - handle click outside
 
 class SendCoin extends React.Component {
   constructor(props) {
