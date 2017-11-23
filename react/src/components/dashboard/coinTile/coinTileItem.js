@@ -158,6 +158,9 @@ class CoinTileItem extends React.Component {
       Store.dispatch(activeHandle());
       setTimeout(() => {
         this.autoSetActiveCoin();
+        setTimeout(() => {
+          Store.dispatch(dashboardRemoveCoin(coin));
+        }, 500);
       }, 500);
     });
   }
@@ -187,6 +190,9 @@ class CoinTileItem extends React.Component {
         Store.dispatch(activeHandle());
         setTimeout(() => {
           this.autoSetActiveCoin();
+          setTimeout(() => {
+            Store.dispatch(dashboardRemoveCoin(coin));
+          }, 500);
         }, 500);
       }
     });
@@ -237,7 +243,7 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-      } else if (mode === 'spv') {
+      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins[coin].pub) {
         Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
         Store.dispatch(shepherdElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
       }
