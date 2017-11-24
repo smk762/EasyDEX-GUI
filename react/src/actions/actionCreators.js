@@ -176,17 +176,19 @@ export function dashboardChangeSection(sectionName) {
   }
 }
 
-export function dashboardChangeActiveCoinState(coin, mode) {
+export function dashboardChangeActiveCoinState(coin, mode, skipCoinsArrayUpdate) {
+    console.warn(skipCoinsArrayUpdate);
   return {
     type: DASHBOARD_ACTIVE_COIN_CHANGE,
     coin: coin,
     mode: mode,
+    skip: skipCoinsArrayUpdate,
   }
 }
 
-export function dashboardChangeActiveCoin(coin, mode) {
+export function dashboardChangeActiveCoin(coin, mode, skipCoinsArrayUpdate) {
   return dispatch => {
-    dispatch(dashboardChangeActiveCoinState(coin, mode));
+    dispatch(dashboardChangeActiveCoinState(coin, mode, skipCoinsArrayUpdate));
   }
 }
 

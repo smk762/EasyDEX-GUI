@@ -109,6 +109,13 @@ export const _ClaimInterestTableRender = function() {
               { this.addressDropdownRender() }
             </div>
           }
+          { !this.isFullySynced() &&
+            this.props.ActiveCoin &&
+            this.props.ActiveCoin.mode === 'native' &&
+            <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
+              <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
+            </div>
+          }
         </div>
       }
       <div className="table-scroll">

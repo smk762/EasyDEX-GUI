@@ -88,7 +88,7 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  autoSetActiveCoin() {
+  autoSetActiveCoin(skipCoin) {
     const modes = [
       'native',
       'spv',
@@ -99,10 +99,11 @@ class CoinTileItem extends React.Component {
     let _mode;
     let _coin;
 
+    console.warn('allCoins', allCoins);
     if (allCoins) {
       modes.map((mode) => {
         allCoins[mode].map((coin) => {
-          if (!_coinSelected) {
+          if (!_coinSelected && coin !== skipCoin) {
             _coinSelected = true;
             _coin = coin;
             _mode = mode;
@@ -111,17 +112,19 @@ class CoinTileItem extends React.Component {
         });
 
         if (_coinMode.KMD &&
-            _coinMode.KMD === 'native') {
+            _coinMode.KMD === 'native' &&
+            skipCoin !== 'KMD') {
           _coin = 'KMD';
           _mode = 'native';
-        } else if (_coinMode.KMD && _coinMode.KMD === 'spv') {
+        } else if (_coinMode.KMD && _coinMode.KMD === 'spv' && skipCoin !== 'KMD') {
           _coin = 'KMD';
           _mode = 'spv';
         }
       });
 
       setTimeout(() => {
-        this._dashboardChangeActiveCoin(_coin, _mode);
+        console.warn('autoset active coin', _coin);
+        this._dashboardChangeActiveCoin(_coin, _mode, true);
       }, 100);
     }
   }
@@ -157,7 +160,7 @@ class CoinTileItem extends React.Component {
       Store.dispatch(getDexCoins());
       Store.dispatch(activeHandle());
       setTimeout(() => {
-        this.autoSetActiveCoin();
+        this.autoSetActiveCoin(coin);
         setTimeout(() => {
           Store.dispatch(dashboardRemoveCoin(coin));
         }, 500);
@@ -189,7 +192,7 @@ class CoinTileItem extends React.Component {
         Store.dispatch(getDexCoins());
         Store.dispatch(activeHandle());
         setTimeout(() => {
-          this.autoSetActiveCoin();
+          this.autoSetActiveCoin(coin);
           setTimeout(() => {
             Store.dispatch(dashboardRemoveCoin(coin));
           }, 500);
@@ -250,9 +253,10 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  _dashboardChangeActiveCoin(coin, mode) {
+  _dashboardChangeActiveCoin(coin, mode, skipCoinsArrUpdate) {
     if (coin !== this.props.ActiveCoin.coin) {
-      Store.dispatch(dashboardChangeActiveCoin(coin, mode));
+      console.warn('_dashboardChangeActiveCoin', skipCoinsArrUpdate);
+      Store.dispatch(dashboardChangeActiveCoin(coin, mode, skipCoinsArrUpdate));
       setTimeout(() => {
         this.dispatchCoinActions(coin, mode);
       }, 100);

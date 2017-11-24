@@ -188,7 +188,7 @@ class ImportKeyModal extends React.Component {
       }
     });
 
-    this.state({
+    this.setState({
       passphraseWif: null,
       passphraseAddress: null,
       wifkeysPassphrase: null,

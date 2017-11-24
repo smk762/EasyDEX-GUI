@@ -1,7 +1,7 @@
 import { translate } from '../../translate/translate';
 import {
   triggerToaster,
-  getDashboardUpdate
+  getDashboardUpdate,
 } from '../actionCreators';
 import Config from '../../config';
 

@@ -71,7 +71,10 @@ export function ActiveCoin(state = {
           getinfoFetchFailures: state.getinfoFetchFailures,
         };
         let _coins = state.coins;
-        _coins[state.coin] = _coinDataToStore;
+
+        if (!action.skip) {
+          _coins[state.coin] = _coinDataToStore;
+        }
         delete _coins.undefined;
 
         return {
@@ -115,7 +118,10 @@ export function ActiveCoin(state = {
             getinfoFetchFailures: state.getinfoFetchFailures,
           };
           let _coins = state.coins;
-          _coins[state.coin] = _coinData;
+
+          if (!action.skip) {
+            _coins[state.coin] = _coinData;
+          }
 
           return {
             ...state,

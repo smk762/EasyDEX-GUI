@@ -453,7 +453,7 @@ export const _lang = {
       'SPV_CONN_ERROR': 'Connection error!',
       'SPV_CONN_ERROR_P1': 'Try to connect to another SPV server.',
       'SPV_CONN_ERROR_P2': 'To do that go to "Settings", select "SPV Server List" tab, choose new server and click "OK".',
-      'FAILED_TX_INFO': 'Transaction failed or block reindexing is in progress. Failed transactions usually rejected after a while resulting in your funds being credited back.',
+      'FAILED_TX_INFO': 'Transaction failed or blocks reindexing is in progress. Failed transactions usually rejected after a while resulting in your funds being credited back.',
       'SPV_CLAIMED_INTEREST': 'Claimed interest',
       'CLAIM_INTEREST_HELPER_BAR_P1': 'You have',
       'CLAIM_INTEREST_HELPER_BAR_P2': 'to claim',

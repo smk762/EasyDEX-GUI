@@ -44,11 +44,23 @@ class ClaimInterestModal extends React.Component {
     this.openDropMenu = this.openDropMenu.bind(this);
     this.closeDropMenu = this.closeDropMenu.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.isFullySynced = this.isFullySynced.bind(this);
   }
 
   componentWillMount() {
     if (this.props.ActiveCoin.mode === 'native') {
       this.loadListUnspent();
+    }
+  }
+
+  isFullySynced() {
+    if (this.props.ActiveCoin.progress &&
+        this.props.ActiveCoin.progress.longestchain &&
+        this.props.ActiveCoin.progress.blocks &&
+        this.props.ActiveCoin.progress.longestchain > 0 &&
+        this.props.ActiveCoin.progress.blocks > 0 &&
+        Number(this.props.ActiveCoin.progress.blocks) * 100 / Number(this.props.ActiveCoin.progress.longestchain) === 100) {
+      return true;
     }
   }
 
@@ -337,8 +349,8 @@ class ClaimInterestModal extends React.Component {
 
   render() {
     if (this.props.ActiveCoin &&
-        this.props.ActiveCoin.coin &&
-        this.props.ActiveCoin.coin === 'KMD') {
+        this.props.ActiveCoin.coin /*&&
+        this.props.ActiveCoin.coin === 'KMD'*/) {
       return ClaimInterestModalRender.call(this);
     } else {
       return null;
@@ -353,6 +365,7 @@ const mapStateToProps = (state) => {
       coin: state.ActiveCoin.coin,
       balance: state.ActiveCoin.balance,
       activeSection: state.ActiveCoin.activeSection,
+      progress: state.ActiveCoin.progress,
     },
     Dashboard: {
       displayClaimInterestModal: state.Dashboard.displayClaimInterestModal,
