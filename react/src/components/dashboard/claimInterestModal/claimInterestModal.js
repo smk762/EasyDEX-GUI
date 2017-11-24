@@ -194,11 +194,7 @@ class ClaimInterestModal extends React.Component {
             false
           )
         );
-        this.setState({
-          transactionsList: [],
-          isLoading: false,
-          totalInterest: 0,
-        });
+        this.closeModal();
       }
     });
   }
@@ -264,6 +260,7 @@ class ClaimInterestModal extends React.Component {
                 false
               )
             );
+            this.closeModal();
           }
         });
       }
@@ -348,7 +345,14 @@ class ClaimInterestModal extends React.Component {
 
   closeModal() {
     this.setState({
+      isLoading: true,
+      transactionsList: [],
+      showZeroInterest: true,
+      totalInterest: 0,
+      spvPreflightSendInProgress: false,
+      spvVerificationWarning: false,
       addressses: {},
+      addressSelectorOpen: false,
       selectedAddress: null,
     });
     Store.dispatch(toggleClaimInterestModal(false));
