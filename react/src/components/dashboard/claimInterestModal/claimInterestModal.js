@@ -236,7 +236,7 @@ class ClaimInterestModal extends React.Component {
       } else {
         sendToAddressPromise(
           this.props.ActiveCoin.coin,
-          this.state.selectedAddress, // this.state.transactionsList[0].address,
+          this.state.selectedAddress,
           this.props.ActiveCoin.balance.transparent
         ).then((json) => {
           if (json.error &&
@@ -251,7 +251,7 @@ class ClaimInterestModal extends React.Component {
           } else if (json.result && json.result.length && json.result.length === 64) {
             Store.dispatch(
               triggerToaster(
-                `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.transactionsList[0].address}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
+                `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.selectedAddress}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 'success',
                 false
@@ -349,8 +349,8 @@ class ClaimInterestModal extends React.Component {
 
   render() {
     if (this.props.ActiveCoin &&
-        this.props.ActiveCoin.coin /*&&
-        this.props.ActiveCoin.coin === 'KMD'*/) {
+        this.props.ActiveCoin.coin &&
+        this.props.ActiveCoin.coin === 'KMD') {
       return ClaimInterestModalRender.call(this);
     } else {
       return null;

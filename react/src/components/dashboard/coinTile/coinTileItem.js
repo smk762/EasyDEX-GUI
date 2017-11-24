@@ -99,11 +99,11 @@ class CoinTileItem extends React.Component {
     let _mode;
     let _coin;
 
-    console.warn('allCoins', allCoins);
     if (allCoins) {
       modes.map((mode) => {
         allCoins[mode].map((coin) => {
-          if (!_coinSelected && coin !== skipCoin) {
+          if (!_coinSelected &&
+              coin !== skipCoin) {
             _coinSelected = true;
             _coin = coin;
             _mode = mode;
@@ -123,7 +123,6 @@ class CoinTileItem extends React.Component {
       });
 
       setTimeout(() => {
-        console.warn('autoset active coin', _coin);
         this._dashboardChangeActiveCoin(_coin, _mode, true);
       }, 100);
     }
