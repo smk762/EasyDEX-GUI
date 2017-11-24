@@ -228,6 +228,13 @@ class ClaimInterestModal extends React.Component {
               this.confirmClaimInterest();
             }
           } else {
+            Store.dispatch(
+              triggerToaster(
+                sendPreflight.result,
+                'Error',
+                'error'
+              )
+            );
             this.setState(Object.assign({}, this.state, {
               spvPreflightSendInProgress: false,
             }));
