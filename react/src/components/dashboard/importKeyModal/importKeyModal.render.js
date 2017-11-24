@@ -116,13 +116,20 @@ export const ImportKeyModalRender = function() {
                   <label
                     htmlFor="wif"
                     className="bold">{ translate('IMPORT_KEY.WIF_KEY') }</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="wif"
-                    ref="wif"
-                    onChange={ this.updateInput }
-                    value={ this.state.wif } />
+                  <div className="form-group form-material">
+                    <input
+                      autoComplete="off"
+                      type={ !this.state.wifInputVisibility ? 'password' : 'text' }
+                      className="form-control"
+                      name="wif"
+                      id="wif"
+                      ref="wif"
+                      onChange={ this.updateInput }
+                      value={ this.state.wif } />
+                    <i
+                      className={ 'seed-toggle fa fa-eye' + (!this.state.wifInputVisibility ? '-slash' : '') }
+                      onClick={ this.toggleWifInputVisibility }></i>
+                  </div>
                 </div>
                 <button
                   type="button"

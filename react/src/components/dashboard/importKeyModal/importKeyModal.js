@@ -42,12 +42,13 @@ class ImportKeyModal extends React.Component {
       keyImportResult: null,
       importWithRescan: false,
       seedInputVisibility: false,
-      toggleSeedInputVisibility: false,
+      wifInputVisibility: false,
       trimPassphraseTimer: null,
     };
     this.generateKeysFromPassphrase = this.generateKeysFromPassphrase.bind(this);
     this.toggleImportWithRescan = this.toggleImportWithRescan.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
+    this.toggleWifInputVisibility = this.toggleWifInputVisibility.bind(this);
     this._copyCoinAddress = this._copyCoinAddress.bind(this);
     this.showPassphraseAddress = this.showPassphraseAddress.bind(this);
     this.importWifAddress = this.importWifAddress.bind(this);
@@ -99,6 +100,12 @@ class ImportKeyModal extends React.Component {
   toggleSeedInputVisibility() {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
+    });
+  }
+
+  toggleWifInputVisibility() {
+    this.setState({
+      wifInputVisibility: !this.state.wifInputVisibility,
     });
   }
 
@@ -189,6 +196,7 @@ class ImportKeyModal extends React.Component {
     });
 
     this.setState({
+      wif: null,
       passphraseWif: null,
       passphraseAddress: null,
       wifkeysPassphrase: null,
@@ -197,6 +205,7 @@ class ImportKeyModal extends React.Component {
     });
 
     // reset input vals
+    this.refs.wif.value = '';
     this.refs.wifkeysPassphrase.value = '';
     this.refs.wifkeysPassphraseTextarea.value = '';
   }
