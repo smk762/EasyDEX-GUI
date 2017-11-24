@@ -10,6 +10,8 @@ import {
   shepherdElectrumLogout,
   getDexCoins,
   activeHandle,
+  dashboardRemoveCoin,
+  dashboardChangeActiveCoin,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -52,6 +54,21 @@ class Navbar extends React.Component {
   spvLogout() {
     shepherdElectrumLogout()
     .then((res) => {
+      const _spvCoins = this.props.Main.coins.spv;
+
+      if (!this.props.Main.coins.native.length) {
+        Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+      }
+
+      setTimeout(() => {
+        for (let i = 0; i < _spvCoins.length; i++) {
+          Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
+        }
+        if (!this.props.Main.coins.native.length) {
+          Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+        }
+      }, 500);
+
       Store.dispatch(getDexCoins());
       Store.dispatch(activeHandle());
     });

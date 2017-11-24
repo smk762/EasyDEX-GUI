@@ -177,7 +177,6 @@ export function dashboardChangeSection(sectionName) {
 }
 
 export function dashboardChangeActiveCoinState(coin, mode, skipCoinsArrayUpdate) {
-    console.warn(skipCoinsArrayUpdate);
   return {
     type: DASHBOARD_ACTIVE_COIN_CHANGE,
     coin: coin,
