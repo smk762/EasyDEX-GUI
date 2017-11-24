@@ -29,6 +29,7 @@ export function ActiveCoin(state = {
   send: false,
   receive: false,
   balance: 0,
+  addresses: null,
   activeSection: 'default',
   showTransactionInfo: false,
   showTransactionInfoTxIndex: null,
@@ -42,9 +43,26 @@ export function ActiveCoin(state = {
 }, action) {
   switch (action.type) {
     case DASHBOARD_REMOVE_COIN:
-      if (state.coins && state.coins[action.coin]) {
-        delete state.coins[action.coin];
+      delete state.coins[action.coin];
 
+      if (state.coin === action.coin) {
+        return {
+          ...state,
+          coins: state.coins,
+          coin: null,
+          mode: null,
+          balance: 0,
+          addresses: null,
+          txhistory: 'loading',
+          send: false,
+          receive: false,
+          showTransactionInfo: false,
+          showTransactionInfoTxIndex: null,
+          activeSection: 'default',
+          progress: null,
+          rescanInProgress: false,
+        };
+      } else {
         return {
           ...state,
         };
@@ -129,6 +147,7 @@ export function ActiveCoin(state = {
             coin: action.coin,
             mode: action.mode,
             balance: 0,
+            addresses: null,
             txhistory: 'loading',
             send: false,
             receive: false,
@@ -144,6 +163,7 @@ export function ActiveCoin(state = {
             coin: action.coin,
             mode: action.mode,
             balance: 0,
+            addresses: null,
             txhistory: 'loading',
             send: false,
             receive: false,
