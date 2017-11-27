@@ -8,7 +8,7 @@ import {
   triggerToaster,
   copyCoinAddress,
   getDebugLog,
-  getDashboardUpdateState
+  getDashboardUpdateState,
 } from '../../../actions/actionCreators';
 import { translate } from '../../../translate/translate';
 import {

@@ -4,6 +4,7 @@ import Toaster from '../toaster/toaster';
 import AddCoin from '../addcoin/addcoin';
 import Login from '../login/login';
 import Dashboard from '../dashboard/main/dashboard';
+import DexMain from '../dex/dexMain';
 
 class WalletMain extends React.Component {
   render() {
