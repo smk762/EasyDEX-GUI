@@ -12,6 +12,7 @@ import {
   shepherdElectrumListunspent,
   shepherdElectrumSendPreflight,
   shepherdElectrumSendPromise,
+  validateAddressPromise,
 } from '../../../actions/actionCreators';
 import { translate } from '../../../translate/translate';
 import {
@@ -237,11 +238,11 @@ class ClaimInterestModal extends React.Component {
           }
         });
       } else {
-        sendToAddressPromise(
+        validateAddressPromise(
           this.props.ActiveCoin.coin,
-          this.state.selectedAddress,
-          this.props.ActiveCoin.balance.transparent
-        ).then((json) => {
+          this.state.selectedAddress
+        )
+        .then((json) => {
           if (json.error &&
               json.error.code) {
             Store.dispatch(
@@ -251,16 +252,41 @@ class ClaimInterestModal extends React.Component {
                 'error'
               )
             );
-          } else if (json.result && json.result.length && json.result.length === 64) {
+          } else if (json.result && !json.result.iswatchonly && json.result.ismine) {
+            sendToAddressPromise(
+              this.props.ActiveCoin.coin,
+              this.state.selectedAddress,
+              this.props.ActiveCoin.balance.transparent
+            ).then((json) => {
+              if (json.error &&
+                  json.error.code) {
+                Store.dispatch(
+                  triggerToaster(
+                    json.error.message,
+                    'Error',
+                    'error'
+                  )
+                );
+              } else if (json.result && json.result.length && json.result.length === 64) {
+                Store.dispatch(
+                  triggerToaster(
+                    `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.selectedAddress}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
+                    translate('TOASTR.WALLET_NOTIFICATION'),
+                    'success',
+                    false
+                  )
+                );
+                this.closeModal();
+              }
+            });
+          } else {
             Store.dispatch(
               triggerToaster(
-                `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.selectedAddress}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
-                translate('TOASTR.WALLET_NOTIFICATION'),
-                'success',
-                false
+                `Failed to verify address ${this.state.selectedAddress}`,
+                'Error',
+                'error'
               )
             );
-            this.closeModal();
           }
         });
       }

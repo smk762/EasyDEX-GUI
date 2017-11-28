@@ -225,3 +225,41 @@ export function clearLastSendToResponseState() {
     lastSendToResponse: null,
   }
 }
+
+export function validateAddressPromise(coin, address) {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'validateaddress',
+      params: [ address ],
+    };
+
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ payload: payload }),
+    };
+
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'validateAddressPromise',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
