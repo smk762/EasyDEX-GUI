@@ -5,7 +5,7 @@ import { sortByDate } from '../../../util/sort';
 import {
   toggleDashboardTxInfoModal,
   getTxDetails,
- } from '../../../actions/actionCreators';
+} from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
 

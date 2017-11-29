@@ -48,3 +48,14 @@ export const DASHBOARD_ELECTRUM_COINS = 'DASHBOARD_ELECTRUM_COINS';
 export const ELECTRUM_SERVER_CHANGED = 'ELECTRUM_SERVER_CHANGED';
 export const DISPLAY_ZCASH_PARAMS_FETCH = 'DISPLAY_ZCASH_PARAMS_FETCH';
 export const DASHBOARD_REMOVE_COIN = 'DASHBOARD_REMOVE_COIN';
+/* dex */
+export const DEX_LOGIN = 'DEX_LOGIN';
+export const DEX_LOGOUT = 'DEX_LOGOUT';
+export const DEX_ASKS = 'DEX_ASKS';
+export const DEX_BIDS = 'DEX_BIDS';
+export const DEX_SWAPS = 'DEX_SWAPS';
+export const DEX_ADD_COIN = 'DEX_ADD_COIN';
+export const DEX_REMOVE_COIN = 'DEX_REMOVE_COIN';
+export const DEX_INVENTORY = 'DEX_INVENTORY';
+export const DEX_UTXO = 'DEX_UTXO';
+export const DEX_RESET = 'DEX_RESET';

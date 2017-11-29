@@ -14,6 +14,7 @@ class WalletMain extends React.Component {
           type="text"
           id="js-copytextarea" />
         <Dashboard />
+        <DexMain />
         <AddCoin />
         <Login />
         <Toaster {...this.props.toaster} />

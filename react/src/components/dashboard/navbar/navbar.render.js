@@ -52,8 +52,8 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
             </li>
-            <li className={ this.isSectionActive('edex') ? 'hide active nav-top-menu' : 'hide nav-top-menu' }>
-              <a onClick={ () => this.dashboardChangeSection('edex') }>
+            <li className={ this.isSectionActive('dex') ? 'active nav-top-menu' : 'nav-top-menu' }>
+              <a onClick={ () => this.dashboardChangeSection('dex') }>
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
