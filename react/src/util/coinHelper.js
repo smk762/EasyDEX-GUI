@@ -136,9 +136,9 @@ export function getCoinTitle(coin) {
       coinlogo = 'HODL';
       coinname = 'HODL';
       break;
-    case 'SHARK':
+    case 'MSHARK':
       coinlogo = 'SHARK';
-      coinname = 'SHARK';
+      coinname = 'MSHARK';
       break;
     case 'BOTS':
       coinlogo = 'BOTS';
@@ -422,7 +422,7 @@ export function coindList() {
     'MNZ',
     'PANGEA',
     'REVS',
-    'SHARK',
+    'MSHARK',
     'MESH',
     'SUPERNET',
     'WLC',

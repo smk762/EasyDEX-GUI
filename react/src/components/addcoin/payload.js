@@ -1,5 +1,6 @@
 // TODO: merge check functions
 //			 move to nodejs
+//			 cleanup
 
 export function checkAC(coinVal) {
 	if (coinVal === 'SUPERNET' ||
@@ -12,7 +13,7 @@ export function checkAC(coinVal) {
 			coinVal === 'CRYPTO' ||
 			coinVal === 'COQUI' ||
 			coinVal === 'HODL' ||
-			coinVal === 'SHARK' ||
+			coinVal === 'MSHARK' ||
 			coinVal === 'BOTS' ||
 			coinVal === 'MGW' ||
 			coinVal === 'MVP' ||
@@ -103,7 +104,7 @@ export function checkCoinType(coin) {
 			coin === 'CRYPTO' ||
 			coin === 'COQUI' ||
 			coin === 'HODL' ||
-			coin === 'SHARK' ||
+			coin === 'MSHARK' ||
 			coin === 'BOTS' ||
 			coin === 'MGW' ||
 			coin === 'MVP' ||
@@ -457,10 +458,10 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 			'supply': 9999999,
 			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'HODL','conf':'HODL.conf','path':confpath,'RELAY':-1,'VALIDATE':1,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'HODL','name':'HODL','netmagic':'9b13fb5f','p2p':assetChainPorts.HODL - 1,'rpc':assetChainPorts.HODL}) : {},
 		},
-		'SHARK': {
-			'name': 'SHARK',
-			'supply': 1401,
-			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'SHARK','conf':'SHARK.conf','path':confpath,'RELAY':-1,'VALIDATE':1,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'SHARK','name':'SHARK','netmagic':'54a5e30c','p2p':assetChainPorts.SHARK - 1,'rpc':assetChainPorts.SHARK}) : {},
+		'MSHARK': {
+			'name': 'MSHARK',
+			'supply': 1400000,
+			'AddCoinData': confpath ? Object.assign({}, _acPayloadOrigin, {'coin':'MSHARK','conf':'MSHARK.conf','path':confpath,'RELAY':-1,'VALIDATE':1,'startpend':4,'endpend':4,'maxpeers':8,'newcoin':'MSHARK','name':'MSHARK','netmagic':'54a5e30c','p2p':assetChainPorts.MSHARK - 1,'rpc':assetChainPorts.MSHARK}) : {},
 		},
 		'BOTS': {
 			'name': 'BOTS',

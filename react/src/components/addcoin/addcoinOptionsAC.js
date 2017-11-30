@@ -18,7 +18,7 @@ class AddCoinOptionsAC extends React.Component {
       'mnz',
       'pangea',
       'revs',
-      'shark',
+      'mshark',
       'supernet',
       'wlc',
     ];
