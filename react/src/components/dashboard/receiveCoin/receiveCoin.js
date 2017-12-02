@@ -60,9 +60,9 @@ class ReceiveCoin extends React.Component {
     );
   }
 
-  dumpPrivKey(address) {
+  dumpPrivKey(address, isZaddr) {
     this.toggleAddressMenu(address);
-    dumpPrivKey(this.props.coin, address)
+    dumpPrivKey(this.props.coin, address, isZaddr)
     .then((json) => {
       if (json.length &&
           json.length > 10) {
@@ -157,7 +157,8 @@ class ReceiveCoin extends React.Component {
           }
 
           if (!this.state.toggleIsMine &&
-            !address.canspend) {
+            !address.canspend &&
+            address.address.substring(0, 2) !== 'zc') {
             items.pop();
           }
         } else {
@@ -166,7 +167,8 @@ class ReceiveCoin extends React.Component {
           );
 
           if (!this.state.toggleIsMine &&
-            !address.canspend) {
+            !address.canspend &&
+            address.address.substring(0, 2) !== 'zc') {
             items.pop();
           }
         }

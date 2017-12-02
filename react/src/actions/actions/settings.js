@@ -3,7 +3,7 @@ import {
   GET_WIF_KEY,
   GET_DEBUG_LOG,
   GET_PEERS_LIST,
-  LOAD_APP_CONFIG
+  LOAD_APP_CONFIG,
 } from '../storeType';
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
@@ -442,12 +442,12 @@ export function getWalletDatKeys(chain, keyMatchPattern) {
   });
 }
 
-export function dumpPrivKey(coin, address) {
+export function dumpPrivKey(coin, address, isZaddr) {
   return new Promise((resolve, reject) => {
     const payload = {
       mode: null,
       chain: coin,
-      cmd: 'dumpprivkey',
+      cmd: isZaddr ? 'z_exportkey' : 'dumpprivkey',
       params: [ address ]
     };
 

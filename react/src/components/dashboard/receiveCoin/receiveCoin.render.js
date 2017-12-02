@@ -3,6 +3,8 @@ import { translate } from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import InvoiceModal from '../invoiceModal/invoiceModal';
 
+// TODO: zaddr match length > 64 chars
+
 export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
     <td>
@@ -25,7 +27,7 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
               <i className="icon wb-copy margin-right-5"></i> { translate('INDEX.COPY') + ' pub key' }
             </li>
             { !address.canspend &&
-              <li onClick={ () => this.dumpPrivKey(address) }>
+              <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
                 <i className="icon fa-key margin-right-5"></i> { translate('INDEX.COPY') + ' priv key (WIF)' }
               </li>
             }
@@ -43,9 +45,10 @@ export const AddressItemRender = function(address, type) {
   return (
     <tr key={ address.address }>
       { this.renderAddressActions(address.address, type) }
-      <td>
+      <td title={ type !== 'public' ? address.address : '' }>
         { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
         { !address.canspend &&
+          address.address.substring(0, 2) !== 'zc' &&
           <i
             title="You don't own priv keys for this address"
             className="fa fa-ban margin-left-10"></i>
@@ -54,6 +57,7 @@ export const AddressItemRender = function(address, type) {
       <td>
         <span>{ address.amount }</span>
         { !address.canspend &&
+          address.address.substring(0, 2) !== 'zc' &&
           <span title="Available amount to spend: 0"> (0)</span>
         }
       </td>
