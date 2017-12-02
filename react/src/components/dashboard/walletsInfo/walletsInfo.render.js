@@ -60,7 +60,7 @@ const WalletsInfoRender = function() {
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">
-                Komodo { translate('INDEX.INFO') }
+                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodo' : `${this.props.ActiveCoin.coin}` } { translate('INDEX.INFO') }
               </h3>
             </div>
             <div className="table-responsive">
