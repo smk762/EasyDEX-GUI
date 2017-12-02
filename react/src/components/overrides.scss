@@ -424,9 +424,10 @@ select{
         z-index: 100;
         right: 20px;
         opacity: 0.5;
-      }
-      .close:hover {
-        opacity: 1;
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
