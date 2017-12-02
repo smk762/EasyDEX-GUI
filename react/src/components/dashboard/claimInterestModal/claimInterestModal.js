@@ -37,6 +37,7 @@ class ClaimInterestModal extends React.Component {
       addressses: {},
       addressSelectorOpen: false,
       selectedAddress: null,
+      loading: false,
     };
     this.claimInterestTableRender = this.claimInterestTableRender.bind(this);
     this.toggleZeroInterest = this.toggleZeroInterest.bind(this);
@@ -93,6 +94,15 @@ class ClaimInterestModal extends React.Component {
     let _transactionsList = [];
     let _totalInterest = 0;
     let _zeroInterestUtxo = false;
+
+    this.setState({
+      loading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+      });
+    }, 1000);
 
     if (this.props.ActiveCoin.mode === 'spv') {
       shepherdElectrumListunspent(

@@ -624,3 +624,10 @@ select{
   top: -15px;
   transform: scale(0.4);
 }
+
+.spinner--medium {
+  position: absolute;
+  right: 38px;
+  top: 0;
+  transform: scale(0.5);
+}

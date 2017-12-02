@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import Spinner from '../spinner/spinner';
 
 export const _ClaimInterestTableRender = function() {
   const _transactionsList = this.state.transactionsList;
@@ -173,9 +174,16 @@ export const ClaimInterestModalRender = function() {
               <h4 className="modal-title white text-left">{ translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }</h4>
             </div>
             <div className="modal-body">
-              <i
-                className="icon fa-refresh pointer refresh-icon"
-                onClick={ this.loadListUnspent }></i>
+              { this.state.loading &&
+                <span className="spinner--medium">
+                  <Spinner />
+                </span>
+              }
+              { !this.state.loading &&
+                <i
+                  className="icon fa-refresh pointer refresh-icon"
+                  onClick={ this.loadListUnspent }></i>
+              }
               <div className="animsition vertical-align fade-in">
                 <div className="page-content vertical-align-middle full-width">
                   { this.state.isLoading &&
