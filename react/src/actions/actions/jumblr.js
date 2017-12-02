@@ -3,6 +3,7 @@ import {
   getNewKMDAddresses
 } from '../actionCreators';
 import Config from '../../config';
+import Store from '../../store';
 
 function getNewAddress(coin) { // TODO: remove(?)
   return new Promise((resolve, reject) => {
@@ -26,7 +27,7 @@ function getNewAddress(coin) { // TODO: remove(?)
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'genJumblrAddress + getKMDAddressesNative',
           'Error',
@@ -64,7 +65,7 @@ export function setJumblrAddress(coin, type, address) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'setJumblrAddress',
           'Error',
@@ -102,7 +103,7 @@ export function pauseJumblr(coin) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'pauseJumblr',
           'Error',
@@ -140,7 +141,7 @@ export function resumeJumblr(coin) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'resumeJumblr',
           'Error',
@@ -178,7 +179,7 @@ function dumpPrivkey(coin, key) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'dumpPrivkey ',
           'Error',
@@ -220,7 +221,7 @@ export function importPrivkey(coin, key, rescan = false) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'importPrivkey ',
           'Error',

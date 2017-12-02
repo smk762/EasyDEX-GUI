@@ -1,7 +1,6 @@
-import {
-  triggerToaster
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
+import Store from '../../store';
 
 export function getTxDetails(coin, txid, type) {
   return new Promise((resolve, reject) => {
@@ -37,7 +36,7 @@ export function getTxDetails(coin, txid, type) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'getTransaction',
           'Error',

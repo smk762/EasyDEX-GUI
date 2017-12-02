@@ -9,6 +9,7 @@ import {
   triggerToaster,
   sendToAddressState,
 } from '../actionCreators';
+import Store from '../../store';
 
 export function shepherdElectrumSetServer(coin, address, port) {
   return new Promise((resolve, reject) => {
@@ -20,7 +21,7 @@ export function shepherdElectrumSetServer(coin, address, port) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumSetServer',
           'Error',
@@ -45,7 +46,7 @@ export function shepherdElectrumCheckServerConnection(address, port) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumCheckServerConnection',
           'Error',
@@ -79,7 +80,7 @@ export function shepherdElectrumKeys(seed) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumKeys',
           'Error',
@@ -243,7 +244,7 @@ export function shepherdElectrumSendPromise(coin, value, sendToAddress, changeAd
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumSendPromise',
           'Error',
@@ -268,7 +269,7 @@ export function shepherdElectrumSendPreflight(coin, value, sendToAddress, change
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumSendPreflight',
           'Error',
@@ -293,7 +294,7 @@ export function shepherdElectrumListunspent(coin, address) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumListunspent',
           'Error',

@@ -8,6 +8,7 @@ import {
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
+import Store from '../../store';
 
 function getAppInfoState(json) {
   return {
@@ -400,7 +401,7 @@ export function coindGetStdout(chain) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'coindGetStdout',
           'Error',
@@ -427,7 +428,7 @@ export function getWalletDatKeys(chain, keyMatchPattern) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'getWalletDatKeys',
           'Error',
@@ -465,7 +466,7 @@ export function dumpPrivKey(coin, address, isZaddr) {
     )
     .catch(function(error) {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'dumpPrivKey',
           'Error',

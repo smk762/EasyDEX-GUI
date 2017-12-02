@@ -5,6 +5,7 @@ import {
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
+import Store from '../../store';
 
 export function sendNativeTx(coin, _payload) {
   let payload;
@@ -197,7 +198,7 @@ export function sendToAddressPromise(coin, address, amount) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'sendToAddress',
           'Error',
@@ -249,7 +250,7 @@ export function validateAddressPromise(coin, address) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'validateAddressPromise',
           'Error',

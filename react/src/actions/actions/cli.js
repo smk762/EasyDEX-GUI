@@ -1,6 +1,7 @@
 import { triggerToaster } from '../actionCreators';
 import { CLI } from '../storeType';
 import Config from '../../config';
+import Store from '../../store';
 
 export function shepherdCliPromise(mode, chain, cmd) {
   const _payload = {
@@ -19,7 +20,7 @@ export function shepherdCliPromise(mode, chain, cmd) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdCli',
           'Error',

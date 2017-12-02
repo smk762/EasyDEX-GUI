@@ -16,6 +16,7 @@ import Config from '../../config';
 import {
   triggerToaster,
 } from '../actionCreators';
+import Store from '../../store';
 
 export function shepherdMMCachePreloadState(isAuth, asks, bids, pair, coins, swaps, rates) {
   return {
@@ -46,7 +47,7 @@ export function shepherdMMStart(passphrase) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdMMStart',
           'Error',
@@ -71,7 +72,7 @@ export function shepherdMMStop() {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdMMStop',
           'Error',
@@ -100,7 +101,7 @@ export function shepherdMMRequest(payload) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdMMRequest',
           'Error',

@@ -1,7 +1,6 @@
-import {
-  triggerToaster
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
+import Store from '../../store';
 
 export function getListUnspent(coin) {
   return new Promise((resolve, reject) => {
@@ -25,7 +24,7 @@ export function getListUnspent(coin) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'getListUnspent',
           'Error',
@@ -80,7 +79,7 @@ export function getRawTransaction(coin, txid) {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'getTransaction',
           'Error',

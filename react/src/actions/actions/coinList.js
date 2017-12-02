@@ -1,5 +1,6 @@
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
+import Store from '../../store';
 
 export function shepherdElectrumLock() {
   return new Promise((resolve, reject) => {
@@ -12,7 +13,7 @@ export function shepherdElectrumLock() {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumLock',
           'Error',
@@ -36,7 +37,7 @@ export function shepherdElectrumLogout() {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdElectrumLogout',
           'Error',
@@ -74,7 +75,7 @@ export function shepherdStopCoind(coin) {
 }
 
 export function shepherdRemoveCoin(coin, mode) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject, dispatch) => {
     fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/coins/remove`, {
       method: 'POST',
       headers: {
@@ -89,7 +90,7 @@ export function shepherdRemoveCoin(coin, mode) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdRemoveCoin',
           'Error',
@@ -98,7 +99,18 @@ export function shepherdRemoveCoin(coin, mode) {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => {
+      resolve(json);
+      if (mode === 'native') {
+        Store.dispatch(
+          triggerToaster(
+            `${coin} daemon is still running. If you want to completely stop it and remove use stop icon next time.`,
+            'Warning',
+            'warning'
+          )
+        );
+      }
+    })
   });
 }
 
@@ -112,7 +124,7 @@ export function shepherdGetCoinList() {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdGetCoinList',
           'Error',
@@ -136,7 +148,7 @@ export function shepherdPostCoinList(data) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdPostCoinList',
           'Error',
@@ -159,7 +171,7 @@ export function shepherdClearCoindFolder(coin, keepWalletDat) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'shepherdClearCoindFolder',
           'Error',
