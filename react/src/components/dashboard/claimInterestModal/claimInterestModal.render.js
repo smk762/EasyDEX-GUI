@@ -47,6 +47,12 @@ export const _ClaimInterestTableRender = function() {
         <p>
           <strong>{ translate('CLAIM_INTEREST.TIP') }:</strong> { translate('CLAIM_INTEREST.TIP_DESC') }
         </p>
+        { this.props.ActiveCoin &&
+          this.props.ActiveCoin.mode === 'native' &&
+          <p>
+            <strong>{ translate('CLAIM_INTEREST.NOTICE') }:</strong> { translate('CLAIM_INTEREST.NATIVE_INTEREST_CHANGE_DESC') }
+          </p>
+        }
       </div>
       { this.state.totalInterest > 0 &&
         <div className="text-left padding-top-10 padding-bottom-10">

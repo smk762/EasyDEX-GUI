@@ -28,7 +28,9 @@ export const _lang = {
       'LOADING': 'Loading interest data',
       'NO_DATA': 'No data',
       'TIP': 'Tip',
+      'NOTICE': 'Notice',
       'TIP_DESC': 'don\'t attempt to claim interest smaller than 0.01 KMD. A fee you have to pay for transaction will be more or equal to the interest amount.',
+      'NATIVE_INTEREST_CHANGE_DESC': 'It\'s likely that interest is going to be credited as a separate transaction to a newely created KMD address. This is how native implements interest claiming.',
     },
     'ABOUT': {
       'AGAMA_WALLET': 'Agama Wallet',
