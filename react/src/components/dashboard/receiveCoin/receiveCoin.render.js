@@ -3,8 +3,6 @@ import { translate } from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import InvoiceModal from '../invoiceModal/invoiceModal';
 
-// TODO: zaddr match length > 64 chars
-
 export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
     <td>
@@ -48,7 +46,7 @@ export const AddressItemRender = function(address, type) {
       <td title={ type !== 'public' ? address.address : '' }>
         { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
         { !address.canspend &&
-          address.address.substring(0, 2) !== 'zc' &&
+          type === 'public' &&
           <i
             title="You don't own priv keys for this address"
             className="fa fa-ban margin-left-10"></i>
@@ -57,7 +55,7 @@ export const AddressItemRender = function(address, type) {
       <td>
         <span>{ address.amount }</span>
         { !address.canspend &&
-          address.address.substring(0, 2) !== 'zc' &&
+          type === 'public' &&
           <span title="Available amount to spend: 0"> (0)</span>
         }
       </td>

@@ -210,8 +210,8 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.addresses &&
         this.props.ActiveCoin.addresses[type] &&
         this.props.ActiveCoin.addresses[type].length) {
-      this.props.ActiveCoin.addresses[type].map((address) => {
-        if (address.amount > 0) {
+        this.props.ActiveCoin.addresses[type].map((address) => {
+        if (address.amount > 0 && (type !== 'public' || (address.canspend && type === 'public'))) {
           _items.push(
             <li
               className="selected"
