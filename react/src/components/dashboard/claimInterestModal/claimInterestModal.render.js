@@ -56,19 +56,23 @@ export const _ClaimInterestTableRender = function() {
       </div>
       { this.state.totalInterest > 0 &&
         <div className="text-left padding-top-10 padding-bottom-10">
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={ this.state.showZeroInterest } />
-            <div
-              className="slider"
-              onClick={ this.toggleZeroInterest }></div>
-          </label>
-          <div
-            className="toggle-label margin-right-15 pointer"
-            onClick={ this.toggleZeroInterest }>
-            { translate('CLAIM_INTEREST.SHOW_ZERO_INTEREST') }
-          </div>
+          { this.state.displayShowZeroInterestToggle &&
+            <span>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={ this.state.showZeroInterest } />
+                <div
+                  className="slider"
+                  onClick={ this.toggleZeroInterest }></div>
+              </label>
+              <div
+                className="toggle-label margin-right-15 pointer"
+                onClick={ this.toggleZeroInterest }>
+                { translate('CLAIM_INTEREST.SHOW_ZERO_INTEREST') }
+              </div>
+            </span>
+          }
           { !this.state.spvVerificationWarning &&
             <button
               type="button"
