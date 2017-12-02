@@ -147,7 +147,7 @@ class WalletsProgress extends React.Component {
         this.state.prevProgress.blocks &&
         this.state.prevProgress.longestchain > 0 &&
         this.state.prevProgress.blocks > 0) {
-      if (Number(this.state.prevProgress.blocks) * 100 / Number(this.state.prevProgress.longestchain) < 80) {
+      if (Number(this.state.prevProgress.blocks) * 100 / Number(this.state.prevProgress.longestchain) < 30) {
         return true;
       }
     } else {
