@@ -16,6 +16,7 @@ import {
 import Store from '../../../store';
 import Config from '../../../config';
 import { checkAC } from '../../addcoin/payload';
+import mainWindow from '../../../util/mainWindow';
 
 import NavbarRender from './navbar.render';
 
@@ -81,15 +82,11 @@ class Navbar extends React.Component {
       false
     );
 
-    let appConfig;
-
-    try {
-      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-    } catch (e) {}
-
     this.setState({
-      isExperimentalOn: appConfig.experimentalFeatures,
+      isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
     });
+
+    Store.dispatch(dashboardChangeSection(mainWindow.activeSection));
   }
 
   componentWillUnmount() {
@@ -127,6 +124,7 @@ class Navbar extends React.Component {
   }
 
   dashboardChangeSection(sectionName) {
+    mainWindow.activeSection = sectionName;
     Store.dispatch(dashboardChangeSection(sectionName));
   }
 

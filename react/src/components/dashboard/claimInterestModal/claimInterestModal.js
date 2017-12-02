@@ -252,7 +252,7 @@ class ClaimInterestModal extends React.Component {
                 'error'
               )
             );
-          } else if (json.result && !json.result.iswatchonly && json.result.ismine) {
+          } else if (json.result && !json.result.iswatchonly && json.result.ismine && json.result.isvalid && !json.result.isscript) {
             sendToAddressPromise(
               this.props.ActiveCoin.coin,
               this.state.selectedAddress,

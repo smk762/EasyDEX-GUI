@@ -58,4 +58,7 @@ export const DEX_ADD_COIN = 'DEX_ADD_COIN';
 export const DEX_REMOVE_COIN = 'DEX_REMOVE_COIN';
 export const DEX_INVENTORY = 'DEX_INVENTORY';
 export const DEX_UTXO = 'DEX_UTXO';
+export const DEX_PRICES = 'DEX_PRICES';
 export const DEX_RESET = 'DEX_RESET';
+export const DEX_STATS = 'DEX_STATS';
+export const DEX_CACHE_PRELOAD = 'DEX_CACHE_PRELOAD';

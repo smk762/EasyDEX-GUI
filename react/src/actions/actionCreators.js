@@ -51,6 +51,7 @@ export * from './actions/interest';
 export * from './actions/nativeDashboardUpdate';
 export * from './actions/getTxDetails';
 export * from './actions/electrum';
+export * from './actions/mm';
 
 export function changeActiveAddress(address) {
   return {

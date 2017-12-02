@@ -3,7 +3,7 @@ import { translate } from '../../translate/translate';
 import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
 import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchModal';
 
-const LoginRender = function () {
+const LoginRender = function() {
   return (
     <div>
       { this.props.Dashboard.displayZcparamsModal &&

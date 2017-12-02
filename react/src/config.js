@@ -1,3 +1,4 @@
+// obsolete(?)
 let Config;
 let _config = {
   iguanaCorePort: 7778,

@@ -749,5 +749,16 @@ export const _lang = {
       'SUPERNET': 'SUPERNET (SUPERNET)',
       'WLC': 'WIRELESS (WIRELESS)',
     },
+    'DEX': {
+      'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',
+      'LOGIN': 'Login',
+      'BACKUP_PASSPHRASE_P1': 'Backup your passpharase',
+      'BACKUP_PASSPHRASE_P2': 'it can\'t be retrieved!',
+      'ESTIMATED_BALANCE': 'Estimated balance',
+      'TRADE_HISTORY_SM': 'trade history',
+      'ELECTRUM_MODE': 'Electrum mode',
+      'NATIVE_MODE': 'Native mode',
+
+    },
   },
 };

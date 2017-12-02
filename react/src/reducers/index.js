@@ -9,6 +9,7 @@ import { ActiveCoin } from './activeCoin';
 import { Settings } from './settings';
 import { Interval } from './interval';
 import { Login } from './login';
+import { Dex } from './dex';
 
 const appReducer = combineReducers({
   AddCoin,
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
   Settings,
   Interval,
   Login,
+  Dex,
   routing: routerReducer,
 });
 
