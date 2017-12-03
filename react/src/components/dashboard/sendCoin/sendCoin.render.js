@@ -78,21 +78,23 @@ export const _SendFormRender = function() {
             autoComplete="off" />
         </div>
         <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() && this.props.ActiveCoin.mode === 'native' ? '' : ' hide') }>
-          <span className="pointer">
-            <label className="switch">
-              <input
-                type="checkbox"
-                checked={ this.state.subtractFee } />
+          { this.state.sendTo.length <= 34 &&
+            <span className="pointer">
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={ this.state.subtractFee } />
+                <div
+                  className="slider"
+                  onClick={ () => this.toggleSubtractFee() }></div>
+              </label>
               <div
-                className="slider"
-                onClick={ () => this.toggleSubtractFee() }></div>
-            </label>
-            <div
-              className="toggle-label"
-              onClick={ () => this.toggleSubtractFee() }>
-                { translate('DASHBOARD.SUBTRACT_FEE') }
-            </div>
-          </span>
+                className="toggle-label"
+                onClick={ () => this.toggleSubtractFee() }>
+                  { translate('DASHBOARD.SUBTRACT_FEE') }
+              </div>
+            </span>
+          }
         </div>
         <div className="col-lg-6 form-group form-material hide">
           <label

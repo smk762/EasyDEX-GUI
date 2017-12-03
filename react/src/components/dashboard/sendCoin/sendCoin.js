@@ -529,7 +529,7 @@ class SendCoin extends React.Component {
         this.state.sendTo.length === 34 &&
         this.props.ActiveCoin.balance &&
         this.props.ActiveCoin.balance.transparent &&
-        Number(Number(this.state.amount) + 0.0001) > Number(this.props.ActiveCoin.balance.transparent)) ||
+        Number(Number(this.state.amount) + (this.state.subtractFee ? 0 : 0.0001)) > Number(this.props.ActiveCoin.balance.transparent)) ||
         (this.state.addressType === 'public' &&
         this.state.sendTo &&
         this.state.sendTo.length > 34 &&

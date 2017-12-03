@@ -26,6 +26,7 @@ class DebugLogPanel extends React.Component {
     this.getAppRuntimeLog = this.getAppRuntimeLog.bind(this);
     this.toggleAppRuntimeLog = this.toggleAppRuntimeLog.bind(this);
     this.renderAppRuntimeLog = this.renderAppRuntimeLog.bind(this);
+    this.checkInputVals = this.checkInputVals.bind(this);
   }
 
   readDebugLog() {
@@ -136,6 +137,15 @@ class DebugLogPanel extends React.Component {
     return _items;
   }
 
+  checkInputVals() {
+    if (!Number(this.state.debugLinesCount) ||
+        Number(this.state.debugLinesCount) < 1 ||
+        !this.state.debugLinesCount ||
+        this.state.debugTarget === 'none') {
+      return true;
+    }
+  }
+
   render() {
     return (
       <div className="row">
@@ -195,7 +205,7 @@ class DebugLogPanel extends React.Component {
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light"
-                  disabled={ (Number(this.state.debugLinesCount) === NaN || Number(this.state.debugLinesCount) < 1 || !this.state.debugLinesCount) || this.state.debugTarget === 'none' }
+                  disabled={ this.checkInputVals() }
                   onClick={ this.readDebugLog }>{ translate('INDEX.LOAD_DEBUG_LOG') }</button>
               </div>
               <div className="row">
