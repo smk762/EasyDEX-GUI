@@ -290,6 +290,7 @@ function init() {
   var appConf = remote.getCurrentWindow().appConfig;
 
   if (!appConf.experimentalFeatures) {
+    $('#kmdPassiveMode').hide();
     $('#spvBtn').hide();
     $('#spvBtnCarret').hide();
     $('.dropdown-menu.native').css('right', '165px');
