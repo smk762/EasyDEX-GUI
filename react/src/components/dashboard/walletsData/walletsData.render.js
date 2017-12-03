@@ -266,6 +266,8 @@ export const WalletsDataRender = function() {
                       { this.props.ActiveCoin.txhistory !== 'loading' &&
                         this.props.ActiveCoin.txhistory !== 'no data' &&
                         this.props.ActiveCoin.txhistory !== 'connection error' &&
+                        this.props.ActiveCoin.txhistory !== 'connection error or incomplete data' &&
+                        this.props.ActiveCoin.txhistory !== 'cant get current height' &&
                         <div className="col-sm-4 search-box">
                           <input
                             className="form-control"

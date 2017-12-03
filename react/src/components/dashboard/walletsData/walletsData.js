@@ -10,6 +10,10 @@ import {
   getDashboardUpdate,
   shepherdElectrumTransactions,
   toggleClaimInterestModal,
+  shepherdElectrumCheckServerConnection,
+  shepherdElectrumSetServer,
+  electrumServerChanged,
+  triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -25,6 +29,7 @@ import {
   WalletsDataRender,
 } from  './walletsData.render';
 import { secondsToString } from '../../../util/time';
+import getRandomElectrumServer from '../../../util/serverRandom';
 
 /*import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -52,12 +57,14 @@ class WalletsData extends React.Component {
       coin: null,
       txhistory: null,
       loading: false,
+      reconnectInProgress: false,
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
     this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
     this.displayClaimInterestUI = this.displayClaimInterestUI.bind(this);
+    this.spvAutoReconnect = this.spvAutoReconnect.bind(this);
   }
 
   componentWillMount() {
@@ -294,6 +301,7 @@ class WalletsData extends React.Component {
         txhistory: this.props.ActiveCoin.txhistory,
         showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize,
         itemsListColumns: this.generateItemsListColumns(this.props.ActiveCoin.txhistory.length),
+        reconnectInProgress: false,
       });
     }
 
@@ -301,19 +309,60 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.txhistory === 'no data') {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'no data',
+        reconnectInProgress: false,
       });
     } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'loading',
+        reconnectInProgress: false,
       });
     } else if ((this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'connection error or incomplete data') ||
       (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'cant get current height')) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'connection error',
+        reconnectInProgress: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? true : false,
       });
+
+      if (!this.state.reconnectInProgress) {
+        this.spvAutoReconnect();
+      }
     }
 
     this.setState(Object.assign({}, _stateChange));
+  }
+
+  spvAutoReconnect() {
+    let _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
+    let _server = [
+      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.ip,
+      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port
+    ];
+    const _randomServer = getRandomElectrumServer(_spvServers, _server.join(':'));
+
+    shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port)
+    .then((res) => {
+      if (res.result) {
+        shepherdElectrumSetServer(this.props.ActiveCoin.coin, _randomServer.ip, _randomServer.port)
+        .then((serverSetRes) => {
+          Store.dispatch(
+            triggerToaster(
+              `${this.props.ActiveCoin.coin} SPV server set to ${_randomServer.ip}:${_randomServer.port}`,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'success'
+            )
+          );
+          Store.dispatch(electrumServerChanged(true));
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            `${this.props.ActiveCoin.coin} SPV server ${_randomServer.ip}:${_randomServer.port} is unreachable!`,
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+      }
+    });
   }
 
   isFullySynced() {
@@ -362,12 +411,16 @@ class WalletsData extends React.Component {
         <tr className="hover--none">
           <td
             colSpan="7"
-            className="table-cell-offset-16 color-warning">
-            { translate('DASHBOARD.SPV_CONN_ERROR') }
-            <span className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
-            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }
-            <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_P2') }
-            </span>
+            className="table-cell-offset-16">
+            <div className="color-warning">
+              { translate('DASHBOARD.SPV_CONN_ERROR') }
+            </div>
+            <div className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
+              <div className="color-warning">Trying to switch to another server...</div>
+              <br />
+              <strong>How to switch manually:</strong>
+              <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }
+            </div>
           </td>
         </tr>
       );

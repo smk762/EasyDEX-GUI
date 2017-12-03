@@ -60,7 +60,7 @@ class SPVServersPanel extends React.Component {
           )
         );
       }
-    })
+    });
   }
 
   updateInput(e) {
