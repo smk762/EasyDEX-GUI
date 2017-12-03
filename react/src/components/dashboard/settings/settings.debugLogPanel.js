@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { translate } from '../../../translate/translate';
 import Config from '../../../config';
 import { secondsToString } from '../../../util/time';
+import { coindList } from '../../../util/coinHelper';
 import {
   getDebugLog,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import mainWindow from '../../../util/mainWindow';
 
 class DebugLogPanel extends React.Component {
   constructor() {
@@ -14,7 +16,7 @@ class DebugLogPanel extends React.Component {
     this.state = {
       appRuntimeLog: [],
       debugLinesCount: 10,
-      debugTarget: 'iguana',
+      debugTarget: 'none',
       nativeOnly: Config.iguanaLessMode,
       toggleAppRuntimeLog: false,
       pristine: true,
@@ -27,6 +29,12 @@ class DebugLogPanel extends React.Component {
   }
 
   readDebugLog() {
+    let _target = this.state.debugTarget;
+
+    if (_target === 'Komodo') {
+      _target = null;
+    }
+
     this.setState(Object.assign({}, this.state, {
       pristine: false,
     }));
@@ -34,7 +42,8 @@ class DebugLogPanel extends React.Component {
     Store.dispatch(
       getDebugLog(
         'komodo',
-        this.state.debugLinesCount
+        this.state.debugLinesCount,
+        _target
       )
     );
   }
@@ -64,11 +73,7 @@ class DebugLogPanel extends React.Component {
   }
 
   getAppRuntimeLog() {
-    let _appRuntimeLog;
-
-    try {
-      _appRuntimeLog = window.require('electron').remote.getCurrentWindow().getAppRuntimeLog;
-    } catch (e) {}
+    const _appRuntimeLog = mainWindow.getAppRuntimeLog;
 
     _appRuntimeLog()
     .then((json) => {
@@ -84,7 +89,8 @@ class DebugLogPanel extends React.Component {
       const _debugLogDataRows = this.props.Settings.debugLog.split('\n');
 
       if (_debugLogDataRows &&
-          _debugLogDataRows.length) {
+          _debugLogDataRows.length &&
+          this.props.Settings.debugLog.indexOf('ENOENT') === -1) {
         return _debugLogDataRows.map((_row) =>
           <div
             key={ `settings-debuglog-${Math.random(0, 9) * 10}` }
@@ -106,7 +112,29 @@ class DebugLogPanel extends React.Component {
     });
   }
 
-  // TODO: extend to include asset chains
+  renderCoinListSelectorOptions() {
+    let _items = [];
+    let _nativeCoins = coindList();
+
+    _items.push(
+      <option
+        key={ `coind-walletdat-coins-none` }
+        value="none">Pick a coin</option>
+    );
+    for (let i = 0; i < _nativeCoins.length; i++) {
+      if (_nativeCoins[i] === 'KMD') {
+        _nativeCoins[i] = 'Komodo';
+      }
+
+      _items.push(
+        <option
+          key={ `coind-debuglog-coins-${ _nativeCoins[i] }` }
+          value={ `${_nativeCoins[i]}` }>{ `${_nativeCoins[i]}` }</option>
+      );
+    }
+
+    return _items;
+  }
 
   render() {
     return (
@@ -138,11 +166,7 @@ class DebugLogPanel extends React.Component {
             this.props.Main.coins &&
             this.props.Main.coins.native &&
             Object.keys(this.props.Main.coins.native).length > 0 &&
-            <form
-              className="read-debug-log-import-form"
-              method="post"
-              action="javascript:"
-              autoComplete="off">
+            <div className="read-debug-log-import-form">
               <div className="form-group form-material floating">
                 <input
                   type="text"
@@ -161,7 +185,7 @@ class DebugLogPanel extends React.Component {
                   name="debugTarget"
                   id="settingsDelectDebugLogOptions"
                   onChange={ this.updateInput }>
-                  <option value="komodo">Komodo</option>
+                  { this.renderCoinListSelectorOptions() }
                 </select>
                 <label
                   className="floating-label"
@@ -171,6 +195,7 @@ class DebugLogPanel extends React.Component {
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light"
+                  disabled={ (Number(this.state.debugLinesCount) === NaN || Number(this.state.debugLinesCount) < 1 || !this.state.debugLinesCount) || this.state.debugTarget === 'none' }
                   onClick={ this.readDebugLog }>{ translate('INDEX.LOAD_DEBUG_LOG') }</button>
               </div>
               <div className="row">
@@ -178,7 +203,7 @@ class DebugLogPanel extends React.Component {
                   <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">{ this.renderDebugLogData() }</div>
                 </div>
               </div>
-            </form>
+            </div>
           }
           { this.state.toggleAppRuntimeLog &&
             <div className="margin-top-20">{ this.renderAppRuntimeLog() }</div>

@@ -6,6 +6,7 @@ import {
   activeHandle,
   shepherdElectrumCoins,
 } from '../../actions/actionCreators';
+import mainWindow from '../../util/mainWindow';
 
 class Main extends React.Component {
   constructor(props) {
@@ -16,13 +17,8 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    let appVersion;
-    let appConfig;
-
-    try {
-      appVersion = window.require('electron').remote.getCurrentWindow().appBasicInfo;
-      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-    } catch (e) {}
+    const appVersion = mainWindow.appBasicInfo;
+    const appConfig = mainWindow.appConfig;
 
     if (appVersion) {
       document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
