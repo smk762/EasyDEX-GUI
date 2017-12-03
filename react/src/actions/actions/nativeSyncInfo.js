@@ -8,6 +8,7 @@ import {
 } from '../actionCreators';
 import Config from '../../config';
 import { translate } from '../../translate/translate';
+import mainWindow from '../../util/mainWindow';
 
 export function nativeGetinfoFailureState() {
   return {
@@ -48,11 +49,11 @@ export function getSyncInfoNativeKMD(skipDebug, json, skipRemote) {
         _json['remoteKMDNode'] = json.info;
         dispatch(getSyncInfoNativeState(_json));
       })
-      .then(function() {
+      .then(() => {
         if (!skipDebug) {
           dispatch(getDebugLog('komodo', 1));
         }
-      })
+      });
     }
   }
 }
@@ -147,11 +148,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
       } else {
         if (!json ||
             json.indexOf('"code":-777') > -1) {
-          let _kmdMainPassiveMode;
-
-          try {
-            _kmdMainPassiveMode = window.require('electron').remote.getCurrentWindow().kmdMainPassiveMode;
-          } catch (e) {}
+          const _kmdMainPassiveMode = mainWindow.kmdMainPassiveMode;
 
           if (_kmdMainPassiveMode) {
             dispatch(

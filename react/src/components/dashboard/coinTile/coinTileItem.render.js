@@ -46,6 +46,7 @@ const CoinTileItemRender = function() {
           className="icon fa-info-circle icon-spv-connection-warning"></i>
       }
       { this.renderCoinConError(item) &&
+        !this.props.ActiveCoin.rescanInProgress &&
         <i
           onClick={ this.openCoindDownModal }
           title={ `Unable to establish RPC connection! Retries count: ${this.props.ActiveCoin.getinfoFetchFailures}.` }

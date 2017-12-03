@@ -29,12 +29,13 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
+import mainWindow from '../../../util/mainWindow';
 
 import CoinTileItemRender from './coinTileItem.render';
 
 const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = window.require('electron').remote.getCurrentWindow().appConfig.failedRPCAttemptsThreshold || 10;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.failedRPCAttemptsThreshold || 10;
 
 class CoinTileItem extends React.Component {
   constructor() {
@@ -133,11 +134,7 @@ class CoinTileItem extends React.Component {
       this.autoSetActiveCoin();
     }
 
-    let appConfig;
-
-    try {
-      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-    } catch (e) {}
+    const appConfig = mainWindow.appConfig;
 
     this.setState({
       appConfig,

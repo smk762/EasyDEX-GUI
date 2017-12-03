@@ -57,6 +57,7 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
       balance: null,
       addresses: null,
       coin: coin,
+      getinfoFetchFailures: 0,
       rescanInProgress: true,
     };
   } else {
@@ -83,6 +84,7 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
         },
         addresses: json.result.addresses,
         coin: coin,
+        getinfoFetchFailures: 0,
         rescanInProgress: false,
       };
     } else {
@@ -109,6 +111,7 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
         balance: json.result.z_gettotalbalance.result,
         addresses: json.result.addresses,
         coin: coin,
+        getinfoFetchFailures: 0,
         rescanInProgress: false,
       };
     }
