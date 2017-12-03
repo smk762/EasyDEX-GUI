@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
+import mainWindow from '../../util/mainWindow';
 
 class AddCoinOptionsCrypto extends React.Component {
   constructor() {
@@ -10,11 +11,7 @@ class AddCoinOptionsCrypto extends React.Component {
   }
 
   componentWillMount() {
-    let appConfig;
-
-    try {
-      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-    } catch (e) {}
+    const appConfig = mainWindow.appConfig;
 
     this.setState({
       isExperimentalOn: appConfig.experimentalFeatures,
@@ -22,9 +19,11 @@ class AddCoinOptionsCrypto extends React.Component {
   }
 
   render() {
+    let availableKMDModes = mainWindow.arch === 'x64' ? 'native|spv' : 'spv';
+
     return (
       <optgroup label={ translate('ADD_COIN.CRYPTO_CURRENCIES') }>
-        <option value="KMD|native|spv">Komodo (KMD)</option>
+        <option value={ `KMD|${availableKMDModes}` }>Komodo (KMD)</option>
         <option
           value="CHIPS|spv"
           className={ this.state.isExperimentalOn ? '' : 'hide' }>Chips (CHIPS)</option>

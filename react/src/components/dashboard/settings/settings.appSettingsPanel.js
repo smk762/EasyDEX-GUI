@@ -11,6 +11,7 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import mainWindow from '../../../util/mainWindow';
 
 class AppSettingsPanel extends React.Component {
   constructor() {
@@ -26,15 +27,13 @@ class AppSettingsPanel extends React.Component {
   }
 
   componentWillMount() {
-    try {
-      const _appConfigSchema = window.require('electron').remote.getCurrentWindow().appConfigSchema;
-      const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, window.require('electron').remote.getCurrentWindow().appConfig);
+    const _appConfigSchema = mainWindow.appConfigSchema;
+    const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, mainWindow.appConfig);
 
-      this.setState(Object.assign({}, this.state, {
-        appConfigSchema: _appConfigSchema,
-        appSettings: _appSettings,
-      }));
-    } catch(e) {}
+    this.setState(Object.assign({}, this.state, {
+      appConfigSchema: _appConfigSchema,
+      appSettings: _appSettings,
+    }));
   }
 
   componentDidMount(props) {
@@ -119,6 +118,7 @@ class AppSettingsPanel extends React.Component {
   renderConfigEditForm() {
     let items = [];
     const _appConfig = this.state.appSettings;
+
     for (let key in _appConfig) {
        if (this.state.appConfigSchema[key] && typeof _appConfig[key] === 'object') {
         if (this.state.appConfigSchema[key].display) {

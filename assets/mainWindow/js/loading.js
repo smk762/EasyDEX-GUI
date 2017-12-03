@@ -288,15 +288,26 @@ function init() {
   const remote = require('electron').remote;
   var window = remote.getCurrentWindow();
   var appConf = remote.getCurrentWindow().appConfig;
+  var arch = remote.getCurrentWindow().arch;
 
-  if (!appConf.experimentalFeatures) {
-    $('#kmdPassiveMode').hide();
-    $('#spvBtn').hide();
-    $('#spvBtnCarret').hide();
-    $('.dropdown-menu.native').css('right', '165px');
-    $('#nativeOnlyBtnCarret').css('margin-right', '0');
-    $('#settingsBtn').css('margin', '0');
-    $('.mode-desc.spv').hide();
-    $('.mode-desc.native').css('left', '180px');
+  if (arch !== 'x64') {
+    $('.settings-help').hide();
+    $('#agamaModeStatusText').html('Choose a shortcut or custom selection');
+    $('#settingsBtn').hide();
+    $('.mode-desc.native').hide();
+    $('#nativeOnlyBtn').hide();
+    $('#nativeOnlyBtnCarret').hide();
+    $('.mode-desc.spv').css('left', '200px');
+    $('.dropdown-menu.lite').css('left', '180px');
+  } else {
+    if (!appConf.experimentalFeatures) {
+      $('#spvBtn').hide();
+      $('#spvBtnCarret').hide();
+      $('.dropdown-menu.native').css('right', '165px');
+      $('#nativeOnlyBtnCarret').css('margin-right', '0');
+      $('#settingsBtn').css('margin', '0');
+      $('.mode-desc.spv').hide();
+      $('.mode-desc.native').css('left', '180px');
+    }
   }
 }

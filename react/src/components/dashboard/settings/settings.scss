@@ -93,7 +93,7 @@
 #SettingsAccordion {
   .panel {
     .panel-collapse {
-  
+
       &.collapse {
         max-height: 0;
         overflow: hidden;
@@ -111,6 +111,7 @@
 
 #section-iguana-wallet-settings {
   background: #f3f4f5;
+  height: 100%;
 
   .panel-title {
     cursor: pointer;

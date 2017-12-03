@@ -3,6 +3,7 @@ import { translate } from '../../translate/translate';
 import AddCoinOptionsCrypto from '../addcoin/addcoinOptionsCrypto';
 import AddCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import AddCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
+import mainWindow from '../../util/mainWindow';
 
 const CoinSelectorsRender = function(item, coin, i) {
   return (
@@ -24,7 +25,9 @@ const CoinSelectorsRender = function(item, coin, i) {
             <option>{ translate('INDEX.SELECT') }</option>
             <AddCoinOptionsCrypto appSettings={ this.props.Settings } />
             <AddCoinOptionsAC appSettings={ this.props.Settings } />
-            <AddCoinOptionsACFiat appSettings={ this.props.Settings } />
+            { mainWindow.arch === 'x64' &&
+              <AddCoinOptionsACFiat appSettings={ this.props.Settings } />
+            }
           </select>
         </div>
         <div className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6' : 'hide' }>
@@ -82,38 +85,40 @@ const CoinSelectorsRender = function(item, coin, i) {
             </span>
           </label>
         </div>
-        <div
-          className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6"
-          style={{ paddingLeft: '0' }}>
-          <input
-            type="radio"
-            className="to-labelauty labelauty"
-            name={ `mode-${i}` }
-            id={ `addcoin_mdl_native_mode_login-${i}` }
-            disabled={ item.nativeMode.disabled }
-            checked={ item.nativeMode.checked } />
-          <label
-            htmlFor={ `addcoin_mdl_native_mode_login-${i}` }
-            onClick={ () => this.updateSelectedMode('-1', i) }
-            style={{ pointerEvents: item.nativeMode.disabled ? 'none' : 'all' }}>
-            <span
-              className="labelauty-unchecked-image"
-              style={{ display: item.nativeMode.checked ? 'none' : 'inline-block' }}></span>
-            <span
-              className="labelauty-unchecked"
-              style={{ display: item.nativeMode.checked ? 'none' : 'inline-block' }}>
-                { translate('INDEX.NATIVE_MODE') }
-            </span>
-            <span
-              className="labelauty-checked-image"
-              style={{ display: item.nativeMode.checked ? 'inline-block' : 'none' }}></span>
-            <span
-              className="labelauty-checked"
-              style={{ display: item.nativeMode.checked ? 'inline-block' : 'none' }}>
-                { translate('INDEX.NATIVE_MODE') }
-            </span>
-          </label>
-        </div>
+        { mainWindow.arch === 'x64' &&
+          <div
+            className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6"
+            style={{ paddingLeft: '0' }}>
+            <input
+              type="radio"
+              className="to-labelauty labelauty"
+              name={ `mode-${i}` }
+              id={ `addcoin_mdl_native_mode_login-${i}` }
+              disabled={ item.nativeMode.disabled }
+              checked={ item.nativeMode.checked } />
+            <label
+              htmlFor={ `addcoin_mdl_native_mode_login-${i}` }
+              onClick={ () => this.updateSelectedMode('-1', i) }
+              style={{ pointerEvents: item.nativeMode.disabled ? 'none' : 'all' }}>
+              <span
+                className="labelauty-unchecked-image"
+                style={{ display: item.nativeMode.checked ? 'none' : 'inline-block' }}></span>
+              <span
+                className="labelauty-unchecked"
+                style={{ display: item.nativeMode.checked ? 'none' : 'inline-block' }}>
+                  { translate('INDEX.NATIVE_MODE') }
+              </span>
+              <span
+                className="labelauty-checked-image"
+                style={{ display: item.nativeMode.checked ? 'inline-block' : 'none' }}></span>
+              <span
+                className="labelauty-checked"
+                style={{ display: item.nativeMode.checked ? 'inline-block' : 'none' }}>
+                  { translate('INDEX.NATIVE_MODE') }
+              </span>
+            </label>
+          </div>
+        }
       </div>
       <div className={ this.hasMoreThanOneCoin() && i !== 0 ? 'col-sm-1' : 'hide' }>
         <button

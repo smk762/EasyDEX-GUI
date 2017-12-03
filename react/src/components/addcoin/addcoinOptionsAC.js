@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
+import mainWindow from '../../util/mainWindow';
 
 class AddCoinOptionsAC extends React.Component {
   render() {
@@ -25,7 +26,11 @@ class AddCoinOptionsAC extends React.Component {
     let _items = [];
 
     for (let i = 0; i < _assetChains.length; i++) {
-      const availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'mgw' ? 'native|spv' : 'native';
+      let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'mgw' ? 'native|spv' : 'native';
+
+      if (mainWindow.arch !== 'x64') {
+        availableModes = 'spv';
+      }
 
       _items.push(
         <option

@@ -17,6 +17,7 @@ import SPVServersPanel from './settings.spvServersPanel';
 import DaemonStdoutPanel from './settings.daemonStdoutPanel';
 import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
 import CoindClearDataDirPanel from './settings.coindClearDataDirPanel';
+import mainWindow from '../../../util/mainWindow';
 
 // import WalletInfoPanel from './settings.walletInfoPanel';
 // import WalletBackupPanel from './settings.walletBackupPanel';
@@ -71,82 +72,90 @@ export const SettingsRender = function() {
             <Panel
               uniqId={'SettingsAccordion'}
               singleOpen={true}>
+              { mainWindow.arch === 'x64' &&
                 <PanelSection
                   title={ translate('INDEX.DEBUG_LOG') }
                   icon="icon fa-bug"
                   openByDefault={this.props.disableWalletSpecificUI}>
                   <DebugLogPanel />
                 </PanelSection>
-                { this.props.Main.coins &&
-                  this.props.Main.coins.native &&
-                  Object.keys(this.props.Main.coins.native).length > 0 &&
-                  <PanelSection
-                    title={ 'Komodod stdout' }
-                    icon="icon fa-bug">
-                    <DaemonStdoutPanel />
-                  </PanelSection>
-                }
+              }
+              { this.props.Main.coins &&
+                this.props.Main.coins.native &&
+                Object.keys(this.props.Main.coins.native).length > 0 &&
+                <PanelSection
+                  title={ 'Komodod stdout' }
+                  icon="icon fa-bug">
+                  <DaemonStdoutPanel />
+                </PanelSection>
+              }
+              { mainWindow.arch === 'x64' &&
                 <PanelSection
                   title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
                   icon="icon fa-wrench">
                   <AppSettingsPanel />
                 </PanelSection>
+              }
+              <PanelSection
+                title={ translate('SETTINGS.APP_INFO') }
+                icon="icon md-info">
+                <AppInfoPanel />
+              </PanelSection>
+              { this.props.Main.coins &&
+                this.props.Main.coins.spv &&
+                Object.keys(this.props.Main.coins.spv).length &&
+                this.props.Main.isLoggedIn &&
                 <PanelSection
-                  title={ translate('SETTINGS.APP_INFO') }
-                  icon="icon md-info">
-                  <AppInfoPanel />
+                  title={ translate('INDEX.EXPORT_KEYS') }
+                  icon="icon md-key">
+                  <ExportKeysPanel />
                 </PanelSection>
-                { this.props.Main.coins &&
-                  this.props.Main.coins.spv &&
-                  Object.keys(this.props.Main.coins.spv).length &&
-                  this.props.Main.isLoggedIn &&
-                  <PanelSection
-                    title={ translate('INDEX.EXPORT_KEYS') }
-                    icon="icon md-key">
-                    <ExportKeysPanel />
-                  </PanelSection>
-                }
+              }
+              { mainWindow.arch === 'x64' &&
                 <PanelSection
                   title={ 'Wallet.dat keys' }
                   icon="icon md-key">
                   <NativeWalletDatKeysPanel />
                 </PanelSection>
+              }
+              { mainWindow.arch === 'x64' &&
                 <PanelSection
                   title={ 'Clear native coin data dir' }
                   icon="icon fa-trash">
                   <CoindClearDataDirPanel />
                 </PanelSection>
-                { this.props.Main.coins &&
-                  this.props.Main.coins.spv &&
-                  Object.keys(this.props.Main.coins.spv).length &&
-                  this.displaySPVServerListTab() &&
-                  <PanelSection
-                    title={ translate('SETTINGS.SPV_SERVERS') }
-                    icon="icon fa-server">
-                    <SPVServersPanel />
-                  </PanelSection>
-                }
-                { this.props.Main.coins &&
-                  this.props.Main.coins.native &&
-                  Object.keys(this.props.Main.coins.native).length > 0 &&
-                  <PanelSection
-                    title="CLI"
-                    icon="icon fa-code">
-                    <CliPanel />
-                  </PanelSection>
-                }
-                { this.state.isExperimentalOn &&
-                  <PanelSection
-                    title={ translate('INDEX.UPDATE') }
-                    icon="icon fa fa-cloud-download">
-                    <AppUpdatePanel />
-                  </PanelSection>
-                }
+              }
+              { this.props.Main.coins &&
+                this.props.Main.coins.spv &&
+                Object.keys(this.props.Main.coins.spv).length &&
+                this.displaySPVServerListTab() &&
                 <PanelSection
-                  title={ translate('SETTINGS.SUPPORT') }
-                  icon="icon fa fa-life-ring">
-                  <SupportPanel />
+                  title={ translate('SETTINGS.SPV_SERVERS') }
+                  icon="icon fa-server">
+                  <SPVServersPanel />
                 </PanelSection>
+              }
+              { this.props.Main.coins &&
+                this.props.Main.coins.native &&
+                Object.keys(this.props.Main.coins.native).length > 0 &&
+                <PanelSection
+                  title="CLI"
+                  icon="icon fa-code">
+                  <CliPanel />
+                </PanelSection>
+              }
+              { this.state.isExperimentalOn &&
+                <PanelSection
+                  title={ translate('INDEX.UPDATE') }
+                  icon="icon fa fa-cloud-download">
+                  <AppUpdatePanel />
+                </PanelSection>
+              }
+              <PanelSection
+                title={ translate('SETTINGS.SUPPORT') }
+                icon="icon fa fa-life-ring">
+                <SupportPanel />
+              </PanelSection>
             </Panel>
           </div>
         </div>

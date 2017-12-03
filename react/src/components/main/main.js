@@ -21,7 +21,7 @@ class Main extends React.Component {
     const appConfig = mainWindow.appConfig;
 
     if (appVersion) {
-      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}-beta)`;
+      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta)`;
     }
   }
 

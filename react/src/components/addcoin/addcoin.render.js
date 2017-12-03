@@ -1,6 +1,6 @@
 import React from 'react';
 import { translate } from '../../translate/translate';
-
+import mainWindow from '../../util/mainWindow';
 // TODO: add modal close on modal overlay click evt
 
 const AddCoinRender = function() {
@@ -50,19 +50,21 @@ const AddCoinRender = function() {
                     { translate('ADD_COIN.ACTIVATE_ALL') }
                 </button>
               </div>
-              <div className="col-sm-12">
-                <p>
-                  <strong>{ translate('INDEX.NATIVE_MODE') }:</strong> { translate('INDEX.NATIVE_MODE_DESC1') }&nbsp;
-                  <strong>Komodo Daemon</strong> { translate('INDEX.NATIVE_MODE_DESC2') }&nbsp;
-                  <i>Iguana Daemon</i> { translate('INDEX.NATIVE_MODE_DESC3') }.
-                </p>
-                <div className="alert alert-icon alert-primary margin-top-20">
-                  <i className="icon md-info-outline"></i>
-                  <strong>{ translate('INDEX.NATIVE_MODE') }</strong> { translate('INDEX.NATIVE_MODE_DESC4') }&nbsp;
-                  <strong>{ translate('INDEX.NATIVE_MODE_DESC5') }</strong>,&nbsp;
-                  <i>{ translate('INDEX.NATIVE_MODE_DESC5') }</i>.
+              { mainWindow.arch === 'x64' &&
+                <div className="col-sm-12">
+                  <p>
+                    <strong>{ translate('INDEX.NATIVE_MODE') }:</strong> { translate('INDEX.NATIVE_MODE_DESC1') }&nbsp;
+                    <strong>Komodo Daemon</strong> { translate('INDEX.NATIVE_MODE_DESC2') }&nbsp;
+                    <i>Iguana Daemon</i> { translate('INDEX.NATIVE_MODE_DESC3') }.
+                  </p>
+                  <div className="alert alert-icon alert-primary margin-top-20">
+                    <i className="icon md-info-outline"></i>
+                    <strong>{ translate('INDEX.NATIVE_MODE') }</strong> { translate('INDEX.NATIVE_MODE_DESC4') }&nbsp;
+                    <strong>{ translate('INDEX.NATIVE_MODE_DESC5') }</strong>,&nbsp;
+                    <i>{ translate('INDEX.NATIVE_MODE_DESC5') }</i>.
+                  </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import { connect } from 'react-redux';
+import mainWindow from '../../../util/mainWindow';
 
 class AppInfoPanel extends React.Component {
   constructor() {
@@ -9,7 +10,7 @@ class AppInfoPanel extends React.Component {
 
   render() {
     const releaseInfo = this.props.Settings.appInfo && this.props.Settings.appInfo.releaseInfo;
-    
+
     if (!releaseInfo) {
       return null
     } else {
@@ -20,7 +21,7 @@ class AppInfoPanel extends React.Component {
             <p>
               { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
               <br />
-              { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}-beta` }
+              { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta` }
               <br />
               { translate('SETTINGS.APP_SESSION') }: { this.props.Settings.appInfo.appSession }
             </p>
@@ -40,22 +41,26 @@ class AppInfoPanel extends React.Component {
               <br />
               { translate('SETTINGS.MEM') }: { this.props.Settings.appInfo.sysInfo.totalmem_readable }
             </p>
-            <h5>{ translate('SETTINGS.LOCATIONS') }</h5>
-            <p>
-              { translate('SETTINGS.CACHE') }: { this.props.Settings.appInfo.dirs.cacheLocation }
-              <br />
-              { translate('SETTINGS.CONFIG') }: { this.props.Settings.appInfo.dirs.configLocation }
-              <br />
-              Iguana { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.iguanaBin }
-              <br />
-              Iguana { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.iguanaDir }
-              <br />
-              Komodo { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.komododBin }
-              <br />
-              Komodo { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.komodoDir }
-              <br />
-              Komodo wallet.dat: { this.props.Settings.appInfo.dirs.komodoDir }
-            </p>
+            { mainWindow.arch === 'x64' &&
+              <h5>{ translate('SETTINGS.LOCATIONS') }</h5>
+            }
+            { mainWindow.arch === 'x64' &&
+              <p>
+                { translate('SETTINGS.CACHE') }: { this.props.Settings.appInfo.dirs.cacheLocation }
+                <br />
+                { translate('SETTINGS.CONFIG') }: { this.props.Settings.appInfo.dirs.configLocation }
+                <br />
+                Iguana { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.iguanaBin }
+                <br />
+                Iguana { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.iguanaDir }
+                <br />
+                Komodo { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.komododBin }
+                <br />
+                Komodo { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.komodoDir }
+                <br />
+                Komodo wallet.dat: { this.props.Settings.appInfo.dirs.komodoDir }
+              </p>
+            }
           </div>
         </div>
       );
