@@ -604,6 +604,9 @@ export const _lang = {
       'JUMBLR_MOTTO': 'Secure, Native and Decentralised Coin Anonymizer',
     },
     'SETTINGS': {
+      'BIP39_DISC': 'Hardware wallets disclaimer: by using this form you\'re acknowledging risks of exposing your seed',
+      'BIP39_DESC_P1': 'Description: the form below is going to search for a pub key in a range of 20 accounts with 50 addresses depth each (1000 keys).',
+      'BIP39_DESC_P2': 'The app might temporary freeze for several seconds during search procedure.',
       'SHOW_APP_RUNTIME_LOG': 'Show app runtime log',
       'WRONG_PASSPHRASE': 'Wrong passphrase!',
       'SPV_SERVER_LIST_DESC': 'Server list selection is only available for active coins that have more than 1 server to connect to.',

@@ -17,6 +17,7 @@ import SPVServersPanel from './settings.spvServersPanel';
 import DaemonStdoutPanel from './settings.daemonStdoutPanel';
 import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
 import CoindClearDataDirPanel from './settings.coindClearDataDirPanel';
+import Bip39KeysPanel from './settings.bip39KeysPanel';
 import mainWindow from '../../../util/mainWindow';
 
 // import WalletInfoPanel from './settings.walletInfoPanel';
@@ -118,6 +119,11 @@ export const SettingsRender = function() {
                   <NativeWalletDatKeysPanel />
                 </PanelSection>
               }
+              <PanelSection
+                title="BIP39 Keys"
+                icon="icon fa-usb">
+                <Bip39KeysPanel />
+              </PanelSection>
               { mainWindow.arch === 'x64' &&
                 <PanelSection
                   title={ 'Clear native coin data dir' }

@@ -312,3 +312,32 @@ export function shepherdElectrumListunspent(coin, address) {
     });
   });
 }
+
+export function shepherdElectrumBip39Keys(seed, match) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/seed/bip39/match`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        seed,
+        match,
+      }),
+    })
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdElectrumSetServer',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
