@@ -181,7 +181,7 @@ class AddCoin extends React.Component {
 
   updateSelectedCoin(e, index) {
     const coin = e.target.value.split('|');
-    const defaultMode = Config.iguanaLessMode ? 'native' : coin[1];
+    const defaultMode = coin[1];
     const modeToValue = { // TODO: move to utils
       'spv': 0,
       'native': -1,

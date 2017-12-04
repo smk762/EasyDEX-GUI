@@ -299,15 +299,5 @@ function init() {
     $('#nativeOnlyBtnCarret').hide();
     $('.mode-desc.spv').css('left', '200px');
     $('.dropdown-menu.lite').css('left', '180px');
-  } else {
-    if (!appConf.experimentalFeatures) {
-      $('#spvBtn').hide();
-      $('#spvBtnCarret').hide();
-      $('.dropdown-menu.native').css('right', '165px');
-      $('#nativeOnlyBtnCarret').css('margin-right', '0');
-      $('#settingsBtn').css('margin', '0');
-      $('.mode-desc.spv').hide();
-      $('.mode-desc.native').css('left', '180px');
-    }
   }
 }

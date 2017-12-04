@@ -26,7 +26,7 @@ class AddCoinOptionsAC extends React.Component {
     let _items = [];
 
     for (let i = 0; i < _assetChains.length; i++) {
-      let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'mgw' ? 'native|spv' : 'native';
+      let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'mgw' ? 'spv|native' : 'native';
 
       if (mainWindow.arch !== 'x64') {
         availableModes = 'spv';

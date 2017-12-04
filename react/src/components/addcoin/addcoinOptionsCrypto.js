@@ -19,7 +19,7 @@ class AddCoinOptionsCrypto extends React.Component {
   }
 
   render() {
-    let availableKMDModes = mainWindow.arch === 'x64' ? 'native|spv' : 'spv';
+    let availableKMDModes = mainWindow.arch === 'x64' ? 'spv|native' : 'spv';
 
     return (
       <optgroup label={ translate('ADD_COIN.CRYPTO_CURRENCIES') }>
