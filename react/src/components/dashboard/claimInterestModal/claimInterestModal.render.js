@@ -41,7 +41,7 @@ export const _ClaimInterestTableRender = function() {
 
   return (
     <span>
-      <div className="padding-bottom-20">
+      <div>
         <p>
           <strong>{ translate('CLAIM_INTEREST.REQ_P1') }:</strong> { translate('CLAIM_INTEREST.REQ_P2') } <strong>10 KMD</strong>
         </p>
@@ -56,7 +56,7 @@ export const _ClaimInterestTableRender = function() {
         }
       </div>
       { this.state.totalInterest > 0 &&
-        <div className="text-left padding-top-10 padding-bottom-10">
+        <div className={ 'text-left padding-bottom-20' + (this.state.displayShowZeroInterestToggle ? ' padding-top-40' : '') }>
           { this.state.displayShowZeroInterestToggle &&
             <span>
               <label className="switch">
@@ -93,7 +93,7 @@ export const _ClaimInterestTableRender = function() {
           }
           { this.state.spvVerificationWarning &&
             <div
-              className="padding-top-20"
+              className="padding-top-10 padding-bottom-10"
               style={{ fontSize: '15px' }}>
               <strong className="color-warning">{ translate('SEND.WARNING') }:</strong> { translate('SEND.WARNING_SPV_P1') } { translate('SEND.WARNING_SPV_P2') }
               <div className="margin-top-15">
@@ -115,7 +115,7 @@ export const _ClaimInterestTableRender = function() {
           { this.props.ActiveCoin.mode === 'native' &&
             this.state.addressses &&
             Object.keys(this.state.addressses).length > 0 &&
-            <div className="margin-top-20 margin-bottom-20">
+            <div className="margin-top-40 margin-bottom-20">
               <div className="margin-bottom-5">Send my balance to</div>
               { this.addressDropdownRender() }
             </div>
@@ -123,7 +123,7 @@ export const _ClaimInterestTableRender = function() {
           { !this.isFullySynced() &&
             this.props.ActiveCoin &&
             this.props.ActiveCoin.mode === 'native' &&
-            <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
+            <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning">
               <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
             </div>
           }

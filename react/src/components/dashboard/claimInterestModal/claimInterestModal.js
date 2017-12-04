@@ -48,6 +48,7 @@ class ClaimInterestModal extends React.Component {
     this.closeDropMenu = this.closeDropMenu.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.isFullySynced = this.isFullySynced.bind(this);
+    this.confirmClaimInterest = this.confirmClaimInterest.bind(this);
   }
 
   componentWillMount() {
