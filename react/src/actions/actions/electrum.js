@@ -313,7 +313,7 @@ export function shepherdElectrumListunspent(coin, address) {
   });
 }
 
-export function shepherdElectrumBip39Keys(seed, match) {
+export function shepherdElectrumBip39Keys(seed, match, addressdepth, accounts) {
   return new Promise((resolve, reject) => {
     fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/seed/bip39/match`, {
       method: 'POST',
@@ -323,6 +323,8 @@ export function shepherdElectrumBip39Keys(seed, match) {
       body: JSON.stringify({
         seed,
         match,
+        addressdepth,
+        accounts,
       }),
     })
     .catch((error) => {

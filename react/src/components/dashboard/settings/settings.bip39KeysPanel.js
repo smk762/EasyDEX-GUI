@@ -17,6 +17,8 @@ class Bip39KeysPanel extends React.Component {
       passphrase: '',
       seedInputVisibility: false,
       trimPassphraseTimer: null,
+      addressdepth: 20,
+      accounts: 1,
     };
     this._getBip39Keys = this._getBip39Keys.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -35,6 +37,9 @@ class Bip39KeysPanel extends React.Component {
         passphrase: '',
         keys: null,
         match: null,
+        accounts: 1,
+        addressdepth: 20,
+        seedInputVisibility: false,
       }));
     }
   }
@@ -86,8 +91,12 @@ class Bip39KeysPanel extends React.Component {
   }
 
   _getBip39Keys() {
-    shepherdElectrumBip39Keys(this.state.passphrase, this.state.match)
-    .then((res) => {
+    shepherdElectrumBip39Keys(
+      this.state.passphrase,
+      this.state.match,
+      this.state.addressdepth,
+      this.state.accounts
+    ).then((res) => {
       this.setState({
         keys: res.result.priv ? res.result : 'empty',
       });
@@ -110,7 +119,7 @@ class Bip39KeysPanel extends React.Component {
             </h4>
             <div>{ translate('SETTINGS.BIP39_DESC_P1') }</div>
             <div>{ translate('SETTINGS.BIP39_DESC_P2') }</div>
-            <div>
+            <div className="bip39-search">
               <div className="col-sm-12 no-padding-left margin-top-10">
                 <div className="form-group form-material floating">
                   <input
@@ -138,7 +147,7 @@ class Bip39KeysPanel extends React.Component {
                     htmlFor="passphrase">{ translate('INDEX.PASSPHRASE') }</label>
                 </div>
               </div>
-              <div className="col-sm-4 no-padding-left text-center">
+              <div className="col-sm-5 no-padding-left">
                 <input
                   type="text"
                   className="form-control margin-top-10"
@@ -152,6 +161,43 @@ class Bip39KeysPanel extends React.Component {
                   className="btn btn-primary waves-effect waves-light margin-top-20"
                   disabled={ !this.state.match || !this.state.passphrase || this.state.passphrase.length < 2 }
                   onClick={ this._getBip39Keys }>Get key</button>
+              </div>
+              <div className="col-sm-2 no-padding-left text-center margin-top-10 margin-left-50">
+                <select
+                  className="form-control form-material"
+                  name="accounts"
+                  value={ this.state.accounts }
+                  onChange={ (event) => this.updateInput(event) }
+                  autoFocus>
+                  <option value="1">1 account</option>
+                  <option value="2">2 accounts</option>
+                  <option value="3">3 accounts</option>
+                  <option value="4">4 accounts</option>
+                  <option value="5">5 accounts</option>
+                  <option value="6">6 accounts</option>
+                  <option value="7">7 accounts</option>
+                  <option value="8">8 accounts</option>
+                  <option value="9">9 accounts</option>
+                  <option value="10">10 accounts</option>
+                </select>
+              </div>
+              <div className="col-sm-2 no-padding-left text-center margin-top-10">
+                <select
+                  className="form-control form-material"
+                  name="addressdepth"
+                  value={ this.state.addressdepth }
+                  onChange={ (event) => this.updateInput(event) }
+                  autoFocus>
+                  <option value="20">20 addresses</option>
+                  <option value="30">30 addresses</option>
+                  <option value="40">40 addresses</option>
+                  <option value="50">50 addresses</option>
+                  <option value="60">60 addresses</option>
+                  <option value="70">70 addresses</option>
+                  <option value="80">80 addresses</option>
+                  <option value="90">90 addresses</option>
+                  <option value="100">100 addresses</option>
+                </select>
               </div>
             </div>
           </div>
