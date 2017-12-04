@@ -55,7 +55,7 @@ const CoinSelectorsRender = function(item, coin, i) {
         </button>
       </div>
       <div className="col-sm-11 text-center add-coin-modes">
-        <div className={ this.state.isExperimentalOn ? 'form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login' : 'hide' }>
+        <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
           <input
             type="radio"
             className="to-labelauty labelauty"

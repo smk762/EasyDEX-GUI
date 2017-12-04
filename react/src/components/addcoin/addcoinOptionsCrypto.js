@@ -6,16 +6,7 @@ class AddCoinOptionsCrypto extends React.Component {
   constructor() {
     super();
     this.state = {
-      isExperimentalOn: false,
     };
-  }
-
-  componentWillMount() {
-    const appConfig = mainWindow.appConfig;
-
-    this.setState({
-      isExperimentalOn: appConfig.experimentalFeatures,
-    });
   }
 
   render() {
@@ -24,9 +15,7 @@ class AddCoinOptionsCrypto extends React.Component {
     return (
       <optgroup label={ translate('ADD_COIN.CRYPTO_CURRENCIES') }>
         <option value={ `KMD|${availableKMDModes}` }>Komodo (KMD)</option>
-        <option
-          value="CHIPS|spv"
-          className={ this.state.isExperimentalOn ? '' : 'hide' }>Chips (CHIPS)</option>
+        <option value="CHIPS|spv">Chips (CHIPS)</option>
       </optgroup>
     );
   }
