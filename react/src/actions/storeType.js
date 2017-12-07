@@ -62,3 +62,4 @@ export const DEX_PRICES = 'DEX_PRICES';
 export const DEX_RESET = 'DEX_RESET';
 export const DEX_STATS = 'DEX_STATS';
 export const DEX_CACHE_PRELOAD = 'DEX_CACHE_PRELOAD';
+export const DEX_ACTIVE_SECTION = 'DEX_ACTIVE_SECTION';
