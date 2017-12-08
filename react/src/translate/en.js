@@ -762,7 +762,6 @@ export const _lang = {
       'TRADE_HISTORY_SM': 'trade history',
       'ELECTRUM_MODE': 'Electrum mode',
       'NATIVE_MODE': 'Native mode',
-
     },
   },
 };
