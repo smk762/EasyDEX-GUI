@@ -12,6 +12,7 @@ import {
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import { zcashParamsCheckErrors } from '../../util/zcashParams';
+import mainWindow from '../../util/mainWindow';
 
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
@@ -54,14 +55,14 @@ class AddCoin extends React.Component {
   verifyZcashParamsExist(mode) {
     return new Promise((resolve, reject) => {
       if (Number(mode) === -1) {
-        const _res = window.require('electron').remote.getCurrentWindow().zcashParamsExist;
+        const _res = mainWindow.zcashParamsExist;
         const __errors = zcashParamsCheckErrors(_res);
 
         if (__errors) {
-          window.require('electron').remote.getCurrentWindow().zcashParamsExistPromise()
+          mainWindow.zcashParamsExistPromise()
           .then((res) => {
             const _errors = zcashParamsCheckErrors(res);
-            window.require('electron').remote.getCurrentWindow().zcashParamsExist = res;
+            mainWindow.zcashParamsExist = res;
 
             if (_errors) {
               Store.dispatch(
@@ -147,14 +148,8 @@ class AddCoin extends React.Component {
   componentWillMount() {
     this.addNewItem();
 
-    let appConfig;
-
-    try {
-      appConfig = window.require('electron').remote.getCurrentWindow().appConfig;
-    } catch (e) {}
-
     this.setState({
-      isExperimentalOn: appConfig.experimentalFeatures,
+      isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
     });
   }
 
@@ -186,8 +181,8 @@ class AddCoin extends React.Component {
       'spv': 0,
       'native': -1,
     };
-    let _coins = this.state.coins;
     const _value = e.target.value;
+    let _coins = this.state.coins;
 
     _coins[index] = {
       [e.target.name]: _value,
@@ -336,8 +331,8 @@ class AddCoin extends React.Component {
   }
 
   renderCoinSelectors() {
-    let items = [];
     const _coins = this.state.coins;
+    let items = [];
 
     for (let i = 0; i < _coins.length; i++) {
       const _item = _coins[i];

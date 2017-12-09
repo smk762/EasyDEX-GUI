@@ -19,7 +19,7 @@ class AppInfoPanel extends React.Component {
 
       for (let key in _ports) {
         _items.push(
-          <span>
+          <span key={ `settings-coind-ports-${key}` }>
             { key === 'komodod' ? 'KMD' : key }: { _ports[key] }<br />
           </span>
         );
