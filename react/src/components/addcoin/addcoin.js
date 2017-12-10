@@ -174,37 +174,53 @@ class AddCoin extends React.Component {
     }
   }
 
+  renderCoinOption(option) {
+    return (
+      <div>
+        <img
+          src={ `/assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
+          alt={ option.label }
+          width="30px"
+          height="30px"/>
+          <span className="margin-left-10">{ option.label }</span>
+      </div>
+    );
+  }
+
   updateSelectedCoin(e, index) {
-    const coin = e.target.value.split('|');
-    const defaultMode = coin[1];
-    const modeToValue = { // TODO: move to utils
-      'spv': 0,
-      'native': -1,
-    };
-    const _value = e.target.value;
-    let _coins = this.state.coins;
+    if (e.value &&
+        e.value.indexOf('|')) {
+      const coin = e.value.split('|');
+      const defaultMode = coin[1];
+      const modeToValue = { // TODO: move to utils
+        'spv': 0,
+        'native': -1,
+      };
+      const _value = e.value;
+      let _coins = this.state.coins;
 
-    _coins[index] = {
-      [e.target.name]: _value,
-      spvMode: {
-        disabled: _value.indexOf('spv') > -1 ? false : true,
-        checked: defaultMode === 'spv' ? true : false,
-      },
-      nativeMode: {
-        disabled: _value.indexOf('native') > -1 ? false : true,
-        checked: defaultMode === 'native' ? true : false,
-      },
-      mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
+      _coins[index] = {
+        selectedCoin: _value,
+        spvMode: {
+          disabled: _value.indexOf('spv') > -1 ? false : true,
+          checked: defaultMode === 'spv' ? true : false,
+        },
+        nativeMode: {
+          disabled: _value.indexOf('native') > -1 ? false : true,
+          checked: defaultMode === 'native' ? true : false,
+        },
+        mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
+      }
+
+      this.setState(Object.assign({}, this.state, {
+        coins: _coins,
+      }));
     }
-
-    this.setState(Object.assign({}, this.state, {
-      coins: _coins,
-    }));
   }
 
   updateSelectedMode(_value, index) {
-    let _coins = this.state.coins;
     const _selectedCoin = _coins[index].selectedCoin;
+    let _coins = this.state.coins;
 
     _coins[index] = {
       selectedCoin: _selectedCoin,
