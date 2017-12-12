@@ -29,6 +29,7 @@ class WalletsProgress extends React.Component {
   }
 
   componentWillMount() {
+    const _mainWindow = mainWindow;
     const _isWindows = mainWindow.isWindows;
 
     if (_isWindows) {

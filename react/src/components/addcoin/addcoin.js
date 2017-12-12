@@ -219,8 +219,8 @@ class AddCoin extends React.Component {
   }
 
   updateSelectedMode(_value, index) {
-    const _selectedCoin = _coins[index].selectedCoin;
     let _coins = this.state.coins;
+    const _selectedCoin = _coins[index].selectedCoin;
 
     _coins[index] = {
       selectedCoin: _selectedCoin,
