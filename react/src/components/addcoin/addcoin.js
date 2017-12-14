@@ -181,14 +181,15 @@ class AddCoin extends React.Component {
           src={ `/assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
           alt={ option.label }
           width="30px"
-          height="30px"/>
+          height="30px" />
           <span className="margin-left-10">{ option.label }</span>
       </div>
     );
   }
 
   updateSelectedCoin(e, index) {
-    if (e.value &&
+    if (e &&
+        e.value &&
         e.value.indexOf('|')) {
       const coin = e.value.split('|');
       const defaultMode = coin[1];
@@ -242,6 +243,7 @@ class AddCoin extends React.Component {
   }
 
   handleKeydown(e) {
+    console.warn(e);
     if (e.key === 'Escape') {
       this.dismiss();
     }
