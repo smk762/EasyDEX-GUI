@@ -7,7 +7,13 @@ const AddCoinRender = function() {
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
       <div className={ `modal modal-3d-sign add-coin-modal ${this.state.modalClassName}` }>
+        <div
+          onClick={ this.dismiss }
+          className="modal-close-overlay"></div>
         <div className="modal-dialog modal-center modal-lg">
+          <div
+            onClick={ this.dismiss }
+            className="modal-close-overlay"></div>
           <div className="modal-content">
             <div className="modal-header bg-orange-a400 wallet-send-header">
               <button

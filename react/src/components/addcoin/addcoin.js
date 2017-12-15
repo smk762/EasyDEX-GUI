@@ -178,23 +178,24 @@ class AddCoin extends React.Component {
     return (
       <div>
         <img
-          src={ `/assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
+          src={ `assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
           alt={ option.label }
           width="30px"
-          height="30px"/>
+          height="30px" />
           <span className="margin-left-10">{ option.label }</span>
       </div>
     );
   }
 
   updateSelectedCoin(e, index) {
-    if (e.value &&
+    if (e &&
+        e.value &&
         e.value.indexOf('|')) {
       const coin = e.value.split('|');
       const defaultMode = coin[1];
       const modeToValue = { // TODO: move to utils
-        'spv': 0,
-        'native': -1,
+        spv: 0,
+        native: -1,
       };
       const _value = e.value;
       let _coins = this.state.coins;
@@ -242,6 +243,7 @@ class AddCoin extends React.Component {
   }
 
   handleKeydown(e) {
+    console.warn(e);
     if (e.key === 'Escape') {
       this.dismiss();
     }

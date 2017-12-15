@@ -75,6 +75,11 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
+            { /*<li className={ this.isSectionActive('explorer') ? 'active nav-top-menu' : 'nav-top-menu' }>
+              <a onClick={ () => this.dashboardChangeSection('exporer') }>
+                <i className="site-menu-icon"></i> Explorer
+              </a>
+            </li>*/ }
           </ul>
           <ul className="nav navbar-toolbar navbar-right navbar-toolbar-right">
             <li>
