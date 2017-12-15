@@ -178,7 +178,7 @@ class AddCoin extends React.Component {
     return (
       <div>
         <img
-          src={ `/assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
+          src={ `assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
           alt={ option.label }
           width="30px"
           height="30px" />
@@ -194,8 +194,8 @@ class AddCoin extends React.Component {
       const coin = e.value.split('|');
       const defaultMode = coin[1];
       const modeToValue = { // TODO: move to utils
-        'spv': 0,
-        'native': -1,
+        spv: 0,
+        native: -1,
       };
       const _value = e.value;
       let _coins = this.state.coins;
