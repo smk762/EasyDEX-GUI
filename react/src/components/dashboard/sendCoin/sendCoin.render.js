@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
+import { isKomodoCoin } from '../../../util/coinHelper';
 
 export const AddressListRender = function() {
   return (
@@ -293,6 +294,7 @@ export const SendRender = function() {
                             this.state.lastSendToResponse &&
                             this.state.lastSendToResponse.txid) ||
                             (this.props.ActiveCoin.mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
+                            isKomodoCoin(this.props.ActiveCoin.coin) &&
                             <div className="margin-top-10">
                               <button
                                 type="button"
@@ -315,7 +317,7 @@ export const SendRender = function() {
                   this.state.lastSendToResponse.msg === 'error' &&
                   <div className="padding-left-30 padding-top-10">
                     <div>
-                      <strong>{ translate('API.ERROR_SM') }</strong>
+                      <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
                     </div>
                     <div>{ this.state.lastSendToResponse.result }</div>
                   </div>

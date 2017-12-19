@@ -6,12 +6,56 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'BCH':
+      coinlogo = 'bch';
+      coinname = 'BitcoinCash';
+      break;
+    case 'BLK':
+      coinlogo = 'blk';
+      coinname = 'Blackcoin';
+      break;
+    case 'SIB':
+      coinlogo = 'sib';
+      coinname = 'Sibcoin';
+      break;
+    case 'VIA':
+      coinlogo = 'via';
+      coinname = 'Viacoin';
+      break;
+    case 'VTC':
+      coinlogo = 'vtc';
+      coinname = 'Vertcoin';
+      break;
+    case 'MONA':
+      coinlogo = 'mona';
+      coinname = 'Monacoin';
+      break;
+    case 'ARG':
+      coinlogo = 'arg';
+      coinname = 'Argentum';
+      break;
+    case 'FAIR':
+      coinlogo = 'fair';
+      coinname = 'Faircoin';
+      break;
+    case 'DASH':
+      coinlogo = 'dash';
+      coinname = 'Dash';
+      break;
+    case 'CRW':
+      coinlogo = 'crw';
+      coinname = 'Crown';
+      break;
+    case 'BTG':
+      coinlogo = 'btg';
+      coinname = 'BitcoinGold';
+      break;
     case 'CHIPS':
       coinlogo = 'chips';
       coinname = 'Chips';
       break;
     case 'BTC':
-      coinlogo = 'bitcoin';
+      coinlogo = 'btc';
       coinname = 'Bitcoin';
       break;
     case 'BTCD':
@@ -19,7 +63,7 @@ export function getCoinTitle(coin) {
       coinname = 'BitcoinDark';
       break;
     case 'LTC':
-      coinlogo = 'litecoin';
+      coinlogo = 'ltc';
       coinname = 'Litecoin';
       break;
     case 'VPN':
@@ -35,7 +79,7 @@ export function getCoinTitle(coin) {
       coinname = 'Zcash';
       break;
     case 'NMC':
-      coinlogo = 'namecoin';
+      coinlogo = 'nmc';
       coinname = 'Namecoin';
       break;
     case 'DEX':
@@ -43,11 +87,11 @@ export function getCoinTitle(coin) {
       coinname = 'DEX';
       break;
     case 'DOGE':
-      coinlogo = 'dogecoin';
+      coinlogo = 'doge';
       coinname = 'Dogecoin';
       break;
     case 'DGB':
-      coinlogo = 'digibyte';
+      coinlogo = 'dgb';
       coinname = 'Digibyte';
       break;
     case 'MZC':
@@ -97,10 +141,6 @@ export function getCoinTitle(coin) {
       titleBG = true;
       coinlogo = 'SUPERNET';
       coinname = 'SUPERNET';
-      break;
-    case 'CHIPS':
-      coinlogo = 'SUPERNET';
-      coinname = 'CHIPS';
       break;
     case 'REVS':
       coinlogo = 'REVS';
@@ -429,4 +469,29 @@ export function coindList() {
   ];
 
   return _coins;
+}
+
+export const isKomodoCoin = (coin) => {
+  if (coin === 'SUPERNET' ||
+      coin === 'REVS' ||
+      coin === 'PANGEA' ||
+      coin === 'DEX' ||
+      coin === 'JUMBLR' ||
+      coin === 'BET' ||
+      coin === 'CRYPTO' ||
+      coin === 'COQUI' ||
+      coin === 'HODL' ||
+      coin === 'MSHARK' ||
+      coin === 'BOTS' ||
+      coin === 'MGW' ||
+      coin === 'MVP' ||
+      coin === 'KV' ||
+      coin === 'CEAL' ||
+      coin === 'MESH' ||
+      coin === 'WLC' ||
+      coin === 'MNZ' ||
+      coin === 'CHIPS' ||
+      coin === 'KMD') {
+    return true;
+  }
 }

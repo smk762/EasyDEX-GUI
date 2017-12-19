@@ -233,7 +233,7 @@ input:checked + .slider:before {
 
 .coin-logo {
   &.breadcrumb {
-    z-index: 100;
+    z-index: 99;
   }
 }
 .breadcrumb > li + li:before {
