@@ -20,6 +20,7 @@ import {
   _SendFormRender
 } from './sendCoin.render';
 import { isPositiveNumber } from '../../../util/number';
+import mainWindow from '../../../util/mainWindow';
 
 // TODO: - add links to explorers
 //       - render z address trim
@@ -111,6 +112,10 @@ class SendCoin extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    if (this.props.ActiveCoin.coin !== props.ActiveCoin.coin &&
+        this.props.ActiveCoin.lastSendToResponse) {
+      Store.dispatch(clearLastSendToResponseState());
+    }
     this.checkZAddressCount(props);
   }
 
@@ -488,11 +493,21 @@ class SendCoin extends React.Component {
       const _amount = this.state.amount;
       const _amountSats = this.state.amount * 100000000;
       const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
+      const _fees = mainWindow.spvFees;
 
-      if (Number(_amountSats) + 10000 > _balanceSats) {
+      if (Number(_amountSats) + _fees[this.props.ActiveCoin.coin] > _balanceSats) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} max available balance is ${(0.00000001 * (_balanceSats - 10000)).toFixed(8)} ${this.props.ActiveCoin.coin}`,
+            `${translate('SEND.INSUFFICIENT_FUNDS')} max available balance is ${(0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)} ${this.props.ActiveCoin.coin}`,
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      } else if (Number(_amountSats) < _fees[this.props.ActiveCoin.coin]) {
+        Store.dispatch(
+          triggerToaster(
+            `Amount ${this.state.amount} is too small, min ${this.props.ActiveCoin.coin} amount is ${_fees[this.props.ActiveCoin.coin] * 0.00000001}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )

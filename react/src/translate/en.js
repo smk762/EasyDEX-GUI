@@ -408,7 +408,7 @@ export const _lang = {
       'FIND_DEPOSIT_ADDR': 'There find your Deposit Address for coin you want to anonymise your funds. (For a start only KMD is supported. BTC support will come in later versions)',
       'YOU_SEND_FUNDS': 'You send your funds to deposit address.',
       'KEEP_WALLET_OPEN': 'Keep your wallet open',
-      'IMPORTANT_FUNDS': '[IMPORTANT] Funds are processed in lot sizes 100 KMD, 1000 KMD, and 10,000 KMD.',
+      'IMPORTANT_FUNDS': '[IMPORTANT] Funds are processed in lot sizes 10 KMD, 100 KMD, 1000 KMD, and 10,000 KMD.',
       'LARGE_LOT': 'The large lot sizes will process first, and then smaller.',
       'EG': 'For example, you sent 1393 KMD to KMD Deposit Address.<br>' +
             'First it will process 1000 KMD<br>' +
@@ -417,7 +417,7 @@ export const _lang = {
             'then 100 KMD',
       '93_KMD': '93 KMD will keep waiting in deposit address.',
       'TO_CLEAR_THEM': 'To clear them you\'ll have to send 7 KMD more to your KMD Deposit Address.',
-      'WHEN_IT_TOTALS': 'When it totals to 100 KMD, it will process to your KMD Jumblr Address.',
+      'WHEN_IT_TOTALS': 'When it totals to 10/100/1000 KMD, it will process to your KMD Jumblr Address.',
       'JADDR': 'Jumblr Addresses',
       'BTC_DEPOSIT': 'BTC Deposit',
       'SHOW_HIDE': 'Show/Hide',
