@@ -23,6 +23,9 @@ class Main extends React.Component {
     if (appVersion) {
       document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta)`;
     }
+
+    document.addEventListener('dragover', event => event.preventDefault());
+    document.addEventListener('drop', event => event.preventDefault());
   }
 
   componentWillMount() {
