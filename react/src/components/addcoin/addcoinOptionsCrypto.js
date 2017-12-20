@@ -16,7 +16,7 @@ const addCoinOptionsCrypto = () => {
   }];
 
   if (mainWindow.argv.indexOf('spvcoins=all') > -1) {
-    _coins.push(/*{
+    _coins.push({
       label: 'BitcoinGold (BTG)',
       icon: 'BTG',
       value: `BTG|spv`,
@@ -24,7 +24,7 @@ const addCoinOptionsCrypto = () => {
       label: 'BitcoinCash (BCH)',
       icon: 'BCH',
       value: `BCH|spv`,
-    }, {
+    },/* {
       label: 'Bitcoin (BTC)',
       icon: 'BTC',
       value: `BTC|spv`,
