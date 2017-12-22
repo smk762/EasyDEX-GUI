@@ -30,6 +30,7 @@ import {
 import Store from '../../../store';
 import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
+import { translate } from '../../../translate/translate';
 
 import CoinTileItemRender from './coinTileItem.render';
 
@@ -146,8 +147,8 @@ class CoinTileItem extends React.Component {
     .then((res) => {
       Store.dispatch(
         triggerToaster(
-          `${coin} is removed`,
-          'Coin notification',
+          `${coin} ${translate('TOASTR.COIN_IS_REMOVED')}`,
+          translate('TOASTR.COIN_NOTIFICATION'),
           'success'
         )
       );
@@ -167,7 +168,7 @@ class CoinTileItem extends React.Component {
       if (res.msg === 'error') {
         Store.dispatch(
           triggerToaster(
-            `Unable to stop ${coin}. Try again.`,
+            translate('TOASTR.COIN_UNABLE_TO_STOP', coin),
             'Error',
             'error'
           )
@@ -175,8 +176,8 @@ class CoinTileItem extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            `${coin} is stopped`,
-            'Coin notification',
+            `${coin} ${translate('TOASTR.COIN_IS_STOPPED')}`,
+            translate('TOASTR.COIN_NOTIFICATION'),
             'success'
           )
         );

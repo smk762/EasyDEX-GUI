@@ -56,7 +56,7 @@ class PanelSection extends React.Component {
   toggleSection() {
     const {
       unq,
-      toggle
+      toggle,
     } = this.props;
     toggle(unq);
   }
@@ -75,7 +75,7 @@ class PanelSection extends React.Component {
       icon,
       children,
       active,
-      className: propClasses
+      className: propClasses,
     } = this.props;
 
     const contentStyles = {
@@ -85,28 +85,28 @@ class PanelSection extends React.Component {
     };
 
     const triggerClasses = className('panel', {
-      active
+      active,
     });
 
     const contentClasses = className('panel-collapse', {
-      active
+      active,
     });
 
     return(
-      <div className={triggerClasses}>
+      <div className={ triggerClasses }>
         <div
-          onClick={() => this.toggleSection()}
+          onClick={ () => this.toggleSection() }
           className="panel-heading">
           <a className="panel-title">
-            <i className={icon}></i> {title}
+            <i className={ icon }></i> { title }
           </a>
         </div>
         <div
-          className={contentClasses}
-          style={contentStyles}
-          ref={(ref) => this.accordionContent = ref}>
+          className={ contentClasses }
+          style={ contentStyles }
+          ref={ (ref) => this.accordionContent = ref }>
           <div className="panel-body">
-            {children}
+            { children }
           </div>
         </div>
       </div>

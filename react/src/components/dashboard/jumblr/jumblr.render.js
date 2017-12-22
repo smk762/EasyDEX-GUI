@@ -137,14 +137,14 @@ export const JumblrRender = function() {
                 className="btn btn-jumblr-warning waves-effect waves-light"
                 onClick={ this._pauseJumblr }>
                 <i className="fa fa-pause margin-right-10"></i>
-                Pause
+                { translate('JUMBLR.PAUSE') }
               </button>
               <button
                 type="button"
                 className="btn btn-success waves-effect waves-light margin-left-20"
                 onClick={ this._resumeJumblr }>
                 <i className="fa fa-play margin-right-10"></i>
-                Resume
+                { translate('JUMBLR.RESUME') }
               </button>
             </div>
           </div>
@@ -281,11 +281,15 @@ export const JumblrRender = function() {
                     <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P2') }</p>
                     <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P3') }</p>
                     <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P4') }</p>
-                    <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P5') } <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer XXX</code>. { translate('JUMBLR.JUMBLR_SECRET_DESC_P6') }.</p>
+                    <p>
+                      { translate('JUMBLR.JUMBLR_SECRET_DESC_P5') }&nbsp;
+                      <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer XXX</code>.&nbsp;
+                      { translate('JUMBLR.JUMBLR_SECRET_DESC_P6') }.
+                    </p>
 
                     { this.state.jumblrDepositAddressPBased &&
                       <div className="padding-bottom-20 padding-top-20">
-                        <label>Passphrase</label>
+                        <label>{ translate('JUMBLR.PASSPHRASE') }</label>
                         <input
                           type="text"
                           className="form-control"
@@ -388,7 +392,10 @@ export const JumblrRender = function() {
                       onClick={ () => this.openTab(1) }>{ translate('INDEX.NEXT') }</button>
                     <div className="col-xlg-12 col-md-12 nofloat">
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P1') }</p>
-                      <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P2') }: <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer</code>.</p>
+                      <p>
+                        { translate('JUMBLR.SECRET_REGEN_DESC_P2') }:&nbsp;
+                        <code>jumblr muffin smart educate tomato boss foil open dirt opinion pizza goddess skate action card garden cotton life write life note shine myself gloom summer</code>.
+                      </p>
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P3') }</p>
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P4') }</p>
 

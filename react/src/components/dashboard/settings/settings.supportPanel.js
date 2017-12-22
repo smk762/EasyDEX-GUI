@@ -9,7 +9,6 @@ class SupportPanel extends React.Component {
   openExternalWindow(url) {
     const remote = window.require('electron').remote;
     const BrowserWindow = remote.BrowserWindow;
-
     const externalWindow = new BrowserWindow({
       width: 1280,
       height: 800,
@@ -18,8 +17,8 @@ class SupportPanel extends React.Component {
     });
 
     externalWindow.loadURL(url);
-    externalWindow.webContents.on('did-finish-load', function() {
-      setTimeout(function() {
+    externalWindow.webContents.on('did-finish-load', () => {
+      setTimeout(() => {
         externalWindow.show();
       }, 40);
     });
@@ -65,12 +64,12 @@ class SupportPanel extends React.Component {
           <div className="support-box-wrapper">
             <div
               className="support-box"
-              onClick={ () => this.openExternalWindow('https://github.com/SuperNETorg/Agama') }>
+              onClick={ () => this.openExternalWindow('https://github.com/KomodoPlatform/Agama') }>
               <img
                 src="assets/images/support/github-icon.png"
                 alt="Github" />
               <div className="support-box-title">Github</div>
-              <div className="support-box-link">github.com/SuperNETorg/Agama</div>
+              <div className="support-box-link">github.com/KomodoPlatform/Agama</div>
             </div>
           </div>
         </div>

@@ -28,7 +28,10 @@ const CoindDownModalRender = function() {
                 onClick={ this.dismiss }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white">{ this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}` } { translate('INDEX.IS_DOWN') }!</h4>
+              <h4 className="modal-title white">
+                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}` }&nbsp;
+                { translate('INDEX.IS_DOWN') }!
+              </h4>
             </div>
             <div className="modal-body">
               <div className="vertical-align text-center">
@@ -49,7 +52,7 @@ const CoindDownModalRender = function() {
                     <div
                       className="toggle-label margin-right-15 pointer"
                       onClick={ this.toggleDebugLog }>
-                      Show debug.log
+                      { translate('INDEX.SHOW') } debug.log
                     </div>
                   </div>
                   { !this.state.toggleDebugLog &&

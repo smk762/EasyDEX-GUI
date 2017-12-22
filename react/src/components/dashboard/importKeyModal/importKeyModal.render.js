@@ -24,7 +24,11 @@ export const ImportKeyModalRender = function() {
             </div>
             <div className="modal-body">
               <div className="padding-bottom-40">
-                { translate('IMPORT_KEY.TWO_FORMS_BELOW_P1') } <strong>Iguana Core / ICO</strong> { translate('IMPORT_KEY.TWO_FORMS_BELOW_P2') } <strong>WIF (Wallet Import Format)</strong> { translate('IMPORT_KEY.TWO_FORMS_BELOW_P3') }.
+                { translate('IMPORT_KEY.TWO_FORMS_BELOW_P1') }&nbsp;
+                <strong>Iguana Core / ICO</strong>&nbsp;
+                { translate('IMPORT_KEY.TWO_FORMS_BELOW_P2') }&nbsp;
+                <strong>WIF (Wallet Import Format)</strong>&nbsp;
+                { translate('IMPORT_KEY.TWO_FORMS_BELOW_P3') }.
               </div>
               <div>
                 <strong>{ translate('IMPORT_KEY.PASSPHRASE') }</strong>
@@ -111,10 +115,10 @@ export const ImportKeyModalRender = function() {
                     <div
                       className="toggle-label"
                       onClick={ this.toggleImportWithRescan }>
-                        { translate('IMPORT_KEY.TRIGGER_RESCAN') }
-                        <i
-                          className="icon fa-question-circle settings-help"
-                          title={ translate('IMPORT_KEY.RESCAN_TIP') }></i>
+                      { translate('IMPORT_KEY.TRIGGER_RESCAN') }
+                      <i
+                        className="icon fa-question-circle settings-help"
+                        title={ translate('IMPORT_KEY.RESCAN_TIP') }></i>
                     </div>
                   </span>
                 </div>

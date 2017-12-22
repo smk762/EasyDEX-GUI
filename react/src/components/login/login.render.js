@@ -170,11 +170,11 @@ const LoginRender = function() {
                       className="login-option"
                       value="">{ translate('INDEX.SELECT') }</option>
                     { this.props.Login.pinList.map((pin) => {
-                        return <option
-                                className="login-option"
-                                value={pin}
-                                key={pin}>{ pin }</option>
-                        })
+                      return <option
+                              className="login-option"
+                              value={pin}
+                              key={pin}>{ pin }</option>
+                      })
                     }
                   </select>
                 </div>
@@ -311,7 +311,8 @@ const LoginRender = function() {
                   value={ this.state.randomSeed }
                   onChange={ (e) => this.updateWalletSeed(e) }
                   readOnly={ !this.isCustomWalletSeed() }></textarea>
-                <button className="copy-floating-label"
+                <button
+                  className="copy-floating-label"
                   htmlFor="walletseed"
                   onClick={ () => this.copyPassPhraseToClipboard() }>{ translate('INDEX.COPY') }</button>
                 <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>

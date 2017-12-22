@@ -18,14 +18,14 @@ class Panel extends React.Component {
       singleOpen,
       openByDefault,
       uniqId,
-      children
+      children,
     } = this.props;
 
     const settings = {
       singleOpen,
       openByDefault,
       uniqId,
-      kids: children
+      kids: children,
     };
 
     const initialStateSections = Utils.setupAccordion(settings).activeSections;
@@ -87,9 +87,9 @@ class Panel extends React.Component {
 
     return(
       <div
-        className={accordionClasses}
-        id={uniqId}>
-        {childrenWithProps}
+        className={ accordionClasses }
+        id={ uniqId }>
+        { childrenWithProps }
       </div>
     );
   }

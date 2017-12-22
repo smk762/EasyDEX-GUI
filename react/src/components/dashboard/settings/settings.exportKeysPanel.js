@@ -81,7 +81,7 @@ class ExportKeysPanel extends React.Component {
         items.push(
           <tr key={ _key }>
             <td className="padding-bottom-30">
-              <strong className="padding-right-20">{_key}</strong>{ _wifKeys[_key].pub }
+              <strong className="padding-right-20">{ _key }</strong>{ _wifKeys[_key].pub }
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }

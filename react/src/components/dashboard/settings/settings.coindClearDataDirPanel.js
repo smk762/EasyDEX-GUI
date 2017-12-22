@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import {
   shepherdClearCoindFolder,
-  triggerToaster
+  triggerToaster,
 } from '../../../actions/actionCreators';
 import { coindList } from '../../../util/coinHelper';
 import Store from '../../../store';
@@ -47,7 +47,7 @@ class CoindClearDataDirPanel extends React.Component {
 
           Store.dispatch(
             triggerToaster(
-              `${_coin} data folder is cleared`,
+              `${_coin} ${translate('TOASTR.DATADIR_CLEARED')}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'success'
             )
@@ -55,7 +55,7 @@ class CoindClearDataDirPanel extends React.Component {
         } else {
           Store.dispatch(
             triggerToaster(
-              `Unable to clear ${_coin}`,
+              `${translate('TOASTR.DATADIR_UNABLE_TO_CLEAR')} ${_coin}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -84,7 +84,7 @@ class CoindClearDataDirPanel extends React.Component {
     _items.push(
       <option
         key={ `coind-clear-data-coins-none` }
-        value="none">Pick a coin</option>
+        value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
     );
     for (let i = 0; i < _nativeCoins.length; i++) {
       if (_nativeCoins[i] !== 'CHIPS') {
@@ -105,7 +105,7 @@ class CoindClearDataDirPanel extends React.Component {
         <div className="row">
           <div className="col-sm-12 padding-bottom-10">
             <h4 className="col-red">
-              <i className="fa fa-warning"></i> Warning: the following form will wipe out all native coin data!<br />Don't touch anything if you're not sure what you're doing.
+              <i className="fa fa-warning"></i> { translate('SETTINGS.COIND_DATADIR_CLEAR_P1') }<br />{ translate('SETTINGS.COIND_DATADIR_CLEAR_P2') }
             </h4>
             <div>
               <div className="col-sm-4 no-padding-left text-center">
@@ -130,29 +130,29 @@ class CoindClearDataDirPanel extends React.Component {
                   </label>
                   <span
                     className="title"
-                    onClick={ this.toggleKeepWalletDat }>Keep wallet.dat</span>
+                    onClick={ this.toggleKeepWalletDat }>{ translate('SETTINGS.KEEP') } wallet.dat</span>
                 </span>
                 { !this.state.displayYesNo &&
                   <button
                     type="button"
                     className="btn btn-primary waves-effect waves-light margin-top-20"
                     disabled={ this.state.loading || this.state.coin === 'none' }
-                    onClick={ this.displayYesNo }>{ this.state.loading ? `Deleting ${this.state.coin} data...` : 'Delete' }</button>
+                    onClick={ this.displayYesNo }>{ this.state.loading ? translate('SETTINGS.COIND_DELETING', this.state.coin) : translate('SETTINGS.COIND_DELETE') }</button>
                 }
                 { this.state.displayYesNo &&
-                  <div className="margin-top-20">Are you sure you want to clear {this.state.coin} data folder?</div>
+                  <div className="margin-top-20">{ translate('SETTINGS.DATADIR_DELETE_PROMPT', this.state.coin) }</div>
                 }
                 { this.state.displayYesNo &&
                   <button
                     type="button"
                     className="btn btn-primary waves-effect waves-light margin-top-20 margin-right-20"
-                    onClick={ this.removeCoindData }>Yes</button>
+                    onClick={ this.removeCoindData }>{ translate('SETTINGS.YES') }</button>
                 }
                 { this.state.displayYesNo &&
                   <button
                     type="button"
                     className="btn btn-primary waves-effect waves-light margin-top-20"
-                    onClick={ this.displayYesNo }>No</button>
+                    onClick={ this.displayYesNo }>{ translate('SETTINGS.NO') }</button>
                 }
               </div>
             </div>

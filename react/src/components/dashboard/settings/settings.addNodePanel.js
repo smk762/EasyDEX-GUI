@@ -78,7 +78,8 @@ class AddNodePanel extends React.Component {
   }
 
   addNode() {
-    if (this.state.addNodeCoin && this.state.addPeerIP) {
+    if (this.state.addNodeCoin &&
+        this.state.addPeerIP) {
       Store.dispatch(
         addPeerNode(
           this.state.addNodeCoin.split('|')[0],
@@ -89,9 +90,9 @@ class AddNodePanel extends React.Component {
   }
 
   updateInput(e) {
-      this.setState({
-        [e.target.name]: e.target.value,
-      });
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   }
 
   render() {

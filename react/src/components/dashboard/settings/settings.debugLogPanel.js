@@ -120,7 +120,7 @@ class DebugLogPanel extends React.Component {
     _items.push(
       <option
         key={ `coind-walletdat-coins-none` }
-        value="none">Pick a coin</option>
+        value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
     );
     for (let i = 0; i < _nativeCoins.length; i++) {
       if (_nativeCoins[i] === 'KMD') {

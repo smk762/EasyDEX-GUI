@@ -122,14 +122,14 @@ const NavbarRender = function() {
                 { this.isRenderSpvLockLogout() &&
                   <li>
                     <a onClick={ this.spvLock }>
-                      <i className="icon fa-lock"></i> Soft logout
+                      <i className="icon fa-lock"></i> { translate('DASHBOARD.SOFT_LOGOUT') }
                     </a>
                   </li>
                 }
                 { this.isRenderSpvLockLogout() &&
                   <li>
                     <a onClick={ this.spvLogout }>
-                      <i className="icon fa-power-off"></i> Complete logout
+                      <i className="icon fa-power-off"></i> { translate('DASHBOARD.COMPLETE_LOGOUT') }
                     </a>
                   </li>
                 }

@@ -1,6 +1,7 @@
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
 import Store from '../../store';
+import { translate } from '../../translate/translate';
 
 export function shepherdElectrumLock() {
   return new Promise((resolve, reject) => {
@@ -104,7 +105,7 @@ export function shepherdRemoveCoin(coin, mode) {
       if (mode === 'native') {
         Store.dispatch(
           triggerToaster(
-            `${coin} daemon is still running. If you want to completely stop it and remove use stop icon next time.`,
+            `${coin} ${translate('API.DAEMON_IS_STILL_RUNNING')}`,
             'Warning',
             'warning'
           )

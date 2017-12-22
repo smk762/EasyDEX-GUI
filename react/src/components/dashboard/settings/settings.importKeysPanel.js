@@ -41,11 +41,7 @@ class ImportKeysPanel extends React.Component {
         </div>
         <div className="row">
           <div className="col-sm-12">
-            <form
-              className="wifkeys-import-form"
-              method="post"
-              action="javascript:"
-              autoComplete="off">
+            <div className="wifkeys-import-form">
               <div className="form-group form-material floating">
                 <input
                   type="text"
@@ -63,7 +59,7 @@ class ImportKeysPanel extends React.Component {
                   className="btn btn-primary waves-effect waves-light"
                   onClick={ this.importWifKey }>{ translate('INDEX.IMPORT_PRIV_KEY') }</button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

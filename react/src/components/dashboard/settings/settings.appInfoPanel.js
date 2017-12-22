@@ -15,7 +15,7 @@ class AppInfoPanel extends React.Component {
       return null
     } else {
       let _items = [];
-      let _ports = mainWindow.getAssetChainPorts()
+      let _ports = mainWindow.getAssetChainPorts();
 
       for (let key in _ports) {
         _items.push(
@@ -69,7 +69,7 @@ class AppInfoPanel extends React.Component {
               </p>
             }
             { mainWindow.arch === 'x64' &&
-              <h5>Daemon ports</h5>
+              <h5>{ translate('SETTINGS.DAEMON_PORTS') }</h5>
             }
             { mainWindow.arch === 'x64' &&
               <p>{ _items }</p>

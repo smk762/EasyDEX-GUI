@@ -20,18 +20,9 @@ import CoindClearDataDirPanel from './settings.coindClearDataDirPanel';
 import Bip39KeysPanel from './settings.bip39KeysPanel';
 import mainWindow from '../../../util/mainWindow';
 
-// import WalletInfoPanel from './settings.walletInfoPanel';
 // import WalletBackupPanel from './settings.walletBackupPanel';
 
 /*
-              { !this.props.disableWalletSpecificUI &&
-                <PanelSection
-                  title={ translate('INDEX.WALLET_INFO') }
-                  icon="icon md-balance-wallet"
-                  openByDefault={!this.props.disableWalletSpecificUI}>
-                  <WalletInfoPanel />
-                </PanelSection>
-              }
               { !this.props.disableWalletSpecificUI &&
                 <PanelSection
                   title={ translate('INDEX.ADD_NODE') }
@@ -71,13 +62,13 @@ export const SettingsRender = function() {
           <div className="col-sm-12">
             <h4 className="font-size-14 text-uppercase">{ translate('INDEX.WALLET_SETTINGS') }</h4>
             <Panel
-              uniqId={'SettingsAccordion'}
-              singleOpen={true}>
+              uniqId={ 'SettingsAccordion' }
+              singleOpen={ true }>
               { mainWindow.arch === 'x64' &&
                 <PanelSection
                   title={ translate('INDEX.DEBUG_LOG') }
                   icon="icon fa-bug"
-                  openByDefault={this.props.disableWalletSpecificUI}>
+                  openByDefault={ this.props.disableWalletSpecificUI }>
                   <DebugLogPanel />
                 </PanelSection>
               }
@@ -114,19 +105,19 @@ export const SettingsRender = function() {
               }
               { mainWindow.arch === 'x64' &&
                 <PanelSection
-                  title={ 'Wallet.dat keys' }
+                  title={ `Wallet.dat ${translate('SETTINGS.KEYS_SM')}` }
                   icon="icon md-key">
                   <NativeWalletDatKeysPanel />
                 </PanelSection>
               }
               <PanelSection
-                title="BIP39 Keys"
+                title={ `BIP39 ${translate('SETTINGS.KEYS_CAP')}` }
                 icon="icon fa-usb">
                 <Bip39KeysPanel />
               </PanelSection>
               { mainWindow.arch === 'x64' &&
                 <PanelSection
-                  title={ 'Clear native coin data dir' }
+                  title={ translate('SETTINGS.CLEAR_NATIVE_DATADIR') }
                   icon="icon fa-trash">
                   <CoindClearDataDirPanel />
                 </PanelSection>
