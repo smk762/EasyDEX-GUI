@@ -169,7 +169,7 @@ class CoinTileItem extends React.Component {
         Store.dispatch(
           triggerToaster(
             translate('TOASTR.COIN_UNABLE_TO_STOP', coin),
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );

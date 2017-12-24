@@ -398,7 +398,6 @@ export const JumblrRender = function() {
                       </p>
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P3') }</p>
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P4') }</p>
-
                       { this.state.jumblrDepositAddressPBased &&
                         <div className="padding-bottom-20 padding-top-20">
                           <label>{ translate('INDEX.PASSPHRASE') }</label>

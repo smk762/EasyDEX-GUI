@@ -18,7 +18,7 @@ import Store from '../../../store';
 import Config from '../../../config';
 import {
   JumblrRender,
-  JumblrRenderSecretAddressList
+  JumblrRenderSecretAddressList,
 } from './jumblr.render';
 import { PassPhraseGenerator } from '../../../util/crypto/passphrasegenerator';
 
