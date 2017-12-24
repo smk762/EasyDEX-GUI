@@ -276,6 +276,30 @@ export const SendRender = function() {
                         </td>
                       </tr>
                       <tr>
+                        <td className="padding-left-30">
+                        { translate('INDEX.SEND_FROM') }
+                        </td>
+                        <td className="padding-left-30">
+                          { this.props.ActiveCoin.mode === 'spv' ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : this.state.sendFrom }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="padding-left-30">
+                        { translate('INDEX.SEND_TO') }
+                        </td>
+                        <td className="padding-left-30">
+                          { this.state.sendTo }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="padding-left-30">
+                        { translate('INDEX.AMOUNT') }
+                        </td>
+                        <td className="padding-left-30">
+                          { this.state.amount }
+                        </td>
+                      </tr>
+                      <tr>
                         <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
                         <td className="padding-left-30">
                           { this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }
