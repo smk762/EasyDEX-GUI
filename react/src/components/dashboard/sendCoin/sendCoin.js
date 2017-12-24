@@ -565,7 +565,8 @@ class SendCoin extends React.Component {
     }
 
     if (this.state.sendTo.length > 34 &&
-        (!this.state.sendFrom || this.state.sendFrom.length < 34)) {
+        (!this.state.sendFrom || this.state.sendFrom.length < 34) &&
+        this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         triggerToaster(
           translate('SEND.SELECT_SOURCE_ADDRESS'),
