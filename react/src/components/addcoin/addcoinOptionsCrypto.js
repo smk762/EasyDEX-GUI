@@ -80,6 +80,14 @@ const addCoinOptionsCrypto = () => {
       label: 'Dogecoin (DOGE)',
       icon: 'DOGE',
       value: `DOGE|spv`,
+    }, {
+      label: 'Zcash (ZEC)',
+      icon: 'ZEC',
+      value: `ZEC|spv`,
+    }, {
+      label: 'Hush (HUSH)',
+      icon: 'HUSH',
+      value: `HUSH|spv`,
     });
   }
 

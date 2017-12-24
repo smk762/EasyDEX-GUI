@@ -19,7 +19,6 @@ class CliPanel extends React.Component {
   renderActiveCoinsList(mode) {
     const modes = [
       'native',
-      'basilisk',
       'full'
     ];
 

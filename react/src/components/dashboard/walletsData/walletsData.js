@@ -346,7 +346,7 @@ class WalletsData extends React.Component {
         .then((serverSetRes) => {
           Store.dispatch(
             triggerToaster(
-              `${this.props.ActiveCoin.coin} SPV server set to ${_randomServer.ip}:${_randomServer.port}`,
+              `${this.props.ActiveCoin.coin} SPV {translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'success'
             )
@@ -356,7 +356,7 @@ class WalletsData extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            `${this.props.ActiveCoin.coin} SPV server ${_randomServer.ip}:${_randomServer.port} is unreachable!`,
+            `${this.props.ActiveCoin.coin} SPV {translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port} {translate('DASHBOARD.IS_UNREACHABLE')}!`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -416,9 +416,9 @@ class WalletsData extends React.Component {
               { translate('DASHBOARD.SPV_CONN_ERROR') }
             </div>
             <div className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
-              <div className="color-warning">Trying to switch to another server...</div>
+              <div className="color-warning">{ translate('DASHBOARD.SPV_AUTO_SWITCH') }...</div>
               <br />
-              <strong>How to switch manually:</strong>
+              <strong>{ translate('DASHBOARD.HOW_TO_SWITCH_MANUALLY') }:</strong>
               <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }
             </div>
           </td>
@@ -435,7 +435,7 @@ class WalletsData extends React.Component {
     this.setState(Object.assign({}, this.state, {
       pageSize: pageSize,
       showPagination: this.state.itemsList && this.state.itemsList.length >= this.state.defaultPageSize,
-    }))
+    }));
   }
 
   updateAddressSelection(address) {
@@ -556,11 +556,11 @@ class WalletsData extends React.Component {
       return true;
     }
 
-    return this.contains(tx.address, term)
-      || this.contains(tx.confirmations, term)
-      || this.contains(tx.amount, term)
-      || this.contains(tx.type, term)
-      || this.contains(secondsToString(tx.blocktime || tx.timestamp || tx.time), term);
+    return this.contains(tx.address, term) ||
+            this.contains(tx.confirmations, term) ||
+            this.contains(tx.amount, term) ||
+            this.contains(tx.type, term) ||
+            this.contains(secondsToString(tx.blocktime || tx.timestamp || tx.time), term);
   }
 
   contains(value, property) {

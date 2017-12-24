@@ -6,6 +6,10 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'HUSH':
+      coinlogo = 'hush';
+      coinname = 'Hush';
+      break;
     case 'BCH':
       coinlogo = 'bch';
       coinname = 'BitcoinCash';
@@ -75,7 +79,7 @@ export function getCoinTitle(coin) {
       coinname = 'Syscoin';
       break;
     case 'ZEC':
-      coinlogo = 'zcash';
+      coinlogo = 'zec';
       coinname = 'Zcash';
       break;
     case 'NMC':

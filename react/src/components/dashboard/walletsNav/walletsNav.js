@@ -33,8 +33,8 @@ class WalletsNav extends React.Component {
   }
 
   checkTotalBalance() {
-    let _balance = '0';
     const _mode = this.props.ActiveCoin.mode;
+    let _balance = '0';
 
     if (this.props.ActiveCoin.balance &&
         this.props.ActiveCoin.balance.total &&

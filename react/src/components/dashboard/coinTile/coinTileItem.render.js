@@ -27,13 +27,13 @@ const CoinTileItemRender = function() {
       { this.renderStopCoinButton() &&
         <i
           onClick={ () => this.stopCoind(item.coin, item.mode) }
-          title="Stop"
+          title={ translate('DASHBOARD.STOP') }
           className="icon fa-stop-circle coind-stop-icon"></i>
       }
       { this.renderRemoveCoinButton() &&
         <i
           onClick={ () => this.removeCoin(item.coin, item.mode) }
-          title="Remove"
+          title={ translate('DASHBOARD.REMOVE') }
           className={ 'icon fa-plus-circle coind-remove-icon' + (item.mode === 'spv' ? ' coind-remove-icon-spv' : '') }></i>
       }
       { this.props.Dashboard &&
@@ -49,7 +49,7 @@ const CoinTileItemRender = function() {
         !this.props.ActiveCoin.rescanInProgress &&
         <i
           onClick={ this.openCoindDownModal }
-          title={ `Unable to establish RPC connection! Retries count: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
+          title={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
           className="icon fa-warning icon-native-connection-warning"></i>
       }
     </div>

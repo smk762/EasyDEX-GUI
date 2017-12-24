@@ -204,7 +204,7 @@ class ClaimInterestModal extends React.Component {
         Store.dispatch(
           triggerToaster(
             res.result,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -270,7 +270,7 @@ class ClaimInterestModal extends React.Component {
             Store.dispatch(
               triggerToaster(
                 json.error.message,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );
@@ -285,7 +285,7 @@ class ClaimInterestModal extends React.Component {
                 Store.dispatch(
                   triggerToaster(
                     json.error.message,
-                    'Error',
+                    translate('TOASTR.ERROR'),
                     'error'
                   )
                 );
@@ -304,8 +304,8 @@ class ClaimInterestModal extends React.Component {
           } else {
             Store.dispatch(
               triggerToaster(
-                `Failed to verify address ${this.state.selectedAddress}`,
-                'Error',
+                `${translate('TOASTR.FAILED_TO_VERIFY_ADDR')} ${this.state.selectedAddress}`,
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );

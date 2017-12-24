@@ -11,8 +11,9 @@ import {
   AddressActionsNonBasiliskModeRender,
   AddressItemRender,
   ReceiveCoinRender,
-  _ReceiveCoinTableRender
+  _ReceiveCoinTableRender,
 } from './receiveCoin.render';
+import { translate } from '../../../translate/translate';
 
 // TODO: implement balance/interest sorting
 
@@ -66,7 +67,7 @@ class ReceiveCoin extends React.Component {
     .then((json) => {
       if (json.length &&
           json.length > 10) {
-        Store.dispatch(copyString(json, 'WIF address copied to clipboard'));
+        Store.dispatch(copyString(json, 'WIF ' + translate('DASHBOARD.RECEIVE_ADDR_COPIED')));
       }
     });
   }

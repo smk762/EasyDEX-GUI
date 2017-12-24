@@ -18,7 +18,7 @@ import Store from '../../../store';
 import Config from '../../../config';
 import {
   JumblrRender,
-  JumblrRenderSecretAddressList
+  JumblrRenderSecretAddressList,
 } from './jumblr.render';
 import { PassPhraseGenerator } from '../../../util/crypto/passphrasegenerator';
 
@@ -91,7 +91,7 @@ class Jumblr extends React.Component {
       } else if (json.result && json.result.result && json.result.result === 'paused') {
         Store.dispatch(
           triggerToaster(
-            'Jumblr paused',
+            translate('JUMBLR.JUMBLR_PAUSED'),
             'Jumblr',
             'success'
           )
@@ -115,7 +115,7 @@ class Jumblr extends React.Component {
       } else if (json.result && json.result.result && json.result.result === 'resumed') {
         Store.dispatch(
           triggerToaster(
-            'Jumblr resumed',
+            translate('JUMBLR.JUMBLR_RESUMED'),
             'Jumblr',
             'success'
           )

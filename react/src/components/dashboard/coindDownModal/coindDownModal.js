@@ -7,6 +7,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
+import { translate } from '../../../translate/translate';
 
 import CoindDownModalRender from './coindDownModal.render';
 
@@ -18,7 +19,7 @@ class CoindDownModal extends React.Component {
     this.state = {
       display: false,
       kmdMainPassiveMode: false,
-      coindStdOut: 'Loading...',
+      coindStdOut: translate('INDEX.LOADING') + '...',
       toggleDebugLog: true,
     };
     this.dismiss = this.dismiss.bind(this);
@@ -51,7 +52,7 @@ class CoindDownModal extends React.Component {
     coindGetStdout(this.props.ActiveCoin.coin)
     .then((res) => {
       this.setState({
-        coindStdOut: res.msg === 'success' ? res.result : `Error reading ${this.props.ActiveCoin.coin} stdout`,
+        coindStdOut: res.msg === 'success' ? res.result : `${translate('INDEX.ERROR_READING')} ${this.props.ActiveCoin.coin} stdout`,
       });
     });
   }

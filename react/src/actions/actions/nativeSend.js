@@ -11,7 +11,6 @@ export function sendNativeTx(coin, _payload) {
   let payload;
   let _apiMethod;
 
-  // iguana core
   if ((_payload.addressType === 'public' && // transparent
       _payload.sendTo.length !== 95) || !_payload.sendFrom) {
     _apiMethod = 'sendtoaddress';

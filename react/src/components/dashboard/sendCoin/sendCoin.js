@@ -59,7 +59,7 @@ class SendCoin extends React.Component {
   }
 
   copyTXID(txid) {
-    Store.dispatch(copyString(txid, 'TXID copied to clipboard'));
+    Store.dispatch(copyString(txid, translate('SEND.TXID_COPIED')));
   }
 
   openExplorerWindow(txid) {
@@ -216,7 +216,8 @@ class SendCoin extends React.Component {
         this.props.ActiveCoin.addresses[type] &&
         this.props.ActiveCoin.addresses[type].length) {
         this.props.ActiveCoin.addresses[type].map((address) => {
-        if (address.amount > 0 && (type !== 'public' || (address.canspend && type === 'public'))) {
+        if (address.amount > 0 &&
+            (type !== 'public' || (address.canspend && type === 'public'))) {
           _items.push(
             <li
               className="selected"
@@ -498,7 +499,7 @@ class SendCoin extends React.Component {
       if (Number(_amountSats) + _fees[this.props.ActiveCoin.coin] > _balanceSats) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} max available balance is ${(0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)} ${this.props.ActiveCoin.coin}`,
+            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${(0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)} ${this.props.ActiveCoin.coin}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -507,7 +508,7 @@ class SendCoin extends React.Component {
       } else if (Number(_amountSats) < _fees[this.props.ActiveCoin.coin]) {
         Store.dispatch(
           triggerToaster(
-            `Amount ${this.state.amount} is too small, min ${this.props.ActiveCoin.coin} amount is ${_fees[this.props.ActiveCoin.coin] * 0.00000001}`,
+            `${translate('SEND.AMOUNT_IS_TOO_SMALL', this.state.amount)}, ${translate('SEND.MIN_AMOUNT_IS', this.props.ActiveCoin.coin)} ${_fees[this.props.ActiveCoin.coin] * 0.00000001}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -555,7 +556,7 @@ class SendCoin extends React.Component {
         Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
       Store.dispatch(
         triggerToaster(
-          `${translate('SEND.INSUFFICIENT_FUNDS')} max available balance is ${Number(this.state.sendFromAmount || this.props.ActiveCoin.balance.transparent)} ${this.props.ActiveCoin.coin}`,
+          `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || this.props.ActiveCoin.balance.transparent)} ${this.props.ActiveCoin.coin}`,
           translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
@@ -564,7 +565,8 @@ class SendCoin extends React.Component {
     }
 
     if (this.state.sendTo.length > 34 &&
-        (!this.state.sendFrom || this.state.sendFrom.length < 34)) {
+        (!this.state.sendFrom || this.state.sendFrom.length < 34) &&
+        this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         triggerToaster(
           translate('SEND.SELECT_SOURCE_ADDRESS'),

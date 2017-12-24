@@ -22,115 +22,109 @@ const WalletsInfoRender = function() {
                 <td></td>
               </tr>
               <tr>
-                <td>Address</td>
+                <td>{ translate('WALLETS_INFO.ADDRESS') }</td>
                 <td>
                   { _netPeers[i].addr }
                 </td>
               </tr>
               <tr>
-                <td>Address local</td>
+                <td>{ translate('WALLETS_INFO.ADRESS_LOCAL') }</td>
                 <td>
                   { _netPeers[i].addrlocal }
                 </td>
               </tr>
               <tr>
-                <td>Services</td>
+                <td>{ translate('WALLETS_INFO.SERVICES') }</td>
                 <td>
                   { _netPeers[i].services }
                 </td>
               </tr>
               <tr>
-                <td>Version</td>
+                <td>{ translate('WALLETS_INFO.VERSION') }</td>
                 <td>
                   { _netPeers[i].version }
                 </td>
               </tr>
               <tr>
-                <td>Subversion</td>
+                <td>{ translate('WALLETS_INFO.SUBVERSION') }</td>
                 <td>
                   { _netPeers[i].subver }
                 </td>
               </tr>
               <tr>
-                <td>Whitelisted</td>
+                <td>{ translate('WALLETS_INFO.WHITELISTED') }</td>
                 <td>
                   { _netPeers[i].whitelisted ? 'true' : 'false' }
                 </td>
               </tr>
               <tr>
-                <td>Inbound</td>
+                <td>{ translate('WALLETS_INFO.INBOUND') }</td>
                 <td>
                   { _netPeers[i].inbound ? 'true' : 'false' }
                 </td>
               </tr>
               <tr>
-                <td>Time offset</td>
+                <td>{ translate('WALLETS_INFO.TIME_OFFSET') }</td>
                 <td>
                   { _netPeers[i].timeoffset }
                 </td>
               </tr>
               <tr>
-                <td>Ping time</td>
+                <td>{ translate('WALLETS_INFO.PING_TIME') }</td>
                 <td>
                   { _netPeers[i].pingtime }
                 </td>
               </tr>
               <tr>
-                <td>Connection time</td>
+                <td>{ translate('WALLETS_INFO.CONNECTION_TIME') }</td>
                 <td>
                   { secondsToString(_netPeers[i].conntime) }
                 </td>
               </tr>
               <tr>
-                <td>Last send</td>
+                <td>{ translate('WALLETS_INFO.LAST_SEND') }</td>
                 <td>
                   { secondsToString(_netPeers[i].lastsend) }
                 </td>
               </tr>
               <tr>
-                <td>Last received</td>
+                <td>{ translate('WALLETS_INFO.LAST_RECEIVED') }</td>
                 <td>
                   { secondsToString(_netPeers[i].lastrecv) }
                 </td>
               </tr>
               <tr>
-                <td>Data sent</td>
+                <td>{ translate('WALLETS_INFO.DATA_SENT') }</td>
                 <td>
                   { formatBytes(_netPeers[i].bytessent) }
                 </td>
               </tr>
               <tr>
-                <td>Data received</td>
+                <td>{ translate('WALLETS_INFO.DATA_RECEIVED') }</td>
                 <td>
                   { formatBytes(_netPeers[i].bytesrecv) }
                 </td>
               </tr>
               <tr>
-                <td>Ban score</td>
+                <td>{ translate('WALLETS_INFO.BAN_SCORE') }</td>
                 <td>
                   { _netPeers[i].banscore }
                 </td>
               </tr>
               <tr>
-                <td>Starting height</td>
+                <td>{ translate('WALLETS_INFO.STARTING_HEIGHT') }</td>
                 <td>
                   { _netPeers[i].startingheight }
                 </td>
               </tr>
               <tr>
-                <td>Synced headers</td>
+                <td>{ translate('WALLETS_INFO.SYNCED_HEADERS') }</td>
                 <td>
                   { _netPeers[i].synced_headers }
                 </td>
               </tr>
               <tr>
-                <td>Synced blocks</td>
-                <td>
-                  { _netPeers[i].synced_blocks }
-                </td>
-              </tr>
-              <tr>
-                <td>Synced blocks</td>
+                <td>{ translate('WALLETS_INFO.SYNCED_BLOCKS') }</td>
                 <td>
                   { _netPeers[i].synced_blocks }
                 </td>
@@ -196,26 +190,26 @@ const WalletsInfoRender = function() {
           }
           <div className="panel">
             <div className="panel-heading">
-              <h3 className="panel-title">Network totals</h3>
+              <h3 className="panel-title">{ translate('WALLETS_INFO.NETWORK_TOTALS') }</h3>
             </div>
             <div className="table-responsive">
               { _netTotals &&
                 <table className="table table-striped">
                   <tbody>
                     <tr>
-                      <td>Time</td>
+                      <td>{ translate('WALLETS_INFO.TIME') }</td>
                       <td>
                         { secondsToString(_netTotals.timemillis, true) }
                       </td>
                     </tr>
                     <tr>
-                      <td>Data received</td>
+                      <td>{ translate('WALLETS_INFO.DATA_RECEIVED') }</td>
                       <td>
                         { formatBytes(_netTotals.totalbytesrecv) }
                       </td>
                     </tr>
                     <tr>
-                      <td>Data sent</td>
+                      <td>{ translate('WALLETS_INFO.DATA_SENT') }</td>
                       <td>
                         { formatBytes(_netTotals.totalbytessent) }
                       </td>
@@ -224,7 +218,7 @@ const WalletsInfoRender = function() {
                 </table>
               }
               { !_netTotals &&
-                <div>Loading...</div>
+                <div>{ translate('WALLETS_INFO.LOADING') }</div>
               }
             </div>
           </div>
@@ -333,11 +327,11 @@ const WalletsInfoRender = function() {
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">
-                Peers
+                { translate('WALLETS_INFO.PEERS') }
               </h3>
             </div>
             { !_netPeers &&
-              <div>Loading...</div>
+              <div>{ translate('WALLETS_INFO.LOADING') }</div>
             }
             { _netPeers &&
               <div className="table-responsive">

@@ -69,7 +69,7 @@ class NativeWalletDatKeysPanel extends React.Component {
     _items.push(
       <option
         key={ `coind-walletdat-coins-none` }
-        value="none">Pick a coin</option>
+        value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
     );
     for (let i = 0; i < _nativeCoins.length; i++) {
       _items.push(
@@ -83,9 +83,8 @@ class NativeWalletDatKeysPanel extends React.Component {
   }
 
   renderKeys() {
-    let _items = [];
-
     const _keys = this.state.keys;
+    let _items = [];
 
     if (_keys.msg === 'error') {
       return (
@@ -103,12 +102,12 @@ class NativeWalletDatKeysPanel extends React.Component {
       return (
         <div>
           <div className="col-sm-12 margin-bottom-20">
-            Found <strong>{ _keys.result.length }</strong> keys
+            { translate('SETTINGS.FOUND') } <strong>{ _keys.result.length }</strong> { translate('SETTINGS.KEYS_SM') }
           </div>
           { _keys.result.length > 0 &&
             <div className="col-sm-6">
               <div>
-                <strong>Address</strong>
+                <strong>{ translate('SETTINGS.ADDRESS') }</strong>
               </div>
               <textarea
                 readOnly
@@ -155,13 +154,13 @@ class NativeWalletDatKeysPanel extends React.Component {
                   autoComplete="off"
                   name="keyMatchPattern"
                   onChange={ this.updateInput }
-                  placeholder="Search key pattern"
+                  placeholder={ translate('SETTINGS.SEARCH_KEY_PATTERN') }
                   value={ this.state.keyMatchPattern } />
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light margin-top-20"
                   disabled={ this.state.loading || this.state.coin === 'none' }
-                  onClick={ this._getWalletDatKeys }>{ this.state.loading ? 'Fetching keys...' : 'Get keys' }</button>
+                  onClick={ this._getWalletDatKeys }>{ this.state.loading ? translate('SETTINGS.FETCHING_KEYS') + '...' : translate('SETTINGS.GET_KEYS') }</button>
               </div>
             </div>
           </div>
