@@ -549,10 +549,12 @@ class SendCoin extends React.Component {
         (this.state.addressType === 'public' &&
         this.state.sendTo &&
         this.state.sendTo.length > 34 &&
+        this.state.sendFrom &&
         Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount)) ||
         (this.state.addressType === 'private' &&
         this.state.sendTo &&
         this.state.sendTo.length >= 34 &&
+        this.state.sendFrom &&
         Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
       Store.dispatch(
         triggerToaster(
@@ -565,7 +567,8 @@ class SendCoin extends React.Component {
     }
 
     if (this.state.sendTo.length > 34 &&
-        (!this.state.sendFrom || this.state.sendFrom.length < 34) &&
+        this.state.sendTo.substring(0, 2) === 'zc' &&
+        !this.state.sendFrom &&
         this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(
         triggerToaster(
