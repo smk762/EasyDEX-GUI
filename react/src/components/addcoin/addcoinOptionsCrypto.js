@@ -72,11 +72,11 @@ const addCoinOptionsCrypto = () => {
       label: 'Sibcoin (SIB)',
       icon: 'SIB',
       value: `SIB|spv`,
-    },/* {
+    }, {
       label: 'Blackcoin (BLK)',
       icon: 'BLK',
       value: `BLK|spv`,
-    }, */{
+    }, {
       label: 'Dogecoin (DOGE)',
       icon: 'DOGE',
       value: `DOGE|spv`,
