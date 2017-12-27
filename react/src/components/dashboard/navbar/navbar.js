@@ -86,7 +86,9 @@ class Navbar extends React.Component {
       isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
     });
 
-    Store.dispatch(dashboardChangeSection(mainWindow.activeSection));
+    if (mainWindow.argv.indexOf('dexonly') > -1) {
+      Store.dispatch(dashboardChangeSection(mainWindow.activeSection));
+    }
   }
 
   componentWillUnmount() {
