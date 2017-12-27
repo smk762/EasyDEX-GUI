@@ -12,6 +12,7 @@ import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
+import Support from '../support/support';
 import WalletsMain from '../walletsMain/walletsMain';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 import CoindDownModal from '../coindDownModal/coindDownModal';
@@ -51,6 +52,9 @@ const DashboardRender = function() {
         }
         { this.isSectionActive('about') &&
           <About />
+        }
+        { this.isSectionActive('support') &&
+          <Support />
         }
       </div>
     </div>

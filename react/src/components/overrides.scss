@@ -684,3 +684,16 @@ select{
     background: #f3f4f5;
   }
 }
+
+.navbar-nav > li > a.navbar-avatar,
+.navbar-toolbar > li > a.navbar-avatar {
+  &.dropdown-toggle {
+    font-size: 24px;
+    padding-top: 24px;
+
+    i {
+      position: relative;
+      top: -2px;
+    }
+  }
+}

@@ -12,7 +12,6 @@ import DebugLogPanel from './settings.debugLogPanel';
 // import FiatCurrencyPanel from './settings.fiatCurrencyPanel';
 import ExportKeysPanel from './settings.exportKeysPanel';
 // import ImportKeysPanel from './settings.importKeysPanel';
-import SupportPanel from './settings.supportPanel';
 import SPVServersPanel from './settings.spvServersPanel';
 import DaemonStdoutPanel from './settings.daemonStdoutPanel';
 import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
@@ -148,11 +147,6 @@ export const SettingsRender = function() {
                   <AppUpdatePanel />
                 </PanelSection>
               }
-              <PanelSection
-                title={ translate('SETTINGS.SUPPORT') }
-                icon="icon fa fa-life-ring">
-                <SupportPanel />
-              </PanelSection>
             </Panel>
           </div>
         </div>
