@@ -169,16 +169,16 @@ class Bip39KeysPanel extends React.Component {
                   value={ this.state.accounts }
                   onChange={ (event) => this.updateInput(event) }
                   autoFocus>
-                  <option value="1">1 { translate('SETTINGS.ACCOUNT') }</option>
-                  <option value="2">2 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="3">3 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="4">4 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="5">5 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="6">6 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="7">7 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="8">8 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="9">9 { translate('SETTINGS.ACCOUNTS') }</option>
-                  <option value="10">10 { translate('SETTINGS.ACCOUNTS') }</option>
+                  <option value="1">1 { translate('SETTINGS.ACCOUNT_SM') }</option>
+                  <option value="2">2 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="3">3 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="4">4 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="5">5 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="6">6 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="7">7 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="8">8 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="9">9 { translate('SETTINGS.ACCOUNTS_SM') }</option>
+                  <option value="10">10 { translate('SETTINGS.ACCOUNTS_SM') }</option>
                 </select>
               </div>
               <div className="col-sm-2 no-padding-left text-center margin-top-10">
@@ -188,15 +188,15 @@ class Bip39KeysPanel extends React.Component {
                   value={ this.state.addressdepth }
                   onChange={ (event) => this.updateInput(event) }
                   autoFocus>
-                  <option value="20">20 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="30">30 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="40">40 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="50">50 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="60">60 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="70">70 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="80">80 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="90">90 { translate('SETTINGS.ADDRESSES') }</option>
-                  <option value="100">100 { translate('SETTINGS.ADDRESSES') }</option>
+                  <option value="20">20 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="30">30 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="40">40 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="50">50 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="60">60 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="70">70 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="80">80 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="90">90 { translate('SETTINGS.ADDRESSES_SM') }</option>
+                  <option value="100">100 { translate('SETTINGS.ADDRESSES_SM') }</option>
                 </select>
               </div>
             </div>

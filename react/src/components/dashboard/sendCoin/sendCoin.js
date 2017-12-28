@@ -540,41 +540,45 @@ class SendCoin extends React.Component {
       valid = false;
     }
 
-    if (((!this.state.sendFrom || this.state.addressType === 'public') &&
-        this.state.sendTo &&
-        this.state.sendTo.length === 34 &&
-        this.props.ActiveCoin.balance &&
-        this.props.ActiveCoin.balance.transparent &&
-        Number(Number(this.state.amount) + (this.state.subtractFee ? 0 : 0.0001)) > Number(this.props.ActiveCoin.balance.transparent)) ||
-        (this.state.addressType === 'public' &&
-        this.state.sendTo &&
-        this.state.sendTo.length > 34 &&
-        Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount)) ||
-        (this.state.addressType === 'private' &&
-        this.state.sendTo &&
-        this.state.sendTo.length >= 34 &&
-        Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
-      Store.dispatch(
-        triggerToaster(
-          `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || this.props.ActiveCoin.balance.transparent)} ${this.props.ActiveCoin.coin}`,
-          translate('TOASTR.WALLET_NOTIFICATION'),
-          'error'
-        )
-      );
-      valid = false;
-    }
+    if (this.props.ActiveCoin.mode === 'native') {
+      if (((!this.state.sendFrom || this.state.addressType === 'public') &&
+          this.state.sendTo &&
+          this.state.sendTo.length === 34 &&
+          this.props.ActiveCoin.balance &&
+          this.props.ActiveCoin.balance.transparent &&
+          Number(Number(this.state.amount) + (this.state.subtractFee ? 0 : 0.0001)) > Number(this.props.ActiveCoin.balance.transparent)) ||
+          (this.state.addressType === 'public' &&
+          this.state.sendTo &&
+          this.state.sendTo.length > 34 &&
+          this.state.sendFrom &&
+          Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount)) ||
+          (this.state.addressType === 'private' &&
+          this.state.sendTo &&
+          this.state.sendTo.length >= 34 &&
+          this.state.sendFrom &&
+          Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
+        Store.dispatch(
+          triggerToaster(
+            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || this.props.ActiveCoin.balance.transparent)} ${this.props.ActiveCoin.coin}`,
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      }
 
-    if (this.state.sendTo.length > 34 &&
-        (!this.state.sendFrom || this.state.sendFrom.length < 34) &&
-        this.props.ActiveCoin.mode === 'native') {
-      Store.dispatch(
-        triggerToaster(
-          translate('SEND.SELECT_SOURCE_ADDRESS'),
-          translate('TOASTR.WALLET_NOTIFICATION'),
-          'error'
-        )
-      );
-      valid = false;
+      if (this.state.sendTo.length > 34 &&
+          this.state.sendTo.substring(0, 2) === 'zc' &&
+          !this.state.sendFrom) {
+        Store.dispatch(
+          triggerToaster(
+            translate('SEND.SELECT_SOURCE_ADDRESS'),
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      }
     }
 
     return valid;

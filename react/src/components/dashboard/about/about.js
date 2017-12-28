@@ -18,8 +18,8 @@ class About extends React.Component {
     });
 
     externalWindow.loadURL(url);
-    externalWindow.webContents.on('did-finish-load', function() {
-      setTimeout(function() {
+    externalWindow.webContents.on('did-finish-load', () => {
+      setTimeout(() => {
         externalWindow.show();
       }, 40);
     });

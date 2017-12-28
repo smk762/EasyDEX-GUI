@@ -137,7 +137,7 @@ class CoindClearDataDirPanel extends React.Component {
                     type="button"
                     className="btn btn-primary waves-effect waves-light margin-top-20"
                     disabled={ this.state.loading || this.state.coin === 'none' }
-                    onClick={ this.displayYesNo }>{ this.state.loading ? translate('SETTINGS.COIND_DELETING', this.state.coin) : translate('SETTINGS.COIND_DELETE') }</button>
+                    onClick={ this.displayYesNo }>{ this.state.loading ? translate('SETTINGS.COIND_DELETING', this.state.coin) : translate('SETTINGS.DELETE') }</button>
                 }
                 { this.state.displayYesNo &&
                   <div className="margin-top-20">{ translate('SETTINGS.DATADIR_DELETE_PROMPT', this.state.coin) }</div>

@@ -101,6 +101,7 @@ class AppSettingsPanel extends React.Component {
 
     if (!saveAfterPathCheck) {
       Store.dispatch(saveAppConfig(_appSettingsPristine));
+      mainWindow.appConfig = _appSettingsPristine;
     }
   }
 
@@ -115,13 +116,31 @@ class AppSettingsPanel extends React.Component {
     );
   }
 
+  renderSelectOptions(data, name) {
+    let _items = [];
+
+    for (let i = 0; i < data.length; i++) {
+      _items.push(
+        <option
+          key={ `settings-${name}-opt-${i}` }
+          value={ data[i].name }>
+          { data[i].label }
+        </option>
+      );
+    }
+
+    return _items;
+  }
+
   renderConfigEditForm() {
-    let items = [];
     const _appConfig = this.state.appSettings;
+    let items = [];
 
     for (let key in _appConfig) {
-       if (this.state.appConfigSchema[key] && typeof _appConfig[key] === 'object') {
-        if (this.state.appConfigSchema[key].display) {
+      if (this.state.appConfigSchema[key] &&
+          typeof _appConfig[key] === 'object') {
+        if ((this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type !== 'select') ||
+            (this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type === 'select' && Config.experimentalFeatures)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
@@ -184,7 +203,8 @@ class AppSettingsPanel extends React.Component {
           }
         }
       } else {
-        if (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display) {
+        if ((this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type !== 'select') ||
+            (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type === 'select' && Config.experimentalFeatures)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
@@ -225,6 +245,16 @@ class AppSettingsPanel extends React.Component {
                         onClick={ (event) => this.updateInputSettings(event, key) }></div>
                     </label>
                   </span>
+                }
+                { this.state.appConfigSchema[key].type === 'select' &&
+                  Config.experimentalFeatures &&
+                  <select
+                    className="form-control select-settings"
+                    name={ `${key}` }
+                    value={ _appConfig[key] }
+                    onChange={ (event) => this.updateInputSettings(event, key) }>
+                    { this.renderSelectOptions(this.state.appConfigSchema[key].data, key) }
+                  </select>
                 }
               </td>
             </tr>
@@ -299,11 +329,11 @@ class AppSettingsPanel extends React.Component {
             <p>
               <strong>{ translate('SETTINGS.CONFIG_RESTART_REQUIRED') }</strong>
             </p>
-              <table>
-                <tbody>
-                { this.renderConfigEditForm() }
-                </tbody>
-              </table>
+            <table>
+              <tbody>
+              { this.renderConfigEditForm() }
+              </tbody>
+            </table>
           </div>
         </div>
         <div className="row">

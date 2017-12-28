@@ -97,11 +97,10 @@ const NavbarRender = function() {
               className={ 'pointer dropdown' + (this.state.openDropMenu ? ' open' : '') }
               onClick={ this.openDropMenu }>
               <a className="navbar-avatar dropdown-toggle">
-                <span className="avatar avatar-online">
-                  <img
-                    src="assets/images/iguana_profile_02.jpg"
-                    alt="iguana" />
-                  <i></i>
+                <span className="navbar-avatar-inner">
+                  <i
+                    title="top menu"
+                    className="icon fa-bars"></i>
                 </span>
               </a>
               <ul className="dropdown-menu">
@@ -116,6 +115,13 @@ const NavbarRender = function() {
                   <li>
                     <a onClick={ () => this.dashboardChangeSection('about') }>
                       <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
+                    </a>
+                  </li>
+                }
+                { !this.isSectionActive('support') &&
+                  <li>
+                    <a onClick={ () => this.dashboardChangeSection('support') }>
+                      <i className="icon fa-life-ring"></i> { translate('SETTINGS.SUPPORT') }
                     </a>
                   </li>
                 }

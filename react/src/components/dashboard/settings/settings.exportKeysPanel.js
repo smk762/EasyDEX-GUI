@@ -197,7 +197,7 @@ class ExportKeysPanel extends React.Component {
                   onClick={ this.toggleSeedInputVisibility }></i>
                 <label
                   className="floating-label"
-                  htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') }</label>
+                  htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
               </div>
               <div className="col-sm-12 col-xs-12 text-align-center">
                 <button
