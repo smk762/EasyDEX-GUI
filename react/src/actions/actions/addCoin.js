@@ -70,12 +70,22 @@ export function shepherdElectrumAuth(seed) {
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(activeHandle());
-      dispatch(shepherdElectrumCoins());
+      if (json.msg !== 'error') {
+        dispatch(activeHandle());
+        dispatch(shepherdElectrumCoins());
+      } else {
+      dispatch(
+        triggerToaster(
+          'Icorrect WIF key format',
+          'Error',
+          'error'
+        )
+      );
+      }
     });
   }
 }
