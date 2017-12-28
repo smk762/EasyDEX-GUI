@@ -30,7 +30,6 @@ class Support extends React.Component {
       <div className="page margin-left-0">
         <div className="page-content">
           <h2>{ translate('SETTINGS.SUPPORT') }</h2>
-
           <div className="row">
             <div className="col-sm-12 no-padding-left">
               <div className="support-box-wrapper">
