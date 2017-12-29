@@ -46,8 +46,55 @@ class CoinTileItem extends React.Component {
       activeCoin: null,
       activeCoinMode: null,
       propsUpdatedCounter: 0,
+      toggledCoinMenu: null,
     };
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
+    this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentWillMount() {
+    const appConfig = mainWindow.appConfig;
+
+    if (!this.props.ActiveCoin.coin) {
+      this.autoSetActiveCoin();
+    }
+
+    this.setState({
+      appConfig,
+    });
+
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
+  }
+
+  handleClickOutside(e) {
+    if (e &&
+        e.srcElement &&
+        e.srcElement.offsetParent &&
+        e.srcElement.offsetParent.className.indexOf('dropdown') === -1 &&
+      (e.srcElement.offsetParent && e.srcElement.offsetParent.className.indexOf('dropdown') === -1)) {
+      this.setState({
+        toggledCoinMenu: e.srcElement.className.indexOf('coin-tile-context-menu-trigger') === -1 ? null : this.state.toggledCoinMenu,
+      });
+    }
+  }
+
+  toggleCoinMenu(coin) {
+    this.setState({
+      toggledCoinMenu: this.state.toggledCoinMenu === coin ? null : coin,
+    });
   }
 
   openCoindDownModal() {
@@ -130,19 +177,11 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  componentWillMount() {
-    if (!this.props.ActiveCoin.coin) {
-      this.autoSetActiveCoin();
-    }
-
-    const appConfig = mainWindow.appConfig;
-
-    this.setState({
-      appConfig,
-    });
-  }
-
   removeCoin(coin, mode) {
+    this.setState({
+      toggledCoinMenu: null,
+    });
+
     shepherdRemoveCoin(coin, mode)
     .then((res) => {
       Store.dispatch(
@@ -163,6 +202,10 @@ class CoinTileItem extends React.Component {
   }
 
   stopCoind(coin) {
+    this.setState({
+      toggledCoinMenu: null,
+    });
+
     shepherdStopCoind(coin)
     .then((res) => {
       if (res.msg === 'error') {

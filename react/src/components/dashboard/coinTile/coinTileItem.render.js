@@ -24,17 +24,41 @@ const CoinTileItemRender = function() {
           </div>
         </div>
       </div>
-      { this.renderStopCoinButton() &&
+      <button
+        onClick={ () => this.toggleCoinMenu(item.coin) }
+        className="btn btn-default btn-xs clipboard-edexaddr coin-tile-context-menu-trigger coind-actions-menu">
+        <i
+          title="Toggle coin context menu"
+          className="fa fa-ellipsis-v coin-tile-context-menu-trigger"></i>
+      </button>
+      { this.state.toggledCoinMenu &&
+        this.state.toggledCoinMenu === item.coin &&
+        <div className="coin-tile-context-menu">
+          <ul>
+            { this.renderStopCoinButton() &&
+              <li onClick={ () => this.stopCoind(item.coin, item.mode) }>
+                <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP') }
+              </li>
+            }
+            { this.renderRemoveCoinButton() &&
+              <li onClick={ () => this.removeCoin(item.coin, item.mode) }>
+                <i className="icon fa-trash-o margin-right-5"></i> { translate('DASHBOARD.REMOVE') }
+              </li>
+            }
+          </ul>
+        </div>
+      }
+      { /*this.renderStopCoinButton() &&
         <i
           onClick={ () => this.stopCoind(item.coin, item.mode) }
           title={ translate('DASHBOARD.STOP') }
-          className="icon fa-stop-circle coind-stop-icon"></i>
+          className="icon fa-stop-circle coind-stop-icon"></i>*/
       }
-      { this.renderRemoveCoinButton() &&
+      { /*this.renderRemoveCoinButton() &&
         <i
           onClick={ () => this.removeCoin(item.coin, item.mode) }
           title={ translate('DASHBOARD.REMOVE') }
-          className={ 'icon fa-plus-circle coind-remove-icon' + (item.mode === 'spv' ? ' coind-remove-icon-spv' : '') }></i>
+          className={ 'icon fa-plus-circle coind-remove-icon' + (item.mode === 'spv' ? ' coind-remove-icon-spv' : '') }></i>*/
       }
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&
