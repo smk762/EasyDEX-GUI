@@ -275,14 +275,16 @@ export const SendRender = function() {
                           <span className="label label-success">{ translate('SEND.SUCCESS_SM') }</span>
                         </td>
                       </tr>
-                      <tr>
-                        <td className="padding-left-30">
-                        { translate('INDEX.SEND_FROM') }
-                        </td>
-                        <td className="padding-left-30">
-                          { this.props.ActiveCoin.mode === 'spv' ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : this.state.sendFrom }
-                        </td>
-                      </tr>
+                      { this.state.sendFrom &&
+                        <tr>
+                          <td className="padding-left-30">
+                          { translate('INDEX.SEND_FROM') }
+                          </td>
+                          <td className="padding-left-30">
+                            { this.props.ActiveCoin.mode === 'spv' ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : this.state.sendFrom }
+                          </td>
+                        </tr>
+                      }
                       <tr>
                         <td className="padding-left-30">
                         { translate('INDEX.SEND_TO') }

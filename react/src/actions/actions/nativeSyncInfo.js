@@ -97,6 +97,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
       mode: null,
       chain: coin,
       cmd: 'getinfo',
+      rpc2cli: Config.rpc2cli,
     };
     const _fetchConfig = {
       method: 'POST',
@@ -206,6 +207,7 @@ export function getBlockTemplate(_json, coin) {
     mode: null,
     chain: coin,
     cmd: 'getblocktemplate',
+    rpc2cli: Config.rpc2cli,
   };
 
   return dispatch => {

@@ -12,6 +12,7 @@ export function getNativePeers(coin) {
       mode: null,
       chain: coin,
       cmd: 'getpeerinfo',
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -50,6 +51,7 @@ export function getNativeNettotals(coin) {
       mode: null,
       chain: coin,
       cmd: 'getnettotals',
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {

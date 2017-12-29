@@ -8,6 +8,7 @@ export function getListUnspent(coin) {
       mode: null,
       chain: coin,
       cmd: 'listunspent',
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -63,6 +64,7 @@ export function getRawTransaction(coin, txid) {
         txid,
         1
       ],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {

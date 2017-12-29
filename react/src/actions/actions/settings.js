@@ -449,7 +449,8 @@ export function dumpPrivKey(coin, address, isZaddr) {
       mode: null,
       chain: coin,
       cmd: isZaddr ? 'z_exportkey' : 'dumpprivkey',
-      params: [ address ]
+      params: [ address ],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {

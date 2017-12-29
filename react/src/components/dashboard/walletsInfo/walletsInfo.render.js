@@ -28,7 +28,7 @@ const WalletsInfoRender = function() {
                 </td>
               </tr>
               <tr>
-                <td>{ translate('WALLETS_INFO.ADRESS_LOCAL') }</td>
+                <td>{ translate('WALLETS_INFO.ADDRESS_LOCAL') }</td>
                 <td>
                   { _netPeers[i].addrlocal }
                 </td>

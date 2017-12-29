@@ -9,7 +9,10 @@ export function getDashboardUpdate(coin, activeCoinProps) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ coin: coin }),
+      body: JSON.stringify({
+        coin: coin,
+        rpc2cli: Config.rpc2cli,
+      }),
     };
 
     return fetch(

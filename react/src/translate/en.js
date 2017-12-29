@@ -515,7 +515,7 @@ export const LANG_EN = {
     'ERROR': 'Error',
     'FAILED_TO_VERIFY_ADDR': 'Failed to verify address',
     'COIN_UNABLE_TO_STOP': 'Unable to stop @template@. Try again.',
-    'COIN_IS_STOPED': 'is stopped',
+    'COIN_IS_STOPPED': 'is stopped',
     'COIN_IS_REMOVED': 'is removed',
     'JUMBLR_RESUMED': 'Jumblr resumed',
     'JUMBLR_PAUSED': 'Jumblr paused',
