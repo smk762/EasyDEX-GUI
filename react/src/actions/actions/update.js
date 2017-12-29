@@ -21,7 +21,7 @@ export function checkForUpdateUIPromise() {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -44,7 +44,7 @@ export function updateUIPromise() {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -67,6 +67,6 @@ export function downloadZCashParamsPromise(dloption) {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }

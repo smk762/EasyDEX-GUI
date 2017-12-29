@@ -50,7 +50,7 @@ export function getListUnspent(coin) {
       }
 
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }
 
@@ -92,6 +92,6 @@ export function getRawTransaction(coin, txid) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }

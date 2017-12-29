@@ -5,7 +5,7 @@ import {
 import Config from '../../config';
 import Store from '../../store';
 
-function getNewAddress(coin) { // TODO: remove(?)
+function getNewAddress(coin) {
   return new Promise((resolve, reject) => {
     const payload = {
       mode: null,
@@ -39,7 +39,7 @@ function getNewAddress(coin) { // TODO: remove(?)
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }
 
@@ -195,7 +195,7 @@ function dumpPrivkey(coin, key) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }
 
@@ -238,6 +238,6 @@ export function importPrivkey(coin, key, rescan = false) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }

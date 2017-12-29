@@ -49,6 +49,6 @@ export function getTxDetails(coin, txid, type) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }

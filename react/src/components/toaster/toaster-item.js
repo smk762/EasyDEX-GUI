@@ -19,6 +19,7 @@ class ToasterItem extends React.Component {
       title: props.title,
       autoClose: props.autoClose,
       toastId: props.toastId,
+      className: props.className,
     };
 
     this.dismissToast = this.dismissToast.bind(this);
@@ -35,6 +36,7 @@ class ToasterItem extends React.Component {
         title: props.title,
         autoClose: props.autoClose,
         toastId: props.toastId,
+        className: props.className,
       });
     } else {
       this.setState({
@@ -43,6 +45,7 @@ class ToasterItem extends React.Component {
         title: null,
         autoClose: true,
         toastId: null,
+        className: null,
       });
     }
   }
@@ -86,7 +89,7 @@ class ToasterItem extends React.Component {
     }
 
     return (
-      <div className={ `toast toast-${this.state.type}` }>
+      <div className={ `toast toast-${this.state.type}${this.state.className ? ' ' + this.state.className : ''}` }>
         <button
           className="toast-close-button"
           onClick={ () => this.dismissToast(this.state.toastId) }>×

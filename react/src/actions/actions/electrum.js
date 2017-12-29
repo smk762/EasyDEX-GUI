@@ -17,7 +17,7 @@ export function shepherdElectrumSetServer(coin, address, port) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -42,7 +42,7 @@ export function shepherdElectrumCheckServerConnection(address, port) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -56,11 +56,7 @@ export function shepherdElectrumCheckServerConnection(address, port) {
     })
     .then(response => response.json())
     .then(json => {
-      if (!json.result) {
-        resolve('error');
-      } else {
-        resolve(json);
-      }
+      resolve(!json.result ? 'error' : json);
     });
   });
 }
@@ -90,11 +86,7 @@ export function shepherdElectrumKeys(seed) {
     })
     .then(response => response.json())
     .then(json => {
-      if (!json.result) {
-        resolve('error');
-      } else {
-        resolve(json);
-      }
+      resolve(!json.result ? 'error' : json);
     });
   });
 }
@@ -105,7 +97,7 @@ export function shepherdElectrumBalance(coin, address) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -137,7 +129,7 @@ export function shepherdElectrumTransactions(coin, address) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -178,7 +170,7 @@ export function shepherdElectrumCoins() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -211,7 +203,7 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -225,11 +217,7 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
     })
     .then(response => response.json())
     .then(json => {
-      if (json.msg === 'error') {
-        dispatch(sendToAddressState(json));
-      } else {
-        dispatch(sendToAddressState(json.result));
-      }
+      dispatch(sendToAddressState(json.msg === 'error' ? json : json.result));
     });
   }
 }
@@ -240,7 +228,7 @@ export function shepherdElectrumSendPromise(coin, value, sendToAddress, changeAd
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -265,7 +253,7 @@ export function shepherdElectrumSendPreflight(coin, value, sendToAddress, change
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     })
     .catch((error) => {
       console.log(error);
@@ -304,11 +292,7 @@ export function shepherdElectrumListunspent(coin, address) {
     })
     .then(response => response.json())
     .then(json => {
-      if (!json.result) {
-        resolve('error');
-      } else {
-        resolve(json);
-      }
+      resolve(!json.result ? 'error' : json);
     });
   });
 }

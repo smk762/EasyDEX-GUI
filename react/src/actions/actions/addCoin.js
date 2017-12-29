@@ -78,13 +78,13 @@ export function shepherdElectrumAuth(seed) {
         dispatch(activeHandle());
         dispatch(shepherdElectrumCoins());
       } else {
-      dispatch(
-        triggerToaster(
-          'Icorrect WIF key format',
-          'Error',
-          'error'
-        )
-      );
+        dispatch(
+          triggerToaster(
+            'Icorrect WIF key format',
+            'Error',
+            'error'
+          )
+        );
       }
     });
   }
@@ -106,7 +106,7 @@ export function shepherdElectrumAddCoin(coin) {
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -150,7 +150,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       '-server',
       `-ac_name=${coin}`,
       '-addnode=78.47.196.146',
-    ]
+    ],
   };
 
   if (coin === 'ZEC') {
@@ -159,7 +159,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       'ac_options': [
         '-daemon=0',
         '-server=1',
-      ]
+      ],
     };
   }
 
@@ -169,7 +169,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       'ac_options': [
         '-daemon=0',
         '-addnode=78.47.196.146',
-      ]
+      ],
     };
   }
 
@@ -278,10 +278,11 @@ export function addCoinResult(coin, mode) {
       )
     );
     dispatch(toggleAddcoinModal(false, false));
+
     if (Number(mode) === 0) {
       dispatch(activeHandle());
       dispatch(shepherdElectrumCoins());
-       dispatch(getDexCoins());
+      dispatch(getDexCoins());
 
       setTimeout(() => {
         dispatch(activeHandle());
@@ -382,7 +383,7 @@ export function shepherdGetConfig(coin, mode, startupParams) {
             startupParams
           )
         )
-      )
+      );
     }
   } else {
     return dispatch => {

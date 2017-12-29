@@ -1,6 +1,6 @@
 import {
   SYNCING_NATIVE_MODE,
-  DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE
+  DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE,
 } from '../storeType';
 import {
   triggerToaster,
@@ -198,7 +198,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           );
         }
       }
-    })
+    });
   }
 }
 
@@ -264,7 +264,7 @@ export function getBlockTemplate(_json, coin) {
           );
         }
       }
-    })
+    });
   }
 }
 
@@ -340,6 +340,6 @@ export function getDebugLogProgress(_json, coin) {
           )
         );
       }
-    })
+    });
   }
 }

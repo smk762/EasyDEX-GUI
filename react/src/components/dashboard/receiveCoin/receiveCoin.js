@@ -5,6 +5,8 @@ import {
   getNewKMDAddresses,
   dumpPrivKey,
   copyString,
+  triggerToaster,
+  validateAddress,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -33,6 +35,7 @@ class ReceiveCoin extends React.Component {
     this.ReceiveCoinTableRender = _ReceiveCoinTableRender.bind(this);
     this.toggleAddressMenu = this.toggleAddressMenu.bind(this);
     this.toggleIsMine = this.toggleIsMine.bind(this);
+    this.validateCoinAddress = this.validateCoinAddress.bind(this);
   }
 
   toggleAddressMenu(address) {
@@ -59,6 +62,28 @@ class ReceiveCoin extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  validateCoinAddress(address, isZaddr) {
+    this.toggleAddressMenu(address);
+    validateAddress(this.props.coin, address, isZaddr)
+    .then((json) => {
+      let _items = [];
+
+      for (let key in json) {
+        _items.push(`${key}: ${json[key]}`);
+      }
+
+      Store.dispatch(
+        triggerToaster(
+          _items,
+          translate('TOASTR.COIN_NOTIFICATION'),
+          json && json.ismine ? 'info' : 'warning',
+          false,
+          'toastr--validate-address'
+        )
+      );
+    });
   }
 
   dumpPrivKey(address, isZaddr) {

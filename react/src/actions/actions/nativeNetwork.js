@@ -41,7 +41,7 @@ export function getNativePeers(coin) {
     .then(json => {
       json = json.result;
       dispatch(getNativePeersState(json));
-    })
+    });
   };
 }
 
@@ -80,7 +80,7 @@ export function getNativeNettotals(coin) {
     .then(json => {
       json = json.result;
       dispatch(getNativeNettotalsState(json));
-    })
+    });
   };
 }
 

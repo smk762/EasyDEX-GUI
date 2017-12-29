@@ -123,7 +123,7 @@ export function sendNativeTx(coin, _payload) {
           )
         );
       }
-    })
+    });
   }
 }
 
@@ -170,7 +170,7 @@ export function getKMDOPID(opid, coin) {
     .then(json => {
       json = json.result;
       dispatch(getKMDOPIDState(json));
-    })
+    });
   };
 }
 

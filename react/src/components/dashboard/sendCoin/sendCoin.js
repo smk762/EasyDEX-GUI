@@ -211,11 +211,12 @@ class SendCoin extends React.Component {
 
   renderAddressByType(type) {
     let _items = [];
+    const _coinAddresses = this.props.ActiveCoin.addresses;
 
-    if (this.props.ActiveCoin.addresses &&
-        this.props.ActiveCoin.addresses[type] &&
-        this.props.ActiveCoin.addresses[type].length) {
-        this.props.ActiveCoin.addresses[type].map((address) => {
+    if (_coinAddresses &&
+        _coinAddresses[type] &&
+        _coinAddresses[type].length) {
+        _coinAddresses[type].map((address) => {
         if (address.amount > 0 &&
             (type !== 'public' || (address.canspend && type === 'public'))) {
           _items.push(
