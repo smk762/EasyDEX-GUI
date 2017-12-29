@@ -9,7 +9,10 @@ export function getDashboardUpdate(coin, activeCoinProps) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ coin: coin }),
+      body: JSON.stringify({
+        coin: coin,
+        rpc2cli: Config.rpc2cli,
+      }),
     };
 
     return fetch(
@@ -38,7 +41,7 @@ export function getDashboardUpdate(coin, activeCoinProps) {
           dispatch(getDashboardUpdateState(json, coin));
         }, 100);
       }
-    })
+    });
   }
 }
 
@@ -80,7 +83,7 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
         txhistory: _listtransactions,
         balance: {
           transparent: json.result.getbalance.result,
-          total: json.result.getbalance.result
+          total: json.result.getbalance.result,
         },
         addresses: json.result.addresses,
         coin: coin,
@@ -89,13 +92,14 @@ export function getDashboardUpdateState(json, coin, fakeResponse) {
       };
     } else {
       // calc transparent balance properly
+      const _addresses = json.result.addresses;
       let _tbalance = 0;
 
-      if (json.result.addresses &&
-          json.result.addresses.public &&
-          json.result.addresses.public.length) {
-        for (let i = 0; i < json.result.addresses.public.length; i++) {
-          _tbalance += json.result.addresses.public[i].spendable;
+      if (_addresses &&
+          _addresses.public &&
+          _addresses.public.length) {
+        for (let i = 0; i < _addresses.public.length; i++) {
+          _tbalance += _addresses.public[i].spendable;
         }
       }
 

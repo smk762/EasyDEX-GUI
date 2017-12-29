@@ -36,7 +36,7 @@ export function getAppInfo() {
       );
     })
     .then(response => response.json())
-    .then(json => dispatch(getAppInfoState(json)))
+    .then(json => dispatch(getAppInfoState(json)));
   }
 }
 
@@ -125,7 +125,7 @@ export function importPrivKey(wifKey) {
         error: 'privkey already in wallet',
       }, dispatch));
       console.log('parsing failed', ex);
-    })
+    });
   }
 }
 
@@ -167,7 +167,7 @@ export function getDebugLog(target, linesCount, acName) {
       );
     })
     .then(response => response.json())
-    .then(json => dispatch(getDebugLogState(json)))
+    .then(json => dispatch(getDebugLogState(json)));
   }
 }
 
@@ -197,7 +197,7 @@ export function getPeersList(coin) {
     .then(response => response.json())
     .then(json => {
       dispatch(getPeersListState(json, dispatch));
-    })
+    });
   }
 }
 
@@ -290,7 +290,7 @@ export function addPeerNode(coin, ip) {
     .then(response => response.json())
     .then(json => {
       dispatch(addPeerNodeState(json, dispatch));
-    })
+    });
   }
 }
 
@@ -323,7 +323,7 @@ export function saveAppConfig(_payload) {
           'success'
         )
       );
-    })
+    });
   }
 }
 
@@ -353,7 +353,7 @@ export function getAppConfig() {
       );
     })
     .then(response => response.json())
-    .then(json => dispatch(getAppConfigState(json)))
+    .then(json => dispatch(getAppConfigState(json)));
   }
 }
 
@@ -385,7 +385,7 @@ export function resetAppConfig() {
           'success'
         )
       );
-    })
+    });
   }
 }
 
@@ -449,7 +449,8 @@ export function dumpPrivKey(coin, address, isZaddr) {
       mode: null,
       chain: coin,
       cmd: isZaddr ? 'z_exportkey' : 'dumpprivkey',
-      params: [ address ]
+      params: [ address ],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -477,6 +478,45 @@ export function dumpPrivKey(coin, address, isZaddr) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
+    });
+  });
+}
+
+export function validateAddress(coin, address, isZaddr) {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: isZaddr ? 'z_validateaddress' : 'validateaddress',
+      params: [ address ],
+      rpc2cli: Config.rpc2cli,
+    };
+
+    const _fetchConfig = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'payload': payload }),
+    };
+
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      _fetchConfig
+    )
+    .catch(function(error) {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'validateAddress',
+          'Error',
+          'error'
+        )
+      );
     })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json.result ? json.result : json);
+    });
   });
 }

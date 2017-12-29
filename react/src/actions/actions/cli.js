@@ -29,7 +29,7 @@ export function shepherdCliPromise(mode, chain, cmd) {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -59,7 +59,7 @@ export function shepherdCli(mode, chain, cmd) {
       );
     })
     .then(response => response.json())
-    .then(json => dispatch(cliResponseState(json)))
+    .then(json => dispatch(cliResponseState(json)));
   }
 }
 

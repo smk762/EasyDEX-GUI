@@ -1,16 +1,17 @@
 import {
   triggerToaster,
-  getNewKMDAddresses
+  getNewKMDAddresses,
 } from '../actionCreators';
 import Config from '../../config';
 import Store from '../../store';
 
-function getNewAddress(coin) { // TODO: remove(?)
+function getNewAddress(coin) {
   return new Promise((resolve, reject) => {
     const payload = {
       mode: null,
       chain: coin,
       cmd: 'getnewaddress',
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -38,7 +39,7 @@ function getNewAddress(coin) { // TODO: remove(?)
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }
 
@@ -49,6 +50,7 @@ export function setJumblrAddress(coin, type, address) {
       chain: coin,
       cmd: type === 'deposit' ? 'jumblr_deposit' : 'jumblr_secret',
       params: [address],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -87,6 +89,7 @@ export function pauseJumblr(coin) {
       chain: coin,
       cmd: 'jumblr_pause',
       params: [],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -125,6 +128,7 @@ export function resumeJumblr(coin) {
       chain: coin,
       cmd: 'jumblr_resume',
       params: [],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -163,6 +167,7 @@ function dumpPrivkey(coin, key) {
       chain: coin,
       cmd: 'dumpprivkey',
       params: [key],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -190,7 +195,7 @@ function dumpPrivkey(coin, key) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }
 
@@ -205,6 +210,7 @@ export function importPrivkey(coin, key, rescan = false) {
         '',
         rescan
       ],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -232,6 +238,6 @@ export function importPrivkey(coin, key, rescan = false) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }

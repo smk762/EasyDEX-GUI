@@ -40,7 +40,7 @@ export function encryptPassphrase(passphrase, key, pubKey) {
           'success'
         )
       );
-    })
+    });
   }
 }
 
@@ -71,7 +71,7 @@ export function loginWithPin(key, pubKey) {
     .then(response => response.json())
     .then(json => {
       dispatch(iguanaWalletPassphrase(json.result));
-    })
+    });
   }
 }
 
@@ -105,6 +105,6 @@ export function loadPinList() {
       dispatch(
         getPinList(json.result)
       );
-    })
+    });
   }
 }

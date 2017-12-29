@@ -1,6 +1,6 @@
 import {
   DASHBOARD_ACTIVE_COIN_NATIVE_OPIDS,
-  DASHBOARD_ACTIVE_COIN_SENDTO
+  DASHBOARD_ACTIVE_COIN_SENDTO,
 } from '../storeType';
 import { translate } from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
@@ -23,6 +23,7 @@ export function sendNativeTx(coin, _payload) {
       mode: null,
       chain: coin,
       cmd: _apiMethod,
+      rpc2cli: Config.rpc2cli,
       params:
         (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
         (_payload.substractFee ?
@@ -77,8 +78,8 @@ export function sendNativeTx(coin, _payload) {
     })
     .then((json) => {
       if (json.indexOf('"code":') > -1) {
-        const _message = json.substring(
-          `${json.indexOf('"message":"')}11`,
+        let _message = json.substring(
+          `${json.indexOf('"message":"') + 11}`,
           json.indexOf('"},"id":"jl777"')
         );
 
@@ -100,6 +101,10 @@ export function sendNativeTx(coin, _payload) {
             )
           );
         } else {
+          if (Config.rpc2cli) {
+            _message = JSON.parse(json).error.message;
+          }
+
           dispatch(
             triggerToaster(
               _message,
@@ -118,7 +123,7 @@ export function sendNativeTx(coin, _payload) {
           )
         );
       }
-    })
+    });
   }
 }
 
@@ -136,6 +141,7 @@ export function getKMDOPID(opid, coin) {
       mode: null,
       chain: coin,
       cmd: 'z_getoperationstatus',
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {
@@ -164,7 +170,7 @@ export function getKMDOPID(opid, coin) {
     .then(json => {
       json = json.result;
       dispatch(getKMDOPIDState(json));
-    })
+    });
   };
 }
 
@@ -174,6 +180,7 @@ export function sendToAddressPromise(coin, address, amount) {
       mode: null,
       chain: coin,
       cmd: 'sendtoaddress',
+      rpc2cli: Config.rpc2cli,
       params: [
         address,
         amount,
@@ -233,6 +240,7 @@ export function validateAddressPromise(coin, address) {
       chain: coin,
       cmd: 'validateaddress',
       params: [ address ],
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {

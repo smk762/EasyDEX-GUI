@@ -11,6 +11,7 @@ export function getNewKMDAddresses(coin, pubpriv, mode) {
       mode: null,
       chain: coin,
       cmd: pubpriv === 'public' ? 'getnewaddress' : 'z_getnewaddress',
+      rpc2cli: Config.rpc2cli,
     };
 
     const _fetchConfig = {

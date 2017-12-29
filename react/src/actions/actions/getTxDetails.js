@@ -11,6 +11,7 @@ export function getTxDetails(coin, txid, type) {
       params: [
         txid
       ],
+      rpc2cli: Config.rpc2cli,
     };
 
     if (type === 'raw') {
@@ -22,6 +23,7 @@ export function getTxDetails(coin, txid, type) {
           txid,
           1
         ],
+        rpc2cli: Config.rpc2cli,
       };
     }
 
@@ -47,6 +49,6 @@ export function getTxDetails(coin, txid, type) {
     .then(response => response.json())
     .then(json => {
       resolve(json.result ? json.result : json);
-    })
+    });
   });
 }

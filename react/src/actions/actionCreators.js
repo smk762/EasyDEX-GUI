@@ -103,13 +103,14 @@ export function toggleSendReceiveCoinFormsState() {
   }
 }
 
-export function triggerToaster(message, title, _type, autoClose = true) {
+export function triggerToaster(message, title, _type, autoClose = true, className) {
   return {
     type: ADD_TOASTER_MESSAGE,
     message,
     title,
     _type,
     autoClose,
+    className,
   }
 }
 

@@ -30,6 +30,11 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
                 <i className="icon fa-key margin-right-5"></i> { translate('INDEX.COPY') + ' priv key (WIF)' }
               </li>
             }
+            { this.props.mode !== 'spv' &&
+              <li onClick={ () => this.validateCoinAddress(address, type !== 'public' ? true : null) }>
+                <i className="icon fa-check margin-right-5"></i> validate address
+              </li>
+            }
             <li className="receive-address-context-menu-get-qr">
               <QRModal content={ address } />
             </li>

@@ -23,7 +23,7 @@ export function shepherdElectrumLock() {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -47,7 +47,7 @@ export function shepherdElectrumLogout() {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -71,7 +71,7 @@ export function shepherdStopCoind(coin) {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -111,7 +111,7 @@ export function shepherdRemoveCoin(coin, mode) {
           )
         );
       }
-    })
+    });
   });
 }
 
@@ -134,7 +134,7 @@ export function shepherdGetCoinList() {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -158,7 +158,7 @@ export function shepherdPostCoinList(data) {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }
 
@@ -181,6 +181,6 @@ export function shepherdClearCoindFolder(coin, keepWalletDat) {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json))
+    .then(json => resolve(json));
   });
 }

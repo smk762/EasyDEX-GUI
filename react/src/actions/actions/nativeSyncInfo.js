@@ -1,6 +1,6 @@
 import {
   SYNCING_NATIVE_MODE,
-  DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE
+  DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE,
 } from '../storeType';
 import {
   triggerToaster,
@@ -97,6 +97,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
       mode: null,
       chain: coin,
       cmd: 'getinfo',
+      rpc2cli: Config.rpc2cli,
     };
     const _fetchConfig = {
       method: 'POST',
@@ -197,7 +198,7 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
           );
         }
       }
-    })
+    });
   }
 }
 
@@ -206,6 +207,7 @@ export function getBlockTemplate(_json, coin) {
     mode: null,
     chain: coin,
     cmd: 'getblocktemplate',
+    rpc2cli: Config.rpc2cli,
   };
 
   return dispatch => {
@@ -262,7 +264,7 @@ export function getBlockTemplate(_json, coin) {
           );
         }
       }
-    })
+    });
   }
 }
 
@@ -338,6 +340,6 @@ export function getDebugLogProgress(_json, coin) {
           )
         );
       }
-    })
+    });
   }
 }
