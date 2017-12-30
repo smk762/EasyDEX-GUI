@@ -36,6 +36,7 @@ import CoinTileItemRender from './coinTileItem.render';
 
 const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
+const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE_RCP2CLI = 40000;
 const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.failedRPCAttemptsThreshold || 10;
 
 class CoinTileItem extends React.Component {
@@ -312,7 +313,7 @@ class CoinTileItem extends React.Component {
       if (mode === 'native') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
-        }, ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE);
+        }, Config.rpc2cli ? ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE_RCP2CLI : ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       } else if (mode === 'spv') {
