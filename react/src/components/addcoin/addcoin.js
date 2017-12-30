@@ -243,7 +243,6 @@ class AddCoin extends React.Component {
   }
 
   handleKeydown(e) {
-    console.warn(e);
     if (e.key === 'Escape') {
       this.dismiss();
     }
