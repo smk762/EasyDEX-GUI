@@ -1,6 +1,6 @@
 {
   "name": "AgamaGUI",
-  "version": "0.0.1",
+  "version": "0.0.26",
   "description": "Agama Wallet GUI",
   "main": "src/index.js",
   "scripts": {
@@ -17,19 +17,18 @@
     "e2e": "protractor",
     "e2e-live": "protractor --elementExplorer"
   },
+  "repository": "https://github.com/KomodoPlatform/EasyDEX-GUI",
+  "homepage": "http://supernet.org",
   "keywords": [
-    "react",
-    "webpack",
-    "babel",
-    "minimal",
-    "starter"
+    "agama",
+    "SuperNET",
+    "komodo",
+    "multicoin",
+    "wallet",
+    "spv"
   ],
   "author": "SuperNET Team",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SuperNETorg/EasyDEX-GUI.git"
-  },
   "dependencies": {
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",

@@ -99,7 +99,7 @@ const NavbarRender = function() {
               <a className="navbar-avatar dropdown-toggle">
                 <span className="navbar-avatar-inner">
                   <i
-                    title="top menu"
+                    title={ translate('INDEX.TOP_MENU') }
                     className="icon fa-bars"></i>
                 </span>
               </a>

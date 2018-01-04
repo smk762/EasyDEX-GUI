@@ -48,18 +48,6 @@ const CoinTileItemRender = function() {
           </ul>
         </div>
       }
-      { /*this.renderStopCoinButton() &&
-        <i
-          onClick={ () => this.stopCoind(item.coin, item.mode) }
-          title={ translate('DASHBOARD.STOP') }
-          className="icon fa-stop-circle coind-stop-icon"></i>*/
-      }
-      { /*this.renderRemoveCoinButton() &&
-        <i
-          onClick={ () => this.removeCoin(item.coin, item.mode) }
-          title={ translate('DASHBOARD.REMOVE') }
-          className={ 'icon fa-plus-circle coind-remove-icon' + (item.mode === 'spv' ? ' coind-remove-icon-spv' : '') }></i>*/
-      }
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&
         this.props.Dashboard.electrumCoins[item.coin] &&

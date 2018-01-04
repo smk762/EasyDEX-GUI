@@ -20,6 +20,10 @@ export function checkAC(coinVal) {
 			coinVal === 'KV' ||
 			coinVal === 'CEAL' ||
 			coinVal === 'MESH' ||
+			coinVal === 'MNZ' ||
+			coinVal === 'AXO' ||
+			coinVal === 'ETOMIC' ||
+			coinVal === 'BTCH' ||
 			coinVal === 'USD' ||
 			coinVal === 'RON' ||
 			coinVal === 'EUR' ||
@@ -51,7 +55,6 @@ export function checkAC(coinVal) {
 			coinVal === 'THB' ||
 			coinVal === 'BGN' ||
 			coinVal === 'IDR' ||
-			coinVal === 'MNZ' ||
 			coinVal === 'HRK')	{
 		return true;
 	} else {
@@ -112,26 +115,15 @@ export function checkCoinType(coin) {
 			coin === 'CEAL' ||
 			coin === 'MESH' ||
 			coin === 'WLC' ||
-			coin === 'MNZ') {
+			coin === 'MNZ' ||
+			coin === 'AXO' ||
+			coin === 'ETOMIC' ||
+			coin === 'BTCH') {
 		return 'ac';
 	}
 
-	if (coin === 'BTC' ||
-			coin === 'BTCD' ||
-			coin === 'LTC' ||
-			coin === 'DOGE' ||
-			coin === 'DGB' ||
-			coin === 'MZC' ||
-			coin === 'SYS' ||
-			coin === 'UNO' ||
-			coin === 'BTM' ||
-			coin === 'CARB' ||
-			coin === 'ANC' ||
-			coin === 'FRK' ||
-			coin === 'GAME' ||
-			coin === 'ZEC' ||
-			coin === 'KMD' ||
-			coin === 'ZET') {
+	if (coin === 'ZEC' ||
+			coin === 'KMD') {
 		return 'crypto';
 	}
 }
@@ -199,6 +191,15 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		MNZ: {
 			supply: 257142858,
+		},
+		AXO: {
+			supply: 200000000,
+		},
+		ETOMIC: {
+			supply: 100000000,
+		},
+		BTCH: {
+			supply: 20998641,
 		},
 	};
 

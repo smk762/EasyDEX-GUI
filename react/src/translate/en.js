@@ -96,6 +96,7 @@ export const LANG_EN = {
     'NO_ACTIVE_COIN': 'No active coin',
   },
   'INDEX': {
+    'TOP_MENU': 'Top menu',
     'ERROR_READING': 'Error reading',
     'SHOW': 'Show',
     'SPV_SERVER_IP': 'Server IP',
@@ -828,6 +829,9 @@ export const LANG_EN = {
     'MESH': 'SpaceMesh (MESH)',
     'SUPERNET': 'SUPERNET (SUPERNET)',
     'WLC': 'WIRELESS (WIRELESS)',
+    'AXO': 'AXO (AXO)',
+    'ETOMIC': 'ETOMIC (ETOMIC)',
+    'BTCH': 'BTCH (BTCH)',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',
