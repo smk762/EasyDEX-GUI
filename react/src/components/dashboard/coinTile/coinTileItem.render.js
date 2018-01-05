@@ -28,7 +28,7 @@ const CoinTileItemRender = function() {
         onClick={ () => this.toggleCoinMenu(item.coin) }
         className="btn btn-default btn-xs clipboard-edexaddr coin-tile-context-menu-trigger coind-actions-menu">
         <i
-          title="Toggle coin context menu"
+          title={ translate('INDEX.TOGGLE_COIN_CONTEXT_MENU') }
           className="fa fa-ellipsis-v coin-tile-context-menu-trigger"></i>
       </button>
       { this.state.toggledCoinMenu &&
@@ -36,6 +36,7 @@ const CoinTileItemRender = function() {
         <div className="coin-tile-context-menu">
           <ul>
             { this.renderStopCoinButton() &&
+              item.mode === 'native' &&
               <li onClick={ () => this.stopCoind(item.coin, item.mode) }>
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP') }
               </li>

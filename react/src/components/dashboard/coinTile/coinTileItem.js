@@ -116,7 +116,7 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  renderStopCoinButton() {
+  renderStopCoinButton(item) {
     if (this.props.Main &&
         this.props.Main.coins &&
         this.props.Main.coins.native &&
@@ -239,7 +239,6 @@ class CoinTileItem extends React.Component {
     if (this.props.Dashboard &&
         this.props.Dashboard.activeSection === 'wallets') {
       if (mode === 'native') {
-        // Store.dispatch(iguanaActiveHandle(true));
         const _propsDashboard = this.props.ActiveCoin;
         const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
