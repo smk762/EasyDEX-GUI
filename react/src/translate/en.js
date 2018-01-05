@@ -96,6 +96,7 @@ export const LANG_EN = {
     'NO_ACTIVE_COIN': 'No active coin',
   },
   'INDEX': {
+    'TOGGLE_COIN_CONTEXT_MENU': 'Toggle coin context menu',
     'TOP_MENU': 'Top menu',
     'ERROR_READING': 'Error reading',
     'SHOW': 'Show',
