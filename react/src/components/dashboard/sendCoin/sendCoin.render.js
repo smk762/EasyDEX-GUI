@@ -275,7 +275,7 @@ export const SendRender = function() {
                           <span className="label label-success">{ translate('SEND.SUCCESS_SM') }</span>
                         </td>
                       </tr>
-                      { this.state.sendFrom &&
+                      { ((this.state.sendFrom && this.props.ActiveCoin.mode === 'native') || this.props.ActiveCoin.mode === 'spv') &&
                         <tr>
                           <td className="padding-left-30">
                           { translate('INDEX.SEND_FROM') }
