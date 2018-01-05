@@ -730,7 +730,7 @@ export const LANG_EN = {
   'ZCPARAMS_FETCH': {
     'DOWNLOADING_ZCASH_KEYS': 'Downloading Zcash keys',
     'BOTH_KEYS_VERIFIED': 'Both Zcash param keys are downloaded and verified!',
-    'PLEASE_RESTART': 'Please restart the app.',
+    'CLOSE_THE_MODAL': 'Close the modal and try to add a coin again.',
     'ZCPARAMS_VERIFICATION_ERROR_P1': 'Zcash param',
     'ZCPARAMS_VERIFICATION_ERROR_P2': 'verification error!',
     'ZCPARAMS_FETCH': 'ZCash Params Fetch',
