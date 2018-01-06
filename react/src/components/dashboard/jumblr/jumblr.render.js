@@ -36,7 +36,6 @@ export const JumblrRender = function() {
               <button
                 type="button"
                 className="close">
-                <span>×</span>
               </button>
               <span className="jumblr-header">
                 <i className="icon fa-paw"></i> { translate('JUMBLR.NOTICE') }
@@ -65,9 +64,7 @@ export const JumblrRender = function() {
           </div>
 
           <div className="col-xlg-12 col-md-12 padding-top-20 padding-bottom-30">
-            <div
-              className="form-group col-lg-2 col-md-2 col-sm-2 col-xs-2"
-              style={{ padding: 0 }}>
+            <div className="form-group col-lg-2 col-md-2 col-sm-2 col-xs-2 no-padding">
               <input
                 type="radio"
                 className="to-labelauty labelauty"
@@ -76,7 +73,7 @@ export const JumblrRender = function() {
                 checked={ this.state.jumblrMode === 'public' ? true : false } />
               <label
                 htmlFor={ `mode-public` }
-                style={{ margin: 0 }}
+                className="no-margin"
                 onClick={ () => this.switchJumblrMode('public') }>
                 <span
                   className="labelauty-unchecked-image"
@@ -97,9 +94,7 @@ export const JumblrRender = function() {
               </label>
             </div>
 
-            <div
-              className="form-group col-lg-2 col-md-2 col-sm-2 col-xs-2"
-              style={{ padding: 0 }}>
+            <div className="form-group col-lg-2 col-md-2 col-sm-2 col-xs-2 no-padding">
               <input
                 type="radio"
                 className="to-labelauty labelauty"
@@ -108,7 +103,7 @@ export const JumblrRender = function() {
                 checked={ this.state.jumblrMode === 'private' ? true : false } />
               <label
                 htmlFor={ `mode-private` }
-                style={{ margin: 0 }}
+                className="no-margin"
                 onClick={ () => this.switchJumblrMode('private') }>
                 <span
                   className="labelauty-unchecked-image"
@@ -129,9 +124,7 @@ export const JumblrRender = function() {
               </label>
             </div>
 
-            <div
-              className="form-group col-lg-3 col-md-3 col-sm-3 col-xs-3"
-              style={{ padding: 0 }}>
+            <div className="form-group col-lg-3 col-md-3 col-sm-3 col-xs-3 no-padding">
               <button
                 type="button"
                 className="btn btn-jumblr-warning waves-effect waves-light"
@@ -186,7 +179,9 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                      onClick={ () => this.openTab(1) }>{ translate('INDEX.NEXT') }</button>
+                      onClick={ () => this.openTab(1) }>
+                      { translate('INDEX.NEXT') }
+                    </button>
                     <h5>{ translate('JUMBLR.HOW_TO_USE') }</h5>
                     <ul>
                       <li>{ translate('JUMBLR.CREATE_DEPOSIT_ADDRESS') }</li>
@@ -246,7 +241,9 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-info waves-effect waves-light"
-                      onClick={ this.generateJumblrDepositAddress }>{ translate('JUMBLR.CREATE_JUMBLR_DEPOSIT_ADDRESS') }</button>
+                      onClick={ this.generateJumblrDepositAddress }>
+                      { translate('JUMBLR.CREATE_JUMBLR_DEPOSIT_ADDRESS') }
+                    </button>
                     { this.state.jumblrDepositAddress &&
                       this.state.jumblrDepositAddress.address &&
                       <div className="padding-top-40">
@@ -276,7 +273,9 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                      onClick={ () => this.openTab(3) }>{ translate('INDEX.NEXT') }</button>
+                      onClick={ () => this.openTab(3) }>
+                      { translate('INDEX.NEXT') }
+                    </button>
                     <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P1') }</p>
                     <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P2') }</p>
                     <p>{ translate('JUMBLR.JUMBLR_SECRET_DESC_P3') }</p>
@@ -304,7 +303,9 @@ export const JumblrRender = function() {
                         </button>
                       </div>
                     }
-                    <div className="col-xs-2 nofloat padding-top-30">{ translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }</div>
+                    <div className="col-xs-2 nofloat padding-top-30">
+                      { translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }
+                    </div>
                     <div className="col-xs-2 nofloat padding-left-10">
                       <input
                         type="text"
@@ -320,7 +321,9 @@ export const JumblrRender = function() {
                       <button
                         type="button"
                         className="btn btn-info waves-effect waves-light"
-                        onClick={ this.generateJumblrSecretAddress }>{ translate('JUMBLR.CREATE_JUMBLR_SECRET_ADDR') }</button>
+                        onClick={ this.generateJumblrSecretAddress }>
+                        { translate('JUMBLR.CREATE_JUMBLR_SECRET_ADDR') }
+                      </button>
                     </div>
                     <div className="toggle-box padding-top-20">
                       <span className="pointer">
@@ -389,7 +392,9 @@ export const JumblrRender = function() {
                     <button
                       type="button"
                       className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                      onClick={ () => this.openTab(1) }>{ translate('INDEX.NEXT') }</button>
+                      onClick={ () => this.openTab(1) }>
+                      { translate('INDEX.NEXT') }
+                    </button>
                     <div className="col-xlg-12 col-md-12 nofloat">
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P1') }</p>
                       <p>
@@ -409,7 +414,9 @@ export const JumblrRender = function() {
                             value={ this.state.jumblrPassphraseImport } />
                         </div>
                       }
-                      <div className="col-xs-2 nofloat padding-top-30">{ translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }</div>
+                      <div className="col-xs-2 nofloat padding-top-30">
+                        { translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }
+                      </div>
                       <div className="col-xs-2 nofloat padding-left-10">
                         <input
                           type="text"
@@ -425,7 +432,9 @@ export const JumblrRender = function() {
                         <button
                           type="button"
                           className="btn btn-info waves-effect waves-light"
-                          onClick={ this.importJumblrSecretAddress }>{ translate('JUMBLR.IMPORT_JUMLR_SECRET_ADDRESSES') }</button>
+                          onClick={ this.importJumblrSecretAddress }>
+                          { translate('JUMBLR.IMPORT_JUMLR_SECRET_ADDRESSES') }
+                        </button>
                       </div>
                       <div className="toggle-box padding-top-20">
                         <span className="pointer">

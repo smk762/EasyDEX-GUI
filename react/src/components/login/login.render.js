@@ -138,20 +138,12 @@ const LoginRender = function() {
             { this.props.Login.pinList.length > 0 &&
               <div className="row margin-top-30">
                 <div className="col-xs-12">
-                  <div style={{
-                      width: '10%',
-                      float: 'left',
-                      marginLeft: '38%'}}>
+                  <div className="pin-block-one">
                     <hr/>
                   </div>
-                  <div style={{
-                    width: '4%',
-                    float: 'left',
-                    marginTop: '10px'}}>
+                  <div className="pin-block-two">
                     <span>{ translate('INDEX.OR') }</span></div>
-                  <div style={{
-                    width: '10%',
-                    float: 'left'}}>
+                  <div className="pin-block-three">
                     <hr/>
                   </div>
                 </div>

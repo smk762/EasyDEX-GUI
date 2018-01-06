@@ -92,9 +92,7 @@ export const _ClaimInterestTableRender = function() {
             </button>
           }
           { this.state.spvVerificationWarning &&
-            <div
-              className="padding-top-10 padding-bottom-10"
-              style={{ fontSize: '15px' }}>
+            <div className="padding-top-10 padding-bottom-10 fs-15">
               <strong className="color-warning">{ translate('SEND.WARNING') }:</strong> { translate('SEND.WARNING_SPV_P1') } { translate('SEND.WARNING_SPV_P2') }
               <div className="margin-top-15">
                 <button

@@ -7,9 +7,7 @@ const WalletsHeaderRender = function() {
       className="page-header page-header-bordered header-easydex margin-bottom-0"
       id="easydex-header-div"
       style={{
-        backgroundImage: `url("assets/images/bg/${this.props.activeSection}_transparent_header_bg.png")`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: '0%'
+        backgroundImage: `url("assets/images/bg/${this.props.activeSection}_transparent_header_bg.png")`
       }}>
       <ol className="breadcrumb">
         <li className={ this.isActiveSectionJumblr() ? 'hide' : 'header-easydex-section' }>

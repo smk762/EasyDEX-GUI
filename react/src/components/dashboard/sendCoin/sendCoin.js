@@ -210,8 +210,8 @@ class SendCoin extends React.Component {
   }
 
   renderAddressByType(type) {
-    let _items = [];
     const _coinAddresses = this.props.ActiveCoin.addresses;
+    let _items = [];
 
     if (_coinAddresses &&
         _coinAddresses[type] &&
@@ -265,7 +265,9 @@ class SendCoin extends React.Component {
       );
     } else {
       return (
-        <span>{ this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }</span>
+        <span>
+          { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
+        </span>
       );
     }
   }

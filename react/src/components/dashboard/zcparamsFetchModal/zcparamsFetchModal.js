@@ -150,9 +150,7 @@ class ZcparamsFetchModal extends React.Component {
 
     if (_updateLogLength) {
       return (
-        <div
-          className="padding-top-20"
-          style={{ minHeight: '140px' }}>
+        <div className="padding-top-20 zcparams-progress">
           <h5>{ translate('SETTINGS.PROGRESS') }</h5>
           <div className="padding-bottom-15">{ items }</div>
           <div className={ updateProgressBar.zcparams.proving > -1 && !this.state.done ? 'progress progress-sm' : 'hide' }>

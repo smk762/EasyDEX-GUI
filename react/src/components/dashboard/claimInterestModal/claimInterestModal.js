@@ -363,9 +363,7 @@ class ClaimInterestModal extends React.Component {
           className={ 'btn dropdown-toggle btn-info' + (this.props.ActiveCoin.mode === 'spv' ? ' disabled' : '') }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">{ this.state.selectedAddress }</span>
-          <span
-            className="bs-caret"
-            style={{ display: 'inline-block' }}>
+          <span className="bs-caret inline">
             <span className="caret"></span>
           </span>
         </button>

@@ -10,7 +10,7 @@ export const AddressListRender = function() {
         type="button"
         className={ 'btn dropdown-toggle btn-info' + (this.props.ActiveCoin.mode === 'spv' ? ' disabled' : '') }
         onClick={ this.openDropMenu }>
-        <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>
+        <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() }&nbsp;</span>
         <span className="bs-caret">
           <span className="caret"></span>
         </span>
@@ -21,7 +21,9 @@ export const AddressListRender = function() {
             className="selected"
             onClick={ () => this.updateAddressSelection(null, 'public', null) }>
             <a>
-              <span className="text">{ this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }</span>
+              <span className="text">
+                { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
+              </span>
               <span
                 className="glyphicon glyphicon-ok check-mark pull-right"
                 style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
@@ -41,7 +43,9 @@ export const _SendFormRender = function() {
       { this.state.renderAddressDropdown &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
-            <label className="control-label padding-bottom-10">{ translate('INDEX.SEND_FROM') }</label>
+            <label className="control-label padding-bottom-10">
+              { translate('INDEX.SEND_FROM') }
+            </label>
             { this.renderAddressList() }
           </div>
         </div>
@@ -58,7 +62,7 @@ export const _SendFormRender = function() {
             onChange={ this.updateInput }
             value={ this.state.sendTo }
             id="kmdWalletSendTo"
-            placeholder={ this.props.ActiveCoin.coin === 'CHIPS' ? translate('SEND.ENTER_ADDRESS') : translate('SEND.ENTER_T_OR_Z_ADDR') }
+            placeholder={ this.props.ActiveCoin.mode === 'spv' ? translate('SEND.ENTER_ADDRESS') : translate('SEND.ENTER_T_OR_Z_ADDR') }
             autoComplete="off"
             required />
         </div>
@@ -124,7 +128,8 @@ export const _SendFormRender = function() {
           this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'native' &&
           <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
-            <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
+            <i className="icon fa-warning color-warning margin-right-5"></i>&nbsp;
+            <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
           </div>
         }
         <div className="col-lg-12">
@@ -200,13 +205,13 @@ export const SendRender = function() {
                 <div className="col-xs-12">
                   <strong>{ translate('INDEX.TO') }</strong>
                 </div>
-                <div
-                  className="col-lg-6 col-sm-6 col-xs-12"
-                  style={{ overflow: 'hidden' }}>{ this.state.sendTo }</div>
+                <div className="col-lg-6 col-sm-6 col-xs-12 overflow-hidden">{ this.state.sendTo }</div>
                 <div className="col-lg-6 col-sm-6 col-xs-6">
                   { this.state.amount } { this.props.ActiveCoin.coin }
                 </div>
-                <div className={ this.state.subtractFee ? 'col-lg-6 col-sm-6 col-xs-12 padding-top-10 bold' : 'hide' }>{ translate('DASHBOARD.SUBTRACT_FEE') }</div>
+                <div className={ this.state.subtractFee ? 'col-lg-6 col-sm-6 col-xs-12 padding-top-10 bold' : 'hide' }>
+                  { translate('DASHBOARD.SUBTRACT_FEE') }
+                </div>
               </div>
 
               { this.state.sendFrom &&
@@ -214,9 +219,7 @@ export const SendRender = function() {
                   <div className="col-xs-12">
                     <strong>{ translate('INDEX.FROM') }</strong>
                   </div>
-                  <div
-                    className="col-lg-6 col-sm-6 col-xs-12"
-                    style={{ overflow: 'hidden' }}>{ this.state.sendFrom }</div>
+                  <div className="col-lg-6 col-sm-6 col-xs-12 overflow-hidden">{ this.state.sendFrom }</div>
                   <div className="col-lg-6 col-sm-6 col-xs-6 confirm-currency-send-container">
                     { Number(this.state.amount) } { this.props.ActiveCoin.coin }
                   </div>
@@ -226,10 +229,9 @@ export const SendRender = function() {
                 <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
               }
               { this.state.spvVerificationWarning &&
-                <div
-                  className="padding-top-20"
-                  style={{ fontSize: '15px' }}>
-                  <strong className="color-warning">{ translate('SEND.WARNING') }:</strong> { translate('SEND.WARNING_SPV_P1') }<br />
+                <div className="padding-top-20 fs-15">
+                  <strong className="color-warning">{ translate('SEND.WARNING') }:</strong>&nbsp;
+                  { translate('SEND.WARNING_SPV_P1') }<br />
                   { translate('SEND.WARNING_SPV_P2') }
                 </div>
               }

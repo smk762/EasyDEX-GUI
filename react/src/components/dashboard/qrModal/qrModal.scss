@@ -12,3 +12,13 @@
 .table a.save-image-button {
   text-decoration: none;
 }
+
+.qr-reader-comp {
+  height: 281;
+  width: 500;
+  transform: scaleX(-1);
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}

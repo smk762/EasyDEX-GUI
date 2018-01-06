@@ -130,8 +130,8 @@ const WalletsInfoRender = function() {
                 </td>
               </tr>
               <tr>
-                <td style={{ background: '#fff' }}>&nbsp;</td>
-                <td style={{ background: '#fff' }}>&nbsp;</td>
+                <td className="bg--white">&nbsp;</td>
+                <td className="bg--white">&nbsp;</td>
               </tr>
             </tbody>
           </table>
@@ -185,7 +185,7 @@ const WalletsInfoRender = function() {
                 className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
                 onClick={ () => this.openClaimInterestModal() }>
                   <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
-                </button>
+              </button>
             </div>
           }
           <div className="panel">
@@ -227,7 +227,8 @@ const WalletsInfoRender = function() {
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">
-                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodo' : `${this.props.ActiveCoin.coin}` } { translate('INDEX.INFO') }
+                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodo' : `${this.props.ActiveCoin.coin}` }&nbsp;
+                { translate('INDEX.INFO') }
               </h3>
             </div>
             <div className="table-responsive">
@@ -402,7 +403,9 @@ const WalletsInfoRender = function() {
               <button
                 type="button"
                 className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>{ translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }</button>
+                onClick={ () => this.openClaimInterestModal() }>
+                { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
+              </button>
               <ClaimInterestModal />
             </div>
           }

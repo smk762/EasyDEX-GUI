@@ -36,7 +36,6 @@ class AppUpdatePanel extends React.Component {
     if (data &&
         data.msg &&
         data.msg.type === 'ui') {
-
       if (data.msg.status === 'progress' &&
           data.msg.progress &&
           data.msg.progress < 100) {
@@ -102,8 +101,8 @@ class AppUpdatePanel extends React.Component {
   }
 
   _updateUIPromise() {
-    updateProgressBar.patch = 0;
     let _updateLog = [];
+    updateProgressBar.patch = 0;
     _updateLog.push(`${translate('INDEX.DOWNLOADING_UI_UPDATE')}...`);
     this.setState(Object.assign({}, this.state, {
       updateLog: _updateLog,
@@ -131,9 +130,9 @@ class AppUpdatePanel extends React.Component {
   }
 
   renderUpdateStatus() {
+    const _updateLogLength = this.state.updateLog.length;
     let items = [];
     let patchProgressBar = null;
-    const _updateLogLength = this.state.updateLog.length;
 
     for (let i = 0; i < _updateLogLength; i++) {
       items.push(
@@ -143,9 +142,9 @@ class AppUpdatePanel extends React.Component {
 
     if (_updateLogLength) {
       return (
-        <div style={{ minHeight: '200px' }}>
+        <div className="app-update-progress">
           <hr />
-          <h5>{ translate('SETTINGS.PROGRESS') }:</h5>
+          <h5>{ translate('SETTINGS.PROGRESS') }</h5>
           <div className="padding-bottom-15">{ items }</div>
           <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
             <div
@@ -169,12 +168,16 @@ class AppUpdatePanel extends React.Component {
             <button
               type="button"
               className="btn btn-info waves-effect waves-light"
-              onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
+              onClick={ this._checkForUpdateUIPromise }>
+              { translate('INDEX.CHECK_FOR_UPDATE') }
+            </button>
             <button
               type="button"
               className="btn btn-primary waves-effect waves-light margin-left-20"
               onClick={ this._updateUIPromise }
-              disabled={ !this.state.updatePatch }>{ translate('INDEX.UPDATE_UI_NOW') }</button>
+              disabled={ !this.state.updatePatch }>
+              { translate('INDEX.UPDATE_UI_NOW') }
+            </button>
           </div>
         </div>
         <div className="col-sm-4 padding-top-15 hide">
@@ -183,11 +186,15 @@ class AppUpdatePanel extends React.Component {
             <button
               type="button"
               className="btn btn-info waves-effect waves-light"
-              onClick={ this._checkForUpdateUIPromise }>{ translate('INDEX.CHECK_FOR_UPDATE') }</button>
+              onClick={ this._checkForUpdateUIPromise }>
+              { translate('INDEX.CHECK_FOR_UPDATE') }
+            </button>
             <button
               type="button"
               className="btn btn-primary waves-effect waves-light margin-left-20"
-              onClick={ this.checkNodes }>{ translate('INDEX.UPDATE_BINS_NOW') }</button>
+              onClick={ this.checkNodes }>
+              { translate('INDEX.UPDATE_BINS_NOW') }
+            </button>
           </div>
         </div>
         <div className="col-sm-12 padding-top-15">
