@@ -8,6 +8,7 @@ export function shepherdCliPromise(mode, chain, cmd) {
     mode,
     chain,
     cmd,
+    token: Config.token,
   };
 
   return new Promise((resolve, reject) => {
@@ -38,6 +39,7 @@ export function shepherdCli(mode, chain, cmd) {
     mode,
     chain,
     cmd,
+    token: Config.token,
   };
 
   return dispatch => {

@@ -1,6 +1,5 @@
 import {
   GET_WIF_KEY,
-  GET_PEERS_LIST,
   GET_DEBUG_LOG,
   LOAD_APP_CONFIG,
   LOAD_APP_INFO,
@@ -21,12 +20,6 @@ export function Settings(state = {
         ...state,
         wifkey: action.wifkey,
         address: action.address,
-      };
-    case GET_PEERS_LIST:
-      return {
-        ...state,
-        supernetPeers: action.supernetPeers,
-        rawPeers: action.rawPeers,
       };
     case GET_DEBUG_LOG:
       return {

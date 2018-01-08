@@ -9,6 +9,7 @@ export function atomic(payload) {
     return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
       method: 'POST',
       body: JSON.stringify(payload),
+      token: Config.token,
     })
     .catch((error) => {
       console.log(error);

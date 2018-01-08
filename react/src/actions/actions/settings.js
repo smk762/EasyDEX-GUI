@@ -19,7 +19,7 @@ function getAppInfoState(json) {
 
 export function getAppInfo() {
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/appinfo`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/appinfo?token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -86,49 +86,6 @@ function parseImportPrivKeyResponse(json, dispatch) {
   }
 }
 
-export function importPrivKey(wifKey) {
-  const payload = {
-    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    method: 'importprivkey',
-    params: [
-      wifKey,
-      'imported'
-    ],
-  };
-
-  return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-    .catch((error) => {
-      console.log(error);
-      dispatch(
-        triggerToaster(
-          'importPrivKey',
-          'Error',
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(
-        parseImportPrivKeyResponse(
-          json,
-          dispatch
-        )
-      );
-    })
-    .catch((ex) => {
-      dispatch(parseImportPrivKeyResponse({
-        error: 'privkey already in wallet',
-      }, dispatch));
-      console.log('parsing failed', ex);
-    });
-  }
-}
-
 function getDebugLogState(json) {
   const _data = json.result.replace('\n', '\r\n');
 
@@ -142,6 +99,7 @@ export function getDebugLog(target, linesCount, acName) {
   const payload = {
     herdname: target,
     lastLines: linesCount,
+    token: Config.token,
   };
 
   if (acName) {
@@ -171,129 +129,6 @@ export function getDebugLog(target, linesCount, acName) {
   }
 }
 
-export function getPeersList(coin) {
-  const payload = {
-    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    agent: 'SuperNET',
-    method: 'getpeers',
-    activecoin: coin,
-  };
-
-  return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-    .catch((error) => {
-      console.log(error);
-      dispatch(
-        triggerToaster(
-          'getPeersList',
-          'Error',
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(getPeersListState(json, dispatch));
-    });
-  }
-}
-
-export function getPeersListState(json) {
-  let peersList = {};
-
-  if (json &&
-      json.rawpeers &&
-      json.rawpeers.length) {
-    for (let i = 0; i < json.rawpeers.length; i++) {
-      peersList[json.rawpeers[i].coin] = json.rawpeers[i].peers;
-    }
-  }
-
-  return {
-    type: GET_PEERS_LIST,
-    supernetPeers: json && json.supernet[0] ? json.supernet : null,
-    rawPeers: peersList,
-  }
-}
-
-function addPeerNodeState(json, dispatch) {
-  if (json.error === 'addnode needs active coin, do an addcoin first') {
-    return dispatch => {
-      dispatch(
-        triggerToaster(
-          translate('API.ADDNODE_NEEDS_COIN'),
-          translate('TOASTR.SETTINGS_NOTIFICATION'),
-          'error'
-        )
-      );
-    }
-  } else if (json.result === 'peer was already connected') {
-    return dispatch => {
-      dispatch(
-        triggerToaster(
-          translate('API.PEER_ALREADY_CONN'),
-          translate('TOASTR.SETTINGS_NOTIFICATION'),
-          'warning'
-        )
-      );
-    }
-  } else if (json.result === 'addnode connection was already pending') {
-    return dispatch => {
-      dispatch(
-        triggerToaster(
-          translate('API.ADDNODE_ALREADY_PENDING'),
-          translate('TOASTR.SETTINGS_NOTIFICATION'),
-          'warning'
-        )
-      );
-    }
-  } else if (json.result === 'addnode submitted') {
-    return dispatch => {
-      dispatch(
-        triggerToaster(
-          translate('API.PEER_ADDED'),
-          translate('TOASTR.SETTINGS_NOTIFICATION'),
-          'success'
-        )
-      );
-    }
-  }
-}
-
-export function addPeerNode(coin, ip) {
-  const payload = {
-    userpass: `tmpIgRPCUser@${sessionStorage.getItem('IguanaRPCAuth')}`,
-    agent: 'iguana',
-    method: 'addnode',
-    activecoin: coin,
-    ipaddr: ip,
-  };
-
-  return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.iguanaCorePort}`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-    .catch((error) => {
-      console.log(error);
-      dispatch(
-        triggerToaster(
-          'addPeerNode',
-          'Error',
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(addPeerNodeState(json, dispatch));
-    });
-  }
-}
-
 export function saveAppConfig(_payload) {
   return dispatch => {
     return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/appconf`, {
@@ -301,7 +136,10 @@ export function saveAppConfig(_payload) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: _payload }),
+      body: JSON.stringify({
+        payload: _payload,
+        token: Config.token,
+      }),
     })
     .catch((error) => {
       console.log(error);
@@ -336,7 +174,7 @@ function getAppConfigState(json) {
 
 export function getAppConfig() {
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/appconf`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/appconf?token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -364,6 +202,7 @@ export function resetAppConfig() {
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ token: Config.token })
     })
     .catch((error) => {
       console.log(error);
@@ -393,7 +232,7 @@ export function coindGetStdout(chain) {
   const _chain = chain === 'KMD' ? 'komodod' : chain;
 
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/coind/stdout?chain=${chain}`, {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/coind/stdout?chain=${chain}&token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -420,7 +259,7 @@ export function getWalletDatKeys(chain, keyMatchPattern) {
   const _chain = chain === 'KMD' ? null : chain;
 
   return new Promise((resolve, reject) => {
-    fetch(keyMatchPattern ? `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}&search=${keyMatchPattern}` : `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}`, {
+    fetch(keyMatchPattern ? `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}&search=${keyMatchPattern}&token=${Config.token}` : `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys?chain=${_chain}&token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -451,6 +290,7 @@ export function dumpPrivKey(coin, address, isZaddr) {
       cmd: isZaddr ? 'z_exportkey' : 'dumpprivkey',
       params: [ address ],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -458,7 +298,7 @@ export function dumpPrivKey(coin, address, isZaddr) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -490,6 +330,7 @@ export function validateAddress(coin, address, isZaddr) {
       cmd: isZaddr ? 'z_validateaddress' : 'validateaddress',
       params: [ address ],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -497,7 +338,7 @@ export function validateAddress(coin, address, isZaddr) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(

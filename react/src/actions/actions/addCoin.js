@@ -25,7 +25,7 @@ function iguanaActiveHandleState(json) {
 
 export function activeHandle() {
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/auth/status`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/auth/status?token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -60,6 +60,7 @@ export function shepherdElectrumAuth(seed) {
       body: JSON.stringify({
         seed,
         iguana: true,
+        token: Config.token,
       }),
     })
     .catch((error) => {
@@ -80,7 +81,7 @@ export function shepherdElectrumAuth(seed) {
       } else {
         dispatch(
           triggerToaster(
-            'Icorrect WIF key format',
+            translate('TOASTR.INCORRECT_WIF'),
             'Error',
             'error'
           )
@@ -92,7 +93,7 @@ export function shepherdElectrumAuth(seed) {
 
 export function shepherdElectrumAddCoin(coin) {
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/coins/add?coin=${coin}`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/coins/add?coin=${coin}&token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -231,6 +232,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       body: JSON.stringify({
         herd: _herd,
         options: herdData,
+        token: Config.token,
       }),
     })
     .catch((error) => {
@@ -326,7 +328,10 @@ export function _shepherdGetConfig(coin, mode, startupParams) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ chain: 'komodod' })
+      body: JSON.stringify({
+        chain: 'komodod',
+        token: Config.token,
+      }),
     })
     .catch((error) => {
       console.log(error);
@@ -361,7 +366,10 @@ export function shepherdGetConfig(coin, mode, startupParams) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ chain: 'komodod' })
+        body: JSON.stringify({
+          chain: 'komodod',
+          token: Config.token,
+        }),
       })
       .catch((error) => {
         console.log(error);
@@ -392,7 +400,10 @@ export function shepherdGetConfig(coin, mode, startupParams) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'chain': coin })
+        body: JSON.stringify({
+          chain: coin,
+          token: Config.token,
+        }),
       })
       .catch((error) => {
         console.log(error);

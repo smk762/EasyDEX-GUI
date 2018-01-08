@@ -3,7 +3,6 @@ import { translate } from '../../../translate/translate';
 import { connect } from 'react-redux';
 import Config from '../../../config';
 import {
-  getPeersList,
   checkForUpdateUIPromise,
   updateUIPromise,
 } from '../../../actions/actionCreators';
@@ -29,7 +28,6 @@ class AppUpdatePanel extends React.Component {
     };
     this._checkForUpdateUIPromise = this._checkForUpdateUIPromise.bind(this);
     this._updateUIPromise = this._updateUIPromise.bind(this);
-    this.checkNodes = this.checkNodes.bind(this);
   }
 
   updateSocketsData(data) {
@@ -92,12 +90,6 @@ class AppUpdatePanel extends React.Component {
 
   componentWillUnmount() {
     socket.removeAllListeners('patch', msg => this.updateSocketsData(msg));
-  }
-
-  checkNodes() {
-    if (this.state.getPeersCoin) {
-      Store.dispatch(getPeersList(this.state.getPeersCoin.split('|')[0]));
-    }
   }
 
   _updateUIPromise() {

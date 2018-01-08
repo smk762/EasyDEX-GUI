@@ -514,6 +514,7 @@ export const LANG_EN = {
     'CURRENT_BLOCK_SM': 'current block',
   },
   'TOASTR': {
+    'INCORRECT_WIF': 'Icorrect WIF key format',
     'ERROR': 'Error',
     'FAILED_TO_VERIFY_ADDR': 'Failed to verify address',
     'COIN_UNABLE_TO_STOP': 'Unable to stop @template@. Try again.',

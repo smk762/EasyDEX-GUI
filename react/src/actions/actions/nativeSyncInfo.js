@@ -98,13 +98,14 @@ export function getSyncInfoNative(coin, skipDebug, skipRemote, suppressErrors) {
       chain: coin,
       cmd: 'getinfo',
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
     const _fetchConfig = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     return fetch(
@@ -208,6 +209,7 @@ export function getBlockTemplate(_json, coin) {
     chain: coin,
     cmd: 'getblocktemplate',
     rpc2cli: Config.rpc2cli,
+    token: Config.token,
   };
 
   return dispatch => {
@@ -216,7 +218,7 @@ export function getBlockTemplate(_json, coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload }),
     };
 
     return fetch(
@@ -273,6 +275,7 @@ export function getDebugLogProgress(_json, coin) {
     mode: null,
     chain: coin,
     cmd: 'debug',
+    token: Config.token,
   };
 
   return dispatch => {
@@ -281,7 +284,7 @@ export function getDebugLogProgress(_json, coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload }),
     };
 
     return fetch(

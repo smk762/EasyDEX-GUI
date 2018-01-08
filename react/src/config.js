@@ -18,6 +18,7 @@ let _config = {
 
 try {
   Config = window.require('electron').remote.getCurrentWindow().appConfig;
+  Config.token = window.require('electron').remote.getCurrentWindow().appSessionHash;
 } catch (e) {
   Config = _config;
 }
