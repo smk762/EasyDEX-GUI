@@ -6,6 +6,14 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'XMY':
+      coinlogo = 'xmy';
+      coinname = 'Myriad';
+      break;
+    case 'ZCL':
+      coinlogo = 'zcl';
+      coinname = 'Zclassic';
+      break;
     case 'HUSH':
       coinlogo = 'hush';
       coinname = 'Hush';

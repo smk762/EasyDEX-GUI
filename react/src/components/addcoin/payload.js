@@ -135,7 +135,7 @@ export function startCurrencyAssetChain(confpath, coin, mode) {
 }
 
 export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
-	let assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
+	const assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
 
 	const acConfig = {
 		SUPERNET: {

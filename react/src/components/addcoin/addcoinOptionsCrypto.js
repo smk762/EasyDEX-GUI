@@ -88,6 +88,14 @@ const addCoinOptionsCrypto = () => {
       label: 'Hush (HUSH)',
       icon: 'HUSH',
       value: `HUSH|spv`,
+    }, {
+      label: 'Zclassic (ZCL)',
+      icon: 'ZCL',
+      value: `ZCL|spv`,
+    }, {
+      label: 'Myriad (XMY)',
+      icon: 'XMY',
+      value: `XMY|spv`,
     });
   }
 
