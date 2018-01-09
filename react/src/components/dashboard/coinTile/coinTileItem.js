@@ -266,7 +266,8 @@ class CoinTileItem extends React.Component {
             )
           );
 
-          if (!this.props.Dashboard.skipFullDashboardUpdate) {
+          if (!this.props.Dashboard.skipFullDashboardUpdate &&
+              this.props.ActiveCoin.activeSection === 'default') {
             Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
           }
         } else {
@@ -279,7 +280,7 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins[coin].pub) {
+      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins[coin].pub && this.props.ActiveCoin.activeSection === 'default') {
         Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
         Store.dispatch(shepherdElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
       }
@@ -364,6 +365,7 @@ const mapStateToProps = (state) => {
       progress: state.ActiveCoin.progress,
       rescanInProgress: state.ActiveCoin.rescanInProgress,
       getinfoFetchFailures: state.ActiveCoin.getinfoFetchFailures,
+      activeSection: state.ActiveCoin.activeSection,
     },
     Dashboard: state.Dashboard,
     Interval: {
