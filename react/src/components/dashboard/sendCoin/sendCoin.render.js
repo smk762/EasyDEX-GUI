@@ -348,6 +348,9 @@ export const SendRender = function() {
                       <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
                     </div>
                     <div>{ this.state.lastSendToResponse.result }</div>
+                    { this.props.ActiveCoin.mode === 'spv' &&
+                      <div>{ this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') }</div>
+                    }
                   </div>
                 }
               </div>
