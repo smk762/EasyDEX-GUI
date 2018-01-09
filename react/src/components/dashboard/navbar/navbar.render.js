@@ -80,6 +80,13 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> Explorer
               </a>
             </li>*/ }
+            { !navigator.onLine &&
+              <li
+                className="nav-top-menu offline"
+                title={ translate('INDEX.WALLET_OFFLINE') }>
+                <span className="offline-icon"></span> { translate('INDEX.OFFLINE') }
+              </li>
+            }
           </ul>
           <ul className="nav navbar-toolbar navbar-right navbar-toolbar-right">
             <li>

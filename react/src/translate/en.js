@@ -96,6 +96,8 @@ export const LANG_EN = {
     'NO_ACTIVE_COIN': 'No active coin',
   },
   'INDEX': {
+    'WALLET_OFFLINE': 'Agama is currently unable to connect to the Internet.',
+    'OFFLINE': 'Offline',
     'TOGGLE_COIN_CONTEXT_MENU': 'Toggle coin context menu',
     'TOP_MENU': 'Top menu',
     'ERROR_READING': 'Error reading',

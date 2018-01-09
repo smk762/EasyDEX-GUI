@@ -124,7 +124,7 @@ export const _SendFormRender = function() {
             { this.props.ActiveCoin.coin }
           </span>
         </div>
-        { !this.isFullySynced() &&
+        { (!this.isFullySynced() || !navigator.onLine) &&
           this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'native' &&
           <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
@@ -349,6 +349,8 @@ export const SendRender = function() {
                     </div>
                     <div>{ this.state.lastSendToResponse.result }</div>
                     { this.props.ActiveCoin.mode === 'spv' &&
+                      this.state.lastSendToResponse.raw &&
+                      this.state.lastSendToResponse.raw.txid &&
                       <div>{ this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') }</div>
                     }
                   </div>

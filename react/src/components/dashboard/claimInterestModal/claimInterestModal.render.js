@@ -118,7 +118,7 @@ export const _ClaimInterestTableRender = function() {
               { this.addressDropdownRender() }
             </div>
           }
-          { !this.isFullySynced() &&
+          { (!this.isFullySynced() || !navigator.onLine) &&
             this.props.ActiveCoin &&
             this.props.ActiveCoin.mode === 'native' &&
             <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning">
