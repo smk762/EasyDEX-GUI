@@ -5,7 +5,6 @@ import Panel from './settings.panel';
 
 import AppUpdatePanel from  './settings.appUpdatePanel';
 import AppInfoPanel from  './settings.appInfoPanel';
-// import AddNodePanel from './settings.addNodePanel';
 import AppSettingsPanel from './settings.appSettingsPanel';
 import CliPanel from './settings.cliPanel';
 import DebugLogPanel from './settings.debugLogPanel';
