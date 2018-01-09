@@ -12,6 +12,7 @@ function getNewAddress(coin) {
       chain: coin,
       cmd: 'getnewaddress',
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -19,7 +20,7 @@ function getNewAddress(coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -51,6 +52,7 @@ export function setJumblrAddress(coin, type, address) {
       cmd: type === 'deposit' ? 'jumblr_deposit' : 'jumblr_secret',
       params: [address],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -58,7 +60,7 @@ export function setJumblrAddress(coin, type, address) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -90,6 +92,7 @@ export function pauseJumblr(coin) {
       cmd: 'jumblr_pause',
       params: [],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -97,7 +100,7 @@ export function pauseJumblr(coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -129,6 +132,7 @@ export function resumeJumblr(coin) {
       cmd: 'jumblr_resume',
       params: [],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -136,7 +140,7 @@ export function resumeJumblr(coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -168,6 +172,7 @@ function dumpPrivkey(coin, key) {
       cmd: 'dumpprivkey',
       params: [key],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -175,7 +180,7 @@ function dumpPrivkey(coin, key) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -211,6 +216,7 @@ export function importPrivkey(coin, key, rescan = false) {
         rescan
       ],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -218,7 +224,7 @@ export function importPrivkey(coin, key, rescan = false) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(

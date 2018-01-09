@@ -20,9 +20,7 @@ const WalletsMainRender = function() {
               { this.getCoinStyle('title') &&
                 <img src={ this.getCoinStyle('title') } />
               }
-              <span
-                className={ `easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? 'hide' : '')}` }
-                style={{ marginLeft: '20px' }}>
+              <span className={ `margin-left-20 easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? 'hide' : '')}` }>
                 { getCoinTitle(this.props.ActiveCoin.coin).name }
               </span>
             </li>

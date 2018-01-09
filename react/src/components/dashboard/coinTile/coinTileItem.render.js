@@ -6,6 +6,9 @@ const CoinTileItemRender = function() {
 
   return (
     <div className="list-group-item col-xlg-6 col-lg-12 wallet-widgets-info pointer">
+      <span className={ `badge up badge-${item.modecolor}` }>
+        { item.modecode }
+      </span>
       <div className={ 'widget widget-shadow' + (this.props.ActiveCoin.coin === item.coin ? ' active' : '') }>
         <div
           className="widget-content text-center bg-white padding-20"
@@ -15,9 +18,6 @@ const CoinTileItemRender = function() {
               className="img-responsive"
               src={ `assets/images/cryptologo/${item.coinlogo.toLowerCase()}.png` }
               alt={ item.coinname }/>
-            <span className={ `badge up badge-${item.modecolor}` }>
-              { item.modecode }
-            </span>
           </a>
           <div className="coin-name">
             { item.coinname } ({ item.coinlogo.toUpperCase() })
@@ -28,7 +28,7 @@ const CoinTileItemRender = function() {
         onClick={ () => this.toggleCoinMenu(item.coin) }
         className="btn btn-default btn-xs clipboard-edexaddr coin-tile-context-menu-trigger coind-actions-menu">
         <i
-          title="Toggle coin context menu"
+          title={ translate('INDEX.TOGGLE_COIN_CONTEXT_MENU') }
           className="fa fa-ellipsis-v coin-tile-context-menu-trigger"></i>
       </button>
       { this.state.toggledCoinMenu &&
@@ -36,6 +36,7 @@ const CoinTileItemRender = function() {
         <div className="coin-tile-context-menu">
           <ul>
             { this.renderStopCoinButton() &&
+              item.mode === 'native' &&
               <li onClick={ () => this.stopCoind(item.coin, item.mode) }>
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP') }
               </li>
@@ -47,18 +48,6 @@ const CoinTileItemRender = function() {
             }
           </ul>
         </div>
-      }
-      { /*this.renderStopCoinButton() &&
-        <i
-          onClick={ () => this.stopCoind(item.coin, item.mode) }
-          title={ translate('DASHBOARD.STOP') }
-          className="icon fa-stop-circle coind-stop-icon"></i>*/
-      }
-      { /*this.renderRemoveCoinButton() &&
-        <i
-          onClick={ () => this.removeCoin(item.coin, item.mode) }
-          title={ translate('DASHBOARD.REMOVE') }
-          className={ 'icon fa-plus-circle coind-remove-icon' + (item.mode === 'spv' ? ' coind-remove-icon-spv' : '') }></i>*/
       }
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&

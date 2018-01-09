@@ -5,7 +5,7 @@ import { translate } from '../../../translate/translate';
 import QrReader from 'react-qr-reader'
 import {
   QRModalRender,
-  QRModalReaderRender
+  QRModalReaderRender,
 } from './qrModal.render';
 
 class QRModal extends React.Component {
@@ -47,12 +47,8 @@ class QRModal extends React.Component {
     if (this.props.mode === 'scan') {
       ReactDOM.render(
         <QrReader
-          delay={50}
-          style={{
-            height: 281,
-            width: 500,
-            transform: 'scaleX(-1)'
-          }}
+          delay={ 50 }
+          className="qr-reader-comp"
           onError={ this.handleError }
           onScan={ this.handleScan } />, document.getElementById('webcam'));
     }
@@ -74,6 +70,7 @@ class QRModal extends React.Component {
     const canvas = qrCanvas.getElementsByTagName('canvas');
     const dataURL = canvas[0].toDataURL();
     const a = document.getElementById('saveModalImage' + this.props.content);
+
     a.href = dataURL;
     a.download = this.props.content;
   }

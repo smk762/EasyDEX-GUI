@@ -1,25 +1,32 @@
+import { FIAT_RATES } from '../storeType';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
 
-export function shepherdGetSysInfo() {
+export function fiatRates() {
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/sysinfo?token=${Config.token}`, {
+    return fetch(`http://46.20.235.46:8111/api/rates/kmd`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
     })
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdGetSysInfo',
+          'fiatRates',
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
-    .then(json => console.log(json));
+    .then(json => {
+      dispatch(fiatRates(json));
+    });
+  }
+}
+
+function fiatRates(json) {
+  return {
+    type: FIAT_RATES,
+    response: json,
   }
 }

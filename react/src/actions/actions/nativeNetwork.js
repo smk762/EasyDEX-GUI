@@ -13,6 +13,7 @@ export function getNativePeers(coin) {
       chain: coin,
       cmd: 'getpeerinfo',
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -20,7 +21,7 @@ export function getNativePeers(coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -52,6 +53,7 @@ export function getNativeNettotals(coin) {
       chain: coin,
       cmd: 'getnettotals',
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -59,7 +61,7 @@ export function getNativeNettotals(coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(

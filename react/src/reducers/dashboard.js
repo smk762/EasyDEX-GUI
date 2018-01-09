@@ -8,6 +8,7 @@ import {
   DASHBOARD_ELECTRUM_COINS,
   ELECTRUM_SERVER_CHANGED,
   DISPLAY_ZCASH_PARAMS_FETCH,
+  FIAT_RATES,
 } from '../actions/storeType';
 
 export function Dashboard(state = {
@@ -70,6 +71,11 @@ export function Dashboard(state = {
       return {
         ...state,
         eletrumServerChanged: action.eletrumServerChanged,
+      };
+    case FIAT_RATES:
+      return {
+        ...state,
+        fiatRates: action.fiatRates,
       };
     default:
       return state;

@@ -96,6 +96,10 @@ export const LANG_EN = {
     'NO_ACTIVE_COIN': 'No active coin',
   },
   'INDEX': {
+    'WALLET_OFFLINE': 'Agama is currently unable to connect to the Internet.',
+    'OFFLINE': 'Offline',
+    'TOGGLE_COIN_CONTEXT_MENU': 'Toggle coin context menu',
+    'TOP_MENU': 'Top menu',
     'ERROR_READING': 'Error reading',
     'SHOW': 'Show',
     'SPV_SERVER_IP': 'Server IP',
@@ -512,6 +516,7 @@ export const LANG_EN = {
     'CURRENT_BLOCK_SM': 'current block',
   },
   'TOASTR': {
+    'INCORRECT_WIF': 'Icorrect WIF key format',
     'ERROR': 'Error',
     'FAILED_TO_VERIFY_ADDR': 'Failed to verify address',
     'COIN_UNABLE_TO_STOP': 'Unable to stop @template@. Try again.',
@@ -728,7 +733,7 @@ export const LANG_EN = {
   'ZCPARAMS_FETCH': {
     'DOWNLOADING_ZCASH_KEYS': 'Downloading Zcash keys',
     'BOTH_KEYS_VERIFIED': 'Both Zcash param keys are downloaded and verified!',
-    'PLEASE_RESTART': 'Please restart the app.',
+    'CLOSE_THE_MODAL': 'Close the modal and try to add a coin again.',
     'ZCPARAMS_VERIFICATION_ERROR_P1': 'Zcash param',
     'ZCPARAMS_VERIFICATION_ERROR_P2': 'verification error!',
     'ZCPARAMS_FETCH': 'ZCash Params Fetch',
@@ -828,6 +833,9 @@ export const LANG_EN = {
     'MESH': 'SpaceMesh (MESH)',
     'SUPERNET': 'SUPERNET (SUPERNET)',
     'WLC': 'WIRELESS (WIRELESS)',
+    'AXO': 'AXO (AXO)',
+    'ETOMIC': 'ETOMIC (ETOMIC)',
+    'BTCH': 'BTCH (BTCH)',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',

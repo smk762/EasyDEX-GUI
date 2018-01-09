@@ -29,6 +29,17 @@ class DebugLogPanel extends React.Component {
     this.checkInputVals = this.checkInputVals.bind(this);
   }
 
+  componentWillMount() {
+    if (this.props.Main.coins &&
+        this.props.Main.coins.native &&
+        Object.keys(this.props.Main.coins.native).length === 0) {
+      this.setState({
+        toggleAppRuntimeLog: true,
+      });
+      this.getAppRuntimeLog();
+    }
+  }
+
   readDebugLog() {
     let _target = this.state.debugTarget;
 
@@ -57,7 +68,7 @@ class DebugLogPanel extends React.Component {
       _items.push(
         <p key={ `app-runtime-log-entry-${i}` }>
           <span>{ secondsToString(_appRuntimeLog[i].time, true) }</span>
-          <span className="padding-left-30">{ JSON.stringify(_appRuntimeLog[i].msg, null, '') }</span>
+          <span className="padding-left-30">{ _appRuntimeLog[i].msg.indexOf('{') === -1 ? _appRuntimeLog[i].msg : JSON.stringify(_appRuntimeLog[i].msg, null, '') }</span>
         </p>
       );
     }

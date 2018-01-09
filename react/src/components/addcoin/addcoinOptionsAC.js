@@ -20,11 +20,14 @@ const addCoinOptionsAC = () => {
     'mshark',
     'supernet',
     'wlc',
+    'axo',
+    'etomic',
+    'btch'
   ];
   let _items = [];
 
   for (let i = 0; i < _assetChains.length; i++) {
-    let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'mgw' ? 'spv|native' : 'native';
+    let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'mgw' && _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' && _assetChains[i] !== 'btch' ? 'spv|native' : 'native';
 
     if (mainWindow.arch !== 'x64') {
       availableModes = 'spv';

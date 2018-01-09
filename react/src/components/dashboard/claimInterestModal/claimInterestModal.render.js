@@ -92,9 +92,7 @@ export const _ClaimInterestTableRender = function() {
             </button>
           }
           { this.state.spvVerificationWarning &&
-            <div
-              className="padding-top-10 padding-bottom-10"
-              style={{ fontSize: '15px' }}>
+            <div className="padding-top-10 padding-bottom-10 fs-15">
               <strong className="color-warning">{ translate('SEND.WARNING') }:</strong> { translate('SEND.WARNING_SPV_P1') } { translate('SEND.WARNING_SPV_P2') }
               <div className="margin-top-15">
                 <button
@@ -120,7 +118,7 @@ export const _ClaimInterestTableRender = function() {
               { this.addressDropdownRender() }
             </div>
           }
-          { !this.isFullySynced() &&
+          { (!this.isFullySynced() || !navigator.onLine) &&
             this.props.ActiveCoin &&
             this.props.ActiveCoin.mode === 'native' &&
             <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning">

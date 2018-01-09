@@ -12,6 +12,7 @@ export function getDashboardUpdate(coin, activeCoinProps) {
       body: JSON.stringify({
         coin: coin,
         rpc2cli: Config.rpc2cli,
+        token: Config.token,
       }),
     };
 

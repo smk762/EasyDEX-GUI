@@ -33,8 +33,6 @@ class AppInfoPanel extends React.Component {
               { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
               <br />
               { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta` }
-              <br />
-              { translate('SETTINGS.APP_SESSION') }: { this.props.Settings.appInfo.appSession }
             </p>
             <h5>{ translate('SETTINGS.SYS_INFO') }</h5>
             <p>

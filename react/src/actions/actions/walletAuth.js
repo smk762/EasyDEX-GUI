@@ -1,3 +1,5 @@
+// obsolete(?)
+
 import {
   LOGIN,
   ACTIVE_HANDLE,

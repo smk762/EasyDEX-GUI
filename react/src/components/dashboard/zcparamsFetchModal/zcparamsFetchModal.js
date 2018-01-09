@@ -103,15 +103,16 @@ class ZcparamsFetchModal extends React.Component {
           if (data.msg.file === 'proving') {
             _updateLog = [];
             _updateLog.push(translate('ZCPARAMS_FETCH.BOTH_KEYS_VERIFIED'));
+            _updateLog.push(translate('ZCPARAMS_FETCH.CLOSE_THE_MODAL'));
             this.setState(Object.assign({}, this.state, {
               updateLog: _updateLog,
               done: true,
             }));
 
-            window.require('electron').remote.getCurrentWindow().zcashParamsExistPromise()
+            mainWindow.zcashParamsExistPromise()
             .then((res) => {
-              const _errors = zcashParamsCheckErrors(res);
-              window.require('electron').remote.getCurrentWindow().zcashParamsExist = res;
+              const _errors = mainWindow.zcashParamsCheckErrors(res);
+              mainWindow.zcashParamsExist = res;
             });
           } else {
             this.setState(Object.assign({}, this.state, {
@@ -149,10 +150,8 @@ class ZcparamsFetchModal extends React.Component {
 
     if (_updateLogLength) {
       return (
-        <div
-          className="padding-top-20"
-          style={{ minHeight: '140px' }}>
-          <h5>{ translate('SETTINGS.PROGRESS') }:</h5>
+        <div className="padding-top-20 zcparams-progress">
+          <h5>{ translate('SETTINGS.PROGRESS') }</h5>
           <div className="padding-bottom-15">{ items }</div>
           <div className={ updateProgressBar.zcparams.proving > -1 && !this.state.done ? 'progress progress-sm' : 'hide' }>
             <div

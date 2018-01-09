@@ -9,6 +9,7 @@ export function getListUnspent(coin) {
       chain: coin,
       cmd: 'listunspent',
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -16,7 +17,7 @@ export function getListUnspent(coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'payload': payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -65,6 +66,7 @@ export function getRawTransaction(coin, txid) {
         1
       ],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {

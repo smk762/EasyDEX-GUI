@@ -24,6 +24,7 @@ export function sendNativeTx(coin, _payload) {
       chain: coin,
       cmd: _apiMethod,
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
       params:
         (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
         (_payload.substractFee ?
@@ -55,7 +56,7 @@ export function sendNativeTx(coin, _payload) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -142,6 +143,7 @@ export function getKMDOPID(opid, coin) {
       chain: coin,
       cmd: 'z_getoperationstatus',
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -149,7 +151,7 @@ export function getKMDOPID(opid, coin) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -181,6 +183,7 @@ export function sendToAddressPromise(coin, address, amount) {
       chain: coin,
       cmd: 'sendtoaddress',
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
       params: [
         address,
         amount,
@@ -195,7 +198,7 @@ export function sendToAddressPromise(coin, address, amount) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(
@@ -241,6 +244,7 @@ export function validateAddressPromise(coin, address) {
       cmd: 'validateaddress',
       params: [ address ],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     const _fetchConfig = {
@@ -248,7 +252,7 @@ export function validateAddressPromise(coin, address) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ payload: payload }),
+      body: JSON.stringify({ payload }),
     };
 
     fetch(

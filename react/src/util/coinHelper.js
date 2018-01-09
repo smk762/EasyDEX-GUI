@@ -6,6 +6,14 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'XMY':
+      coinlogo = 'xmy';
+      coinname = 'Myriad';
+      break;
+    case 'ZCL':
+      coinlogo = 'zcl';
+      coinname = 'Zclassic';
+      break;
     case 'HUSH':
       coinlogo = 'hush';
       coinname = 'Hush';
@@ -219,6 +227,18 @@ export function getCoinTitle(coin) {
       transparentBG = true;
       coinlogo = 'MESH';
       coinname = 'SpaceMesh';
+      break;
+    case 'AXO':
+      coinlogo = 'AXO';
+      coinname = 'AXO';
+      break;
+    case 'ETOMIC':
+      coinlogo = 'ETOMIC';
+      coinname = 'ETOMIC';
+      break;
+    case 'BTCH':
+      coinlogo = 'BTCH';
+      coinname = 'BTCH';
       break;
     case 'USD':
       titleBG = true;
@@ -470,6 +490,9 @@ export function coindList() {
     'MESH',
     'SUPERNET',
     'WLC',
+    'AXO',
+    'ETOMIC',
+    'BTCH'
   ];
 
   return _coins;
@@ -495,7 +518,10 @@ export const isKomodoCoin = (coin) => {
       coin === 'WLC' ||
       coin === 'MNZ' ||
       coin === 'CHIPS' ||
-      coin === 'KMD') {
+      coin === 'KMD' ||
+      coin === 'AXO',
+      coin === 'ETOMIC',
+      coin === 'BTCH') {
     return true;
   }
 }

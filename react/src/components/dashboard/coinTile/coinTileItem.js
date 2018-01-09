@@ -116,7 +116,7 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  renderStopCoinButton() {
+  renderStopCoinButton(item) {
     if (this.props.Main &&
         this.props.Main.coins &&
         this.props.Main.coins.native &&
@@ -239,7 +239,6 @@ class CoinTileItem extends React.Component {
     if (this.props.Dashboard &&
         this.props.Dashboard.activeSection === 'wallets') {
       if (mode === 'native') {
-        // Store.dispatch(iguanaActiveHandle(true));
         const _propsDashboard = this.props.ActiveCoin;
         const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
@@ -267,7 +266,8 @@ class CoinTileItem extends React.Component {
             )
           );
 
-          if (!this.props.Dashboard.skipFullDashboardUpdate) {
+          if (!this.props.Dashboard.skipFullDashboardUpdate &&
+              this.props.ActiveCoin.activeSection === 'default') {
             Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
           }
         } else {
@@ -280,7 +280,7 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins[coin].pub) {
+      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins[coin].pub && this.props.ActiveCoin.activeSection === 'default') {
         Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
         Store.dispatch(shepherdElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
       }
@@ -365,6 +365,7 @@ const mapStateToProps = (state) => {
       progress: state.ActiveCoin.progress,
       rescanInProgress: state.ActiveCoin.rescanInProgress,
       getinfoFetchFailures: state.ActiveCoin.getinfoFetchFailures,
+      activeSection: state.ActiveCoin.activeSection,
     },
     Dashboard: state.Dashboard,
     Interval: {

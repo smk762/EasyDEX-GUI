@@ -12,6 +12,7 @@ export function getTxDetails(coin, txid, type) {
         txid
       ],
       rpc2cli: Config.rpc2cli,
+      token: Config.token,
     };
 
     if (type === 'raw') {
@@ -24,6 +25,7 @@ export function getTxDetails(coin, txid, type) {
           1
         ],
         rpc2cli: Config.rpc2cli,
+        token: Config.token,
       };
     }
 
@@ -33,7 +35,7 @@ export function getTxDetails(coin, txid, type) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ payload: payload }),
+        body: JSON.stringify({ payload }),
       },
     )
     .catch((error) => {

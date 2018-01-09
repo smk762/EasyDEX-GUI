@@ -36,18 +36,12 @@ class About extends React.Component {
               <span className="font-weight-600">{ translate('INDEX.NATIVE_MODE') }</span>:&nbsp;
               { translate('ABOUT.NATIVE_MODE_DESC') }
             </li>
-          </ul>
-
-          { translate('ABOUT.AGAMA_CAPABILITIES') }
-          <ul>
             <li>
-              <span className="font-weight-600">BarterDEX</span>:&nbsp;
-              { translate('ABOUT.BARTER_DEX_DESC') }&nbsp;
-              <a className="link" onClick={ () => this.openExternalWindow('https://supernet.org/en/technology/whitepapers/easydex-a-practical-native-dex') }>
-                (BarterDEX – A Practical Native DEX)
-              </a>
+              <span className="font-weight-600">{ translate('INDEX.SPV_MODE') }</span>:&nbsp;
+              { translate('ADD_COIN.LITE_MODE_DESC') }
             </li>
           </ul>
+          <br />
 
           <span className="font-weight-600">{ translate('ABOUT.AGAMA_NOTE') }</span>
 

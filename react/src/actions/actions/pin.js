@@ -11,6 +11,7 @@ export function encryptPassphrase(passphrase, key, pubKey) {
     string: passphrase,
     key: key,
     pubkey: pubKey,
+    token: Config.token,
   };
 
   return dispatch => {
@@ -48,6 +49,7 @@ export function loginWithPin(key, pubKey) {
   const payload = {
     key: key,
     pubkey: pubKey,
+    token: Config.token,
   };
 
   return dispatch => {
@@ -77,7 +79,7 @@ export function loginWithPin(key, pubKey) {
 
 export function loadPinList() {
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/getpinlist`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/getpinlist?token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
