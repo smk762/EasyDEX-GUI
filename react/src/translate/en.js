@@ -368,6 +368,7 @@ export const LANG_EN = {
   'JUMBLR': {
     'PASSPHRASE': 'Passphrase',
     'PAUSE': 'Pause',
+    'RESUME': 'Resume',
     'STOP': 'Stop',
     'TO_SM': 'to',
     'ABOUT': 'About Jumblr',
