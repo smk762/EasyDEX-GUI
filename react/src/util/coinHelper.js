@@ -519,8 +519,8 @@ export const isKomodoCoin = (coin) => {
       coin === 'MNZ' ||
       coin === 'CHIPS' ||
       coin === 'KMD' ||
-      coin === 'AXO',
-      coin === 'ETOMIC',
+      coin === 'AXO' ||
+      coin === 'ETOMIC' ||
       coin === 'BTCH') {
     return true;
   }
