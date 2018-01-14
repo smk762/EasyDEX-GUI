@@ -346,7 +346,7 @@ class WalletsData extends React.Component {
         .then((serverSetRes) => {
           Store.dispatch(
             triggerToaster(
-              `${this.props.ActiveCoin.coin} SPV {translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}`,
+              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'success'
             )
@@ -356,7 +356,7 @@ class WalletsData extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            `${this.props.ActiveCoin.coin} SPV {translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port} {translate('DASHBOARD.IS_UNREACHABLE')}!`,
+            `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
