@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 import { translate } from '../../../translate/translate';
 import Config from '../../../config';
 import {
@@ -146,9 +147,14 @@ class AppSettingsPanel extends React.Component {
               <td className="padding-15">
                 { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
                 { this.state.appConfigSchema[key].info &&
-                  <i
-                    className="icon fa-question-circle settings-help"
-                    title={ this.state.appConfigSchema[key].info }></i>
+                  <span>
+                    <i
+                      className="icon fa-question-circle settings-help"
+                      data-tip={ this.state.appConfigSchema[key].info }></i>
+                    <ReactTooltip
+                      effect="solid"
+                      className="text-left" />
+                  </span>
                 }
               </td>
               <td className="padding-15"></td>
@@ -161,9 +167,14 @@ class AppSettingsPanel extends React.Component {
                 <td className="padding-15 padding-left-30">
                   { this.state.appConfigSchema[key][_key].displayName ? this.state.appConfigSchema[key][_key].displayName : _key }
                   { this.state.appConfigSchema[key][_key].info &&
-                    <i
-                      className="icon fa-question-circle settings-help"
-                      title={ this.state.appConfigSchema[key][_key].info }></i>
+                    <span>
+                      <i
+                        className="icon fa-question-circle settings-help"
+                        data-tip={ this.state.appConfigSchema[key][_key].info }></i>
+                      <ReactTooltip
+                        effect="solid"
+                        className="text-left" />
+                    </span>
                   }
                 </td>
                 <td className="padding-15">
@@ -210,9 +221,14 @@ class AppSettingsPanel extends React.Component {
               <td className="padding-15">
                 { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
                 { this.state.appConfigSchema[key].info &&
-                  <i
-                    className="icon fa-question-circle settings-help"
-                    title={ this.state.appConfigSchema[key].info }></i>
+                  <span>
+                    <i
+                      className="icon fa-question-circle settings-help"
+                      data-tip={ this.state.appConfigSchema[key].info }></i>
+                    <ReactTooltip
+                      effect="solid"
+                      className="text-left" />
+                  </span>
                 }
               </td>
               <td className="padding-15">
@@ -269,7 +285,10 @@ class AppSettingsPanel extends React.Component {
           { translate('SETTINGS.KMD_MAIN_SYNC_ONLY') }
           <i
             className="icon fa-question-circle settings-help"
-            title={ translate('SETTINGS.RPC_FETCH_ONLY_DESC') }></i>
+            data-tip={ translate('SETTINGS.RPC_FETCH_ONLY_DESC') }></i>
+          <ReactTooltip
+            effect="solid"
+            className="text-left" />
         </td>
         <td className="padding-15">
           <span className="pointer toggle">

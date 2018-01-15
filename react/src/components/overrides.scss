@@ -283,3 +283,45 @@ select{
 .no-margin {
   margin: 0 !important;
 }
+
+.Select {
+  cursor: pointer;
+  text-align: left;
+
+  * { color: #757575 !important; }
+
+  .Select-clear {
+    display: none;
+  }
+  .Select-control {
+    height: 40px !important;
+
+    .Select-placeholder,
+    .Select-value {
+      line-height: 36px !important;
+    }
+  }
+}
+.Select-menu-outer {
+  max-height: 253px !important;
+}
+.Select-menu {
+  max-height: 250px !important;
+}
+.Select.is-open,
+.Select.is-focused {
+  .Select-control {
+    border-color: #FF6600 !important;
+    box-shadow: none !important;
+  }
+  .Select-menu-outer {
+    border-color: #FF6600 !important;
+    border-top-color: #d9d9d9 !important;
+  }
+}
+
+.__react_component_tooltip {
+  &.type-dark {
+    background-color: #000;
+  }
+}

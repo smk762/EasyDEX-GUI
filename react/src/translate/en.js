@@ -468,6 +468,7 @@ export const LANG_EN = {
     'ERROR': 'Error',
   },
   'DASHBOARD': {
+    'SHOW_ALL_ADDR': 'Show all addresses',
     'RPC_CONN_FAILURE': 'Unable to establish RPC connection! Retries count',
     'REMOVE': 'Remove',
     'STOP': 'Stop',
@@ -626,6 +627,7 @@ export const LANG_EN = {
     'ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE': '- verifying key size is incorrect',
   },
   'LOGIN': {
+    'OR_USE_A_SHORTCUT': 'or use a shortcut',
     'PIN_LOGIN_INFO': 'You can login be entering a login seed or by selecting a pin',
     'QUICK_ACCESS': 'Quick access',
     'PWD_REQ': 'Password is required.',
@@ -742,6 +744,10 @@ export const LANG_EN = {
     'DOWNLOAD': 'Download',
   },
   'SEND': {
+    'BAD_TXN_SPENT_ERR1': 'This particular error can happen in the following cases:',
+    'BAD_TXN_SPENT_ERR2': 'Your machine\'s clock is not set properly',
+    'BAD_TXN_SPENT_ERR3': 'SPV server is temporary out of sync. Try to switch over to another one.',
+    'BAD_TXN_SPENT_ERR4': 'Double spend in case you just made another transaction',
     'MIN_AMOUNT_IS': 'min @template@ amount is',
     'AMOUNT_IS_TOO_SMALL': 'Amount @template@ is too small',
     'MAX_AVAIL_BALANCE': 'max available balance is',

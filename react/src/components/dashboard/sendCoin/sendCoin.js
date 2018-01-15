@@ -17,7 +17,7 @@ import {
   AddressListRender,
   SendRender,
   SendFormRender,
-  _SendFormRender
+  _SendFormRender,
 } from './sendCoin.render';
 import { isPositiveNumber } from '../../../util/number';
 import mainWindow from '../../../util/mainWindow';
@@ -502,7 +502,7 @@ class SendCoin extends React.Component {
       if (Number(_amountSats) + _fees[this.props.ActiveCoin.coin] > _balanceSats) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${(0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)} ${this.props.ActiveCoin.coin}`,
+            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8))} ${this.props.ActiveCoin.coin}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -511,7 +511,7 @@ class SendCoin extends React.Component {
       } else if (Number(_amountSats) < _fees[this.props.ActiveCoin.coin]) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.AMOUNT_IS_TOO_SMALL', this.state.amount)}, ${translate('SEND.MIN_AMOUNT_IS', this.props.ActiveCoin.coin)} ${_fees[this.props.ActiveCoin.coin] * 0.00000001}`,
+            `${translate('SEND.AMOUNT_IS_TOO_SMALL', this.state.amount)}, ${translate('SEND.MIN_AMOUNT_IS', this.props.ActiveCoin.coin)} ${Number(_fees[this.props.ActiveCoin.coin] * 0.00000001)}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )

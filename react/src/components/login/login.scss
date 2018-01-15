@@ -185,3 +185,51 @@ option.login-option {
   width: 10%;
   float: left;
 }
+
+.page-login {
+  .addcoin-shortcut {
+    display: inline-block;
+    width: 46%;
+
+    &:last-child {
+      margin-left: 8%;
+    }
+    > div {
+      margin-bottom: 10px;
+    }
+  }
+  .line {
+    padding: 60px 0 40px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    white-space: nowrap;
+
+    &:before {
+      content: '';
+      display: inline-block;
+      height: 1px;
+      width: 33%;
+      background: #ccc;
+      margin-right: 10px;
+      position: relative;
+      top: -4px;
+    }
+    &:after {
+      content: '';
+      display: inline-block;
+      height: 1px;
+      width: 33%;
+      background: #ccc;
+      margin-left: 10px;
+      position: relative;
+      top: -4px;
+    }
+  }
+  .login-help {
+    font-size: 20px;
+    position: relative;
+    top: 2px;
+    left: 15px;
+    color: #fff;
+  }
+}

@@ -353,6 +353,16 @@ export const SendRender = function() {
                       this.state.lastSendToResponse.raw.txid &&
                       <div>{ this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') }</div>
                     }
+                    { this.state.lastSendToResponse.raw.txid.indexOf('bad-txns-inputs-spent') > -1 &&
+                      <div className="margin-top-10">
+                        { translate('SEND.BAD_TXN_SPENT_ERR1') }
+                        <ul>
+                          <li>{ translate('SEND.BAD_TXN_SPENT_ERR2') }</li>
+                          <li>{ translate('SEND.BAD_TXN_SPENT_ERR3') }</li>
+                          <li>{ translate('SEND.BAD_TXN_SPENT_ERR4') }</li>
+                        </ul>
+                      </div>
+                    }
                   </div>
                 }
               </div>

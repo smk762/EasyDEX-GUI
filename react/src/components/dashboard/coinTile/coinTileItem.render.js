@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import ReactTooltip from 'react-tooltip';
 
 const CoinTileItemRender = function() {
   const { item } = this.props;
@@ -28,8 +29,11 @@ const CoinTileItemRender = function() {
         onClick={ () => this.toggleCoinMenu(item.coin) }
         className="btn btn-default btn-xs clipboard-edexaddr coin-tile-context-menu-trigger coind-actions-menu">
         <i
-          title={ translate('INDEX.TOGGLE_COIN_CONTEXT_MENU') }
+          data-tip={ translate('INDEX.TOGGLE_COIN_CONTEXT_MENU') }
           className="fa fa-ellipsis-v coin-tile-context-menu-trigger"></i>
+        <ReactTooltip
+          effect="solid"
+          className="text-left" />
       </button>
       { this.state.toggledCoinMenu &&
         this.state.toggledCoinMenu === item.coin &&
@@ -55,16 +59,19 @@ const CoinTileItemRender = function() {
         this.props.Dashboard.electrumCoins[item.coin].serverList &&
         this.props.Dashboard.electrumCoins[item.coin].serverList === 'none' &&
         <i
-          title={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
+          data-tip={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
           className="icon fa-info-circle icon-spv-connection-warning"></i>
       }
       { this.renderCoinConError(item) &&
         !this.props.ActiveCoin.rescanInProgress &&
         <i
           onClick={ this.openCoindDownModal }
-          title={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
+          data-tip={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
           className="icon fa-warning icon-native-connection-warning"></i>
       }
+      <ReactTooltip
+        effect="solid"
+        className="text-left" />
     </div>
   );
 };

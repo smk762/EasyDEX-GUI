@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 import { translate } from '../../../translate/translate';
 import ReactTable from 'react-table';
 import TablePaginationRenderer from './pagination';
@@ -13,9 +14,14 @@ export const TxConfsRender = function(confs) {
     );
   } else {
     return (
-      <i
-        className="icon fa-warning color-warning margin-right-5"
-        title={ translate('DASHBOARD.FAILED_TX_INFO') }></i>
+      <span>
+        <i
+          className="icon fa-warning color-warning margin-right-5"
+          data-tip={ translate('DASHBOARD.FAILED_TX_INFO') }></i>
+        <ReactTooltip
+          effect="solid"
+          className="text-left" />
+      </span>
     );
   }
 }
@@ -82,13 +88,16 @@ export const AddressListRender = function() {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          title={ `${translate('KMD_NATIVE.SELECT_ADDRESS')}` }
+          data-tip={ `${translate('KMD_NATIVE.SELECT_ADDRESS')}` }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
           <span className="bs-caret">
             <span className="caret"></span>
           </span>
         </button>
+        <ReactTooltip
+          effect="solid"
+          className="text-left" />
         <div className="dropdown-menu open">
           <ul className="dropdown-menu inner">
             <li className="no--hover">
@@ -160,13 +169,21 @@ export const TxAmountRender = function(tx) {
 
   if (Config.roundValues) {
     return (
-      <span title={ tx.amount * _amountNegative }>
-        { formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }
-        { tx.interest &&
-          <span
-            className="tx-interest"
-            title={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
-        }
+      <span>
+        <span data-tip={ tx.amount * _amountNegative }>
+          { formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }
+          { tx.interest &&
+            <span
+              className="tx-interest"
+              data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
+          }
+          <ReactTooltip
+            effect="solid"
+            className="text-left" />
+        </span>
+        <ReactTooltip
+          effect="solid"
+          className="text-left" />
       </span>
     );
   }
@@ -177,8 +194,11 @@ export const TxAmountRender = function(tx) {
       { tx.interest &&
         <span
           className="tx-interest"
-          title={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
+          data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
       }
+      <ReactTooltip
+        effect="solid"
+        className="text-left" />
     </span>
   );
 };
