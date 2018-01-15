@@ -2,6 +2,8 @@ import React from 'react';
 import { translate } from '../../translate/translate';
 import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
 import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchModal';
+import Select from 'react-select';
+import ReactTooltip from 'react-tooltip';
 
 const LoginRender = function() {
   return (
@@ -142,7 +144,8 @@ const LoginRender = function() {
                     <hr/>
                   </div>
                   <div className="pin-block-two">
-                    <span>{ translate('INDEX.OR') }</span></div>
+                    <span>{ translate('INDEX.OR') }</span>
+                  </div>
                   <div className="pin-block-three">
                     <hr/>
                   </div>
@@ -187,12 +190,16 @@ const LoginRender = function() {
               type="button"
               className="btn btn-primary btn-block margin-top-20"
               onClick={ this.loginSeed }
-              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>{ translate('INDEX.SIGN_IN') }</button>
+              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>
+              { translate('INDEX.SIGN_IN') }
+            </button>
             <div className="form-group form-material floating">
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect"
                 id="register-btn"
-                onClick={ () => this.updateActiveLoginSection('signup') }>{ translate('INDEX.CREATE_WALLET') }</button>
+                onClick={ () => this.updateActiveLoginSection('signup') }>
+                { translate('INDEX.CREATE_WALLET') }
+              </button>
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect hide"
                 id="logint-another-wallet">{ translate('INDEX.LOGIN_ANOTHER_WALLET') }</button>
@@ -221,6 +228,58 @@ const LoginRender = function() {
                   { translate('INDEX.ACTIVATE_COIN') }
                 </span>
               </button>
+              <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
+              <div className="addcoin-shortcut">
+                <div>
+                  <i className="icon fa-cube margin-right-5"></i>
+                  { translate('INDEX.NATIVE_MODE') }
+                  <i
+                    className="icon fa-question-circle login-help"
+                    data-tip="<strong>Be aware:</strong> <u>Native mode</u> requires to download the whole blockchain data to a local disk before you can start using it.<br/>This may take from <strong>several hours to a day</strong> depending on your connection and hardware.<br/>Please <u>try to keep Agama running</u> until the whole process is finished."
+                    data-html={ true }></i>
+                  <ReactTooltip effect="solid" className="text-left" />
+                </div>
+                <Select
+                  name="selectedShortcutNative"
+                  value={ this.state.selectedShortcutNative }
+                  onChange={ (event) => this.updateSelectedShortcut(event, 'native') }
+                  optionRenderer={ this.renderShortcutOption }
+                  valueRenderer={ this.renderShortcutOption }
+                  options={[
+                    { value: 'kmd', label: 'kmd' },
+                    { value: 'mnz', label: 'mnz' },
+                    { value: 'btch', label: 'btch' },
+                    { value: 'revs', label: 'revs' },
+                    { value: 'jumblr', label: 'jumblr' },
+                    { value: 'kmd+revs+jumblr', label: 'kmd+revs+jumblr' },
+                  ]} />
+              </div>
+              <div className="addcoin-shortcut">
+                <div>
+                  <i className="icon fa-flash margin-right-5"></i>
+                  { translate('INDEX.SPV_MODE') }
+                  <i
+                    className="icon fa-question-circle login-help"
+                    data-tip="If you need a quick and easy access to your funds try <u>Lite (SPV) mode</u> which doesn't require any blockchain to be loaded locally.<br/>All data is requested on demand from Electrum servers."
+                    data-html={ true }></i>
+                  <ReactTooltip effect="solid" className="text-left" />
+                </div>
+                <Select
+                  name="selectedShortcutSPV"
+                  value={ this.state.selectedShortcutSPV }
+                  onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
+                  optionRenderer={ this.renderShortcutOption }
+                  valueRenderer={ this.renderShortcutOption }
+                  options={[
+                    { value: 'kmd', label: 'kmd' },
+                    { value: 'chips', label: 'chips' },
+                    { value: 'btch', label: 'btch' },
+                    { value: 'mnz', label: 'mnz' },
+                    { value: 'revs', label: 'revs' },
+                    { value: 'jumblr', label: 'jumblr' },
+                    { value: 'kmd+revs+jumblr', label: 'kmd+revs+jumblr' },
+                  ]} />
+              </div>
             </div>
           </div>
 

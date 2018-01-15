@@ -10,10 +10,13 @@ import {
   toggleLoginSettingsModal,
   stopInterval,
   dashboardChangeActiveCoin,
+  toggleZcparamsFetchModal,
+  activeHandle,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
 import { PassPhraseGenerator } from '../../util/crypto/passphrasegenerator';
+import { zcashParamsCheckErrors } from '../../util/zcashParams';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import { translate } from '../../translate/translate';
@@ -57,6 +60,8 @@ class Login extends React.Component {
       selectedPin: '',
       isExperimentalOn: false,
       enableEncryptSeed: false,
+      selectedShortcutNative: '',
+      selectedShortcutSPV: '',
     };
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -73,6 +78,7 @@ class Login extends React.Component {
     this.updatePubKey = this.updatePubKey.bind(this);
     this.updateDecryptKey = this.updateDecryptKey.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
+    this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
   }
 
   // the setInterval handler for 'activeCoins'
@@ -452,12 +458,109 @@ class Login extends React.Component {
     );
   }
 
+  updateSelectedShortcut(e, type) {
+    this.setState({
+      [type === 'native' ? 'selectedShortcutNative' : 'selectedShortcutSPV'] : e.value,
+    });
+
+    if (type === 'native') {
+      const _res = mainWindow.zcashParamsExist;
+      const __errors = zcashParamsCheckErrors(_res);
+
+      if (__errors) {
+        mainWindow.zcashParamsExistPromise()
+        .then((res) => {
+          const _errors = zcashParamsCheckErrors(res);
+          mainWindow.zcashParamsExist = res;
+
+          if (_errors) {
+            Store.dispatch(
+              triggerToaster(
+                _errors,
+                'Komodod',
+                'error',
+                false
+              )
+            );
+            Store.dispatch(toggleZcparamsFetchModal(true));
+          } else {
+            mainWindow.startKMDNative(e.value.toUpperCase());
+          }
+        });
+      } else {
+        mainWindow.startKMDNative(e.value.toUpperCase());
+      }
+
+      console.warn('native');
+    } else {
+      mainWindow.startSPV(e.value.toUpperCase());
+      console.warn('spv');
+    }
+
+    setTimeout(() => {
+      Store.dispatch(activeHandle());
+      if (type === 'native') {
+        Store.dispatch(shepherdElectrumCoins());
+      }
+      Store.dispatch(getDexCoins());
+    }, 500);
+    setTimeout(() => {
+      Store.dispatch(activeHandle());
+      if (type === 'native') {
+        Store.dispatch(shepherdElectrumCoins());
+      }
+      Store.dispatch(getDexCoins());
+    }, 1000);
+    setTimeout(() => {
+      Store.dispatch(activeHandle());
+      if (type === 'native') {
+        Store.dispatch(shepherdElectrumCoins());
+      }
+      Store.dispatch(getDexCoins());
+    }, type === 'native' ? 5000 : 2000);
+  }
+
   renderSwallModal() {
     if (this.state.displaySeedBackupModal) {
       return SwallModalRender.call(this);
     }
 
     return null;
+  }
+
+  renderShortcutOption(option) {
+    if (option.value.indexOf('+') > -1) {
+      const _comps = option.value.split('+');
+      let _items = [];
+
+      for (let i = 0; i < _comps.length; i++) {
+        _items.push(
+          <span key={ `addcoin-shortcut-icons-${i}` }>
+            <img
+              src={ `assets/images/cryptologo/${_comps[i].toLowerCase()}.png` }
+              alt={ _comps[i].toUpperCase() }
+              width="30px"
+              height="30px" />
+              { i !== _comps.length - 1 &&
+                <span className="margin-left-10 margin-right-10">+</span>
+              }
+          </span>
+        );
+      }
+
+      return _items;
+    } else {
+      return (
+        <div>
+          <img
+            src={ `assets/images/cryptologo/${option.value.toLowerCase()}.png` }
+            alt={ option.value.toUpperCase() }
+            width="30px"
+            height="30px" />
+            <span className="margin-left-10">{ option.value.toUpperCase() }</span>
+        </div>
+      );
+    }
   }
 
   render() {
