@@ -468,6 +468,7 @@ export const LANG_EN = {
     'ERROR': 'Error',
   },
   'DASHBOARD': {
+    'SHOW_ALL_ADDR': 'Show all addresses',
     'RPC_CONN_FAILURE': 'Unable to establish RPC connection! Retries count',
     'REMOVE': 'Remove',
     'STOP': 'Stop',

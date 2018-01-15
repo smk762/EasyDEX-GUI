@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import mainWindow from '../../../util/mainWindow';
+import ReactTooltip from 'react-tooltip';
 
 const NavbarRender = function() {
   return (
@@ -83,8 +84,11 @@ const NavbarRender = function() {
             { !navigator.onLine &&
               <li
                 className="nav-top-menu offline"
-                title={ translate('INDEX.WALLET_OFFLINE') }>
+                data-tip={ translate('INDEX.WALLET_OFFLINE') }>
                 <span className="offline-icon"></span> { translate('INDEX.OFFLINE') }
+                <ReactTooltip
+                  effect="solid"
+                  className="text-left" />
               </li>
             }
           </ul>

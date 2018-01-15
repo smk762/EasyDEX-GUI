@@ -237,7 +237,9 @@ const LoginRender = function() {
                     className="icon fa-question-circle login-help"
                     data-tip="<strong>Be aware:</strong> <u>Native mode</u> requires to download the whole blockchain data to a local disk before you can start using it.<br/>This may take from <strong>several hours to a day</strong> depending on your connection and hardware.<br/>Please <u>try to keep Agama running</u> until the whole process is finished."
                     data-html={ true }></i>
-                  <ReactTooltip effect="solid" className="text-left" />
+                  <ReactTooltip
+                    effect="solid"
+                    className="text-left" />
                 </div>
                 <Select
                   name="selectedShortcutNative"
@@ -262,7 +264,9 @@ const LoginRender = function() {
                     className="icon fa-question-circle login-help"
                     data-tip="If you need a quick and easy access to your funds try <u>Lite (SPV) mode</u> which doesn't require any blockchain to be loaded locally.<br/>All data is requested on demand from Electrum servers."
                     data-html={ true }></i>
-                  <ReactTooltip effect="solid" className="text-left" />
+                  <ReactTooltip
+                    effect="solid"
+                    className="text-left" />
                 </div>
                 <Select
                   name="selectedShortcutSPV"

@@ -490,11 +490,8 @@ class Login extends React.Component {
       } else {
         mainWindow.startKMDNative(e.value.toUpperCase());
       }
-
-      console.warn('native');
     } else {
       mainWindow.startSPV(e.value.toUpperCase());
-      console.warn('spv');
     }
 
     setTimeout(() => {

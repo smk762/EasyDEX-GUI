@@ -2,6 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import InvoiceModal from '../invoiceModal/invoiceModal';
+import ReactTooltip from 'react-tooltip';
 
 export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
@@ -12,11 +13,13 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
       </span>
       <button
         onClick={ () => this.toggleAddressMenu(address) }
+        data-tip="Toggle address context menu"
         className="btn btn-default btn-xs clipboard-edexaddr margin-left-10 receive-address-context-menu-trigger">
-        <i
-          title="Toggle address context menu"
-          className="fa fa-ellipsis-v receive-address-context-menu-trigger"></i>
+        <i className="fa fa-ellipsis-v receive-address-context-menu-trigger"></i>
       </button>
+      <ReactTooltip
+        effect="solid"
+        className="text-left" />
       { this.state.toggledAddressMenu &&
         this.state.toggledAddressMenu === address &&
         <div className="receive-address-context-menu">
@@ -49,14 +52,22 @@ export const AddressItemRender = function(address, type) {
   return (
     <tr key={ address.address }>
       { this.renderAddressActions(address.address, type) }
-      <td title={ type !== 'public' ? address.address : '' }>
+      <td data-tip={ type !== 'public' ? address.address : '' }>
+        <ReactTooltip
+          effect="solid"
+          className="text-left" />
         { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
-          <i
-            title="You don't own priv keys for this address"
-            className="fa fa-ban margin-left-10"></i>
+          <span>
+            <i
+              data-tip="You don't own priv keys for this address"
+              className="fa fa-ban margin-left-10"></i>
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
+          </span>
         }
       </td>
       <td>
@@ -64,7 +75,12 @@ export const AddressItemRender = function(address, type) {
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
-          <span title="Available amount to spend: 0"> (0)</span>
+          <span>
+            <span data-tip="Available amount to spend: 0"> (0)</span>
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
+          </span>
         }
       </td>
     </tr>
@@ -99,7 +115,7 @@ export const _ReceiveCoinTableRender = function() {
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-20 padding-bottom-15 push-right">
           { this.props.mode !== 'spv' &&
-            <div title="Display all addresses including not mine (ismine:false)">
+            <div data-tip="Display all addresses including not mine (ismine:false)">
               <label className="switch">
                 <input
                   type="checkbox"
@@ -112,9 +128,14 @@ export const _ReceiveCoinTableRender = function() {
               <div
                 className="toggle-label margin-right-15 pointer"
                 onClick={ this.toggleIsMine }>
-                Show all addresses
+                { translate('DASHBOARD.SHOW_ALL_ADDR') }
               </div>
             </div>
+          }
+          { this.props.mode !== 'spv' &&
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
           }
         </div>
       }

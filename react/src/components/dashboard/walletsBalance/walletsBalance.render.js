@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 import { translate } from '../../../translate/translate';
 import { formatValue } from '../../../util/formatValue';
 import Config from '../../../config';
@@ -39,9 +40,12 @@ const WalletsBalanceRender = function() {
                     </div>
                     <span
                       className="pull-right padding-top-10 font-size-22"
-                      title={ this.renderBalance('transparent') }>
+                      data-tip={ Config.roundValues ? this.renderBalance('transparent') : '' }>
                       { Config.roundValues ? formatValue(this.renderBalance('transparent')) : this.renderBalance('transparent') }
                     </span>
+                    <ReactTooltip
+                      effect="solid"
+                      className="text-left" />
                   </div>
                 </div>
               </div>
@@ -77,9 +81,12 @@ const WalletsBalanceRender = function() {
                     </div>
                     <span
                       className="pull-right padding-top-10 font-size-22"
-                      title={ this.renderBalance('interest') }>
+                      data-tip={ Config.roundValues ? this.renderBalance('interest') : '' }>
                       { Config.roundValues ? formatValue(this.renderBalance('interest')) : this.renderBalance('interest') }
                     </span>
+                    <ReactTooltip
+                      effect="solid"
+                      className="text-left" />
                   </div>
                 </div>
               </div>
@@ -97,9 +104,12 @@ const WalletsBalanceRender = function() {
                     </div>
                     <span
                       className="pull-right padding-top-10 font-size-22"
-                      title={ this.renderBalance('total') }>
+                      data-tip={ Config.roundValues ? this.renderBalance('total') : '' }>
                       { Config.roundValues ? formatValue(this.renderBalance('total')) : this.renderBalance('total') }
                     </span>
+                    <ReactTooltip
+                      effect="solid"
+                      className="text-left" />
                   </div>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import Spinner from '../spinner/spinner';
+import ReactTooltip from 'react-tooltip';
 
 export const _ClaimInterestTableRender = function() {
   const _transactionsList = this.state.transactionsList;
@@ -25,14 +26,17 @@ export const _ClaimInterestTableRender = function() {
           <td className="locktime center">
             { _transactionsList[i].locktime &&
               <i
-                title={ _transactionsList[i].locktime }
+                data-tip={ `Locktime is set to ${_transactionsList[i].locktime}` }
                 className="fa-check-circle green"></i>
             }
             { !_transactionsList[i].locktime &&
               <i
-                title={ _transactionsList[i].locktime }
+                data-tip={ `Locktime is unset! Your UTXO is not accruing interest.` }
                 className="fa-exclamation-circle red"></i>
             }
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
           </td>
         </tr>
       );

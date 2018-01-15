@@ -1,5 +1,6 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
+import ReactTooltip from 'react-tooltip';
 
 export const ImportKeyModalRender = function() {
   return (
@@ -118,7 +119,10 @@ export const ImportKeyModalRender = function() {
                       { translate('IMPORT_KEY.TRIGGER_RESCAN') }
                       <i
                         className="icon fa-question-circle settings-help"
-                        title={ translate('IMPORT_KEY.RESCAN_TIP') }></i>
+                        data-tip={ translate('IMPORT_KEY.RESCAN_TIP') }></i>
+                      <ReactTooltip
+                        effect="solid"
+                        className="text-left" />
                     </div>
                   </span>
                 </div>
