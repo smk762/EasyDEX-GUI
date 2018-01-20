@@ -2,6 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import mainWindow from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
+import Config from '../../../config';
 
 const NavbarRender = function() {
   return (
@@ -81,6 +82,13 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> Explorer
               </a>
             </li>*/ }
+            { Config.experimentalFeatures &&
+              <li className={ this.isSectionActive('tools') ? 'active nav-top-menu' : 'nav-top-menu' }>
+                <a onClick={ () => this.dashboardChangeSection('tools') }>
+                  <i className="site-menu-icon"></i> Tools
+                </a>
+              </li>
+            }
             { !navigator.onLine &&
               <li
                 className="nav-top-menu offline"
