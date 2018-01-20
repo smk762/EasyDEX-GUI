@@ -31,19 +31,22 @@ class Tools extends React.Component {
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.getBalance = this.getBalance.bind(this);
     this.getUnsignedTx = this.getUnsignedTx.bind(this);
-    this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
+    this.sendTx = this.sendTx.bind(this);
     this.closeQr = this.closeQr.bind(this);
   }
 
-  sendTx() {
-    let _txData = this.state.rawTx2Push.split(':');
+  sendTx(rawTx2Push) {
+    let _txData = rawTx2Push.split(':');
 
     console.warn(_txData);
 
     shepherdToolsPushTx(_txData[0], _txData[1])
     .then((res) => {
+      console.warn(res);
+
       this.setState({
         txPushResult: res.result,
+        rawTx2Push,
       });
     });
   }
@@ -104,12 +107,6 @@ class Tools extends React.Component {
           )
         );
       }
-    });
-  }
-
-  setRecieverFromScan(receiver) {
-    this.setState({
-      rawTx2Push: receiver,
     });
   }
 
@@ -188,7 +185,7 @@ class Tools extends React.Component {
               <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
                 <button
                   type="button"
-                  className="btn btn-info col-xs-1"
+                  className="btn btn-info col-sm-2"
                   onClick={ this.getBalance }>
                     Get balance
                 </button>
@@ -238,7 +235,11 @@ class Tools extends React.Component {
               { this.state.tx2qr &&
                 <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
                   <label className="control-label col-sm-1 no-padding-left">QR payload</label>
-                  <textarea rows="5" cols="20" className="col-sm-7">{ this.state.tx2qr }</textarea>
+                  <textarea
+                    rows="5"
+                    cols="20"
+                    className="col-sm-7"
+                    value={ this.state.tx2qr }></textarea>
                 </div>
               }
               { this.state.tx2qr &&
@@ -254,18 +255,19 @@ class Tools extends React.Component {
             </div>
           </div>
           { this.state.tx2qr &&
+            this.state.utxo.length < 4 &&
             <div className="offlinesig-qr">
-              <div className="margin-top-70 margin-bottom-70 center">
-                <div style={{ border: 'solid 2px red', display: 'inline-block', padding: '50px' }}>
+              <div className="margin-top-50 margin-bottom-70 center">
+                <div>
                   <QRCode
                     value={ this.state.tx2qr }
-                    size={ 640 } />
+                    size={ 560 } />
                 </div>
                 <button
                   type="button"
                   className="btn btn-primary col-sm-2"
                   onClick={ this.closeQr }>
-                    Make another tx
+                    Close
                 </button>
               </div>
             </div>
@@ -278,16 +280,28 @@ class Tools extends React.Component {
             <div className="col-sm-12 form-group form-material no-padding-left">
               <QRModal
                 mode="scan"
-                setRecieverFromScan={ this.setRecieverFromScan } />
+                setRecieverFromScan={ this.sendTx } />
             </div>
             { this.state.rawTx2Push &&
               <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
-                <textarea rows="5" cols="20" className="col-sm-7 no-padding-left">{ this.state.rawTx2Push }</textarea>
+                <textarea
+                  rows="5"
+                  cols="20"
+                  className="col-sm-7 no-padding-left"
+                  value={ this.state.rawTx2Push }></textarea>
               </div>
             }
             { this.state.txPushResult &&
               <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
-                { this.state.txPushResult }
+                { this.state.txPushResult.length === 64 &&
+                  <div>
+                    <div className="margin-bottom-15">{ this.state.rawTx2Push.split(':')[0].toUpperCase() } transaction pushed!</div>
+                    <div>TxID { this.state.txPushResult }</div>
+                  </div>
+                }
+                { this.state.txPushResult.length !== 64 &&
+                  <div>Error: { this.state.txPushResult }</div>
+                }
               </div>
             }
           </div>
