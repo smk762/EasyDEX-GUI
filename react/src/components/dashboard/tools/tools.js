@@ -26,6 +26,7 @@ class Tools extends React.Component {
       utxo: null,
       rawTx2Push: null,
       txPushResult: null,
+      string2qr: null,
     };
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
@@ -246,10 +247,10 @@ class Tools extends React.Component {
                 <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
                   <label className="control-label col-sm-2 no-padding-left">
                     UTXO count: { this.state.utxo.length }
-                    { this.state.utxo.length > 3 &&
-                      <span className="col-red margin-left-20">cant encode a qr tx larger than 3 utxos!</span>
-                    }
                   </label>
+                  { this.state.utxo.length > 3 &&
+                    <div className="col-red margin-left-20 margin-top-5">cant encode a qr tx larger than 3 utxos!</div>
+                  }
                 </div>
               }
             </div>
@@ -302,6 +303,29 @@ class Tools extends React.Component {
                 { this.state.txPushResult.length !== 64 &&
                   <div>Error: { this.state.txPushResult }</div>
                 }
+              </div>
+            }
+          </div>
+          <div className="row">
+            <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
+              <hr />
+              <h4 className="margin-top-20 no-padding-left">String to QR</h4>
+            </div>
+            <div className="col-sm-12 form-group form-material no-padding-left">
+              <input
+                type="text"
+                className="form-control col-sm-3"
+                name="string2qr"
+                value={ this.state.string2qr }
+                onChange={ this.updateInput }
+                placeholder="Type a string here"
+                autoComplete="off" />
+            </div>
+            { this.state.string2qr &&
+              <div className="col-sm-12 form-group form-material no-padding-left margin-top-30">
+                <QRCode
+                  value={ this.state.string2qr }
+                  size={ 320 } />
               </div>
             }
           </div>
