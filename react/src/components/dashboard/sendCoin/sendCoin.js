@@ -426,7 +426,8 @@ class SendCoin extends React.Component {
             this.state.amount * 100000000,
             this.state.sendTo,
             this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
-          ).then((sendPreflight) => {
+          )
+          .then((sendPreflight) => {
             if (sendPreflight &&
                 sendPreflight.msg === 'success') {
               this.setState(Object.assign({}, this.state, {

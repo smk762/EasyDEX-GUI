@@ -27,7 +27,7 @@ export function sendNativeTx(coin, _payload) {
       token: Config.token,
       params:
         (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
-        (_payload.substractFee ?
+        (_payload.subtractFee ?
           [
             _payload.sendTo,
             _payload.amount,
