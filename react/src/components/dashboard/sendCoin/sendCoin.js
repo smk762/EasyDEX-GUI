@@ -56,6 +56,25 @@ class SendCoin extends React.Component {
     this.isTransparentTx = this.isTransparentTx.bind(this);
     this.toggleSubtractFee = this.toggleSubtractFee.bind(this);
     this.isFullySynced = this.isFullySynced.bind(this);
+    this.setSendAmountAll = this.setSendAmountAll.bind(this);
+    this.setSendToSelf = this.setSendToSelf.bind(this);
+  }
+
+  setSendAmountAll() {
+    const _amount = this.state.amount;
+    const _amountSats = this.state.amount * 100000000;
+    const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
+    const _fees = mainWindow.spvFees;
+
+    this.setState({
+      amount: Number((0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)),
+    });
+  }
+
+  setSendToSelf() {
+    this.setState({
+      sendTo: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+    });
   }
 
   copyTXID(txid) {
