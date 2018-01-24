@@ -14,7 +14,7 @@ export const QRModalRender = function() {
       <div
         className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }
         id="QRModal">
-        <div className="modal-dialog modal-center modal-sm">
+        <div className={ `modal-dialog modal-center modal-${this.props.modalSize || 'sm' }` }>
           <div className="modal-content">
             <div className="modal-header bg-orange-a400 wallet-send-header">
               <button
@@ -23,7 +23,7 @@ export const QRModalRender = function() {
                 onClick={ this.closeModal }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white text-left">{ translate('INDEX.SCAN_QR_CODE') }</h4>
+              <h4 className="modal-title white text-left">{ this.props.title || translate('INDEX.SCAN_QR_CODE') }</h4>
             </div>
             <div className="modal-body">
               <div className="animsition vertical-align fade-in">
@@ -32,7 +32,7 @@ export const QRModalRender = function() {
                   className="page-content vertical-align-middle text-center">
                   <QRCode
                     value={ this.props.content }
-                    size={ 198 } />
+                    size={ Number(this.props.qrSize) || 198 } />
                   <p className="margin-top-10">
                     <a href=""
                       id={ 'saveModalImage' + this.props.content }
@@ -61,7 +61,7 @@ export const QRModalReaderRender = function() {
           className="btn btn-default"
           onClick={ this.openModal }>
           <i className="icon fa-qrcode"></i>
-          { translate('INDEX.SCAN_QRCODE_WEBCAM') }
+          { translate('INDEX.SCAN_QR_CODE') }
         </button>
         <div
           className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }

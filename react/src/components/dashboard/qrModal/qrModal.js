@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Store from '../../../store';
 import { translate } from '../../../translate/translate';
-import QrReader from 'react-qr-reader'
+import QrReader from 'react-qr-reader';
 import {
   QRModalRender,
   QRModalReaderRender,
@@ -72,15 +72,11 @@ class QRModal extends React.Component {
     const a = document.getElementById('saveModalImage' + this.props.content);
 
     a.href = dataURL;
-    a.download = this.props.content;
+    a.download = this.props.fileName || this.props.content;
   }
 
   render() {
-    if (this.props.mode === 'scan') {
-      return QRModalReaderRender.call(this);
-    } else {
-      return QRModalRender.call(this);
-    }
+    return this.props.mode === 'scan' ? QRModalReaderRender.call(this) : QRModalRender.call(this);
   }
 }
 

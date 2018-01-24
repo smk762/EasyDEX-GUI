@@ -2,6 +2,7 @@ import React from 'react';
 import { translate } from '../../translate/translate';
 import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
 import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchModal';
+import QRModal from '../dashboard/qrModal/qrModal';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
 
@@ -59,9 +60,9 @@ const LoginRender = function() {
             <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
                 type="password"
-                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 name="loginPassphrase"
                 ref="loginPassphrase"
+                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
                 onChange={ this.updateLoginPassPhraseInput }
                 onKeyDown={ (event) => this.handleKeydown(event) }
                 autoComplete="off"
@@ -81,6 +82,11 @@ const LoginRender = function() {
               <label
                 className="floating-label"
                 htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
+              <div className="qr-modal-login-block">
+                <QRModal
+                  mode="scan"
+                  setRecieverFromScan={ this.setRecieverFromScan } />
+              </div>
             </div>
             { this.state.loginPassPhraseSeedType &&
               <div
@@ -89,7 +95,6 @@ const LoginRender = function() {
                 <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
               </div>
             }
-
             { this.state.loginPassphrase &&
               this.state.enableEncryptSeed &&
               <div className="row">
@@ -369,7 +374,9 @@ const LoginRender = function() {
                 <button
                   className="copy-floating-label"
                   htmlFor="walletseed"
-                  onClick={ () => this.copyPassPhraseToClipboard() }>{ translate('INDEX.COPY') }</button>
+                  onClick={ () => this.copyPassPhraseToClipboard() }>
+                  { translate('INDEX.COPY') }
+                </button>
                 <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
                   <strong>{ translate('INDEX.WEAK_SEED') }</strong><br /><br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN') }<br />
@@ -400,6 +407,16 @@ const LoginRender = function() {
                 <label
                   className="floating-label"
                   htmlFor="rwalletseed">{ translate('INDEX.CONFIRM_SEED') }</label>
+                <button
+                  type="button"
+                  className="btn btn-success btn-block margin-top-20 btn-generate-qr">
+                  <QRModal
+                    qrSize="256"
+                    modalSize="md"
+                    title="Seed QR recovery"
+                    fileName="agama-seed"
+                    content={ this.state.randomSeed } />
+                </button>
               </div>
               <button
                 type="button"

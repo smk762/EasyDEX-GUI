@@ -56,7 +56,7 @@ export const _SendFormRender = function() {
             <button type="button"
               className="btn btn-default btn-send-self"
               onClick={ this.setSendToSelf }>
-              Self
+              { translate('SEND.SELF') }
             </button>
           }
           <label
@@ -78,7 +78,7 @@ export const _SendFormRender = function() {
             <button type="button"
               className="btn btn-default btn-send-self"
               onClick={ this.setSendAmountAll }>
-              All
+              { translate('SEND.ALL') }
             </button>
           }
           <label

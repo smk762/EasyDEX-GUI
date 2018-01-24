@@ -744,6 +744,8 @@ export const LANG_EN = {
     'DOWNLOAD': 'Download',
   },
   'SEND': {
+    'SELF': 'Self',
+    'ALL': 'All',
     'BAD_TXN_SPENT_ERR1': 'This particular error can happen in the following cases:',
     'BAD_TXN_SPENT_ERR2': 'Your machine\'s clock is not set properly',
     'BAD_TXN_SPENT_ERR3': 'SPV server is temporary out of sync. Try to switch over to another one.',

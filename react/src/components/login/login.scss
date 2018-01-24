@@ -233,3 +233,22 @@ option.login-option {
     color: #fff;
   }
 }
+
+.qrcode-modal + .modal {
+  a {
+    color: #fff;
+  }
+}
+
+.btn-generate-qr {
+  .qrcode-modal {
+    display: block;
+  }
+}
+
+.qr-modal-login-block {
+  .btn {
+    background: transparent;
+    color: #fff;
+  }
+}
