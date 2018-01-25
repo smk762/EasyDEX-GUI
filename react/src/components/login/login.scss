@@ -247,6 +247,10 @@ option.login-option {
 }
 
 .qr-modal-login-block {
+  position: absolute;
+  right: 0;
+  top: -50px;
+
   .btn {
     background: transparent;
     color: #fff;

@@ -167,3 +167,59 @@ export function shepherdToolsPushTx(network, rawtx) {
     });
   });
 }
+
+export function shepherdToolsWifToKP(coin, wif) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/wiftopub?coin=${coin}&wif=${wif}&token=${Config.token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdToolsWifToKP',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(!json.result ? 'error' : json);
+    });
+  });
+}
+
+export function shepherdToolsSeedToWif(seed, network, iguana) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/seedtowif`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        seed,
+        network,
+        iguana,
+        token: Config.token,
+      }),
+    })
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdToolsSeedToWif',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(!json.result ? 'error' : json);
+    });
+  });
+}

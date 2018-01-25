@@ -142,7 +142,7 @@ class Login extends React.Component {
 
   toggleShouldEncryptSeed() {
     this.setState({
-      shouldEncryptSeed: !this.state.shouldEncryptSeed
+      shouldEncryptSeed: !this.state.shouldEncryptSeed,
     });
   }
 
