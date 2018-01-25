@@ -52,6 +52,13 @@ export const _SendFormRender = function() {
       }
       <div className="row">
         <div className="col-xlg-12 form-group form-material">
+          { this.props.ActiveCoin.mode === 'spv' &&
+            <button type="button"
+              className="btn btn-default btn-send-self"
+              onClick={ this.setSendToSelf }>
+              { translate('SEND.SELF') }
+            </button>
+          }
           <label
             className="control-label"
             htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
@@ -67,6 +74,13 @@ export const _SendFormRender = function() {
             required />
         </div>
         <div className="col-lg-12 form-group form-material">
+          { this.props.ActiveCoin.mode === 'spv' &&
+            <button type="button"
+              className="btn btn-default btn-send-self"
+              onClick={ this.setSendAmountAll }>
+              { translate('SEND.ALL') }
+            </button>
+          }
           <label
             className="control-label"
             htmlFor="kmdWalletAmount">
@@ -353,7 +367,9 @@ export const SendRender = function() {
                       this.state.lastSendToResponse.raw.txid &&
                       <div>{ this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') }</div>
                     }
-                    { this.state.lastSendToResponse.raw.txid.indexOf('bad-txns-inputs-spent') > -1 &&
+                    { this.state.lastSendToResponse.raw &&
+                      this.state.lastSendToResponse.raw.txid &&
+                      this.state.lastSendToResponse.raw.txid.indexOf('bad-txns-inputs-spent') > -1 &&
                       <div className="margin-top-10">
                         { translate('SEND.BAD_TXN_SPENT_ERR1') }
                         <ul>

@@ -13,6 +13,7 @@ import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
 import Support from '../support/support';
+import Tools from '../tools/tools';
 import WalletsMain from '../walletsMain/walletsMain';
 import WalletsTxInfo from '../walletsTxInfo/walletsTxInfo';
 import CoindDownModal from '../coindDownModal/coindDownModal';
@@ -55,6 +56,9 @@ const DashboardRender = function() {
         }
         { this.isSectionActive('support') &&
           <Support />
+        }
+        { this.isSectionActive('tools') &&
+          <Tools />
         }
       </div>
     </div>

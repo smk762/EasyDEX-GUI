@@ -79,6 +79,7 @@ class Login extends React.Component {
     this.updateDecryptKey = this.updateDecryptKey.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
+    this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
   }
 
   // the setInterval handler for 'activeCoins'
@@ -91,6 +92,22 @@ class Login extends React.Component {
       displayLoginSettingsDropdown: false,
       displayLoginSettingsDropdownSection: sectionName,
     });
+  }
+
+  setRecieverFromScan(receiver) {
+    if (receiver) {
+      this.setState({
+        loginPassphrase: receiver,
+      });
+    } else {
+      Store.dispatch(
+        triggerToaster(
+          'Unable to recognize QR code',
+          'QR scan Error',
+          'error'
+        )
+      );
+    }
   }
 
   isCustomWalletSeed() {
@@ -125,7 +142,7 @@ class Login extends React.Component {
 
   toggleShouldEncryptSeed() {
     this.setState({
-      shouldEncryptSeed: !this.state.shouldEncryptSeed
+      shouldEncryptSeed: !this.state.shouldEncryptSeed,
     });
   }
 
