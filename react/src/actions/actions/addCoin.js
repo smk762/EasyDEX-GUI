@@ -39,7 +39,7 @@ export function activeHandle() {
           'Error',
           'error'
         )
-      )
+      );
     })
     .then(response => response.json())
     .then(json => {
@@ -150,7 +150,7 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       '-daemon=0',
       '-server',
       `-ac_name=${coin}`,
-      '-addnode=78.47.196.146',
+      coin === 'BEER' || coin === 'PIZZA' ? '-addnode=24.54.206.138' : '-addnode=78.47.196.146',
     ],
   };
 

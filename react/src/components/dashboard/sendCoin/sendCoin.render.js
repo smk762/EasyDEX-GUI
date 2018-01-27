@@ -53,7 +53,8 @@ export const _SendFormRender = function() {
       <div className="row">
         <div className="col-xlg-12 form-group form-material">
           { this.props.ActiveCoin.mode === 'spv' &&
-            <button type="button"
+            <button
+              type="button"
               className="btn btn-default btn-send-self"
               onClick={ this.setSendToSelf }>
               { translate('SEND.SELF') }
@@ -75,7 +76,8 @@ export const _SendFormRender = function() {
         </div>
         <div className="col-lg-12 form-group form-material">
           { this.props.ActiveCoin.mode === 'spv' &&
-            <button type="button"
+            <button
+              type="button"
               className="btn btn-default btn-send-self"
               onClick={ this.setSendAmountAll }>
               { translate('SEND.ALL') }

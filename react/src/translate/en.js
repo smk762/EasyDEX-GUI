@@ -845,6 +845,8 @@ export const LANG_EN = {
     'AXO': 'AXO (AXO)',
     'ETOMIC': 'ETOMIC (ETOMIC)',
     'BTCH': 'BTCH (BTCH)',
+    'BEER': 'BEER (Test coin)',
+    'PIZZA': 'PIZZA (Test coin)',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',

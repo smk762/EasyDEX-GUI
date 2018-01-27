@@ -22,12 +22,14 @@ const addCoinOptionsAC = () => {
     'wlc',
     'axo',
     'etomic',
-    'btch'
+    'btch',
+    'beer',
+    'pizza'
   ];
   let _items = [];
 
   for (let i = 0; i < _assetChains.length; i++) {
-    let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' ? 'spv|native' : 'native';
+    let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' && _assetChains[i] !== 'beer' && _assetChains[i] !== 'pizza' ? 'spv|native' : 'native';
 
     if (mainWindow.arch !== 'x64') {
       availableModes = 'spv';
