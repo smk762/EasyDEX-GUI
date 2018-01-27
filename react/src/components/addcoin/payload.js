@@ -24,6 +24,8 @@ export function checkAC(coinVal) {
 			coinVal === 'AXO' ||
 			coinVal === 'ETOMIC' ||
 			coinVal === 'BTCH' ||
+			coinVal === 'BEER' ||
+			coinVal === 'PIZZA' ||
 			coinVal === 'USD' ||
 			coinVal === 'RON' ||
 			coinVal === 'EUR' ||
@@ -118,7 +120,9 @@ export function checkCoinType(coin) {
 			coin === 'MNZ' ||
 			coin === 'AXO' ||
 			coin === 'ETOMIC' ||
-			coin === 'BTCH') {
+			coin === 'BTCH' ||
+			coin === 'BEER' ||
+			coin === 'PIZZA') {
 		return 'ac';
 	}
 
@@ -200,6 +204,12 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		BTCH: {
 			supply: 20998641,
+		},
+		BEER: {
+			supply: 100000000,
+		},
+		PIZZA: {
+			supply: 100000000,
 		},
 	};
 

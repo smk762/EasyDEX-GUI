@@ -663,14 +663,14 @@ class Tools extends React.Component {
                   <div className="col-sm-12 form-group form-material no-padding-left">
                     <label
                       className="control-label col-sm-1 no-padding-left"
-                      htmlFor="kmdWalletSendTo">Address</label>
+                      htmlFor="kmdWalletSendTo">WIF</label>
                     <input
                       type="text"
                       className="form-control col-sm-3"
                       name="w2wWif"
                       onChange={ this.updateInput }
                       value={ this.state.w2wWif }
-                      placeholder={ translate('SEND.ENTER_ADDRESS') }
+                      placeholder="Enter a WIF"
                       autoComplete="off"
                       required />
                   </div>
@@ -712,14 +712,14 @@ class Tools extends React.Component {
                   <div className="col-sm-12 form-group form-material no-padding-left">
                     <label
                       className="control-label col-sm-1 no-padding-left"
-                      htmlFor="kmdWalletSendTo">Address</label>
+                      htmlFor="kmdWalletSendTo">Passphrase</label>
                     <input
                       type="text"
                       className="form-control col-sm-3"
                       name="s2wSeed"
                       onChange={ this.updateInput }
                       value={ this.state.s2wSeed }
-                      placeholder={ translate('SEND.ENTER_ADDRESS') }
+                      placeholder="Enter a passphrase"
                       autoComplete="off"
                       required />
                   </div>

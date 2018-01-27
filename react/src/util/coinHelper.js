@@ -6,6 +6,14 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'BEER':
+      coinlogo = 'beer';
+      coinname = 'BEER (Test coin)';
+      break;
+    case 'PIZZA':
+      coinlogo = 'pizza';
+      coinname = 'PIZZA (Test coin)';
+      break;
     case 'XMY':
       coinlogo = 'xmy';
       coinname = 'Myriad';

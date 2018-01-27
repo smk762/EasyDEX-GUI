@@ -24,7 +24,6 @@ const LoginRender = function() {
               height="160"
               alt="SuperNET Agama" />
           </div>
-
           <div className="login-settings-dropdown margin-bottom-30">
             <div>
               <span
@@ -207,7 +206,9 @@ const LoginRender = function() {
               </button>
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect hide"
-                id="logint-another-wallet">{ translate('INDEX.LOGIN_ANOTHER_WALLET') }</button>
+                id="logint-another-wallet">
+                { translate('INDEX.LOGIN_ANOTHER_WALLET') }
+              </button>
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
                 id="register-btn"
@@ -312,7 +313,7 @@ const LoginRender = function() {
                       <div
                         className="toggle-label white"
                         onClick={ () => this.toggleCustomWalletSeed() }>
-                          { translate('LOGIN.CUSTOM_WALLET_SEED') }
+                        { translate('LOGIN.CUSTOM_WALLET_SEED') }
                       </div>
                     </span>
                   </div>
@@ -421,12 +422,16 @@ const LoginRender = function() {
               <button
                 type="button"
                 className="btn btn-primary btn-block"
-                onClick={ this.handleRegisterWallet }>{ translate('INDEX.REGISTER') }</button>
+                onClick={ this.handleRegisterWallet }>
+                { translate('INDEX.REGISTER') }
+              </button>
               <div className="form-group form-material floating">
                 <button
                   className="btn btn-lg btn-flat btn-block waves-effect"
                   id="register-back-btn"
-                  onClick={ () => this.updateActiveLoginSection('login') }>{ translate('INDEX.BACK_TO_LOGIN') }</button>
+                  onClick={ () => this.updateActiveLoginSection('login') }>
+                  { translate('INDEX.BACK_TO_LOGIN') }
+                </button>
               </div>
             </div>
           </div>
