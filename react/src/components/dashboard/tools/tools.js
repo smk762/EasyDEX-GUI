@@ -11,6 +11,8 @@ import {
   shepherdToolsSeedToWif,
   shepherdToolsWifToKP,
   shepherdElectrumListunspent,
+  shepherdCliPromise,
+  shepherdElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import QRCode from 'qrcode.react';
@@ -43,6 +45,12 @@ class Tools extends React.Component {
       balanceAddr: '',
       balanceCoin: '',
       balanceResult: null,
+      utxoSplitCoin: 'BEER',
+      utxoSplitList: null,
+      utxoSplitPairsCount: 1,
+      utxoSplitPairs: '10,0.002',
+      utxoSplitRawtx: null,
+      utxoSplitPushResult: null,
     };
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
@@ -56,6 +64,114 @@ class Tools extends React.Component {
     this.getBalanceAlt = this.getBalanceAlt.bind(this);
     this.getUtxos = this.getUtxos.bind(this);
     this.toggleS2wIsIguana = this.toggleS2wIsIguana.bind(this);
+    this.getUtxoSplit = this.getUtxoSplit.bind(this);
+    this.splitUtxo = this.splitUtxo.bind(this);
+  }
+
+  splitUtxo() {
+    let largestUTXO = { amount: 0 };
+
+    for (let i = 0; i < this.state.utxoSplitList.length; i++) {
+      if (Number(this.state.utxoSplitList[i].amount) > Number(largestUTXO.amount)) {
+        largestUTXO = this.state.utxoSplitList[i];
+      }
+    }
+
+    console.warn(`largest utxo ${largestUTXO.amount}`);
+    console.warn(`largest utxo ${largestUTXO.amount}`);
+
+    const utxoSize = largestUTXO.amount;
+    const targetSizes = this.state.utxoSplitPairs.split(',');
+    const wif = '';
+    const address = '';
+    let totalOutSize = 0;
+    let _targets = [];
+
+    console.warn(`total utxos ${this.state.utxoSplitPairsCount * targetSizes.length}`);
+    console.warn(`total pairs ${this.state.utxoSplitPairsCount}`);
+    console.warn(`utxo size ${utxoSize}`);
+    console.warn(`utxo sizes`);
+    console.warn(targetSizes);
+
+    for (let i = 0; i < this.state.utxoSplitPairsCount; i++) {
+      console.warn(`vout ${i} ${targetSizes[0]}`);
+      console.warn(`vout ${i + 1} ${targetSizes[1]}`);
+      _targets.push(Number(targetSizes[0]) * 100000000);
+      _targets.push(Number(targetSizes[1]) * 100000000);
+      totalOutSize += Number(targetSizes[0]) + Number(targetSizes[1]);
+    }
+
+    console.warn(`total out size ${totalOutSize}`);
+    console.warn(`change ${utxoSize - totalOutSize}`);
+
+    const payload = {
+      wif,
+      network: 'komodo',
+      targets: _targets,
+      utxo: [largestUTXO],
+      changeAddress: address,
+      outputAddress: address,
+      change: Math.floor(Number(utxoSize - totalOutSize) * 100000000) - 10000, // 10k sat fee
+    };
+
+    shepherdElectrumSplitUtxoPromise(payload)
+    .then((res) => {
+      console.warn(res);
+
+      if (res.msg === 'success') {
+        //this.setState({
+        //  utxoSplitRawtx: res.result,
+        //});
+
+        shepherdCliPromise(null, this.state.utxoSplitCoin, 'sendrawtransaction', [res.result])
+        .then((res) => {
+          console.warn(res);
+
+          if (!res.error) {
+            this.setState({
+              utxoSplitPushResult: res.result,
+            });
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                res.result,
+                'Split UTXO error',
+                'error'
+              )
+            );
+          }
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            res.result,
+            'Split UTXO error',
+            'error'
+          )
+        );
+      }
+    });
+  }
+
+  getUtxoSplit() {
+    shepherdCliPromise(null, this.state.utxoSplitCoin, 'listunspent')
+    .then((res) => {
+      console.warn(res);
+
+      if (!res.error) {
+        this.setState({
+          utxoSplitList: res.result,
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            res.result,
+            'Get UTXO error',
+            'error'
+          )
+        );
+      }
+    });
   }
 
   getUtxos() {
@@ -325,6 +441,53 @@ class Tools extends React.Component {
     );
   }
 
+  renderUTXOSplitResponse() {
+    const _utxos = this.state.utxoSplitList;
+    let _items = [];
+    console.warn(_utxos);
+
+    if (_utxos &&
+        _utxos.length) {
+      for (let i = 0; i < _utxos.length; i++) {
+        _items.push(
+          <tr key={ `tools-utxos-${i}` }>
+            <td>{ _utxos[i].amount }</td>
+            <td>{ _utxos[i].address }</td>
+            <td>{ _utxos[i].confirmations }</td>
+            <td>{ _utxos[i].vout }</td>
+            <td>{ _utxos[i].txid }</td>
+          </tr>
+        );
+      }
+    }
+
+    return (
+      <table className="table table-hover dataTable table-striped">
+        <thead>
+          <tr>
+            <th>Amount</th>
+            <th>Address</th>
+            <th>Confirmations</th>
+            <th>Vout</th>
+            <th>TxID</th>
+          </tr>
+        </thead>
+        <tbody>
+        { _items }
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Amount</th>
+            <th>Address</th>
+            <th>Confirmations</th>
+            <th>Vout</th>
+            <th>TxID</th>
+          </tr>
+        </tfoot>
+      </table>
+    );
+  }
+
   render() {
     return (
       <div className="page margin-left-0">
@@ -367,6 +530,11 @@ class Tools extends React.Component {
                   className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('utxo') }>
                   UTXO *
+                </button>
+                <button type="button"
+                  className="btn btn-default margin-left-20 hide"
+                  onClick={ () => this.setActiveSection('utxo-split') }>
+                  Split UTXO **
                 </button>
                 <div className="margin-top-10">* Electrum</div>
               </div>
@@ -754,6 +922,85 @@ class Tools extends React.Component {
                       <div className="margin-top-10">
                         <strong>Pub:</strong> { this.state.s2wResult.keys.pub }
                       </div>
+                    </div>
+                  }
+                </div>
+              }
+              { this.state.activeSection === 'utxo-split' &&
+                <div className="row margin-left-10">
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
+                    <label
+                      className="control-label col-sm-1 no-padding-left"
+                      htmlFor="kmdWalletSendTo">Coin</label>
+                    <input
+                      type="text"
+                      className="form-control col-sm-3"
+                      name="utxoSplitCoin"
+                      onChange={ this.updateInput }
+                      value={ this.state.utxoSplitCoin }
+                      placeholder="Coin"
+                      autoComplete="off"
+                      required />
+                  </div>
+                  <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
+                    <button
+                      type="button"
+                      className="btn btn-info col-sm-2"
+                      onClick={ this.getUtxoSplit }>
+                        Get UTXO(s)
+                    </button>
+                  </div>
+                  <hr />
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
+                    <label
+                      className="control-label col-sm-1 no-padding-left"
+                      htmlFor="kmdWalletSendTo">Pair sizes</label>
+                    <input
+                      type="text"
+                      className="form-control col-sm-3"
+                      name="utxoSplitPairs"
+                      onChange={ this.updateInput }
+                      value={ this.state.utxoSplitPairs }
+                      placeholder="Pair sizes"
+                      autoComplete="off"
+                      required />
+                  </div>
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
+                    <label
+                      className="control-label col-sm-1 no-padding-left"
+                      htmlFor="kmdWalletSendTo">Number of pairs</label>
+                    <input
+                      type="text"
+                      className="form-control col-sm-3"
+                      name="utxoSplitPairsCount"
+                      onChange={ this.updateInput }
+                      value={ this.state.utxoSplitPairsCount }
+                      placeholder="Pairs"
+                      autoComplete="off"
+                      required />
+                  </div>
+                  <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
+                    <button
+                      type="button"
+                      className="btn btn-info col-sm-2"
+                      onClick={ this.splitUtxo }>
+                        Split UTXO(s)
+                    </button>
+                  </div>
+                  { this.state.utxoSplitList &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      { /*this.renderUTXOSplitResponse()*/ }
+                      Total UTXO: { this.state.utxoSplitList.length }
+                    </div>
+                  }
+                  { this.state.utxoSplitRawtx &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      Rawtx: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoSplitRawtx }</div>
+                    </div>
+                  }
+                  { this.state.utxoSplitPushResult &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      TXID: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoSplitPushResult }</div>
                     </div>
                   }
                 </div>
