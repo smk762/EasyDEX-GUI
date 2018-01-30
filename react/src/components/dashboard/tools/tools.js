@@ -17,6 +17,7 @@ import {
 import Store from '../../../store';
 import QRCode from 'qrcode.react';
 import QRModal from '../qrModal/qrModal';
+import { isKomodoCoin } from '../../../util/coinHelper';
 
 class Tools extends React.Component {
   constructor() {
@@ -32,25 +33,45 @@ class Tools extends React.Component {
       rawTx2Push: null,
       txPushResult: null,
       string2qr: null,
+      // seed 2 wif
       s2wSeed: '',
       s2wCoin: '',
       s2wisIguana: true,
       s2wResult: null,
+      // wif 2 wif
       w2wWif: '',
       w2wCoin: '',
       w2wResult: null,
+      // utxo list
       utxoAddr: '',
       utxoCoin: '',
       utxoResult: null,
+      // balance
       balanceAddr: '',
       balanceCoin: '',
       balanceResult: null,
-      utxoSplitCoin: 'BEER',
+      // utxo split
+      utxoSplitLargestUtxo: null,
+      utxoSplitAddress: null,
+      utxoSplitWif: null,
+      utxoSplitSeed: '',
+      utxoSplitCoin: '',
       utxoSplitList: null,
       utxoSplitPairsCount: 1,
       utxoSplitPairs: '10,0.002',
       utxoSplitRawtx: null,
       utxoSplitPushResult: null,
+      utxoSplitShowUtxoList: false,
+      // utxo merge
+      utxoMergeAddress: null,
+      utxoMergeWif: null,
+      utxoMergeSeed: '',
+      utxoMergeCoin: '',
+      utxoMergeUtxoNum: 10,
+      utxoMergeRawtx: null,
+      utxoMergeList: null,
+      utxoMergePushResult: null,
+      utxoMergeShowUtxoList: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
@@ -66,6 +87,106 @@ class Tools extends React.Component {
     this.toggleS2wIsIguana = this.toggleS2wIsIguana.bind(this);
     this.getUtxoSplit = this.getUtxoSplit.bind(this);
     this.splitUtxo = this.splitUtxo.bind(this);
+    this.getUtxoMerge = this.getUtxoMerge.bind(this);
+    this.mergeUtxo = this.mergeUtxo.bind(this);
+    this.toggleMergeUtxoList = this.toggleMergeUtxoList.bind(this);
+    this.toggleSplitUtxoList = this.toggleSplitUtxoList.bind(this);
+  }
+
+  toggleMergeUtxoList() {
+    this.setState({
+      utxoMergeShowUtxoList: !this.state.utxoMergeShowUtxoList,
+    });
+  }
+
+  toggleSplitUtxoList() {
+    this.setState({
+      utxoSplitShowUtxoList: !this.state.utxoSplitShowUtxoList,
+    });
+  }
+
+  mergeUtxo() {
+    const wif = this.state.utxoMergeWif;
+    const address = this.state.utxoMergeAddress;
+    const utxoNum = this.state.utxoMergeUtxoNum;
+    let totalOutSize = 0;
+    let _utxos = [];
+    let _interest = 0;
+
+    for (let i = 0; i < utxoNum; i++) {
+      console.warn(`vout ${i} ${this.state.utxoMergeList[i].amount}`);
+      _utxos.push(JSON.parse(JSON.stringify(this.state.utxoMergeList[i])));
+      totalOutSize += Number(this.state.utxoMergeList[i].amount);
+    }
+
+    for (let i = 0; i < _utxos.length; i++) {
+      _utxos[i].amount = Number(_utxos[i].amount) * 100000000;
+      _utxos[i].interest = Number(_utxos[i].interest) * 100000000;
+      _interest += _utxos[i].interest;
+    }
+
+    console.warn(`total out size ${totalOutSize}`);
+    console.warn(`interest ${_interest}`);
+
+    const payload = {
+      wif,
+      network: 'komodo',
+      targets: [Math.floor(totalOutSize * 100000000) - 10000 + _interest],
+      utxo: _utxos,
+      changeAddress: address,
+      outputAddress: address,
+      change: 0,
+    };
+
+    console.log(payload);
+
+    shepherdElectrumSplitUtxoPromise(payload)
+    .then((res) => {
+      console.warn(res);
+
+      if (res.msg === 'success') {
+        const _coin = this.state.utxoMergeCoin.split('|');
+
+        shepherdCliPromise(
+          null,
+          _coin[0],
+          'sendrawtransaction',
+          [res.result]
+        )
+        .then((res) => {
+          console.warn(res);
+
+          if (!res.error) {
+            this.setState({
+              utxoMergePushResult: res.result,
+            });
+            Store.dispatch(
+              triggerToaster(
+                'Merge success',
+                'UTXO',
+                'success'
+              )
+            );
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                res.result,
+                'Split UTXO error',
+                'error'
+              )
+            );
+          }
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            res.result,
+            'Split UTXO error',
+            'error'
+          )
+        );
+      }
+    });
   }
 
   splitUtxo() {
@@ -82,27 +203,28 @@ class Tools extends React.Component {
 
     const utxoSize = largestUTXO.amount;
     const targetSizes = this.state.utxoSplitPairs.split(',');
-    const wif = '';
-    const address = '';
+    const wif = this.state.utxoSplitWif;
+    const address = this.state.utxoSplitAddress;
+    const pairsCount = this.state.utxoSplitPairsCount;
     let totalOutSize = 0;
     let _targets = [];
 
-    console.warn(`total utxos ${this.state.utxoSplitPairsCount * targetSizes.length}`);
-    console.warn(`total pairs ${this.state.utxoSplitPairsCount}`);
+    console.warn(`total utxos ${pairsCount * targetSizes.length}`);
+    console.warn(`total pairs ${pairsCount}`);
     console.warn(`utxo size ${utxoSize}`);
     console.warn(`utxo sizes`);
     console.warn(targetSizes);
 
-    for (let i = 0; i < this.state.utxoSplitPairsCount; i++) {
-      console.warn(`vout ${i} ${targetSizes[0]}`);
-      console.warn(`vout ${i + 1} ${targetSizes[1]}`);
-      _targets.push(Number(targetSizes[0]) * 100000000);
-      _targets.push(Number(targetSizes[1]) * 100000000);
-      totalOutSize += Number(targetSizes[0]) + Number(targetSizes[1]);
+    for (let i = 0; i < pairsCount; i++) {
+      for (let j = 0; j < targetSizes.length; j++) {
+        console.warn(`vout ${_targets.length} ${targetSizes[j]}`);
+        _targets.push(Number(targetSizes[j]) * 100000000);
+        totalOutSize += Number(targetSizes[j]);
+      }
     }
 
     console.warn(`total out size ${totalOutSize}`);
-    console.warn(`change ${utxoSize - totalOutSize}`);
+    console.warn(`change ${Math.floor(Number(utxoSize - totalOutSize)) - 0.0001 + (largestUTXO.interest)}`);
 
     const payload = {
       wif,
@@ -111,19 +233,25 @@ class Tools extends React.Component {
       utxo: [largestUTXO],
       changeAddress: address,
       outputAddress: address,
-      change: Math.floor(Number(utxoSize - totalOutSize) * 100000000) - 10000, // 10k sat fee
+      change: Math.floor(Number(utxoSize - totalOutSize) * 100000000) - 10000 + (largestUTXO.interest * 100000000), // 10k sat fee
     };
+
+    console.warn(payload);
+    console.warn(largestUTXO);
 
     shepherdElectrumSplitUtxoPromise(payload)
     .then((res) => {
       console.warn(res);
 
       if (res.msg === 'success') {
-        //this.setState({
-        //  utxoSplitRawtx: res.result,
-        //});
+        const _coin = this.state.utxoSplitCoin.split('|');
 
-        shepherdCliPromise(null, this.state.utxoSplitCoin, 'sendrawtransaction', [res.result])
+        shepherdCliPromise(
+          null,
+          _coin[0],
+          'sendrawtransaction',
+          [res.result]
+        )
         .then((res) => {
           console.warn(res);
 
@@ -131,6 +259,13 @@ class Tools extends React.Component {
             this.setState({
               utxoSplitPushResult: res.result,
             });
+            Store.dispatch(
+              triggerToaster(
+                'Split success',
+                'UTXO',
+                'success'
+              )
+            );
           } else {
             Store.dispatch(
               triggerToaster(
@@ -154,19 +289,136 @@ class Tools extends React.Component {
   }
 
   getUtxoSplit() {
-    shepherdCliPromise(null, this.state.utxoSplitCoin, 'listunspent')
-    .then((res) => {
-      console.warn(res);
+    const _coin = this.state.utxoSplitCoin.split('|');
 
-      if (!res.error) {
-        this.setState({
-          utxoSplitList: res.result,
+    shepherdToolsSeedToWif(
+      this.state.utxoSplitSeed,
+      'KMD',
+      true
+    )
+    .then((seed2kpRes) => {
+      if (seed2kpRes.msg === 'success') {
+        shepherdCliPromise(null, _coin[0], 'listunspent')
+        .then((res) => {
+          // console.warn(res);
+
+          if (!res.error) {
+            const _utxoList = res.result;
+            let largestUTXO = 0;
+
+            if (_utxoList &&
+                _utxoList.length) {
+              let _mineUtxo = [];
+
+              for (let i = 0; i < _utxoList.length; i++) {
+                if (_utxoList[i].spendable &&
+                    seed2kpRes.result.keys.pub === _utxoList[i].address) {
+                  _mineUtxo.push(_utxoList[i]);
+                }
+              }
+
+              for (let i = 0; i < _mineUtxo.length; i++) {
+                if (Number(_mineUtxo[i].amount) > Number(largestUTXO)) {
+                  largestUTXO = _mineUtxo[i].amount;
+                }
+              }
+
+              this.setState({
+                utxoSplitList: _mineUtxo,
+                utxoSplitLargestUtxo: largestUTXO,
+                utxoSplitAddress: seed2kpRes.result.keys.pub,
+                utxoSplitWif: seed2kpRes.result.keys.priv,
+              });
+            } else {
+              Store.dispatch(
+                triggerToaster(
+                  res.result,
+                  'Split UTXO error',
+                  'error'
+                )
+              );
+            }
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                res.result,
+                'Get UTXO error',
+                'error'
+              )
+            );
+          }
         });
       } else {
         Store.dispatch(
           triggerToaster(
-            res.result,
-            'Get UTXO error',
+            seed2kpRes.result,
+            'Seed to wif error',
+            'error'
+          )
+        );
+      }
+    });
+  }
+
+  getUtxoMerge() {
+    const _coin = this.state.utxoMergeCoin.split('|');
+
+    shepherdToolsSeedToWif(
+      this.state.utxoMergeSeed,
+      'KMD',
+      true
+    )
+    .then((seed2kpRes) => {
+      if (seed2kpRes.msg === 'success') {
+        shepherdCliPromise(null, _coin[0], 'listunspent')
+        .then((res) => {
+          // console.warn(res);
+
+          if (!res.error) {
+            const _utxoList = res.result;
+            let largestUTXO = 0;
+
+            if (_utxoList &&
+                _utxoList.length) {
+              let _mineUtxo = [];
+
+              for (let i = 0; i < _utxoList.length; i++) {
+                if (_utxoList[i].spendable &&
+                    seed2kpRes.result.keys.pub === _utxoList[i].address) {
+                  _mineUtxo.push(_utxoList[i]);
+                }
+              }
+
+              this.setState({
+                utxoMergeList: _mineUtxo,
+                utxoMergeAddress: seed2kpRes.result.keys.pub,
+                utxoMergeWif: seed2kpRes.result.keys.priv,
+                utxoMergeUtxoNum: _mineUtxo.length,
+              });
+            } else {
+              Store.dispatch(
+                triggerToaster(
+                  'Utxo Merge Error',
+                  'No valid UTXO',
+                  'error'
+                )
+              );
+            }
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                res.result,
+                'Get UTXO error',
+                'error'
+              )
+            );
+          }
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            seed2kpRes.result,
+            'Seed to wif error',
             'error'
           )
         );
@@ -388,6 +640,29 @@ class Tools extends React.Component {
     });
   }
 
+  openExplorerWindow(txid, coin) {
+    const url = `http://${coin}.explorer.supernet.org/tx/${txid}`;
+    const remote = window.require('electron').remote;
+    const BrowserWindow = remote.BrowserWindow;
+
+    const externalWindow = new BrowserWindow({
+      width: 1280,
+      height: 800,
+      title: `${translate('INDEX.LOADING')}...`,
+      icon: remote.getCurrentWindow().iguanaIcon,
+      webPreferences: {
+        nodeIntegration: false,
+      },
+    });
+
+    externalWindow.loadURL(url);
+    externalWindow.webContents.on('did-finish-load', () => {
+      setTimeout(() => {
+        externalWindow.show();
+      }, 40);
+    });
+  }
+
   renderUTXOResponse() {
     const _utxos = this.state.utxoResult;
     const _coin = this.state.utxoCoin.split('|');
@@ -441,10 +716,9 @@ class Tools extends React.Component {
     );
   }
 
-  renderUTXOSplitResponse() {
-    const _utxos = this.state.utxoSplitList;
+  renderUTXOSplitMergeResponse(type) {
+    const _utxos = type === 'merge' ? this.state.utxoMergeList : this.state.utxoSplitList;
     let _items = [];
-    console.warn(_utxos);
 
     if (_utxos &&
         _utxos.length) {
@@ -496,52 +770,68 @@ class Tools extends React.Component {
             <div className="col-sm-12 no-padding-left">
               <h2>Tools</h2>
               <div className="margin-top-20">
-                <button type="button"
+                <button
+                  type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('offlinesig-create') }>
                   Offline signing create
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('offlinesig-scan') }>
                   Offline signing scan
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('string2qr') }>
                   String to QR
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('seed2kp') }>
                   Seed to key pair
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('wif2wif') }>
                   WIF to WIF
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('balance') }>
                   Balance *
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('utxo') }>
                   UTXO *
                 </button>
-                <button type="button"
-                  className="btn btn-default margin-left-20 hide"
+                <button
+                  type="button"
+                  className="btn btn-default margin-left-20"
                   onClick={ () => this.setActiveSection('utxo-split') }>
                   Split UTXO **
                 </button>
-                <div className="margin-top-10">* Electrum</div>
+                <button
+                  type="button"
+                  className="btn btn-default margin-left-20"
+                  onClick={ () => this.setActiveSection('utxo-merge') }>
+                  Merge UTXO **
+                </button>
+                <div className="margin-top-10">* Electrum, ** Native</div>
               </div>
               <hr />
               { this.state.activeSection === 'offlinesig-create' &&
                 <div className="row margin-left-10">
-                  <h4 className="margin-top-20">Offline Transaction Signing</h4>
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>Offline Transaction Signing</h4>
+                  </div>
                   <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
                     <label
                       className="control-label col-sm-1 no-padding-left"
@@ -662,8 +952,8 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'offlinesig-scan' &&
                 <div className="row margin-left-10">
-                  <div className="col-sm-12 form-group form-material no-padding-left">
-                    <h4 className="margin-top-20 no-padding-left">Push QR transaction</h4>
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>Push QR transaction</h4>
                   </div>
                   <div className="col-sm-12 form-group form-material no-padding-left">
                     <QRModal
@@ -698,8 +988,8 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'string2qr' &&
                 <div className="row margin-left-10">
-                  <div className="col-sm-12 form-group form-material no-padding-left">
-                    <h4 className="margin-top-20 no-padding-left">String to QR</h4>
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>String to QR</h4>
                   </div>
                   <div className="col-sm-12 form-group form-material no-padding-left">
                     <input
@@ -722,6 +1012,9 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'balance' &&
                 <div className="row margin-left-10">
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>Get balance</h4>
+                  </div>
                   <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
                     <label
                       className="control-label col-sm-1 no-padding-left"
@@ -771,6 +1064,9 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'utxo' &&
                 <div className="row margin-left-10">
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>Get UTXO list</h4>
+                  </div>
                   <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
                     <label
                       className="control-label col-sm-1 no-padding-left"
@@ -815,6 +1111,9 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'wif2wif' &&
                 <div className="row margin-left-10">
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>WIF to key pair (wif, pub)</h4>
+                  </div>
                   <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
                     <label
                       className="control-label col-sm-1 no-padding-left"
@@ -864,6 +1163,9 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'seed2kp' &&
                 <div className="row margin-left-10">
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>Seed to key pair (wif, pub)</h4>
+                  </div>
                   <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
                     <label
                       className="control-label col-sm-1 no-padding-left"
@@ -928,21 +1230,51 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'utxo-split' &&
                 <div className="row margin-left-10">
-                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>Split UTXO</h4>
+                  </div>
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-50">
                     <label
                       className="control-label col-sm-1 no-padding-left"
                       htmlFor="kmdWalletSendTo">Coin</label>
+                    <Select
+                      name="utxoSplitCoin"
+                      className="col-sm-3"
+                      value={ this.state.utxoSplitCoin }
+                      onChange={ (event) => this.updateSelectedCoin(event, 'utxoSplitCoin') }
+                      optionRenderer={ this.renderCoinOption }
+                      valueRenderer={ this.renderCoinOption }
+                      options={ [{
+                        label: 'Komodo (KMD)',
+                        icon: 'KMD',
+                        value: `KMD|native`,
+                      }].concat(addCoinOptionsAC()) } />
+                  </div>
+                  <div className="col-sm-12 form-group form-material no-padding-left">
+                    <label
+                      className="control-label col-sm-1 no-padding-left"
+                      htmlFor="kmdWalletSendTo">Seed</label>
                     <input
                       type="text"
                       className="form-control col-sm-3"
-                      name="utxoSplitCoin"
+                      name="utxoSplitSeed"
                       onChange={ this.updateInput }
-                      value={ this.state.utxoSplitCoin }
-                      placeholder="Coin"
+                      value={ this.state.utxoSplitSeed }
+                      placeholder="Enter a seed"
                       autoComplete="off"
                       required />
                   </div>
-                  <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
+                  { this.state.utxoSplitAddress &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      Pub: { this.state.utxoSplitAddress }
+                    </div>
+                  }
+                  { this.state.utxoSplitAddress &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      WIF: { this.state.utxoSplitWif }
+                    </div>
+                  }
+                  <div className="col-sm-12 form-group no-padding-left margin-top-20 padding-bottom-10">
                     <button
                       type="button"
                       className="btn btn-info col-sm-2"
@@ -950,24 +1282,50 @@ class Tools extends React.Component {
                         Get UTXO(s)
                     </button>
                   </div>
-                  <hr />
-                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
+                  { this.state.utxoSplitList &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      { /*this.renderUTXOSplitResponse()*/ }
+                      <div>Total UTXO: { this.state.utxoSplitList.length }</div>
+                      <div>Largest UTXO: { this.state.utxoSplitLargestUtxo }</div>
+                    </div>
+                  }
+                  <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={ this.state.utxoSplitShowUtxoList } />
+                      <div
+                        className="slider"
+                        onClick={ this.toggleSplitUtxoList }></div>
+                    </label>
+                    <div
+                      className="toggle-label margin-right-15 pointer iguana-core-toggle"
+                      onClick={ this.toggleSplitUtxoList }>
+                      Show UTXO list
+                    </div>
+                  </div>
+                  { this.state.utxoSplitShowUtxoList &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      { this.renderUTXOSplitMergeResponse('split') }
+                    </div>
+                  }
+                  <div className="col-sm-12 form-group form-material no-padding-left margin-top-20 padding-bottom-20">
                     <label
-                      className="control-label col-sm-1 no-padding-left"
-                      htmlFor="kmdWalletSendTo">Pair sizes</label>
+                      className="control-label col-sm-2 no-padding-left"
+                      htmlFor="kmdWalletSendTo">UTXO sizes</label>
                     <input
                       type="text"
                       className="form-control col-sm-3"
                       name="utxoSplitPairs"
                       onChange={ this.updateInput }
                       value={ this.state.utxoSplitPairs }
-                      placeholder="Pair sizes"
+                      placeholder="UTXO sized"
                       autoComplete="off"
                       required />
                   </div>
-                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
+                  <div className="col-sm-12 form-group form-material no-padding-left padding-top-20 padding-bottom-20">
                     <label
-                      className="control-label col-sm-1 no-padding-left"
+                      className="control-label col-sm-2 no-padding-left"
                       htmlFor="kmdWalletSendTo">Number of pairs</label>
                     <input
                       type="text"
@@ -983,24 +1341,164 @@ class Tools extends React.Component {
                     <button
                       type="button"
                       className="btn btn-info col-sm-2"
+                      onClick={ this.splitUtxoApproximate }>
+                        Calc total output size
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-info col-sm-2 margin-left-40"
                       onClick={ this.splitUtxo }>
                         Split UTXO(s)
                     </button>
                   </div>
-                  { this.state.utxoSplitList &&
+                  { this.state.splitUtxoApproximateVal &&
                     <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-                      { /*this.renderUTXOSplitResponse()*/ }
-                      Total UTXO: { this.state.utxoSplitList.length }
+                      Total out size: { this.state.splitUtxoApproximateVal }
                     </div>
                   }
-                  { this.state.utxoSplitRawtx &&
+                  {
+                    /*this.state.utxoSplitRawtx &&
                     <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
                       Rawtx: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoSplitRawtx }</div>
-                    </div>
+                    </div>*/
                   }
                   { this.state.utxoSplitPushResult &&
                     <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
                       TXID: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoSplitPushResult }</div>
+                      { isKomodoCoin(this.state.utxoSplitCoin.split('|')[0]) &&
+                        <div className="margin-top-10">
+                          <button
+                            type="button"
+                            className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                            onClick={ () => this.openExplorerWindow(this.state.utxoSplitPushResult, this.state.utxoSplitCoin.split('|')[0]) }>
+                            <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.state.utxoSplitCoin.split('|')[0]) }
+                          </button>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+              { this.state.activeSection === 'utxo-merge' &&
+                <div className="row margin-left-10">
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
+                    <h4>Merge UTXO</h4>
+                  </div>
+                  <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-50">
+                    <label
+                      className="control-label col-sm-1 no-padding-left"
+                      htmlFor="kmdWalletSendTo">Coin</label>
+                    <Select
+                      name="utxoMergeCoin"
+                      className="col-sm-3"
+                      value={ this.state.utxoMergeCoin }
+                      onChange={ (event) => this.updateSelectedCoin(event, 'utxoMergeCoin') }
+                      optionRenderer={ this.renderCoinOption }
+                      valueRenderer={ this.renderCoinOption }
+                      options={ [{
+                          label: 'Komodo (KMD)',
+                          icon: 'KMD',
+                          value: `KMD|native`,
+                        }].concat(addCoinOptionsAC())
+                      } />
+                  </div>
+                  <div className="col-sm-12 form-group form-material no-padding-left">
+                    <label
+                      className="control-label col-sm-1 no-padding-left"
+                      htmlFor="kmdWalletSendTo">Seed</label>
+                    <input
+                      type="text"
+                      className="form-control col-sm-3"
+                      name="utxoMergeSeed"
+                      onChange={ this.updateInput }
+                      value={ this.state.utxoMergeSeed }
+                      placeholder="Enter a seed"
+                      autoComplete="off"
+                      required />
+                  </div>
+                  { this.state.utxoMergeAddress &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      Pub: { this.state.utxoMergeAddress }
+                    </div>
+                  }
+                  { this.state.utxoMergeAddress &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      WIF: { this.state.utxoMergeWif }
+                    </div>
+                  }
+                  <div className="col-sm-12 form-group no-padding-left margin-top-20 padding-bottom-10">
+                    <button
+                      type="button"
+                      className="btn btn-info col-sm-2"
+                      onClick={ this.getUtxoMerge }>
+                        Get UTXO(s)
+                    </button>
+                  </div>
+                  { this.state.utxoMergeList &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      <div>Total UTXO: { this.state.utxoMergeList.length }</div>
+                    </div>
+                  }
+                  <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={ this.state.utxoMergeShowUtxoList } />
+                      <div
+                        className="slider"
+                        onClick={ this.toggleMergeUtxoList }></div>
+                    </label>
+                    <div
+                      className="toggle-label margin-right-15 pointer iguana-core-toggle"
+                      onClick={ this.toggleMergeUtxoList }>
+                      Show UTXO list
+                    </div>
+                  </div>
+                  { this.state.utxoMergeShowUtxoList &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      { this.renderUTXOSplitMergeResponse('merge') }
+                    </div>
+                  }
+                  <div className="col-sm-12 form-group form-material no-padding-left padding-top-20 padding-bottom-20">
+                    <label
+                      className="control-label col-sm-2 no-padding-left"
+                      htmlFor="kmdWalletSendTo">UTXO count to merge in 1 tx</label>
+                    <input
+                      type="text"
+                      className="form-control col-sm-3"
+                      name="utxoMergeUtxoNum"
+                      onChange={ this.updateInput }
+                      value={ this.state.utxoMergeUtxoNum }
+                      placeholder="UTXO count"
+                      autoComplete="off"
+                      required />
+                  </div>
+                  <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
+                    <button
+                      type="button"
+                      className="btn btn-info col-sm-2"
+                      onClick={ this.mergeUtxo }>
+                        Merge UTXO(s)
+                    </button>
+                  </div>
+                  { /*this.state.utxoMergeRawtx &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      Rawtx: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoMergeRawtx }</div>
+                    </div>*/
+                  }
+                  { this.state.utxoMergePushResult &&
+                    <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
+                      TXID: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoMergePushResult }</div>
+                      { isKomodoCoin(this.state.utxoMergeCoin.split('|')[0]) &&
+                        <div className="margin-top-10">
+                          <button
+                            type="button"
+                            className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                            onClick={ () => this.openExplorerWindow(this.state.utxoMergePushResult, this.state.utxoMergeCoin.split('|')[0]) }>
+                            <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.state.utxoMergeCoin.split('|')[0]) }
+                          </button>
+                        </div>
+                      }
                     </div>
                   }
                 </div>
