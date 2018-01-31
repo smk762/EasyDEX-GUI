@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import WalletsMainRender from './walletsMain.render';
 import { translate } from '../../../translate/translate';
-import { triggerToaster } from '../../../actions/actionCreators';
+import {
+  triggerToaster,
+  prices,
+} from '../../../actions/actionCreators';
 import { getCoinTitle } from '../../../util/coinHelper';
 import Config from '../../../config';
 import Store from '../../../store';
@@ -12,16 +15,27 @@ import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
+const PRICES_UPDATE_INTERVAL = 120000; // every 2m
 
 class WalletsMain extends React.Component {
   constructor() {
     super();
     this.getCoinStyle = this.getCoinStyle.bind(this);
+    this.pricesInterval = null;
     socket.on('service', msg => this.updateSocketsData(msg));
   }
 
+  componentWillUnmount() {
+    if (this.pricesInterval) {
+      clearInterval(this.pricesInterval);
+    }
+  }
+
   componentWillMount() {
-    console.warn('login');
+    Store.dispatch(prices());
+    this.pricesInterval = setInterval(() => {
+      Store.dispatch(prices());
+    }, PRICES_UPDATE_INTERVAL);
 
     if (mainWindow.createSeed.triggered &&
         !mainWindow.createSeed.secondaryLoginPH) {
