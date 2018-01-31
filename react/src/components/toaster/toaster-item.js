@@ -21,7 +21,6 @@ class ToasterItem extends React.Component {
       toastId: props.toastId,
       className: props.className,
     };
-
     this.dismissToast = this.dismissToast.bind(this);
     this.renderLB = this.renderLB.bind(this);
     this.timeoutHandler = null;

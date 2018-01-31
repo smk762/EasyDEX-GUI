@@ -26,6 +26,7 @@ import {
   loginWithPin,
 } from '../../actions/actions/pin';
 import mainWindow from '../../util/mainWindow';
+import { md5 } from '../../util/crypto/md5';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
@@ -318,6 +319,7 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    mainWindow.createSeed.secondaryLoginPH = md5(this.state.loginPassphrase);
     // reset the login pass phrase values so that when the user logs out, the values are clear
     this.setState({
       loginPassphrase: '',
@@ -398,6 +400,9 @@ class Login extends React.Component {
   }
 
   execWalletCreate() {
+    mainWindow.createSeed.triggered = true;
+    mainWindow.createSeed.firstLoginPH = md5(this.state.randomSeed);
+
     Store.dispatch(
       shepherdElectrumAuth(this.state.randomSeedConfirm)
     );

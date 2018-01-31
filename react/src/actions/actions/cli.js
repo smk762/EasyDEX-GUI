@@ -3,13 +3,17 @@ import { CLI } from '../storeType';
 import Config from '../../config';
 import Store from '../../store';
 
-export function shepherdCliPromise(mode, chain, cmd) {
-  const _payload = {
+export function shepherdCliPromise(mode, chain, cmd, params) {
+  let _payload = {
     mode,
     chain,
     cmd,
     token: Config.token,
   };
+
+  if (params) {
+    _payload.params = params;
+  }
 
   return new Promise((resolve, reject) => {
     fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {

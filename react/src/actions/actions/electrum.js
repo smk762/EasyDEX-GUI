@@ -335,3 +335,35 @@ export function shepherdElectrumBip39Keys(seed, match, addressdepth, accounts) {
     });
   });
 }
+
+// split test
+export function shepherdElectrumSplitUtxoPromise(payload) {
+  console.warn(payload);
+
+  return new Promise((resolve, reject) => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx-test`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        payload,
+        token: Config.token,
+      }),
+    })
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdElectrumSendPromise',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}

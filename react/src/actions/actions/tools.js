@@ -1,8 +1,6 @@
 import { translate } from '../../translate/translate';
 import Config from '../../config';
-import {
-  triggerToaster,
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import Store from '../../store';
 
 export function shepherdToolsSeedKeys(seed) {

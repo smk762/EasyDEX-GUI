@@ -5,6 +5,10 @@ import {
   getDashboardUpdate,
   shepherdElectrumBalance,
 } from '../../../actions/actionCreators';
+import mainWindow from '../../../util/mainWindow';
+import Config from '../../../config';
+import { formatValue } from '../../../util/formatValue';
+import ReactTooltip from 'react-tooltip';
 
 import Store from '../../../store';
 
@@ -65,7 +69,7 @@ class WalletsBalance extends React.Component {
     }
   }
 
-  renderBalance(type) {
+  renderBalance(type, returnFiatPrice) {
     const _mode = this.props.ActiveCoin.mode;
     let _balance = 0;
 
@@ -102,7 +106,53 @@ class WalletsBalance extends React.Component {
       }
     }
 
-    return Number(_balance);
+    if (mainWindow.appConfig.fiatRates &&
+        this.props.Dashboard.prices &&
+        returnFiatPrice) {
+      const _prices = this.props.Dashboard.prices;
+      let _fiatPriceTotal = 0;
+      let _fiatPricePerCoin = 0;
+
+      if (this.props.ActiveCoin.coin === 'KMD') {
+        if (_prices.fiat &&
+            _prices.fiat.USD) {
+          _fiatPriceTotal = formatValue(_balance * _prices.fiat.USD);
+          _fiatPricePerCoin = _prices.fiat.USD;
+        }
+      } else {
+        if (_prices.fiat &&
+            _prices.fiat.USD &&
+            _prices[`${this.props.ActiveCoin.coin}/KMD`] &&
+            _prices[`${this.props.ActiveCoin.coin}/KMD`].low) {
+          _fiatPriceTotal = _balance * _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
+          _fiatPricePerCoin = _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
+        }
+      }
+
+      return (
+        <div>
+          <div>{ _balance }</div>
+          { _fiatPriceTotal > 0 &&
+            _fiatPricePerCoin > 0 &&
+            <div
+              data-tip={ `Price per 1 ${this.props.ActiveCoin.coin} ~ $${formatValue(_fiatPricePerCoin)}` }
+              className="text-right">${ formatValue(_fiatPriceTotal) }</div>
+          }
+          { _fiatPriceTotal > 0 &&
+            _fiatPricePerCoin > 0 &&
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
+          }
+        </div>
+      );
+    } else {
+      if (Config.roundValues) {
+        return formatValue(_balance);
+      } else {
+        return Number(_balance);
+      }
+    }
   }
 
   isActiveCoinMode(coinMode) {
