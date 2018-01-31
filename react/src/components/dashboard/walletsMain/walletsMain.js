@@ -6,6 +6,7 @@ import { triggerToaster } from '../../../actions/actionCreators';
 import { getCoinTitle } from '../../../util/coinHelper';
 import Config from '../../../config';
 import Store from '../../../store';
+import mainWindow from '../../../util/mainWindow';
 
 import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -17,6 +18,52 @@ class WalletsMain extends React.Component {
     super();
     this.getCoinStyle = this.getCoinStyle.bind(this);
     socket.on('service', msg => this.updateSocketsData(msg));
+  }
+
+  componentWillMount() {
+    console.warn('login');
+
+    if (mainWindow.createSeed.triggered &&
+        !mainWindow.createSeed.secondaryLoginPH) {
+      Store.dispatch(
+        triggerToaster(
+          'Please write down your public address, logout and login into Agama again to verify that your seed is correct.',
+          'First time seed use',
+          'info',
+          false
+        )
+      );
+    } else if (mainWindow.createSeed.triggered && mainWindow.createSeed.secondaryLoginPH) {
+      if (mainWindow.createSeed.secondaryLoginPH === mainWindow.createSeed.firstLoginPH) {
+        Store.dispatch(
+          triggerToaster(
+            'Your seed appears to be correct. As a final check up please double check that the public address you wrote down earlier is matching the one you see right now.',
+            'Congrats, you are all set!',
+            'success',
+            false
+          )
+        );
+        mainWindow.createSeed = {
+          triggered: false,
+          firstLoginPH: null,
+          secondaryLoginPH: null,
+        };
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            'Your seed doesn\'t seem to be correct. Please logout and repeat wallet creation procedure again.',
+            'Seed verification error!',
+            'error',
+            false
+          )
+        );
+        mainWindow.createSeed = {
+          triggered: false,
+          firstLoginPH: null,
+          secondaryLoginPH: null,
+        };
+      }
+    }
   }
 
   updateSocketsData(data) {
