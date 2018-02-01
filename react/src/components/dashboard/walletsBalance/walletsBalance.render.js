@@ -38,13 +38,9 @@ const WalletsBalanceRender = function() {
                       { this.props.ActiveCoin.coin === 'CHIPS' || this.props.ActiveCoin.mode === 'spv' ? translate('INDEX.BALANCE') : translate('INDEX.TRANSPARENT_BALANCE') }
                     </div>
                     <span
-                      className="pull-right padding-top-10 font-size-22"
-                      data-tip={ Config.roundValues ? this.renderBalance('transparent') : '' }>
+                      className="pull-right padding-top-10 font-size-22">
                       { this.renderBalance('transparent', true) }
                     </span>
-                    <ReactTooltip
-                      effect="solid"
-                      className="text-left" />
                   </div>
                 </div>
               </div>

@@ -32,10 +32,12 @@ class WalletsMain extends React.Component {
   }
 
   componentWillMount() {
-    Store.dispatch(prices());
-    this.pricesInterval = setInterval(() => {
+    if (Config.fiatRates) {
       Store.dispatch(prices());
-    }, PRICES_UPDATE_INTERVAL);
+      this.pricesInterval = setInterval(() => {
+        Store.dispatch(prices());
+      }, PRICES_UPDATE_INTERVAL);
+    }
 
     if (mainWindow.createSeed.triggered &&
         !mainWindow.createSeed.secondaryLoginPH) {

@@ -131,18 +131,12 @@ class WalletsBalance extends React.Component {
 
       return (
         <div>
-          <div>{ _balance }</div>
+          <div className="text-right">{ _balance }</div>
           { _fiatPriceTotal > 0 &&
             _fiatPricePerCoin > 0 &&
             <div
               data-tip={ `Price per 1 ${this.props.ActiveCoin.coin} ~ $${formatValue(_fiatPricePerCoin)}` }
               className="text-right">${ formatValue(_fiatPriceTotal) }</div>
-          }
-          { _fiatPriceTotal > 0 &&
-            _fiatPricePerCoin > 0 &&
-            <ReactTooltip
-              effect="solid"
-              className="text-left" />
           }
         </div>
       );
