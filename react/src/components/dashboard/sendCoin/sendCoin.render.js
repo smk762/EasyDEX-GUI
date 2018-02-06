@@ -363,7 +363,12 @@ export const SendRender = function() {
                     <div>
                       <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
                     </div>
-                    <div>{ this.state.lastSendToResponse.result }</div>
+                    { (this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') > -1) &&
+                      <div>Your history contains shielded transactions(z).<br />Please move funds to another transparent address in order to use Lite mode.</div>
+                    }
+                    { this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') === -1 &&
+                      <div>{ this.state.lastSendToResponse.result }</div>
+                    }
                     { this.props.ActiveCoin.mode === 'spv' &&
                       this.state.lastSendToResponse.raw &&
                       this.state.lastSendToResponse.raw.txid &&

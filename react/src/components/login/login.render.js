@@ -201,8 +201,7 @@ const LoginRender = function() {
             <button
               type="button"
               className="btn btn-primary btn-block margin-top-20"
-              onClick={ this.loginSeed }
-              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>
+              onClick={ this.loginSeed }>
               { translate('INDEX.SIGN_IN') }
             </button>
             <div className="form-group form-material floating">
