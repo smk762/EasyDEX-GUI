@@ -5,6 +5,7 @@ import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchMod
 import QRModal from '../dashboard/qrModal/qrModal';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
+import mainWindow from '../../util/mainWindow';
 
 const LoginRender = function() {
   return (
@@ -45,6 +46,13 @@ const LoginRender = function() {
                     <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                   </a>
                 </li>
+                { mainWindow.nnVoteChain &&
+                  <li>
+                    <a onClick={ () => this._toggleNotaryElectionsModal() }>
+                      <i className="icon fa-thumbs-up"></i> Notary Elections 2018
+                    </a>
+                  </li>
+                }
               </ul>
             </div>
           </div>

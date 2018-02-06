@@ -30,6 +30,7 @@ import {
   ELECTRUM_SERVER_CHANGED,
   DISPLAY_ZCASH_PARAMS_FETCH,
   DASHBOARD_REMOVE_COIN,
+  DISPLAY_NOTARY_ELECTIONS_MODAL,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -52,6 +53,7 @@ export * from './actions/mm';
 export * from './actions/nativeNetwork';
 export * from './actions/tools';
 export * from './actions/prices';
+export * from './actions/elections';
 
 export function changeActiveAddress(address) {
   return {
@@ -201,7 +203,7 @@ export function toggleAddcoinModal(display, isLogin) {
 
 export function dismissToasterMessage(toastId) {
   return dispatch => {
-    dispatch(dismissToaster(toastId))
+    dispatch(dismissToaster(toastId));
   }
 }
 
@@ -298,5 +300,12 @@ export function dashboardRemoveCoin(coin) {
   return {
     type: DASHBOARD_REMOVE_COIN,
     coin,
+  }
+}
+
+export function toggleNotaryElectionsModal(display) {
+  return {
+    type: DISPLAY_NOTARY_ELECTIONS_MODAL,
+    displayNotaryElectionsModal: display,
   }
 }
