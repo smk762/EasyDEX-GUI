@@ -89,6 +89,13 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
+            { mainWindow.nnVoteChain &&
+              <li className="nav-top-menu">
+                <a onClick={ this._toggleNotaryElectionsModal }>
+                  <i className="site-menu-icon"></i> Notary Elections
+                </a>
+              </li>
+            }
             { !navigator.onLine &&
               <li
                 className="nav-top-menu offline"

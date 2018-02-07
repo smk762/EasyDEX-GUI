@@ -11,6 +11,7 @@ import {
   stopInterval,
   dashboardChangeActiveCoin,
   toggleZcparamsFetchModal,
+  toggleNotaryElectionsModal,
   activeHandle,
 } from '../../actions/actionCreators';
 import Config from '../../config';
@@ -81,6 +82,13 @@ class Login extends React.Component {
     this.loadPinList = this.loadPinList.bind(this);
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
+  }
+
+  _toggleNotaryElectionsModal() {
+    this.setState({
+      displayLoginSettingsDropdown: false,
+    });
+    Store.dispatch(toggleNotaryElectionsModal(true));
   }
 
   // the setInterval handler for 'activeCoins'
@@ -337,12 +345,8 @@ class Login extends React.Component {
     if (this.state.selectedPin) {
       Store.dispatch(loginWithPin(this.state.decryptKey, this.state.selectedPin));
     } else {
-      Store.dispatch(
-        shepherdElectrumAuth(this.state.loginPassphrase)
-      );
-      Store.dispatch(
-        shepherdElectrumCoins()
-      );
+      Store.dispatch(shepherdElectrumAuth(this.state.loginPassphrase));
+      Store.dispatch(shepherdElectrumCoins());
     }
   }
 

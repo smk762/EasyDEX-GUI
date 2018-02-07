@@ -121,7 +121,7 @@ class ToolsSplitUTXO extends React.Component {
     for (let i = 0; i < pairsCount; i++) {
       for (let j = 0; j < targetSizes.length; j++) {
         devlog(`vout ${_targets.length} ${targetSizes[j]}`);
-        _targets.push(Number(targetSizes[j]) * 100000000);
+        _targets.push(parseInt(Number(targetSizes[j]) * 100000000));
         totalOutSize += Number(targetSizes[j]);
       }
     }

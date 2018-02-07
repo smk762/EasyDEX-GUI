@@ -12,6 +12,7 @@ import {
   activeHandle,
   dashboardRemoveCoin,
   dashboardChangeActiveCoin,
+  toggleNotaryElectionsModal,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -29,6 +30,7 @@ class Navbar extends React.Component {
     };
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this._toggleNotaryElectionsModal = this._toggleNotaryElectionsModal.bind(this);
     this._checkAC = this._checkAC.bind(this);
     this.spvLock = this.spvLock.bind(this);
     this.spvLogout = this.spvLogout.bind(this);
@@ -120,6 +122,10 @@ class Navbar extends React.Component {
     this.setState(Object.assign({}, this.state, {
       openDropMenu: !this.state.openDropMenu,
     }));
+  }
+
+  _toggleNotaryElectionsModal() {
+    Store.dispatch(toggleNotaryElectionsModal(true));
   }
 
   toggleAddCoinModal() {

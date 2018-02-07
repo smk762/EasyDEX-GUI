@@ -2,12 +2,14 @@ import {
   GET_ACTIVE_COINS,
   LOGIN,
   ACTIVE_HANDLE,
-  DISPLAY_LOGIN_SETTINGS_MODAL
+  DISPLAY_LOGIN_SETTINGS_MODAL,
+  DISPLAY_NOTARY_ELECTIONS_MODAL,
 } from '../actions/storeType';
 
 export function Main(state = {
   isLoggedIn: false,
   displayLoginSettingsModal: false,
+  displayNotaryElectionsModal: false,
   total: 0,
 }, action) {
   switch (action.type) {
@@ -32,6 +34,11 @@ export function Main(state = {
       return {
         ...state,
         displayLoginSettingsModal: action.displayLoginSettingsModal,
+      };
+    case DISPLAY_NOTARY_ELECTIONS_MODAL:
+      return {
+        ...state,
+        displayNotaryElectionsModal: action.displayNotaryElectionsModal,
       };
     default:
       return state;

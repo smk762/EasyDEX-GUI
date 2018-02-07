@@ -5,6 +5,7 @@ import AddCoin from '../addcoin/addcoin';
 import Login from '../login/login';
 import Dashboard from '../dashboard/main/dashboard';
 import DexMain from '../dex/dexMain';
+import NotaryElectionsModal from '../dashboard/notaryElectionsModal/notaryElectionsModal';
 import mainWindow from '../../util/mainWindow';
 import Store from '../../store';
 import {
@@ -14,6 +15,7 @@ import {
   toggleClaimInterestModal,
   toggleCoindDownModal,
   displayImportKeyModal,
+  toggleNotaryElectionsModal,
 } from '../../actions/actionCreators';
 
 class WalletMain extends React.Component {
@@ -46,6 +48,8 @@ class WalletMain extends React.Component {
           Store.dispatch(toggleAddcoinModal(false, false));
         } else if (this.props.activeModals.displayLoginSettingsModal) {
           Store.dispatch(toggleLoginSettingsModal(false));
+        } else if (this.props.activeModals.displayNotaryElectionsModal) {
+          Store.dispatch(toggleNotaryElectionsModal(false));
         }
       }
     };
@@ -70,6 +74,7 @@ class WalletMain extends React.Component {
           <Dashboard />
           <AddCoin />
           <Login />
+          <NotaryElectionsModal />
           <Toaster {...this.props.toaster} />
         </div>
       );
@@ -88,6 +93,7 @@ const mapStateToProps = (state) => {
       displayZcparamsModal: state.Dashboard.displayZcparamsModal,
       displayAddCoinModal: state.AddCoin.display,
       displayLoginSettingsModal: state.Main.displayLoginSettingsModal,
+      displayNotaryElectionsModal: state.Main.displayNotaryElectionsModal,
     },
   };
 };

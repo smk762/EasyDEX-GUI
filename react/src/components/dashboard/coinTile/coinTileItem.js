@@ -279,7 +279,7 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins[coin].pub) {
+      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins && this.props.Dashboard.electrumCoins[coin] && this.props.Dashboard.electrumCoins[coin].pub) {
         Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
 
         if (this.props.ActiveCoin.activeSection === 'default') {
