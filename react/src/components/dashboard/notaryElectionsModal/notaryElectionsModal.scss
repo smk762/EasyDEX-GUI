@@ -100,15 +100,20 @@
       top: 258px;
     }
     &.elections-map-node--sh {
-      left: 420px;
-      top: 344px;
+      left: 632px;
+      top: 382px;
+
+      .notary-elections-node-title {
+        margin-top: 26px;
+        margin-left: 34px;
+      }
     }
     &.elections-map-node--ae {
       left: 560px;
       top: 284px;
     }
     &.elections-map-node--eu {
-      left: 440px;
+      left: 412px;
       top: 250px;
     }
   }
