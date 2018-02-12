@@ -65,6 +65,7 @@ class Login extends React.Component {
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
     };
+    this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
     this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
@@ -244,6 +245,8 @@ class Login extends React.Component {
         display: true,
         activeLoginSection: this.state.activeLoginSection !== 'signup' ? 'login' : 'signup',
       });
+
+      console.warn(props);
     }
 
     if (props.Main &&
@@ -348,6 +351,8 @@ class Login extends React.Component {
       Store.dispatch(shepherdElectrumAuth(this.state.loginPassphrase));
       Store.dispatch(shepherdElectrumCoins());
     }
+
+    this.setState(this.defaultState);
   }
 
   loadPinList() {
