@@ -541,15 +541,26 @@ class SendCoin extends React.Component {
     }
 
     if (!this.state.sendTo ||
-        this.state.sendTo.length < 34) {
-      Store.dispatch(
-        triggerToaster(
-          translate('SEND.SEND_TO_ADDRESS_MIN_LENGTH'),
-          translate('TOASTR.WALLET_NOTIFICATION'),
-          'error'
-        )
-      );
-      valid = false;
+        (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc')) {
+      const _validateAddress = mainWindow.addressVersionCheck(this.props.ActiveCoin.coin, this.state.sendTo);
+      let _msg;
+
+      if (_validateAddress === 'Invalid pub address') {
+        _msg = _validateAddress;
+      } else if (!_validateAddress) {
+        _msg = `${this.state.sendTo} is not a valid ${this.props.ActiveCoin.coin} pub address`;
+      }
+
+      if (_msg) {
+        Store.dispatch(
+          triggerToaster(
+            _msg,
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      }
     }
 
     if (!isPositiveNumber(this.state.amount)) {

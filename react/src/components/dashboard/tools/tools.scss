@@ -36,4 +36,14 @@
     top: -6px;
     left: 18px;
   }
+
+  .tools-btn-block {
+    position: relative;
+    left: -20px;
+
+    .btn {
+      margin-bottom: 20px;
+      margin-left: 20px;
+    }
+  }
 }

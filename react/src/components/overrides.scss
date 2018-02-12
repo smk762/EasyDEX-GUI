@@ -288,6 +288,10 @@ select{
   cursor: pointer;
   text-align: left;
 
+  img {
+    border-radius: 50%;
+  }
+
   * { color: #757575 !important; }
 
   .Select-clear {
