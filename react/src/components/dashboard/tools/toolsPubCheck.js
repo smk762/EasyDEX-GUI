@@ -57,7 +57,11 @@ class ToolsPubCheck extends React.Component {
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
           { this.state.pubResult.coin &&
             <div>
-              <div>Coin(s): { this.state.pubResult.coin.map((item) => { return(<div key={ `tools-pub-check-${item}` }>{ item }</div>); }) }</div>
+              <div>Coin(s): {
+                this.state.pubResult.coin.map((item) => {
+                  return(<div key={ `tools-pub-check-${item}` }>{ item }</div>);
+                })
+              }</div>
               <div className="margin-top-10">Version: { this.state.pubResult.version }</div>
             </div>
           }

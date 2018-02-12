@@ -14,6 +14,7 @@
     height: inherit;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .elections-title {
@@ -59,11 +60,15 @@
   }
 
   .elections-map {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    height: 350px;
     text-align: center;
   }
 
   .elections-map-node {
-    position: absolute;
+    position: relative;
 
     .notary-elections-node-title {
       color: #fff !important;
@@ -74,6 +79,7 @@
     }
 
     img {
+      position: absolute;
       width: 35px;
       background: #fff;
       border-radius: 50%;
@@ -90,32 +96,49 @@
         border: solid 5px #fff;
       }
     }
-    &:hover {
-      img {
-        width: 40px;
-      }
+    img:hover {
+      width: 40px;
     }
     &.elections-map-node--na {
-      left: 210px;
-      top: 258px;
-    }
-    &.elections-map-node--sh {
-      left: 632px;
-      top: 382px;
+      left: -234px;
+      top: -262px;
 
       .notary-elections-node-title {
-        margin-top: 26px;
-        margin-left: 34px;
+        margin-top: -6px;
+        margin-left: 38px;
       }
     }
     &.elections-map-node--ae {
-      left: 560px;
-      top: 284px;
+      left: 114px;
+      top: -236px;
+
+      .notary-elections-node-title {
+        margin-top: -6px;
+        margin-left: 40px;
+      }
+    }
+    &.elections-map-node--sh {
+      left: 190px;
+      top: -138px;
+
+      .notary-elections-node-title {
+        margin-left: 32px;
+        margin-top: 30px;
+      }
     }
     &.elections-map-node--eu {
-      left: 412px;
-      top: 250px;
+      left: -28px;
+      top: -268px;
+
+      .notary-elections-node-title {
+        margin-top: -4px;
+        margin-left: 40px;
+      }
     }
+  }
+
+  .elections-voter-ui {
+    height: 350px;
   }
 
   .elections-balance,
