@@ -123,14 +123,17 @@ class DexSwapsTable extends React.Component {
   }
 
   componentWillMount() {
-    const _swaps = this.props.Dex.swaps.swaps.filter(swap => swap.alice && swap.finishtime);
+    if (this.props.Dex.swaps &&
+        this.props.Dex.swaps.swaps) {
+      const _swaps = this.props.Dex.swaps.swaps.filter(swap => swap.alice && swap.finishtime);
 
-    this.setState({
-      itemsList: _swaps,
-      filteredItemsList: this.filterData(_swaps, this.state.searchTerm),
-      showPagination: _swaps && _swaps.length >= this.state.defaultPageSize,
-      itemsListColumns: this.generateItemsListColumns(_swaps.length),
-    });
+      this.setState({
+        itemsList: _swaps,
+        filteredItemsList: this.filterData(_swaps, this.state.searchTerm),
+        showPagination: _swaps && _swaps.length >= this.state.defaultPageSize,
+        itemsListColumns: this.generateItemsListColumns(_swaps.length),
+      });
+    }
   }
 
   componentWillReceiveProps(props) {

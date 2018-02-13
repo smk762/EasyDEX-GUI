@@ -6,6 +6,26 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'GRS':
+      coinlogo = 'grs';
+      coinname = 'Groestlcoin';
+      break;
+    case 'BTCZ':
+      coinlogo = 'btcz';
+      coinname = 'BitcoinZ';
+      break;
+    case 'QTUM':
+      coinlogo = 'qtum';
+      coinname = 'Qtum';
+      break;
+    case 'BTX':
+      coinlogo = 'btx';
+      coinname = 'Bitcore';
+      break;
+    case 'HODLC':
+      coinlogo = 'hodlc';
+      coinname = 'Hodl coin';
+      break;
     case 'BEER':
       coinlogo = 'beer';
       coinname = 'BEER (Test coin)';

@@ -96,6 +96,26 @@ const addCoinOptionsCrypto = () => {
       label: 'Myriad (XMY)',
       icon: 'XMY',
       value: `XMY|spv`,
+    },/* {
+      label: 'Groestlcoin (GRS)',
+      icon: 'GRS',
+      value: `GRS|spv`,
+    }, */{
+      label: 'Hodlc (HODLC)',
+      icon: 'HODLC',
+      value: `HODLC|spv`,
+    }, {
+      label: 'Bitcore (BTX)',
+      icon: 'BTX',
+      value: `BTX|spv`,
+    }, {
+      label: 'Qtum (QTUM)',
+      icon: 'QTUM',
+      value: `QTUM|spv`,
+    }, {
+      label: 'BitcoinZ (BTCZ)',
+      icon: 'BTCZ',
+      value: `BTCZ|spv`,
     });
   }
 
