@@ -245,8 +245,6 @@ class Login extends React.Component {
         display: true,
         activeLoginSection: this.state.activeLoginSection !== 'signup' ? 'login' : 'signup',
       });
-
-      console.warn(props);
     }
 
     if (props.Main &&
