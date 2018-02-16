@@ -1,8 +1,8 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
-import { isKomodoCoin } from '../../../util/coinHelper';
 import { formatValue } from '../../../util/formatValue';
+import explorerList from '../../../util/explorerList';
 import ReactTooltip from 'react-tooltip';
 
 export const AddressListRender = function() {
@@ -373,7 +373,7 @@ export const SendRender = function() {
                             this.state.lastSendToResponse &&
                             this.state.lastSendToResponse.txid) ||
                             (this.props.ActiveCoin.mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
-                            isKomodoCoin(this.props.ActiveCoin.coin) &&
+                            explorerList[this.props.ActiveCoin.coin] &&
                             <div className="margin-top-10">
                               <button
                                 type="button"

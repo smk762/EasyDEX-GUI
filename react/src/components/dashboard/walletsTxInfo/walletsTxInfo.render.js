@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../../translate/translate';
 import { secondsToString } from '../../../util/time';
 import Config from '../../../config';
-import { isKomodoCoin } from '../../../util/coinHelper';
+import explorerList from '../../../util/explorerList';
 
 const WalletsTxInfoRender = function(txInfo) {
   return (
@@ -191,7 +191,7 @@ const WalletsTxInfoRender = function(txInfo) {
             <div className="modal-footer">
               { this.state.txDetails &&
                 this.props.ActiveCoin.coin !== 'CHIPS' &&
-                isKomodoCoin(this.props.ActiveCoin.coin) &&
+                explorerList[this.props.ActiveCoin.coin] &&
                 <button
                   type="button"
                   className="btn btn-sm white btn-dark waves-effect waves-light pull-left"

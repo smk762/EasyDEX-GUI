@@ -8,6 +8,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
+import explorerList from '../../../util/explorerList';
 
 class WalletsTxInfo extends React.Component {
   constructor() {
@@ -91,7 +92,7 @@ class WalletsTxInfo extends React.Component {
   }
 
   openExplorerWindow(txid) {
-    const url = `http://${this.props.ActiveCoin.coin}.explorer.supernet.org/tx/${txid}`;
+    const url = explorerList[this.props.ActiveCoin.coin].split('/').length - 1 > 2 ? `${explorerList[this.props.ActiveCoin.coin]}${txid}` : `${explorerList[this.props.ActiveCoin.coin]}/tx/${txid}`;
     const remote = window.require('electron').remote;
     const BrowserWindow = remote.BrowserWindow;
 

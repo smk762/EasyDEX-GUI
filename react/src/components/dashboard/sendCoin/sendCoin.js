@@ -22,6 +22,7 @@ import {
 } from './sendCoin.render';
 import { isPositiveNumber } from '../../../util/number';
 import mainWindow from '../../../util/mainWindow';
+import explorerList from '../../../util/explorerList';
 import Slider, { Range } from 'rc-slider';
 import ReactTooltip from 'react-tooltip';
 
@@ -103,7 +104,7 @@ class SendCoin extends React.Component {
   }
 
   openExplorerWindow(txid) {
-    const url = `http://${this.props.ActiveCoin.coin}.explorer.supernet.org/tx/${txid}`;
+    const url = explorerList[this.props.ActiveCoin.coin].split('/').length - 1 > 2 ? `${explorerList[this.props.ActiveCoin.coin]}${txid}` : `${explorerList[this.props.ActiveCoin.coin]}/tx/${txid}`;
     const remote = window.require('electron').remote;
     const BrowserWindow = remote.BrowserWindow;
 
