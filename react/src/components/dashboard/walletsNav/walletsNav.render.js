@@ -54,7 +54,6 @@ export const WalletsNavWithWalletRender = function() {
               <i className="icon md-view-dashboard"></i> { translate('INDEX.TRANSACTIONS') }
             </button>
             { this.props.ActiveCoin &&
-              this.props.ActiveCoin.coin !== 'BTC' &&
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light"
