@@ -684,7 +684,7 @@ class SendCoin extends React.Component {
 
   onSliderChangeTime(value) {
     this.setState({
-      btcFeesSize: this.state.btcFees.recommended[_feeLookup[value]],
+      btcFeesSize: _feeLookup[value] === 'advanced' ? this.state.btcFees.electrum[this.state.btcFeesAdvancedStep] : this.state.btcFees.recommended[_feeLookup[value]],
       btcFeesTimeBasedStep: value,
       btcFeesType: _feeLookup[value] === 'advanced' ? 'advanced' : null,
     });
@@ -749,7 +749,7 @@ class SendCoin extends React.Component {
                 3: 'advanced'
               }} />
             { this.state.btcFeesType === 'advanced' &&
-              <div>
+              <div className="margin-bottom-20">
                 <div className="send-target-block">Estimated to be included within the next <strong>{this.state.btcFeesAdvancedStep + 1} {(this.state.btcFeesAdvancedStep + 1) > 1 ? 'blocks' : 'block'}</strong></div>
                 <Slider
                   onChange={ this.onSliderChange }
