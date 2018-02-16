@@ -1,7 +1,9 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
-import { isKomodoCoin } from '../../../util/coinHelper';
+import { formatValue } from '../../../util/formatValue';
+import explorerList from '../../../util/explorerList';
+import ReactTooltip from 'react-tooltip';
 
 export const AddressListRender = function() {
   return (
@@ -117,6 +119,7 @@ export const _SendFormRender = function() {
             </span>
           }
         </div>
+        { this.renderBTCFees() }
         <div className="col-lg-6 form-group form-material hide">
           <label
             className="control-label"
@@ -169,7 +172,7 @@ export const SendRender = function() {
     );
   } else {
     return (
-      <div className="col-sm-12 padding-top-10">
+      <div className="col-sm-12 padding-top-10 coin-send-form">
         <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
           <div className="steps row margin-top-10">
             <div className={ 'step col-md-4' + (this.state.currentStep === 0 ? ' current' : '') }>
@@ -239,6 +242,38 @@ export const SendRender = function() {
                   <div className="col-lg-6 col-sm-6 col-xs-6 confirm-currency-send-container">
                     { Number(this.state.amount) } { this.props.ActiveCoin.coin }
                   </div>
+                </div>
+              }
+              { this.state.btcPreflightRes &&
+                <div className="row padding-top-20">
+                  <div className="col-xs-12">
+                    <strong>Fee</strong>
+                  </div>
+                  <div className="col-lg-12 col-sm-12 col-xs-12">{ formatValue(this.state.btcPreflightRes.fee * 0.00000001) } ({ this.state.btcPreflightRes.fee } sats)</div>
+                </div>
+              }
+              { this.state.btcPreflightRes &&
+                <div className="row padding-top-20">
+                  { this.state.btcPreflightRes.change === 0 &&
+                    <div className="col-lg-12 col-sm-12 col-xs-12">
+                      <strong>Adjusted amount</strong>
+                      <span>
+                        <i
+                          className="icon fa-question-circle settings-help send-btc"
+                          data-tip="Max. available amount to spend - transaction fee"></i>
+                        <ReactTooltip
+                          effect="solid"
+                          className="text-left" />
+                      </span>
+                      &nbsp;{ formatValue((this.state.btcPreflightRes.value * 0.00000001) - (this.state.btcPreflightRes.fee * 0.00000001)) }
+                    </div>
+                  }
+                  { this.state.btcPreflightRes.change > 0 &&
+                    <div className="col-lg-12 col-sm-12 col-xs-12">
+                      <strong>Total (amount + transaction fee)</strong>&nbsp;
+                      { formatValue((this.state.btcPreflightRes.value * 0.00000001) + (this.state.btcPreflightRes.fee * 0.00000001)) }
+                    </div>
+                  }
                 </div>
               }
               { this.state.spvPreflightSendInProgress &&
@@ -338,7 +373,7 @@ export const SendRender = function() {
                             this.state.lastSendToResponse &&
                             this.state.lastSendToResponse.txid) ||
                             (this.props.ActiveCoin.mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
-                            isKomodoCoin(this.props.ActiveCoin.coin) &&
+                            explorerList[this.props.ActiveCoin.coin] &&
                             <div className="margin-top-10">
                               <button
                                 type="button"
@@ -364,7 +399,10 @@ export const SendRender = function() {
                       <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
                     </div>
                     { (this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') > -1) &&
-                      <div>Your history contains shielded transactions(z).<br />Please move funds to another transparent address in order to use Lite mode.</div>
+                      <div>
+                        Your history contains shielded transactions(z).<br />
+                        Please move funds to another transparent address in order to use Lite mode.
+                      </div>
                     }
                     { this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') === -1 &&
                       <div>{ this.state.lastSendToResponse.result }</div>

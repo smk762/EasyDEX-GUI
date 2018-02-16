@@ -24,11 +24,11 @@ const addCoinOptionsCrypto = () => {
       label: 'BitcoinCash (BCH)',
       icon: 'BCH',
       value: `BCH|spv`,
-    },/* {
+    }, {
       label: 'Bitcoin (BTC)',
       icon: 'BTC',
       value: `BTC|spv`,
-    }, */{
+    }, {
       label: 'Crown (CRW)',
       icon: 'CRW',
       value: `CRW|spv`,

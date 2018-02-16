@@ -10,6 +10,7 @@ import {
   clearLastSendToResponseState,
   shepherdElectrumSend,
   shepherdElectrumSendPreflight,
+  shepherdGetRemoteBTCFees,
   copyString,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -21,10 +22,20 @@ import {
 } from './sendCoin.render';
 import { isPositiveNumber } from '../../../util/number';
 import mainWindow from '../../../util/mainWindow';
+import explorerList from '../../../util/explorerList';
+import Slider, { Range } from 'rc-slider';
+import ReactTooltip from 'react-tooltip';
 
 // TODO: - add links to explorers
 //       - render z address trim
 //       - handle click outside
+
+const _feeLookup = [
+  'fastestFee',
+  'halfHourFee',
+  'hourFee',
+  'advanced'
+];
 
 class SendCoin extends React.Component {
   constructor(props) {
@@ -44,7 +55,14 @@ class SendCoin extends React.Component {
       coin: null,
       spvVerificationWarning: false,
       spvPreflightSendInProgress: false,
+      btcFees: {},
+      btcFeesType: 'halfHourFee',
+      btcFeesAdvancedStep: 9,
+      btcFeesSize: 0,
+      btcFeesTimeBasedStep: 1,
+      btcPreflightRes: null,
     };
+    this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.openDropMenu = this.openDropMenu.bind(this);
@@ -58,13 +76,17 @@ class SendCoin extends React.Component {
     this.isFullySynced = this.isFullySynced.bind(this);
     this.setSendAmountAll = this.setSendAmountAll.bind(this);
     this.setSendToSelf = this.setSendToSelf.bind(this);
+    this.fetchBTCFees = this.fetchBTCFees.bind(this);
+    this.onSliderChange = this.onSliderChange.bind(this);
+    this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
   }
 
   setSendAmountAll() {
     const _amount = this.state.amount;
     const _amountSats = this.state.amount * 100000000;
     const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
-    const _fees = mainWindow.spvFees;
+    let _fees = mainWindow.spvFees;
+    _fees.BTC = 0;
 
     this.setState({
       amount: Number((0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)),
@@ -82,7 +104,7 @@ class SendCoin extends React.Component {
   }
 
   openExplorerWindow(txid) {
-    const url = `http://${this.props.ActiveCoin.coin}.explorer.supernet.org/tx/${txid}`;
+    const url = explorerList[this.props.ActiveCoin.coin].split('/').length - 1 > 2 ? `${explorerList[this.props.ActiveCoin.coin]}${txid}` : `${explorerList[this.props.ActiveCoin.coin]}/tx/${txid}`;
     const remote = window.require('electron').remote;
     const BrowserWindow = remote.BrowserWindow;
 
@@ -136,6 +158,11 @@ class SendCoin extends React.Component {
       Store.dispatch(clearLastSendToResponseState());
     }
     this.checkZAddressCount(props);
+
+    if (this.props.ActiveCoin.activeSection !== props.ActiveCoin.activeSection &&
+        this.props.ActiveCoin.activeSection !== 'send') {
+      this.fetchBTCFees();
+    }
   }
 
   setRecieverFromScan(receiver) {
@@ -400,8 +427,29 @@ class SendCoin extends React.Component {
     });
   }
 
+  fetchBTCFees() {
+    if (this.props.ActiveCoin.mode === 'spv' &&
+        this.props.ActiveCoin.coin === 'BTC') {
+      shepherdGetRemoteBTCFees()
+      .then((res) => {
+        if (res.msg === 'success') {
+          // TODO: check, approx fiat value
+          this.setState({
+            btcFees: res.result,
+            btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup[this.state.btcFeesTimeBasedStep]],
+          });
+        } else {
+          // TODO: fallback to local electrum
+        }
+        console.warn('btcfees', res);
+      });
+    }
+  }
+
   changeSendCoinStep(step, back) {
     if (step === 0) {
+      this.fetchBTCFees();
+
       if (back) {
         this.setState({
           currentStep: 0,
@@ -411,21 +459,7 @@ class SendCoin extends React.Component {
       } else {
         Store.dispatch(clearLastSendToResponseState());
 
-        this.setState({
-          currentStep: 0,
-          addressType: null,
-          sendFrom: null,
-          sendFromAmount: 0,
-          sendTo: '',
-          sendToOA: null,
-          amount: 0,
-          fee: 0,
-          addressSelectorOpen: false,
-          renderAddressDropdown: true,
-          subtractFee: false,
-          spvVerificationWarning: false,
-          spvPreflightSendInProgress: false,
-        });
+        this.setState(this.defaultState);
       }
     }
 
@@ -444,7 +478,8 @@ class SendCoin extends React.Component {
             this.props.ActiveCoin.coin,
             this.state.amount * 100000000,
             this.state.sendTo,
-            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+            this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null
           )
           .then((sendPreflight) => {
             if (sendPreflight &&
@@ -452,6 +487,7 @@ class SendCoin extends React.Component {
               this.setState(Object.assign({}, this.state, {
                 spvVerificationWarning: !sendPreflight.result.utxoVerified,
                 spvPreflightSendInProgress: false,
+                btcPreflightRes: this.props.ActiveCoin.coin === 'BTC' ? { fee: sendPreflight.result.fee, value: sendPreflight.result.value, change: sendPreflight.result.change } : null,
               }));
             } else {
               this.setState(Object.assign({}, this.state, {
@@ -502,7 +538,8 @@ class SendCoin extends React.Component {
             this.props.ActiveCoin.coin,
             this.state.amount * 100000000,
             this.state.sendTo,
-            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+            this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null
           )
         );
       }
@@ -517,7 +554,8 @@ class SendCoin extends React.Component {
       const _amount = this.state.amount;
       const _amountSats = this.state.amount * 100000000;
       const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
-      const _fees = mainWindow.spvFees;
+      let _fees = mainWindow.spvFees;
+      _fees.BTC = 0;
 
       if (Number(_amountSats) + _fees[this.props.ActiveCoin.coin] > _balanceSats) {
         Store.dispatch(
@@ -635,6 +673,102 @@ class SendCoin extends React.Component {
         this.props.ActiveCoin.progress.blocks > 0 &&
         Number(this.props.ActiveCoin.progress.blocks) * 100 / Number(this.props.ActiveCoin.progress.longestchain) === 100) {
       return true;
+    }
+  }
+
+  onSliderChange(value) {
+    console.warn(value);
+    console.warn(`btc fee /byte ${this.state.btcFees.electrum[value]}`);
+    this.setState({
+      btcFeesSize: this.state.btcFees.electrum[value],
+      btcFeesAdvancedStep: value,
+    });
+  }
+
+  onSliderChangeTime(value) {
+    console.warn(value);
+    console.warn(`btc fee /byte ${_feeLookup[value]}`);
+    this.setState({
+      btcFeesSize: this.state.btcFees.recommended[_feeLookup[value]],
+      btcFeesTimeBasedStep: value,
+      btcFeesType: _feeLookup[value] === 'advanced' ? 'advanced' : null,
+    });
+  }
+
+  renderBTCFees() {
+    if (this.props.ActiveCoin.mode === 'spv' &&
+        this.props.ActiveCoin.coin === 'BTC' &&
+        !this.state.btcFees.lastUpdated) {
+      return (<div className="col-lg-6 form-group form-material">Fetching BTC fees...</div>);
+    } else if (this.props.ActiveCoin.mode === 'spv' && this.props.ActiveCoin.coin === 'BTC' && this.state.btcFees.lastUpdated) {
+      const _min = 0;
+      const _max = this.state.btcFees.electrum.length - 1;
+      const _confTime = [
+        'within less than 30 min',
+        'within 30 min',
+        'within 60 min',
+      ];
+      const _minTimeBased = 0;
+      const _maxTimeBased = 3;
+
+      /*let _marks = {};
+
+      for (let i = _min; i < _max; i++) {
+        _marks[i] = i + 1;
+      }*/
+
+      return (
+        <div className="col-lg-12 form-group form-material">
+          <div>
+            <div>
+              Fee
+              <span>
+                <i
+                  className="icon fa-question-circle settings-help"
+                  data-html={ true }
+                  data-tip={ this.state.btcFeesType === 'advanced' ? 'Electrum based fee estimates may not be as accurate as bitcoinfees.earn.com.<br />It is advised to use fast/average/slow options if you want your transaction to be confirmed within 60 min time frame.' : 'Estimates are based on bitcoinfees.earn.com data.<br />Around 90% probability for a transaction to be confirmed within desired time frame.' }></i>
+                <ReactTooltip
+                  effect="solid"
+                  className="text-left" />
+              </span>
+            </div>
+            <div className="send-target-block">
+              { this.state.btcFeesType !== 'advanced' &&
+                <span>Confirmation time <strong>{ _confTime[this.state.btcFeesTimeBasedStep] }</strong></span>
+              }
+              { this.state.btcFeesType === 'advanced' &&
+                <span>Advanced selection</span>
+              }
+            </div>
+            <Slider
+              className="send-slider-time-based margin-bottom-70"
+              onChange={ this.onSliderChangeTime }
+              defaultValue={ this.state.btcFeesTimeBasedStep }
+              min={ _minTimeBased }
+              max={ _maxTimeBased }
+              dots={ true }
+              marks={{
+                0: 'fast',
+                1: 'average',
+                2: 'slow',
+                3: 'advanced'
+              }} />
+            { this.state.btcFeesType === 'advanced' &&
+              <div>
+                <div className="send-target-block">Estimated to be included within the next <strong>{this.state.btcFeesAdvancedStep + 1} {(this.state.btcFeesAdvancedStep + 1) > 1 ? 'blocks' : 'block'}</strong></div>
+                <Slider
+                  onChange={ this.onSliderChange }
+                  defaultValue={ this.state.btcFeesAdvancedStep }
+                  min={ _min }
+                  max={ _max } />
+              </div>
+            }
+            { this.state.btcFeesSize > 0 &&
+              <div className="margin-top-10">Fee per byte {this.state.btcFeesSize}, per KB {this.state.btcFeesSize * 1024}</div>
+            }
+          </div>
+        </div>
+      );
     }
   }
 

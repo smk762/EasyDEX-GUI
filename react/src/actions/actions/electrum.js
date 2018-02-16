@@ -11,6 +11,32 @@ import {
 } from '../actionCreators';
 import Store from '../../store';
 
+// src: atomicexplorer
+export function shepherdGetRemoteBTCFees() {
+  return new Promise((resolve, reject) => {
+    fetch(`http://atomicexplorer.com/api/btc/fees`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdGetRemoteBTCFees',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
 export function shepherdElectrumSetServer(coin, address, port) {
   return new Promise((resolve, reject) => {
     fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/coins/server/set?address=${address}&port=${port}&coin=${coin}&token=${Config.token}`, {
@@ -198,11 +224,11 @@ export function shepherdElectrumCoinsState(json) {
 }
 
 // value in sats
-export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) {
+export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress, btcFee) {
   value = Math.floor(value);
 
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=true&verify=true&token=${Config.token}`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}${btcFee ? '&btcfee=' + btcFee : ''}&gui=true&push=true&verify=true&token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -225,11 +251,11 @@ export function shepherdElectrumSend(coin, value, sendToAddress, changeAddress) 
   }
 }
 
-export function shepherdElectrumSendPromise(coin, value, sendToAddress, changeAddress) {
+export function shepherdElectrumSendPromise(coin, value, sendToAddress, changeAddress, btcFee) {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=true&verify=true&token=${Config.token}`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}${btcFee ? '&btcfee=' + btcFee : ''}&gui=true&push=true&verify=true&token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -252,11 +278,11 @@ export function shepherdElectrumSendPromise(coin, value, sendToAddress, changeAd
   });
 }
 
-export function shepherdElectrumSendPreflight(coin, value, sendToAddress, changeAddress) {
+export function shepherdElectrumSendPreflight(coin, value, sendToAddress, changeAddress, btcFee) {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}&gui=true&push=false&verify=true&token=${Config.token}`, {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx?coin=${coin}&address=${sendToAddress}&value=${value}&change=${changeAddress}${btcFee ? '&btcfee=' + btcFee : ''}&gui=true&push=false&verify=true&token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
