@@ -441,7 +441,6 @@ class SendCoin extends React.Component {
         } else {
           // TODO: fallback to local electrum
         }
-        console.warn('btcfees', res);
       });
     }
   }
@@ -677,8 +676,6 @@ class SendCoin extends React.Component {
   }
 
   onSliderChange(value) {
-    console.warn(value);
-    console.warn(`btc fee /byte ${this.state.btcFees.electrum[value]}`);
     this.setState({
       btcFeesSize: this.state.btcFees.electrum[value],
       btcFeesAdvancedStep: value,
@@ -686,8 +683,6 @@ class SendCoin extends React.Component {
   }
 
   onSliderChangeTime(value) {
-    console.warn(value);
-    console.warn(`btc fee /byte ${_feeLookup[value]}`);
     this.setState({
       btcFeesSize: this.state.btcFees.recommended[_feeLookup[value]],
       btcFeesTimeBasedStep: value,
