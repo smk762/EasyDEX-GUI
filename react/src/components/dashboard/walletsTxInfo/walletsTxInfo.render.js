@@ -190,7 +190,6 @@ const WalletsTxInfoRender = function(txInfo) {
             </div>
             <div className="modal-footer">
               { this.state.txDetails &&
-                this.props.ActiveCoin.coin !== 'CHIPS' &&
                 explorerList[this.props.ActiveCoin.coin] &&
                 <button
                   type="button"
