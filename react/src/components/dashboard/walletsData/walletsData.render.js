@@ -183,9 +183,11 @@ export const TxAmountRender = function(tx) {
               className="tx-interest"
               data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
           }
-          <ReactTooltip
-            effect="solid"
-            className="text-left" />
+          { tx.interest &&
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
+          }
         </span>
         <ReactTooltip
           effect="solid"
@@ -202,9 +204,11 @@ export const TxAmountRender = function(tx) {
           className="tx-interest"
           data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
       }
-      <ReactTooltip
-        effect="solid"
-        className="text-left" />
+      { tx.interest &&
+        <ReactTooltip
+          effect="solid"
+          className="text-left" />
+      }
     </span>
   );
 };
