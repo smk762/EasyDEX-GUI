@@ -115,7 +115,7 @@ class NotaryElectionsModal extends React.Component {
   }
 
   sendMulti() {
-    const _divisor = 10;
+    const _divisor = 4;
     let _addressValidateMsg = [];
 
     for (let i = 0; i < 4; i++) {
@@ -466,8 +466,8 @@ class NotaryElectionsModal extends React.Component {
         <tr key={ `notary-elections-history-${i}` }>
           <td>{ _history[i].address }</td>
           <td>{ _history[i].amount === 'unknown' ? 'unknown' : Number(_history[i].amount) }</td>
-          <td>{ _history[i].region === 'unknown' ? 'unknown' : this.renderHistoryRegion(_history[i].region) }</td>
           <td>{ secondsToString(_history[i].timestamp) }</td>
+          <td>{ this.renderHistoryRegion(_history[i].region) }</td>
         </tr>
       );
     }
@@ -478,8 +478,8 @@ class NotaryElectionsModal extends React.Component {
           <tr>
             <th>{ this.state.userType === 'voter' ? 'To' : 'From' }</th>
             <th>{ translate('INDEX.AMOUNT') }</th>
-            <th>Region</th>
             <th>Time</th>
+            <th>Region</th>
           </tr>
         </thead>
         <tbody>
@@ -489,8 +489,8 @@ class NotaryElectionsModal extends React.Component {
           <tr>
             <th>{ this.state.userType === 'voter' ? 'To' : 'From' }</th>
             <th>{ translate('INDEX.AMOUNT') }</th>
-            <th>Region</th>
             <th>Time</th>
+            <th>Region</th>
           </tr>
         </tfoot>
       </table>
