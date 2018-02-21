@@ -383,6 +383,7 @@ class NotaryElectionsModal extends React.Component {
           isAuth: true,
           pub: res.result,
         });
+        this.sync();
       } else {
         Store.dispatch(
           triggerToaster(
@@ -402,8 +403,6 @@ class NotaryElectionsModal extends React.Component {
     // reset login input vals
     this.refs.loginPassphrase.value = '';
     this.refs.loginPassphraseTextarea.value = '';
-
-    this.sync();
   }
 
   logout() {
@@ -466,8 +465,8 @@ class NotaryElectionsModal extends React.Component {
       _items.push(
         <tr key={ `notary-elections-history-${i}` }>
           <td>{ _history[i].address }</td>
-          <td>{ Number(_history[i].amount) }</td>
-          <td>{ this.renderHistoryRegion(_history[i].region) }</td>
+          <td>{ _history[i].amount === 'unknown' ? 'unknown' : Number(_history[i].amount) }</td>
+          <td>{ _history[i].region === 'unknown' ? 'unknown' : this.renderHistoryRegion(_history[i].region) }</td>
           <td>{ secondsToString(_history[i].timestamp) }</td>
         </tr>
       );
@@ -612,6 +611,7 @@ class NotaryElectionsModal extends React.Component {
                       </div>
                     }
                     { this.state.isAuth &&
+                      this.state.userType === 'voter' &&
                       <div className={ 'elections-user-type' + (this.state.voteType === 'single' ? ' margin-bottom-30' : '') }>
                         <a
                           className={ this.state.voteType === 'multi' ? 'active' : '' }
