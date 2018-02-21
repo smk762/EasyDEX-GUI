@@ -362,12 +362,12 @@ export function shepherdElectrumBip39Keys(seed, match, addressdepth, accounts) {
   });
 }
 
-// split test
+// split utxo
 export function shepherdElectrumSplitUtxoPromise(payload) {
   console.warn(payload);
 
   return new Promise((resolve, reject) => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx-test`, {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx-split`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

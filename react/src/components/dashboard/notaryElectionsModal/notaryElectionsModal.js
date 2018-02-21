@@ -4,6 +4,7 @@ import { translate } from '../../../translate/translate';
 import {
   toggleNotaryElectionsModal,
   shepherdElectionsSend,
+  shepherdElectionsSendMany,
   shepherdElectionsLogout,
   shepherdElectionsLogin,
   shepherdElectionsStatus,
@@ -35,6 +36,11 @@ class NotaryElectionsModal extends React.Component {
       pub: null,
       amount: 0,
       address: '',
+      voteType: 'multi',
+      multiOutAddress1: '',
+      multiOutAddress2: '',
+      multiOutAddress3: '',
+      multiOutAddress4: '',
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.closeModal = this.closeModal.bind(this);
@@ -42,13 +48,16 @@ class NotaryElectionsModal extends React.Component {
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
     this.setUserType = this.setUserType.bind(this);
+    this.setVoteType = this.setVoteType.bind(this);
     this.setRegion = this.setRegion.bind(this);
     this.loginSeed = this.loginSeed.bind(this);
     this.logout = this.logout.bind(this);
     this.sync = this.sync.bind(this);
     this.send = this.send.bind(this);
+    this.sendMulti = this.sendMulti.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.sendValidate = this.sendValidate.bind(this);
+    this.verifyMultiSendForm = this.verifyMultiSendForm.bind(this);
     this.electionsDataInterval = null;
   }
 
@@ -105,20 +114,52 @@ class NotaryElectionsModal extends React.Component {
     return valid;
   }
 
-  send() {
-    if (this.sendValidate()) {
-      shepherdElectionsSend(
+  sendMulti() {
+    const _divisor = 10;
+    let _addressValidateMsg = [];
+
+    for (let i = 0; i < 4; i++) {
+      const _validateAddress = mainWindow.addressVersionCheck(this.state.coin, this.state[`multiOutAddress${i + 1}`]);
+
+      if (!_validateAddress ||
+          _validateAddress === 'Invalid pub address') {
+        _addressValidateMsg.push(this.state[`multiOutAddress${i + 1}`]);
+      }
+    }
+
+    if (_addressValidateMsg.length) {
+      Store.dispatch(
+        triggerToaster(
+          `Address(es) ${_addressValidateMsg.join(', ')} is(are) invalid!`,
+          'Notary voting 2018',
+          'error',
+          false
+        )
+      );
+    } else {
+      shepherdElectionsSendMany(
         this.state.coin,
-        (this.state.amount * 100000000) - 10000,
-        this.state.address,
+        [{
+          address: this.state.multiOutAddress1,
+          value: parseInt((this.state.balance / _divisor) * 100000000),
+        }, {
+          address: this.state.multiOutAddress2,
+          value: parseInt((this.state.balance / _divisor) * 100000000),
+        }, {
+          address: this.state.multiOutAddress3,
+          value: parseInt((this.state.balance / _divisor) * 100000000),
+        }, {
+          address: this.state.multiOutAddress4,
+          value: parseInt((this.state.balance / _divisor) * 100000000),
+        }],
         this.state.pub,
-        'ne2k18-' + this.state.region,
+        ['ne2k18-na-1-eu-2-ae-3-sh-4']
       )
       .then((res) => {
         if (res.msg === 'success') {
           Store.dispatch(
             triggerToaster(
-              `You succesfully voted ${this.state.amount} for ${this.state.address}`,
+              `You succesfully voted`,
               'Notary voting 2018',
               'success',
               false
@@ -126,13 +167,29 @@ class NotaryElectionsModal extends React.Component {
           );
           let _transactions = this.state.transactions;
           _transactions.unshift({
-            address: this.state.address,
-            amount: this.state.amount - 0.0001,
-            region: 'ne2k18-' + this.state.region,
+            address: this.state.multiOutAddress1,
+            amount: this.state.balance / _divisor,
+            region: 'ne2k18-na',
+            timestamp: Math.floor(Date.now() / 1000),
+          }, {
+            address: this.state.multiOutAddress2,
+            amount: this.state.balance / _divisor,
+            region: 'ne2k18-eu',
+            timestamp: Math.floor(Date.now() / 1000),
+          }, {
+            address: this.state.multiOutAddress3,
+            amount: this.state.balance / _divisor,
+            region: 'ne2k18-ae',
+            timestamp: Math.floor(Date.now() / 1000),
+          }, {
+            address: this.state.multiOutAddress4,
+            amount: this.state.balance / _divisor,
+            region: 'ne2k18-sh',
             timestamp: Math.floor(Date.now() / 1000),
           });
           this.setState({
             transactions: _transactions,
+            balance: 0,
           });
         } else {
           Store.dispatch(
@@ -144,6 +201,64 @@ class NotaryElectionsModal extends React.Component {
           );
         }
       });
+    }
+  }
+
+  send() {
+    const _validateAddress = mainWindow.addressVersionCheck(this.state.coin, this.state.address);
+
+    if (!_validateAddress ||
+        _validateAddress === 'Invalid pub address') {
+      _addressValidateMsg.push(this.state[`multiOutAddress${i + 1}`]);
+      Store.dispatch(
+        triggerToaster(
+          `Address ${this.state.address} is invalid!`,
+          'Notary voting 2018',
+          'error',
+          false
+        )
+      );
+    } else {
+      if (this.sendValidate()) {
+        shepherdElectionsSend(
+          this.state.coin,
+          (this.state.amount * 100000000) - 10000,
+          this.state.address,
+          this.state.pub,
+          'ne2k18-' + this.state.region,
+        )
+        .then((res) => {
+          if (res.msg === 'success') {
+            Store.dispatch(
+              triggerToaster(
+                `You succesfully voted ${this.state.amount} for ${this.state.address}`,
+                'Notary voting 2018',
+                'success',
+                false
+              )
+            );
+            let _transactions = this.state.transactions;
+            _transactions.unshift({
+              address: this.state.address,
+              amount: this.state.amount - 0.0001,
+              region: 'ne2k18-' + this.state.region,
+              timestamp: Math.floor(Date.now() / 1000),
+            });
+            this.setState({
+              transactions: _transactions,
+              balance: this.state.balance - this.state.amount - 0.0001,
+            });
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                res.result.txid || res.result,
+                'Notary voting 2018',
+                'error'
+              )
+            );
+          }
+        });
+      }
     }
   }
 
@@ -213,6 +328,12 @@ class NotaryElectionsModal extends React.Component {
   setUserType(type) {
     this.setState({
       userType: type,
+    });
+  }
+
+  setVoteType(type) {
+    this.setState({
+      voteType: type,
     });
   }
 
@@ -301,6 +422,17 @@ class NotaryElectionsModal extends React.Component {
   displayTxHistoryRender() {
     if (this.state.transactions &&
         this.state.transactions.length) {
+      return true;
+    }
+  }
+
+  verifyMultiSendForm() {
+    if (!this.state.multiOutAddress1 || !this.state.multiOutAddress1.length ||
+        !this.state.multiOutAddress2 || !this.state.multiOutAddress2.length ||
+        !this.state.multiOutAddress3 || !this.state.multiOutAddress3.length ||
+        !this.state.multiOutAddress4 || !this.state.multiOutAddress4.length) {
+      return false;
+    } else {
       return true;
     }
   }
@@ -401,13 +533,13 @@ class NotaryElectionsModal extends React.Component {
                       <span className="margin-left-30 margin-right-30">|</span>
                       <a
                         className={ this.state.userType === 'candidate' ? 'active' : '' }
-                        onClick={ () => this.setUserType('candidate') }><i className="fa fa-user margin-right-10"></i>I'm a candidate</a>
+                        onClick={ () => this.setUserType('candidate') }><i className="fa fa-user-o margin-right-10"></i>I'm a candidate</a>
                     </div>
                     { !this.state.isAuth &&
                       <div className="elections-login">
                         <label
                           className="floating-label"
-                          htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
+                          htmlFor="inputPassword">{  this.state.userType === 'voter' ? translate('INDEX.WALLET_SEED') : 'Pub key' }</label>
                         <input
                           type="password"
                           name="loginPassphrase"
@@ -445,7 +577,7 @@ class NotaryElectionsModal extends React.Component {
                     { this.state.isAuth &&
                       this.state.userType === 'voter' &&
                       <div className="elections-voter-ui">
-                        <div className="elections-map">
+                        <div className={ 'elections-map' + (this.state.voteType === 'multi' ? ' disable' : '') }>
                           <img src={ `assets/images/world-map.png` } />
                           <div className={ 'elections-map-node elections-map-node--na' + (this.state.region === 'na' ? ' active' : '') }>
                             <label className="notary-elections-node-title">NA</label>
@@ -480,8 +612,21 @@ class NotaryElectionsModal extends React.Component {
                       </div>
                     }
                     { this.state.isAuth &&
+                      <div className={ 'elections-user-type' + (this.state.voteType === 'single' ? ' margin-bottom-30' : '') }>
+                        <a
+                          className={ this.state.voteType === 'multi' ? 'active' : '' }
+                          onClick={ () => this.setVoteType('multi') }><i className="fa fa-users margin-right-10"></i>4-way vote</a>
+                        <span className="margin-left-30 margin-right-30">|</span>
+                        <a
+                          className={ this.state.voteType === 'single' ? 'active' : '' }
+                          onClick={ () => this.setVoteType('single') }><i className="fa fa-user margin-right-10"></i>1-way vote</a>
+                      </div>
+                    }
+                    { this.state.isAuth &&
                       this.state.userType === 'voter' &&
-                      <div className="elections-send margin-top-10">
+                      this.state.voteType === 'single' &&
+                      this.state.balance > 0 &&
+                      <div className="elections-send elections-send--single margin-top-10">
                         <input
                           type="text"
                           className="form-control block margin-bottom-10"
@@ -502,6 +647,68 @@ class NotaryElectionsModal extends React.Component {
                           onClick={ this.send }
                           disabled={ !this.state.amount || !this.state.address || !this.state.address.length || !this.state.region || this.state.address === this.state.pub }
                           className="btn btn-md btn-primary btn-block ladda-button elections-login-btn">
+                          Vote
+                        </button>
+                      </div>
+                    }
+                    { this.state.isAuth &&
+                      this.state.userType === 'voter' &&
+                      this.state.voteType === 'multi' &&
+                      this.state.balance > 0 &&
+                      <div className="elections-send margin-top-50">
+                        <div className="margin-bottom-30">Each candidate is going to recieve 25% of your VOTE funds</div>
+                        <div>
+                          <label>NA</label>
+                          <input
+                            type="text"
+                            className="form-control margin-left-15 margin-bottom-10"
+                            name="multiOutAddress1"
+                            value={ this.state.multiOutAddress1 !== 0 ? this.state.multiOutAddress1 : '' }
+                            onChange={ this.updateInput }
+                            placeholder="Enter an address for NA region"
+                            autoComplete="off" />
+                          <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
+                        </div>
+                        <div className="margin-top-10">
+                          <label>EU</label>
+                          <input
+                            type="text"
+                            className="form-control margin-left-15 margin-bottom-10"
+                            name="multiOutAddress2"
+                            value={ this.state.multiOutAddress2 !== 0 ? this.state.multiOutAddress2 : '' }
+                            onChange={ this.updateInput }
+                            placeholder="Enter an address for EU region"
+                            autoComplete="off" />
+                          <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
+                        </div>
+                        <div className="margin-top-10">
+                          <label>AE</label>
+                          <input
+                            type="text"
+                            className="form-control margin-left-15 margin-bottom-10"
+                            name="multiOutAddress3"
+                            value={ this.state.multiOutAddress3 !== 0 ? this.state.multiOutAddress3 : '' }
+                            onChange={ this.updateInput }
+                            placeholder="Enter an address for AE region"
+                            autoComplete="off" />
+                          <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
+                        </div>
+                        <div className="margin-top-10">
+                          <label>SH</label>
+                          <input
+                            type="text"
+                            className="form-control margin-left-15 margin-bottom-10"
+                            name="multiOutAddress4"
+                            value={ this.state.multiOutAddress4 !== 0 ? this.state.multiOutAddress4 : '' }
+                            onChange={ this.updateInput }
+                            placeholder="Enter an address for SH region"
+                            autoComplete="off" />
+                          <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
+                        </div>
+                        <button
+                          onClick={ this.sendMulti }
+                          disabled={ !this.verifyMultiSendForm() }
+                          className="btn btn-md btn-primary btn-block ladda-button elections-login-btn margin-top-20">
                           Vote
                         </button>
                       </div>
