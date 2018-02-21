@@ -24,7 +24,8 @@ const addCoinOptionsAC = () => {
     'etomic',
     'btch',
     'beer',
-    'pizza'
+    'pizza',
+    'vote'
   ];
   let _items = [];
 

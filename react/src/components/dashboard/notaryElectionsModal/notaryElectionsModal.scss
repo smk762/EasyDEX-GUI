@@ -65,6 +65,10 @@
     left: 0;
     height: 350px;
     text-align: center;
+
+    &.disable {
+      pointer-events: none;
+    }
   }
 
   .elections-map-node {
@@ -154,17 +158,26 @@
   .elections-send {
     .form-control {
       display: inline-block;
-      width: 250px;
-    }
-    .btn {
-      position: relative;
-      top: -6px;
-      left: 15px;
-      display: inline-block;
+      width: 350px;
     }
     .block {
-      width: 365px;
+      width: 400px;
       display: block;
+    }
+
+    &.elections-send--single {
+      .btn {
+        position: relative;
+        top: -6px;
+        left: 15px;
+        display: inline-block;
+      }
+      .form-control {
+        width: 250px;
+      }
+      .block {
+        width: 365px;
+      }
     }
   }
 }

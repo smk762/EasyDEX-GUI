@@ -166,3 +166,38 @@ export function shepherdElectionsSend(coin, value, sendToAddress, changeAddress,
     });
   });
 }
+
+export function shepherdElectionsSendMany(coin, targets, change, opreturn) {
+  return new Promise((resolve, reject) => {
+    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx-multiout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token: Config.token,
+        coin,
+        targets,
+        change,
+        opreturn,
+        push: true,
+        verify: false,
+        vote: true,
+      }),
+    })
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdElectionsSendMany',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}

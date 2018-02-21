@@ -152,6 +152,12 @@ export const TxTypeRender = function(category) {
         <i className="icon fa-meh-o"></i> <span>{ translate('DASHBOARD.UNKNOWN') }</span>
       </span>
     );
+  } else if (category === 'self') {
+    return (
+      <span className="label label-info self-send">
+        <span>self</span>
+      </span>
+    );
   }
 };
 
@@ -171,15 +177,17 @@ export const TxAmountRender = function(tx) {
     return (
       <span>
         <span data-tip={ tx.amount * _amountNegative }>
-          { formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN') }
+          { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN')) : '' }
           { tx.interest &&
             <span
               className="tx-interest"
               data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
           }
-          <ReactTooltip
-            effect="solid"
-            className="text-left" />
+          { tx.interest &&
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
+          }
         </span>
         <ReactTooltip
           effect="solid"
@@ -190,15 +198,17 @@ export const TxAmountRender = function(tx) {
 
   return (
     <span>
-      { tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN') }
+      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN')) : '' }
       { tx.interest &&
         <span
           className="tx-interest"
           data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
       }
-      <ReactTooltip
-        effect="solid"
-        className="text-left" />
+      { tx.interest &&
+        <ReactTooltip
+          effect="solid"
+          className="text-left" />
+      }
     </span>
   );
 };
