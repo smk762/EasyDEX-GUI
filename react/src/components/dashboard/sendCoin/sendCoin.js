@@ -551,7 +551,7 @@ class SendCoin extends React.Component {
 
     if (this.props.ActiveCoin.mode === 'spv') {
       const _amount = this.state.amount;
-      const _amountSats = this.state.amount * 100000000;
+      const _amountSats = Math.floor(this.state.amount * 100000000);
       const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
       let _fees = mainWindow.spvFees;
       _fees.BTC = 0;
@@ -685,8 +685,8 @@ class SendCoin extends React.Component {
   onSliderChangeTime(value) {
     this.setState({
       btcFeesSize: _feeLookup[value] === 'advanced' ? this.state.btcFees.electrum[this.state.btcFeesAdvancedStep] : this.state.btcFees.recommended[_feeLookup[value]],
-      btcFeesTimeBasedStep: value,
       btcFeesType: _feeLookup[value] === 'advanced' ? 'advanced' : null,
+      btcFeesTimeBasedStep: value,
     });
   }
 
