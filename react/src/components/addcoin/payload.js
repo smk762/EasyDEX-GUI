@@ -26,6 +26,7 @@ export function checkAC(coinVal) {
 			coinVal === 'BTCH' ||
 			coinVal === 'BEER' ||
 			coinVal === 'PIZZA' ||
+			coinVal === 'VOTE' ||
 			coinVal === 'USD' ||
 			coinVal === 'RON' ||
 			coinVal === 'EUR' ||
@@ -122,7 +123,8 @@ export function checkCoinType(coin) {
 			coin === 'ETOMIC' ||
 			coin === 'BTCH' ||
 			coin === 'BEER' ||
-			coin === 'PIZZA') {
+			coin === 'PIZZA' ||
+			coin === 'VOTE') {
 		return 'ac';
 	}
 
@@ -210,6 +212,9 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		PIZZA: {
 			supply: 100000000,
+		},
+		VOTE: {
+			supply: 49999999999,
 		},
 	};
 
