@@ -60,7 +60,7 @@ class SendCoin extends React.Component {
       btcFeesAdvancedStep: 9,
       btcFeesSize: 0,
       btcFeesTimeBasedStep: 1,
-      btcPreflightRes: null,
+      spvPreflightRes: null,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -262,7 +262,7 @@ class SendCoin extends React.Component {
     if (_coinAddresses &&
         _coinAddresses[type] &&
         _coinAddresses[type].length) {
-        _coinAddresses[type].map((address) => {
+      _coinAddresses[type].map((address) => {
         if (address.amount > 0 &&
             (type !== 'public' || (address.canspend && type === 'public'))) {
           _items.push(
@@ -486,7 +486,12 @@ class SendCoin extends React.Component {
               this.setState(Object.assign({}, this.state, {
                 spvVerificationWarning: !sendPreflight.result.utxoVerified,
                 spvPreflightSendInProgress: false,
-                btcPreflightRes: this.props.ActiveCoin.coin === 'BTC' ? { fee: sendPreflight.result.fee, value: sendPreflight.result.value, change: sendPreflight.result.change } : null,
+                spvPreflightRes: {
+                  fee: sendPreflight.result.fee,
+                  value: sendPreflight.result.value,
+                  change: sendPreflight.result.change,
+                  estimatedFee: sendPreflight.result.estimatedFee,
+                },
               }));
             } else {
               this.setState(Object.assign({}, this.state, {
