@@ -69,8 +69,7 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
-            { this.props.ActiveCoin.coin !== 'CHIPS' &&
-              this.props.ActiveCoin.mode !== 'spv' &&
+            { this.props.ActiveCoin.mode !== 'spv' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
                   <i className="site-menu-icon"></i> { translate('IMPORT_KEY.IMPORT_KEY') }

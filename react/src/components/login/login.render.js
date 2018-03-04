@@ -102,6 +102,16 @@ const LoginRender = function() {
                 <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
               </div>
             }
+            { this.state.seedExtraSpaces &&
+              <span>
+                <i className="icon fa-warning seed-extra-spaces-warning"
+                  data-tip="Your seed contains leading/trailing space characters"
+                  data-html={ true }></i>
+                <ReactTooltip
+                  effect="solid"
+                  className="text-left" />
+              </span>
+            }
             { this.state.loginPassphrase &&
               this.state.enableEncryptSeed &&
               <div className="row">

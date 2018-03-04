@@ -64,6 +64,16 @@ export const ImportKeyModalRender = function() {
                     <label
                       className="floating-label"
                       htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') }</label>
+                    { this.state.seedExtraSpaces &&
+                      <span>
+                        <i className="icon fa-warning seed-extra-spaces-warning"
+                          data-tip="Your seed contains leading/trailing space characters"
+                          data-html={ true }></i>
+                        <ReactTooltip
+                          effect="solid"
+                          className="text-left" />
+                      </span>
+                    }
                   </div>
                   <div className="text-align-center">
                     <button

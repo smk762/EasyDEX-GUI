@@ -187,6 +187,13 @@ option.login-option {
 }
 
 .page-login {
+  .seed-extra-spaces-warning {
+    position: absolute;
+    right: -30px;
+    margin-top: 54px;
+    font-size: 20px;
+    color: rgb(255, 75, 0);
+  }
   .addcoin-shortcut {
     display: inline-block;
     width: 46%;

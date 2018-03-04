@@ -31,6 +31,7 @@ import { md5 } from '../../util/crypto/md5';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
+const SEED_TRIM_TIMEOUT = 5000;
 
 // TODO: remove duplicate activehandle and activecoins calls
 
@@ -64,6 +65,7 @@ class Login extends React.Component {
       enableEncryptSeed: false,
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
+      seedExtraSpaces: false,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
@@ -290,22 +292,27 @@ class Login extends React.Component {
   }
 
   updateLoginPassPhraseInput(e) {
-    // remove any empty chars from the start/end of the string
     const newValue = e.target.value;
 
     clearTimeout(this.state.trimPassphraseTimer);
 
     const _trimPassphraseTimer = setTimeout(() => {
-      this.setState({
-        loginPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
-        loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
-      });
-    }, 2000);
+      if (newValue[0] === ' ' ||
+          newValue[newValue.length - 1] === ' ') {
+        this.setState({
+          seedExtraSpaces: true,
+        });
+      } else {
+        this.setState({
+          seedExtraSpaces: false,
+        });
+      }
+    }, SEED_TRIM_TIMEOUT);
 
     this.resizeLoginTextarea();
 
     this.setState({
-      trimPassphraseTimer: _trimPassphraseTimer,
+      // trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
       loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
     });

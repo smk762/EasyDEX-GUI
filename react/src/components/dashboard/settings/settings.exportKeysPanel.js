@@ -7,6 +7,9 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import ReactTooltip from 'react-tooltip';
+
+const SEED_TRIM_TIMEOUT = 5000;
 
 class ExportKeysPanel extends React.Component {
   constructor() {
@@ -16,6 +19,7 @@ class ExportKeysPanel extends React.Component {
       trimPassphraseTimer: null,
       wifkeysPassphrase: '',
       keys: null,
+      seedExtraSpaces: false,
     };
     this.exportWifKeys = this.exportWifKeys.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
@@ -109,18 +113,24 @@ class ExportKeysPanel extends React.Component {
   }
 
   updateInput(e) {
-    if (e.target.name === 'wifkeysPassphrase') {
-      // remove any empty chars from the start/end of the string
-      const newValue = e.target.value;
+    const newValue = e.target.value;
 
-      clearTimeout(this.state.trimPassphraseTimer);
+    clearTimeout(this.state.trimPassphraseTimer);
 
-      const _trimPassphraseTimer = setTimeout(() => {
+    const _trimPassphraseTimer = setTimeout(() => {
+      if (newValue[0] === ' ' ||
+          newValue[newValue.length - 1] === ' ') {
         this.setState({
-          wifkeysPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
+          seedExtraSpaces: true,
         });
-      }, 2000);
+      } else {
+        this.setState({
+          seedExtraSpaces: false,
+        });
+      }
+    }, SEED_TRIM_TIMEOUT);
 
+    if (e.target.name === 'wifkeysPassphrase') {
       this.resizeLoginTextarea();
 
       this.setState({
@@ -198,6 +208,16 @@ class ExportKeysPanel extends React.Component {
                 <label
                   className="floating-label"
                   htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
+                { this.state.seedExtraSpaces &&
+                  <span>
+                    <i className="icon fa-warning seed-extra-spaces-warning"
+                      data-tip="Your seed contains leading/trailing space characters"
+                      data-html={ true }></i>
+                    <ReactTooltip
+                      effect="solid"
+                      className="text-left" />
+                  </span>
+                }
               </div>
               <div className="col-sm-12 col-xs-12 text-align-center">
                 <button
