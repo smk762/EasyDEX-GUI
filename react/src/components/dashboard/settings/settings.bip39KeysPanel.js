@@ -7,6 +7,9 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import ReactTooltip from 'react-tooltip';
+
+const SEED_TRIM_TIMEOUT = 5000;
 
 class Bip39KeysPanel extends React.Component {
   constructor() {
@@ -15,6 +18,7 @@ class Bip39KeysPanel extends React.Component {
       keys: null,
       match: '',
       passphrase: '',
+      seedExtraSpaces: false,
       seedInputVisibility: false,
       trimPassphraseTimer: null,
       addressdepth: 20,
@@ -51,18 +55,24 @@ class Bip39KeysPanel extends React.Component {
   }
 
   updateInput(e) {
-    if (e.target.name === 'passphrase') {
-      // remove any empty chars from the start/end of the string
-      const newValue = e.target.value;
+    const newValue = e.target.value;
 
-      clearTimeout(this.state.trimPassphraseTimer);
+    clearTimeout(this.state.trimPassphraseTimer);
 
-      const _trimPassphraseTimer = setTimeout(() => {
+    const _trimPassphraseTimer = setTimeout(() => {
+      if (newValue[0] === ' ' ||
+          newValue[newValue.length - 1] === ' ') {
         this.setState({
-          passphrase: newValue ? newValue.trim() : '', // hardcoded field name
+          seedExtraSpaces: true,
         });
-      }, 2000);
+      } else {
+        this.setState({
+          seedExtraSpaces: false,
+        });
+      }
+    }, SEED_TRIM_TIMEOUT);
 
+    if (e.target.name === 'passphrase') {
       this.resizeLoginTextarea();
 
       this.setState({
@@ -103,12 +113,6 @@ class Bip39KeysPanel extends React.Component {
     });
   }
 
-  updateInput(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  }
-
   render() {
     return (
       <div>
@@ -145,6 +149,16 @@ class Bip39KeysPanel extends React.Component {
                   <label
                     className="floating-label"
                     htmlFor="passphrase">{ translate('INDEX.PASSPHRASE') }</label>
+                  { this.state.seedExtraSpaces &&
+                    <span>
+                      <i className="icon fa-warning seed-extra-spaces-warning"
+                        data-tip="Your seed contains leading/trailing space characters"
+                        data-html={ true }></i>
+                      <ReactTooltip
+                        effect="solid"
+                        className="text-left" />
+                    </span>
+                  }
                 </div>
               </div>
               <div className="col-sm-5 no-padding-left">

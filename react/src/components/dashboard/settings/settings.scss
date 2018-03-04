@@ -130,6 +130,12 @@
       content: '\F273';
     }
   }
+  .seed-extra-spaces-warning {
+    position: absolute;
+    right: -3px;
+    font-size: 20px;
+    color: rgb(255, 75, 0);
+  }
 }
 
 @keyframes max-height {

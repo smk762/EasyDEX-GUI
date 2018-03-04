@@ -15,6 +15,8 @@ import {
   ImportKeyModalRender,
 } from './importKeyModal.render';
 
+const SEED_TRIM_TIMEOUT = 5000;
+
 // import gen komodo keys utils
 import '../../../util/crypto/gen/array.map.js';
 import '../../../util/crypto/gen/cryptojs.js';
@@ -44,6 +46,7 @@ class ImportKeyModal extends React.Component {
       seedInputVisibility: false,
       wifInputVisibility: false,
       trimPassphraseTimer: null,
+      seedExtraSpaces: false,
     };
     this.generateKeysFromPassphrase = this.generateKeysFromPassphrase.bind(this);
     this.toggleImportWithRescan = this.toggleImportWithRescan.bind(this);
@@ -62,18 +65,24 @@ class ImportKeyModal extends React.Component {
   }
 
   updateInput(e) {
-    if (e.target.name === 'wifkeysPassphrase') {
-      // remove any empty chars from the start/end of the string
-      const newValue = e.target.value;
+    const newValue = e.target.value;
 
-      clearTimeout(this.state.trimPassphraseTimer);
+    clearTimeout(this.state.trimPassphraseTimer);
 
-      const _trimPassphraseTimer = setTimeout(() => {
+    const _trimPassphraseTimer = setTimeout(() => {
+      if (newValue[0] === ' ' ||
+          newValue[newValue.length - 1] === ' ') {
         this.setState({
-          wifkeysPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
+          seedExtraSpaces: true,
         });
-      }, 2000);
+      } else {
+        this.setState({
+          seedExtraSpaces: false,
+        });
+      }
+    }, SEED_TRIM_TIMEOUT);
 
+    if (e.target.name === 'wifkeysPassphrase') {
       this.resizeLoginTextarea();
 
       this.setState({
