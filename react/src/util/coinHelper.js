@@ -14,6 +14,10 @@ export function getCoinTitle(coin) {
       coinlogo = 'grs';
       coinname = 'Groestlcoin';
       break;
+    case 'DNR':
+      coinlogo = 'dnr';
+      coinname = 'Denarius';
+      break;
     case 'BTCZ':
       coinlogo = 'btcz';
       coinname = 'BitcoinZ';
