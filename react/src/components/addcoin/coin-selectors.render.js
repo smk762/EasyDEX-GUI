@@ -2,7 +2,7 @@ import React from 'react';
 import { translate } from '../../translate/translate';
 import addCoinOptionsCrypto from '../addcoin/addcoinOptionsCrypto';
 import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
-import addCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
+// import addCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
 import mainWindow from '../../util/mainWindow';
 import Select from 'react-select';
 
@@ -23,7 +23,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             onChange={ (event) => this.updateSelectedCoin(event, i) }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()).concat(addCoinOptionsACFiat()) } />
+            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
         </div>
         <div className={ this.hasMoreThanOneCoin() && (item.mode === '-1' || item.mode === -1) ? 'col-sm-6' : 'hide' }>
           <div className="toggle-box padding-bottom-10">

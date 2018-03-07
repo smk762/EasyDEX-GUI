@@ -312,7 +312,7 @@ class Login extends React.Component {
     this.resizeLoginTextarea();
 
     this.setState({
-      // trimPassphraseTimer: _trimPassphraseTimer,
+      trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
       loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
     });

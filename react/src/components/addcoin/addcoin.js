@@ -400,7 +400,6 @@ class AddCoin extends React.Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
     Main: state.Main,
