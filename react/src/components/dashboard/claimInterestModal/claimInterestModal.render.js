@@ -58,6 +58,9 @@ export const _ClaimInterestTableRender = function() {
             <strong>{ translate('CLAIM_INTEREST.NOTICE') }:</strong> { translate('CLAIM_INTEREST.NATIVE_INTEREST_CHANGE_DESC') }
           </p>
         }
+        <p>
+          <strong>Claim interest fee:</strong> 0.0001 KMD (10000 sats).
+        </p>
       </div>
       { this.state.totalInterest > 0 &&
         <div className={ 'text-left padding-bottom-20' + (this.state.displayShowZeroInterestToggle ? ' padding-top-40' : '') }>
