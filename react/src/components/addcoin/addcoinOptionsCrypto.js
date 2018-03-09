@@ -36,11 +36,11 @@ const addCoinOptionsCrypto = () => {
       label: 'Dash (DASH)',
       icon: 'DASH',
       value: `DASH|spv`,
-    }, {
+    }, /*{
       label: 'Denarius (DNR)',
       icon: 'DNR',
       value: `DNR|spv`,
-    }, {
+    },*/ {
       label: 'DigiByte (DGB)',
       icon: 'DGB',
       value: `DGB|spv`,
