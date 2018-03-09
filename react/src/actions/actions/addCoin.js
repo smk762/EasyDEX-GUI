@@ -11,7 +11,6 @@ import {
   startCurrencyAssetChain,
   startAssetChain,
   startCrypto,
-  checkCoinType,
   checkAC,
 } from '../../components/addcoin/payload';
 
@@ -183,23 +182,13 @@ export function shepherdHerd(coin, mode, path, startupParams) {
   }
 
   // TODO: switch statement
-  if (checkCoinType(coin) === 'crypto') {
+  if (coin === 'KMD') {
     acData = startCrypto(
       path.result,
       coin,
       mode
     );
-  }
-
-  if (checkCoinType(coin) === 'currency_ac') {
-    acData = startCurrencyAssetChain(
-      path.result,
-      coin,
-      mode
-    );
-  }
-
-  if (checkCoinType(coin) === 'ac') {
+  } else {
     const supply = startAssetChain(
       path.result,
       coin,
