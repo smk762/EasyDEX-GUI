@@ -91,7 +91,8 @@ class ImportKeyModal extends React.Component {
       });
     } else {
       this.setState({
-        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: e.target.value,
+        trimPassphraseTimer: _trimPassphraseTimer,
+        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
       });
     }
   }

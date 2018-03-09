@@ -17,7 +17,9 @@ import { secondsToString } from '../../../util/time';
 import { isPositiveNumber } from '../../../util/number';
 import mainWindow from '../../../util/mainWindow';
 import Spinner from '../spinner/spinner';
+import ReactTooltip from 'react-tooltip';
 
+const SEED_TRIM_TIMEOUT = 5000;
 const ELECTIONS_SYNC_UPDATE_INTERVAL = 120000; // every 2 min
 
 class NotaryElectionsModal extends React.Component {
@@ -25,6 +27,7 @@ class NotaryElectionsModal extends React.Component {
     super(props);
     this.state = {
       loginPassphrase: '',
+      seedExtraSpaces: false,
       seedInputVisibility: false,
       userType: 'voter',
       region: null,
@@ -362,10 +365,17 @@ class NotaryElectionsModal extends React.Component {
     clearTimeout(this.state.trimPassphraseTimer);
 
     const _trimPassphraseTimer = setTimeout(() => {
-      this.setState({
-        loginPassphrase: newValue ? newValue.trim() : '', // hardcoded field name
-      });
-    }, 2000);
+      if (newValue[0] === ' ' ||
+          newValue[newValue.length - 1] === ' ') {
+        this.setState({
+          seedExtraSpaces: true,
+        });
+      } else {
+        this.setState({
+          seedExtraSpaces: false,
+        });
+      }
+    }, SEED_TRIM_TIMEOUT);
 
     this.resizeLoginTextarea();
 
@@ -560,6 +570,17 @@ class NotaryElectionsModal extends React.Component {
                         <i
                           className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                           onClick={ this.toggleSeedInputVisibility }></i>
+                        { this.state.seedExtraSpaces &&
+                          this.state.userType === 'voter' &&
+                          <span>
+                            <i className="icon fa-warning seed-extra-spaces-warning"
+                              data-tip="Your seed contains leading/trailing space characters"
+                              data-html={ true }></i>
+                            <ReactTooltip
+                              effect="solid"
+                              className="text-left" />
+                          </span>
+                        }
                         <button
                           onClick={ this.loginSeed }
                           disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }

@@ -132,16 +132,12 @@ class ExportKeysPanel extends React.Component {
 
     if (e.target.name === 'wifkeysPassphrase') {
       this.resizeLoginTextarea();
-
-      this.setState({
-        trimPassphraseTimer: _trimPassphraseTimer,
-        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
-      });
-    } else {
-      this.setState({
-        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: e.target.value,
-      });
     }
+
+    this.setState({
+      trimPassphraseTimer: _trimPassphraseTimer,
+      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+    });
   }
 
   resizeLoginTextarea() {

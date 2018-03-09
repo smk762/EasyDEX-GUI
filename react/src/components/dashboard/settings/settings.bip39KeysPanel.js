@@ -81,7 +81,8 @@ class Bip39KeysPanel extends React.Component {
       });
     } else {
       this.setState({
-        [e.target.name === 'passphraseTextarea' ? 'passphrase' : e.target.name]: e.target.value,
+        trimPassphraseTimer: _trimPassphraseTimer,
+        [e.target.name === 'passphraseTextarea' ? 'passphrase' : e.target.name]: newValue,
       });
     }
   }

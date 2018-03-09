@@ -1,6 +1,14 @@
 .notary-elections-modal {
   color: #757575 !important;
 
+  .seed-extra-spaces-warning {
+    position: absolute;
+    right: 16px;
+    margin-top: 0;
+    font-size: 20px;
+    color: rgb(255, 75, 0);
+  }
+
   label,
   input {
     color: #757575 !important;
