@@ -211,7 +211,8 @@ const LoginRender = function() {
             <button
               type="button"
               className="btn btn-primary btn-block margin-top-20"
-              onClick={ this.loginSeed }>
+              onClick={ this.loginSeed }
+              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>
               { translate('INDEX.SIGN_IN') }
             </button>
             <div className="form-group form-material floating">
@@ -439,7 +440,8 @@ const LoginRender = function() {
               <button
                 type="button"
                 className="btn btn-primary btn-block"
-                onClick={ this.handleRegisterWallet }>
+                onClick={ this.handleRegisterWallet }
+                disabled={ !this.state.randomSeedConfirm || !this.state.randomSeed || !this.state.randomSeedConfirm.length || !this.state.randomSeed.length || this.state.randomSeedConfirm !== this.state.randomSeed }>
                 { translate('INDEX.REGISTER') }
               </button>
               <div className="form-group form-material floating">
