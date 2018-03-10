@@ -93,6 +93,10 @@ const addCoinOptionsCrypto = () => {
       icon: 'HUSH',
       value: `HUSH|spv`,
     }, {
+      label: 'SnowGem (SNG)',
+      icon: 'snowgem',
+      value: `SNG|spv`,
+    }, {
       label: 'Zclassic (ZCL)',
       icon: 'ZCL',
       value: `ZCL|spv`,
