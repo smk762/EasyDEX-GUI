@@ -149,9 +149,18 @@ export function shepherdHerd(coin, mode, path, startupParams) {
       '-daemon=0',
       '-server',
       `-ac_name=${coin}`,
-      coin === 'BEER' || coin === 'PIZZA' ? '-addnode=24.54.206.138' : '-addnode=78.47.196.146',
+      '-addnode=78.47.196.146',
     ],
   };
+
+  if (coin === 'BEER' ||
+      coin === 'PIZZA') {
+    herdData['ac_options'].pop();
+    herdData['ac_options'].push('-addnode=24.54.206.138');
+  } else if (coin === 'NINJA') {
+    herdData['ac_options'].pop();
+    herdData['ac_options'].push('-addnode=192.241.134.19');
+  }
 
   if (coin === 'ZEC') {
     herdData = {

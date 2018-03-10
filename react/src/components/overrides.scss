@@ -75,10 +75,6 @@ body {
   transition: height 0.3s ease-out;
 }
 
-.page-aside {
-  position: fixed;
-}
-
 .page-aside-inner {
   .wallet-widgets-list {
     overflow-y: auto;
@@ -369,13 +365,15 @@ select{
     bottom: -5px;
     width: 12px;
     height: 12px;
+    border-color: #dcdcdc;
   }
 
   .rc-slider-dot-active {
     border-color: #51c4f9 !important;
   }
+}
 
-  .rc-slider-dot {
-    border-color: #dcdcdc;
-  }
+.page-aside {
+  position: fixed;
+  z-index: 99;
 }
