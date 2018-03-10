@@ -16,6 +16,7 @@ const addCoinOptionsAC = () => {
     //'mvp',
     'mnz',
     'pangea',
+    'oot',
     'revs',
     'mshark',
     'supernet',
