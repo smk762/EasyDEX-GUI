@@ -847,7 +847,8 @@ export const LANG_EN = {
     'BTCH': 'BTCH (BTCH)',
     'BEER': 'BEER (Test coin)',
     'PIZZA': 'PIZZA (Test coin)',
-    'VOTE': 'VOTE (Notary Elections)',
+    'VOTE2018': 'VOTE2018 (Notary Elections)',
+    'NINJA': 'NINJA (NINJA)',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',

@@ -23,6 +23,8 @@ const explorerList = {
   HUSH: 'https://explorer.myhush.org',
   PIZZA: 'http://pizza.komodochainz.info',
   BEER: 'http://beer.komodochainz.info',
+  NINJA: 'https://explorer.fund.ninja',
+  VOTE2018: 'http://88.99.226.252',
   QTUM: 'https://explorer.qtum.org',
   LTC: 'https://live.blockcypher.com/ltc',
   DOGE: 'https://live.blockcypher.com/doge',
