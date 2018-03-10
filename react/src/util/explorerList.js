@@ -26,6 +26,7 @@ const explorerList = {
   NINJA: 'https://explorer.fund.ninja',
   VOTE2018: 'http://88.99.226.252',
   QTUM: 'https://explorer.qtum.org',
+  DNR: 'http://denarius.name',
   LTC: 'https://live.blockcypher.com/ltc',
   DOGE: 'https://live.blockcypher.com/doge',
   DASH: 'https://live.blockcypher.com/dash',
