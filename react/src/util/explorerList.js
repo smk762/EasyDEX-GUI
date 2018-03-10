@@ -36,6 +36,7 @@ const explorerList = {
   BTG: 'https://btgexplorer.com',
   BCH: 'https://bitcoincash.blockexplorer.com',
   ZCL: 'http://explorer.zclmine.pro',
+  SNG: 'https://explorer.snowgem.org/',
   ZMY: 'https://myriadexplorer.com',
   BTX: 'http://explorer.bitcore.cc',
   BTCZ: 'https://explorer.bitcoinz.site',
