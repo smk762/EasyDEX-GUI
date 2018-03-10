@@ -42,6 +42,10 @@ export function getCoinTitle(coin) {
       coinlogo = 'pizza';
       coinname = 'PIZZA (Test coin)';
       break;
+    case 'OOT':
+      coinlogo = 'oot';
+      coinname = 'Utrum';
+      break;
     case 'XMY':
       coinlogo = 'xmy';
       coinname = 'Myriad';
