@@ -6,9 +6,13 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
-    case 'VOTE':
-      coinlogo = 'vote';
-      coinname = 'VOTE (Notary Elections)';
+    case 'NINJA':
+      coinlogo = 'ninja';
+      coinname = 'NINJA';
+      break;
+    case 'VOTE2018':
+      coinlogo = 'vote2018';
+      coinname = 'VOTE2018';
       break;
     case 'GRS':
       coinlogo = 'grs';

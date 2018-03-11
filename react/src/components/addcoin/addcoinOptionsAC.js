@@ -13,7 +13,6 @@ const addCoinOptionsAC = () => {
     'jumblr',
     'kv',
     'mgw',
-    //'mvp',
     'mnz',
     'pangea',
     'revs',
@@ -25,7 +24,8 @@ const addCoinOptionsAC = () => {
     'btch',
     'beer',
     'pizza',
-    'vote'
+    'vote2018',
+    'ninja'
   ];
   let _items = [];
 
