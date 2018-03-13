@@ -58,6 +58,10 @@ export function getCoinTitle(coin) {
       coinlogo = 'hush';
       coinname = 'Hush';
       break;
+    case 'SNG':
+      coinlogo = 'snowgem';
+      coinname = 'SnowGem';
+      break;
     case 'BCH':
       coinlogo = 'bch';
       coinname = 'BitcoinCash';
