@@ -11,10 +11,39 @@ import {
 } from '../actionCreators';
 import Store from '../../store';
 
+// TODO: dev display errors
+
 // src: atomicexplorer
 export function shepherdGetRemoteBTCFees() {
   return new Promise((resolve, reject) => {
-    fetch(`https://atomicexplorer.com/api/btc/fees`, {
+    fetch(`https://www.atomicexplorer.com/api/btc/fees`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      /*Store.dispatch(
+        triggerToaster(
+          'shepherdGetRemoteBTCFees',
+          'Error',
+          'error'
+        )
+      );*/
+      resolve({ msg: 'error' });
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+// btc fees fallback
+export function shepherdGetLocalBTCFees() {
+  return new Promise((resolve, reject) => {
+    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/btcfees?token=${Config.token}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -24,7 +53,7 @@ export function shepherdGetRemoteBTCFees() {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdGetRemoteBTCFees',
+          'shepherdGetLocalBTCFees',
           'Error',
           'error'
         )

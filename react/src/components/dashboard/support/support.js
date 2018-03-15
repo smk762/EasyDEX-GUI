@@ -1,28 +1,15 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
 
+const shell = window.require('electron').shell;
+
 class Support extends React.Component {
   constructor() {
     super();
   }
 
   openExternalWindow(url) {
-    const remote = window.require('electron').remote;
-    const BrowserWindow = remote.BrowserWindow;
-
-    const externalWindow = new BrowserWindow({
-      width: 1280,
-      height: 800,
-      title: `${translate('INDEX.LOADING')}...`,
-      icon: remote.getCurrentWindow().iguanaIcon,
-    });
-
-    externalWindow.loadURL(url);
-    externalWindow.webContents.on('did-finish-load', () => {
-      setTimeout(() => {
-        externalWindow.show();
-      }, 40);
-    });
+    return shell.openExternal(url);
   }
 
   render() {
@@ -81,10 +68,10 @@ class Support extends React.Component {
           <div className="row margin-top-30">
             <div className="col-sm-12">
               <p>
-                For guides & FAQ please go to <a onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/home') }>https://support.komodoplatform.com/support/home</a>
+                For guides & FAQ please go to <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/home') }>https://support.komodoplatform.com/support/home</a>
               </p>
               <p>
-                To send feedback please open a ticket at <a onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/tickets/new') }>https://support.komodoplatform.com/support/tickets/new</a>
+                To send feedback please open a ticket at <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/tickets/new') }>https://support.komodoplatform.com/support/tickets/new</a>
               </p>
             </div>
           </div>

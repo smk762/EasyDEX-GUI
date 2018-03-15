@@ -518,7 +518,7 @@ export const LANG_EN = {
     'CURRENT_BLOCK_SM': 'current block',
   },
   'TOASTR': {
-    'INCORRECT_WIF': 'Icorrect WIF key format',
+    'INCORRECT_WIF': 'Incorrect WIF key format',
     'ERROR': 'Error',
     'FAILED_TO_VERIFY_ADDR': 'Failed to verify address',
     'COIN_UNABLE_TO_STOP': 'Unable to stop @template@. Try again.',
@@ -849,6 +849,7 @@ export const LANG_EN = {
     'PIZZA': 'PIZZA (Test coin)',
     'VOTE2018': 'VOTE2018 (Notary Elections)',
     'NINJA': 'NINJA (NINJA)',
+    'OOT': 'Utrum (OOT)',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',
