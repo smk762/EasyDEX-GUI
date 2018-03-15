@@ -1,6 +1,5 @@
 import React from 'react';
 import { translate } from '../../../translate/translate';
-import electron from 'electron';
 
 class Support extends React.Component {
   constructor() {
@@ -8,7 +7,7 @@ class Support extends React.Component {
   }
 
   openExternalWindow(url) {
-    return electron.shell.openExternal(url);
+    return window.require('electron').shell.openExternal(url);
   }
 
   render() {
