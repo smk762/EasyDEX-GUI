@@ -11,6 +11,7 @@ import {
   shepherdElectrumSend,
   shepherdElectrumSendPreflight,
   shepherdGetRemoteBTCFees,
+  shepherdGetLocalBTCFees,
   copyString,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -414,6 +415,7 @@ class SendCoin extends React.Component {
         this.props.ActiveCoin.coin === 'BTC') {
       shepherdGetRemoteBTCFees()
       .then((res) => {
+        console.warn(res);
         if (res.msg === 'success') {
           // TODO: check, approx fiat value
           this.setState({
@@ -422,6 +424,24 @@ class SendCoin extends React.Component {
           });
         } else {
           // TODO: fallback to local electrum
+          shepherdGetLocalBTCFees()
+          .then((res) => {
+            if (res.msg === 'success') {
+              // TODO: check, approx fiat value
+              this.setState({
+                btcFees: res.result,
+                btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup[this.state.btcFeesTimeBasedStep]],
+              });
+            } else {
+              Store.dispatch(
+                triggerToaster(
+                  'Cannot get BTC fees',
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'error'
+                )
+              );
+            }
+          });
         }
       });
     }

@@ -2,6 +2,8 @@ import { PRICES } from '../storeType';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
 
+// TODO: dev display errors
+
 function fiatRates(pricesJson) {
   return dispatch => {
     return fetch(`https://www.atomicexplorer.com/api/rates/kmd`, {
@@ -9,13 +11,13 @@ function fiatRates(pricesJson) {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      /*dispatch(
         triggerToaster(
           'fiatRates',
           'Error',
           'error'
         )
-      );
+      );*/
     })
     .then(response => response.json())
     .then(json => {
@@ -34,13 +36,13 @@ export function prices() {
     })
     .catch((error) => {
       console.log(error);
-      dispatch(
+      /*dispatch(
         triggerToaster(
           'prices',
           'Error',
           'error'
         )
-      );
+      );*/
     })
     .then(response => response.json())
     .then(json => {
