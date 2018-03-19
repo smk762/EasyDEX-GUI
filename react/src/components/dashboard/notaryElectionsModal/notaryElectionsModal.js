@@ -144,16 +144,16 @@ class NotaryElectionsModal extends React.Component {
         this.state.coin,
         [{
           address: this.state.multiOutAddress1,
-          value: parseInt((this.state.balance / _divisor) * 100000000),
+          value: parseInt((this.state.balance / _divisor) * 100000000) - 2500,
         }, {
           address: this.state.multiOutAddress2,
-          value: parseInt((this.state.balance / _divisor) * 100000000),
+          value: parseInt((this.state.balance / _divisor) * 100000000) - 2500,
         }, {
           address: this.state.multiOutAddress3,
-          value: parseInt((this.state.balance / _divisor) * 100000000),
+          value: parseInt((this.state.balance / _divisor) * 100000000) - 2500,
         }, {
           address: this.state.multiOutAddress4,
-          value: parseInt((this.state.balance / _divisor) * 100000000),
+          value: parseInt((this.state.balance / _divisor) * 100000000) - 2500,
         }],
         this.state.pub,
         ['ne2k18-na-1-eu-2-ae-3-sh-4']
