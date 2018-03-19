@@ -667,7 +667,7 @@ class NotaryElectionsModal extends React.Component {
                           autoComplete="off" />
                         <button
                           onClick={ this.send }
-                          disabled={ !this.state.amount || !this.state.address || !this.state.address.length || !this.state.region || this.state.address === this.state.pub }
+                          disabled={ !this.state.amount || !this.state.address || !this.state.address.length }
                           className="btn btn-md btn-primary btn-block ladda-button elections-login-btn">
                           Vote
                         </button>
