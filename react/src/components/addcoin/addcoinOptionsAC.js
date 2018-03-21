@@ -6,6 +6,7 @@ const addCoinOptionsAC = () => {
     'bet',
     'bots',
     'ceal',
+    'mesh',
     'coqui',
     'crypto',
     'hodl',
@@ -31,7 +32,7 @@ const addCoinOptionsAC = () => {
   let _items = [];
 
   for (let i = 0; i < _assetChains.length; i++) {
-    let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' ? 'spv|native' : 'native';
+    let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' && _assetChains[i] !== 'mesh' && _assetChains[i] !== 'ceal' ? 'spv|native' : 'native';
 
     if (mainWindow.arch !== 'x64') {
       availableModes = 'spv';

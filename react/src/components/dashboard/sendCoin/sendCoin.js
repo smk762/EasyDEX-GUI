@@ -415,7 +415,6 @@ class SendCoin extends React.Component {
         this.props.ActiveCoin.coin === 'BTC') {
       shepherdGetRemoteBTCFees()
       .then((res) => {
-        console.warn(res);
         if (res.msg === 'success') {
           // TODO: check, approx fiat value
           this.setState({
@@ -423,7 +422,6 @@ class SendCoin extends React.Component {
             btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup[this.state.btcFeesTimeBasedStep]],
           });
         } else {
-          // TODO: fallback to local electrum
           shepherdGetLocalBTCFees()
           .then((res) => {
             if (res.msg === 'success') {
