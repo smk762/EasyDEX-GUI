@@ -6,6 +6,10 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'ABY':
+      coinlogo = 'aby';
+      coinname = 'ArtByte';
+      break;
     case 'NINJA':
       coinlogo = 'ninja';
       coinname = 'NINJA';

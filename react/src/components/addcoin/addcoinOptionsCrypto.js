@@ -17,6 +17,10 @@ const addCoinOptionsCrypto = () => {
 
   if (config.experimentalFeatures) {
     _coins.push({
+      label: 'ArtByte (ABY)',
+      icon: 'ABY',
+      value: `ABY|spv`,
+    }, {
       label: 'BitcoinGold (BTG)',
       icon: 'BTG',
       value: `BTG|spv`,
