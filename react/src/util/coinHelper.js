@@ -6,6 +6,162 @@ export function getCoinTitle(coin) {
   let hideTitle = false;
 
   switch (coin) {
+    case 'ACC':
+      coinlogo = 'acc';
+      coinname = 'AdCoin';
+      break;
+    case 'AUR':
+      coinlogo = 'aur';
+      coinname = 'Auroracoin';
+      break;
+    case 'BCA':
+      coinlogo = 'bca';
+      coinname = 'Bitcoin Atom';
+      break;
+    case 'CLAM':
+      coinlogo = 'clam';
+      coinname = 'Clams';
+      break;
+    case 'CLUB':
+      coinlogo = 'club';
+      coinname = 'ClubCoin';
+      break;
+    case 'CRAVE':
+      coinlogo = 'crave';
+      coinname = 'Crave';
+      break;
+    case 'DMD':
+      coinlogo = 'dmd';
+      coinname = 'Diamond';
+      break;
+    case 'EXCL':
+      coinlogo = 'excl';
+      coinname = 'ExclusiveCoin';
+      break;
+    case 'FTC':
+      coinlogo = 'ftc';
+      coinname = 'FeatherCoin';
+      break;
+    case 'FLASH':
+      coinlogo = 'flash';
+      coinname = 'Flash';
+      break;
+    case 'FJC':
+      coinlogo = 'FJC';
+      coinname = 'Fujicoin';
+      break;
+    case 'NLG':
+      coinlogo = 'NLG';
+      coinname = 'Gulden';
+      break;
+    case 'LCC':
+      coinlogo = 'lcc';
+      coinname = 'Litecoin Cash';
+      break;
+    case 'MNX':
+      coinlogo = 'mnx';
+      coinname = 'MinexCoin';
+      break;
+    case 'NAV':
+      coinlogo = 'nav';
+      coinname = 'NavCoin';
+      break;
+    case 'NEOS':
+      coinlogo = 'neos';
+      coinname = 'NeosCoin';
+      break;
+    case 'OK':
+      coinlogo = 'ok';
+      coinname = 'OKCash';
+      break;
+    case 'OMNI':
+      coinlogo = 'omni';
+      coinname = 'OmniLayer';
+      break;
+    case 'PIVX':
+      coinlogo = 'pivx';
+      coinname = 'Pivx';
+      break;
+    case 'RDD':
+      coinlogo = 'rdd';
+      coinname = 'Reddcoin';
+      break;
+    case 'SMART':
+      coinlogo = 'smart';
+      coinname = 'Smartcash';
+      break;
+    case 'XVC':
+      coinlogo = 'xvc';
+      coinname = 'Vcash';
+      break;
+    case 'XVG':
+      coinlogo = 'xvg';
+      coinname = 'Verge';
+      break;
+    case 'VIVO':
+      coinlogo = 'vivo';
+      coinname = 'VIVO';
+      break;
+    case 'XWC':
+      coinlogo = 'xwc';
+      coinname = 'Whitecoin';
+      break;
+    case 'EFL':
+      coinlogo = 'efl';
+      coinname = 'E-Gulden';
+      break;
+    case 'GBX':
+      coinlogo = 'gbx';
+      coinname = 'GoByte';
+      break;
+    case 'BSD':
+      coinlogo = 'bsd';
+      coinname = 'Bitsend';
+      break;
+    case 'LBC':
+      coinlogo = 'lbc';
+      coinname = 'LBRY Credits';
+      break;
+    case 'ERC':
+      coinlogo = 'erc';
+      coinname = 'Europecoin';
+      break;
+    case 'BTA':
+      coinlogo = 'bta';
+      coinname = 'Bata';
+      break;
+    case 'EMC2':
+      coinlogo = 'emc2';
+      coinname = 'Einsteinium';
+      break;
+    case 'XZC':
+      coinlogo = 'xzc';
+      coinname = 'Zcoin';
+      break;
+    case 'ZEN':
+      coinlogo = 'zen';
+      coinname = 'ZenCash';
+      break;
+    case 'BTCP':
+      coinlogo = 'btcp';
+      coinname = 'BitcoinPrivate';
+      break;
+    case 'BDL':
+      coinlogo = 'bdl';
+      coinname = 'Bitdeal';
+      break;
+    case 'IOP':
+      coinlogo = 'iop';
+      coinname = 'Internet of People';
+      break;
+    case 'VOT':
+      coinlogo = 'vot';
+      coinname = 'VoteCoin';
+      break;
+    case 'MAC':
+      coinlogo = 'mac';
+      coinname = 'Machinecoin';
+      break;
     case 'ABY':
       coinlogo = 'aby';
       coinname = 'ArtByte';
@@ -67,7 +223,7 @@ export function getCoinTitle(coin) {
       coinname = 'Hush';
       break;
     case 'SNG':
-      coinlogo = 'snowgem';
+      coinlogo = 'sng';
       coinname = 'SnowGem';
       break;
     case 'BCH':
@@ -131,11 +287,11 @@ export function getCoinTitle(coin) {
       coinname = 'Litecoin';
       break;
     case 'VPN':
-      coinlogo = 'vpncoin';
+      coinlogo = 'vpn';
       coinname = 'VPNcoin';
       break;
     case 'SYS':
-      coinlogo = 'syscoin';
+      coinlogo = 'sys';
       coinname = 'Syscoin';
       break;
     case 'ZEC':
@@ -163,7 +319,7 @@ export function getCoinTitle(coin) {
       coinname = 'Mazacoin';
       break;
     case 'UNO':
-      coinlogo = 'unobtanium';
+      coinlogo = 'uno';
       coinname = 'Unobtanium';
       break;
     case 'ZET':
@@ -198,7 +354,7 @@ export function getCoinTitle(coin) {
       coinname = 'Franko';
       break;
     case 'GAME':
-      coinlogo = 'GAME';
+      coinlogo = 'game';
       coinname = 'GameCredits';
       break;
     case 'SUPERNET':
