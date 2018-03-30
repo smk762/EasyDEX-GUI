@@ -43,10 +43,12 @@ class ImportKeyModal extends React.Component {
       passphraseAddress: null,
       keyImportResult: null,
       importWithRescan: false,
+      importMulti: false,
       seedInputVisibility: false,
       wifInputVisibility: false,
       trimPassphraseTimer: null,
       seedExtraSpaces: false,
+      multipleWif: '',
     };
     this.generateKeysFromPassphrase = this.generateKeysFromPassphrase.bind(this);
     this.toggleImportWithRescan = this.toggleImportWithRescan.bind(this);
@@ -58,6 +60,7 @@ class ImportKeyModal extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.importFromPassphrase = this.importFromPassphrase.bind(this);
     this.importFromWif = this.importFromWif.bind(this);
+    this.toggleImportMulti = this.toggleImportMulti.bind(this);
   }
 
   _copyCoinAddress(address) {
@@ -173,8 +176,12 @@ class ImportKeyModal extends React.Component {
     importPrivkey(
       this.props.ActiveCoin.coin,
       wif,
-      rescan
-    ).then((json) => {
+      rescan,
+      // https://github.com/zcash/zcash/blob/master/src/chainparams.cpp#L152
+      wif[0] === 'S' && wif[1] === 'K'
+    )
+    .then((json) => {
+      console.warn(json);
       _rescanInProgress = false;
 
       if (rescan) {
@@ -252,6 +259,12 @@ class ImportKeyModal extends React.Component {
   toggleImportWithRescan() {
     this.setState({
       importWithRescan: !this.state.importWithRescan,
+    });
+  }
+
+  toggleImportMulti() {
+    this.setState({
+      importMulti: !this.state.importMulti,
     });
   }
 

@@ -204,13 +204,16 @@ function dumpPrivkey(coin, key) {
   });
 }
 
-export function importPrivkey(coin, key, rescan = false) {
+export function importPrivkey(coin, key, rescan = false, isZKey) {
   return new Promise((resolve, reject) => {
     const payload = {
       mode: null,
       chain: coin,
-      cmd: 'importprivkey',
-      params: [
+      cmd: isZKey ? 'z_importkey' : 'importprivkey',
+      params: isZKey ? [
+        key,
+        rescan
+      ] : [
         key,
         '',
         rescan

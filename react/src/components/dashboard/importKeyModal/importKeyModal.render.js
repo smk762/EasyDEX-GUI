@@ -136,25 +136,68 @@ export const ImportKeyModalRender = function() {
                     </div>
                   </span>
                 </div>
-                <div className="margin-top-20">
-                  <label
-                    htmlFor="wif"
-                    className="bold">{ translate('IMPORT_KEY.WIF_KEY') }</label>
-                  <div className="form-group form-material">
-                    <input
-                      autoComplete="off"
-                      type={ !this.state.wifInputVisibility ? 'password' : 'text' }
-                      className="form-control"
-                      name="wif"
-                      id="wif"
-                      ref="wif"
-                      onChange={ this.updateInput }
-                      value={ this.state.wif } />
-                    <i
-                      className={ 'seed-toggle fa fa-eye' + (!this.state.wifInputVisibility ? '-slash' : '') }
-                      onClick={ this.toggleWifInputVisibility }></i>
-                  </div>
+                <div className="toggle-box padding-top-20">
+                  <span className="pointer">
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={ this.state.importMulti } />
+                      <div
+                        className="slider"
+                        onClick={ this.toggleImportMulti }></div>
+                    </label>
+                    <div
+                      className="toggle-label"
+                      onClick={ this.toggleImportMulti }>
+                      Import multiple keys
+                      <i
+                        className="icon fa-question-circle settings-help"
+                        data-tip="Use this toggle if you want to import several keys at once"></i>
+                      <ReactTooltip
+                        effect="solid"
+                        className="text-left" />
+                    </div>
+                  </span>
                 </div>
+                { !this.state.importMulti &&
+                  <div className="margin-top-20">
+                    <label
+                      htmlFor="wif"
+                      className="bold">{ translate('IMPORT_KEY.WIF_KEY') }</label>
+                    <div className="form-group form-material">
+                      <input
+                        autoComplete="off"
+                        type={ !this.state.wifInputVisibility ? 'password' : 'text' }
+                        className="form-control"
+                        name="wif"
+                        id="wif"
+                        ref="wif"
+                        onChange={ this.updateInput }
+                        value={ this.state.wif } />
+                      <i
+                        className={ 'seed-toggle fa fa-eye' + (!this.state.wifInputVisibility ? '-slash' : '') }
+                        onClick={ this.toggleWifInputVisibility }></i>
+                    </div>
+                  </div>
+                }
+                { this.state.importMulti &&
+                  <div className="margin-top-20">
+                    <label
+                      htmlFor="multipleWif"
+                      className="bold">Keys, separated by a new line</label>
+                    <div className="form-group form-material">
+                      <textarea
+                        autoComplete="off"
+                        className="form-control"
+                        name="multipleWif"
+                        id="multipleWif"
+                        ref="multipleWif"
+                        rows="5"
+                        onChange={ this.updateInput }
+                        value={ this.state.multipleWif } />
+                    </div>
+                  </div>
+                }
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light margin-top-10"
