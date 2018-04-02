@@ -1,4 +1,4 @@
-import { translate } from '../../translate/translate';
+import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 
 const addCoinOptionsAC = () => {

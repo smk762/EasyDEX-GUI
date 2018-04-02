@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
-import { translate } from '../../../translate/translate';
+import translate from '../../../translate/translate';
 import ReactTable from 'react-table';
 import TablePaginationRenderer from './pagination';
-import { formatValue } from '../../../util/formatValue';
+import formatValue from '../../../util/formatValue';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from '../../translate/translate';
+import translate from '../../translate/translate';
 import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
 import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchModal';
 import QRModal from '../dashboard/qrModal/qrModal';

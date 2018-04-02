@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from '../../../translate/translate';
+import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
 
 export const ImportKeyModalRender = function() {

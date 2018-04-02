@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { translate } from '../../../translate/translate';
+import translate from '../../../translate/translate';
 import {
   getDashboardUpdate,
   shepherdElectrumBalance,
 } from '../../../actions/actionCreators';
 import mainWindow from '../../../util/mainWindow';
 import Config from '../../../config';
-import { formatValue } from '../../../util/formatValue';
+import formatValue from '../../../util/formatValue';
 import ReactTooltip from 'react-tooltip';
 
 import Store from '../../../store';

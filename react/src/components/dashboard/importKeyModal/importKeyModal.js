@@ -10,10 +10,8 @@ import {
   getDebugLog,
   getDashboardUpdateState,
 } from '../../../actions/actionCreators';
-import { translate } from '../../../translate/translate';
-import {
-  ImportKeyModalRender,
-} from './importKeyModal.render';
+import translate from '../../../translate/translate';
+import { ImportKeyModalRender } from './importKeyModal.render';
 
 const SEED_TRIM_TIMEOUT = 5000;
 
@@ -87,17 +85,12 @@ class ImportKeyModal extends React.Component {
 
     if (e.target.name === 'wifkeysPassphrase') {
       this.resizeLoginTextarea();
-
-      this.setState({
-        trimPassphraseTimer: _trimPassphraseTimer,
-        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
-      });
-    } else {
-      this.setState({
-        trimPassphraseTimer: _trimPassphraseTimer,
-        [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
-      });
     }
+
+    this.setState({
+      trimPassphraseTimer: _trimPassphraseTimer,
+      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+    });
   }
 
   resizeLoginTextarea() {
@@ -149,7 +142,6 @@ class ImportKeyModal extends React.Component {
 
         for (let i = 0; i < _keys.length; i++) {
           setTimeout(() => {
-            console.warn(_keys[i]);
             this.importWifAddress(_keys[i], i === _keys.length - 1 ? this.state.importWithRescan : false, true);
           }, i * 1000);
         }

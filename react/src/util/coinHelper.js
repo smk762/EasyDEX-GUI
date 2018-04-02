@@ -1,4 +1,4 @@
-export function getCoinTitle(coin) {
+export const getCoinTitle = (coin) => {
   let coinlogo;
   let coinname;
   let transparentBG = false;
@@ -636,7 +636,7 @@ export function getCoinTitle(coin) {
   };
 }
 
-export function getModeInfo(mode) {
+export const getModeInfo = (mode) => {
   let modecode;
   let modetip;
   let modecolor;
@@ -676,7 +676,7 @@ export function getModeInfo(mode) {
   };
 }
 
-export function coindList() {
+export const coindList = () => {
   const _coins = [
     'KMD',
     'CHIPS',

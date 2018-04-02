@@ -16,18 +16,18 @@ import {
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
-import { PassPhraseGenerator } from '../../util/crypto/passphrasegenerator';
-import { zcashParamsCheckErrors } from '../../util/zcashParams';
+import PassPhraseGenerator from '../../util/crypto/passphrasegenerator';
+import zcashParamsCheckErrors from '../../util/zcashParams';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
-import { translate } from '../../translate/translate';
+import translate from '../../translate/translate';
 import {
   encryptPassphrase,
   loadPinList,
   loginWithPin,
 } from '../../actions/actions/pin';
 import mainWindow from '../../util/mainWindow';
-import { md5 } from '../../util/crypto/md5';
+import md5 from '../../util/crypto/md5';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;

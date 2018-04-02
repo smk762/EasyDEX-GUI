@@ -1,14 +1,17 @@
 import { PRICES } from '../storeType';
 import { triggerToaster } from '../actionCreators';
 import Config from '../../config';
+import translate from '../../translate/translate';
+import fetchType from '../../util/fetchType';
 
 // TODO: dev display errors
 
-function fiatRates(pricesJson) {
+const fiatRates = (pricesJson) => {
   return dispatch => {
-    return fetch(`https://www.atomicexplorer.com/api/rates/kmd`, {
-      method: 'GET',
-    })
+    return fetch(
+      `https://www.atomicexplorer.com/api/rates/kmd`,
+      fetchType.get
+    )
     .catch((error) => {
       console.log(error);
       /*dispatch(
@@ -29,11 +32,12 @@ function fiatRates(pricesJson) {
   }
 }
 
-export function prices() {
+export const prices = () => {
   return dispatch => {
-    return fetch(`https://www.atomicexplorer.com/api/mm/prices`, {
-      method: 'GET',
-    })
+    return fetch(
+      `https://www.atomicexplorer.com/api/mm/prices`,
+      fetchType.get
+    )
     .catch((error) => {
       console.log(error);
       /*dispatch(
@@ -51,7 +55,7 @@ export function prices() {
   }
 }
 
-function pricesState(json) {
+const pricesState = (json) => {
   return {
     type: PRICES,
     prices: json,
