@@ -167,7 +167,7 @@ export const shepherdHerd = (coin, mode, path, startupParams) => {
     herdData['ac_options'].push('-addnode=192.241.134.19');
   } else if (coin === 'OOT') {
     herdData['ac_options'].pop();
-    herdData['ac_options'].push('-addnode=192.241.134.19');
+    herdData['ac_options'].push('-addnode=174.138.107.226');
   }
 
   if (coin === 'ZEC') {
