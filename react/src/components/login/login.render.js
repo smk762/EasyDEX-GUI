@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from '../../translate/translate';
+import translate from '../../translate/translate';
 import LoginSettingsModal from '../dashboard/loginSettingsModal/loginSettingsModal';
 import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchModal';
 import QRModal from '../dashboard/qrModal/qrModal';
@@ -25,12 +25,12 @@ const LoginRender = function() {
               height="160"
               alt="SuperNET Agama" />
           </div>
-          { mainWindow.nnVoteChain &&
+          { /*mainWindow.nnVoteChain &&
             <a
               className="login-nn-elections"
               onClick={ () => this._toggleNotaryElectionsModal() }>
               <i className="icon fa-thumbs-up"></i> Notary Elections 2018
-            </a>
+            </a>*/
           }
           <div className="login-settings-dropdown margin-bottom-30">
             <div>
@@ -253,33 +253,35 @@ const LoginRender = function() {
                 </span>
               </button>
               <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
-              <div className="addcoin-shortcut">
-                <div>
-                  <i className="icon fa-cube margin-right-5"></i>
-                  { translate('INDEX.NATIVE_MODE') }
-                  <i
-                    className="icon fa-question-circle login-help"
-                    data-tip="<strong>Be aware:</strong> <u>Native mode</u> requires to download the whole blockchain data to a local disk before you can start using it.<br/>This may take from <strong>several hours to a day</strong> depending on your connection and hardware.<br/>Please <u>try to keep Agama running</u> until the whole process is finished."
-                    data-html={ true }></i>
-                  <ReactTooltip
-                    effect="solid"
-                    className="text-left" />
+              { mainWindow.arch === 'x64' &&
+                <div className="addcoin-shortcut">
+                  <div>
+                    <i className="icon fa-cube margin-right-5"></i>
+                    { translate('INDEX.NATIVE_MODE') }
+                    <i
+                      className="icon fa-question-circle login-help"
+                      data-tip="<strong>Be aware:</strong> <u>Native mode</u> requires to download the whole blockchain data to a local disk before you can start using it.<br/>This may take from <strong>several hours to a day</strong> depending on your connection and hardware.<br/>Please <u>try to keep Agama running</u> until the whole process is finished."
+                      data-html={ true }></i>
+                    <ReactTooltip
+                      effect="solid"
+                      className="text-left" />
+                  </div>
+                  <Select
+                    name="selectedShortcutNative"
+                    value={ this.state.selectedShortcutNative }
+                    onChange={ (event) => this.updateSelectedShortcut(event, 'native') }
+                    optionRenderer={ this.renderShortcutOption }
+                    valueRenderer={ this.renderShortcutOption }
+                    options={[
+                      { value: 'kmd', label: 'kmd' },
+                      { value: 'mnz', label: 'mnz' },
+                      { value: 'btch', label: 'btch' },
+                      { value: 'revs', label: 'revs' },
+                      { value: 'jumblr', label: 'jumblr' },
+                      { value: 'kmd+revs+jumblr', label: 'kmd+revs+jumblr' },
+                    ]} />
                 </div>
-                <Select
-                  name="selectedShortcutNative"
-                  value={ this.state.selectedShortcutNative }
-                  onChange={ (event) => this.updateSelectedShortcut(event, 'native') }
-                  optionRenderer={ this.renderShortcutOption }
-                  valueRenderer={ this.renderShortcutOption }
-                  options={[
-                    { value: 'kmd', label: 'kmd' },
-                    { value: 'mnz', label: 'mnz' },
-                    { value: 'btch', label: 'btch' },
-                    { value: 'revs', label: 'revs' },
-                    { value: 'jumblr', label: 'jumblr' },
-                    { value: 'kmd+revs+jumblr', label: 'kmd+revs+jumblr' },
-                  ]} />
-              </div>
+              }
               <div className="addcoin-shortcut">
                 <div>
                   <i className="icon fa-flash margin-right-5"></i>
