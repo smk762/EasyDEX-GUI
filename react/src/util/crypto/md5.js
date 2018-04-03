@@ -1,6 +1,6 @@
 // ref: https://css-tricks.com/snippets/javascript/javascript-md5/
 
-export const md5 = (string) => {
+const md5 = (string) => {
   const RotateLeft = (lValue, iShiftBits) => {
     return (lValue<<iShiftBits) | (lValue>>>(32 - iShiftBits));
   }
@@ -218,3 +218,5 @@ export const md5 = (string) => {
 
  	return temp.toLowerCase();
 }
+
+export default md5;

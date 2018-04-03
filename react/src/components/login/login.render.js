@@ -25,12 +25,12 @@ const LoginRender = function() {
               height="160"
               alt="SuperNET Agama" />
           </div>
-          { mainWindow.nnVoteChain &&
+          { /*mainWindow.nnVoteChain &&
             <a
               className="login-nn-elections"
               onClick={ () => this._toggleNotaryElectionsModal() }>
               <i className="icon fa-thumbs-up"></i> Notary Elections 2018
-            </a>
+            </a>*/
           }
           <div className="login-settings-dropdown margin-bottom-30">
             <div>
