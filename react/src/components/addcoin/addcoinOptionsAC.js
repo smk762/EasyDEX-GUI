@@ -27,7 +27,8 @@ const addCoinOptionsAC = () => {
     'beer',
     'pizza',
     'vote2018',
-    'ninja'
+    'ninja',
+    'bntn'
   ];
   let _items = [];
 

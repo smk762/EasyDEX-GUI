@@ -852,6 +852,7 @@ export const LANG_EN = {
     'VOTE2018': 'VOTE2018 (Notary Elections)',
     'NINJA': 'NINJA (NINJA)',
     'OOT': 'Utrum (OOT)',
+    'BNTN': 'Blocknation (BNTN)',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',
