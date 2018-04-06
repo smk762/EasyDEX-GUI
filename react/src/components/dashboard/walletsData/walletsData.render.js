@@ -50,7 +50,6 @@ export const TransactionDetailRender = function(transactionIndex) {
 
 export const AddressRender = function(tx) {
   if (!tx.address) {
-    console.warn('AddressRender', tx);
     return (
       <span>
         { /*<i className="icon fa-bullseye"></i>&nbsp; */ }

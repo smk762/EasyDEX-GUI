@@ -335,6 +335,21 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
+
+    if (!stringEntropy) {
+      Store.dispatch(
+        triggerToaster(
+          ['Your seed is weak, it means that someone can steal your funds by guessing/bruteforcing the seed.',
+            '',
+            'Consider creating a stronger seed and moving your funds to a new address.'],
+          'Weak seed detected',
+          'warning toastr-wide',
+          false
+        )
+      );
+    }
+
     mainWindow.createSeed.secondaryLoginPH = md5(this.state.loginPassphrase);
     // reset the login pass phrase values so that when the user logs out, the values are clear
     this.setState({
@@ -437,13 +452,23 @@ class Login extends React.Component {
     const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
     const isSeedBlank = this.isBlank(this.state.randomSeed);
 
-    // if custom seed check for string strength
-    // at least 1 letter in upper case
-    // at least 1 digit
-    // at least one special char
-    // min length 10 chars
+    const stringEntropy = mainWindow.checkStringEntropy(this.state.customWalletSeed);
 
-    const _customSeed = this.state.customWalletSeed ? this.state.randomSeed.match('^(?=.*[A-Z])(?=.*[^<>{}\"/|;:.,~!?@#$%^=&*\\]\\\\()\\[_+]*$)(?=.*[0-9])(?=.*[a-z]).{10,99}$') : false;
+    if (!stringEntropy &&
+        this.state.customWalletSeed) {
+      Store.dispatch(
+        triggerToaster(
+          ['Your seed is weak, it means that someone can steal your funds by guessing/bruteforcing the seed.',
+            '',
+            'Consider using a stronger seed that is not susceptible to such attacks.'],
+          'Weak seed detected',
+          'warning toastr-wide',
+          false
+        )
+      );
+    }
+
+    const _customSeed = this.state.customWalletSeed;
 
     this.setState({
       isCustomSeedWeak: _customSeed === null ? true : false,
@@ -453,7 +478,8 @@ class Login extends React.Component {
 
     if (enteredSeedsMatch &&
         !isSeedBlank &&
-        _customSeed !== null) {
+        _customSeed !== null &&
+        stringEntropy) {
       this.toggleSeedBackupModal();
     }
   }

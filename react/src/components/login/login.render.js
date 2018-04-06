@@ -398,7 +398,7 @@ const LoginRender = function() {
                   onClick={ () => this.copyPassPhraseToClipboard() }>
                   { translate('INDEX.COPY') }
                 </button>
-                <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
+                {/*<span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
                   <strong>{ translate('INDEX.WEAK_SEED') }</strong><br /><br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN1') }<br />
@@ -406,7 +406,7 @@ const LoginRender = function() {
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN3') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN5') }<br />
-                </span>
+                </span>*/}
                 <label
                   className="floating-label"
                   htmlFor="walletseed">{ translate('INDEX.WALLET_SEED') }</label>
