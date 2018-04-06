@@ -496,7 +496,7 @@ export const LANG_EN = {
     'OUT': 'OUT',
     'MINED': 'Mined',
     'IMMATURE': 'Immature',
-    'ZADDR_NOT_LISTED': 'Z Address not listed by wallet',
+    'ZADDR_NOT_LISTED': 'Address not listed by wallet',
     'ADDR_COPIED': 'Address Copied',
     'QR_ERR_NO_VIDEO_DEVICE': 'Error: No video input devices found!',
     'QR_ERR_UNKNOWN': 'Error: unknown error!',
