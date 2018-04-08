@@ -535,7 +535,7 @@ class NotaryElectionsModal extends React.Component {
                         <i className="fa fa-power-off margin-right-5"></i>Logout
                       </button>
                     }
-                    <div className="elections-user-type">
+                    {/*<div className="elections-user-type">
                       <a
                         className={ this.state.userType === 'voter' ? 'active' : '' }
                         onClick={ () => this.setUserType('voter') }><i className="fa fa-file margin-right-10"></i>I'm a voter</a>
@@ -543,7 +543,7 @@ class NotaryElectionsModal extends React.Component {
                       <a
                         className={ this.state.userType === 'candidate' ? 'active' : '' }
                         onClick={ () => this.setUserType('candidate') }><i className="fa fa-user-o margin-right-10"></i>I'm a candidate</a>
-                    </div>
+                    </div>*/}
                     { !this.state.isAuth &&
                       <div className="elections-login">
                         <label
@@ -633,6 +633,7 @@ class NotaryElectionsModal extends React.Component {
                     }
                     { this.state.isAuth &&
                       this.state.userType === 'voter' &&
+                      this.state.balance > 0 &&
                       <div className={ 'elections-user-type' + (this.state.voteType === 'single' ? ' margin-bottom-30' : '') }>
                         <a
                           className={ this.state.voteType === 'multi' ? 'active' : '' }

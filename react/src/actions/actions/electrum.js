@@ -14,7 +14,7 @@ import Store from '../../store';
 // src: atomicexplorer
 export function shepherdGetRemoteBTCFees() {
   return new Promise((resolve, reject) => {
-    fetch(`http://atomicexplorer.com/api/btc/fees`, {
+    fetch(`https://atomicexplorer.com/api/btc/fees`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

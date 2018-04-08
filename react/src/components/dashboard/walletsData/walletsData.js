@@ -332,37 +332,39 @@ class WalletsData extends React.Component {
   }
 
   spvAutoReconnect() {
-    let _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
-    let _server = [
-      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.ip,
-      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port
-    ];
-    const _randomServer = getRandomElectrumServer(_spvServers, _server.join(':'));
+    if (this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none') {
+      let _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
+      let _server = [
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.ip,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port
+      ];
+      const _randomServer = getRandomElectrumServer(_spvServers, _server.join(':'));
 
-    shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port)
-    .then((res) => {
-      if (res.result) {
-        shepherdElectrumSetServer(this.props.ActiveCoin.coin, _randomServer.ip, _randomServer.port)
-        .then((serverSetRes) => {
+      shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port)
+      .then((res) => {
+        if (res.result) {
+          shepherdElectrumSetServer(this.props.ActiveCoin.coin, _randomServer.ip, _randomServer.port)
+          .then((serverSetRes) => {
+            Store.dispatch(
+              triggerToaster(
+                `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}`,
+                translate('TOASTR.WALLET_NOTIFICATION'),
+                'success'
+              )
+            );
+            Store.dispatch(electrumServerChanged(true));
+          });
+        } else {
           Store.dispatch(
             triggerToaster(
-              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}`,
+              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
               translate('TOASTR.WALLET_NOTIFICATION'),
-              'success'
+              'error'
             )
           );
-          Store.dispatch(electrumServerChanged(true));
-        });
-      } else {
-        Store.dispatch(
-          triggerToaster(
-            `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
-            translate('TOASTR.WALLET_NOTIFICATION'),
-            'error'
-          )
-        );
-      }
-    });
+        }
+      });
+    }
   }
 
   isFullySynced() {

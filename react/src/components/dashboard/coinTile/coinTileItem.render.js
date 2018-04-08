@@ -58,20 +58,27 @@ const CoinTileItemRender = function() {
         this.props.Dashboard.electrumCoins[item.coin] &&
         this.props.Dashboard.electrumCoins[item.coin].serverList &&
         this.props.Dashboard.electrumCoins[item.coin].serverList === 'none' &&
-        <i
-          data-tip={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
-          className="icon fa-info-circle icon-spv-connection-warning"></i>
+        <span>
+          <i
+            data-tip={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
+            className="icon fa-info-circle icon-spv-connection-warning"></i>
+          <ReactTooltip
+            effect="solid"
+            className="text-left" />
+        </span>
       }
       { this.renderCoinConError(item) &&
         !this.props.ActiveCoin.rescanInProgress &&
-        <i
-          onClick={ this.openCoindDownModal }
-          data-tip={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
-          className="icon fa-warning icon-native-connection-warning"></i>
+        <span>
+          <i
+            onClick={ this.openCoindDownModal }
+            data-tip={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
+            className="icon fa-warning icon-native-connection-warning"></i>
+          <ReactTooltip
+            effect="solid"
+            className="text-left" />
+        </span>
       }
-      <ReactTooltip
-        effect="solid"
-        className="text-left" />
     </div>
   );
 };
