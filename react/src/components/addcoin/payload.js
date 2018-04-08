@@ -26,7 +26,9 @@ export function checkAC(coinVal) {
 			coinVal === 'BTCH' ||
 			coinVal === 'BEER' ||
 			coinVal === 'PIZZA' ||
-			coinVal === 'VOTE2018')	{
+	    coinVal === 'OOT' ||
+			coinVal === 'VOTE2018' ||
+			coinVal === 'BNTN')	{
 		return true;
 	} else {
 		return false;
@@ -112,11 +114,17 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		PIZZA: {
 			supply: 100000000,
 		},
+		OOT: {
+			supply: 216000000,
+		},
 		VOTE2018: {
 			supply: 600000000,
 		},
 		NINJA: {
 			supply: 100000000,
+		},
+		BNTN: {
+			supply: 500000000,
 		},
 	};
 
