@@ -189,6 +189,28 @@ option.login-option {
 }
 
 .page-login {
+  .pin-login-block {
+    .form-material {
+      .form-control.focus~.floating-label,
+      .form-control:focus~.floating-label,
+      .form-control:not(.empty)~.floating-label {
+        top: -20px;
+      }
+    }
+    select.form-control.form-material,
+    input.form-control {
+      color: #fff;
+    }
+    ::placeholder {
+      color: #fff;
+    }
+  }
+  .seed-encrypt-block {
+    .login-help {
+      top: -10px;
+      left: 25px;
+    }
+  }
   .seed-extra-spaces-warning {
     position: absolute;
     right: -30px;

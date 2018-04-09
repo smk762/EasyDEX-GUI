@@ -54,6 +54,7 @@ export * from './actions/nativeNetwork';
 export * from './actions/tools';
 export * from './actions/prices';
 export * from './actions/elections';
+export * from './actions/pin';
 
 export const changeActiveAddress = (address) => {
   return {

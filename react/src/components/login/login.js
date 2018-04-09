@@ -13,6 +13,9 @@ import {
   toggleZcparamsFetchModal,
   toggleNotaryElectionsModal,
   activeHandle,
+  encryptPassphrase,
+  loadPinList,
+  loginWithPin,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -21,11 +24,6 @@ import zcashParamsCheckErrors from '../../util/zcashParams';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import translate from '../../translate/translate';
-import {
-  encryptPassphrase,
-  loadPinList,
-  loginWithPin,
-} from '../../actions/actions/pin';
 import mainWindow from '../../util/mainWindow';
 import md5 from '../../util/crypto/md5';
 
@@ -52,17 +50,16 @@ class Login extends React.Component {
       displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
-      nativeOnly: Config.iguanaLessMode,
       trimPassphraseTimer: null,
       displayLoginSettingsDropdown: false,
       displayLoginSettingsDropdownSection: null,
       shouldEncryptSeed: false,
       encryptKey: '',
-      pubKey: '',
+      encryptKeyConfirm: '',
       decryptKey: '',
       selectedPin: '',
       isExperimentalOn: false,
-      enableEncryptSeed: false,
+      enableEncryptSeed: true,
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
@@ -79,9 +76,7 @@ class Login extends React.Component {
     this.execWalletCreate = this.execWalletCreate.bind(this);
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
-    this.updateEncryptKey = this.updateEncryptKey.bind(this);
-    this.updatePubKey = this.updatePubKey.bind(this);
-    this.updateDecryptKey = this.updateDecryptKey.bind(this);
+    this.updateInput = this.updateInput.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
@@ -158,21 +153,9 @@ class Login extends React.Component {
     });
   }
 
-  updateEncryptKey(e) {
+  updateInput(e) {
     this.setState({
-      encryptKey: e.target.value,
-    });
-  }
-
-  updatePubKey(e) {
-    this.setState({
-      pubKey: e.target.value,
-    });
-  }
-
-  updateDecryptKey(e) {
-    this.setState({
-      decryptKey: e.target.value,
+      [e.target.name]: e.target.value,
     });
   }
 
@@ -180,6 +163,8 @@ class Login extends React.Component {
     this.setState({
       isExperimentalOn: mainWindow.experimentalFeatures,
     });
+
+    this.loadPinList();
   }
 
   toggleSeedInputVisibility() {
@@ -207,6 +192,15 @@ class Login extends React.Component {
   componentWillReceiveProps(props) {
     if (props.Login.pinList === 'no pins') {
       props.Login.pinList = [];
+    }
+
+    if (props.Login.pinList !== 'no pins' &&
+        props.Login.pinList.length === 1) {
+      setTimeout(() => {
+        this.setState({
+          selectedPin: props.Login.pinList[0],
+        });
+      }, 100);
     }
 
     if (props &&
@@ -335,44 +329,58 @@ class Login extends React.Component {
   }
 
   loginSeed() {
-    const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
+    if (!this.state.selectedPin) {
+      const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
 
-    if (!stringEntropy) {
-      Store.dispatch(
-        triggerToaster(
-          ['Your seed is weak, it means that someone can steal your funds by guessing/bruteforcing the seed.',
-            '',
-            'Consider creating a stronger seed and moving your funds to a new address.'],
-          'Weak seed detected',
-          'warning toastr-wide',
-          false
-        )
-      );
-    }
+      mainWindow.pinAccess = false;
 
-    mainWindow.createSeed.secondaryLoginPH = md5(this.state.loginPassphrase);
-    // reset the login pass phrase values so that when the user logs out, the values are clear
-    this.setState({
-      loginPassphrase: '',
-      loginPassPhraseSeedType: null,
-    });
+      if (!stringEntropy) {
+        Store.dispatch(
+          triggerToaster(
+            ['Your seed is weak, it means that someone can steal your funds by guessing/bruteforcing the seed.',
+              '',
+              'Consider creating a stronger seed and moving your funds to a new address.'],
+            'Weak seed detected',
+            'warning toastr-wide',
+            false
+          )
+        );
+      }
 
-    // reset login input vals
-    this.refs.loginPassphrase.value = '';
-    this.refs.loginPassphraseTextarea.value = '';
+      mainWindow.createSeed.secondaryLoginPH = md5(this.state.loginPassphrase);
+      // reset the login pass phrase values so that when the user logs out, the values are clear
+      this.setState({
+        loginPassphrase: '',
+        loginPassPhraseSeedType: null,
+      });
 
-    if (this.state.shouldEncryptSeed) {
-      Store.dispatch(encryptPassphrase(this.state.loginPassphrase, this.state.encryptKey, this.state.pubKey));
-    }
+      // reset login input vals
+      this.refs.loginPassphrase.value = '';
+      this.refs.loginPassphraseTextarea.value = '';
 
-    if (this.state.selectedPin) {
-      Store.dispatch(loginWithPin(this.state.decryptKey, this.state.selectedPin));
-    } else {
+      this.setState(this.defaultState);
+
       Store.dispatch(shepherdElectrumAuth(this.state.loginPassphrase));
       Store.dispatch(shepherdElectrumCoins());
-    }
+    } else {
+      mainWindow.pinAccess = this.state.selectedPin;
 
-    this.setState(this.defaultState);
+      loginWithPin(this.state.decryptKey, this.state.selectedPin)
+      .then((res) => {
+        if (res.msg === 'success') {
+          // reset login input vals
+          this.refs.loginPassphrase.value = '';
+          this.refs.loginPassphraseTextarea.value = '';
+          this.refs.decryptKey.value = '';
+          this.refs.selectedPin.value = '';
+
+          this.setState(this.defaultState);
+
+          Store.dispatch(shepherdElectrumAuth(res.result));
+          Store.dispatch(shepherdElectrumCoins());
+        }
+      });
+    }
   }
 
   loadPinList() {
@@ -447,7 +455,6 @@ class Login extends React.Component {
     });
   }
 
-  // TODO: disable register btn if seed or seed conf is incorrect
   handleRegisterWallet() {
     const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
     const isSeedBlank = this.isBlank(this.state.randomSeed);
@@ -476,11 +483,61 @@ class Login extends React.Component {
       isSeedBlank: isSeedBlank ? true : false,
     });
 
-    if (enteredSeedsMatch &&
-        !isSeedBlank &&
-        _customSeed !== null &&
-        stringEntropy) {
-      this.toggleSeedBackupModal();
+    if (this.state.shouldEncryptSeed &&
+        !this.isCustomWalletSeed()) {
+      if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
+        Store.dispatch(
+          triggerToaster(
+            'Encryption keys don\'t match',
+            'Seed encrypt',
+            'error'
+          )
+        );
+      } else {
+        if (!this.state.encryptKey ||
+            !this.state.encryptKeyConfirm) {
+          Store.dispatch(
+            triggerToaster(
+              'Encryption key/confirmation field is empty',
+              'Seed encrypt',
+              'error'
+            )
+          );
+        } else if (this.state.encryptKey === this.state.encryptKeyConfirm) {
+          const seedEncryptionKeyEntropy = mainWindow.checkStringEntropy(this.state.encryptKey);
+
+          if (!seedEncryptionKeyEntropy) {
+            Store.dispatch(
+              triggerToaster(
+                'Encryption key/password is weak, please choose a stronger password',
+                'Weak password detected',
+                'error'
+              )
+            );
+          } else {
+            encryptPassphrase(this.state.randomSeed, this.state.encryptKey)
+            .then((res) => {
+              if (res.msg === 'success') {
+                this.loadPinList();
+
+                setTimeout(() => {
+                  this.setState({
+                    selectedPin: res.result,
+                    activeLoginSection: 'login',
+                  });
+                }, 500);
+              }
+            });
+          }
+        }
+      }
+    } else {
+      if (enteredSeedsMatch &&
+          !isSeedBlank &&
+          _customSeed !== null &&
+          ((stringEntropy && this.isCustomWalletSeed()) || !this.isCustomWalletSeed())) {
+        this.toggleSeedBackupModal();
+      }
     }
   }
 
@@ -492,7 +549,7 @@ class Login extends React.Component {
     this.updateLoginPassPhraseInput(e);
 
     if (e.key === 'Enter' &&
-        this.state.loginPassphrase) {
+        (this.state.loginPassphrase || (this.state.selectedPin && this.state.decryptKey))) {
       this.loginSeed();
     }
   }

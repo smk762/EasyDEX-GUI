@@ -96,6 +96,7 @@ export const LANG_EN = {
     'NO_ACTIVE_COIN': 'No active coin',
   },
   'INDEX': {
+    'PASSPHRASE_SUCCESSFULLY_ENCRYPTED': 'Seed is encrypted. Please try to login with your password now.',
     'WALLET_OFFLINE': 'Agama is currently unable to connect to the Internet.',
     'OFFLINE': 'Offline',
     'TOGGLE_COIN_CONTEXT_MENU': 'Toggle coin context menu',
@@ -188,6 +189,7 @@ export const LANG_EN = {
     'WELCOME_PLEASE_ADD': 'Welcome. Please add a coin to start.',
     'SELECT_SEED_TYPE': 'Please select compatible wallet seed type',
     'SELECT': '-Select-',
+    'SELECT_PUB_ADDRESS': 'Select pub address',
     'NATIVE_MODE': 'Native Mode',
     'NATIVE_MODE_DESC1': 'This mode is ONLY available for KOMODO Coin, PAX FIAT Chains, Assetchains, and Geckochains. ' +
                          'This mode uses',
@@ -313,7 +315,7 @@ export const LANG_EN = {
     'IMPORT_KEYS_DESC_P1': 'This section allows you to import private key of all iguana supported coins, Assetchain, Geckochain, or PAXchain by the wallet.',
     'IMPORT_KEYS_DESC_P2': 'It is not mandatory to have that coin active in the wallet for which you are executing import private key process.',
     'IMPORT_KEYS_DESC_P3': 'You\'ll also notice the private key you imported for one coin or chain will also be showing a new address in all other coin wallets\' receiving address section. ' +
-               'It is normal.',
+                           'It is normal.',
     'INPUT_PRIV_KEY': 'Input Private Key',
     'IMPORT_PRIV_KEY': 'Import Private Key',
     'EMPTY_PASSPHRASE_FIELD': 'Empty passphrase field',
@@ -652,10 +654,10 @@ export const LANG_EN = {
     'NXT_SEED': 'NXT',
     'SEED_COPIED': 'Seed copied',
     'SEED_SUCCESSFULLY_COPIED': 'The seed was successfully copied',
-    'ENCRYPT_SEED': 'Encrypt login seed',
+    'ENCRYPT_SEED': 'Encrypt seed',
     'PUBKEY': 'pubkey',
     'ENCRYPT_KEY': 'Encrypt key',
-    'DECRYPT_KEY': 'Decrypt key'
+    'DECRYPT_KEY': 'Password'
   },
   'SIDEBAR': {
     'EDEX_MOTTO': 'Most Secure, Easy and Native Decentralised Exchange',
@@ -728,6 +730,7 @@ export const LANG_EN = {
     'ADD_PEER_IP': 'Add Peer IP',
     'APP_SESSION': 'App Session',
     'EXPORT_KEYS_NOTE': 'Note: it\'s important that you provide the same passphrase you used to login to the wallet!',
+    'EXPORT_KEYS_NOTE_PIN': 'Note: it\'s important that you provide the same password/pin you used to login to the wallet!',
   },
   'TX_INFO': {
     'ADDRESS': 'address',
@@ -854,6 +857,8 @@ export const LANG_EN = {
     'NINJA': 'NINJA (NINJA)',
     'OOT': 'Utrum (OOT)',
     'BNTN': 'Blocknation (BNTN)',
+    'OOT': 'Utrum (OOT)',
+    'EQL': 'Equaliser (EQL)',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',

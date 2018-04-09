@@ -435,7 +435,7 @@ export const getCoinTitle = (coin) => {
       break;
     case 'EQL':
       coinlogo = 'EQL';
-      coinname = 'Equaliser'; 
+      coinname = 'Equaliser';
       break;
     case 'MESH':
       hideTitle = true;

@@ -27,7 +27,7 @@ export function checkAC(coinVal) {
 			coinVal === 'BTCH' ||
 			coinVal === 'BEER' ||
 			coinVal === 'PIZZA' ||
-	    		coinVal === 'OOT' ||
+	    coinVal === 'OOT' ||
 			coinVal === 'VOTE2018' ||
 			coinVal === 'BNTN')	{
 		return true;
@@ -96,9 +96,9 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		COQUI: {
 			supply: 72000000,
-                },
-                EQL: {
-                        supply: 500000000,
+    },
+    EQL: {
+	    supply: 500000000,
 		},
 		MNZ: {
 			supply: 257142858,

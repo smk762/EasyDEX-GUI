@@ -16,6 +16,7 @@ import DaemonStdoutPanel from './settings.daemonStdoutPanel';
 import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
 import CoindClearDataDirPanel from './settings.coindClearDataDirPanel';
 import Bip39KeysPanel from './settings.bip39KeysPanel';
+import SeedEncryptPanel from './settings.seedEncryptPanel';
 import mainWindow from '../../../util/mainWindow';
 
 // import WalletBackupPanel from './settings.walletBackupPanel';
@@ -101,6 +102,11 @@ export const SettingsRender = function() {
                   <ExportKeysPanel />
                 </PanelSection>
               }
+              <PanelSection
+                title="Encrypt seed"
+                icon="icon fa-shield">
+                <SeedEncryptPanel />
+              </PanelSection>
               { mainWindow.arch === 'x64' &&
                 <PanelSection
                   title={ `Wallet.dat ${translate('SETTINGS.KEYS_SM')}` }
