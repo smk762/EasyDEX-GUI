@@ -135,9 +135,9 @@ const LoginRender = function() {
                       })
                     }
                   </select>
-                <label
-                  className="floating-label margin-bottom-20"
-                  htmlFor="selectedPin">Pin / password access</label>
+                  <label
+                    className="floating-label margin-bottom-20"
+                    htmlFor="selectedPin">Pin / password access</label>
                 </div>
                 <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40">
                   <input
@@ -147,6 +147,7 @@ const LoginRender = function() {
                     ref="decryptKey"
                     placeholder={ translate('LOGIN.DECRYPT_KEY') }
                     onChange={ this.updateInput }
+                    onKeyDown={ (event) => this.handleKeydown(event) }
                     value={ this.state.decryptKey } />
                 </div>
               </div>
