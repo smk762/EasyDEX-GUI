@@ -433,6 +433,10 @@ export const getCoinTitle = (coin) => {
       coinlogo = 'COQUI';
       coinname = 'COQUI';
       break;
+    case 'EQL':
+      coinlogo = 'EQL';
+      coinname = 'Equiliser'; 
+      break;
     case 'MESH':
       hideTitle = true;
       titleBG = true;
@@ -688,6 +692,7 @@ export const coindList = () => {
     'BOTS',
     'CEAL',
     'COQUI',
+    'EQL',
     'CRYPTO',
     'HODL',
     'DEX',
@@ -719,6 +724,7 @@ export const isKomodoCoin = (coin) => {
       coin === 'BET' ||
       coin === 'CRYPTO' ||
       coin === 'COQUI' ||
+      coin === 'EQL' ||
       coin === 'HODL' ||
       coin === 'MSHARK' ||
       coin === 'BOTS' ||
