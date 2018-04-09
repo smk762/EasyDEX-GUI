@@ -3,10 +3,13 @@ import translate from '../../../translate/translate';
 import { connect } from 'react-redux';
 import {
   copyCoinAddress,
+  copyString,
   shepherdElectrumKeys,
+  loginWithPin,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import mainWindow from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 
 const SEED_TRIM_TIMEOUT = 5000;
@@ -20,20 +23,21 @@ class ExportKeysPanel extends React.Component {
       wifkeysPassphrase: '',
       keys: null,
       seedExtraSpaces: false,
+      decryptedPassphrase: null,
     };
+    this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.exportWifKeys = this.exportWifKeys.bind(this);
+    this._exportWifKeys = this._exportWifKeys.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this._copyCoinAddress = this._copyCoinAddress.bind(this);
+    this._copyString = this._copyString.bind(this);
     this.updateInput = this.updateInput.bind(this);
   }
 
   componentWillReceiveProps(props) {
     if (props.Dashboard &&
         props.Dashboard.activeSection !== 'settings') {
-      this.setState(Object.assign({}, this.state, {
-        keys: null,
-        wifkeysPassphrase: '',
-      }));
+      this.setState(this.defaultState);
 
       // reset input vals
       this.refs.wifkeysPassphrase.value = '';
@@ -42,7 +46,23 @@ class ExportKeysPanel extends React.Component {
   }
 
   exportWifKeys() {
-    shepherdElectrumKeys(this.state.wifkeysPassphrase)
+    if (mainWindow.pinAccess) {
+      loginWithPin(this.state.wifkeysPassphrase, mainWindow.pinAccess)
+      .then((res) => {
+        if (res.msg === 'success') {
+          this.setState({
+            decryptedPassphrase: res.result,
+          });
+          this._exportWifKeys(res.result);
+        }
+      });
+    } else {
+      this._exportWifKeys(this.state.wifkeysPassphrase);
+    }
+  }
+
+  _exportWifKeys(pass) {
+    shepherdElectrumKeys(pass)
     .then((keys) => {
       if (keys === 'error') {
         Store.dispatch(
@@ -75,12 +95,15 @@ class ExportKeysPanel extends React.Component {
     Store.dispatch(copyCoinAddress(address));
   }
 
+  _copyString(str, msg) {
+    Store.dispatch(copyString(str, msg));
+  }
+
   renderWifKeys() {
+    const _wifKeys = this.state.keys;
     let items = [];
 
-    if (this.state.keys) {
-      const _wifKeys = this.state.keys;
-
+    if (_wifKeys) {
       for (let _key in _wifKeys) {
         items.push(
           <tr key={ _key }>
@@ -165,10 +188,10 @@ class ExportKeysPanel extends React.Component {
     return (
       <div>
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col-sm-12 margin-bottom-15">
             <div className="padding-bottom-20">{ this.renderLB('INDEX.ONLY_ACTIVE_WIF_KEYS') }</div>
             <div className="padding-bottom-20">
-              <i>{ this.renderLB('SETTINGS.EXPORT_KEYS_NOTE') }</i>
+              <i>{ this.renderLB( mainWindow.pinAccess ? 'SETTINGS.EXPORT_KEYS_NOTE_PIN' : 'SETTINGS.EXPORT_KEYS_NOTE') }</i>
             </div>
             <strong>
               <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
@@ -176,7 +199,7 @@ class ExportKeysPanel extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col-sm-12 margin-bottom-20">
             <div
               className="wifkeys-form"
               autoComplete="off">
@@ -201,9 +224,16 @@ class ExportKeysPanel extends React.Component {
                 <i
                   className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                   onClick={ this.toggleSeedInputVisibility }></i>
-                <label
-                  className="floating-label"
-                  htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
+                { !mainWindow.pinAccess &&
+                  <label
+                    className="floating-label"
+                    htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
+                }
+                { mainWindow.pinAccess &&
+                  <label
+                    className="floating-label"
+                    htmlFor="wifkeysPassphrase">Password / pin</label>
+                }
                 { this.state.seedExtraSpaces &&
                   <span>
                     <i className="icon fa-warning seed-extra-spaces-warning"
@@ -219,11 +249,24 @@ class ExportKeysPanel extends React.Component {
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light margin-bottom-5"
-                  onClick={ this.exportWifKeys }>{ translate('INDEX.GET_WIF_KEYS') }</button>
+                  onClick={ this.exportWifKeys }>{ mainWindow.pinAccess ? 'Get seed and WIF keys' : translate('INDEX.GET_WIF_KEYS') }</button>
               </div>
             </div>
           </div>
         </div>
+        { this.state.decryptedPassphrase &&
+          <div className="row">
+            <div className="col-sm-12 padding-top-15 margin-left-10">
+              <strong>Seed:</strong> { this.state.decryptedPassphrase }
+              <button
+                className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                onClick={ () => this._copyString(this.state.decryptedPassphrase, 'Seed is copied to clipboard') }>
+                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+              </button>
+            </div>
+          </div>
+        }
         { this.state.keys &&
           <div className="row">
             <div className="col-sm-12 padding-top-15">

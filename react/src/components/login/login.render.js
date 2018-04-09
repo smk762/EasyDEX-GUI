@@ -62,7 +62,7 @@ const LoginRender = function() {
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
             { this.props.Login.pinList.length > 0 &&
-             <span>{ translate('LOGIN.PIN_LOGIN_INFO') }</span>
+             <div className="margin-top-25 margin-bottom-70">{ translate('LOGIN.PIN_LOGIN_INFO') }</div>
             }
             <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
               <input
@@ -112,107 +112,53 @@ const LoginRender = function() {
                   className="text-left" />
               </span>
             }
-            { this.state.loginPassphrase &&
-              this.state.enableEncryptSeed &&
-              <div className="row">
-                <div className="toggle-box padding-top-30 col-sm-3">
-                  <span className="pointer">
-                    <label className="switch">
-                      <input
-                        type="checkbox"
-                        checked={ this.shouldEncryptSeed() } />
-                      <div
-                        className="slider"
-                        onClick={ () => this.toggleShouldEncryptSeed() }></div>
-                    </label>
-                    <div
-                      className="toggle-label white"
-                      onClick={ () => this.toggleShouldEncryptSeed() }>
-                        { translate('LOGIN.ENCRYPT_SEED') }
-                    </div>
-                  </span>
-                </div>
-
-                <div className="col-sm-9">
-                  <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right-0">
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="encryptKey"
-                      placeholder={ translate('LOGIN.ENCRYPT_KEY') }
-                      onChange={ this.updateEncryptKey }
-                      value={ this.state.encryptKey }
-                      disabled={ !this.shouldEncryptSeed() } />
-                  </div>
-
-                  <div className="form-group form-material floating horizontal-padding-0 margin-5 margin-right">
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="pubKey"
-                      placeholder={ translate('LOGIN.PUBKEY') }
-                      onChange={ this.updatePubKey }
-                      value={ this.state.pubKey }
-                      disabled={ !this.shouldEncryptSeed() } />
-                  </div>
-                </div>
-              </div>
-            }
 
             { this.props.Login.pinList.length > 0 &&
-              <div className="row margin-top-30">
-                <div className="col-xs-12">
-                  <div className="pin-block-one">
-                    <hr/>
-                  </div>
-                  <div className="pin-block-two">
-                    <span>{ translate('INDEX.OR') }</span>
-                  </div>
-                  <div className="pin-block-three">
-                    <hr/>
-                  </div>
-                </div>
-              </div>
-            }
-            { this.props.Login.pinList.length > 0 &&
-              <div className="row">
-                <div className="form-group form-material floating col-sm-8 padding-left-10 horizontal-padding-0">
+              <div className="pin-login-block">
+                <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40">
                   <select
                     className="form-control form-material"
-                    name="storedPins"
+                    name="selectedPin"
+                    id="selectedPin"
+                    ref="selectedPin"
                     value={ this.state.selectedPin }
                     onChange={ (event) => this.updateSelectedPin(event) }
                     autoFocus>
                     <option
                       className="login-option"
-                      value="">{ translate('INDEX.SELECT') }</option>
+                      value="">{ translate('INDEX.SELECT_PUB_ADDRESS') }</option>
                     { this.props.Login.pinList.map((pin) => {
                       return <option
                               className="login-option"
-                              value={pin}
-                              key={pin}>{ pin }</option>
+                              value={ pin }
+                              key={ pin }>{ pin }</option>
                       })
                     }
                   </select>
+                <label
+                  className="floating-label margin-bottom-20"
+                  htmlFor="selectedPin">Pin / password access</label>
                 </div>
-                <div className="form-group form-material floating col-sm-4 padding-left-10 margin-top-20">
+                <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40">
                   <input
-                    type="text"
+                    type="password"
                     className="form-control"
                     name="decryptKey"
+                    ref="decryptKey"
                     placeholder={ translate('LOGIN.DECRYPT_KEY') }
-                    disabled={ false }
-                    onChange={ this.updateDecryptKey }
+                    onChange={ this.updateInput }
                     value={ this.state.decryptKey } />
                 </div>
               </div>
             }
-
             <button
               type="button"
               className="btn btn-primary btn-block margin-top-20"
               onClick={ this.loginSeed }
-              disabled={ !this.state.loginPassphrase || !this.state.loginPassphrase.length }>
+              disabled={
+                (this.props.Login.pinList.length === 0 && (!this.state.loginPassphrase || !this.state.loginPassphrase.length)) ||
+                (this.props.Login.pinList.length > 0 && (!this.state.selectedPin || !this.state.decryptKey))
+              }>
               { translate('INDEX.SIGN_IN') }
             </button>
             <div className="form-group form-material floating">
@@ -398,7 +344,7 @@ const LoginRender = function() {
                   onClick={ () => this.copyPassPhraseToClipboard() }>
                   { translate('INDEX.COPY') }
                 </button>
-                <span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
+                {/*<span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
                   <strong>{ translate('INDEX.WEAK_SEED') }</strong><br /><br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN1') }<br />
@@ -406,7 +352,7 @@ const LoginRender = function() {
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN3') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }<br />
                   { translate('INDEX.YOUR_SEED_MUST_CONTAIN5') }<br />
-                </span>
+                </span>*/}
                 <label
                   className="floating-label"
                   htmlFor="walletseed">{ translate('INDEX.WALLET_SEED') }</label>
@@ -428,6 +374,66 @@ const LoginRender = function() {
                 <label
                   className="floating-label"
                   htmlFor="rwalletseed">{ translate('INDEX.CONFIRM_SEED') }</label>
+                { !this.isCustomWalletSeed() &&
+                  <div className="seed-encrypt-block">
+                    <div className="form-group form-material floating text-left">
+                      <div className="toggle-box vertical-padding-20">
+                        <span className="pointer">
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              checked={ this.shouldEncryptSeed() } />
+                            <div
+                              className="slider"
+                              onClick={ () => this.toggleShouldEncryptSeed() }></div>
+                          </label>
+                          <div
+                            className="toggle-label white"
+                            onClick={ () => this.toggleShouldEncryptSeed() }>
+                            { translate('LOGIN.ENCRYPT_SEED') }
+                          </div>
+                        </span>
+                        <i
+                          className="icon fa-question-circle login-help"
+                          data-tip="Your seed is going to be stored locally and encrypted with a key/password.<br />This option aims to minimize typos in seed keying and multiple seeds case scenario."
+                          data-html={ true }></i>
+                        <ReactTooltip
+                          effect="solid"
+                          className="text-left" />
+                      </div>
+                    </div>
+                    { this.state.shouldEncryptSeed &&
+                      <div className="form-group form-material floating text-left">
+                        <input
+                          type="password"
+                          name="encryptKey"
+                          ref="encryptKey"
+                          className="form-control"
+                          onChange={ this.updateInput }
+                          autoComplete="off"
+                          value={ this.state.encryptKey || '' } />
+                        <label
+                          className="floating-label"
+                          htmlFor="encryptKey">Seed encrypt key</label>
+                      </div>
+                    }
+                    { this.state.shouldEncryptSeed &&
+                      <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
+                        <input
+                          type="password"
+                          name="encryptKeyConfirm"
+                          ref="encryptKeyConfirm"
+                          className="form-control"
+                          onChange={ this.updateInput }
+                          autoComplete="off"
+                          value={ this.state.encryptKeyConfirm || '' } />
+                        <label
+                          className="floating-label"
+                          htmlFor="encryptKeyConfirm">Seed encrypt key confirm</label>
+                      </div>
+                    }
+                  </div>
+                }
                 <button
                   type="button"
                   className="btn btn-success btn-block margin-top-20 btn-generate-qr">
@@ -443,7 +449,13 @@ const LoginRender = function() {
                 type="button"
                 className="btn btn-primary btn-block"
                 onClick={ this.handleRegisterWallet }
-                disabled={ !this.state.randomSeedConfirm || !this.state.randomSeed || !this.state.randomSeedConfirm.length || !this.state.randomSeed.length || this.state.randomSeedConfirm !== this.state.randomSeed }>
+                disabled={
+                  !this.state.randomSeedConfirm ||
+                  !this.state.randomSeed ||
+                  !this.state.randomSeedConfirm.length ||
+                  !this.state.randomSeed.length ||
+                  this.state.randomSeedConfirm !== this.state.randomSeed
+                }>
                 { translate('INDEX.REGISTER') }
               </button>
               <div className="form-group form-material floating">

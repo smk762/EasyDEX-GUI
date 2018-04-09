@@ -2,76 +2,93 @@ import Config from '../../config';
 import {
   getDecryptedPassphrase,
   getPinList,
-  triggerToaster
+  triggerToaster,
+  shepherdElectrumAuth,
 } from '../actionCreators';
-import { iguanaWalletPassphrase } from './walletAuth';
 import translate from '../../translate/translate';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import Store from '../../store';
 
-export const encryptPassphrase = (passphrase, key, pubKey) => {
+export const encryptPassphrase = (string, key, suppressToastr) => {
   const payload = {
-    string: passphrase,
-    key: key,
-    pubkey: pubKey,
+    string,
+    key,
     token: Config.token,
   };
 
-  return dispatch => {
-    return fetch(
+  return new Promise((resolve, reject) => {
+    fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/encryptkey`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'encryptKey',
           'Error',
           'error'
         )
       );
+      resolve({ msg: 'error' });
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(
-        triggerToaster(
-          translate('INDEX.PASSPHRASE_SUCCESSFULLY_ENCRYPTED'),
-          translate('KMD_NATIVE.SUCCESS'),
-          'success'
-        )
-      );
+      if (!suppressToastr) {
+        Store.dispatch(
+          triggerToaster(
+            translate('INDEX.PASSPHRASE_SUCCESSFULLY_ENCRYPTED'),
+            translate('KMD_NATIVE.SUCCESS'),
+            'success'
+          )
+        );
+      }
+      resolve(json);
     });
-  }
+  });
 }
 
-export const loginWithPin = (key, pubKey) => {
+export const loginWithPin = (key, pubkey) => {
   const payload = {
-    key: key,
-    pubkey: pubKey,
+    key,
+    pubkey,
     token: Config.token,
   };
 
-  return dispatch => {
-    return fetch(
+  return new Promise((resolve, reject) => {
+    fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/decryptkey`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           'decryptKey',
           'Error',
           'error'
         )
       );
+      resolve({ msg: 'error' });
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(iguanaWalletPassphrase(json.result));
+      if (json.msg === 'success') {
+        // Store.dispatch(shepherdElectrumAuth(json.result));
+        resolve(json);
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            json.result,
+            'Pin decrypt error',
+            'error'
+          )
+        );
+        resolve(json);
+      }
     });
-  }
+  });
 }
 
 export const loadPinList = () => {
@@ -95,13 +112,13 @@ export const loadPinList = () => {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(
+      /*dispatch(
         triggerToaster(
           'getPinList',
           'Success',
           'success'
         )
-      );
+      );*/
       dispatch(
         getPinList(json.result)
       );

@@ -112,7 +112,7 @@ export const getDebugLog = (target, linesCount, acName) => {
   return dispatch => {
     return fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/debuglog`,
-      fetchType(JSON.stringify(payload))
+      fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
       console.log(error);
@@ -178,7 +178,7 @@ export function getAppConfig() {
     };
     return fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/appconf${urlParams(_urlParams)}`,
-      fetchType.get  
+      fetchType.get
     )
     .catch((error) => {
       console.log(error);
@@ -235,7 +235,7 @@ export const coindGetStdout = (chain) => {
     };
     fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/coind/stdout${urlParams(_urlParams)}`,
-      fetchType.get  
+      fetchType.get
     )
     .catch((error) => {
       console.log(error);

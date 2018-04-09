@@ -8,6 +8,7 @@ const addCoinOptionsAC = () => {
     'ceal',
     'mesh',
     'coqui',
+    'eql',
     'crypto',
     'hodl',
     'dex',
@@ -27,7 +28,8 @@ const addCoinOptionsAC = () => {
     'beer',
     'pizza',
     'vote2018',
-    'ninja'
+    'ninja',
+    'bntn'
   ];
   let _items = [];
 

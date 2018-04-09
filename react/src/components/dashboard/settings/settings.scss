@@ -66,6 +66,13 @@
 }
 
 #SettingsAccordion {
+  label {
+    color: #757575;
+  }
+  .form-material .form-control.focus~.floating-label,
+  .form-material .form-control:focus~.floating-label {
+    color: #FF6600;
+  }
   .toggle {
     position: relative;
     top: 4px;
