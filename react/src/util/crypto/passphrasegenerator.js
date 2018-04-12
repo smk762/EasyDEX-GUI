@@ -1,7 +1,8 @@
 /******************************************************************************
  * Copyright © 2016 The Waves Core Developers.                             	  *
+ * Copyright © 2018 The SuperNET Developers.                                  *
  *                                                                            *
- * See the LICENSE files at     											  *
+ * See the LICENSE files at     											                        *
  * the top-level directory of this distribution for the individual copyright  *
  * holder information and the developer policies on copyright and licensing.  *
  *                                                                            *
@@ -14,7 +15,9 @@
  *                                                                            *
  ******************************************************************************/
 
-import ClientWordList from './wordlist.js';
+import ClientWordList from './wordlist';
+import mainWindow from '../mainWindow';
+import seedrandom from './seedrandom';
 
 const PassPhraseGenerator = {
 	seeds: 0,
@@ -38,19 +41,17 @@ const PassPhraseGenerator = {
 
 	passPhrase: "",
 
-	wordCount: 2048,
+	wordCount: ClientWordList.length,
 
 	words: ClientWordList,
 
-	generatePassPhrase: function(bitsval) {
+	generatePassPhrase: function(bits) {
+		var random = [];
 
-		var crypto = window.crypto || window.msCrypto;
-
-		var bits = bitsval;
-
-		var random = new Uint32Array(bits / 32);
-
-		crypto.getRandomValues(random);
+    for (var a = 0 ; a < bits / 32; a++) {
+      var randval = Math.abs(new Math.seedrandom(mainWindow.randomBytes(32).toString('hex')).int32(), true);
+      random.push(randval);
+    }
 
 		var i = 0,
 			l = random.length,
@@ -71,7 +72,6 @@ const PassPhraseGenerator = {
 
 		this.passPhrase = words.join(" ");
 
-		crypto.getRandomValues(random);
 
 		return this.passPhrase;
 	},
