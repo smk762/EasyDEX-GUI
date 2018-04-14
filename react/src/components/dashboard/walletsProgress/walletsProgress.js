@@ -317,7 +317,7 @@ class WalletsProgress extends React.Component {
           this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
           !this.props.ActiveCoin.progress ||
           !this.props.ActiveCoin.progress.blocks
-        ) {
+      ) {
         const temp = this.props.Settings.debugLog.split(' ');
         let currentProgress;
 
@@ -358,7 +358,7 @@ class WalletsProgress extends React.Component {
       } else if (
           this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
           this.props.Settings.debugLog.indexOf('Reindexing block file') > -1
-        ) {
+      ) {
         return (
           `: (${ translate('INDEX.REINDEX') })`
         );
