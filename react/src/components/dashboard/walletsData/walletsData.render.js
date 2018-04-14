@@ -52,7 +52,6 @@ export const AddressRender = function(tx) {
   if (!tx.address) {
     return (
       <span>
-        { /*<i className="icon fa-bullseye"></i>&nbsp; */ }
         <span className="label label-dark">
           { translate('DASHBOARD.ZADDR_NOT_LISTED') }
         </span>
@@ -172,7 +171,7 @@ export const TxAmountRender = function(tx) {
   } else {
     _amountNegative = 1;
   }
-
+  
   if (Config.roundValues) {
     return (
       <span>
@@ -192,6 +191,17 @@ export const TxAmountRender = function(tx) {
         <ReactTooltip
           effect="solid"
           className="text-left" />
+        { tx.vinLen > tx.vinMaxLen &&
+          <span>
+            <i
+              className="icon fa-question tx-history-vin-len-err"
+              data-tip="Transaction vin count exceeds max allowed number.<br/>The amount you are seeing now might be not precise."
+              data-html={ true }></i>
+            <ReactTooltip
+              effect="solid"
+              className="text-left" />
+          </span>
+        }
       </span>
     );
   }
@@ -208,6 +218,17 @@ export const TxAmountRender = function(tx) {
         <ReactTooltip
           effect="solid"
           className="text-left" />
+      }
+      { tx.vinLen > tx.vinMaxLen &&
+        <span>
+          <i
+            className="icon fa-question tx-history-vin-len-err"
+            data-tip="Transaction vin count exceeds max allowed number.<br/>The amount you are seeing now might be not precise."
+            data-html={ true }></i>
+          <ReactTooltip
+            effect="solid"
+            className="text-left" />
+        </span>
       }
     </span>
   );
