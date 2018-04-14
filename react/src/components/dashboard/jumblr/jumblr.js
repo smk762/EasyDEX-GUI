@@ -403,7 +403,8 @@ class Jumblr extends React.Component {
           this.props.ActiveCoin.coin,
           'deposit',
           _genKeys.address
-        ).then((json) => {
+        )
+        .then((json) => {
           if (json.error &&
               json.error.code) {
             Store.dispatch(

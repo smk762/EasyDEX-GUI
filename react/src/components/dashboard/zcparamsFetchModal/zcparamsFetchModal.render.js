@@ -44,7 +44,9 @@ const ZcparamsFetchModalRender = function() {
                         <button
                           type="button"
                           className="btn btn-primary btn-block"
-                          onClick={ this._downloadZCashParamsPromise }>{ translate('ZCPARAMS_FETCH.DOWNLOAD') }</button>
+                          onClick={ this._downloadZCashParamsPromise }>
+                          { translate('ZCPARAMS_FETCH.DOWNLOAD') }
+                        </button>
                       </div>
                     </div>
                   </div>

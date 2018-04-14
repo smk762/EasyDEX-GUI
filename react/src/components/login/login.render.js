@@ -62,60 +62,11 @@ const LoginRender = function() {
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
             { this.props.Login.pinList.length > 0 &&
-             <div className="margin-top-25 margin-bottom-70">{ translate('LOGIN.PIN_LOGIN_INFO') }</div>
+              <div className="margin-top-25 margin-bottom-70">{ translate('LOGIN.PIN_LOGIN_INFO') }</div>
             }
-            <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
-              <input
-                type="password"
-                name="loginPassphrase"
-                ref="loginPassphrase"
-                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                onChange={ this.updateLoginPassPhraseInput }
-                onKeyDown={ (event) => this.handleKeydown(event) }
-                autoComplete="off"
-                value={ this.state.loginPassphrase || '' } />
-              <textarea
-                className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                id="loginPassphrase"
-                ref="loginPassphraseTextarea"
-                name="loginPassphraseTextarea"
-                autoComplete="off"
-                onChange={ this.updateLoginPassPhraseInput }
-                onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase || '' }></textarea>
-              <i
-                className={ 'seed-toggle fa fa-eye' +  (!this.state.seedInputVisibility ? '-slash' : '') }
-                onClick={ this.toggleSeedInputVisibility }></i>
-              <label
-                className="floating-label"
-                htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
-              <div className="qr-modal-login-block">
-                <QRModal
-                  mode="scan"
-                  setRecieverFromScan={ this.setRecieverFromScan } />
-              </div>
-            </div>
-            { this.state.loginPassPhraseSeedType &&
-              <div
-                className="form-group form-material floating horizontal-padding-0 margin-top-20 seed-type-block"
-                style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
-                <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
-              </div>
-            }
-            { this.state.seedExtraSpaces &&
-              <span>
-                <i className="icon fa-warning seed-extra-spaces-warning"
-                  data-tip="Your seed contains leading/trailing space characters"
-                  data-html={ true }></i>
-                <ReactTooltip
-                  effect="solid"
-                  className="text-left" />
-              </span>
-            }
-
-            { this.props.Login.pinList.length > 0 &&
+              { this.props.Login.pinList.length > 0 &&
               <div className="pin-login-block">
-                <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40">
+                <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40 margin-bottom-80">
                   <select
                     className="form-control form-material"
                     name="selectedPin"
@@ -137,9 +88,9 @@ const LoginRender = function() {
                   </select>
                   <label
                     className="floating-label margin-bottom-20"
-                    htmlFor="selectedPin">Pin / password access</label>
+                    htmlFor="selectedPin">{ translate('LOGIN.PIN_PW_ACCESS') }</label>
                 </div>
-                <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40">
+                <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40 margin-bottom-80">
                   <input
                     type="password"
                     className="form-control"
@@ -152,13 +103,62 @@ const LoginRender = function() {
                 </div>
               </div>
             }
+            <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
+              <input
+                type="password"
+                name="loginPassphrase"
+                ref="loginPassphrase"
+                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                onChange={ this.updateLoginPassPhraseInput }
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                autoComplete="off"
+                value={ this.state.loginPassphrase || '' } />
+              <textarea
+                className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                id="loginPassphrase"
+                ref="loginPassphraseTextarea"
+                name="loginPassphraseTextarea"
+                autoComplete="off"
+                onChange={ this.updateLoginPassPhraseInput }
+                onKeyDown={ (event) => this.handleKeydown(event) }
+                value={ this.state.loginPassphrase || '' }></textarea>
+              <i
+                className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
+                onClick={ this.toggleSeedInputVisibility }></i>
+              <label
+                className="floating-label"
+                htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
+              <div className="qr-modal-login-block">
+                <QRModal
+                  mode="scan"
+                  setRecieverFromScan={ this.setRecieverFromScan } />
+              </div>
+            </div>
+            { this.state.loginPassPhraseSeedType &&
+              <div
+                className="form-group form-material floating horizontal-padding-0 margin-top-20 seed-type-block"
+                style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
+                <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
+              </div>
+            }
+            { this.state.seedExtraSpaces &&
+              <span>
+                <i className="icon fa-warning seed-extra-spaces-warning"
+                  data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                  data-html={ true }></i>
+                <ReactTooltip
+                  effect="solid"
+                  className="text-left" />
+              </span>
+            }
+
             <button
               type="button"
               className="btn btn-primary btn-block margin-top-20"
               onClick={ this.loginSeed }
               disabled={
                 (this.props.Login.pinList.length === 0 && (!this.state.loginPassphrase || !this.state.loginPassphrase.length)) ||
-                (this.props.Login.pinList.length > 0 && (!this.state.selectedPin || !this.state.decryptKey))
+                (this.props.Login.pinList.length > 0 && (!this.state.selectedPin || !this.state.decryptKey) && !this.state.loginPassphrase)
               }>
               { translate('INDEX.SIGN_IN') }
             </button>
@@ -207,7 +207,7 @@ const LoginRender = function() {
                     { translate('INDEX.NATIVE_MODE') }
                     <i
                       className="icon fa-question-circle login-help"
-                      data-tip="<strong>Be aware:</strong> <u>Native mode</u> requires to download the whole blockchain data to a local disk before you can start using it.<br/>This may take from <strong>several hours to a day</strong> depending on your connection and hardware.<br/>Please <u>try to keep Agama running</u> until the whole process is finished."
+                      data-tip={ `<strong>${ translate('LOGIN.NATIVE_MODE_DESC_P1') }</strong> <u>${ translate('LOGIN.NATIVE_MODE_DESC_P2') }</u> ${ translate('LOGIN.NATIVE_MODE_DESC_P3') }<br/>${ translate('LOGIN.NATIVE_MODE_DESC_P4') } <strong>${ translate('LOGIN.NATIVE_MODE_DESC_P5') }</strong> ${ translate('LOGIN.NATIVE_MODE_DESC_P6') }<br/>${ translate('LOGIN.NATIVE_MODE_DESC_P7') } <u>${ translate('LOGIN.NATIVE_MODE_DESC_P8') }</u> ${ translate('LOGIN.NATIVE_MODE_DESC_P9') }` }
                       data-html={ true }></i>
                     <ReactTooltip
                       effect="solid"
@@ -220,12 +220,30 @@ const LoginRender = function() {
                     optionRenderer={ this.renderShortcutOption }
                     valueRenderer={ this.renderShortcutOption }
                     options={[
-                      { value: 'kmd', label: 'kmd' },
-                      { value: 'mnz', label: 'mnz' },
-                      { value: 'btch', label: 'btch' },
-                      { value: 'revs', label: 'revs' },
-                      { value: 'jumblr', label: 'jumblr' },
-                      { value: 'kmd+revs+jumblr', label: 'kmd+revs+jumblr' },
+                      { 
+                        value: 'kmd',
+                        label: 'kmd',
+                      },
+                      {
+                        value: 'mnz',
+                        label: 'mnz',
+                      },
+                      {
+                        value: 'btch',
+                        label: 'btch',
+                      },
+                      {
+                        value: 'revs',
+                        label: 'revs',
+                      },
+                      {
+                        value: 'jumblr',
+                        label: 'jumblr',
+                      },
+                      {
+                        value: 'kmd+revs+jumblr',
+                        label: 'kmd+revs+jumblr',
+                      },
                     ]} />
                 </div>
               }
@@ -235,7 +253,7 @@ const LoginRender = function() {
                   { translate('INDEX.SPV_MODE') }
                   <i
                     className="icon fa-question-circle login-help"
-                    data-tip="If you need a quick and easy access to your funds try <u>Lite (SPV) mode</u> which doesn't require any blockchain to be loaded locally.<br/>All data is requested on demand from Electrum servers."
+                    data-tip={ `${ translate('LOGIN.SPV_MODE_DESC_P1') } <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ${ translate('LOGIN.SPV_MODE_DESC_P3') }<br/>${ translate('LOGIN.SPV_MODE_DESC_P4') }` }
                     data-html={ true }></i>
                   <ReactTooltip
                     effect="solid"
@@ -248,13 +266,34 @@ const LoginRender = function() {
                   optionRenderer={ this.renderShortcutOption }
                   valueRenderer={ this.renderShortcutOption }
                   options={[
-                    { value: 'kmd', label: 'kmd' },
-                    { value: 'chips', label: 'chips' },
-                    { value: 'btch', label: 'btch' },
-                    { value: 'mnz', label: 'mnz' },
-                    { value: 'revs', label: 'revs' },
-                    { value: 'jumblr', label: 'jumblr' },
-                    { value: 'kmd+revs+jumblr', label: 'kmd+revs+jumblr' },
+                    {
+                      value: 'kmd',
+                      label: 'kmd',
+                    },
+                    {
+                      value: 'chips',
+                      label: 'chips',
+                    },
+                    {
+                      value: 'btch',
+                      label: 'btch',
+                    },
+                    {
+                      value: 'mnz',
+                      label: 'mnz',
+                    },
+                    {
+                      value: 'revs',
+                      label: 'revs',
+                    },
+                    {
+                      value: 'jumblr',
+                      label: 'jumblr',
+                    },
+                    {
+                      value: 'kmd+revs+jumblr',
+                      label: 'kmd+revs+jumblr',
+                    },
                   ]} />
               </div>
             </div>
@@ -396,7 +435,7 @@ const LoginRender = function() {
                         </span>
                         <i
                           className="icon fa-question-circle login-help"
-                          data-tip="Your seed is going to be stored locally and encrypted with a key/password.<br />This option aims to minimize typos in seed keying and multiple seeds case scenario."
+                          data-tip={ `${translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P1')}<br />${translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P2')}` }
                           data-html={ true }></i>
                         <ReactTooltip
                           effect="solid"
@@ -415,7 +454,7 @@ const LoginRender = function() {
                           value={ this.state.encryptKey || '' } />
                         <label
                           className="floating-label"
-                          htmlFor="encryptKey">Seed encrypt key</label>
+                          htmlFor="encryptKey">{ translate('LOGIN.SEED_ENCRYPT_KEY') }</label>
                       </div>
                     }
                     { this.state.shouldEncryptSeed &&
@@ -430,7 +469,7 @@ const LoginRender = function() {
                           value={ this.state.encryptKeyConfirm || '' } />
                         <label
                           className="floating-label"
-                          htmlFor="encryptKeyConfirm">Seed encrypt key confirm</label>
+                          htmlFor="encryptKeyConfirm">{ translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }</label>
                       </div>
                     }
                   </div>
@@ -441,7 +480,7 @@ const LoginRender = function() {
                   <QRModal
                     qrSize="256"
                     modalSize="md"
-                    title="Seed QR recovery"
+                    title={ translate('LOGIN.SEED_QR_RECOVERY') }
                     fileName="agama-seed"
                     content={ this.state.randomSeed } />
                 </button>
