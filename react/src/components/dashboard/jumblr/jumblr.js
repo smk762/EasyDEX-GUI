@@ -20,7 +20,7 @@ import {
   JumblrRender,
   JumblrRenderSecretAddressList,
 } from './jumblr.render';
-import PassPhraseGenerator from '../../../util/crypto/passphrasegenerator';
+import mainWindow from '../../../util/mainWindow';
 
 // import gen komodo keys utils
 import '../../../util/crypto/gen/array.map.js';
@@ -40,7 +40,7 @@ import { Bitcoin } from '../../../util/crypto/gen/bitcoin.js';
 // TODO: promises, move to backend crypto libs
 
 if (!window.jumblrPasshrase) { // gen jumblr passphrase
-  window.jumblrPasshrase = `jumblr ${PassPhraseGenerator.generatePassPhrase(256)}`;
+  window.jumblrPasshrase = `jumblr ${mainWindow.bip39.generateMnemonic(256)}`;
 }
 
 class Jumblr extends React.Component {

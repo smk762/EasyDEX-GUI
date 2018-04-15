@@ -64,7 +64,7 @@ const LoginRender = function() {
             { this.props.Login.pinList.length > 0 &&
               <div className="margin-top-25 margin-bottom-70">{ translate('LOGIN.PIN_LOGIN_INFO') }</div>
             }
-              { this.props.Login.pinList.length > 0 &&
+            { this.props.Login.pinList.length > 0 &&
               <div className="pin-login-block">
                 <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40 margin-bottom-80">
                   <select
@@ -136,7 +136,7 @@ const LoginRender = function() {
             </div>
             { this.state.loginPassPhraseSeedType &&
               <div
-                className="form-group form-material floating horizontal-padding-0 margin-top-20 seed-type-block"
+                className={ `form-group form-material floating horizontal-padding-0 seed-type-block ` + (this.props.Login.pinList.length > 0 ? 'margin-top-130' : 'margin-top-20') }
                 style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
                 <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
               </div>
