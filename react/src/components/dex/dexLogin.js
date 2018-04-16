@@ -10,6 +10,7 @@ import SVGFaviconColor from './svg/faviconColor';
 import SVGCopy from './svg/copy';
 import SVGChevronRight from './svg/chevronRight';
 import SVGCheck from './svg/check';
+import PassPhraseGenerator from '../../../util/crypto/passphrasegenerator';
 
 class DexLogin extends React.Component {
   constructor() {
@@ -44,7 +45,7 @@ class DexLogin extends React.Component {
   generateNewSeed() {
     this.setState(Object.assign({}, this.state, {
       isNewPassphrase: true,
-      passphrase: mainWindow.bip39.generateMnemonic(256),
+      passphrase: PassPhraseGenerator.generatePassPhrase(256),
     }));
   }
 

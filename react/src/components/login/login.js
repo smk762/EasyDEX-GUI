@@ -19,6 +19,7 @@ import {
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
+import PassPhraseGenerator from '../../util/crypto/passphrasegenerator';
 import zcashParamsCheckErrors from '../../util/zcashParams';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
@@ -42,7 +43,7 @@ class Login extends React.Component {
       seedInputVisibility: false,
       loginPassPhraseSeedType: null,
       bitsOption: 256,
-      randomSeed: mainWindow.bip39.generateMnemonic(256),
+      randomSeed: PassPhraseGenerator.generatePassPhrase(256),
       randomSeedConfirm: '',
       isSeedConfirmError: false,
       isSeedBlank: false,
@@ -127,7 +128,7 @@ class Login extends React.Component {
       // if customWalletSeed is set to false, regenerate the seed
       if (!this.state.customWalletSeed) {
         this.setState({
-          randomSeed: mainWindow.bip39.generateMnemonic(this.state.bitsOption),
+          randomSeed: PassPhraseGenerator.generatePassPhrase(this.state.bitsOption),
           isSeedConfirmError: false,
           isSeedBlank: false,
           isCustomSeedWeak: false,
@@ -176,7 +177,7 @@ class Login extends React.Component {
 
   generateNewSeed(bits) {
     this.setState(Object.assign({}, this.state, {
-      randomSeed: mainWindow.bip39.generateMnemonic(bits),
+      randomSeed: PassPhraseGenerator.generatePassPhrase(bits),
       bitsOption: bits,
       isSeedBlank: false,
     }));
@@ -393,31 +394,26 @@ class Login extends React.Component {
     });
   }
 
-  isPassphraseValid(passPhraseWords, bits) {
-    // the required number of words based on the number of bits
-    // mirrors the generatePassPhrase function above
-    const wordsCount = bits / 32 * 3;
-    return passPhraseWords && passPhraseWords.length === wordsCount;
-  }
-
   getLoginPassPhraseSeedType(passPhrase) {
     if (!passPhrase) {
       return null;
     }
-    
-    if (!mainWindow.bip39.validateMnemonic(passPhrase)) {
+
+    const passPhraseWords = passPhrase.split(' ');
+
+    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhrase)) {
       return null;
     }
 
-    if (this.isPassphraseValid(passPhraseWords, 256)) {
+    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
       return translate('LOGIN.IGUANA_SEED');
     }
 
-    if (this.isPassphraseValid(passPhraseWords, 160)) {
+    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 160)) {
       return translate('LOGIN.WAVES_SEED');
     }
 
-    if (this.isPassphraseValid(passPhraseWords, 128)) {
+    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 128)) {
       return translate('LOGIN.NXT_SEED');
     }
 
@@ -432,7 +428,7 @@ class Login extends React.Component {
       loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
-      randomSeed: mainWindow.bip39.generateMnemonic(256),
+      randomSeed: PassPhraseGenerator.generatePassPhrase(256),
       randomSeedConfirm: '',
       isSeedConfirmError: false,
       isSeedBlank: false,
