@@ -90,7 +90,10 @@ class WalletsData extends React.Component {
       if (this.props.ActiveCoin.balance.interest &&
           this.props.ActiveCoin.balance.interest > 0) {
         return 777;
-      } else if ((this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) || (this.props.ActiveCoin.balance.balance && this.props.ActiveCoin.balance.balance >= 10)) {
+      } else if (
+        (this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) ||
+        (this.props.ActiveCoin.balance.balance && this.props.ActiveCoin.balance.balance >= 10)
+      ) {
         return -777;
       }
     }
@@ -300,13 +303,18 @@ class WalletsData extends React.Component {
         itemsList: 'no data',
         reconnectInProgress: false,
       });
-    } else if (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'loading') {
+    } else if (
+      this.props.ActiveCoin.txhistory &&
+      this.props.ActiveCoin.txhistory === 'loading'
+    ) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'loading',
         reconnectInProgress: false,
       });
-    } else if ((this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'connection error or incomplete data') ||
-      (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'cant get current height')) {
+    } else if (
+      (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'connection error or incomplete data') ||
+      (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'cant get current height')
+    ) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'connection error',
         reconnectInProgress: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? true : false,
@@ -552,10 +560,10 @@ class WalletsData extends React.Component {
     }
 
     return this.contains(tx.address, term) ||
-            this.contains(tx.confirmations, term) ||
-            this.contains(tx.amount, term) ||
-            this.contains(tx.type, term) ||
-            this.contains(secondsToString(tx.blocktime || tx.timestamp || tx.time), term);
+      this.contains(tx.confirmations, term) ||
+      this.contains(tx.amount, term) ||
+      this.contains(tx.type, term) ||
+      this.contains(secondsToString(tx.blocktime || tx.timestamp || tx.time), term);
   }
 
   contains(value, property) {

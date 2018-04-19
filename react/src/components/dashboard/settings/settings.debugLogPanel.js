@@ -131,6 +131,7 @@ class DebugLogPanel extends React.Component {
         key={ `coind-walletdat-coins-none` }
         value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
     );
+    
     for (let i = 0; i < _nativeCoins.length; i++) {
       if (_nativeCoins[i] === 'KMD') {
         _nativeCoins[i] = 'Komodo';
@@ -215,11 +216,15 @@ class DebugLogPanel extends React.Component {
                   type="button"
                   className="btn btn-primary waves-effect waves-light"
                   disabled={ this.checkInputVals() }
-                  onClick={ this.readDebugLog }>{ translate('INDEX.LOAD_DEBUG_LOG') }</button>
+                  onClick={ this.readDebugLog }>
+                  { translate('INDEX.LOAD_DEBUG_LOG') }
+                </button>
               </div>
               <div className="row">
                 <div className="col-sm-12 col-xs-12 text-align-left">
-                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">{ this.renderDebugLogData() }</div>
+                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+                  { this.renderDebugLogData() }
+                  </div>
                 </div>
               </div>
             </div>

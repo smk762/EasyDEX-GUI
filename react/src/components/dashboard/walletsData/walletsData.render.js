@@ -126,8 +126,10 @@ export const TxTypeRender = function(category) {
         <i className="icon fa-arrow-circle-left"></i> <span>{ translate('DASHBOARD.OUT') }</span>
       </span>
     );
-  } else if (category === 'receive' ||
-      category === 'received') {
+  } else if (
+    category === 'receive' ||
+    category === 'received'
+  ) {
     return (
       <span className="label label-success">
         <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') } &nbsp; &nbsp;</span>
@@ -195,7 +197,7 @@ export const TxAmountRender = function(tx) {
           <span>
             <i
               className="icon fa-question tx-history-vin-len-err"
-              data-tip="Transaction vin count exceeds max allowed number.<br/>The amount you are seeing now might be not precise."
+              data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
               data-html={ true }></i>
             <ReactTooltip
               effect="solid"
@@ -223,7 +225,7 @@ export const TxAmountRender = function(tx) {
         <span>
           <i
             className="icon fa-question tx-history-vin-len-err"
-            data-tip="Transaction vin count exceeds max allowed number.<br/>The amount you are seeing now might be not precise."
+            data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
             data-html={ true }></i>
           <ReactTooltip
             effect="solid"
@@ -260,7 +262,8 @@ export const WalletsDataRender = function() {
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
-        { (this.displayClaimInterestUI() === 777 || this.displayClaimInterestUI() === -777) &&
+        { (this.displayClaimInterestUI() === 777 ||
+          this.displayClaimInterestUI() === -777) &&
           <div className="col-xs-12 margin-top-20 backround-gray">
             <div className="panel no-margin">
               <div>

@@ -48,8 +48,8 @@ class SeedEncryptPanel extends React.Component {
     if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
       Store.dispatch(
         triggerToaster(
-          'Encryption keys don\'t match',
-          'Seed encrypt',
+          translate('LOGIN.ENCRYPTION_KEYS_DONT_MATCH'),
+          translate('LOGIN.SEED_ENCRYPT'),
           'error'
         )
       );
@@ -58,8 +58,8 @@ class SeedEncryptPanel extends React.Component {
           !this.state.encryptKeyConfirm) {
         Store.dispatch(
           triggerToaster(
-            'Encryption key/confirmation field is empty',
-            'Seed encrypt',
+            translate('LOGIN.ENCRYPTION_KEY_EMPTY'),
+            translate('LOGIN.SEED_ENCRYPT'),
             'error'
           )
         );
@@ -69,8 +69,8 @@ class SeedEncryptPanel extends React.Component {
         if (!seedEncryptionKeyEntropy) {
           Store.dispatch(
             triggerToaster(
-              'Encryption key/password is weak, please choose a stronger password',
-              'Weak password detected',
+              translate('LOGIN.SEED_ENCRYPTION_WEAK_PW'),
+              translate('LOGIN.WEAK_PW'),
               'error'
             )
           );
@@ -146,7 +146,7 @@ class SeedEncryptPanel extends React.Component {
       <div>
         <div className="row">
           <div className="col-sm-12">
-            <div className="padding-bottom-20">This section allows you to encrypt a seed with a password and store it locally.</div>
+            <div className="padding-bottom-20">{ translate('SETTINGS.THIS_SECTION_ALLOWS_YOU_TO_ENCRYPT') }</div>
           </div>
         </div>
         <div className="row">
@@ -189,7 +189,7 @@ class SeedEncryptPanel extends React.Component {
                     value={ this.state.encryptKey || '' } />
                   <label
                     className="floating-label"
-                    htmlFor="encryptKey">Seed encrypt key</label>
+                    htmlFor="encryptKey">{ translate('LOGIN.SEED_ENCRYPT_KEY') }</label>
                 </div>
                 <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
                   <input
@@ -202,12 +202,12 @@ class SeedEncryptPanel extends React.Component {
                     value={ this.state.encryptKeyConfirm || '' } />
                   <label
                     className="floating-label"
-                    htmlFor="encryptKeyConfirm">Seed encrypt key confirm</label>
+                    htmlFor="encryptKeyConfirm">{ translate('LOGIN.SEED_ENCRYPT_KEY_CONF') }</label>
                 </div>
                 { this.state.seedExtraSpaces &&
                   <span>
                     <i className="icon fa-warning seed-extra-spaces-warning"
-                      data-tip="Your seed contains leading/trailing space characters"
+                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
                       data-html={ true }></i>
                     <ReactTooltip
                       effect="solid"
@@ -224,7 +224,7 @@ class SeedEncryptPanel extends React.Component {
                     !this.state.encryptKey ||
                     !this.state.encryptKeyConfirm
                   }
-                  onClick={ this.encryptSeed }>Encrypt</button>
+                  onClick={ this.encryptSeed }>{ translate('SETTINGS.ENCRYPT') }</button>
               </div>
             </div>
           </div>

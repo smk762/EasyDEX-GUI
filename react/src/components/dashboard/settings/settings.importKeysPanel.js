@@ -55,7 +55,9 @@ class ImportKeysPanel extends React.Component {
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light"
-                  onClick={ this.importWifKey }>{ translate('INDEX.IMPORT_PRIV_KEY') }</button>
+                  onClick={ this.importWifKey }>
+                  { translate('INDEX.IMPORT_PRIV_KEY') }
+                </button>
               </div>
             </div>
           </div>

@@ -39,12 +39,12 @@ const AddCoinRender = function() {
                 <button
                   className="btn btn-outline-primary btn-save-coin-selection"
                   onClick={ this.saveCoinSelection }>
-                    { translate('ADD_COIN.SAVE_SELECTION') }
+                  { translate('ADD_COIN.SAVE_SELECTION') }
                 </button>
                 <button
                   className="btn btn-outline-primary btn-load-coin-selection"
                   onClick={ this.loadCoinSelection }>
-                    { translate('ADD_COIN.LOAD_SELECTION') }
+                  { translate('ADD_COIN.LOAD_SELECTION') }
                 </button>
               </span>
               { this.renderCoinSelectors() }
@@ -53,7 +53,7 @@ const AddCoinRender = function() {
                   type="button"
                   className="btn btn-primary col-sm-4 float-none"
                   onClick={ this.activateAllCoins }>
-                    { translate('ADD_COIN.ACTIVATE_ALL') }
+                  { translate('ADD_COIN.ACTIVATE_ALL') }
                 </button>
               </div>
               { mainWindow.arch === 'x64' &&

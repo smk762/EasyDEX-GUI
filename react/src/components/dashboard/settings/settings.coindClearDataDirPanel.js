@@ -116,11 +116,11 @@ class CoindClearDataDirPanel extends React.Component {
             <div>
               <div className="col-sm-4 no-padding-left text-center">
                 <select
-                  className="form-control form-material margin-top-20 margin-bottom-10"
+                  autoFocus
                   name="coin"
+                  className="form-control form-material margin-top-20 margin-bottom-10"
                   value={ this.state.coin }
-                  onChange={ (event) => this.updateInput(event) }
-                  autoFocus>
+                  onChange={ (event) => this.updateInput(event) }>
                   { this.renderCoinListSelectorOptions() }
                 </select>
                 <span className="pointer toggle margin-top-20 block text-left">
@@ -142,8 +142,13 @@ class CoindClearDataDirPanel extends React.Component {
                   <button
                     type="button"
                     className="btn btn-primary waves-effect waves-light margin-top-20"
-                    disabled={ this.state.loading || this.state.coin === 'none' }
-                    onClick={ this.displayYesNo }>{ this.state.loading ? translate('SETTINGS.COIND_DELETING', this.state.coin) : translate('SETTINGS.DELETE') }</button>
+                    disabled={
+                      this.state.loading ||
+                      this.state.coin === 'none'
+                    }
+                    onClick={ this.displayYesNo }>
+                    { this.state.loading ? translate('SETTINGS.COIND_DELETING', this.state.coin) : translate('SETTINGS.DELETE') }
+                  </button>
                 }
                 { this.state.displayYesNo &&
                   <div className="margin-top-20">{ translate('SETTINGS.DATADIR_DELETE_PROMPT', this.state.coin) }</div>
@@ -152,13 +157,17 @@ class CoindClearDataDirPanel extends React.Component {
                   <button
                     type="button"
                     className="btn btn-primary waves-effect waves-light margin-top-20 margin-right-20"
-                    onClick={ this.removeCoindData }>{ translate('SETTINGS.YES') }</button>
+                    onClick={ this.removeCoindData }>
+                    { translate('SETTINGS.YES') }
+                  </button>
                 }
                 { this.state.displayYesNo &&
                   <button
                     type="button"
                     className="btn btn-primary waves-effect waves-light margin-top-20"
-                    onClick={ this.displayYesNo }>{ translate('SETTINGS.NO') }</button>
+                    onClick={ this.displayYesNo }>
+                    { translate('SETTINGS.NO') }
+                  </button>
                 }
               </div>
             </div>

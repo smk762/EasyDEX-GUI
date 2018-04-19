@@ -82,7 +82,10 @@ class WalletsBalance extends React.Component {
           this.props.ActiveCoin.balance[type]) {
         _balance = this.props.ActiveCoin.balance[type];
       }
-    } else if (_mode === 'spv' && this.props.ActiveCoin.balance.balance) {
+    } else if (
+      _mode === 'spv' &&
+      this.props.ActiveCoin.balance.balance
+    ) {
       if (this.props.ActiveCoin.coin === 'KMD') {
         if (type === 'total' &&
             this.props.ActiveCoin.balance &&
@@ -136,7 +139,7 @@ class WalletsBalance extends React.Component {
             _fiatPricePerCoin > 0 &&
             <span>
               <div
-                data-tip={ `Price per 1 ${this.props.ActiveCoin.coin} ~ $${formatValue(_fiatPricePerCoin)}` }
+                data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ $${formatValue(_fiatPricePerCoin)}` }
                 className="text-right">${ formatValue(_fiatPriceTotal) }</div>
               <ReactTooltip
                 effect="solid"

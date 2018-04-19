@@ -65,7 +65,9 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
 export const LoadingBlocksRender = function() {
   return (
     <div className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent full-width">
-      <span className="full-width">{ translate(this.props.ActiveCoin.rescanInProgress ? 'INDEX.PLEASE_WAIT_UNTIL_RESCAN_FINISHED' : 'INDEX.LOADING_BLOCKS') }</span>
+      <span className="full-width">
+      { translate(this.props.ActiveCoin.rescanInProgress ? 'INDEX.PLEASE_WAIT_UNTIL_RESCAN_FINISHED' : 'INDEX.LOADING_BLOCKS') }
+      </span>
     </div>
   );
 };

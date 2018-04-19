@@ -10,7 +10,7 @@ import SVGFaviconColor from './svg/faviconColor';
 import SVGCopy from './svg/copy';
 import SVGChevronRight from './svg/chevronRight';
 import SVGCheck from './svg/check';
-import PassPhraseGenerator from '../../../util/crypto/passphrasegenerator';
+import PassPhraseGenerator from '../../util/crypto/passphrasegenerator';
 
 class DexLogin extends React.Component {
   constructor() {
