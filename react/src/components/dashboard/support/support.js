@@ -68,10 +68,10 @@ class Support extends React.Component {
           <div className="row margin-top-30">
             <div className="col-sm-12">
               <p>
-                For guides & FAQ please go to <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/home') }>https://support.komodoplatform.com/support/home</a>
+                { translate('SUPPORT.FOR_GUIDES') } <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/home') }>https://support.komodoplatform.com/support/home</a>
               </p>
               <p>
-                To send feedback please open a ticket at <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/tickets/new') }>https://support.komodoplatform.com/support/tickets/new</a>
+              { translate('SUPPORT.TO_SEND_FEEDBACK') } <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/tickets/new') }>https://support.komodoplatform.com/support/tickets/new</a>
               </p>
             </div>
           </div>

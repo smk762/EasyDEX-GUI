@@ -103,7 +103,7 @@ export const SettingsRender = function() {
                 </PanelSection>
               }
               <PanelSection
-                title="Encrypt seed"
+                title={ translate('SETTINGS.ENCRYPT_SEED') }
                 icon="icon fa-shield">
                 <SeedEncryptPanel />
               </PanelSection>

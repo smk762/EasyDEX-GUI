@@ -94,6 +94,7 @@ class AppUpdatePanel extends React.Component {
 
   _updateUIPromise() {
     let _updateLog = [];
+    
     updateProgressBar.patch = 0;
     _updateLog.push(`${translate('INDEX.DOWNLOADING_UI_UPDATE')}...`);
     this.setState(Object.assign({}, this.state, {

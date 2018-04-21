@@ -67,7 +67,7 @@ class ExportKeysPanel extends React.Component {
       if (keys === 'error') {
         Store.dispatch(
           triggerToaster(
-            translate('SETTINGS.WRONG_PASSPHRASE') + ' or WIF key format',
+            translate('SETTINGS.WRONG_PASSPHRASE') + ' ' + translate('SETTINGS.OR_WIF_FORMAT'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -113,7 +113,7 @@ class ExportKeysPanel extends React.Component {
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
                 onClick={ () => this._copyCoinAddress(_wifKeys[_key].pub) }>
-                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
               </button>
             </td>
             <td className="padding-bottom-30 padding-left-15">
@@ -122,7 +122,7 @@ class ExportKeysPanel extends React.Component {
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
                 onClick={ () => this._copyCoinAddress(_wifKeys[_key].priv) }>
-                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
               </button>
             </td>
           </tr>
@@ -232,12 +232,12 @@ class ExportKeysPanel extends React.Component {
                 { mainWindow.pinAccess &&
                   <label
                     className="floating-label"
-                    htmlFor="wifkeysPassphrase">Password / pin</label>
+                    htmlFor="wifkeysPassphrase">{ translate('SETTINGS.PW_PIN') }</label>
                 }
                 { this.state.seedExtraSpaces &&
                   <span>
                     <i className="icon fa-warning seed-extra-spaces-warning"
-                      data-tip="Your seed contains leading/trailing space characters"
+                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
                       data-html={ true }></i>
                     <ReactTooltip
                       effect="solid"
@@ -249,7 +249,9 @@ class ExportKeysPanel extends React.Component {
                 <button
                   type="button"
                   className="btn btn-primary waves-effect waves-light margin-bottom-5"
-                  onClick={ this.exportWifKeys }>{ mainWindow.pinAccess ? 'Get seed and WIF keys' : translate('INDEX.GET_WIF_KEYS') }</button>
+                  onClick={ this.exportWifKeys }>
+                  { mainWindow.pinAccess ? translate('SETTINGS.GET_SEED_AND_WIF') : translate('INDEX.GET_WIF_KEYS') }
+                </button>
               </div>
             </div>
           </div>
@@ -257,12 +259,12 @@ class ExportKeysPanel extends React.Component {
         { this.state.decryptedPassphrase &&
           <div className="row">
             <div className="col-sm-12 padding-top-15 margin-left-10">
-              <strong>Seed:</strong> { this.state.decryptedPassphrase }
+              <strong>{ translate('TOOLS.TOOLS') }:</strong> { this.state.decryptedPassphrase }
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                onClick={ () => this._copyString(this.state.decryptedPassphrase, 'Seed is copied to clipboard') }>
-                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                onClick={ () => this._copyString(this.state.decryptedPassphrase, translate('SETTINGS.SEED_IS_COPIED')) }>
+                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
               </button>
             </div>
           </div>

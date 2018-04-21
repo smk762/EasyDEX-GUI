@@ -401,7 +401,7 @@ class Login extends React.Component {
 
     const passPhraseWords = passPhrase.split(' ');
 
-    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhraseWords)) {
+    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhrase)) {
       return null;
     }
 
