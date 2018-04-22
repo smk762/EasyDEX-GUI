@@ -107,7 +107,7 @@ class InvoiceModal extends React.Component {
             this,
             {
               address: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-              amount: this.props.ActiveCoin.balance.balance
+              amount: this.props.ActiveCoin.balance.balance,
             },
             'public'
           )

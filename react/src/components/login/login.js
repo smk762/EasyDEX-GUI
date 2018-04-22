@@ -109,8 +109,8 @@ class Login extends React.Component {
     } else {
       Store.dispatch(
         triggerToaster(
-          'Unable to recognize QR code',
-          'QR scan Error',
+          translate('INDEX.QR_UNABLE_TO_DECODE'),
+          translate('INDEX.QR_ERROR'),
           'error'
         )
       );
@@ -329,7 +329,8 @@ class Login extends React.Component {
   }
 
   loginSeed() {
-    if (!this.state.selectedPin) {
+    if (!this.state.selectedPin ||
+        !this.state.decryptKey) {
       const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
 
       mainWindow.pinAccess = false;
@@ -337,10 +338,10 @@ class Login extends React.Component {
       if (!stringEntropy) {
         Store.dispatch(
           triggerToaster(
-            ['Your seed is weak, it means that someone can steal your funds by guessing/bruteforcing the seed.',
+            [translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P1'),
               '',
-              'Consider creating a stronger seed and moving your funds to a new address.'],
-            'Weak seed detected',
+              translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P2')],
+            translate('LOGIN.SEED_ENTROPY_CHECK_TITLE'),
             'warning toastr-wide',
             false
           )
@@ -400,7 +401,7 @@ class Login extends React.Component {
 
     const passPhraseWords = passPhrase.split(' ');
 
-    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhraseWords)) {
+    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhrase)) {
       return null;
     }
 
@@ -458,24 +459,22 @@ class Login extends React.Component {
   handleRegisterWallet() {
     const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
     const isSeedBlank = this.isBlank(this.state.randomSeed);
-
     const stringEntropy = mainWindow.checkStringEntropy(this.state.customWalletSeed);
-
+    const _customSeed = this.state.customWalletSeed;
+    
     if (!stringEntropy &&
-        this.state.customWalletSeed) {
+        _customSeed) {
       Store.dispatch(
         triggerToaster(
-          ['Your seed is weak, it means that someone can steal your funds by guessing/bruteforcing the seed.',
+          [translate('LOGIN.SEED_ENTROPY_CHECK_P1'),
             '',
-            'Consider using a stronger seed that is not susceptible to such attacks.'],
-          'Weak seed detected',
+            translate('LOGIN.SEED_ENTROPY_CHECK_P3')],
+            translate('LOGIN.SEED_ENTROPY_CHECK_TITLE'),
           'warning toastr-wide',
           false
         )
       );
     }
-
-    const _customSeed = this.state.customWalletSeed;
 
     this.setState({
       isCustomSeedWeak: _customSeed === null ? true : false,
@@ -488,8 +487,8 @@ class Login extends React.Component {
       if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
         Store.dispatch(
           triggerToaster(
-            'Encryption keys don\'t match',
-            'Seed encrypt',
+            translate('LOGIN.ENCRYPTION_KEYS_DONT_MATCH'),
+            translate('LOGIN.SEED_ENCRYPT'),
             'error'
           )
         );
@@ -498,8 +497,8 @@ class Login extends React.Component {
             !this.state.encryptKeyConfirm) {
           Store.dispatch(
             triggerToaster(
-              'Encryption key/confirmation field is empty',
-              'Seed encrypt',
+              translate('LOGIN.ENCRYPTION_KEY_EMPTY'),
+              translate('LOGIN.SEED_ENCRYPT'),
               'error'
             )
           );
@@ -509,8 +508,8 @@ class Login extends React.Component {
           if (!seedEncryptionKeyEntropy) {
             Store.dispatch(
               triggerToaster(
-                'Encryption key/password is weak, please choose a stronger password',
-                'Weak password detected',
+                translate('LOGIN.SEED_ENCRYPTION_WEAK_PW'),
+                translate('LOGIN.WEAK_PW'),
                 'error'
               )
             );

@@ -2,6 +2,8 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import { connect } from 'react-redux';
 
+// TODO: add currency(ies) selector option to query prices from atomic
+
 class FiatCurrencyPanel extends React.Component {
   constructor() {
     super();

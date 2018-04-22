@@ -27,7 +27,9 @@ export const LoginSettingsModalRender = function() {
               <button
                 type="button"
                 className="btn btn-default"
-                onClick={ this.closeLoginSettingsModal }>{ translate('INDEX.CLOSE') }</button>
+                onClick={ this.closeLoginSettingsModal }>
+                { translate('INDEX.CLOSE') }
+              </button>
             </div>
           </div>
         </div>

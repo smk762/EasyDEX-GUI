@@ -88,7 +88,11 @@ class Jumblr extends React.Component {
             'error'
           )
         );
-      } else if (json.result && json.result.result && json.result.result === 'paused') {
+      } else if (
+        json.result &&
+        json.result.result &&
+        json.result.result === 'paused'
+      ) {
         Store.dispatch(
           triggerToaster(
             translate('JUMBLR.JUMBLR_PAUSED'),
@@ -112,7 +116,11 @@ class Jumblr extends React.Component {
             'error'
           )
         );
-      } else if (json.result && json.result.result && json.result.result === 'resumed') {
+      } else if (
+        json.result &&
+        json.result.result &&
+        json.result.result === 'resumed'
+      ) {
         Store.dispatch(
           triggerToaster(
             translate('JUMBLR.JUMBLR_RESUMED'),
@@ -226,7 +234,11 @@ class Jumblr extends React.Component {
                 'error'
               )
             );
-          } else if (json.result && json.result.result && json.result.result === 'success') {
+          } else if (
+            json.result &&
+            json.result.result &&
+            json.result.result === 'success'
+          ) {
             _jumblrSecretAddress.push(_genKeys);
             this.setState(Object.assign({}, this.state, {
               jumblrSecretAddress: _jumblrSecretAddress,
@@ -403,7 +415,8 @@ class Jumblr extends React.Component {
           this.props.ActiveCoin.coin,
           'deposit',
           _genKeys.address
-        ).then((json) => {
+        )
+        .then((json) => {
           if (json.error &&
               json.error.code) {
             Store.dispatch(
@@ -413,7 +426,10 @@ class Jumblr extends React.Component {
                 'error'
               )
             );
-          } else if (json.result && (json.result.result === 0 || json.result.result === null)) {
+          } else if (
+            json.result &&
+            (json.result.result === 0 || json.result.result === null)
+          ) {
             this.setState(Object.assign({}, this.state, {
               jumblrDepositAddress: {
                 address: _genKeys.address,

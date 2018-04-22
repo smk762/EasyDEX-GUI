@@ -6,9 +6,13 @@ export const getCoinTitle = (coin) => {
   let hideTitle = false;
 
   switch (coin) {
+    case 'BCBC':
+      coinlogo = 'BCBC';
+      coinname = 'Bitcoin CBC';
+      break;
     case 'BNTN':
       coinlogo = 'bntn';
-      coinname = 'Blocknation';
+      coinname = 'Blocnation';
       break;
     case 'ACC':
       coinlogo = 'acc';
@@ -656,8 +660,8 @@ export const getModeInfo = (mode) => {
       modecolor = 'primary';
       break;
     case 'spv':
-      modecode = 'SPV';
-      modetip = 'SPV';
+      modecode = 'Lite';
+      modetip = 'Lite';
       modecolor = 'info';
       break;
     case 'full':
