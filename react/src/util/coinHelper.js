@@ -437,6 +437,10 @@ export const getCoinTitle = (coin) => {
       coinlogo = 'COQUI';
       coinname = 'COQUI';
       break;
+    case 'GLXT':
+      coinlogo = 'GLXT';
+      coinname = 'GLXToken';
+      break;
     case 'EQL':
       coinlogo = 'EQL';
       coinname = 'Equaliser';
@@ -696,6 +700,7 @@ export const coindList = () => {
     'BOTS',
     'CEAL',
     'COQUI',
+    'GLXT',
     'EQL',
     'CRYPTO',
     'HODL',
@@ -728,6 +733,7 @@ export const isKomodoCoin = (coin) => {
       coin === 'BET' ||
       coin === 'CRYPTO' ||
       coin === 'COQUI' ||
+      coin === 'GLXT' ||
       coin === 'EQL' ||
       coin === 'HODL' ||
       coin === 'MSHARK' ||
