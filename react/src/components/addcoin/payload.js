@@ -12,6 +12,7 @@ export function checkAC(coinVal) {
 			coinVal === 'BET' ||
 			coinVal === 'CRYPTO' ||
 			coinVal === 'COQUI' ||
+			coinVal === 'GLXT' ||
 			coinVal === 'EQL' ||
 			coinVal === 'HODL' ||
 			coinVal === 'MSHARK' ||
@@ -96,9 +97,13 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 		},
 		COQUI: {
 			supply: 72000000,
-    },
-    EQL: {
-	    supply: 500000000,
+   		 },
+		GLXT: {
+                        supply: 100000000,
+	        },
+
+    		EQL: {
+		        supply: 500000000,
 		},
 		MNZ: {
 			supply: 257142858,
