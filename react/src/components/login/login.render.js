@@ -77,7 +77,7 @@ const LoginRender = function() {
                     autoFocus>
                     <option
                       className="login-option"
-                      value="">{ translate('INDEX.SELECT_PUB_ADDRESS') }</option>
+                      value="">{ translate('INDEX.SELECT_PIN_NAME') }</option>
                     { this.props.Login.pinList.map((pin) => {
                       return <option
                               className="login-option"
@@ -220,7 +220,7 @@ const LoginRender = function() {
                     optionRenderer={ this.renderShortcutOption }
                     valueRenderer={ this.renderShortcutOption }
                     options={[
-                      { 
+                      {
                         value: 'kmd',
                         label: 'kmd',
                       },
@@ -443,33 +443,72 @@ const LoginRender = function() {
                       </div>
                     </div>
                     { this.state.shouldEncryptSeed &&
-                      <div className="form-group form-material floating text-left">
-                        <input
-                          type="password"
-                          name="encryptKey"
-                          ref="encryptKey"
-                          className="form-control"
-                          onChange={ this.updateInput }
-                          autoComplete="off"
-                          value={ this.state.encryptKey || '' } />
-                        <label
-                          className="floating-label"
-                          htmlFor="encryptKey">{ translate('LOGIN.SEED_ENCRYPT_KEY') }</label>
-                      </div>
-                    }
-                    { this.state.shouldEncryptSeed &&
-                      <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
-                        <input
-                          type="password"
-                          name="encryptKeyConfirm"
-                          ref="encryptKeyConfirm"
-                          className="form-control"
-                          onChange={ this.updateInput }
-                          autoComplete="off"
-                          value={ this.state.encryptKeyConfirm || '' } />
-                        <label
-                          className="floating-label"
-                          htmlFor="encryptKeyConfirm">{ translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }</label>
+                      <div>
+                        <div className="form-group form-material floating text-left">
+                          <input
+                            type="password"
+                            name="encryptKey"
+                            ref="encryptKey"
+                            className="form-control"
+                            onChange={ this.updateInput }
+                            autoComplete="off"
+                            value={ this.state.encryptKey || '' } />
+                          <label
+                            className="floating-label"
+                            htmlFor="encryptKey">{ translate('LOGIN.SEED_ENCRYPT_KEY') }</label>
+                        </div>
+                        <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
+                          <input
+                            type="password"
+                            name="encryptKeyConfirm"
+                            ref="encryptKeyConfirm"
+                            className="form-control"
+                            onChange={ this.updateInput }
+                            autoComplete="off"
+                            value={ this.state.encryptKeyConfirm || '' } />
+                          <label
+                            className="floating-label"
+                            htmlFor="encryptKeyConfirm">{ translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }</label>
+                        </div>
+                        <div className="toggle-box vertical-padding-20 text-left">
+                          <span className="pointer">
+                            <label className="switch">
+                              <input
+                                type="checkbox"
+                                checked={ this.state.isCustomPinFilename } />
+                              <div
+                                className="slider"
+                                onClick={ () => this.toggleCustomPinFilename() }></div>
+                            </label>
+                            <div
+                              className="toggle-label white"
+                              onClick={ () => this.toggleCustomPinFilename() }>
+                              { translate('LOGIN.CUSTOM_PIN_FNAME') }
+                            </div>
+                          </span>
+                          <i
+                            className="icon fa-question-circle login-help"
+                            data-tip={ translate('LOGIN.CUSTOM_PIN_FNAME_INFO') }
+                            data-html={ true }></i>
+                          <ReactTooltip
+                            effect="solid"
+                            className="text-left" />
+                        </div>
+                        { this.state.isCustomPinFilename &&
+                          <div className="form-group form-material floating text-left margin-top-20 margin-bottom-40">
+                            <input
+                              type="text"
+                              name="customPinFilename"
+                              ref="customPinFilename"
+                              className="form-control"
+                              onChange={ this.updateInput }
+                              autoComplete="off"
+                              value={ this.state.customPinFilename || '' } />
+                            <label
+                              className="floating-label"
+                              htmlFor="customPinFilename">{ translate('LOGIN.CUSTOM_PIN_FNAME') }</label>
+                          </div>
+                        }
                       </div>
                     }
                   </div>
