@@ -193,7 +193,11 @@ const addCoinOptionsCrypto = () => {
       label: 'Zcoin (XZC)',
       icon: 'XZC',
       value: `XZC|spv`,
-    },*/ {
+    },*/{
+      label: 'Bitcoin CBC (BCBC)',
+      icon: 'BCBC',
+      value: `BCBC|spv`,
+    }, {
       label: 'BitcoinGold (BTG)',
       icon: 'BTG',
       value: `BTG|spv`,

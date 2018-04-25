@@ -1,7 +1,7 @@
 /******************************************************************************
- * Copyright © 2016 The Waves Core Developers.                             	  *
+ * Copyright © 2016 The Waves Core Developers.                                *
  *                                                                            *
- * See the LICENSE files at     											  											*
+ * See the LICENSE files at                                                   *
  * the top-level directory of this distribution for the individual copyright  *
  * holder information and the developer policies on copyright and licensing.  *
  *                                                                            *
@@ -17,10 +17,10 @@
 import mainWindow from '../mainWindow';
 
 const PassPhraseGenerator = {
-	generatePassPhrase: (bitsval) => {
-		return mainWindow.bip39.generateMnemonic(bitsval);
-	},
-	
+  generatePassPhrase: (bitsval) => {
+    return mainWindow.bip39.generateMnemonic(bitsval);
+  },
+
   // checks if it's possible that the pass phrase words supplied as the first parameter
   // were generated with the number of bits supplied as the second parameter
   isPassPhraseValid: (passPhraseWords, bits) => {
@@ -28,11 +28,11 @@ const PassPhraseGenerator = {
     // mirrors the generatePassPhrase function above
     const wordsCount = bits / 32 * 3;
     return passPhraseWords && passPhraseWords.length === wordsCount;
-	},
-	
-	arePassPhraseWordsValid: (passphrase) => {
-		return mainWindow.bip39.validateMnemonic(passphrase);
-	},
+  },
+
+  arePassPhraseWordsValid: (passphrase) => {
+    return mainWindow.bip39.validateMnemonic(passphrase);
+  },
 }
 
 export default PassPhraseGenerator;

@@ -66,7 +66,7 @@ class DebugLogPanel extends React.Component {
       _items.push(
         <p key={ `app-runtime-log-entry-${i}` }>
           <span>{ secondsToString(_appRuntimeLog[i].time, true) }</span>
-          <span className="padding-left-30">{ _appRuntimeLog[i].msg.indexOf('{') === -1 ? _appRuntimeLog[i].msg : JSON.stringify(_appRuntimeLog[i].msg, null, '') }</span>
+          <span className="padding-left-30">{ typeof _appRuntimeLog[i].msg === 'string' ? _appRuntimeLog[i].msg : JSON.stringify(_appRuntimeLog[i].msg, null, '') }</span>
         </p>
       );
     }
@@ -131,7 +131,7 @@ class DebugLogPanel extends React.Component {
         key={ `coind-walletdat-coins-none` }
         value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
     );
-    
+
     for (let i = 0; i < _nativeCoins.length; i++) {
       if (_nativeCoins[i] === 'KMD') {
         _nativeCoins[i] = 'Komodo';
