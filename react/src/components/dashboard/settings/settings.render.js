@@ -96,6 +96,7 @@ export const SettingsRender = function() {
                 this.props.Main.coins.spv &&
                 Object.keys(this.props.Main.coins.spv).length &&
                 this.props.Main.isLoggedIn &&
+                !mainWindow.isWatchOnly() &&
                 <PanelSection
                   title={ translate('INDEX.EXPORT_KEYS') }
                   icon="icon md-key">
