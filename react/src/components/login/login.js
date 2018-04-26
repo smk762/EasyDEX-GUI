@@ -31,8 +31,6 @@ const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
 const SEED_TRIM_TIMEOUT = 5000;
 
-// TODO: remove duplicate activehandle and activecoins calls
-
 class Login extends React.Component {
   constructor() {
     super();
@@ -60,6 +58,8 @@ class Login extends React.Component {
       selectedPin: '',
       isExperimentalOn: false,
       enableEncryptSeed: true,
+      isCustomPinFilename: false,
+      customPinFilename: '',
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
@@ -80,6 +80,7 @@ class Login extends React.Component {
     this.loadPinList = this.loadPinList.bind(this);
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
+    this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
   }
 
   _toggleNotaryElectionsModal() {
@@ -150,6 +151,12 @@ class Login extends React.Component {
   toggleShouldEncryptSeed() {
     this.setState({
       shouldEncryptSeed: !this.state.shouldEncryptSeed,
+    });
+  }
+
+  toggleCustomPinFilename() {
+    this.setState({
+      isCustomPinFilename: !this.state.isCustomPinFilename,
     });
   }
 
@@ -461,7 +468,7 @@ class Login extends React.Component {
     const isSeedBlank = this.isBlank(this.state.randomSeed);
     const stringEntropy = mainWindow.checkStringEntropy(this.state.customWalletSeed);
     const _customSeed = this.state.customWalletSeed;
-    
+
     if (!stringEntropy &&
         _customSeed) {
       Store.dispatch(
@@ -514,19 +521,69 @@ class Login extends React.Component {
               )
             );
           } else {
-            encryptPassphrase(this.state.randomSeed, this.state.encryptKey)
-            .then((res) => {
-              if (res.msg === 'success') {
-                this.loadPinList();
+            if (this.state.isCustomPinFilename) {
+              const _customPinFilenameTest = /^[0-9a-zA-Z-_]+$/g;
 
-                setTimeout(() => {
-                  this.setState({
-                    selectedPin: res.result,
-                    activeLoginSection: 'login',
-                  });
-                }, 500);
+              if (this.state.customPinFilename &&
+                  _customPinFilenameTest.test(this.state.customPinFilename)) {
+                encryptPassphrase(
+                  this.state.randomSeed,
+                  this.state.encryptKey,
+                  false,
+                  this.state.customPinFilename,
+                )
+                .then((res) => {
+                  if (res.msg === 'success') {
+                    this.loadPinList();
+
+                    setTimeout(() => {
+                      this.setState({
+                        selectedPin: res.result,
+                        activeLoginSection: 'login',
+                      });
+                    }, 500);
+                  } else {
+                    Store.dispatch(
+                      triggerToaster(
+                        res.result,
+                        translate('LOGIN.ERR_SEED_STORAGE'),
+                        'error'
+                      )
+                    );
+                  }
+                });
+              } else {
+                Store.dispatch(
+                  triggerToaster(
+                    translate('LOGIN.CUSTOM_PIN_FNAME_INFO'),
+                    translate('LOGIN.ERR_SEED_STORAGE'),
+                    'error'
+                  )
+                );
               }
-            });
+            } else {
+              encryptPassphrase(this.state.randomSeed, this.state.encryptKey)
+              .then((res) => {
+                if (res.msg === 'success') {
+                  this.loadPinList();
+
+                  setTimeout(() => {
+                    this.setState({
+                      selectedPin: res.result,
+                      activeLoginSection: 'login',
+                    });
+                  }, 500);
+                } else {
+                  Store.dispatch(
+                    triggerToaster(
+                      res.result,
+                      translate('LOGIN.ERR_SEED_STORAGE'),
+                      'error'
+                    )
+                  );
+                }
+              });
+            }
           }
         }
       }

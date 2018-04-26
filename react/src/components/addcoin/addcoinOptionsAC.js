@@ -1,5 +1,6 @@
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
+import config from '../../config';
 
 const addCoinOptionsAC = () => {
   const _assetChains = [
@@ -35,7 +36,7 @@ const addCoinOptionsAC = () => {
   let _items = [];
 
   for (let i = 0; i < _assetChains.length; i++) {
-    let availableModes = _assetChains[i] !== 'kv' && _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' && _assetChains[i] !== 'mesh' && _assetChains[i] !== 'ceal' ? 'spv|native' : 'native';
+    let availableModes = _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' && _assetChains[i] !== 'mesh' && _assetChains[i] !== 'ceal' ? 'spv|native' : 'native';
 
     if (mainWindow.arch !== 'x64') {
       availableModes = 'spv';
@@ -46,6 +47,26 @@ const addCoinOptionsAC = () => {
       icon: _assetChains[i],
       value: `${_assetChains[i].toUpperCase()}|${availableModes}`,
     });
+  }
+
+  if (config.experimentalFeatures) {
+    const _customAssetChains = {
+      mining: [
+      ],
+      staking: [
+      ],
+    };
+
+    for (let key in _customAssetChains) {
+      for (let i = 0; i < _customAssetChains[key].length; i++) {
+
+        _items.push({
+          label: translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`),
+          icon: _customAssetChains[key][i],
+          value: `${_customAssetChains[key][i].toUpperCase()}|${key}`,
+        });
+      }
+    }
   }
 
   return _items;
