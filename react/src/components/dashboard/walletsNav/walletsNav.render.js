@@ -20,10 +20,12 @@ export const WalletsNavNoWalletRender = function() {
 };
 
 export const WalletsNavWithWalletRender = function() {
+  const pubKeys = mainWindow.getPubkeys();
+
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 ' + (this.props.ActiveCoin.mode === 'spv' ? 'page-header--spv' : 'page-header--native') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 ' + (this.props.ActiveCoin.mode === 'spv' || (pubKeys[this.props.ActiveCoin.coin.toLowerCase()] && pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
         id="header-dashboard"
         style={{ marginBottom: '30px' }}>
         { this.props.ActiveCoin &&
@@ -37,6 +39,19 @@ export const WalletsNavWithWalletRender = function() {
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
               onClick={ () => this.copyMyAddress(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) }>
+              <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+            </button>
+          </div>
+        }
+        { this.props.ActiveCoin &&
+          this.props.ActiveCoin.coin &&
+          pubKeys[this.props.ActiveCoin.coin.toLowerCase()] &&
+          <div>
+            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+            { pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub }
+            <button
+              className="btn btn-default btn-xs clipboard-edexaddr"
+              onClick={ () => this.copyMyAddress(pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub) }>
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
             </button>
           </div>

@@ -3,6 +3,7 @@ import translate from '../../translate/translate';
 import Config from '../../config';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import mainWindow from '../../util/mainWindow';
 
 import {
   triggerToaster,
@@ -15,6 +16,7 @@ import {
   startAssetChain,
   startCrypto,
   checkAC,
+  acConfig,
 } from '../../components/addcoin/payload';
 
 export const iguanaActiveHandleState = (json) => {
@@ -130,7 +132,7 @@ export const addCoin = (coin, mode, startupParams) => {
     }
   } else {
     return dispatch => {
-      dispatch(shepherdGetConfig(coin, '-1', startupParams));
+      dispatch(shepherdGetConfig(coin, mode, startupParams));
     }
   }
 }
@@ -153,33 +155,28 @@ export const shepherdHerd = (coin, mode, path, startupParams) => {
     'ac_options': [
       '-daemon=0',
       '-server',
-      `-ac_name=${coin}`,
-      '-addnode=78.47.196.146',
+      `-ac_name=${coin}`
     ],
   };
 
-  if (coin === 'BEER' ||
-      coin === 'PIZZA') {
-    herdData['ac_options'].pop();
-    herdData['ac_options'].push('-addnode=24.54.206.138');
-  } else if (coin === 'NINJA') {
-    herdData['ac_options'].pop();
-    herdData['ac_options'].push('-addnode=192.241.134.19');
-  } else if (coin === 'OOT') {
-    herdData['ac_options'].pop();
-    herdData['ac_options'].push('-addnode=174.138.107.226');
-  } else if (coin === 'BNTN') {
-    herdData['ac_options'].pop();
-    herdData['ac_options'].push('-addnode=94.130.169.205');
-  } else if (coin === 'EQL') {
-    herdData['ac_options'].pop();
-    herdData['ac_options'].push('-addnode=46.101.124.153');  
-  } else if (coin === 'GLXT') {
-    herdData['ac_options'].pop();
-    herdData['ac_options'].push('-addnode=34.201.62.8');  
+  if (acConfig[coin]) {
+    for (let key in acConfig[coin]) {
+      if (key === 'pubkey') {
+        const pubKeys = mainWindow.getPubkeys();
 
-}
+        if (pubKeys &&
+            pubKeys[coin.toLowerCase()]) {
+          herdData['ac_options'].push(`-pubkey=${pubKeys[coin.toLowerCase()].pubHex}`);
+        }
+      } else {
+        herdData['ac_options'].push(`-${key}=${acConfig[coin][key]}`);
+      }
+    }
+  }
 
+  if (!acConfig[coin].addnode) {
+    herdData['ac_options'].push('-addnode=78.47.196.146');
+  }
 
   if (coin === 'ZEC') {
     herdData = {
@@ -228,7 +225,7 @@ export const shepherdHerd = (coin, mode, path, startupParams) => {
       coin,
       mode
     );
-    herdData.ac_options.push(`-ac_supply=${supply}`);
+    // herdData.ac_options.push(`-ac_supply=${supply}`);
   }
 
   return dispatch => {
@@ -285,6 +282,8 @@ export const addCoinResult = (coin, mode) => {
   const modeToValue = {
     '0': 'spv',
     '-1': 'native',
+    '1': 'staking',
+    '2': 'mining',
   };
 
   return dispatch => {

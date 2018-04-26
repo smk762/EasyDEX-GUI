@@ -7,7 +7,7 @@ export const getCoinTitle = (coin) => {
 
   switch (coin) {
     case 'BCBC':
-      coinlogo = 'BCBC';
+      coinlogo = 'bcbc';
       coinname = 'Bitcoin CBC';
       break;
     case 'BNTN':

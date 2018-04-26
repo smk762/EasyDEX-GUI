@@ -17,6 +17,8 @@ import mainWindow from '../../util/mainWindow';
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
 
+const SEED_TRIM_TIMEOUT = 5000;
+
 class AddCoin extends React.Component {
   constructor() {
     super();
@@ -33,6 +35,14 @@ class AddCoin extends React.Component {
           disabled: true,
           checked: false,
         },
+        miningMode: {
+          disabled: true,
+          checked: false,
+        },
+        stakingMode: {
+          disabled: true,
+          checked: false,
+        },
         mode: -2,
         daemonParam: null,
       },
@@ -40,8 +50,14 @@ class AddCoin extends React.Component {
       actionsMenu: false,
       modalClassName: 'hide',
       isExperimentalOn: false,
+      // staking ac
+      loginPassphrase: '',
+      seedInputVisibility: false,
+      seedExtraSpaces: false,
+      trimPassphraseTimer: null,
     };
     this.existingCoins = null;
+    this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.activateCoin = this.activateCoin.bind(this);
     this.dismiss = this.dismiss.bind(this);
     this.addNewItem = this.addNewItem.bind(this);
@@ -50,11 +66,60 @@ class AddCoin extends React.Component {
     this.saveCoinSelection = this.saveCoinSelection.bind(this);
     this.loadCoinSelection = this.loadCoinSelection.bind(this);
     this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
+    this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
+    this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
+    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
+  }
+
+  toggleSeedInputVisibility() {
+    this.setState({
+      seedInputVisibility: !this.state.seedInputVisibility,
+    });
+
+    this.resizeLoginTextarea();
+  }
+
+  resizeLoginTextarea() {
+    // auto-size textarea
+    setTimeout(() => {
+      if (this.state.seedInputVisibility) {
+        document.querySelector('#loginPassphrase').style.height = '1px';
+        document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
+      }
+    }, 100);
+  }
+
+  updateLoginPassPhraseInput(e) {
+    const newValue = e.target.value;
+
+    clearTimeout(this.state.trimPassphraseTimer);
+
+    const _trimPassphraseTimer = setTimeout(() => {
+      if (newValue[0] === ' ' ||
+          newValue[newValue.length - 1] === ' ') {
+        this.setState({
+          seedExtraSpaces: true,
+        });
+      } else {
+        this.setState({
+          seedExtraSpaces: false,
+        });
+      }
+    }, SEED_TRIM_TIMEOUT);
+
+    this.resizeLoginTextarea();
+
+    this.setState({
+      trimPassphraseTimer: _trimPassphraseTimer,
+      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
+    });
   }
 
   verifyZcashParamsExist(mode) {
     return new Promise((resolve, reject) => {
-      if (Number(mode) === -1) {
+      if (Number(mode) === -1 ||
+          Number(mode) === 1 ||
+          Number(mode) === 2) {
         const _res = mainWindow.zcashParamsExist;
         const __errors = zcashParamsCheckErrors(_res);
 
@@ -113,18 +178,6 @@ class AddCoin extends React.Component {
         );
       }
     });
-  }
-
-  toggleSyncOnlyMode(index) {
-    let _coins = this.state.coins;
-
-    _coins[index] = Object.assign({}, _coins[index], {
-      syncOnly: !this.state.coins[index].syncOnly,
-    });
-
-    this.setState(Object.assign({}, this.state, {
-      coins: _coins,
-    }));
   }
 
   updateDaemonParam(e, index) {
@@ -196,6 +249,8 @@ class AddCoin extends React.Component {
       const modeToValue = { // TODO: move to utils
         spv: 0,
         native: -1,
+        staking: 1,
+        mining: 2,
       };
       const _value = e.value;
       let _coins = this.state.coins;
@@ -209,6 +264,14 @@ class AddCoin extends React.Component {
         nativeMode: {
           disabled: _value.indexOf('native') > -1 ? false : true,
           checked: defaultMode === 'native' ? true : false,
+        },
+        stakingMode: {
+          disabled: _value.indexOf('staking') > -1 ? false : true,
+          checked: defaultMode === 'staking' ? true : false,
+        },
+        miningMode: {
+          disabled: _value.indexOf('mining') > -1 ? false : true,
+          checked: defaultMode === 'mining' ? true : false,
         },
         mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
       }
@@ -233,6 +296,14 @@ class AddCoin extends React.Component {
       nativeMode: {
         disabled: _selectedCoin.indexOf('native') > -1 ? false : true,
         checked: _value === '-1' ? true : false,
+      },
+      stakingMode: {
+        disabled: _selectedCoin.indexOf('staking') > -1 ? false : true,
+        checked: _value === '1' ? true : false,
+      },
+      miningMode: {
+        disabled: _selectedCoin.indexOf('mining') > -1 ? false : true,
+        checked: _value === '2' ? true : false,
       },
       mode: _value,
     };
@@ -260,6 +331,12 @@ class AddCoin extends React.Component {
     this.verifyZcashParamsExist(_coin.mode)
     .then((res) => {
       if (res) {
+        const seed = this.state.loginPassphrase;
+
+        if (seed) {
+          mainWindow.setPubkey(seed, coin.toLowerCase());
+        }
+
         if (!_coin.daemonParam) {
           Store.dispatch(addCoin(
             coin,
@@ -282,6 +359,7 @@ class AddCoin extends React.Component {
   }
 
   dismiss() {
+    this.setState(this.defaultState);
     Store.dispatch(toggleAddcoinModal(false, false));
   }
 
@@ -377,11 +455,14 @@ class AddCoin extends React.Component {
   isCoinAlreadyAdded(coin) {
     const modes = [
       'spv',
-      'native'
+      'native',
+      'staking',
+      'mining'
     ];
 
     for (let mode of modes) {
-      if (this.existingCoins[mode].indexOf(coin) !== -1) {
+      if (this.existingCoins[mode] &&
+          this.existingCoins[mode].indexOf(coin) !== -1) {
         const message = `${coin} ${translate('ADD_COIN.ALREADY_ADDED')} ${translate('ADD_COIN.IN')} ${mode} ${translate('ADD_COIN.MODE')}`;
 
         Store.dispatch(
