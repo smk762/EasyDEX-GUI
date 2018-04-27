@@ -116,8 +116,8 @@ export const acConfig = {
 		'ac_supply': 72000000,
  	},
 	CHAIN: {
-                'ac_supply': 999999,
-		addnode:78.47.146.222',
+     'ac_supply': 999999,
+     addnode: '78.47.146.222',
         },
 
 	GLXT: {
