@@ -9,6 +9,7 @@ const addCoinOptionsAC = () => {
     'ceal',
     'mesh',
     'coqui',
+    'chain',
     'glxt',
     'eql',
     'crypto',
