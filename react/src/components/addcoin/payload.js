@@ -12,6 +12,7 @@ export function checkAC(coinVal) {
 			coinVal === 'BET' ||
 			coinVal === 'CRYPTO' ||
 			coinVal === 'COQUI' ||
+			coinVal === 'CHAIN' ||
 			coinVal === 'GLXT' ||
 			coinVal === 'EQL' ||
 			coinVal === 'HODL' ||
@@ -114,6 +115,10 @@ export const acConfig = {
 	COQUI: {
 		'ac_supply': 72000000,
  	},
+	CHAIN: {
+                'ac_supply': 999999,
+        },
+
 	GLXT: {
     'ac_supply': 100000000,
     addnode: '34.201.62.8',
