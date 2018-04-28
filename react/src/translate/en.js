@@ -1009,10 +1009,9 @@ export const LANG_EN = {
     'PIZZA': 'PIZZA (Test coin)',
     'VOTE2018': 'VOTE2018 (Notary Elections)',
     'NINJA': 'NINJA (NINJA)',
-    'OOT': 'Utrum (OOT)',
+    'GLXT': 'GLXToken (GLXT)',
     'BNTN': 'Blocnation (BNTN)',
     'OOT': 'Utrum (OOT)',
-    'EQL': 'Equaliser (EQL)',
   },
   'TOOLS': {
     'TOOLS': 'Tools',
@@ -1080,6 +1079,9 @@ export const LANG_EN = {
     'TYPE_A_STR': 'Type a string here',
     'ENTER_A_WIF': 'Enter a WIF',
     'GET_WIF': 'Get WIF',
+    'GET_BALANCE_MULTI_KMD': 'This section doesn\'t account for KMD interest. It shows multiple balances only.',
+    'ADDRESSES': 'Addresses',
+    'ADDRESS_MULTI': 'Enter KMD pub addresses each address on a new line.'
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',

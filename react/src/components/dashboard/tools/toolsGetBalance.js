@@ -101,14 +101,14 @@ class ToolsGetBalance extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDRESS') }</label>
+            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
           <input
             type="text"
             className="form-control col-sm-3"
             name="balanceAddr"
             onChange={ this.updateInput }
             value={ this.state.balanceAddr }
-            placeholder={ translate('SEND.ENTER_ADDRESS') }
+            placeholder={ translate('SEND.ENTER_ADDR') }
             autoComplete="off"
             required />
         </div>
