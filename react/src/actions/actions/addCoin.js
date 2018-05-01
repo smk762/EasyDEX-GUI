@@ -174,7 +174,8 @@ export const shepherdHerd = (coin, mode, path, startupParams) => {
     }
   }
 
-  if (!acConfig[coin].addnode) {
+  if (!acConfig[coin] ||
+      (acConfig[coin] && !acConfig[coin].addnode)) {
     herdData['ac_options'].push('-addnode=78.47.196.146');
   }
 

@@ -245,10 +245,10 @@ export const shepherdToolsSeedToWif = (seed, network, iguana) => {
 }
 
 // remote bitcore api
-export const shepherdToolsMultiAddressBalance = (addressList) => {
+export const shepherdToolsMultiAddressBalance = (addressList, fallback) => {
   return new Promise((resolve, reject) => {
     fetch(
-      `https://kmd.explorer.supernet.org/api/addrs/utxo`,
+      fallback ? 'https://kmd.explorer.supernet.org/api/addrs/utxo' : 'https://www.kmdexplorer.ru/insight-api-komodo/addrs/utxo',
       fetchType(
         JSON.stringify({
           addrs: addressList,
@@ -257,13 +257,17 @@ export const shepherdToolsMultiAddressBalance = (addressList) => {
     )
     .catch((error) => {
       console.log(error);
-      Store.dispatch(
-        triggerToaster(
-          'shepherdToolsMultiAddressBalance',
-          'Error',
-          'error'
-        )
-      );
+      Store.dispatch(shepherdToolsMultiAddressBalance(addressList, true));
+
+      if (fallback) {
+        Store.dispatch(
+          triggerToaster(
+            'shepherdToolsMultiAddressBalance',
+            'Error',
+            'error'
+          )
+        );
+      }
     })
     .then((response) => {
       const _response = response.text().then((text) => { return text; });

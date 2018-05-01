@@ -1081,7 +1081,8 @@ export const LANG_EN = {
     'GET_WIF': 'Get WIF',
     'GET_BALANCE_MULTI_KMD': 'This section doesn\'t account for KMD interest. It shows multiple balances only.',
     'ADDRESSES': 'Addresses',
-    'ADDRESS_MULTI': 'Enter KMD pub addresses each address on a new line.'
+    'ADDRESS_MULTI': 'Enter KMD pub addresses each address on a new line.',
+    'REMOTE_CALL_EXPLORER_ACKNOWLEDGEMENT': 'Privacy notification: this is a remote call to KMD explorer servers.',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',
