@@ -31,8 +31,6 @@ const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
 const SEED_TRIM_TIMEOUT = 5000;
 
-// TODO: remove duplicate activehandle and activecoins calls
-
 class Login extends React.Component {
   constructor() {
     super();

@@ -7,7 +7,7 @@ export const getCoinTitle = (coin) => {
 
   switch (coin) {
     case 'BCBC':
-      coinlogo = 'BCBC';
+      coinlogo = 'bcbc';
       coinname = 'Bitcoin CBC';
       break;
     case 'BNTN':
@@ -437,6 +437,10 @@ export const getCoinTitle = (coin) => {
       coinlogo = 'COQUI';
       coinname = 'COQUI';
       break;
+    case 'CHAIN':
+      coinlogo = 'CHAIN';
+      coinname = 'Chainmakers';
+      break;
     case 'GLXT':
       coinlogo = 'GLXT';
       coinname = 'GLXToken';
@@ -700,6 +704,7 @@ export const coindList = () => {
     'BOTS',
     'CEAL',
     'COQUI',
+    'CHAIN',
     'GLXT',
     'EQL',
     'CRYPTO',
@@ -733,6 +738,7 @@ export const isKomodoCoin = (coin) => {
       coin === 'BET' ||
       coin === 'CRYPTO' ||
       coin === 'COQUI' ||
+      coin === 'CHAIN' ||
       coin === 'GLXT' ||
       coin === 'EQL' ||
       coin === 'HODL' ||

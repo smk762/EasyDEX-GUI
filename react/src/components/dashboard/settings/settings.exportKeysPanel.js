@@ -259,7 +259,7 @@ class ExportKeysPanel extends React.Component {
         { this.state.decryptedPassphrase &&
           <div className="row">
             <div className="col-sm-12 padding-top-15 margin-left-10">
-              <strong>{ translate('TOOLS.TOOLS') }:</strong> { this.state.decryptedPassphrase }
+              <strong>{ translate('TOOLS.SEED') }:</strong> { this.state.decryptedPassphrase }
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }

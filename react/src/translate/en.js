@@ -135,6 +135,12 @@ export const LANG_EN = {
     'HISTORY': 'History',
   },
   'INDEX': {
+    'MINING_IS_ENABLED': 'Mining is enabled',
+    'STAKING_IS_DISABLED': 'Staking is disabled',
+    'STAKING_IS_ENABLED': 'Staking is enabled',
+    'LITE_MODE_WATCHONLY': 'You are using watchonly address mode. Send coin functionality is unavailable.',
+    'MINING_MODE': 'Native / Mining',
+    'STAKING_MODE': 'Native / Staking',
     'QR_CODE': 'QR-code',
     'PRICE_PER_1': 'Price per 1',
     'SPV_TX_VIN_COUNT_WARN': 'Transaction vin count exceeds max allowed number.<br/>The amount you are seeing now might be not precise.',
@@ -411,6 +417,8 @@ export const LANG_EN = {
     'LITE': 'Lite',
     'LITE_MODE_DESC': 'Lite mode doesn\'t require any blockchain to be loaded locally. All data is requested on demand from Electrum servers. Lite mode has higher network latency compared to native mode.',
     'NONE': 'none',
+    'STAKING_PUB_P1': 'Provide your seed / WIF key in order to stake.',
+    'STAKING_PUB_P2': 'If you only want to access funds without staking leave this field blank.',
   },
   'JUMBLR': {
     'PASSPHRASE': 'Passphrase',
@@ -977,6 +985,7 @@ export const LANG_EN = {
     'BOTS': 'BOTS (BOTS)',
     'CEAL': 'CEAL NET (CEAL)',
     'COQUI': 'COQUI (COQUI)',
+    'CHAIN': 'Chainmakers (CHAIN)',
     'GLXT': 'GLXToken (GLXT)',
     'EQL': 'Equaliser (EQL)',
     'CRYPTO': 'CRYPTO (CRYPTO)',
@@ -1000,10 +1009,9 @@ export const LANG_EN = {
     'PIZZA': 'PIZZA (Test coin)',
     'VOTE2018': 'VOTE2018 (Notary Elections)',
     'NINJA': 'NINJA (NINJA)',
-    'OOT': 'Utrum (OOT)',
+    'GLXT': 'GLXToken (GLXT)',
     'BNTN': 'Blocnation (BNTN)',
     'OOT': 'Utrum (OOT)',
-    'EQL': 'Equaliser (EQL)',
   },
   'TOOLS': {
     'TOOLS': 'Tools',
@@ -1071,6 +1079,9 @@ export const LANG_EN = {
     'TYPE_A_STR': 'Type a string here',
     'ENTER_A_WIF': 'Enter a WIF',
     'GET_WIF': 'Get WIF',
+    'GET_BALANCE_MULTI_KMD': 'This section doesn\'t account for KMD interest. It shows multiple balances only.',
+    'ADDRESSES': 'Addresses',
+    'ADDRESS_MULTI': 'Enter KMD pub addresses each address on a new line.'
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',

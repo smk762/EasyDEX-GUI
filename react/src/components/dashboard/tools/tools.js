@@ -2,6 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 
 import ToolsGetBalance from './toolsGetBalance';
+import ToolsGetBalanceMulti from './toolsGetBalanceMulti';
 import ToolsGetUtxos from './toolsGetUtxos';
 import ToolsOfflineSigCreate from './toolsOfflineSigCreate';
 import ToolsOfflineSigScan from './toolsOfflineSigScan';
@@ -83,6 +84,12 @@ class Tools extends React.Component {
                 <button
                   type="button"
                   className="btn btn-default"
+                  onClick={ () => this.setActiveSection('balance-multi') }>
+                  KMD { translate('TOOLS.BALANCE') } (multi address) *
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
                   onClick={ () => this.setActiveSection('utxo') }>
                   UTXO *
                 </button>
@@ -130,6 +137,9 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'utxo-merge' &&
                 <ToolsMergeUTXO />
+              }
+              { this.state.activeSection === 'balance-multi' &&
+                <ToolsGetBalanceMulti />
               }
             </div>
           </div>
