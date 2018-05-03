@@ -419,6 +419,7 @@ export const LANG_EN = {
     'NONE': 'none',
     'STAKING_PUB_P1': 'Provide your seed / WIF key in order to stake.',
     'STAKING_PUB_P2': 'If you only want to access funds without staking leave this field blank.',
+    'MINING_THREADS': 'Mining threads',
   },
   'JUMBLR': {
     'PASSPHRASE': 'Passphrase',
