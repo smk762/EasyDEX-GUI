@@ -150,7 +150,8 @@ class AppSettingsPanel extends React.Component {
                   <span>
                     <i
                       className="icon fa-question-circle settings-help"
-                      data-tip={ this.state.appConfigSchema[key].info }></i>
+                      data-tip={ this.state.appConfigSchema[key].info }
+                      data-html={ true }></i>
                     <ReactTooltip
                       effect="solid"
                       className="text-left" />
@@ -170,7 +171,8 @@ class AppSettingsPanel extends React.Component {
                     <span>
                       <i
                         className="icon fa-question-circle settings-help"
-                        data-tip={ this.state.appConfigSchema[key][_key].info }></i>
+                        data-tip={ this.state.appConfigSchema[key][_key].info }
+                        data-html={ true }></i>
                       <ReactTooltip
                         effect="solid"
                         className="text-left" />
@@ -225,7 +227,8 @@ class AppSettingsPanel extends React.Component {
                   <span>
                     <i
                       className="icon fa-question-circle settings-help"
-                      data-tip={ this.state.appConfigSchema[key].info }></i>
+                      data-tip={ this.state.appConfigSchema[key].info }
+                      data-html={ true }></i>
                     <ReactTooltip
                       effect="solid"
                       className="text-left" />
@@ -287,7 +290,8 @@ class AppSettingsPanel extends React.Component {
           { translate('SETTINGS.KMD_MAIN_SYNC_ONLY') }
           <i
             className="icon fa-question-circle settings-help"
-            data-tip={ translate('SETTINGS.RPC_FETCH_ONLY_DESC') }></i>
+            data-tip={ translate('SETTINGS.RPC_FETCH_ONLY_DESC') }
+            data-html={ true }></i>
           <ReactTooltip
             effect="solid"
             className="text-left" />
