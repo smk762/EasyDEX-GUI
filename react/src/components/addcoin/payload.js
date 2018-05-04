@@ -2,7 +2,7 @@
 //			 move to nodejs
 //			 cleanup
 
-export function checkAC(coinVal) {
+export const checkAC = (coinVal) => {
 	if (coinVal === 'SUPERNET' ||
 			coinVal === 'REVS' ||
 			coinVal === 'WLC' ||
@@ -38,13 +38,13 @@ export function checkAC(coinVal) {
 	}
 }
 
-export function startCurrencyAssetChain(confpath, coin, mode) {
+export const startCurrencyAssetChain = (confpath, coin, mode) => {
 	const assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
 
 	return assetChainPorts[coin];
 }
 
-export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
+export const startAssetChain = (confpath, coin, mode, getSuppyOnly) => {
 	const assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
 
 	if (mode === '-1') {
@@ -56,7 +56,7 @@ export function startAssetChain(confpath, coin, mode, getSuppyOnly) {
 	}
 }
 
-export function startCrypto(confpath, coin, mode) {
+export const startCrypto = (confpath, coin, mode) => {
 	const assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
 
 	coin = coin === 'KMD' ? 'komodod' : coin;
@@ -116,10 +116,9 @@ export const acConfig = {
 		'ac_supply': 72000000,
  	},
 	CHAIN: {
-     'ac_supply': 999999,
-     addnode: '78.47.146.222',
-        },
-
+  	'ac_supply': 999999,
+  	addnode: '78.47.146.222',
+  },
 	GLXT: {
     'ac_supply': 100000000,
     addnode: '34.201.62.8',

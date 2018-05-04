@@ -666,9 +666,15 @@ class Login extends React.Component {
         });
       } else {
         mainWindow.startKMDNative(e.value.toUpperCase());
+        this.setState({
+          selectedShortcutNative: '',
+        });
       }
     } else {
       mainWindow.startSPV(e.value.toUpperCase());
+      this.setState({
+        selectedShortcutSPV: '',
+      });
     }
 
     setTimeout(() => {

@@ -228,7 +228,7 @@ class ToolsMergeUTXO extends React.Component {
 
   openExplorerWindow(txid, coin) {
     const url = `http://${coin}.explorer.supernet.org/tx/${txid}`;
-    return shell.openExternal(url);    
+    return shell.openExternal(url);
   }
 
   renderUTXOSplitMergeResponse(type) {
@@ -255,7 +255,7 @@ class ToolsMergeUTXO extends React.Component {
         <thead>
           <tr>
             <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.ADDRESS') }</th>
+            <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
             <th>TxID</th>
@@ -267,7 +267,7 @@ class ToolsMergeUTXO extends React.Component {
         <tfoot>
           <tr>
             <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.ADDRESS') }</th>
+            <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
             <th>TxID</th>

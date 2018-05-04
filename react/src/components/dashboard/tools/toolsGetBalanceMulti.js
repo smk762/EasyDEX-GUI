@@ -126,6 +126,7 @@ class ToolsGetBalanceMulti extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
           <h4>{ translate('TOOLS.GET_BALANCE') } multi</h4>
           { translate('TOOLS.GET_BALANCE_MULTI_KMD') }
+          <div className="margin-top-15">{ translate('TOOLS.REMOTE_CALL_EXPLORER_ACKNOWLEDGEMENT') }</div>
         </div>
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
           <label
@@ -147,7 +148,7 @@ class ToolsGetBalanceMulti extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-3 no-padding-left padding-bottom-10"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDRESSES') }</label>
+            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <textarea

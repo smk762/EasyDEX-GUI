@@ -124,7 +124,7 @@ export const shepherdElectrumAddCoin = (coin) => {
   }
 }
 
-export const addCoin = (coin, mode, startupParams) => {
+export const addCoin = (coin, mode, startupParams, genproclimit) => {
   if (mode === 0 ||
       mode === '0') {
     return dispatch => {
@@ -132,7 +132,7 @@ export const addCoin = (coin, mode, startupParams) => {
     }
   } else {
     return dispatch => {
-      dispatch(shepherdGetConfig(coin, mode, startupParams));
+      dispatch(shepherdGetConfig(coin, mode, startupParams, genproclimit));
     }
   }
 }
@@ -148,7 +148,7 @@ const handleErrors = (response) => {
   }
 }
 
-export const shepherdHerd = (coin, mode, path, startupParams) => {
+export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
   let acData;
   let herdData = {
     'ac_name': coin,
@@ -168,13 +168,20 @@ export const shepherdHerd = (coin, mode, path, startupParams) => {
             pubKeys[coin.toLowerCase()]) {
           herdData['ac_options'].push(`-pubkey=${pubKeys[coin.toLowerCase()].pubHex}`);
         }
+      } else if (key === 'genproclimit') {
+        if (genproclimit) {
+          herdData['ac_options'].push(`-genproclimit=${genproclimit + 1}`);
+        } else {
+          herdData['ac_options'].push(`-genproclimit=1`);
+        }
       } else {
         herdData['ac_options'].push(`-${key}=${acConfig[coin][key]}`);
       }
     }
   }
 
-  if (!acConfig[coin].addnode) {
+  if (!acConfig[coin] ||
+      (acConfig[coin] && !acConfig[coin].addnode)) {
     herdData['ac_options'].push('-addnode=78.47.196.146');
   }
 
@@ -371,7 +378,7 @@ export const _shepherdGetConfig = (coin, mode, startupParams) => {
   }
 }
 
-export const shepherdGetConfig = (coin, mode, startupParams) => {
+export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
   if (coin === 'KMD' &&
       mode === '-1') {
     return dispatch => {
@@ -434,7 +441,8 @@ export const shepherdGetConfig = (coin, mode, startupParams) => {
             coin,
             mode,
             json,
-            startupParams
+            startupParams,
+            genproclimit
           )
         )
       );

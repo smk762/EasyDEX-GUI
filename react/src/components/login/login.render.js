@@ -225,6 +225,10 @@ const LoginRender = function() {
                         label: 'kmd',
                       },
                       {
+                        value: 'bntn',
+                        label: 'bntn',
+                      },
+                      {
                         value: 'mnz',
                         label: 'mnz',
                       },
@@ -273,6 +277,10 @@ const LoginRender = function() {
                     {
                       value: 'chips',
                       label: 'chips',
+                    },
+                    {
+                      value: 'bntn',
+                      label: 'bntn',
                     },
                     {
                       value: 'btch',

@@ -45,6 +45,7 @@ class AddCoin extends React.Component {
         },
         mode: -2,
         daemonParam: null,
+        genProcLimit: null,
       },
       display: false,
       actionsMenu: false,
@@ -346,7 +347,8 @@ class AddCoin extends React.Component {
           Store.dispatch(addCoin(
             coin,
             _coin.mode,
-            { type: _coin.daemonParam }
+            { type: _coin.daemonParam },
+            Number(_coin.genProcLimit)
           ));
         }
 
@@ -354,6 +356,15 @@ class AddCoin extends React.Component {
         this.addNewItem();
 
         Store.dispatch(toggleAddcoinModal(false, false));
+
+        setTimeout(() => {
+          this.setState({
+            loginPassphrase: '',
+            seedInputVisibility: false,
+            seedExtraSpaces: false,
+            trimPassphraseTimer: null,
+          });
+        }, 100);
       }
     });
   }
@@ -420,6 +431,15 @@ class AddCoin extends React.Component {
           }));
 
           Store.dispatch(toggleAddcoinModal(false, false));
+
+          setTimeout(() => {
+            this.setState({
+              loginPassphrase: '',
+              seedInputVisibility: false,
+              seedExtraSpaces: false,
+              trimPassphraseTimer: null,
+            });
+          }, 100);
         }
       }, 2000 * i);
     }
@@ -444,6 +464,21 @@ class AddCoin extends React.Component {
     }
 
     return items;
+  }
+
+  renderGenproclimitOptions() {
+    const _max = 32;
+    let _items = [];
+
+    for (let i = 0; i < _max; i++) {
+      _items.push(
+        <option
+          key={ `addcoin-genproclimit-${i}` }
+          value={ i }>{ translate('ADD_COIN.MINING_THREADS') }: { i + 1}</option>
+      );
+    }
+
+    return _items;
   }
 
   render() {

@@ -328,7 +328,7 @@ class ToolsSplitUTXO extends React.Component {
         <thead>
           <tr>
             <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.ADDRESS') }</th>
+            <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
             <th>TxID</th>
@@ -340,7 +340,7 @@ class ToolsSplitUTXO extends React.Component {
         <tfoot>
           <tr>
             <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.ADDRESS') }</th>
+            <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
             <th>TxID</th>

@@ -6,6 +6,7 @@ import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import mainWindow from '../../util/mainWindow';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
+import { acConfig } from '../addcoin/payload';
 
 const CoinSelectorsRender = function(item, coin, i) {
   const _modesEnum = [
@@ -15,10 +16,12 @@ const CoinSelectorsRender = function(item, coin, i) {
     'staking'
   ];
   let _availModes = {};
+  let _coinName;
 
   if (item &&
       item.selectedCoin) {
     const _itemSplit = item.selectedCoin.split('|');
+    _coinName = _itemSplit[0];
 
     for (let i = 0; i < _modesEnum.length; i++) {
       const mode = _itemSplit.find((item) => {
@@ -268,6 +271,19 @@ const CoinSelectorsRender = function(item, coin, i) {
             <option value="rescan">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.RESCAN') }</option>
             <option value="gen">{ translate('INDEX.DAEMON_PARAM') }: gen</option>
           </select>
+        </div>
+      </div>
+      <div className="col-sm-12 no-padding">
+        <div className={ item.daemonParam === 'gen' && acConfig[_coinName] && acConfig[_coinName].genproclimit ? 'col-sm-5 padding-bottom-30' : 'hide' }>
+          <div className="toggle-box padding-bottom-10">
+            <select
+              className="form-control form-material"
+              name="genProcLimit"
+              onChange={ (event) => this.updateDaemonParam(event, i) }
+              autoFocus>
+              { this.renderGenproclimitOptions() }
+            </select>
+          </div>
         </div>
       </div>
     </div>
