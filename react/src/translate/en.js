@@ -692,6 +692,7 @@ export const LANG_EN = {
     'ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE': '- verifying key size is incorrect',
   },
   'LOGIN': {
+    'QMENU_REMOVE_SPV': 'Remove all SPV coins',
     'ERR_SEED_STORAGE': 'Seed storage error',
     'CUSTOM_PIN_FNAME': 'Custom pin file name',
     'CUSTOM_PIN_FNAME_INFO': 'Pin file name can only contain alphanumeric characters, dash "-" and underscore "_"',
