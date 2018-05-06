@@ -38,24 +38,6 @@
     padding: 10px;
   }
 
-  .page-login {
-    .line {
-      &:after,
-      &:before {
-        width: 13%;
-      }
-    }
-    .login-form,
-    .register-form,
-    .width-540 {
-      width: 95%;
-    }
-    .row {
-      text-align: left;
-      margin: 0;
-    }
-  }
-
   .page-main {
     .navbar-collapse {
       padding-left: 0;
@@ -250,6 +232,56 @@
 
     .md-chevron-left {
       display: inline-block;
+    }
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .page-login {
+    .page-content {
+      margin-left: 0;
+      max-width: 700px;
+      width: 100%;
+      margin: 0 auto;
+      float: none;
+    }
+
+    .line {
+      &:after,
+      &:before {
+        width: 13%;
+      }
+    }
+    .login-form,
+    .register-form,
+    .width-540 {
+      width: 95%;
+    }
+    .row {
+      text-align: left;
+      margin: 0;
+    }
+  }
+  .modal-dialog {
+    width: 98%;
+  }
+  .modal.add-coin-modal {
+    .single {
+      display: block;
+      height: 90px;
+
+      .col-sm-8.padding-left-none {
+        width: 40%;
+        float: left;
+      }
+      .col-sm-4 {
+        width: 20%;
+        float: left;
+      }
+      .col-sm-11.text-center.add-coin-modes {
+        float: left;
+        width: 100%;
+      }
     }
   }
 }
