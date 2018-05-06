@@ -381,3 +381,15 @@ select{
 .full-width {
   width: 100%;
 }
+
+.navbar-toolbar .dropdown-menu:not(.dropdown-menu-media) {
+  overflow-y: auto;
+}
+
+.kmd-mobile-icon {
+  display: none;
+}
+
+.site-navbar .navbar-brand-logo.hidden-lg {
+  display: none;
+}

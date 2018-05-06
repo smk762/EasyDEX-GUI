@@ -30,6 +30,7 @@ import {
 } from  './walletsData.render';
 import { secondsToString } from '../../../util/time';
 import getRandomElectrumServer from '../../../util/serverRandom';
+import DoubleScrollbar from 'react-double-scrollbar';
 
 /*import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -428,7 +429,11 @@ class WalletsData extends React.Component {
         </tr>
       );
     } else if (this.state.itemsList && this.state.itemsList.length) {
-      return TxHistoryListRender.call(this);
+      return (
+        <DoubleScrollbar>
+        { TxHistoryListRender.call(this) }
+        </DoubleScrollbar>
+      );
     }
 
     return null;
