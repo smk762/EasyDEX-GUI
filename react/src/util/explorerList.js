@@ -2,6 +2,7 @@
 
 const explorerList = {
   KMD: 'http://www.kmdexplorer.ru',
+  KV: 'http://kv.explorer.supernet.org',
   OOT: 'http://explorer.utrum.io',
   MSHARK: 'http://MSHARK.explorer.supernet.org',
   REVS: 'http://revs.explorer.supernet.org',

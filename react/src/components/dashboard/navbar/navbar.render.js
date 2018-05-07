@@ -7,7 +7,7 @@ import Config from '../../../config';
 const NavbarRender = function() {
   return (
     <nav className="site-navbar navbar navbar-default navbar-fixed-top navbar-mega">
-      <div className="navbar-header">
+      { /*<div className="navbar-header">
         <button
           type="button"
           className="navbar-toggle hamburger hamburger-close navbar-toggle-left hided">
@@ -38,6 +38,21 @@ const NavbarRender = function() {
           <span className="sr-only">{ translate('INDEX.TOGGLE_SEARCH') }</span>
           <i className="icon md-search"></i>
         </button>
+      </div>*/ }
+      <div className="navbar-header">
+        <div className="navbar-brand navbar-brand-center site-gridmenu-toggle">
+          <img
+            className="navbar-brand-logo hidden-xs"
+            src="assets/images/agama-logo-side.svg"
+            height="100"
+            width="100"
+            title={ translate('ABOUT.AGAMA_WALLET') } />
+          <img
+            className="navbar-brand-logo hidden-lg"
+            src="assets/images/agama-icon.svg"
+            title={ translate('ABOUT.AGAMA_WALLET') } />
+          <span className="navbar-brand-text hidden-xs"></span>
+        </div>
       </div>
       <div className="navbar-container container-fluid">
         <div className="collapse navbar-collapse navbar-collapse-toolbar">
