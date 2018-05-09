@@ -2,7 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Config from '../../../config';
 import translate from '../../../translate/translate';
-import { secondsToString } from '../../../util/time';
+import {
+  secondsToString,
+  checkTimestamp,
+} from '../../../util/time';
 import {
   triggerToaster,
   sendNativeTx,
@@ -12,6 +15,7 @@ import {
   shepherdElectrumSendPreflight,
   shepherdGetRemoteBTCFees,
   shepherdGetLocalBTCFees,
+  shepherdGetRemoteTimestamp,
   copyString,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -28,6 +32,7 @@ import Slider, { Range } from 'rc-slider';
 import ReactTooltip from 'react-tooltip';
 
 const shell = window.require('electron').shell;
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
 
 // TODO: - render z address trim
 
@@ -145,6 +150,24 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.activeSection !== props.ActiveCoin.activeSection &&
         this.props.ActiveCoin.activeSection !== 'send') {
       this.fetchBTCFees();
+
+      if (this.props.ActiveCoin.mode === 'spv') {
+        shepherdGetRemoteTimestamp()
+        .then((res) => {
+          if (res.msg === 'success') {
+            if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
+              Store.dispatch(
+                triggerToaster(
+                  translate('SEND.CLOCK_OUT_OF_SYNC'),
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'warning',
+                  false
+                )
+              );
+            }
+          }
+        });
+      }
     }
   }
 
@@ -445,6 +468,24 @@ class SendCoin extends React.Component {
   }
 
   changeSendCoinStep(step, back) {
+    if (this.props.ActiveCoin.mode === 'spv') {
+      shepherdGetRemoteTimestamp()
+      .then((res) => {
+        if (res.msg === 'success') {
+          if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
+            Store.dispatch(
+              triggerToaster(
+                translate('SEND.CLOCK_OUT_OF_SYNC'),
+                translate('TOASTR.WALLET_NOTIFICATION'),
+                'warning',
+                false
+              )
+            );
+          }
+        }
+      });
+    }
+
     if (step === 0) {
       this.fetchBTCFees();
 
