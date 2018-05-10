@@ -611,6 +611,7 @@ export const LANG_EN = {
     'CLAIM_INTEREST_BALANCE_SENT_P2': 'Check back your new balance in a few minutes.',
     'SETTINGS_RESET': 'Settings are reset to default',
     'SETTINGS_SAVED': 'Settings are saved',
+    'SETTINGS_CACHE_RESET': 'SPV cache is cleared',
     'TRANSACTION_FAILED': 'Transaction failed',
     'WALLET_NOTIFICATION': 'Wallet Notification',
     'ACCOUNT_NOTIFICATION': 'Account Notification',
@@ -773,6 +774,8 @@ export const LANG_EN = {
     'TO_SEND_FEEDBACK': 'To send feedback please open a ticket at',
   },
   'SETTINGS': {
+    'CURRENT_CACHE_SIZE': 'Current cache size',
+    'CLEAR_CACHE': 'Clear cache',
     'PIN_RENAMED': 'Pin @template@ renamed',
     'PIN_REMOVED': 'Pin @template@ is deleted',
     'OLD_PIN_NAME': 'Old pin name',

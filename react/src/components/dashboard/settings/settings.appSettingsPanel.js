@@ -7,6 +7,7 @@ import {
   getAppConfig,
   getAppInfo,
   resetAppConfig,
+  resetSPVCache,
   saveAppConfig,
   skipFullDashboardUpdate,
   triggerToaster,
@@ -24,7 +25,12 @@ class AppSettingsPanel extends React.Component {
     this._saveAppConfig = this._saveAppConfig.bind(this);
     this._resetAppConfig = this._resetAppConfig.bind(this);
     this._skipFullDashboardUpdate = this._skipFullDashboardUpdate.bind(this);
+    this._resetSPVCache = this._resetSPVCache.bind(this);
     this.updateInput = this.updateInput.bind(this);
+  }
+
+  _resetSPVCache() {
+    Store.dispatch(resetSPVCache());
   }
 
   componentWillMount() {
@@ -214,6 +220,28 @@ class AppSettingsPanel extends React.Component {
                 </td>
               </tr>
             );
+
+            if (key === 'spv' &&
+                _key === 'cache' &&
+                this.props.Settings.appInfo &&
+                this.props.Settings.appInfo.cacheSize &&
+                this.props.Settings.appInfo.cacheSize !== '2 Bytes') {
+              items.push(
+                <tr key={ `app-settings-${key}-${_key}-size` }>
+                  <td
+                    colSpan="2"
+                    className="padding-15 padding-left-30">
+                    { translate('SETTINGS.CURRENT_CACHE_SIZE') }: <strong>{ this.props.Settings.appInfo.cacheSize }</strong>
+                    <button
+                      type="button"
+                      className="btn btn-info waves-effect waves-light margin-left-30"
+                      onClick={ this._resetSPVCache }>
+                      { translate('SETTINGS.CLEAR_CACHE') }
+                    </button>
+                  </td>
+                </tr>
+              );              
+            }
           }
         }
       } else {
