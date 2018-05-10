@@ -879,6 +879,7 @@ export const LANG_EN = {
     'DOWNLOAD': 'Download',
   },
   'SEND': {
+    'CLOCK_OUT_OF_SYNC': 'Your local clock is not set properly. This will prevent sending a KMD transaction.',
     'FEE_PER_BYTE': 'Fee per byte',
     'PER_KB': 'per KB',
     'ESTIMATED_TO_BE_INCLUDED_P3': 'block',
