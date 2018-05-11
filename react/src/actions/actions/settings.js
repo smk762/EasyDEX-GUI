@@ -351,3 +351,33 @@ export const validateAddress = (coin, address, isZaddr) => {
     });
   });
 }
+
+export const resetSPVCache = () => {
+  return dispatch => {
+    return fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/cache/delete`,
+      fetchType(JSON.stringify({ token: Config.token })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          'resetSPVCache',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(getAppInfo());
+      dispatch(
+        triggerToaster(
+          translate('TOASTR.SETTINGS_CACHE_RESET'),
+          translate('TOASTR.SETTINGS_NOTIFICATION'),
+          'success'
+        )
+      );
+    });
+  }
+}

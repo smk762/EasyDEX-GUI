@@ -706,6 +706,7 @@ export const coindList = () => {
     'COQUI',
     'CHAIN',
     'GLXT',
+    'OOT',
     'EQL',
     'CRYPTO',
     'HODL',
@@ -723,7 +724,8 @@ export const coindList = () => {
     'WLC',
     'AXO',
     'ETOMIC',
-    'BTCH'
+    'BTCH',
+    'BNTN'
   ];
 
   return _coins;
@@ -741,6 +743,8 @@ export const isKomodoCoin = (coin) => {
       coin === 'CHAIN' ||
       coin === 'GLXT' ||
       coin === 'EQL' ||
+      coin === 'OOT' ||
+      coin === 'BNTN' ||
       coin === 'HODL' ||
       coin === 'MSHARK' ||
       coin === 'BOTS' ||

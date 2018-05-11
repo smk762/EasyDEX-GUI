@@ -53,6 +53,13 @@ const LoginRender = function() {
                     <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                   </a>
                 </li>
+                { this.renderResetSPVCoinsOption() &&
+                  <li>
+                    <a onClick={ this.resetSPVCoins }>
+                      <i className="icon fa-trash"></i> { translate('LOGIN.QMENU_REMOVE_SPV') }
+                    </a>
+                  </li>
+                }
               </ul>
             </div>
           </div>

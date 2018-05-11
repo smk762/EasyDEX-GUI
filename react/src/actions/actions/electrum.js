@@ -16,6 +16,31 @@ import fetchType from '../../util/fetchType';
 // TODO: dev display errors
 
 // src: atomicexplorer
+export const shepherdGetRemoteTimestamp = () => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `https://www.atomicexplorer.com/api/timestamp/now`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      /*Store.dispatch(
+        triggerToaster(
+          'shepherdGetRemoteBTCFees',
+          'Error',
+          'error'
+        )
+      );*/
+      resolve({ msg: 'error' });
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+// src: atomicexplorer
 export const shepherdGetRemoteBTCFees = () => {
   return new Promise((resolve, reject) => {
     fetch(
@@ -200,7 +225,7 @@ export const shepherdElectrumTransactions = (coin, address) => {
     };
     return fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listtransactions${urlParams(_urlParams)}`,
-      fetchType.get  
+      fetchType.get
     )
     .catch((error) => {
       console.log(error);
@@ -320,7 +345,7 @@ export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAd
     };
     return fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      fetchType.get  
+      fetchType.get
     )
     .catch((error) => {
       console.log(error);
@@ -352,7 +377,7 @@ export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, change
       gui: true,
       verify: true,
       push: false,
-    };  
+    };
     fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
       fetchType.get

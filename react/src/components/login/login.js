@@ -16,6 +16,8 @@ import {
   encryptPassphrase,
   loadPinList,
   loginWithPin,
+  shepherdElectrumLogout,
+  dashboardRemoveCoin,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -81,6 +83,56 @@ class Login extends React.Component {
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
     this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
+    this.resetSPVCoins = this.resetSPVCoins.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  handleClickOutside(e) {
+    if (e &&
+        e.srcElement &&
+        e.srcElement.offsetParent) {
+      this.setState({
+        displayLoginSettingsDropdown: e.srcElement.className.indexOf('login-settings-dropdown-label') === -1 ? false : true,
+      });
+    }
+  }
+
+  renderResetSPVCoinsOption() {
+    if (this.props.Main &&
+        this.props.Main.coins &&
+        this.props.Main.coins.spv &&
+        this.props.Main.coins.spv.length) {
+      return true;
+    }
+  }
+
+  resetSPVCoins() {
+    this.setState({
+      displayLoginSettingsDropdown: false,
+    });
+
+    shepherdElectrumLogout()
+    .then((res) => {
+      const _spvCoins = this.props.Main.coins.spv;
+
+      mainWindow.pinAccess = false;
+
+      if (!this.props.Main.coins.native.length) {
+        Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+      }
+
+      setTimeout(() => {
+        for (let i = 0; i < _spvCoins.length; i++) {
+          Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
+        }
+        if (!this.props.Main.coins.native.length) {
+          Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+        }
+      }, 500);
+
+      Store.dispatch(getDexCoins());
+      Store.dispatch(activeHandle());
+    });
   }
 
   _toggleNotaryElectionsModal() {
@@ -194,6 +246,22 @@ class Login extends React.Component {
     this.setState(Object.assign({}, this.state, {
       displayLoginSettingsDropdown: !this.state.displayLoginSettingsDropdown,
     }));
+  }
+
+  componentWillMount() {
+    document.addEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener(
+      'click',
+      this.handleClickOutside,
+      false
+    );
   }
 
   componentWillReceiveProps(props) {
