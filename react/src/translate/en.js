@@ -1089,6 +1089,7 @@ export const LANG_EN = {
     'ADDRESSES': 'Addresses',
     'ADDRESS_MULTI': 'Enter KMD pub addresses each address on a new line.',
     'REMOTE_CALL_EXPLORER_ACKNOWLEDGEMENT': 'Privacy notification: this is a remote call to KMD explorer servers.',
+    'ALL_BALANCES_ARE_EMPTY': 'All balances are empty',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',
