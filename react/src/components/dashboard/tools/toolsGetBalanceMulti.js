@@ -29,17 +29,46 @@ class ToolsGetBalanceMulti extends React.Component {
       shepherdToolsMultiAddressBalance(_addr.join(','))
       .then((res) => {
         if (res.msg === 'success') {
+          if (!res.result.length) {
+            Store.dispatch(
+              triggerToaster(
+                translate('TOOLS.ALL_BALANCES_ARE_EMPTY'),
+                translate('TOOLS.GET_BALANCE') + ' multi',
+                'warning'
+              )
+            );
+          }
+
           this.setState({
             balanceResult: res.result,
           });
         } else {
-          Store.dispatch(
-            triggerToaster(
-              res.result,
-              translate('TOOLS.ERR_GET_BALANCE') + ' multi',
-              'error'
-            )
-          );
+          shepherdToolsMultiAddressBalance(_addr.join(','), true)
+          .then((res) => {
+            if (res.msg === 'success') {
+              if (!res.result.length) {
+                Store.dispatch(
+                  triggerToaster(
+                    translate('TOOLS.ALL_BALANCES_ARE_EMPTY'),
+                    translate('TOOLS.GET_BALANCE') + ' multi',
+                    'warning'
+                  )
+                );
+              }
+
+              this.setState({
+                balanceResult: res.result,
+              });
+            } else {
+              Store.dispatch(
+                triggerToaster(
+                  res.result + (res.code ? ` code: ${res.code}` : ''),
+                  translate('TOOLS.ERR_GET_BALANCE') + ' multi',
+                  'error'
+                )
+              );
+            }
+          });
         }
       });
     }
@@ -125,7 +154,7 @@ class ToolsGetBalanceMulti extends React.Component {
       <div className="row margin-left-10">
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
           <h4>{ translate('TOOLS.GET_BALANCE') } multi</h4>
-          { translate('TOOLS.GET_BALANCE_MULTI_KMD') }
+          <div className="margin-top-20">{ translate('TOOLS.GET_BALANCE_MULTI_KMD') }</div>
           <div className="margin-top-15">{ translate('TOOLS.REMOTE_CALL_EXPLORER_ACKNOWLEDGEMENT') }</div>
         </div>
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">

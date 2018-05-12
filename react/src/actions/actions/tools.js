@@ -257,17 +257,12 @@ export const shepherdToolsMultiAddressBalance = (addressList, fallback) => {
     )
     .catch((error) => {
       console.log(error);
-      Store.dispatch(shepherdToolsMultiAddressBalance(addressList, true));
+      console.warn(`shepherdToolsMultiAddressBalance has failed, ${fallback ? ' use fallback' : ' all routes have failed'}`);
 
-      if (fallback) {
-        Store.dispatch(
-          triggerToaster(
-            'shepherdToolsMultiAddressBalance',
-            'Error',
-            'error'
-          )
-        );
-      }
+      resolve({
+        msg: 'error',
+        code: fallback ? -1554 : -777,
+      });
     })
     .then((response) => {
       const _response = response.text().then((text) => { return text; });
@@ -276,14 +271,23 @@ export const shepherdToolsMultiAddressBalance = (addressList, fallback) => {
     .then(json => {
       try {
         json = JSON.parse(json);
-        resolve({
-          msg: 'success',
-          result: json,
-        });
+
+        if (json.length ||
+            (typeof json === 'object' && !Object.keys(json).length)) {
+          resolve({
+            msg: 'success',
+            result: json,
+          });
+        } else {
+          resolve({
+            msg: 'error',
+            result: 'error parsing response',
+          });
+        }
       } catch (e) {
         resolve({
           msg: 'error',
-          result: json,
+          result: json.indexOf('<html>') === -1 ? json : 'error parsing response',
         });
       }
     });
