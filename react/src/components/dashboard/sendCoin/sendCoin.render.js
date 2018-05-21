@@ -42,6 +42,12 @@ export const AddressListRender = function() {
 export const _SendFormRender = function() {
   return (
     <div className="extcoin-send-form">
+        <button
+          type="button"
+          className="btn btn-default btn-send-self"
+          onClick={ this.testKvSend }>
+          kv test
+        </button>
       { this.state.renderAddressDropdown &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">

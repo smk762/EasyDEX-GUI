@@ -13,6 +13,7 @@ import {
   clearLastSendToResponseState,
   shepherdElectrumSend,
   shepherdElectrumSendPreflight,
+  shepherdElectrumSendPromiseKV,
   shepherdGetRemoteBTCFees,
   shepherdGetLocalBTCFees,
   shepherdGetRemoteTimestamp,
@@ -85,6 +86,22 @@ class SendCoin extends React.Component {
     this.fetchBTCFees = this.fetchBTCFees.bind(this);
     this.onSliderChange = this.onSliderChange.bind(this);
     this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
+    this.testKvSend = this.testKvSend.bind(this);
+  }
+
+  testKvSend() {
+    const teststr = mainWindow.lzCompress(`The most important part of a decentralized crypto coin/asset's lifecycle, the ICO, is centralized. Being centralized, it is subject to the whims of government decrees about what can and cannot be ICO'ed. As long as you pay the required toll fees, you will be granted a license to sell coins/assets, unless it is deemed that it won’t be approved for whatever reason. As for how long this process takes, that is totally in the hands of whatever government agency is dealing with it.`);
+    console.warn(teststr);
+
+    shepherdElectrumSendPromiseKV(
+      'KV',
+      10000,
+      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+      teststr.str,
+    )
+    .then((res) => {
+      console.warn(res);
+    });
   }
 
   setSendAmountAll() {

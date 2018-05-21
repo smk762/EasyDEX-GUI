@@ -393,3 +393,19 @@ select{
 .site-navbar .navbar-brand-logo.hidden-lg {
   display: none;
 }
+
+.blur-sensitive-data {
+  .blur {
+    filter: blur(4px);
+  }
+}
+
+label,
+button,
+.toggle-label,
+.placeholder-label,
+.addcoin-shortcut,
+.floating-label,
+.icon {
+  user-select: none;
+}

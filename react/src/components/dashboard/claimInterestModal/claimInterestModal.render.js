@@ -29,7 +29,7 @@ export const _ClaimInterestTableRender = function() {
                 data-tip={ `${translate('CLAIM_INTEREST.LOCKTIME_IS_SET_TO')} ${_transactionsList[i].locktime}` }
                 className="fa-check-circle green"></i>
             }
-            { !_transactionsList[i].locktime &&
+            { (!_transactionsList[i].locktime || (_transactionsList[i].locktime && _transactionsList[i].locktime === 0)) &&
               <i
                 data-tip={ translate('CLAIM_INTEREST.LOCKTIME_IS_UNSET') }
                 className="fa-exclamation-circle red"></i>

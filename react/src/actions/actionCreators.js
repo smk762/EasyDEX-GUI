@@ -31,6 +31,7 @@ import {
   DISPLAY_ZCASH_PARAMS_FETCH,
   DASHBOARD_REMOVE_COIN,
   DISPLAY_NOTARY_ELECTIONS_MODAL,
+  BLUR_SENSITIVE_DATA,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -55,7 +56,7 @@ export * from './actions/tools';
 export * from './actions/prices';
 export * from './actions/elections';
 export * from './actions/pin';
-// export * from './actions/kv';
+//export * from './actions/kv';
 
 export const changeActiveAddress = (address) => {
   return {
@@ -309,5 +310,12 @@ export const toggleNotaryElectionsModal = (display) => {
   return {
     type: DISPLAY_NOTARY_ELECTIONS_MODAL,
     displayNotaryElectionsModal: display,
+  }
+}
+
+export const toggleBlurSensitiveData = (display) => {
+  return {
+    type: BLUR_SENSITIVE_DATA,
+    blurSensitiveData: display,
   }
 }
