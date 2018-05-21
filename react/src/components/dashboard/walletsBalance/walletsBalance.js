@@ -7,9 +7,9 @@ import {
 } from '../../../actions/actionCreators';
 import mainWindow from '../../../util/mainWindow';
 import Config from '../../../config';
-import formatValue from '../../../util/formatValue';
 import ReactTooltip from 'react-tooltip';
-
+import { secondsToString } from 'agama-wallet-lib/src/time';
+import { formatValue } from 'agama-wallet-lib/src/utils';
 import Store from '../../../store';
 
 import WalletsBalanceRender from './walletsBalance.render';

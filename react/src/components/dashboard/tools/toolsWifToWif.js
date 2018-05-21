@@ -106,7 +106,7 @@ class ToolsWifToWif extends React.Component {
             htmlFor="kmdWalletSendTo">WIF</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="w2wWif"
             onChange={ this.updateInput }
             value={ this.state.w2wWif }
@@ -125,10 +125,10 @@ class ToolsWifToWif extends React.Component {
         { this.state.w2wResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
             <div>
-              <strong>WIF:</strong> { this.state.w2wResult.keys.priv }
+              <strong>WIF:</strong> <span className="blur">{ this.state.w2wResult.keys.priv }</span>
             </div>
             <div className="margin-top-10">
-              <strong>Pub:</strong> { this.state.w2wResult.keys.pub }
+              <strong>Pub:</strong> <span className="blur">{ this.state.w2wResult.keys.pub }</span>
             </div>
           </div>
         }

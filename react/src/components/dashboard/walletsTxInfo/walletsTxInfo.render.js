@@ -1,8 +1,8 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import { secondsToString } from '../../../util/time';
 import Config from '../../../config';
-import explorerList from '../../../util/explorerList';
+import { secondsToString } from 'agama-wallet-lib/src/time';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const WalletsTxInfoRender = function(txInfo) {
   return (
@@ -51,7 +51,7 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tbody>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter(translate('TX_INFO.ADDRESS')) }</td>
-                                <td>
+                                <td className="blur">
                                   { this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.address : this.state.txDetails.details[0].address }
                                 </td>
                               </tr>
@@ -99,7 +99,7 @@ const WalletsTxInfoRender = function(txInfo) {
                               }
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('txid') }</td>
-                                <td>
+                                <td className="blur">
                                   { this.state.txDetails.txid }
                                 </td>
                               </tr>

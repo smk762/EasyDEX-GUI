@@ -15,8 +15,8 @@ import {
   shepherdElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import { isKomodoCoin } from '../../../util/coinHelper';
 import devlog from '../../../util/devlog';
+import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 
 const shell = window.require('electron').shell;
 
@@ -314,10 +314,10 @@ class ToolsSplitUTXO extends React.Component {
         _items.push(
           <tr key={ `tools-utxos-${i}` }>
             <td>{ _utxos[i].amount }</td>
-            <td>{ _utxos[i].address }</td>
+            <td className="blur">{ _utxos[i].address }</td>
             <td>{ _utxos[i].confirmations }</td>
             <td>{ _utxos[i].vout }</td>
-            <td>{ _utxos[i].txid }</td>
+            <td className="blur">{ _utxos[i].txid }</td>
           </tr>
         );
       }
@@ -379,7 +379,7 @@ class ToolsSplitUTXO extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('TOOLS.SEED') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="utxoSplitSeed"
             onChange={ this.updateInput }
             value={ this.state.utxoSplitSeed }
@@ -389,12 +389,12 @@ class ToolsSplitUTXO extends React.Component {
         </div>
         { this.state.utxoSplitAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            Pub: { this.state.utxoSplitAddress }
+            Pub: <span className="blur">{ this.state.utxoSplitAddress }</span>
           </div>
         }
         { this.state.utxoSplitAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            WIF: { this.state.utxoSplitWif }
+            WIF: <span className="blur">{ this.state.utxoSplitWif }</span>
           </div>
         }
         <div className="col-sm-12 form-group no-padding-left margin-top-20 padding-bottom-10">
@@ -487,7 +487,7 @@ class ToolsSplitUTXO extends React.Component {
         }
         { this.state.utxoSplitPushResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            TXID: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoSplitPushResult }</div>
+            TXID: <div className="blur" style={{ wordBreak: 'break-all' }}>{ this.state.utxoSplitPushResult }</div>
             { isKomodoCoin(this.state.utxoSplitCoin.split('|')[0]) &&
               <div className="margin-top-10">
                 <button

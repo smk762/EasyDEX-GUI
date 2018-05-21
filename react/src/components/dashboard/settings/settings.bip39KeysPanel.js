@@ -125,7 +125,7 @@ class Bip39KeysPanel extends React.Component {
                 <div className="form-group form-material floating">
                   <input
                     type="password"
-                    className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                    className={ !this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
                     autoComplete="off"
                     name="passphrase"
                     ref="passphrase"
@@ -133,7 +133,7 @@ class Bip39KeysPanel extends React.Component {
                     onChange={ this.updateInput }
                     value={ this.state.passphrase } />
                   <textarea
-                    className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                    className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
                     autoComplete="off"
                     id="passphraseTextarea"
                     ref="passphraseTextarea"
@@ -161,7 +161,7 @@ class Bip39KeysPanel extends React.Component {
               <div className="col-sm-5 no-padding-left">
                 <input
                   type="text"
-                  className="form-control margin-top-10"
+                  className="form-control margin-top-10 blur"
                   autoComplete="off"
                   name="match"
                   onChange={ this.updateInput }
@@ -222,7 +222,7 @@ class Bip39KeysPanel extends React.Component {
             <div className="col-sm-12 margin-top-30 margin-bottom-20">
               { this.state.keys !== 'empty' &&
                 <div>
-                  <strong>WIF:</strong> <span>{ this.state.keys.priv }</span>
+                  <strong>WIF:</strong> <span className="blur">{ this.state.keys.priv }</span>
                   <button
                     className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                     title={ translate('INDEX.COPY_TO_CLIPBOARD') }

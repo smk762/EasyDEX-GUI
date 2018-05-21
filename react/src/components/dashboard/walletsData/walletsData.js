@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import sortByDate from '../../../util/sort';
-import formatValue from '../../../util/formatValue';
+import { sortByDate } from 'agama-wallet-lib/src/utils';
+import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import {
   toggleDashboardTxInfoModal,
@@ -28,7 +28,7 @@ import {
   AddressListRender,
   WalletsDataRender,
 } from  './walletsData.render';
-import { secondsToString } from '../../../util/time';
+import { secondsToString } from 'agama-wallet-lib/src/time';
 import getRandomElectrumServer from '../../../util/serverRandom';
 import DoubleScrollbar from 'react-double-scrollbar';
 

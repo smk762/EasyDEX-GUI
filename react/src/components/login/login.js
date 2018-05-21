@@ -21,13 +21,13 @@ import {
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
-import PassPhraseGenerator from '../../util/crypto/passphrasegenerator';
 import zcashParamsCheckErrors from '../../util/zcashParams';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
-import md5 from '../../util/crypto/md5';
+import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
+import md5 from 'agama-wallet-lib/src/crypto/md5';
 
 const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
 const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
@@ -43,7 +43,7 @@ class Login extends React.Component {
       seedInputVisibility: false,
       loginPassPhraseSeedType: null,
       bitsOption: 256,
-      randomSeed: PassPhraseGenerator.generatePassPhrase(256),
+      randomSeed: passphraseGenerator.generatePassPhrase(256),
       randomSeedConfirm: '',
       isSeedConfirmError: false,
       isSeedBlank: false,
@@ -53,7 +53,7 @@ class Login extends React.Component {
       trimPassphraseTimer: null,
       displayLoginSettingsDropdown: false,
       displayLoginSettingsDropdownSection: null,
-      shouldEncryptSeed: false,
+      shouldEncryptSeed: true,
       encryptKey: '',
       encryptKeyConfirm: '',
       decryptKey: '',
@@ -92,7 +92,7 @@ class Login extends React.Component {
         e.srcElement &&
         e.srcElement.offsetParent) {
       this.setState({
-        displayLoginSettingsDropdown: e.srcElement.className.indexOf('login-settings-dropdown-label') === -1 ? false : true,
+        displayLoginSettingsDropdown: e.srcElement.className.indexOf('login-settings-dropdown-label') === -1 || !this.state.displayLoginSettingsDropdown ? false : true,
       });
     }
   }
@@ -181,7 +181,7 @@ class Login extends React.Component {
       // if customWalletSeed is set to false, regenerate the seed
       if (!this.state.customWalletSeed) {
         this.setState({
-          randomSeed: PassPhraseGenerator.generatePassPhrase(this.state.bitsOption),
+          randomSeed: passphraseGenerator.generatePassPhrase(this.state.bitsOption),
           isSeedConfirmError: false,
           isSeedBlank: false,
           isCustomSeedWeak: false,
@@ -236,7 +236,7 @@ class Login extends React.Component {
 
   generateNewSeed(bits) {
     this.setState(Object.assign({}, this.state, {
-      randomSeed: PassPhraseGenerator.generatePassPhrase(bits),
+      randomSeed: passphraseGenerator.generatePassPhrase(bits),
       bitsOption: bits,
       isSeedBlank: false,
     }));
@@ -476,19 +476,19 @@ class Login extends React.Component {
 
     const passPhraseWords = passPhrase.split(' ');
 
-    if (!PassPhraseGenerator.arePassPhraseWordsValid(passPhrase)) {
+    if (!passphraseGenerator.arePassPhraseWordsValid(passPhrase)) {
       return null;
     }
 
-    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
+    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
       return translate('LOGIN.IGUANA_SEED');
     }
 
-    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 160)) {
+    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 160)) {
       return translate('LOGIN.WAVES_SEED');
     }
 
-    if (PassPhraseGenerator.isPassPhraseValid(passPhraseWords, 128)) {
+    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 128)) {
       return translate('LOGIN.NXT_SEED');
     }
 
@@ -503,7 +503,7 @@ class Login extends React.Component {
       loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
-      randomSeed: PassPhraseGenerator.generatePassPhrase(256),
+      randomSeed: passphraseGenerator.generatePassPhrase(256),
       randomSeedConfirm: '',
       isSeedConfirmError: false,
       isSeedBlank: false,

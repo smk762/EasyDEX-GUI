@@ -725,7 +725,9 @@ export const coindList = () => {
     'AXO',
     'ETOMIC',
     'BTCH',
-    'BNTN'
+    'BNTN',
+    'BEER',
+    'PIZZA'
   ];
 
   return _coins;

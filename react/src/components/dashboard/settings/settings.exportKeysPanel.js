@@ -214,7 +214,7 @@ class ExportKeysPanel extends React.Component {
                   onChange={ this.updateInput }
                   value={ this.state.wifkeysPassphrase } />
                 <textarea
-                  className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                  className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
                   autoComplete="off"
                   id="wifkeysPassphraseTextarea"
                   ref="wifkeysPassphraseTextarea"

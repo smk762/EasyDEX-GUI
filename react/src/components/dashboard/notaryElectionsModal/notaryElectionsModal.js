@@ -13,11 +13,12 @@ import {
   shepherdElectionsTransactions,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import { secondsToString } from '../../../util/time';
-import { isPositiveNumber } from '../../../util/number';
 import mainWindow from '../../../util/mainWindow';
 import Spinner from '../spinner/spinner';
 import ReactTooltip from 'react-tooltip';
+
+const { secondsToString } = require('agama-wallet-lib/src/index-fe').time;
+const { isPositiveNumber } = require('agama-wallet-lib/src/index-fe').utils;
 
 const SEED_TRIM_TIMEOUT = 5000;
 const ELECTIONS_SYNC_UPDATE_INTERVAL = 120000; // every 2 min
@@ -162,7 +163,7 @@ class NotaryElectionsModal extends React.Component {
         if (res.msg === 'success') {
           Store.dispatch(
             triggerToaster(
-              translate('NN_ELECTIONS.YOU_SUCCESFULLY_VOTED'),              
+              translate('NN_ELECTIONS.YOU_SUCCESFULLY_VOTED'),
               translate('NN_ELECTIONS.NN_ELECTIONS_2018'),
               'success',
               false

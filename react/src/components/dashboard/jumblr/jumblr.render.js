@@ -1,6 +1,5 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-
 import WalletsHeader from '../walletsHeader/walletsHeader';
 import SendCoin from '../sendCoin/sendCoin';
 import ReceiveCoin from '../receiveCoin/receiveCoin';

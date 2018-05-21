@@ -21,6 +21,7 @@ const explorerList = {
   COQUI: 'https://explorer.coqui.cash',
   CHAIN: 'https://explorer.chainmakers.co',
   GLXT: 'http://glx.info',
+  BNTN: 'http://chain.blocnation.io',
   EQL: 'http://178.62.240.191',
   MNZ: 'https://www.mnzexplorer.com',
   BTCH: 'http://www.btch.host',

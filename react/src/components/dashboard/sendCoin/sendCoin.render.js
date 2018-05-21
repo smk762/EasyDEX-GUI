@@ -1,9 +1,9 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
-import formatValue from '../../../util/formatValue';
-import explorerList from '../../../util/explorerList';
 import ReactTooltip from 'react-tooltip';
+import { formatValue } from 'agama-wallet-lib/src/utils';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 export const AddressListRender = function() {
   return (

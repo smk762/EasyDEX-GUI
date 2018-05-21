@@ -3,17 +3,12 @@ import { connect } from 'react-redux';
 import Config from '../../../config';
 import translate from '../../../translate/translate';
 import {
-  secondsToString,
-  checkTimestamp,
-} from '../../../util/time';
-import {
   triggerToaster,
   sendNativeTx,
   getKMDOPID,
   clearLastSendToResponseState,
   shepherdElectrumSend,
   shepherdElectrumSendPreflight,
-  shepherdElectrumSendPromiseKV,
   shepherdGetRemoteBTCFees,
   shepherdGetLocalBTCFees,
   shepherdGetRemoteTimestamp,
@@ -26,11 +21,15 @@ import {
   SendFormRender,
   _SendFormRender,
 } from './sendCoin.render';
-import { isPositiveNumber } from '../../../util/number';
 import mainWindow from '../../../util/mainWindow';
-import explorerList from '../../../util/explorerList';
 import Slider, { Range } from 'rc-slider';
 import ReactTooltip from 'react-tooltip';
+import {
+  secondsToString,
+  checkTimestamp,
+} from 'agama-wallet-lib/src/time';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import { isPositiveNumber } from 'agama-wallet-lib/src/utils';
 
 const shell = window.require('electron').shell;
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
@@ -86,22 +85,6 @@ class SendCoin extends React.Component {
     this.fetchBTCFees = this.fetchBTCFees.bind(this);
     this.onSliderChange = this.onSliderChange.bind(this);
     this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
-    this.testKvSend = this.testKvSend.bind(this);
-  }
-
-  testKvSend() {
-    const teststr = mainWindow.lzCompress(`The most important part of a decentralized crypto coin/asset's lifecycle, the ICO, is centralized. Being centralized, it is subject to the whims of government decrees about what can and cannot be ICO'ed. As long as you pay the required toll fees, you will be granted a license to sell coins/assets, unless it is deemed that it won’t be approved for whatever reason. As for how long this process takes, that is totally in the hands of whatever government agency is dealing with it.`);
-    console.warn(teststr);
-
-    shepherdElectrumSendPromiseKV(
-      'KV',
-      10000,
-      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-      teststr.str,
-    )
-    .then((res) => {
-      console.warn(res);
-    });
   }
 
   setSendAmountAll() {

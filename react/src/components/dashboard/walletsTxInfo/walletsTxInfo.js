@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import sortByDate from '../../../util/sort';
 import {
   toggleDashboardTxInfoModal,
   getTxDetails,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
-import explorerList from '../../../util/explorerList';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const shell = window.require('electron').shell;
 
