@@ -135,6 +135,8 @@ export const LANG_EN = {
     'HISTORY': 'History',
   },
   'INDEX': {
+    'HIDE_SENSITIVE_DATA': 'Hide sensitive data',
+    'SHOW_SENSITIVE_DATA': 'Show sensitive data',
     'MINING_IS_ENABLED': 'Mining is enabled',
     'STAKING_IS_DISABLED': 'Staking is disabled',
     'STAKING_IS_ENABLED': 'Staking is enabled',

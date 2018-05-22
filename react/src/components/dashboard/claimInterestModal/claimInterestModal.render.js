@@ -20,7 +20,7 @@ export const _ClaimInterestTableRender = function() {
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') + ' TXID' }
             </button>
           </td>
-          <td>{ _transactionsList[i].address }</td>
+          <td className="blur">{ _transactionsList[i].address }</td>
           <td className={ _transactionsList[i].amount > 10 ? 'green bold' : '' }>{ _transactionsList[i].amount }</td>
           <td>{ _transactionsList[i].interest }</td>
           <td className="locktime center">
@@ -29,7 +29,7 @@ export const _ClaimInterestTableRender = function() {
                 data-tip={ `${translate('CLAIM_INTEREST.LOCKTIME_IS_SET_TO')} ${_transactionsList[i].locktime}` }
                 className="fa-check-circle green"></i>
             }
-            { !_transactionsList[i].locktime &&
+            { (!_transactionsList[i].locktime || (_transactionsList[i].locktime && _transactionsList[i].locktime === 0)) &&
               <i
                 data-tip={ translate('CLAIM_INTEREST.LOCKTIME_IS_UNSET') }
                 className="fa-exclamation-circle red"></i>

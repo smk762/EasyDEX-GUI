@@ -178,10 +178,6 @@ const addCoinOptionsCrypto = () => {
       icon: 'SYS',
       value: `SYS|spv`,
     }, {
-      label: 'GameCredits (GAME)',
-      icon: 'GAME',
-      value: `GAME|spv`,
-    }, {
       label: 'Internet of People (IOP)',
       icon: 'IOP',
       value: `IOP|spv`,
@@ -193,7 +189,11 @@ const addCoinOptionsCrypto = () => {
       label: 'Zcoin (XZC)',
       icon: 'XZC',
       value: `XZC|spv`,
-    },*/{
+    },*/ {
+      label: 'GameCredits (GAME)',
+      icon: 'GAME',
+      value: `GAME|spv`,
+    }, {
       label: 'Bitcoin CBC (BCBC)',
       icon: 'BCBC',
       value: `BCBC|spv`,

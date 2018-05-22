@@ -3,7 +3,7 @@ import ReactTooltip from 'react-tooltip';
 import translate from '../../../translate/translate';
 import ReactTable from 'react-table';
 import TablePaginationRenderer from './pagination';
-import formatValue from '../../../util/formatValue';
+import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
 
@@ -59,7 +59,7 @@ export const AddressRender = function(tx) {
     );
   }
 
-  return tx.address;
+  return (<span className="blur">{ tx.address }</span>);
 };
 
 export const AddressItemRender = function(address, type, amount, coin) {
@@ -173,7 +173,7 @@ export const TxAmountRender = function(tx) {
   } else {
     _amountNegative = 1;
   }
-  
+
   if (Config.roundValues) {
     return (
       <span>

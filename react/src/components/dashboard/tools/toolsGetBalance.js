@@ -104,7 +104,7 @@ class ToolsGetBalance extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="balanceAddr"
             onChange={ this.updateInput }
             value={ this.state.balanceAddr }

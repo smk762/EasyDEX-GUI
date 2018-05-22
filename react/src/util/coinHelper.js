@@ -730,6 +730,8 @@ export const coindList = () => {
     'ETOMIC',
     'BTCH',
     'BNTN',
+    'BEER',
+    'PIZZA',
     'PRLPAY'
   ];
 

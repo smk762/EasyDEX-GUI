@@ -3,10 +3,6 @@ import { connect } from 'react-redux';
 import Config from '../../../config';
 import translate from '../../../translate/translate';
 import {
-  secondsToString,
-  checkTimestamp,
-} from '../../../util/time';
-import {
   triggerToaster,
   sendNativeTx,
   getKMDOPID,
@@ -25,11 +21,15 @@ import {
   SendFormRender,
   _SendFormRender,
 } from './sendCoin.render';
-import { isPositiveNumber } from '../../../util/number';
 import mainWindow from '../../../util/mainWindow';
-import explorerList from '../../../util/explorerList';
 import Slider, { Range } from 'rc-slider';
 import ReactTooltip from 'react-tooltip';
+import {
+  secondsToString,
+  checkTimestamp,
+} from 'agama-wallet-lib/src/time';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import { isPositiveNumber } from 'agama-wallet-lib/src/utils';
 
 const shell = window.require('electron').shell;
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds

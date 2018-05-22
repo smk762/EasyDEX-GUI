@@ -116,7 +116,7 @@ class NativeWalletDatKeysPanel extends React.Component {
               <textarea
                 readOnly
                 id="coind-keys-textarea-left"
-                className="form-control settings-coind-stdout-textarea"
+                className="form-control settings-coind-stdout-textarea blur"
                 value={ _addresses }></textarea>
             </div>
           }
@@ -128,7 +128,7 @@ class NativeWalletDatKeysPanel extends React.Component {
               <textarea
                 readOnly
                 id="coind-keys-textarea-right"
-                className="form-control settings-coind-stdout-textarea"
+                className="form-control settings-coind-stdout-textarea blur"
                 value={ _wifs }></textarea>
             </div>
           }
@@ -154,7 +154,7 @@ class NativeWalletDatKeysPanel extends React.Component {
                 </select>
                 <input
                   type="text"
-                  className="form-control margin-top-10"
+                  className="form-control margin-top-10 blur"
                   autoComplete="off"
                   name="keyMatchPattern"
                   onChange={ this.updateInput }

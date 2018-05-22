@@ -121,7 +121,7 @@ class ToolsGetBalanceMulti extends React.Component {
       for (let key in balances) {
         _items.push(
           <tr key={ `tools-balances-multi-${key}` }>
-            <td>{ key }</td>
+            <td className="blur">{ key }</td>
             <td>{ balances[key] } KMD</td>
           </tr>
         );
@@ -181,7 +181,7 @@ class ToolsGetBalanceMulti extends React.Component {
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <textarea
-            className="form-control placeholder-no-fix height-100 col-sm-3"
+            className="form-control placeholder-no-fix height-100 col-sm-3 blur"
             id="walletseed"
             name="balanceAddr"
             onChange={ this.updateInput }

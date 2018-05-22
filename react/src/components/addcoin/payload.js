@@ -1,42 +1,10 @@
 // TODO: merge check functions
 //			 move to nodejs
 //			 cleanup
+import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 
 export const checkAC = (coinVal) => {
-	if (coinVal === 'SUPERNET' ||
-			coinVal === 'REVS' ||
-			coinVal === 'WLC' ||
-			coinVal === 'DEX' ||
-			coinVal === 'PANGEA' ||
-			coinVal === 'JUMBLR' ||
-			coinVal === 'BET' ||
-			coinVal === 'CRYPTO' ||
-			coinVal === 'COQUI' ||
-			coinVal === 'CHAIN' ||
-			coinVal === 'GLXT' ||
-			coinVal === 'EQL' ||
-			coinVal === 'HODL' ||
-			coinVal === 'MSHARK' ||
-			coinVal === 'BOTS' ||
-			coinVal === 'MGW' ||
-			coinVal === 'MVP' ||
-			coinVal === 'KV' ||
-			coinVal === 'CEAL' ||
-			coinVal === 'MESH' ||
-			coinVal === 'MNZ' ||
-			coinVal === 'AXO' ||
-			coinVal === 'ETOMIC' ||
-			coinVal === 'BTCH' ||
-			coinVal === 'BEER' ||
-			coinVal === 'PIZZA' ||
-			coinVal === 'OOT' ||
-			coinVal === 'VOTE2018' ||
-			coinVal === 'BNTN' ||
-			coinVal === 'PRLPAY')	{
-		return true;
-	} else {
-		return false;
-	}
+	return isKomodoCoin(coinVal, true);
 }
 
 export const startCurrencyAssetChain = (confpath, coin, mode) => {
