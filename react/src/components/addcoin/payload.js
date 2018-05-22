@@ -31,7 +31,8 @@ export const checkAC = (coinVal) => {
 			coinVal === 'PIZZA' ||
 			coinVal === 'OOT' ||
 			coinVal === 'VOTE2018' ||
-			coinVal === 'BNTN')	{
+			coinVal === 'BNTN' ||
+			coinVal === 'PRLPAY')	{
 		return true;
 	} else {
 		return false;
@@ -161,5 +162,9 @@ export const acConfig = {
 	BNTN: {
 		'ac_supply': 500000000,
 		addnode: '94.130.169.205',
+	},
+	PRLPAY: {
+		'ac_supply': 500000000,
+		addnode: '13.250.226.125',
 	},
 };

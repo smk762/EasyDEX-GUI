@@ -14,6 +14,10 @@ export const getCoinTitle = (coin) => {
       coinlogo = 'bntn';
       coinname = 'Blocnation';
       break;
+    case 'PRLPAY':
+      coinlogo = 'prlpay';
+      coinname = 'Pearl Pay Coin';
+      break;
     case 'ACC':
       coinlogo = 'acc';
       coinname = 'AdCoin';
@@ -725,7 +729,8 @@ export const coindList = () => {
     'AXO',
     'ETOMIC',
     'BTCH',
-    'BNTN'
+    'BNTN',
+    'PRLPAY'
   ];
 
   return _coins;
@@ -745,6 +750,7 @@ export const isKomodoCoin = (coin) => {
       coin === 'EQL' ||
       coin === 'OOT' ||
       coin === 'BNTN' ||
+      coin === 'PRLPPAY' ||
       coin === 'HODL' ||
       coin === 'MSHARK' ||
       coin === 'BOTS' ||
