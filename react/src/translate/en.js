@@ -1019,6 +1019,7 @@ export const LANG_EN = {
     'NINJA': 'NINJA (NINJA)',
     'GLXT': 'GLXToken (GLXT)',
     'BNTN': 'Blocnation (BNTN)',
+    'PRLPAY': 'Pearl Pay Coin (PRLPAY)',
     'OOT': 'Utrum (OOT)',
   },
   'TOOLS': {

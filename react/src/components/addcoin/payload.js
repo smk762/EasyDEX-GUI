@@ -131,4 +131,8 @@ export const acConfig = {
 		'ac_supply': 500000000,
 		addnode: '94.130.169.205',
 	},
+	PRLPAY: {
+		'ac_supply': 500000000,
+		addnode: '13.250.226.125',
+	},
 };
