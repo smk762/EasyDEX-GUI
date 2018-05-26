@@ -4,6 +4,13 @@ import QRModal from '../qrModal/qrModal';
 import ReactTooltip from 'react-tooltip';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import Config from '../../../config';
+
+const kvCoins = {
+  'KV': true,
+  'BEER': true,
+  'PIZZA': true,
+};
 
 export const AddressListRender = function() {
   return (
@@ -42,12 +49,6 @@ export const AddressListRender = function() {
 export const _SendFormRender = function() {
   return (
     <div className="extcoin-send-form">
-        <button
-          type="button"
-          className="btn btn-default btn-send-self"
-          onClick={ this.testKvSend }>
-          kv test
-        </button>
       { this.state.renderAddressDropdown &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
@@ -58,118 +59,194 @@ export const _SendFormRender = function() {
           </div>
         </div>
       }
-      <div className="row">
-        <div className="col-xlg-12 form-group form-material">
-          { this.props.ActiveCoin.mode === 'spv' &&
-            <button
-              type="button"
-              className="btn btn-default btn-send-self"
-              onClick={ this.setSendToSelf }>
-              { translate('SEND.SELF') }
-            </button>
-          }
-          <label
-            className="control-label"
-            htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
-          <input
-            type="text"
-            className="form-control"
-            name="sendTo"
-            onChange={ this.updateInput }
-            value={ this.state.sendTo }
-            id="kmdWalletSendTo"
-            placeholder={ this.props.ActiveCoin.mode === 'spv' ? translate('SEND.ENTER_ADDRESS') : translate('SEND.ENTER_T_OR_Z_ADDR') }
-            autoComplete="off"
-            required />
-        </div>
-        <div className="col-lg-12 form-group form-material">
-          { this.props.ActiveCoin.mode === 'spv' &&
-            <button
-              type="button"
-              className="btn btn-default btn-send-self"
-              onClick={ this.setSendAmountAll }>
-              { translate('SEND.ALL') }
-            </button>
-          }
-          <label
-            className="control-label"
-            htmlFor="kmdWalletAmount">
-            { translate('INDEX.AMOUNT') }
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            name="amount"
-            value={ this.state.amount !== 0 ? this.state.amount : '' }
-            onChange={ this.updateInput }
-            id="kmdWalletAmount"
-            placeholder="0.000"
-            autoComplete="off" />
-        </div>
-        <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() && this.props.ActiveCoin.mode === 'native' ? '' : ' hide') }>
-          { this.state.sendTo.length <= 34 &&
-            <span className="pointer">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={ this.state.subtractFee } />
-                <div
-                  className="slider"
-                  onClick={ () => this.toggleSubtractFee() }></div>
-              </label>
-              <div
-                className="toggle-label"
-                onClick={ () => this.toggleSubtractFee() }>
-                  { translate('DASHBOARD.SUBTRACT_FEE') }
-              </div>
-            </span>
-          }
-        </div>
-        { this.renderBTCFees() }
-        <div className="col-lg-6 form-group form-material hide">
-          <label
-            className="control-label"
-            htmlFor="kmdWalletFee">
-            { translate('INDEX.FEE') }
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            name="fee"
-            onChange={ this.updateInput }
-            id="kmdWalletFee"
-            placeholder="0.000"
-            value={ this.state.fee !== 0 ? this.state.fee : '' }
-            autoComplete="off" />
-        </div>
-        <div className="col-lg-12 hide">
-          <span>
-            <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
-            { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }&nbsp;
-            { this.props.ActiveCoin.coin }
-          </span>
-        </div>
-        { (!this.isFullySynced() || !navigator.onLine) &&
-          this.props.ActiveCoin &&
-          this.props.ActiveCoin.mode === 'native' &&
-          <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
-            <i className="icon fa-warning color-warning margin-right-5"></i>&nbsp;
-            <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
+      { !this.state.kvSend &&
+        <div className="row">
+          <div className="col-xlg-12 form-group form-material">
+            { this.props.ActiveCoin.mode === 'spv' &&
+              <button
+                type="button"
+                className="btn btn-default btn-send-self"
+                onClick={ this.setSendToSelf }>
+                { translate('SEND.SELF') }
+              </button>
+            }
+            <label
+              className="control-label"
+              htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
+            <input
+              type="text"
+              className="form-control"
+              name="sendTo"
+              onChange={ this.updateInput }
+              value={ this.state.sendTo }
+              id="kmdWalletSendTo"
+              placeholder={ this.props.ActiveCoin.mode === 'spv' ? translate('SEND.ENTER_ADDRESS') : translate('SEND.ENTER_T_OR_Z_ADDR') }
+              autoComplete="off"
+              required />
           </div>
-        }
-        <div className="col-lg-12">
-          <button
-            type="button"
-            className="btn btn-primary waves-effect waves-light pull-right"
-            onClick={ this.props.renderFormOnly ? this.handleSubmit : () => this.changeSendCoinStep(1) }
-            disabled={
-              !this.state.sendTo ||
-              !this.state.amount
-            }>
-            { translate('INDEX.SEND') } { this.state.amount } { this.props.ActiveCoin.coin }
-          </button>
+          <div className="col-lg-12 form-group form-material">
+            { this.props.ActiveCoin.mode === 'spv' &&
+              <button
+                type="button"
+                className="btn btn-default btn-send-self"
+                onClick={ this.setSendAmountAll }>
+                { translate('SEND.ALL') }
+              </button>
+            }
+            <label
+              className="control-label"
+              htmlFor="kmdWalletAmount">
+              { translate('INDEX.AMOUNT') }
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="amount"
+              value={ this.state.amount !== 0 ? this.state.amount : '' }
+              onChange={ this.updateInput }
+              id="kmdWalletAmount"
+              placeholder="0.000"
+              autoComplete="off" />
+          </div>
+          <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() && this.props.ActiveCoin.mode === 'native' ? '' : ' hide') }>
+            { this.state.sendTo.length <= 34 &&
+              <span className="pointer">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={ this.state.subtractFee } />
+                  <div
+                    className="slider"
+                    onClick={ () => this.toggleSubtractFee() }></div>
+                </label>
+                <div
+                  className="toggle-label"
+                  onClick={ () => this.toggleSubtractFee() }>
+                    { translate('DASHBOARD.SUBTRACT_FEE') }
+                </div>
+              </span>
+            }
+          </div>
+          { this.renderBTCFees() }
+          <div className="col-lg-6 form-group form-material hide">
+            <label
+              className="control-label"
+              htmlFor="kmdWalletFee">
+              { translate('INDEX.FEE') }
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="fee"
+              onChange={ this.updateInput }
+              id="kmdWalletFee"
+              placeholder="0.000"
+              value={ this.state.fee !== 0 ? this.state.fee : '' }
+              autoComplete="off" />
+          </div>
+          <div className="col-lg-12 hide">
+            <span>
+              <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
+              { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }&nbsp;
+              { this.props.ActiveCoin.coin }
+            </span>
+          </div>
+          { (!this.isFullySynced() || !navigator.onLine) &&
+            this.props.ActiveCoin &&
+            this.props.ActiveCoin.mode === 'native' &&
+            <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
+              <i className="icon fa-warning color-warning margin-right-5"></i>&nbsp;
+              <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
+            </div>
+          }
+          <div className="col-lg-12">
+            <button
+              type="button"
+              className="btn btn-primary waves-effect waves-light pull-right"
+              onClick={ this.props.renderFormOnly ? this.handleSubmit : () => this.changeSendCoinStep(1) }
+              disabled={
+                !this.state.sendTo ||
+                !this.state.amount
+              }>
+              { translate('INDEX.SEND') } { this.state.amount } { this.props.ActiveCoin.coin }
+            </button>
+          </div>
         </div>
-      </div>
+      }
+      { this.state.kvSend &&
+        <div className="row">
+          {/*<button
+            type="button"
+            className="btn btn-default btn-send-self"
+            onClick={ this.loadTestData }>
+            Load test data
+          </button>*/}
+          <div className="col-xlg-12 form-group form-material">
+            <label
+              className="control-label"
+              htmlFor="kvSendTag">{ translate('KV.TAG') }</label>
+            <input
+              type="text"
+              className="form-control"
+              name="kvSendTag"
+              onChange={ this.updateInput }
+              value={ this.state.kvSendTag }
+              id="kvSendTag"
+              placeholder={ translate('KV.TITLE') }
+              autoComplete="off"
+              maxLength="64"
+              required />
+          </div>
+          <div className="col-xlg-12 form-group form-material">
+            <label
+              className="control-label"
+              htmlFor="kvSendTitle">{ translate('KV.TITLE') }</label>
+            <input
+              type="text"
+              className="form-control"
+              name="kvSendTitle"
+              onChange={ this.updateInput }
+              value={ this.state.kvSendTitle }
+              id="kvSendTitle"
+              placeholder={ translate('KV.ENTER_A_TITLE') }
+              autoComplete="off"
+              maxLength="128"
+              required />
+          </div>
+          <div className="col-xlg-12 form-group form-material">
+            <label
+              className="control-label margin-bottom-10"
+              htmlFor="kvSendContent">{ translate('KV.CONTENT') }</label>
+            <textarea
+              className="full-width height-400"
+              rows="20"
+              cols="80"
+              id="kvSendContent"
+              name="kvSendContent"
+              onChange={ this.updateInput }
+              value={ this.state.kvSendContent }></textarea>
+          </div>
+          <div className="col-xlg-12 form-group form-material">
+            { (4096 - this.state.kvSendContent.length) > 0 &&
+              <span>{ translate('KV.CHARS_LEFT') }:  { 4096 - this.state.kvSendContent.length }</span>
+            }
+            { (4096 - this.state.kvSendContent.length) < 0 &&
+              <span>{ translate('KV.KV_ERR_TOO_LONG') }</span>
+            }
+          </div>
+          <div className="col-lg-12">
+            <button
+              type="button"
+              className="btn btn-primary waves-effect waves-light pull-right"
+              onClick={ this.props.renderFormOnly ? this.handleSubmit : () => this.changeSendCoinStep(1) }
+              disabled={
+                !this.state.kvSendContent
+              }>
+              { translate('INDEX.SEND') } KV { this.props.ActiveCoin.coin }
+            </button>
+          </div>
+        </div>
+      }
     </div>
   );
 }
@@ -214,6 +291,24 @@ export const SendRender = function() {
               <h3 className="panel-title">
                 { translate('INDEX.SEND') } { this.props.ActiveCoin.coin }
               </h3>
+              { this.props.ActiveCoin.mode === 'spv' &&
+                Config.experimentalFeatures &&
+                kvCoins[this.props.ActiveCoin.coin] &&
+                <div className="kv-select-block">
+                  <button
+                    type="button"
+                    className={ 'btn btn-default' + (this.state.kvSend ? ' active' : '') }
+                    onClick={ this.toggleKvSend }>
+                    { translate('KV.SEND_KV') }
+                  </button>
+                  <button
+                    type="button"
+                    className={ 'btn btn-default margin-left-10' + (!this.state.kvSend ? ' active' : '') }
+                    onClick={ this.toggleKvSend }>
+                    { translate('KV.SEND_TX') }
+                  </button>
+                </div>
+              }
             </div>
             <div className="qr-modal-send-block">
               <QRModal

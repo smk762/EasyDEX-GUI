@@ -67,6 +67,11 @@ class SendCoin extends React.Component {
       btcFeesSize: 0,
       btcFeesTimeBasedStep: 1,
       spvPreflightRes: null,
+      kvSend: false,
+      kvSendTag: '',
+      kvSendTitle: '',
+      kvSendContent: '',
+      kvHex: '',
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -85,6 +90,32 @@ class SendCoin extends React.Component {
     this.fetchBTCFees = this.fetchBTCFees.bind(this);
     this.onSliderChange = this.onSliderChange.bind(this);
     this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
+    this.toggleKvSend = this.toggleKvSend.bind(this);
+    //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  /*loadTestData() {
+    this.setState({
+      kvSendTag: 'test',
+      kvSendTitle: 'This is a test kv',
+      kvSendContent: 'test test test test',
+    });
+  }*/
+
+  toggleKvSend() {
+    if (this.state.kvSend) {
+      this.setState({
+        kvSend: !this.state.kvSend,
+        amount: '',
+        sendTo: '',
+      });
+    } else {
+      this.setState({
+        kvSend: !this.state.kvSend,
+        amount: 0.0001,
+        sendTo: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+      });
+    }
   }
 
   setSendAmountAll() {
@@ -506,9 +537,26 @@ class SendCoin extends React.Component {
       if (!this.validateSendFormData()) {
         return;
       } else {
+        let kvHex;
+
+        if (this.state.kvSend) {
+          const kvEncode = mainWindow.kvEncode({
+            tag: this.state.kvSendTag,
+            content: {
+              title: this.state.kvSendTitle,
+              version: '01',
+              body: this.state.kvSendContent,
+            },
+          });
+
+          console.warn(kvEncode);
+          kvHex = kvEncode;
+        }
+
         this.setState(Object.assign({}, this.state, {
           spvPreflightSendInProgress: this.props.ActiveCoin.mode === 'spv' ? true : false,
           currentStep: step,
+          kvHex,
         }));
 
         // spv pre tx push request
@@ -518,7 +566,9 @@ class SendCoin extends React.Component {
             this.state.amount * 100000000,
             this.state.sendTo,
             this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-            this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null
+            this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null,
+            this.state.kvSend,
+            kvHex,
           )
           .then((sendPreflight) => {
             if (sendPreflight &&
@@ -583,7 +633,9 @@ class SendCoin extends React.Component {
             this.state.amount * 100000000,
             this.state.sendTo,
             this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-            this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null
+            this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null,
+            this.state.kvSend,
+            this.state.kvHex,
           )
         );
       }
@@ -610,7 +662,7 @@ class SendCoin extends React.Component {
           )
         );
         valid = false;
-      } else if (Number(_amountSats) < _fees[this.props.ActiveCoin.coin]) {
+      } else if (Number(_amountSats) < _fees[this.props.ActiveCoin.coin] && !this.state.kvSend) {
         Store.dispatch(
           triggerToaster(
             `${translate('SEND.AMOUNT_IS_TOO_SMALL', this.state.amount)}, ${translate('SEND.MIN_AMOUNT_IS', this.props.ActiveCoin.coin)} ${Number(_fees[this.props.ActiveCoin.coin] * 0.00000001)}`,

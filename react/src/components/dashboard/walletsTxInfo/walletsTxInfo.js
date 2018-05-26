@@ -8,6 +8,7 @@ import {
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import Config from '../../../config';
 
 const shell = window.require('electron').shell;
 
@@ -42,6 +43,7 @@ class WalletsTxInfo extends React.Component {
       this.setState(Object.assign({}, this.state, {
         txDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
         rawTxDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
+        activeTab: Config.experimentalFeatures && nextProps.ActiveCoin.showTransactionInfoTxIndex && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn.kvDecoded ? 4 : 0,
       }));
     } else {
       if (nextProps.ActiveCoin &&
