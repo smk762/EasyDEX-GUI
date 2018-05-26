@@ -125,9 +125,16 @@ class SendCoin extends React.Component {
     let _fees = mainWindow.spvFees;
     _fees.BTC = 0;
 
-    this.setState({
-      amount: Number((0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)),
-    });
+    if (this.props.ActiveCoin.mode === 'native' &&
+        this.state.sendFrom) {
+      this.setState({
+        amount: Number(this.state.sendFromAmount) - 0.0001,
+      });
+    } else {
+      this.setState({
+        amount: Number((0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)),
+      });
+    }
   }
 
   setSendToSelf() {

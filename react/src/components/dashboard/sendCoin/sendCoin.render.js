@@ -85,7 +85,8 @@ export const _SendFormRender = function() {
               required />
           </div>
           <div className="col-lg-12 form-group form-material">
-            { this.props.ActiveCoin.mode === 'spv' &&
+            { (this.props.ActiveCoin.mode === 'spv' ||
+                (this.props.ActiveCoin.mode === 'native' && this.state.sendFrom)) &&
               <button
                 type="button"
                 className="btn btn-default btn-send-self"
