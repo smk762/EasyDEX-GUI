@@ -421,7 +421,7 @@ export const SendRender = function() {
               <h4 className="panel-title">
                 { translate('INDEX.TRANSACTION_RESULT') }
               </h4>
-              <div>
+              <div className="overflow-x">
                 { this.state.lastSendToResponse &&
                   !this.state.lastSendToResponse.msg &&
                   <table className="table table-hover table-striped">

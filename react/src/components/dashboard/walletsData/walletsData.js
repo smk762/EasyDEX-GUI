@@ -289,8 +289,8 @@ class WalletsData extends React.Component {
       },
       {
         id: 'tag',
-        Header: 'Tag',
-        Footer: 'Tag',
+        Header: translate('KV.TAG'),
+        Footer: translate('KV.TAG'),
         headerClassName: 'hidden-xs hidden-sm',
         footerClassName: 'hidden-xs hidden-sm',
         className: 'hidden-xs hidden-sm',
@@ -298,8 +298,8 @@ class WalletsData extends React.Component {
       },
       {
         id: 'title',
-        Header: 'Title',
-        Footer: 'Title',
+        Header: translate('KV.TITLE'),
+        Footer: translate('KV.TITLE'),
         accessor: (tx) => tx.opreturn.kvDecoded.content.title,
       },
       {
@@ -310,8 +310,8 @@ class WalletsData extends React.Component {
       },
       {
         id: 'tx-detail',
-        Header: 'Content',
-        Footer: 'Content',
+        Header: translate('KV.CONTENT'),
+        Footer: translate('KV.CONTENT'),
         className: 'colum--txinfo',
         headerClassName: 'colum--txinfo',
         footerClassName: 'colum--txinfo',
