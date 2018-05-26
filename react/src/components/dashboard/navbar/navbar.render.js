@@ -100,14 +100,14 @@ const NavbarRender = function() {
             { Config.experimentalFeatures &&
               <li className={ this.isSectionActive('tools') ? 'active nav-top-menu' : 'nav-top-menu' }>
                 <a onClick={ () => this.dashboardChangeSection('tools') }>
-                  <i className="site-menu-icon"></i> Tools
+                  <i className="site-menu-icon"></i> { translate('TOOLS.TOOLS') }
                 </a>
               </li>
             }
             { mainWindow.nnVoteChain &&
               <li className="nav-top-menu">
                 <a onClick={ this._toggleNotaryElectionsModal }>
-                  <i className="site-menu-icon"></i> Notary Elections
+                  <i className="site-menu-icon"></i> { translate('NN_ELECTIONS.NN_ELECTIONS_2018') }
                 </a>
               </li>
             }
@@ -166,6 +166,11 @@ const NavbarRender = function() {
                     </a>
                   </li>
                 }
+                <li>
+                  <a onClick={ this._toggleBlurSensitiveData }>
+                    <i className={ 'icon fa-eye' + (!this.props.Main.blurSensitiveData ? '-slash' : '') }></i> { this.props.Main.blurSensitiveData ? translate('INDEX.SHOW_SENSITIVE_DATA') : translate('INDEX.HIDE_SENSITIVE_DATA') }
+                  </a>
+                </li>
                 { this.isRenderSpvLockLogout() &&
                   <li>
                     <a onClick={ this.spvLock }>

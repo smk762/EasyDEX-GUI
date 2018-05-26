@@ -244,6 +244,38 @@ export const shepherdElectrumTransactions = (coin, address) => {
   }
 }
 
+export const shepherdElectrumKVTransactionsPromise = (coin, address) => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token: Config.token,
+      address,
+      coin,
+      full: true,
+      maxlength: 20,
+      kv: true,
+    };
+
+    fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listtransactions${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdElectrumTransactionsKV',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
 export const shepherdElectrumTransactionsState= (json) => {
   json = json.result;
 
@@ -294,10 +326,21 @@ export const shepherdElectrumCoinsState = (json) => {
 }
 
 // value in sats
-export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, btcFee) => {
+export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, btcFee, isKv, opreturn) => {
   value = Math.floor(value);
 
   return dispatch => {
+    const payload = {
+      token: Config.token,
+      coin,
+      value,
+      address: changeAddress,
+      change: changeAddress,
+      opreturn,
+      gui: true,
+      verify: true,
+      push: true,
+    };
     const _urlParams = {
       token: Config.token,
       coin,
@@ -305,12 +348,14 @@ export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, 
       address: sendToAddress,
       change: changeAddress,
       gui: true,
-      push: true,
       verify: true,
+      push: true,
     };
+
+
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      fetchType.get
+      isKv ? `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx` : `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);
@@ -343,7 +388,7 @@ export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAd
       verify: true,
       push: true,
     };
-    return fetch(
+    fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
       fetchType.get
     )
@@ -364,10 +409,21 @@ export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAd
   });
 }
 
-export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, btcFee) => {
+export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, btcFee, isKv, opreturn) => {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
+    const payload = {
+      token: Config.token,
+      coin,
+      value,
+      address: changeAddress,
+      change: changeAddress,
+      opreturn,
+      gui: true,
+      verify: true,
+      push: false,
+    };
     const _urlParams = {
       token: Config.token,
       coin,
@@ -378,9 +434,10 @@ export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, change
       verify: true,
       push: false,
     };
+
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      fetchType.get
+      isKv ? `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx` : `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);

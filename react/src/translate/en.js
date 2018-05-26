@@ -135,6 +135,8 @@ export const LANG_EN = {
     'HISTORY': 'History',
   },
   'INDEX': {
+    'HIDE_SENSITIVE_DATA': 'Hide sensitive data',
+    'SHOW_SENSITIVE_DATA': 'Show sensitive data',
     'MINING_IS_ENABLED': 'Mining is enabled',
     'STAKING_IS_DISABLED': 'Staking is disabled',
     'STAKING_IS_ENABLED': 'Staking is enabled',
@@ -1017,6 +1019,7 @@ export const LANG_EN = {
     'NINJA': 'NINJA (NINJA)',
     'GLXT': 'GLXToken (GLXT)',
     'BNTN': 'Blocnation (BNTN)',
+    'PRLPAY': 'Pearl Pay Coin (PRLPAY)',
     'OOT': 'Utrum (OOT)',
   },
   'TOOLS': {
@@ -1090,6 +1093,20 @@ export const LANG_EN = {
     'ADDRESS_MULTI': 'Enter KMD pub addresses each address on a new line.',
     'REMOTE_CALL_EXPLORER_ACKNOWLEDGEMENT': 'Privacy notification: this is a remote call to KMD explorer servers.',
     'ALL_BALANCES_ARE_EMPTY': 'All balances are empty',
+  },
+  'KV': {
+    'TAG': 'Tag',
+    'TITLE': 'Title',
+    'CONTENT': 'Content',
+    'SEND_KV': 'Send KV',
+    'SEND_TX': 'Send transaction',
+    'CHARS_LEFT': 'Chars left',
+    'KV_ERR_TOO_LONG': 'Content is too long! Max 4096 chars.',
+    'ENTER_A_TITLE': 'Enter a title',
+    'ENTER_A_TAG': 'Enter a tag',
+    'KV_VIEW': 'KV view',
+    'TX_VIEW': 'Transactions view',
+    'KV_HISTORY': 'KV history',
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Generate a new passphrase',

@@ -163,7 +163,7 @@ class ToolsOfflineSigCreate extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_FROM') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="sendFrom"
             onChange={ this.updateInput }
             value={ this.state.sendFrom }
@@ -189,7 +189,7 @@ class ToolsOfflineSigCreate extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="sendTo"
             onChange={ this.updateInput }
             value={ this.state.sendTo }

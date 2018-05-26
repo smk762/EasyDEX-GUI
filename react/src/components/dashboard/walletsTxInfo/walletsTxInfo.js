@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import sortByDate from '../../../util/sort';
 import {
   toggleDashboardTxInfoModal,
   getTxDetails,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
-import explorerList from '../../../util/explorerList';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import Config from '../../../config';
 
 const shell = window.require('electron').shell;
 
@@ -43,6 +43,7 @@ class WalletsTxInfo extends React.Component {
       this.setState(Object.assign({}, this.state, {
         txDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
         rawTxDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
+        activeTab: Config.experimentalFeatures && nextProps.ActiveCoin.showTransactionInfoTxIndex && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn.kvDecoded ? 4 : 0,
       }));
     } else {
       if (nextProps.ActiveCoin &&

@@ -37,7 +37,7 @@ class ToolsPubCheck extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('TOOLS.PUB_ADDR') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="pub"
             onChange={ this.updateInput }
             value={ this.state.pub }

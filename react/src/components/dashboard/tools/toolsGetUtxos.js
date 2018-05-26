@@ -66,7 +66,7 @@ class ToolsGetUtxos extends React.Component {
             { _coin[0] === 'KMD' &&
               <td>{ _utxos[i].locktime }</td>
             }
-            <td>{ _utxos[i].txid }</td>
+            <td className="blur">{ _utxos[i].txid }</td>
           </tr>
         );
       }
@@ -157,7 +157,7 @@ class ToolsGetUtxos extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="utxoAddr"
             onChange={ this.updateInput }
             value={ this.state.utxoAddr }

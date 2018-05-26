@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import sortByDate from '../../../util/sort';
-import formatValue from '../../../util/formatValue';
+import { sortByDate } from 'agama-wallet-lib/src/utils';
+import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import {
   toggleDashboardTxInfoModal,
   changeActiveAddress,
   getDashboardUpdate,
+  shepherdElectrumKVTransactionsPromise,
   shepherdElectrumTransactions,
   toggleClaimInterestModal,
   shepherdElectrumCheckServerConnection,
@@ -28,7 +29,7 @@ import {
   AddressListRender,
   WalletsDataRender,
 } from  './walletsData.render';
-import { secondsToString } from '../../../util/time';
+import { secondsToString } from 'agama-wallet-lib/src/time';
 import getRandomElectrumServer from '../../../util/serverRandom';
 import DoubleScrollbar from 'react-double-scrollbar';
 
@@ -59,13 +60,19 @@ class WalletsData extends React.Component {
       txhistory: null,
       loading: false,
       reconnectInProgress: false,
+      kvView: false,
+      kvHistory: null,
+      txhistoryCopy: null,
     };
+    this.kvHistoryInterval = null;
     this.openDropMenu = this.openDropMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.refreshTxHistory = this.refreshTxHistory.bind(this);
     this.openClaimInterestModal = this.openClaimInterestModal.bind(this);
     this.displayClaimInterestUI = this.displayClaimInterestUI.bind(this);
     this.spvAutoReconnect = this.spvAutoReconnect.bind(this);
+    this.toggleKvView = this.toggleKvView.bind(this);
+    this._setTxHistory = this._setTxHistory.bind(this);
   }
 
   componentWillMount() {
@@ -82,6 +89,36 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  toggleKvView() {
+    this.setState({
+      kvView: !this.state.kvView,
+    });
+
+    if (!this.state.kvView) {
+      shepherdElectrumKVTransactionsPromise(
+        this.props.ActiveCoin.coin,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+      )
+      .then((res) => {
+        // console.warn('kvHistory', res);
+
+        if (res.msg === 'success') {
+          this.setState({
+            kvHistory: res.result,
+            txhistoryCopy: this.state.txhistory,
+            searchTerm: '',
+          });
+
+          setTimeout(() => {
+            this._setTxHistory();
+          }, 200);
+        }
+      });
+    } else {
+      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+    }
   }
 
   displayClaimInterestUI() {
@@ -237,6 +274,61 @@ class WalletsData extends React.Component {
       columns.push(_col);
     }
 
+    if (this.state &&
+        this.state.kvView) {
+      columns = [];
+
+      _col = [{
+        id: 'direction',
+        Header: translate('INDEX.DIRECTION'),
+        Footer: translate('INDEX.DIRECTION'),
+        className: 'colum--direction',
+        headerClassName: 'colum--direction',
+        footerClassName: 'colum--direction',
+        accessor: (tx) => TxTypeRender.call(this, tx.category || tx.type),
+      },
+      {
+        id: 'tag',
+        Header: 'Tag',
+        Footer: 'Tag',
+        headerClassName: 'hidden-xs hidden-sm',
+        footerClassName: 'hidden-xs hidden-sm',
+        className: 'hidden-xs hidden-sm',
+        accessor: (tx) => tx.opreturn.kvDecoded.tag,
+      },
+      {
+        id: 'title',
+        Header: 'Title',
+        Footer: 'Title',
+        accessor: (tx) => tx.opreturn.kvDecoded.content.title,
+      },
+      {
+        id: 'timestamp',
+        Header: translate('INDEX.TIME'),
+        Footer: translate('INDEX.TIME'),
+        accessor: (tx) => secondsToString(tx.timestamp || tx.time || tx.blocktime),
+      },
+      {
+        id: 'tx-detail',
+        Header: 'Content',
+        Footer: 'Content',
+        className: 'colum--txinfo',
+        headerClassName: 'colum--txinfo',
+        footerClassName: 'colum--txinfo',
+        accessor: (tx) => TransactionDetailRender.call(this, tx),
+      }];
+
+      columns.push(..._col);
+
+      if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
+        delete _col[0].Footer;
+        delete _col[1].Footer;
+        delete _col[2].Footer;
+        delete _col[3].Footer;
+        delete _col[4].Footer;
+      }
+    }
+
     return columns;
   }
 
@@ -278,43 +370,44 @@ class WalletsData extends React.Component {
     Store.dispatch(toggleDashboardTxInfoModal(display, txIndex));
   }
 
-  componentWillReceiveProps(props) {
+  _setTxHistory(oldTxHistory) {
+    const _txhistory = this.state.kvView ? this.state.kvHistory : (oldTxHistory ? oldTxHistory : this.props.ActiveCoin.txhistory);
     let _stateChange = {};
 
     // TODO: figure out why changing ActiveCoin props doesn't trigger comp update
-    if (this.props.ActiveCoin.txhistory &&
-        this.props.ActiveCoin.txhistory !== 'loading' &&
-        this.props.ActiveCoin.txhistory !== 'no data' &&
-        this.props.ActiveCoin.txhistory !== 'connection error or incomplete data' &&
-        this.props.ActiveCoin.txhistory !== 'cant get current height' &&
-        this.props.ActiveCoin.txhistory.length) {
+    if (_txhistory &&
+        _txhistory !== 'loading' &&
+        _txhistory !== 'no data' &&
+        _txhistory !== 'connection error or incomplete data' &&
+        _txhistory !== 'cant get current height' &&
+        _txhistory.length) {
       _stateChange = Object.assign({}, _stateChange, {
-        itemsList: this.props.ActiveCoin.txhistory,
-        filteredItemsList: this.filterTransactions(this.props.ActiveCoin.txhistory, this.state.searchTerm),
-        txhistory: this.props.ActiveCoin.txhistory,
-        showPagination: this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory.length >= this.state.defaultPageSize,
-        itemsListColumns: this.generateItemsListColumns(this.props.ActiveCoin.txhistory.length),
+        itemsList: _txhistory,
+        filteredItemsList: this.filterTransactions(_txhistory, this.state.searchTerm),
+        txhistory: _txhistory,
+        showPagination: _txhistory && _txhistory.length >= this.state.defaultPageSize,
+        itemsListColumns: this.generateItemsListColumns(_txhistory.length),
         reconnectInProgress: false,
       });
     }
 
-    if (this.props.ActiveCoin.txhistory &&
-        this.props.ActiveCoin.txhistory === 'no data') {
+    if (_txhistory &&
+        _txhistory === 'no data') {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'no data',
         reconnectInProgress: false,
       });
     } else if (
-      this.props.ActiveCoin.txhistory &&
-      this.props.ActiveCoin.txhistory === 'loading'
+      _txhistory &&
+      _txhistory === 'loading'
     ) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'loading',
         reconnectInProgress: false,
       });
     } else if (
-      (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'connection error or incomplete data') ||
-      (this.props.ActiveCoin.txhistory && this.props.ActiveCoin.txhistory === 'cant get current height')
+      (_txhistory && _txhistory === 'connection error or incomplete data') ||
+      (_txhistory && _txhistory === 'cant get current height')
     ) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'connection error',
@@ -327,6 +420,10 @@ class WalletsData extends React.Component {
     }
 
     this.setState(Object.assign({}, _stateChange));
+  }
+
+  componentWillReceiveProps(props) {
+    this._setTxHistory();
   }
 
   spvAutoReconnect() {

@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import Config from '../../../config';
-import { secondsToString } from '../../../util/time';
 import { coindList } from '../../../util/coinHelper';
 import { getDebugLog } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
+import { secondsToString } from 'agama-wallet-lib/src/time';
 
 class DebugLogPanel extends React.Component {
   constructor() {

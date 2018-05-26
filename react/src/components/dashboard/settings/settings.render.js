@@ -146,12 +146,12 @@ export const SettingsRender = function() {
                   <CliPanel />
                 </PanelSection>
               }
-              { this.state.isExperimentalOn &&
+              { /*this.state.isExperimentalOn &&
                 <PanelSection
                   title={ translate('INDEX.UPDATE') }
                   icon="icon fa fa-cloud-download">
                   <AppUpdatePanel />
-                </PanelSection>
+                </PanelSection>*/
               }
             </Panel>
           </div>

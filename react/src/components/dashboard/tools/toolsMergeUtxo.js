@@ -15,8 +15,8 @@ import {
   shepherdElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import { isKomodoCoin } from '../../../util/coinHelper';
 import devlog from '../../../util/devlog';
+import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 
 const shell = window.require('electron').shell;
 
@@ -80,7 +80,7 @@ class ToolsMergeUTXO extends React.Component {
       change: 0,
     };
 
-    console.log(payload);
+    // console.log(payload);
 
     shepherdElectrumSplitUtxoPromise(payload)
     .then((res) => {
@@ -241,10 +241,10 @@ class ToolsMergeUTXO extends React.Component {
         _items.push(
           <tr key={ `tools-utxos-${i}` }>
             <td>{ _utxos[i].amount }</td>
-            <td>{ _utxos[i].address }</td>
+            <td className="blur">{ _utxos[i].address }</td>
             <td>{ _utxos[i].confirmations }</td>
             <td>{ _utxos[i].vout }</td>
-            <td>{ _utxos[i].txid }</td>
+            <td className="blur">{ _utxos[i].txid }</td>
           </tr>
         );
       }
@@ -307,7 +307,7 @@ class ToolsMergeUTXO extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('TOOLS.SEED') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="utxoMergeSeed"
             onChange={ this.updateInput }
             value={ this.state.utxoMergeSeed }
@@ -387,7 +387,7 @@ class ToolsMergeUTXO extends React.Component {
         }
         { this.state.utxoMergePushResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            TXID: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoMergePushResult }</div>
+            TXID: <div className="blur" style={{ wordBreak: 'break-all' }}>{ this.state.utxoMergePushResult }</div>
             { isKomodoCoin(this.state.utxoMergeCoin.split('|')[0]) &&
               <div className="margin-top-10">
                 <button
