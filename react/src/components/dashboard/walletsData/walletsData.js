@@ -102,6 +102,8 @@ class WalletsData extends React.Component {
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
       )
       .then((res) => {
+        // console.warn('kvHistory', res);
+
         if (res.msg === 'success') {
           this.setState({
             kvHistory: res.result && res.result.length ? res.result : 'no data',
@@ -343,24 +345,46 @@ class WalletsData extends React.Component {
   }
 
   refreshTxHistory() {
-    this.setState({
-      loading: true,
-    });
-    setTimeout(() => {
-      this.setState({
-        loading: false,
-      });
-    }, 1000);
+    if (this.state.kvView) {
+      shepherdElectrumKVTransactionsPromise(
+        this.props.ActiveCoin.coin,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+      )
+      .then((res) => {
+        // console.warn('kvHistory', res);
 
-    if (this.props.ActiveCoin.mode === 'native') {
-      Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
-    } else if (this.props.ActiveCoin.mode === 'spv') {
-      Store.dispatch(
-        shepherdElectrumTransactions(
-          this.props.ActiveCoin.coin,
-          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
-        )
-      );
+        if (res.msg === 'success') {
+          this.setState({
+            kvHistory: res.result && res.result.length ? res.result : 'no data',
+            txhistoryCopy: this.state.txhistory,
+            searchTerm: '',
+          });
+
+          setTimeout(() => {
+            this._setTxHistory();
+          }, 200);
+        }
+      });
+    } else {
+      this.setState({
+        loading: true,
+      });
+      setTimeout(() => {
+        this.setState({
+          loading: false,
+        });
+      }, 1000);
+
+      if (this.props.ActiveCoin.mode === 'native') {
+        Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+      } else if (this.props.ActiveCoin.mode === 'spv') {
+        Store.dispatch(
+          shepherdElectrumTransactions(
+            this.props.ActiveCoin.coin,
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+          )
+        );
+      }
     }
   }
 

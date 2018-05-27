@@ -556,6 +556,7 @@ export const SendRender = function() {
         </div>
 
         { this.renderOPIDListCheck() &&
+          this.props.ActiveCoin.mode === 'native' &&
           <div className="col-xs-12">
             <div className="row">
               <div className="panel nav-tabs-horizontal">

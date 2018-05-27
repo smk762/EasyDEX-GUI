@@ -556,7 +556,7 @@ class SendCoin extends React.Component {
             },
           });
 
-          console.warn(kvEncode);
+          // console.warn(kvEncode);
           kvHex = kvEncode;
         }
 
