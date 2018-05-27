@@ -102,11 +102,9 @@ class WalletsData extends React.Component {
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
       )
       .then((res) => {
-        // console.warn('kvHistory', res);
-
         if (res.msg === 'success') {
           this.setState({
-            kvHistory: res.result,
+            kvHistory: res.result && res.result.length ? res.result : 'no data',
             txhistoryCopy: this.state.txhistory,
             searchTerm: '',
           });
