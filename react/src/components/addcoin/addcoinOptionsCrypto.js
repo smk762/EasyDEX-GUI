@@ -16,7 +16,7 @@ const addCoinOptionsCrypto = () => {
   }];
 
   if (config.experimentalFeatures) {
-    _coins.push(/*{
+    _coins.push({
       label: 'ArtByte (ABY)',
       icon: 'ABY',
       value: `ABY|spv`,
@@ -185,7 +185,7 @@ const addCoinOptionsCrypto = () => {
       label: 'Zcoin (XZC)',
       icon: 'XZC',
       value: `XZC|spv`,
-    },*/ {
+    }, {
       label: 'Fujicoin (FJC)',
       icon: 'FJC',
       value: `FJC|spv`,
@@ -285,11 +285,11 @@ const addCoinOptionsCrypto = () => {
       label: 'Myriad (XMY)',
       icon: 'XMY',
       value: `XMY|spv`,
-    },/* {
+    }, {
       label: 'Groestlcoin (GRS)',
       icon: 'GRS',
       value: `GRS|spv`,
-    }, */{
+    }, {
       label: 'Hodlc (HODLC)',
       icon: 'HODLC',
       value: `HODLC|spv`,
@@ -306,6 +306,12 @@ const addCoinOptionsCrypto = () => {
       icon: 'BTCZ',
       value: `BTCZ|spv`,
     });
+  }
+
+  for (let i = 0; i < _coins.length; i++) {
+    if (!mainWindow.electrumServers[_coins[i].icon.toLowerCase()]) {
+      _coins = _coins.filter(item => item.icon !== _coins[i].icon);
+    }
   }
 
   return _coins;
