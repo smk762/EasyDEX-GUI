@@ -2,7 +2,9 @@ import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import config from '../../config';
 
-const addCoinOptionsCrypto = () => {
+let _prepCoinsList;
+
+const prepCoinsList = () => {
   const availableKMDModes = mainWindow.arch === 'x64' ? 'spv|native' : 'spv';
 
   let _coins = [{
@@ -314,7 +316,17 @@ const addCoinOptionsCrypto = () => {
     }
   }
 
+  _prepCoinsList = _coins;
+
   return _coins;
+};
+
+const addCoinOptionsCrypto = () => {
+  if (_prepCoinsList) {
+    return _prepCoinsList;
+  } else {
+    return prepCoinsList();
+  }
 }
 
 export default addCoinOptionsCrypto;

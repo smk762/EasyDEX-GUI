@@ -60,7 +60,7 @@ class Login extends React.Component {
       selectedPin: '',
       isExperimentalOn: false,
       enableEncryptSeed: true,
-      isCustomPinFilename: false,
+      isCustomPinFilename: true,
       customPinFilename: '',
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
