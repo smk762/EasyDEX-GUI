@@ -32,10 +32,12 @@ export const WalletsNavWithWalletRender = function() {
           this.props.ActiveCoin.mode === 'spv' &&
           <div>
             <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
-            <span className="blur">{ this.props &&
+            <span className="blur">{
+              this.props &&
               this.props.Dashboard &&
               this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin] &&
-              this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : '-' }</span>
+              this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : '-'
+            }</span>
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
               onClick={ () => this.copyMyAddress(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) }>

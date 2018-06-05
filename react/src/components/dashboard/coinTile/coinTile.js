@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import {
   getCoinTitle,
   getModeInfo,
+  isKomodoCoin,
 } from '../../../util/coinHelper';
 import CoinTileItem from './coinTileItem';
+import translate from '../../../translate/translate';
 
 import CoinTileRender from './coinTile.render';
 
@@ -40,9 +42,9 @@ class CoinTile extends React.Component {
           const modetip = _coinMode.tip;
           const modecolor = _coinMode.color;
 
-          const _coinTitle = getCoinTitle(coin);
-          const coinlogo = _coinTitle.logo;
-          const coinname = _coinTitle.name;
+          const _coinTitle = getCoinTitle(coin.toUpperCase());
+          const coinlogo = coin.toUpperCase();
+          const coinname = translate((isKomodoCoin(coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + coin.toUpperCase());
 
           items.push({
             coinlogo,

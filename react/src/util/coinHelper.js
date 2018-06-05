@@ -1,3 +1,5 @@
+ import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers'
+
 export const getCoinTitle = (coin) => {
   let coinlogo;
   let coinname;
@@ -739,37 +741,9 @@ export const coindList = () => {
 }
 
 export const isKomodoCoin = (coin) => {
-  if (coin === 'SUPERNET' ||
-      coin === 'REVS' ||
-      coin === 'PANGEA' ||
-      coin === 'DEX' ||
-      coin === 'JUMBLR' ||
-      coin === 'BET' ||
-      coin === 'CRYPTO' ||
-      coin === 'COQUI' ||
-      coin === 'CHAIN' ||
-      coin === 'GLXT' ||
-      coin === 'EQL' ||
-      coin === 'OOT' ||
-      coin === 'BNTN' ||
-      coin === 'PRLPPAY' ||
-      coin === 'HODL' ||
-      coin === 'MSHARK' ||
-      coin === 'BOTS' ||
-      coin === 'MGW' ||
-      coin === 'MVP' ||
-      coin === 'KV' ||
-      coin === 'CEAL' ||
-      coin === 'MESH' ||
-      coin === 'WLC' ||
-      coin === 'MNZ' ||
-      coin === 'CHIPS' ||
-      coin === 'KMD' ||
-      coin === 'AXO' ||
-      coin === 'ETOMIC' ||
-      coin === 'BTCH') {
-    return true;
-  }
+  return (kmdAssetChains.find((element) => {
+    return element === coin.toUpperCase();
+  }));
 }
 
 export const cryptoCoins = [
