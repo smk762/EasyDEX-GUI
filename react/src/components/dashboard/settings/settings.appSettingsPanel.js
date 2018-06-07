@@ -240,7 +240,7 @@ class AppSettingsPanel extends React.Component {
                     </button>
                   </td>
                 </tr>
-              );              
+              );
             }
           }
         }
@@ -366,10 +366,18 @@ class AppSettingsPanel extends React.Component {
       (!childKey && this.state.appConfigSchema[parentKey].type === 'number') ||
       (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'number')
     ) {
-      if (e.target.value === '') {
-        _appSettings[e.target.name] = _appSettingsPrev[e.target.name];
+      if (!childKey) {
+        if (e.target.value === '') {
+          _appSettings[e.target.name] = _appSettingsPrev[e.target.name];
+        } else {
+          _appSettings[e.target.name] = e.target.value.replace(/[^0-9]+/g, '');
+        }
       } else {
-        _appSettings[e.target.name] = e.target.value.replace(/[^0-9]+/g, '');
+        if (e.target.value === '') {
+          _appSettings[parentKey][childKey] = _appSettingsPrev[parentKey][childKey];
+        } else {
+          _appSettings[parentKey][childKey] = e.target.value.replace(/[^0-9]+/g, '');
+        }
       }
     } else {
       _appSettings[e.target.name] = e.target.value;
