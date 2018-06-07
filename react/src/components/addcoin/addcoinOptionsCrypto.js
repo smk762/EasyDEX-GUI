@@ -15,18 +15,12 @@ const prepCoinsList = () => {
   }
 
   for (let i = 0; i < coins.length; i++) {
-    _coins.push({
-      label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
-      icon: coins[i],
-      value: `${coins[i]}|${coins[i] === 'KMD' ? availableKMDModes : 'spv'}`,
-    });
-  }
-
-  for (let j = 0; j < 2; j++) { // run twice
-    for (let i = 0; i < _coins.length; i++) {
-      if (!mainWindow.electrumServers[_coins[i].icon.toLowerCase()]) {
-        _coins.splice(i, 1);
-      }
+    if (mainWindow.electrumServers[coins[i].toLowerCase()]) {
+      _coins.push({
+        label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
+        icon: coins[i],
+        value: `${coins[i]}|${coins[i] === 'KMD' ? availableKMDModes : 'spv'}`,
+      });
     }
   }
 

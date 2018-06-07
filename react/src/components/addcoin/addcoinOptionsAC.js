@@ -14,11 +14,13 @@ const addCoinOptionsAC = () => {
       availableModes = 'spv';
     }
 
-    _items.push({
-      label: translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`),
-      icon: _assetChains[i].toLowerCase(),
-      value: `${_assetChains[i].toUpperCase()}|${availableModes}`,
-    });
+    if (_assetChains[i] !== 'MVP') {
+      _items.push({
+        label: translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`),
+        icon: _assetChains[i].toLowerCase(),
+        value: `${_assetChains[i].toUpperCase()}|${availableModes}`,
+      });
+    }
   }
 
   if (config.experimentalFeatures) {

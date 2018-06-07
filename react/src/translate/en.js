@@ -1063,7 +1063,7 @@ export const LANG_EN = {
     'EFL': 'E-Gulden',
     'GBX': 'GoByte',
     'BSD': 'Bitsend',
-    'LBRY': 'LBRY Credits',
+    'LBC': 'LBRY Credits',
     'ERC': 'Europecoin',
     'BATA': 'Bata',
     'EMC2': 'Einsteinium',
