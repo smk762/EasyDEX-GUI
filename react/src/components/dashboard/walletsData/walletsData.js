@@ -346,6 +346,15 @@ class WalletsData extends React.Component {
   }
 
   refreshTxHistory() {
+    this.setState({
+      loading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+      });
+    }, 1000);
+
     if (this.state.kvView) {
       shepherdElectrumKVTransactionsPromise(
         this.props.ActiveCoin.coin,
@@ -367,15 +376,6 @@ class WalletsData extends React.Component {
         }
       });
     } else {
-      this.setState({
-        loading: true,
-      });
-      setTimeout(() => {
-        this.setState({
-          loading: false,
-        });
-      }, 1000);
-
       if (this.props.ActiveCoin.mode === 'native') {
         Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
       } else if (this.props.ActiveCoin.mode === 'spv') {
@@ -446,6 +446,14 @@ class WalletsData extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    if (props.ActiveCoin.coin !== 'BEER' &&
+        props.ActiveCoin.coin !== 'PIZZA' &&
+        props.ActiveCoin.coin !== 'KV') {
+      this.setState({
+        kvView: false,
+      });
+    }
+
     this._setTxHistory();
   }
 
@@ -454,11 +462,12 @@ class WalletsData extends React.Component {
       let _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
       let _server = [
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.ip,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.proto
       ];
       const _randomServer = getRandomElectrumServer(_spvServers, _server.join(':'));
 
-      shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port)
+      shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port, _randomServer.proto)
       .then((res) => {
         if (res.result) {
           shepherdElectrumSetServer(
@@ -469,7 +478,7 @@ class WalletsData extends React.Component {
           .then((serverSetRes) => {
             Store.dispatch(
               triggerToaster(
-                `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}`,
+                `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}:${_randomServer.proto}`,
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 'success'
               )
@@ -479,7 +488,7 @@ class WalletsData extends React.Component {
         } else {
           Store.dispatch(
             triggerToaster(
-              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
+              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port}:${_randomServer.proto} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
