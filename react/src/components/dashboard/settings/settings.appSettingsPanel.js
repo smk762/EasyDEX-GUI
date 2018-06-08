@@ -11,6 +11,7 @@ import {
   saveAppConfig,
   skipFullDashboardUpdate,
   triggerToaster,
+  shepherdElectrumKvServersList,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
@@ -26,7 +27,31 @@ class AppSettingsPanel extends React.Component {
     this._resetAppConfig = this._resetAppConfig.bind(this);
     this._skipFullDashboardUpdate = this._skipFullDashboardUpdate.bind(this);
     this._resetSPVCache = this._resetSPVCache.bind(this);
+    this._shepherdElectrumKvServersList = this._shepherdElectrumKvServersList.bind(this);
     this.updateInput = this.updateInput.bind(this);
+  }
+
+  _shepherdElectrumKvServersList() {
+    shepherdElectrumKvServersList()
+    .then((res) => {
+      if (res.msg === 'success') {
+        Store.dispatch(
+          triggerToaster(
+            'KV Electrum servers list is downloaded. Please restart the app.',
+            translate('INDEX.SETTINGS'),
+            'success'
+          )
+        );
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            'Unable to retrieve remote KV Electrum servers list',
+            translate('INDEX.SETTINGS'),
+            'error'
+          )
+        );
+      }
+    });
   }
 
   _resetSPVCache() {
@@ -237,6 +262,24 @@ class AppSettingsPanel extends React.Component {
                       className="btn btn-info waves-effect waves-light margin-left-30"
                       onClick={ this._resetSPVCache }>
                       { translate('SETTINGS.CLEAR_CACHE') }
+                    </button>
+                  </td>
+                </tr>
+              );
+            }
+
+            if (key === 'spv' &&
+                _key === 'syncServerListFromKv') {
+              items.push(
+                <tr key={ `app-settings-${key}-${_key}-size` }>
+                  <td
+                    colSpan="2"
+                    className="padding-15">
+                    <button
+                      type="button"
+                      className="btn btn-info waves-effect waves-light margin-left-15"
+                      onClick={ this._shepherdElectrumKvServersList }>
+                      Download KV Electrum servers list
                     </button>
                   </td>
                 </tr>
