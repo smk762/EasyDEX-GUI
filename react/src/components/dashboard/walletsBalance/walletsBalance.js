@@ -90,7 +90,7 @@ class WalletsBalance extends React.Component {
         if (type === 'total' &&
             this.props.ActiveCoin.balance &&
             this.props.ActiveCoin.balance.total) {
-          _balance = this.props.ActiveCoin.balance.total;
+          _balance = this.props.ActiveCoin.balance.total - this.props.ActiveCoin.balance.unconfirmed;
         }
 
         if (type === 'interest' &&
@@ -102,10 +102,10 @@ class WalletsBalance extends React.Component {
         if (type === 'transparent' &&
             this.props.ActiveCoin.balance &&
             this.props.ActiveCoin.balance.balance) {
-          _balance = this.props.ActiveCoin.balance.balance;
+          _balance = this.props.ActiveCoin.balance.balance- this.props.ActiveCoin.balance.unconfirmed;
         }
       } else {
-        _balance = this.props.ActiveCoin.balance.balance;
+        _balance = this.props.ActiveCoin.balance.balance - this.props.ActiveCoin.balance.unconfirmed;
       }
     }
 
