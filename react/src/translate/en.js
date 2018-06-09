@@ -772,10 +772,14 @@ export const LANG_EN = {
     'JUMBLR_MOTTO': 'Secure, Native and Decentralised Coin Anonymizer',
   },
   'SUPPORT': {
-    'FOR_GUIDES': 'For guides & FAQ please go to',
-    'TO_SEND_FEEDBACK': 'To send feedback please open a ticket at',
+    'FOR_GUIDES': 'For guides & FAQ please navigate to',
+    'TO_SEND_FEEDBACK_P1': 'For Feedback please open a ticket',
+    'TO_SEND_FEEDBACK_P2': 'or send an email to support@komodoplatform.com',
   },
   'SETTINGS': {
+    'DOWNLOAD_KV_ELECTRUMS_DONE': 'KV Electrum servers list is downloaded. Please restart the app.',
+    'DOWNLOAD_KV_ELECTRUMS_ERR': 'Unable to retrieve remote KV Electrum servers list',
+    'DOWNLOAD_KV_ELECTRUMS': 'Download KV Electrum servers list',
     'CURRENT_CACHE_SIZE': 'Current cache size',
     'CLEAR_CACHE': 'Clear cache',
     'PIN_RENAMED': 'Pin @template@ renamed',

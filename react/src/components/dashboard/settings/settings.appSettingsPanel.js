@@ -37,7 +37,7 @@ class AppSettingsPanel extends React.Component {
       if (res.msg === 'success') {
         Store.dispatch(
           triggerToaster(
-            'KV Electrum servers list is downloaded. Please restart the app.',
+            translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS_DONE'),
             translate('INDEX.SETTINGS'),
             'success'
           )
@@ -45,7 +45,7 @@ class AppSettingsPanel extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            'Unable to retrieve remote KV Electrum servers list',
+            translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS_ERR'),
             translate('INDEX.SETTINGS'),
             'error'
           )
@@ -279,7 +279,7 @@ class AppSettingsPanel extends React.Component {
                       type="button"
                       className="btn btn-info waves-effect waves-light margin-left-15"
                       onClick={ this._shepherdElectrumKvServersList }>
-                      Download KV Electrum servers list
+                      { translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS') }
                     </button>
                   </td>
                 </tr>
