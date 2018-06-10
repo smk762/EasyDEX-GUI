@@ -135,6 +135,7 @@ export const LANG_EN = {
     'HISTORY': 'History',
   },
   'INDEX': {
+    'EXPORT_TO_CSV': 'Export to CSV',
     'HIDE_SENSITIVE_DATA': 'Hide sensitive data',
     'SHOW_SENSITIVE_DATA': 'Show sensitive data',
     'MINING_IS_ENABLED': 'Mining is enabled',

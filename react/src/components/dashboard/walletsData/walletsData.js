@@ -14,6 +14,8 @@ import {
   shepherdElectrumCheckServerConnection,
   shepherdElectrumSetServer,
   electrumServerChanged,
+  shepherdElectrumTransactionsCSV,
+  shepherdNativeTransactionsCSV,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -64,6 +66,7 @@ class WalletsData extends React.Component {
       kvView: false,
       kvHistory: null,
       txhistoryCopy: null,
+      generatingCSV: false,
     };
     this.kvHistoryInterval = null;
     this.openDropMenu = this.openDropMenu.bind(this);
@@ -74,6 +77,7 @@ class WalletsData extends React.Component {
     this.spvAutoReconnect = this.spvAutoReconnect.bind(this);
     this.toggleKvView = this.toggleKvView.bind(this);
     this._setTxHistory = this._setTxHistory.bind(this);
+    this.exportToCSV = this.exportToCSV.bind(this);
   }
 
   componentWillMount() {
@@ -90,6 +94,66 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  exportToCSV() {
+    this.setState({
+      generatingCSV: true,
+    });
+
+    if (this.props.ActiveCoin.mode === 'spv') {
+      shepherdElectrumTransactionsCSV(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub)
+      .then((res) => {
+        this.setState({
+          generatingCSV: false,
+        });
+
+        if (res.msg === 'success') {
+          Store.dispatch(
+            triggerToaster(
+              `CSV export is saved at ${res.result}`,
+              'Transaction history export',
+              'success toastr-wide',
+              false
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              res.result,
+              'CSV export error',
+              'error'
+            )
+          );
+        }
+      });
+    } else {
+      shepherdNativeTransactionsCSV(this.props.ActiveCoin.coin)
+      .then((res) => {
+        this.setState({
+          generatingCSV: false,
+        });
+
+        if (res.msg === 'success') {
+          Store.dispatch(
+            triggerToaster(
+              res.result,
+              `CSV export is saved ${res.result}`,
+              'success',
+              false
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              res.result,
+              'CSV export error',
+              'error'
+            )
+          );
+        }
+      });
+    }
   }
 
   toggleKvView() {
@@ -560,7 +624,14 @@ class WalletsData extends React.Component {
     } else if (this.state.itemsList && this.state.itemsList.length) {
       return (
         <DoubleScrollbar>
-        { TxHistoryListRender.call(this) }
+          { TxHistoryListRender.call(this) }
+          <div className="margin-left-5 margin-top-30">
+            <span
+              className="pointer"
+              onClick={ this.exportToCSV }>
+              <i className="icon fa-file-excel-o margin-right-10"></i>{ this.state.generatingCSV ? 'Generating CSV...' : translate('INDEX.EXPORT_TO_CSV') }
+            </span>
+          </div>
         </DoubleScrollbar>
       );
     }
