@@ -13,6 +13,7 @@ import {
   shepherdGetLocalBTCFees,
   shepherdGetRemoteTimestamp,
   copyString,
+  loginWithPin,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -31,7 +32,7 @@ import {
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import { isPositiveNumber } from 'agama-wallet-lib/src/utils';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
 
 // TODO: - render z address trim
@@ -72,6 +73,8 @@ class SendCoin extends React.Component {
       kvSendTitle: '',
       kvSendContent: '',
       kvHex: '',
+      pin: '',
+      noUtxo: false,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -91,7 +94,23 @@ class SendCoin extends React.Component {
     this.onSliderChange = this.onSliderChange.bind(this);
     this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
     this.toggleKvSend = this.toggleKvSend.bind(this);
+    this.verifyPin = this.verifyPin.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  verifyPin() {
+    loginWithPin(this.state.pin, mainWindow.pinAccess)
+    .then((res) => {
+      if (res.msg === 'success') {
+        this.refs.pin.value = '';
+
+        this.setState({
+          pin: '',
+        });
+
+        this.changeSendCoinStep(2);
+      }
+    });
   }
 
   /*loadTestData() {
@@ -532,6 +551,8 @@ class SendCoin extends React.Component {
           currentStep: 0,
           spvVerificationWarning: false,
           spvPreflightSendInProgress: false,
+          pin: '',
+          noUtxo: false,
         });
       } else {
         Store.dispatch(clearLastSendToResponseState());
@@ -593,6 +614,7 @@ class SendCoin extends React.Component {
             } else {
               this.setState(Object.assign({}, this.state, {
                 spvPreflightSendInProgress: false,
+                noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
               }));
             }
           });
