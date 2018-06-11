@@ -111,8 +111,8 @@ class WalletsData extends React.Component {
         if (res.msg === 'success') {
           Store.dispatch(
             triggerToaster(
-              `CSV export is saved at ${res.result}`,
-              'Transaction history export',
+              `${translate('INDEX.CSV_EXPORT_SAVED')} ${res.result}`,
+              translate('INDEX.TX_HISTORY_EXPORT'),
               'success toastr-wide',
               false
             )
@@ -121,7 +121,7 @@ class WalletsData extends React.Component {
           Store.dispatch(
             triggerToaster(
               res.result,
-              'CSV export error',
+              translate('INDEX.CSV_EXPORT_ERR'),
               'error'
             )
           );
@@ -137,9 +137,9 @@ class WalletsData extends React.Component {
         if (res.msg === 'success') {
           Store.dispatch(
             triggerToaster(
-              res.result,
-              `CSV export is saved ${res.result}`,
-              'success',
+              `${translate('INDEX.CSV_EXPORT_SAVED')} ${res.result}`,
+              translate('INDEX.TX_HISTORY_EXPORT'),
+              'success toastr-wide',
               false
             )
           );
@@ -147,7 +147,7 @@ class WalletsData extends React.Component {
           Store.dispatch(
             triggerToaster(
               res.result,
-              'CSV export error',
+              translate('INDEX.CSV_EXPORT_ERR'),
               'error'
             )
           );
@@ -629,7 +629,7 @@ class WalletsData extends React.Component {
             <span
               className="pointer"
               onClick={ this.exportToCSV }>
-              <i className="icon fa-file-excel-o margin-right-10"></i>{ this.state.generatingCSV ? 'Generating CSV...' : translate('INDEX.EXPORT_TO_CSV') }
+              <i className="icon fa-file-excel-o margin-right-10"></i>{ this.state.generatingCSV ? translate('INDEX.GENERATING_CSV') + '...' : translate('INDEX.EXPORT_TO_CSV') }
             </span>
           </div>
         </DoubleScrollbar>

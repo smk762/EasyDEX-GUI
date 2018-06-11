@@ -18,7 +18,7 @@ import Store from '../../../store';
 import devlog from '../../../util/devlog';
 import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class ToolsSplitUTXO extends React.Component {
   constructor() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class Support extends React.Component {
   constructor() {

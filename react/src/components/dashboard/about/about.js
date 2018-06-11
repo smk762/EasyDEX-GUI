@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class About extends React.Component {
   constructor() {
@@ -10,7 +10,7 @@ class About extends React.Component {
 
   openExternalWindow(url) {
     const remote = window.require('electron').remote;
-    return shell.openExternal(url);    
+    return shell.openExternal(url);
   }
 
   render() {

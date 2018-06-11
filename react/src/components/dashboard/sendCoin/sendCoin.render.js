@@ -5,6 +5,7 @@ import ReactTooltip from 'react-tooltip';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
+import mainWindow from '../../../util/mainWindow';
 
 const kvCoins = {
   'KV': true,
@@ -389,6 +390,31 @@ export const SendRender = function() {
                   }
                 </div>
               }
+              { Config.requirePinToConfirmTx &&
+                mainWindow.pinAccess &&
+                <div className="row padding-top-30">
+                  <div className="col-lg-12 col-sm-12 col-xs-12 form-group form-material">
+                    <label
+                      className="control-label bold"
+                      htmlFor="pinNumber">
+                      { translate('SEND.PIN_NUMBER') }
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      name="pin"
+                      ref="pin"
+                      value={ this.state.pin }
+                      onChange={ this.updateInput }
+                      id="pinNumber"
+                      placeholder={ translate('SEND.ENTER_YOUR_PIN') }
+                      autoComplete="off" />
+                  </div>
+                </div>
+              }
+              { this.state.noUtxo &&
+                <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
+              }
               { this.state.spvPreflightSendInProgress &&
                 <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
               }
@@ -407,7 +433,7 @@ export const SendRender = function() {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={ () => this.changeSendCoinStep(2) }>
+                    onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>
                     { translate('INDEX.CONFIRM') }
                   </button>
                 </div>

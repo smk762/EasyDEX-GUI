@@ -135,6 +135,10 @@ export const LANG_EN = {
     'HISTORY': 'History',
   },
   'INDEX': {
+    'GENERATING_CSV': 'Generating CSV',
+    'TX_HISTORY_EXPORT': 'Transaction history export',
+    'CSV_EXPORT_ERR': 'CSV export error',
+    'CSV_EXPORT_SAVED': 'CSV export is saved at',
     'EXPORT_TO_CSV': 'Export to CSV',
     'HIDE_SENSITIVE_DATA': 'Hide sensitive data',
     'SHOW_SENSITIVE_DATA': 'Show sensitive data',
@@ -886,6 +890,9 @@ export const LANG_EN = {
     'DOWNLOAD': 'Download',
   },
   'SEND': {
+    'NO_VALID_UTXO_ERR': 'No valid UTXO is available. Your previous transaction is still in unconfirmed state. Please retry later.',
+    'PIN_NUMBER': 'Pin number',
+    'ENTER_YOUR_PIN': 'Enter your pin number to confirm transaction',
     'CLOCK_OUT_OF_SYNC': 'Your local clock is not set properly. This will prevent sending a KMD transaction.',
     'FEE_PER_BYTE': 'Fee per byte',
     'PER_KB': 'per KB',
