@@ -9,7 +9,6 @@ class About extends React.Component {
   }
 
   openExternalWindow(url) {
-    const remote = window.require('electron').remote;
     return shell.openExternal(url);
   }
 

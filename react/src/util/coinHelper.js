@@ -285,36 +285,7 @@ export const coindList = () => {
   const _coins = [
     'KMD',
     'CHIPS',
-    'BET',
-    'BOTS',
-    'CEAL',
-    'COQUI',
-    'CHAIN',
-    'GLXT',
-    'OOT',
-    'EQL',
-    'CRYPTO',
-    'HODL',
-    'DEX',
-    'JUMBLR',
-    'KV',
-    'MGW',
-    'MVP',
-    'MNZ',
-    'PANGEA',
-    'REVS',
-    'MSHARK',
-    'MESH',
-    'SUPERNET',
-    'WLC',
-    'AXO',
-    'ETOMIC',
-    'BTCH',
-    'BNTN',
-    'BEER',
-    'PIZZA',
-    'PRLPAY'
-  ];
+  ].concat(kmdAssetChains);
 
   return _coins;
 }
