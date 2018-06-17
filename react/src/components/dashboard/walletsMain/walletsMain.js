@@ -115,11 +115,8 @@ class WalletsMain extends React.Component {
 
       if (getCoinTitle(this.props.ActiveCoin.coin).titleBG) {
         _iconPath = `assets/images/native/${getCoinTitle(this.props.ActiveCoin.coin).logo.toLowerCase()}_header_title_logo.png`;
-      } else if (
-        !getCoinTitle(this.props.ActiveCoin.coin).titleBG &&
-        getCoinTitle(this.props.ActiveCoin.coin).logo
-      ) {
-        _iconPath = `assets/images/cryptologo/${getCoinTitle(this.props.ActiveCoin.coin).logo.toLowerCase()}.png`;
+      } else if (!getCoinTitle(this.props.ActiveCoin.coin).titleBG) {
+        _iconPath = `assets/images/cryptologo/${this.props.ActiveCoin.coin.toLowerCase()}.png`;
       }
 
       return _iconPath;

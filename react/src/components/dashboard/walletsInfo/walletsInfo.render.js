@@ -390,7 +390,7 @@ const WalletsInfoRender = function() {
                   <tr>
                     <td>{ translate('INDEX.UNCONFIRMED_BALANCE') }</td>
                     <td>
-                      { _balance.uncomfirmed }
+                      { _balance.unconfirmed }
                     </td>
                   </tr>
                 </tbody>

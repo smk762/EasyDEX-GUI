@@ -121,12 +121,13 @@ export const shepherdElectrumSetServer = (coin, address, port) => {
   });
 }
 
-export const shepherdElectrumCheckServerConnection = (address, port) => {
+export const shepherdElectrumCheckServerConnection = (address, port, proto) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token: Config.token,
       address,
       port,
+      proto,
     };
     fetch(
       `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/servers/test${urlParams(_urlParams)}`,
@@ -352,7 +353,6 @@ export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, 
       push: true,
     };
 
-
     return fetch(
       isKv ? `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx` : `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
       isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
@@ -535,6 +535,34 @@ export const shepherdElectrumSplitUtxoPromise = (payload) => {
       Store.dispatch(
         triggerToaster(
           'shepherdElectrumSendPromise',
+          'Error',
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+// get kv electrums list
+export const shepherdElectrumKvServersList = () => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token: Config.token,
+      save: true,
+    };
+    return fetch(
+      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/kv/servers${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'shepherdElectrumKvServersList',
           'Error',
           'error'
         )

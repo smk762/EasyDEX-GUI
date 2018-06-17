@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class About extends React.Component {
   constructor() {
@@ -9,8 +9,7 @@ class About extends React.Component {
   }
 
   openExternalWindow(url) {
-    const remote = window.require('electron').remote;
-    return shell.openExternal(url);    
+    return shell.openExternal(url);
   }
 
   render() {
@@ -36,7 +35,7 @@ class About extends React.Component {
           <br /><br />
 
           <div className="font-weight-600">{ translate('ABOUT.TESTERS') }</div>
-          { translate('ABOUT.TESTERS_P1') } <a className="link" onClick={ () => this.openExternalWindow('https://supernet.org/en/products/agama-wallet') }>{ translate('ABOUT.TESTERS_P2') }</a>.
+          { translate('ABOUT.TESTERS_P1') } <a className="link" onClick={ () => this.openExternalWindow('https://komodoplatform.com/komodo-wallets') }>{ translate('ABOUT.TESTERS_P2') }</a>.
           { translate('ABOUT.TESTERS_P3') } <a className="link" onClick={ () => this.openExternalWindow('https://sprnt.slack.com/messages/C0HT9MH96/') }>#testing-agama</a> Slack { translate('ABOUT.CHANNEL') }. <a className="link" onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>{ translate('ABOUT.GET_AN_INVITE') }</a> { translate('ABOUT.GET_AN_INVITE_P2') }.
           { translate('ABOUT.TESTERS_P4') }
 

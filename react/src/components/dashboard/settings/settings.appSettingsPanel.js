@@ -11,6 +11,7 @@ import {
   saveAppConfig,
   skipFullDashboardUpdate,
   triggerToaster,
+  shepherdElectrumKvServersList,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
@@ -26,7 +27,31 @@ class AppSettingsPanel extends React.Component {
     this._resetAppConfig = this._resetAppConfig.bind(this);
     this._skipFullDashboardUpdate = this._skipFullDashboardUpdate.bind(this);
     this._resetSPVCache = this._resetSPVCache.bind(this);
+    this._shepherdElectrumKvServersList = this._shepherdElectrumKvServersList.bind(this);
     this.updateInput = this.updateInput.bind(this);
+  }
+
+  _shepherdElectrumKvServersList() {
+    shepherdElectrumKvServersList()
+    .then((res) => {
+      if (res.msg === 'success') {
+        Store.dispatch(
+          triggerToaster(
+            translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS_DONE'),
+            translate('INDEX.SETTINGS'),
+            'success'
+          )
+        );
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS_ERR'),
+            translate('INDEX.SETTINGS'),
+            'error'
+          )
+        );
+      }
+    });
   }
 
   _resetSPVCache() {
@@ -240,7 +265,25 @@ class AppSettingsPanel extends React.Component {
                     </button>
                   </td>
                 </tr>
-              );              
+              );
+            }
+
+            if (key === 'spv' &&
+                _key === 'syncServerListFromKv') {
+              items.push(
+                <tr key={ `app-settings-${key}-${_key}-size` }>
+                  <td
+                    colSpan="2"
+                    className="padding-15">
+                    <button
+                      type="button"
+                      className="btn btn-info waves-effect waves-light margin-left-15"
+                      onClick={ this._shepherdElectrumKvServersList }>
+                      { translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS') }
+                    </button>
+                  </td>
+                </tr>
+              );
             }
           }
         }
@@ -366,10 +409,18 @@ class AppSettingsPanel extends React.Component {
       (!childKey && this.state.appConfigSchema[parentKey].type === 'number') ||
       (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'number')
     ) {
-      if (e.target.value === '') {
-        _appSettings[e.target.name] = _appSettingsPrev[e.target.name];
+      if (!childKey) {
+        if (e.target.value === '') {
+          _appSettings[e.target.name] = _appSettingsPrev[e.target.name];
+        } else {
+          _appSettings[e.target.name] = e.target.value.replace(/[^0-9]+/g, '');
+        }
       } else {
-        _appSettings[e.target.name] = e.target.value.replace(/[^0-9]+/g, '');
+        if (e.target.value === '') {
+          _appSettings[parentKey][childKey] = _appSettingsPrev[parentKey][childKey];
+        } else {
+          _appSettings[parentKey][childKey] = e.target.value.replace(/[^0-9]+/g, '');
+        }
       }
     } else {
       _appSettings[e.target.name] = e.target.value;

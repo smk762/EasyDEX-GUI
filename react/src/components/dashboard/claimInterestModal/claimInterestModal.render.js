@@ -24,7 +24,7 @@ export const _ClaimInterestTableRender = function() {
           <td className={ _transactionsList[i].amount > 10 ? 'green bold' : '' }>{ _transactionsList[i].amount }</td>
           <td>{ _transactionsList[i].interest }</td>
           <td className="locktime center">
-            { _transactionsList[i].locktime &&
+            { _transactionsList[i].locktime > 0 &&
               <i
                 data-tip={ `${translate('CLAIM_INTEREST.LOCKTIME_IS_SET_TO')} ${_transactionsList[i].locktime}` }
                 className="fa-check-circle green"></i>

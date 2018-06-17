@@ -1,54 +1,26 @@
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import config from '../../config';
+import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 
 const addCoinOptionsAC = () => {
-  const _assetChains = [
-    'bet',
-    'bots',
-    'ceal',
-    'mesh',
-    'coqui',
-    'chain',
-    'glxt',
-    'eql',
-    'crypto',
-    'hodl',
-    'dex',
-    'jumblr',
-    'kv',
-    'mgw',
-    'mnz',
-    'pangea',
-    'oot',
-    'revs',
-    'mshark',
-    'supernet',
-    'wlc',
-    'axo',
-    'etomic',
-    'btch',
-    'beer',
-    'pizza',
-    'vote2018',
-    'ninja',
-    'bntn',
-    'prlpay'
-  ];
+  const _assetChains = kmdAssetChains;
   let _items = [];
 
   for (let i = 0; i < _assetChains.length; i++) {
-    let availableModes = _assetChains[i] !== 'axo' && _assetChains[i] !== 'etomic' && _assetChains[i] !== 'mesh' && _assetChains[i] !== 'ceal' ? 'spv|native' : 'native';
+    let availableModes = _assetChains[i] !== 'AXO' && _assetChains[i] !== 'ETOMIC' && _assetChains[i] !== 'MESH' && _assetChains[i] !== 'CEAL' ? 'spv|native' : 'native';
 
     if (mainWindow.arch !== 'x64') {
       availableModes = 'spv';
     }
 
-    _items.push({
-      label: translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`),
-      icon: _assetChains[i],
-      value: `${_assetChains[i].toUpperCase()}|${availableModes}`,
-    });
+    if (_assetChains[i] !== 'MVP') {
+      _items.push({
+        label: translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`),
+        icon: _assetChains[i].toLowerCase(),
+        value: `${_assetChains[i].toUpperCase()}|${availableModes}`,
+      });
+    }
   }
 
   if (config.experimentalFeatures) {
@@ -64,7 +36,7 @@ const addCoinOptionsAC = () => {
 
         _items.push({
           label: translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`),
-          icon: _customAssetChains[key][i],
+          icon: _customAssetChains[key][i].toLowerCase(),
           value: `${_customAssetChains[key][i].toUpperCase()}|${key}`,
         });
       }

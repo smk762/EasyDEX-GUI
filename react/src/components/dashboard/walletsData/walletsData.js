@@ -14,6 +14,8 @@ import {
   shepherdElectrumCheckServerConnection,
   shepherdElectrumSetServer,
   electrumServerChanged,
+  shepherdElectrumTransactionsCSV,
+  shepherdNativeTransactionsCSV,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -32,6 +34,7 @@ import {
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import getRandomElectrumServer from '../../../util/serverRandom';
 import DoubleScrollbar from 'react-double-scrollbar';
+import mainWindow from '../../../util/mainWindow';
 
 /*import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
@@ -63,6 +66,7 @@ class WalletsData extends React.Component {
       kvView: false,
       kvHistory: null,
       txhistoryCopy: null,
+      generatingCSV: false,
     };
     this.kvHistoryInterval = null;
     this.openDropMenu = this.openDropMenu.bind(this);
@@ -73,6 +77,7 @@ class WalletsData extends React.Component {
     this.spvAutoReconnect = this.spvAutoReconnect.bind(this);
     this.toggleKvView = this.toggleKvView.bind(this);
     this._setTxHistory = this._setTxHistory.bind(this);
+    this.exportToCSV = this.exportToCSV.bind(this);
   }
 
   componentWillMount() {
@@ -91,6 +96,66 @@ class WalletsData extends React.Component {
     );
   }
 
+  exportToCSV() {
+    this.setState({
+      generatingCSV: true,
+    });
+
+    if (this.props.ActiveCoin.mode === 'spv') {
+      shepherdElectrumTransactionsCSV(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub)
+      .then((res) => {
+        this.setState({
+          generatingCSV: false,
+        });
+
+        if (res.msg === 'success') {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('INDEX.CSV_EXPORT_SAVED')} ${res.result}`,
+              translate('INDEX.TX_HISTORY_EXPORT'),
+              'success toastr-wide',
+              false
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              res.result,
+              translate('INDEX.CSV_EXPORT_ERR'),
+              'error'
+            )
+          );
+        }
+      });
+    } else {
+      shepherdNativeTransactionsCSV(this.props.ActiveCoin.coin)
+      .then((res) => {
+        this.setState({
+          generatingCSV: false,
+        });
+
+        if (res.msg === 'success') {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('INDEX.CSV_EXPORT_SAVED')} ${res.result}`,
+              translate('INDEX.TX_HISTORY_EXPORT'),
+              'success toastr-wide',
+              false
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              res.result,
+              translate('INDEX.CSV_EXPORT_ERR'),
+              'error'
+            )
+          );
+        }
+      });
+    }
+  }
+
   toggleKvView() {
     this.setState({
       kvView: !this.state.kvView,
@@ -106,7 +171,7 @@ class WalletsData extends React.Component {
 
         if (res.msg === 'success') {
           this.setState({
-            kvHistory: res.result,
+            kvHistory: res.result && res.result.length ? res.result : 'no data',
             txhistoryCopy: this.state.txhistory,
             searchTerm: '',
           });
@@ -127,7 +192,7 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.balance) {
       if (this.props.ActiveCoin.balance.interest &&
           this.props.ActiveCoin.balance.interest > 0) {
-        return 777;
+        return this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 : 777;
       } else if (
         (this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) ||
         (this.props.ActiveCoin.balance.balance && this.props.ActiveCoin.balance.balance >= 10)
@@ -289,8 +354,8 @@ class WalletsData extends React.Component {
       },
       {
         id: 'tag',
-        Header: 'Tag',
-        Footer: 'Tag',
+        Header: translate('KV.TAG'),
+        Footer: translate('KV.TAG'),
         headerClassName: 'hidden-xs hidden-sm',
         footerClassName: 'hidden-xs hidden-sm',
         className: 'hidden-xs hidden-sm',
@@ -298,8 +363,8 @@ class WalletsData extends React.Component {
       },
       {
         id: 'title',
-        Header: 'Title',
-        Footer: 'Title',
+        Header: translate('KV.TITLE'),
+        Footer: translate('KV.TITLE'),
         accessor: (tx) => tx.opreturn.kvDecoded.content.title,
       },
       {
@@ -310,8 +375,8 @@ class WalletsData extends React.Component {
       },
       {
         id: 'tx-detail',
-        Header: 'Content',
-        Footer: 'Content',
+        Header: translate('KV.CONTENT'),
+        Footer: translate('KV.CONTENT'),
         className: 'colum--txinfo',
         headerClassName: 'colum--txinfo',
         footerClassName: 'colum--txinfo',
@@ -354,15 +419,37 @@ class WalletsData extends React.Component {
       });
     }, 1000);
 
-    if (this.props.ActiveCoin.mode === 'native') {
-      Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
-    } else if (this.props.ActiveCoin.mode === 'spv') {
-      Store.dispatch(
-        shepherdElectrumTransactions(
-          this.props.ActiveCoin.coin,
-          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
-        )
-      );
+    if (this.state.kvView) {
+      shepherdElectrumKVTransactionsPromise(
+        this.props.ActiveCoin.coin,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+      )
+      .then((res) => {
+        // console.warn('kvHistory', res);
+
+        if (res.msg === 'success') {
+          this.setState({
+            kvHistory: res.result && res.result.length ? res.result : 'no data',
+            txhistoryCopy: this.state.txhistory,
+            searchTerm: '',
+          });
+
+          setTimeout(() => {
+            this._setTxHistory();
+          }, 200);
+        }
+      });
+    } else {
+      if (this.props.ActiveCoin.mode === 'native') {
+        Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
+      } else if (this.props.ActiveCoin.mode === 'spv') {
+        Store.dispatch(
+          shepherdElectrumTransactions(
+            this.props.ActiveCoin.coin,
+            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+          )
+        );
+      }
     }
   }
 
@@ -423,6 +510,14 @@ class WalletsData extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    if (props.ActiveCoin.coin !== 'BEER' &&
+        props.ActiveCoin.coin !== 'PIZZA' &&
+        props.ActiveCoin.coin !== 'KV') {
+      this.setState({
+        kvView: false,
+      });
+    }
+
     this._setTxHistory();
   }
 
@@ -431,11 +526,12 @@ class WalletsData extends React.Component {
       let _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
       let _server = [
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.ip,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.proto
       ];
       const _randomServer = getRandomElectrumServer(_spvServers, _server.join(':'));
 
-      shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port)
+      shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port, _randomServer.proto)
       .then((res) => {
         if (res.result) {
           shepherdElectrumSetServer(
@@ -446,7 +542,7 @@ class WalletsData extends React.Component {
           .then((serverSetRes) => {
             Store.dispatch(
               triggerToaster(
-                `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}`,
+                `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}:${_randomServer.proto}`,
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 'success'
               )
@@ -456,7 +552,7 @@ class WalletsData extends React.Component {
         } else {
           Store.dispatch(
             triggerToaster(
-              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
+              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port}:${_randomServer.proto} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -528,7 +624,14 @@ class WalletsData extends React.Component {
     } else if (this.state.itemsList && this.state.itemsList.length) {
       return (
         <DoubleScrollbar>
-        { TxHistoryListRender.call(this) }
+          { TxHistoryListRender.call(this) }
+          <div className="margin-left-5 margin-top-30">
+            <span
+              className="pointer"
+              onClick={ this.exportToCSV }>
+              <i className="icon fa-file-excel-o margin-right-10"></i>{ this.state.generatingCSV ? translate('INDEX.GENERATING_CSV') + '...' : translate('INDEX.EXPORT_TO_CSV') }
+            </span>
+          </div>
         </DoubleScrollbar>
       );
     }

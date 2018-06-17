@@ -10,7 +10,7 @@ import WalletsTxInfoRender from './walletsTxInfo.render';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class WalletsTxInfo extends React.Component {
   constructor() {
