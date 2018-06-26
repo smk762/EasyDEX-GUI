@@ -1,4 +1,4 @@
- import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers'
+import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers'
 
 export const getCoinTitle = (coin) => {
   let coinlogo;
