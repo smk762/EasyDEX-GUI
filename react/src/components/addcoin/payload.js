@@ -89,7 +89,7 @@ export const acConfig = {
   	addnode: '78.47.146.222',
   },
 	GLXT: {
-    'ac_supply': 100000000,
+    'ac_supply': 10000000000,
     addnode: '13.230.224.15',
   },
 	EQL: {
