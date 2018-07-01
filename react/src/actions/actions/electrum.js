@@ -203,6 +203,18 @@ export const shepherdElectrumBalance = (coin, address) => {
     })
     .then(response => response.json())
     .then(json => {
+      console.log(json.electrumres);
+      if (json &&
+          json.electrumres &&
+          json.electrumres.code) {
+        dispatch(
+          triggerToaster(
+            json.electrumres.message,
+            'Error',
+            'error'
+          )
+        );
+      }
       dispatch(shepherdElectrumBalanceState(json));
     });
   }
