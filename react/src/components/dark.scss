@@ -1,0 +1,95 @@
+/* dark */
+body {
+  background-color: #4c4f69;
+}
+
+.modal {
+  .modal-content {
+    background-color: #3f414e;
+    color: #fff;
+  }
+  .modal-header {
+    background: rgb(47, 50, 70) !important;
+  }
+}
+
+.Select-control,
+.Select-menu-outer,
+.Select-menu-outer .Select-option {
+  background-color: #2f3140;
+}
+.Select-menu-outer .Select-option:hover {
+  background-color: #383a4c !important;
+}
+
+.Select * {
+  color: #fff !important;
+}
+.Select-arrow {
+  border-color: #fff transparent transparent !important;
+}
+.Select.is-open .Select-arrow {
+  border-color: transparent transparent #fff !important;
+}
+
+.Select.is-open .Select-control,
+.Select.is-focused .Select-control {
+  border: 1px solid rgba(204, 204, 204, 0.7) !important;
+}
+.Select.is-open,
+.Select.is-focused {
+  .Select-menu-outer {
+    border: 1px solid rgba(204, 204, 204, 0.7) !important;
+    border-top-color: rgba(204, 204, 204, 0.3) !important;
+  }
+}
+
+select.form-control.form-material,
+.Select-placeholder,
+.Select-value {
+  color: #fff;
+  background-color: #2f3140;
+  border-color: #fff transparent transparent;
+}
+
+select.form-control.form-material {
+  border-color: #2f3140;
+}
+
+.page-login {
+  .Select-control {
+    border: 1px solid rgba(204, 204, 204, 0.2);
+  }
+}
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:hover,
+.btn-outline-primary {
+  background-color: #7d7e8c !important;
+  border-color: #7d7e8c !important;
+  color: #fff;
+}
+
+.btn-add-coin-item {
+  right: 64px;
+}
+
+.alert.alert-icon.alert-primary {
+  background: none;
+  border: 1px solid rgba(204, 204, 204, 0.2);
+  color: #fff;
+}
+
+input.labelauty:checked + label {
+  background-color: #21242d !important;
+}
+
+input.labelauty + label,
+input.labelauty + label:hover,
+input.labelauty + label:focus {
+  background: none !important;
+  border: 1px solid rgba(204, 204, 204, 0.2) !important;
+  color: #fff !important;
+}
