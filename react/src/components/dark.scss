@@ -1,4 +1,74 @@
 /* dark */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+
+   input {
+    display: none;
+  }
+}
+
+.slider {
+  border-radius: 20px;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #383a4e;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+
+  &.round {
+    border-radius: 34px;
+
+    &:before {
+      border-radius: 50%;
+    }
+  }
+  &:before {
+    border-radius: 50%;
+    position: absolute;
+    content: '';
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #ACAEBF;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+}
+
+.toggle-label {
+  color: #fff;
+  display: inline-block;
+  position: relative;
+  top: -6px;
+  left: 12px;
+}
+
+input:checked + .slider {
+  background-color: #262733;
+
+  &:before {
+    background-color: #fff;
+  }
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #262733;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
 body {
   background-color: #4c4f69;
 }
@@ -44,16 +114,19 @@ body {
   }
 }
 
-select.form-control.form-material,
+select.form-control,
 .Select-placeholder,
 .Select-value {
-  color: #fff;
+  color: #fff !important;
   background-color: #2f3140;
   border-color: #fff transparent transparent;
 }
 
-select.form-control.form-material {
+select.form-control {
   border-color: #2f3140;
+}
+select.form-control:focus {
+  border-color: #fff;
 }
 
 .page-login {
@@ -66,7 +139,15 @@ select.form-control.form-material {
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary:hover,
-.btn-outline-primary {
+.btn-outline-primary,
+.btn-default,
+.btn-default:focus,
+.btn-default:active,
+.btn-default:hover,
+.btn-info,
+.btn-info:focus,
+.btn-info:active,
+.btn-info:hover {
   background-color: #7d7e8c !important;
   border-color: #7d7e8c !important;
   color: #fff;
@@ -74,6 +155,17 @@ select.form-control.form-material {
 
 .btn-add-coin-item {
   right: 64px;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  color: #fff !important;
+}
+
+.btn-save-coin-selection,
+.btn-load-coin-selection {
+  width: 126px;
+  border-radius: 0;
 }
 
 .alert.alert-icon.alert-primary {
@@ -92,4 +184,88 @@ input.labelauty + label:focus {
   background: none !important;
   border: 1px solid rgba(204, 204, 204, 0.2) !important;
   color: #fff !important;
+}
+
+.dropdown-menu {
+  background-color: #2f3140;
+  padding: 0;
+
+  li > a {
+    color: #fff;
+  }
+  li > a:hover {
+    background: #525671;
+    color: #fff;
+  }
+}
+
+.__react_component_tooltip {
+  &.type-dark {
+    background-color: #373842 !important;
+  }
+}
+
+.login-settings-modal .modal-body {
+  background-color: #3f414e;
+  color: #fff;
+
+  h2 {
+    color: #fff;
+  }
+}
+
+#section-iguana-wallet-settings,
+#section-iguana-wallet-settings > .row {
+  background-color: #3f414e;
+  color: #fff;
+
+  h4,
+  h5 {
+    color: #fff;
+    font-weight: bold;
+  }
+  .panel,
+  .panel-title {
+    background-color: #5e6173;
+    color: #fff;
+  }
+  .panel.active {
+    .panel-collapse.active {
+      border-top: solid 1px rgba(255, 255, 255, 0.3)
+    }
+  }
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+textarea {
+  background: #2f3140;
+  border: solid 1px #2f3140;
+  color: #fff !important;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  border: solid 1px #fff;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+  padding: 5px 10px;
+}
+
+.settings-help {
+  color: #fff;
+}
+
+.table-striped {
+  color: #fff;
+
+  th {
+    color: #fff !important;
+  }
 }
