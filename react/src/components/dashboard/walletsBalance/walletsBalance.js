@@ -107,6 +107,8 @@ class WalletsBalance extends React.Component {
       } else {
         _balance = Number(this.props.ActiveCoin.balance.balance) - Number(Math.abs(this.props.ActiveCoin.balance.unconfirmed));
       }
+
+      _balance = _balance.toFixed(8);
     }
 
     if (mainWindow.appConfig.fiatRates &&
