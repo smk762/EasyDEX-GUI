@@ -7,7 +7,11 @@ import {
 } from '../storeType';
 import translate from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
@@ -22,10 +26,10 @@ const getAppInfoState = (json) => {
 export const getAppInfo = () => {
   return dispatch => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/appinfo${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/appinfo${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -102,7 +106,7 @@ export const getDebugLog = (target, linesCount, acName) => {
   let payload = {
     herdname: target,
     lastLines: linesCount,
-    token: Config.token,
+    token,
   };
 
   if (acName) {
@@ -111,7 +115,7 @@ export const getDebugLog = (target, linesCount, acName) => {
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/debuglog`,
+      `http://127.0.0.1:${agamaPort}/shepherd/debuglog`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -132,11 +136,11 @@ export const getDebugLog = (target, linesCount, acName) => {
 export const saveAppConfig = (_payload) => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/appconf`,
+      `http://127.0.0.1:${agamaPort}/shepherd/appconf`,
       fetchType(
         JSON.stringify({
           payload: _payload,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -174,10 +178,10 @@ const getAppConfigState = (json) => {
 export function getAppConfig() {
   return dispatch => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/appconf${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/appconf${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -198,8 +202,8 @@ export function getAppConfig() {
 export const resetAppConfig = () => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/appconf/reset`,
-      fetchType(JSON.stringify({ token: Config.token })).post
+      `http://127.0.0.1:${agamaPort}/shepherd/appconf/reset`,
+      fetchType(JSON.stringify({ token })).post
     )
     .catch((error) => {
       console.log(error);
@@ -230,11 +234,11 @@ export const coindGetStdout = (chain) => {
 
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       chain,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/coind/stdout${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/coind/stdout${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -259,16 +263,16 @@ export const getWalletDatKeys = (chain, keyMatchPattern) => {
 
   return new Promise((resolve, reject) => {
     const _urlParams1 = {
-      token: Config.token,
+      token,
       chain,
       search: keyMatchPattern,
     };
     const _urlParams2 = {
-      token: Config.token,
+      token,
       chain,
     };
     fetch(
-      keyMatchPattern ? `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys${urlParams(_urlParams1)}` : `http://127.0.0.1:${Config.agamaPort}/shepherd/coindwalletkeys${urlParams(_urlParams2)}`,
+      keyMatchPattern ? `http://127.0.0.1:${agamaPort}/shepherd/coindwalletkeys${urlParams(_urlParams1)}` : `http://127.0.0.1:${agamaPort}/shepherd/coindwalletkeys${urlParams(_urlParams2)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -295,12 +299,12 @@ export const dumpPrivKey = (coin, address, isZaddr) => {
       chain: coin,
       cmd: isZaddr ? 'z_exportkey' : 'dumpprivkey',
       params: [ address ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch(function(error) {
@@ -327,12 +331,12 @@ export const validateAddress = (coin, address, isZaddr) => {
       chain: coin,
       cmd: isZaddr ? 'z_validateaddress' : 'validateaddress',
       params: [ address ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch(function(error) {
@@ -355,8 +359,8 @@ export const validateAddress = (coin, address, isZaddr) => {
 export const resetSPVCache = () => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/cache/delete`,
-      fetchType(JSON.stringify({ token: Config.token })).post
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/cache/delete`,
+      fetchType(JSON.stringify({ token })).post
     )
     .catch((error) => {
       console.log(error);

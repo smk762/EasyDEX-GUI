@@ -99,12 +99,12 @@ export const getSyncInfoNative = (coin, skipDebug, skipRemote, suppressErrors) =
       mode: null,
       chain: coin,
       cmd: 'getinfo',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -203,13 +203,13 @@ export const getBlockTemplate = (_json, coin) => {
     mode: null,
     chain: coin,
     cmd: 'getblocktemplate',
-    rpc2cli: Config.rpc2cli,
-    token: Config.token,
+    rpc2cli,
+    token,
   };
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -262,12 +262,12 @@ export const getDebugLogProgress = (_json, coin) => {
     mode: null,
     chain: coin,
     cmd: 'debug',
-    token: Config.token,
+    token,
   };
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {

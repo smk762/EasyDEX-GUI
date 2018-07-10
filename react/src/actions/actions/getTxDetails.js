@@ -1,5 +1,9 @@
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
 
@@ -12,8 +16,8 @@ export const getTxDetails = (coin, txid, type) => {
       params: [
         txid
       ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     if (type === 'raw') {
@@ -25,13 +29,13 @@ export const getTxDetails = (coin, txid, type) => {
           txid,
           1
         ],
-        rpc2cli: Config.rpc2cli,
-        token: Config.token,
+        rpc2cli,
+        token,
       };
     }
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {

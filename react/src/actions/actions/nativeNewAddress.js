@@ -3,7 +3,11 @@ import {
   triggerToaster,
   getDashboardUpdate,
 } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import fetchType from '../../util/fetchType';
 
 export const getNewKMDAddresses = (coin, pubpriv, mode) => {
@@ -12,12 +16,12 @@ export const getNewKMDAddresses = (coin, pubpriv, mode) => {
       mode: null,
       chain: coin,
       cmd: pubpriv === 'public' ? 'getnewaddress' : 'z_getnewaddress',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload: payload })).post
     )
     .catch((error) => {

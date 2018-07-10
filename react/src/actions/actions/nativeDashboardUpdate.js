@@ -1,29 +1,21 @@
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import { DASHBOARD_UPDATE } from '../storeType';
 import fetchType from '../../util/fetchType';
 
 export const getDashboardUpdate = (coin, activeCoinProps) => {
   return dispatch => {
-    const _fetchConfig = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        coin: coin,
-        rpc2cli: Config.rpc2cli,
-        token: Config.token,
-      }),
-    };
-
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/native/dashboard/update`,
+      `http://127.0.0.1:${agamaPort}/shepherd/native/dashboard/update`,
       fetchType(
         JSON.stringify({
           coin: coin,
-          rpc2cli: Config.rpc2cli,
-          token: Config.token,
+          rpc2cli,
+          token,
         })
       ).post
     )
@@ -57,7 +49,6 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
   if (fakeResponse ||
       ((json.result.getinfo.error && json.result.getinfo.error === 'daemon is busy') &&
       (json.result.z_getoperationstatus.error && json.result.z_getoperationstatus.error === 'daemon is busy') &&
-      (json.result.listtransactions.error && json.result.listtransactions.error === 'daemon is busy') &&
       (json.result.listtransactions.error && json.result.listtransactions.error === 'daemon is busy'))) {
     return {
       type: DASHBOARD_UPDATE,
@@ -100,7 +91,7 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
           total: json.result.getbalance.result,
         },
         addresses: json.result.addresses,
-        coin: coin,
+        coin,
         getinfoFetchFailures: 0,
         rescanInProgress: false,
       };
@@ -128,7 +119,7 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
         txhistory: _listtransactions,
         balance: json.result.z_gettotalbalance.result,
         addresses: json.result.addresses,
-        coin: coin,
+        coin,
         getinfoFetchFailures: 0,
         rescanInProgress: false,
       };

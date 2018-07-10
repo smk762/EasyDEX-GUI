@@ -14,6 +14,8 @@ let _config = {
   },
   iguanaLessMode: true,
   roundValues: true,
+  rpc2cli: false,
+  token: null,
 };
 
 try {
@@ -22,5 +24,9 @@ try {
 } catch (e) {
   Config = _config;
 }
+
+export const agamaPort = Config.agamaPort;
+export const token = Config.token;
+export const rpc2cli = Config.rpc2cli;
 
 export default Config;

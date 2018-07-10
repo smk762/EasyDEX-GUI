@@ -1,4 +1,8 @@
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import {
   getDecryptedPassphrase,
   getPinList,
@@ -14,13 +18,13 @@ export const encryptPassphrase = (string, key, suppressToastr, customPinName) =>
   const payload = {
     string,
     key,
-    token: Config.token,
+    token,
     pubkey: customPinName,
   };
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/encryptkey`,
+      `http://127.0.0.1:${agamaPort}/shepherd/encryptkey`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -54,12 +58,12 @@ export const loginWithPin = (key, pubkey) => {
   const payload = {
     key,
     pubkey,
-    token: Config.token,
+    token,
   };
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/decryptkey`,
+      `http://127.0.0.1:${agamaPort}/shepherd/decryptkey`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -96,16 +100,16 @@ export const modifyPin = (pubkey, remove, pubkeynew) => {
   const payload = remove ? {
     pubkey,
     delete: true,
-    token: Config.token,
+    token,
   } : {
     pubkey,
     pubkeynew,
-    token: Config.token,
+    token,
   };
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/modifypin`,
+      `http://127.0.0.1:${agamaPort}/shepherd/modifypin`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -140,10 +144,10 @@ export const modifyPin = (pubkey, remove, pubkeynew) => {
 export const loadPinList = () => {
   return dispatch => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/getpinlist${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/getpinlist${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {

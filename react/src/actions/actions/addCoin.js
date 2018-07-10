@@ -1,6 +1,9 @@
 import { ACTIVE_HANDLE } from '../storeType';
 import translate from '../../translate/translate';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
@@ -30,10 +33,10 @@ export const iguanaActiveHandleState = (json) => {
 export const activeHandle = () => {
   return dispatch => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/auth/status${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/auth/status${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -58,12 +61,12 @@ export const activeHandle = () => {
 export const shepherdElectrumAuth = (seed) => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/login`,
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/login`,
       fetchType(
         JSON.stringify({
           seed,
           iguana: true,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -99,10 +102,10 @@ export const shepherdElectrumAddCoin = (coin) => {
   return dispatch => {
     const _urlParams = {
       coin,
-      token: Config.token,
+      token,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/coins/add${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/coins/add${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -172,7 +175,7 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
         if (genproclimit) {
           herdData['ac_options'].push(`-genproclimit=${genproclimit + 1}`);
         } else {
-          herdData['ac_options'].push(`-genproclimit=1`);
+          herdData['ac_options'].push('-genproclimit=1');
         }
       } else {
         herdData['ac_options'].push(`-${key}=${acConfig[coin][key]}`);
@@ -246,12 +249,12 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
     }
 
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/herd`,
+      `http://127.0.0.1:${agamaPort}/shepherd/herd`,
       fetchType(
         JSON.stringify({
           herd: _herd,
           options: herdData,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -346,11 +349,11 @@ export const addCoinResult = (coin, mode) => {
 export const _shepherdGetConfig = (coin, mode, startupParams) => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/getconf`,
+      `http://127.0.0.1:${agamaPort}/shepherd/getconf`,
       fetchType(
         JSON.stringify({
           chain: 'komodod',
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -383,11 +386,11 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
       mode === '-1') {
     return dispatch => {
       return fetch(
-        `http://127.0.0.1:${Config.agamaPort}/shepherd/getconf`,
+        `http://127.0.0.1:${agamaPort}/shepherd/getconf`,
         fetchType(
           JSON.stringify({
             chain: 'komodod',
-            token: Config.token,
+            token,
           })
         ).post
       )
@@ -416,11 +419,11 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
   } else {
     return dispatch => {
       return fetch(
-        `http://127.0.0.1:${Config.agamaPort}/shepherd/getconf`,
+        `http://127.0.0.1:${agamaPort}/shepherd/getconf`,
         fetchType(
           JSON.stringify({
             chain: coin,
-            token: Config.token,
+            token,
           })
         ).post
       )

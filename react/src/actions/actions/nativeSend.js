@@ -4,7 +4,11 @@ import {
 } from '../storeType';
 import translate from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
 
@@ -24,8 +28,8 @@ export const sendNativeTx = (coin, _payload) => {
       mode: null,
       chain: coin,
       cmd: _apiMethod,
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
       params:
         (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
         (_payload.subtractFee ?
@@ -53,7 +57,7 @@ export const sendNativeTx = (coin, _payload) => {
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -95,7 +99,7 @@ export const sendNativeTx = (coin, _payload) => {
             )
           );
         } else {
-          if (Config.rpc2cli) {
+          if (rpc2cli) {
             _message = JSON.parse(json).error.message;
           }
 
@@ -135,12 +139,12 @@ export const getKMDOPID = (opid, coin) => {
       mode: null,
       chain: coin,
       cmd: 'z_getoperationstatus',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -167,8 +171,8 @@ export const sendToAddressPromise = (coin, address, amount) => {
       mode: null,
       chain: coin,
       cmd: 'sendtoaddress',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
       params: [
         address,
         amount,
@@ -179,7 +183,7 @@ export const sendToAddressPromise = (coin, address, amount) => {
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -220,8 +224,8 @@ export const validateAddressPromise = (coin, address) => {
       chain: coin,
       cmd: 'validateaddress',
       params: [ address ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(

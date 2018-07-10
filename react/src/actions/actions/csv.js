@@ -1,5 +1,8 @@
 import translate from '../../translate/translate';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import {
   triggerToaster,
 } from '../actionCreators';
@@ -10,12 +13,12 @@ import fetchType from '../../util/fetchType';
 export const shepherdElectrumTransactionsCSV = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       address,
       coin,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listtransactions/csv${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/listtransactions/csv${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -38,12 +41,12 @@ export const shepherdElectrumTransactionsCSV = (coin, address) => {
 export const shepherdNativeTransactionsCSV = (coin) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       rpc2cli: Config.rpc2cli,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listtransactions/csv${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/listtransactions/csv${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
