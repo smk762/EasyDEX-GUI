@@ -6,7 +6,11 @@ import {
   triggerToaster,
   getDebugLog,
 } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import fetchType from '../../util/fetchType';
