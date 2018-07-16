@@ -122,19 +122,11 @@ class SendCoin extends React.Component {
   }*/
 
   toggleKvSend() {
-    if (this.state.kvSend) {
-      this.setState({
-        kvSend: !this.state.kvSend,
-        amount: '',
-        sendTo: '',
-      });
-    } else {
-      this.setState({
-        kvSend: !this.state.kvSend,
-        amount: 0.0001,
-        sendTo: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-      });
-    }
+    this.setState({
+      kvSend: !this.state.kvSend,
+      amount: this.state.kvSend ? '' : 0.0001,
+      sendTo: this.state.kvSend ? '' : this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+    });
   }
 
   setSendAmountAll() {

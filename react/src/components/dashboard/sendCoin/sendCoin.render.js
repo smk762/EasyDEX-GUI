@@ -241,9 +241,7 @@ export const _SendFormRender = function() {
               type="button"
               className="btn btn-primary waves-effect waves-light pull-right"
               onClick={ this.props.renderFormOnly ? this.handleSubmit : () => this.changeSendCoinStep(1) }
-              disabled={
-                !this.state.kvSendContent
-              }>
+              disabled={ !this.state.kvSendContent }>
               { translate('INDEX.SEND') } KV { this.props.ActiveCoin.coin }
             </button>
           </div>

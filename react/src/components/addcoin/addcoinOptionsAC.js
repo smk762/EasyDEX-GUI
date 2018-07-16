@@ -16,7 +16,7 @@ const addCoinOptionsAC = () => {
 
     if (_assetChains[i] !== 'MVP') {
       _items.push({
-        label: translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`),
+        label: `${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`)}${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`).indexOf('(') === -1 && translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) !== _assetChains[i].toUpperCase() ? ' (' + _assetChains[i].toUpperCase() + ')' : ''}`,
         icon: _assetChains[i].toLowerCase(),
         value: `${_assetChains[i].toUpperCase()}|${availableModes}`,
       });
@@ -35,7 +35,7 @@ const addCoinOptionsAC = () => {
       for (let i = 0; i < _customAssetChains[key].length; i++) {
 
         _items.push({
-          label: translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`),
+          label: `${translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`)}${translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`).indexOf('(') === -1 && translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`) !== _customAssetChains[key][i].toUpperCase() ? ' (' + _customAssetChains[key][i].toUpperCase() + ')' : ''}`,
           icon: _customAssetChains[key][i].toLowerCase(),
           value: `${_customAssetChains[key][i].toUpperCase()}|${key}`,
         });
