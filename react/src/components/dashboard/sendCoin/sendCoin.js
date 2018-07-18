@@ -200,7 +200,8 @@ class SendCoin extends React.Component {
         this.props.ActiveCoin.activeSection !== 'send') {
       this.fetchBTCFees();
 
-      if (this.props.ActiveCoin.mode === 'spv') {
+      if (this.props.ActiveCoin.mode === 'spv' &&
+          this.props.ActiveCoin.coin === 'KMD') {
         shepherdGetRemoteTimestamp()
         .then((res) => {
           if (res.msg === 'success') {
@@ -517,7 +518,8 @@ class SendCoin extends React.Component {
   }
 
   changeSendCoinStep(step, back) {
-    if (this.props.ActiveCoin.mode === 'spv') {
+    if (this.props.ActiveCoin.mode === 'spv' &&
+        this.props.ActiveCoin.coin === 'KMD') {
       shepherdGetRemoteTimestamp()
       .then((res) => {
         if (res.msg === 'success') {
