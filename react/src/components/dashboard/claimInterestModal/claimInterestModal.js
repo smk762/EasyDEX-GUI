@@ -428,6 +428,24 @@ class ClaimInterestModal extends React.Component {
     if (!this.state.open &&
         props.Dashboard.displayClaimInterestModal) {
       this.loadListUnspent();
+
+      if (this.props.ActiveCoin.mode === 'spv') {
+        shepherdGetRemoteTimestamp()
+        .then((res) => {
+          if (res.msg === 'success') {
+            if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
+              Store.dispatch(
+                triggerToaster(
+                  translate('SEND.CLOCK_OUT_OF_SYNC'),
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'warning',
+                  false
+                )
+              );
+            }
+          }
+        });
+      }
     }
   }
 
