@@ -132,7 +132,6 @@ class SendCoin extends React.Component {
   setSendAmountAll() {
     const _amount = this.state.amount;
     const _amountSats = this.state.amount * 100000000;
-    const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
     let _fees = mainWindow.spvFees;
     _fees.BTC = 0;
 
@@ -143,7 +142,7 @@ class SendCoin extends React.Component {
       });
     } else {
       this.setState({
-        amount: Number((0.00000001 * (_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8)),
+        amount: Number((0.00000001 * (this.props.ActiveCoin.balance.balanceSats - Math.abs(this.props.ActiveCoin.balance.unconfirmedSats) - _fees[this.props.ActiveCoin.coin])).toFixed(8)),
       });
     }
   }
@@ -367,7 +366,7 @@ class SendCoin extends React.Component {
     } else {
       return (
         <span>
-          { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
+          { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
         </span>
       );
     }
@@ -672,7 +671,7 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'spv') {
       const _amount = this.state.amount;
       const _amountSats = Math.floor(this.state.amount * 100000000);
-      const _balanceSats = this.props.ActiveCoin.balance.balanceSats;
+      const _balanceSats = this.props.ActiveCoin.balance.balanceSats - Math.abs(this.props.ActiveCoin.balance.unconfirmedSats);
       let _fees = mainWindow.spvFees;
       _fees.BTC = 0;
 

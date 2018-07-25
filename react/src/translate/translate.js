@@ -1,5 +1,5 @@
-import { LANG_EN } from './en';
-import { LANG_DE } from './de';
+import LANG_EN from './en';
+import LANG_DE from './de';
 import Config from '../config';
 
 const _lang = {
