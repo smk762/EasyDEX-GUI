@@ -7,13 +7,13 @@ import {
   BLUR_SENSITIVE_DATA,
 } from '../actions/storeType';
 
-export function Main(state = {
+export const Main = (state = {
   isLoggedIn: false,
   displayLoginSettingsModal: false,
   displayNotaryElectionsModal: false,
   blurSensitiveData: false,
   total: 0,
-}, action) {
+}, action) => {
   switch (action.type) {
     case GET_ACTIVE_COINS:
       return {

@@ -25,7 +25,7 @@ import {
 
 // TODO: refactor current coin props copy on change
 
-export function ActiveCoin(state = {
+export const ActiveCoin = (state = {
   coins: {},
   coin: null,
   mode: null,
@@ -47,7 +47,7 @@ export function ActiveCoin(state = {
     peers: null,
     totals: null,
   },
-}, action) {
+}, action) => {
   switch (action.type) {
     case DASHBOARD_REMOVE_COIN:
       delete state.coins[action.coin];
