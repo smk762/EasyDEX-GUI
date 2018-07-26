@@ -125,11 +125,11 @@ const LANG_EN = {
     PUB_KEY: 'Pub key',
     LOGIN: 'Login',
     YOU_HAVE: 'You have',
-    4WAY_VOTE: '4-way vote',
-    1WAY_VOTE: '1-way vote',
+    '4WAY_VOTE': '4-way vote',
+    '1WAY_VOTE': '1-way vote',
     ENTER_AN_ADDR: 'Enter an address',
     ENTER_AN_AMOUNT: 'Enter an amout, e.g. 1',
-    25_PERC_SPLIT: 'Each candidate is going to recieve 25% of your VOTE funds',
+    '25_PERC_SPLIT': 'Each candidate is going to recieve 25% of your VOTE funds',
     ENTER_AN_ADDR_NA: 'Enter an address for NA region',
     ENTER_AN_ADDR_EU: 'Enter an address for EU region',
     ENTER_AN_ADDR_AR: 'Enter an address for AR region',
@@ -518,7 +518,7 @@ const LANG_EN = {
         'then 100 KMD<br>' +
         'then 100 KMD<br>' +
         'then 100 KMD',
-    93_KMD: '93 KMD will keep waiting in deposit address.',
+    '93_KMD': '93 KMD will keep waiting in deposit address.',
     TO_CLEAR_THEM: 'To clear them you\'ll have to send 7 KMD more to your KMD Deposit Address.',
     WHEN_IT_TOTALS: 'When it totals to 10/100/1000 KMD, it will process to your KMD Jumblr Address.',
     JADDR: 'Jumblr Addresses',
