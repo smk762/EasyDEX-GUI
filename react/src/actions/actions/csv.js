@@ -3,9 +3,7 @@ import Config, {
   token,
   agamaPort,
 } from '../../config';
-import {
-  triggerToaster,
-} from '../actionCreators';
+import { triggerToaster } from '../actionCreators';
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';

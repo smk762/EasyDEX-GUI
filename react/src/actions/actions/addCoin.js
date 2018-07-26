@@ -154,8 +154,8 @@ const handleErrors = (response) => {
 export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
   let acData;
   let herdData = {
-    'ac_name': coin,
-    'ac_options': [
+    ac_name: coin,
+    ac_options: [
       '-daemon=0',
       '-server',
       `-ac_name=${coin}`
@@ -190,8 +190,8 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
 
   if (coin === 'ZEC') {
     herdData = {
-      'ac_name': 'zcashd',
-      'ac_options': [
+      ac_name: 'zcashd',
+      ac_options: [
         '-daemon=0',
         '-server=1',
       ],
@@ -200,8 +200,8 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
 
   if (coin === 'KMD') {
     herdData = {
-      'ac_name': 'komodod',
-      'ac_options': [
+      ac_name: 'komodod',
+      ac_options: [
         '-daemon=0',
         '-addnode=78.47.196.146',
       ],

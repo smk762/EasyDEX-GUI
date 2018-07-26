@@ -162,13 +162,6 @@ export const loadPinList = () => {
     })
     .then(response => response.json())
     .then(json => {
-      /*dispatch(
-        triggerToaster(
-          'getPinList',
-          'Success',
-          'success'
-        )
-      );*/
       dispatch(
         getPinList(json.result)
       );

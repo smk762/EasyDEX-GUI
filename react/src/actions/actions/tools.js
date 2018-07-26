@@ -252,7 +252,7 @@ export const shepherdToolsSeedToWif = (seed, network, iguana) => {
 export const shepherdToolsMultiAddressBalance = (addressList, fallback) => {
   return new Promise((resolve, reject) => {
     fetch(
-      fallback ? 'https://kmd.explorer.supernet.org/api/addrs/utxo' : 'https://www.kmdexplorer.ru/insight-api-komodo/addrs/utxo',
+      fallback ? 'https://kmdexplorer.io/insight-api-komodo/addrs/utxo' : 'https://www.kmdexplorer.ru/insight-api-komodo/addrs/utxo',
       fetchType(
         JSON.stringify({
           addrs: addressList,
