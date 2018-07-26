@@ -12,23 +12,10 @@ import {
 } from '../../../actions/actionCreators';
 import translate from '../../../translate/translate';
 import { ImportKeyModalRender } from './importKeyModal.render';
+import { seedToWif } from 'agama-wallet-lib/src/keys';
+import btcNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const SEED_TRIM_TIMEOUT = 5000;
-
-// import gen komodo keys utils
-import '../../../util/crypto/gen/array.map.js';
-import '../../../util/crypto/gen/cryptojs.js';
-import '../../../util/crypto/gen/cryptojs.sha256.js';
-import '../../../util/crypto/gen/cryptojs.pbkdf2.js';
-import '../../../util/crypto/gen/cryptojs.hmac.js';
-import '../../../util/crypto/gen/cryptojs.aes.js';
-import '../../../util/crypto/gen/cryptojs.blockmodes.js';
-import '../../../util/crypto/gen/cryptojs.ripemd160.js';
-import '../../../util/crypto/gen/securerandom.js';
-import '../../../util/crypto/gen/ellipticcurve.js';
-import '../../../util/crypto/gen/biginteger.js';
-import '../../../util/crypto/gen/crypto-scrypt.js';
-import { Bitcoin } from '../../../util/crypto/gen/bitcoin.js';
 
 class ImportKeyModal extends React.Component {
   constructor() {
@@ -237,18 +224,11 @@ class ImportKeyModal extends React.Component {
   generateKeysFromPassphrase() {
     if (this.state.wifkeysPassphrase &&
         this.state.wifkeysPassphrase.length) {
-      const bytes = Crypto.SHA256(this.state.wifkeysPassphrase, { asBytes: true });
-      // byte flipping to make it compat with iguana core
-      bytes[0] &= 248;
-      bytes[31] &= 127;
-      bytes[31] |= 64;
-      const btcKey = new Bitcoin.ECKey(bytes).setCompressed(true);
-      const kmdAddress = btcKey.getBitcoinAddress();
-      const wifAddress = btcKey.getBitcoinWalletImportFormat();
+      const _keys = seedToWif(this.state.wifkeysPassphrase, btcNetworks.kmd, true);
 
       return {
-        address: kmdAddress,
-        wif: wifAddress,
+        address: _keys.pub,
+        wif: _keys.priv,
       };
     } else {
       Store.dispatch(
