@@ -6,6 +6,22 @@
 .navbar {
   &.navbar-fixed-top {
     .dropdown {
+      &.new-update-icon:before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: #4caf50;
+        border-radius: 50%;
+        right: 28px;
+        top: 20px;
+        z-index: 10;
+      }
+      .new-update-icon-link {
+        a {
+          color: #fb8c00;
+        }
+      }
       &.open {
         .dropdown-menu {
           right: 0;

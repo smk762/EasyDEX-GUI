@@ -138,6 +138,7 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    NEW_VERSION: 'New version',
     GENERATING_CSV: 'Generating CSV',
     TX_HISTORY_EXPORT: 'Transaction history export',
     CSV_EXPORT_ERR: 'CSV export error',

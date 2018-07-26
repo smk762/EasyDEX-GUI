@@ -19,8 +19,8 @@ import Store from '../../../store';
 import Config from '../../../config';
 import { checkAC } from '../../addcoin/payload';
 import mainWindow from '../../../util/mainWindow';
-
 import NavbarRender from './navbar.render';
+const { shell } = window.require('electron');
 
 class Navbar extends React.Component {
   constructor() {
@@ -36,6 +36,11 @@ class Navbar extends React.Component {
     this._toggleBlurSensitiveData = this._toggleBlurSensitiveData.bind(this);
     this.spvLock = this.spvLock.bind(this);
     this.spvLogout = this.spvLogout.bind(this);
+    this.openKomodoPlatformLink = this.openKomodoPlatformLink.bind(this);
+  }
+
+  openKomodoPlatformLink() {
+    return shell.openExternal('https://komodoplatform.com/komodo-wallets');
   }
 
   _toggleBlurSensitiveData() {
@@ -175,6 +180,7 @@ const mapStateToProps = (state) => {
       isLoggedIn: state.Main.isLoggedIn,
       coins: state.Main.coins,
       blurSensitiveData: state.Main.blurSensitiveData,
+      newUpdateAvailable: state.Main.newUpdateAvailable,
     },
   };
 };
