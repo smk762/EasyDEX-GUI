@@ -6,6 +6,7 @@ import TablePaginationRenderer from './pagination';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
+import mainWindow from '../../../util/mainWindow';
 
 const kvCoins = {
   'KV': true,
@@ -245,7 +246,7 @@ export const TxAmountRender = function(tx) {
 export const TxHistoryListRender = function() {
   return (
     <ReactTable
-      data={ this.state.filteredItemsList }
+      data={ (this.props.ActiveCoin.coins[mainWindow.activeCoin] ? this.props.ActiveCoin.coins[mainWindow.activeCoin].txhistory : null) || this.state.filteredItemsList }
       columns={ this.state.itemsListColumns }
       minRows="0"
       sortable={ true }
@@ -265,6 +266,8 @@ export const TxHistoryListRender = function() {
 };
 
 export const WalletsDataRender = function() {
+  console.warn('WalletsDataRender', this.props.ActiveCoin.coins);
+
   return (
     <span>
       <div id="edexcoin_dashboardinfo">

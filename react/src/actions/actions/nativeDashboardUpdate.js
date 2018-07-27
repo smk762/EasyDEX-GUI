@@ -6,7 +6,7 @@ import Config, {
 } from '../../config';
 import { DASHBOARD_UPDATE } from '../storeType';
 import fetchType from '../../util/fetchType';
-import mainWindow from '../util/mainWindow';
+import mainWindow from '../../util/mainWindow';
 
 export const getDashboardUpdate = (coin, activeCoinProps) => {
   return dispatch => {

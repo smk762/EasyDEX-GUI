@@ -6,7 +6,7 @@ import Config, {
 } from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
-import mainWindow from '../util/mainWindow';
+import mainWindow from '../../util/mainWindow';
 
 export const getTxDetails = (coin, txid, type) => {
   return new Promise((resolve, reject) => {
