@@ -6,6 +6,7 @@ import Config, {
 } from '../../config';
 import { DASHBOARD_UPDATE } from '../storeType';
 import fetchType from '../../util/fetchType';
+import mainWindow from '../util/mainWindow';
 
 export const getDashboardUpdate = (coin, activeCoinProps) => {
   return dispatch => {
@@ -31,14 +32,16 @@ export const getDashboardUpdate = (coin, activeCoinProps) => {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(getDashboardUpdateState(json, coin));
+      if (mainWindow.activeCoin === coin) {
+        dispatch(getDashboardUpdateState(json, coin));
 
-      // dirty hack to trigger dashboard render
-      if (!activeCoinProps ||
-          (activeCoinProps && !activeCoinProps.balance && !activeCoinProps.addresses)) {
-        setTimeout(() => {
-          dispatch(getDashboardUpdateState(json, coin));
-        }, 100);
+        // dirty hack to trigger dashboard render
+        if (!activeCoinProps ||
+            (activeCoinProps && !activeCoinProps.balance && !activeCoinProps.addresses)) {
+          setTimeout(() => {
+            dispatch(getDashboardUpdateState(json, coin));
+          }, 100);
+        }
       }
     });
   }

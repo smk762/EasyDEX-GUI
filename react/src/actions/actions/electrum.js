@@ -15,6 +15,7 @@ import {
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import mainWindow from '../../util/mainWindow';
 
 // TODO: dev display errors
 
@@ -192,18 +193,20 @@ export const shepherdElectrumBalance = (coin, address) => {
     })
     .then(response => response.json())
     .then(json => {
-      if (json &&
-          json.electrumres &&
-          json.electrumres.code) {
-        dispatch(
-          triggerToaster(
-            json.electrumres.message,
-            'Error',
-            'error'
-          )
-        );
+      if (mainWindow.activeCoin === coin) {
+        if (json &&
+            json.electrumres &&
+            json.electrumres.code) {
+          dispatch(
+            triggerToaster(
+              json.electrumres.message,
+              'Error',
+              'error'
+            )
+          );
+        }
+        dispatch(shepherdElectrumBalanceState(json));
       }
-      dispatch(shepherdElectrumBalanceState(json));
     });
   }
 }
@@ -240,7 +243,9 @@ export const shepherdElectrumTransactions = (coin, address) => {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(shepherdElectrumTransactionsState(json));
+      if (mainWindow.activeCoin === coin) {
+        dispatch(shepherdElectrumTransactionsState(json));
+      }
     });
   }
 }
@@ -277,7 +282,7 @@ export const shepherdElectrumKVTransactionsPromise = (coin, address) => {
   });
 }
 
-export const shepherdElectrumTransactionsState= (json) => {
+export const shepherdElectrumTransactionsState = (json) => {
   json = json.result;
 
   if (json &&

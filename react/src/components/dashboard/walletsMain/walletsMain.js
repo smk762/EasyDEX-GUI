@@ -28,6 +28,8 @@ class WalletsMain extends React.Component {
   }
 
   componentWillUnmount() {
+    mainWindow.activeCoin = null;
+
     if (this.pricesInterval) {
       clearInterval(this.pricesInterval);
     }
