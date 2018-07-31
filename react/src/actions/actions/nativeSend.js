@@ -84,7 +84,7 @@ export const sendNativeTx = (coin, _payload) => {
         if (json.indexOf('"code":-4') > -1) {
           dispatch(
             triggerToaster(
-              translate('API.WALLETDAT_MISMATCH'),
+              translate('API.WALLETDAT_MISMATCH') + `,${translate('API.DAEMON_RESPONSE')} : ` + JSON.parse(json).error.message,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
