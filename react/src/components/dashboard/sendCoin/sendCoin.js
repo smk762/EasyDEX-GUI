@@ -602,6 +602,7 @@ class SendCoin extends React.Component {
                   value: sendPreflight.result.value,
                   change: sendPreflight.result.change,
                   estimatedFee: sendPreflight.result.estimatedFee,
+                  totalInterest: sendPreflight.result.totalInterest,
                 },
               }));
             } else {

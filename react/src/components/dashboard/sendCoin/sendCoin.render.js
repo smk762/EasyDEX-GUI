@@ -361,7 +361,7 @@ export const SendRender = function() {
               { this.state.spvPreflightRes &&
                 <div className="row padding-top-20">
                   { this.state.spvPreflightRes.change === 0 &&
-                    <div className="col-lg-12 col-sm-12 col-xs-12">
+                    <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.ADJUSTED_AMOUNT') }</strong>
                       <span>
                         <i
@@ -378,6 +378,12 @@ export const SendRender = function() {
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.KMD_INTEREST') }</strong>&nbsp;
                       { Math.abs(formatValue(this.state.spvPreflightRes.estimatedFee * 0.00000001)) } { translate('SEND.TO') } { this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub }
+                    </div>
+                  }
+                  { this.state.spvPreflightRes.totalInterest > 0 &&
+                    <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
+                      <strong>{ translate('SEND.KMD_INTEREST') }</strong>&nbsp;
+                      { Math.abs(formatValue(this.state.spvPreflightRes.totalInterest * 0.00000001)) } { translate('SEND.TO') } { this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub }
                     </div>
                   }
                   { this.state.spvPreflightRes.change > 0 &&
