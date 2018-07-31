@@ -18,6 +18,7 @@ import Store from '../../../store';
 import devlog from '../../../util/devlog';
 import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import { toSats } from 'agama-wallet-lib/src/utils';
 
 const { shell } = window.require('electron');
 
@@ -63,8 +64,8 @@ class ToolsMergeUTXO extends React.Component {
     }
 
     for (let i = 0; i < _utxos.length; i++) {
-      _utxos[i].amount = Number(_utxos[i].amount) * 100000000;
-      _utxos[i].interest = Number(_utxos[i].interest) * 100000000;
+      _utxos[i].amount = Number(toSats(_utxos[i].amount));
+      _utxos[i].interest = Number(toSats(_utxos[i].interest));
       _interest += (_utxos[i].interest ? _utxos[i].interest : 0);
     }
 
@@ -74,7 +75,7 @@ class ToolsMergeUTXO extends React.Component {
     const payload = {
       wif,
       network: 'komodo',
-      targets: [Math.floor(totalOutSize * 100000000) - 10000 + _interest],
+      targets: [Math.floor(toSats(totalOutSize)) - 10000 + _interest],
       utxo: _utxos,
       changeAddress: address,
       outputAddress: address,

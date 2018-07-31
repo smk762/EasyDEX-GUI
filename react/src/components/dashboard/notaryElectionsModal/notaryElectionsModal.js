@@ -17,8 +17,11 @@ import mainWindow from '../../../util/mainWindow';
 import Spinner from '../spinner/spinner';
 import ReactTooltip from 'react-tooltip';
 
-const { secondsToString } = require('agama-wallet-lib/src/index-fe').time;
-const { isPositiveNumber } = require('agama-wallet-lib/src/index-fe').utils;
+import { secondsToString } from 'agama-wallet-lib/src/time';
+import {
+  isPositiveNumber,
+  toSats,
+} from 'agama-wallet-lib/src/utils';
 
 const SEED_TRIM_TIMEOUT = 5000;
 const ELECTIONS_SYNC_UPDATE_INTERVAL = 120000; // every 2 min
@@ -145,16 +148,16 @@ class NotaryElectionsModal extends React.Component {
         this.state.coin,
         [{
           address: this.state.multiOutAddress1,
-          value: parseInt((this.state.balance / _divisor) * 100000000) - 10000,
+          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
         }, {
           address: this.state.multiOutAddress2,
-          value: parseInt((this.state.balance / _divisor) * 100000000) - 10000,
+          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
         }, {
           address: this.state.multiOutAddress3,
-          value: parseInt((this.state.balance / _divisor) * 100000000) - 10000,
+          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
         }, {
           address: this.state.multiOutAddress4,
-          value: parseInt((this.state.balance / _divisor) * 100000000) - 10000,
+          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
         }],
         this.state.pub,
         ['ne2k18-na-1-eu-2-ae-3-sh-4']
@@ -226,7 +229,7 @@ class NotaryElectionsModal extends React.Component {
       if (this.sendValidate()) {
         shepherdElectionsSend(
           this.state.coin,
-          (this.state.amount * 100000000) - 10000,
+          toSats(this.state.amount) - 10000,
           this.state.address,
           this.state.pub,
           'ne2k18-' + this.state.region,

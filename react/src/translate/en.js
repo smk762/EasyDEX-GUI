@@ -90,7 +90,7 @@ const LANG_EN = {
     GET_AN_INVITE_P2: 'to our slack if you\'re not registered yet'
   },
   API: {
-    DAEMON_RESPONSE: 'daemon response',
+    TX_TOO_LARGE: 'Transaction too large',
     DAEMON_IS_STILL_RUNNING: 'daemon is still running. If you want to completely stop it and remove use stop icon next time.',
     CONN_ERROR: 'Connection error',
     KMD_PASSIVE_ERROR: 'Please make sure to run komodod manually',

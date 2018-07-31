@@ -18,6 +18,7 @@ import Store from '../../../store';
 import devlog from '../../../util/devlog';
 import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import { toSats } from 'agama-wallet-lib/src/utils';
 
 const { shell } = window.require('electron');
 
@@ -81,7 +82,7 @@ class ToolsSplitUTXO extends React.Component {
     for (let i = 0; i < pairsCount; i++) {
       for (let j = 0; j < targetSizes.length; j++) {
         devlog(`vout ${_targets.length} ${targetSizes[j]}`);
-        _targets.push(Number(targetSizes[j]) * 100000000);
+        _targets.push(Number(toSats(targetSizes[j])));
         totalOutSize += Number(targetSizes[j]);
       }
     }
@@ -124,7 +125,7 @@ class ToolsSplitUTXO extends React.Component {
     for (let i = 0; i < pairsCount; i++) {
       for (let j = 0; j < targetSizes.length; j++) {
         devlog(`vout ${_targets.length} ${targetSizes[j]}`);
-        _targets.push(parseInt(Number(targetSizes[j]) * 100000000));
+        _targets.push(parseInt(Number(toSats(targetSizes[j]))));
         totalOutSize += Number(targetSizes[j]);
       }
     }
@@ -140,7 +141,7 @@ class ToolsSplitUTXO extends React.Component {
       utxo: [largestUTXO],
       changeAddress: address,
       outputAddress: address,
-      change: Math.floor(Number(largestUTXO.amount - totalOutSize) * 100000000 - 10000 + ((largestUTXO.interest ? largestUTXO.interest : 0) * 100000000)), // 10k sat fee
+      change: Math.floor(Number(toSats(largestUTXO.amount - totalOutSize)) - 10000 + (toSats(largestUTXO.interest ? largestUTXO.interest : 0))), // 10k sat fee
     };
 
     devlog(payload);

@@ -17,6 +17,7 @@ import {
 import Store from '../../../store';
 import QRCode from 'qrcode.react';
 import QRModal from '../qrModal/qrModal';
+import { toSats } from 'agama-wallet-lib/src/utils';
 
 class ToolsOfflineSigCreate extends React.Component {
   constructor() {
@@ -65,7 +66,7 @@ class ToolsOfflineSigCreate extends React.Component {
 
     shepherdToolsBuildUnsigned(
       _coin[0],
-      this.state.amount * 100000000,
+      toSats(this.state.amount),
       this.state.sendTo,
       this.state.sendFrom
     )
