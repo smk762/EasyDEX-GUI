@@ -1,6 +1,8 @@
 .jumblr {
-  .alert-info {
+  .alert-info,
+  .alert-warning {
     width: 100%;
+    margin-bottom: 22px !important;
   }
   p {
     width: calc(100% - 100px);

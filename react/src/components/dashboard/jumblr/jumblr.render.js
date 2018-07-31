@@ -46,15 +46,18 @@ export const JumblrRender = function() {
 
           <div className="col-xs-12">
             <div className="alert alert-info alert-dismissible">
-              <button
+              { /*<button
                 type="button"
                 className="close">
                 <span>×</span>
-              </button>
+              </button>*/ }
               <span className="jumblr-header">
                 <i className="icon fa-paw"></i> { translate('JUMBLR.ABOUT') }
               </span>
               <br />
+              <p>
+                <strong>{ translate('JUMBLR.NOTICE_BOTH_NODES') }</strong>
+              </p>
               <p>{ translate('JUMBLR.JUMBLR_FUNCTIONS') }</p>
               <p>
                 <strong>{ translate('JUMBLR.TIP') }:</strong> { translate('JUMBLR.TIP_DESC') }.
@@ -67,11 +70,11 @@ export const JumblrRender = function() {
               <input
                 type="radio"
                 className="to-labelauty labelauty"
-                name={ `mode-public` }
-                id={ `mode-public` }
+                name="mode-public"
+                id="mode-public"
                 checked={ this.state.jumblrMode === 'public' ? true : false } />
               <label
-                htmlFor={ `mode-public` }
+                htmlFor="mode-public"
                 className="no-margin"
                 onClick={ () => this.switchJumblrMode('public') }>
                 <span
@@ -97,11 +100,11 @@ export const JumblrRender = function() {
               <input
                 type="radio"
                 className="to-labelauty labelauty"
-                name={ `mode-private` }
-                id={ `mode-private` }
+                name="mode-private"
+                id="mode-private"
                 checked={ this.state.jumblrMode === 'private' ? true : false } />
               <label
-                htmlFor={ `mode-private` }
+                htmlFor="mode-private"
                 className="no-margin"
                 onClick={ () => this.switchJumblrMode('private') }>
                 <span

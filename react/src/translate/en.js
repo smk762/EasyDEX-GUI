@@ -435,6 +435,9 @@ const LANG_EN = {
     MINING_THREADS: 'Mining threads',
   },
   JUMBLR: {
+    IMPORTANT_NOTICE: 'Important notice',
+    NOTICE_BOTH_NODES: 'You should have both your public and your private node machines running throughout the Jumblr process, with the passphrase entered and Jumblr activated. ' +
+                       'If your private node is not monitoring the private address, you will have to rescan the blockchain to claim your funds.',
     PASSPHRASE: 'Passphrase',
     PAUSE: 'Pause',
     RESUME: 'Resume',
