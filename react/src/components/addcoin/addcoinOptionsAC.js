@@ -14,7 +14,9 @@ const addCoinOptionsAC = () => {
       availableModes = 'spv';
     }
 
-    if (_assetChains[i] !== 'MVP') {
+    if (_assetChains[i] !== 'MVP' &&
+        _assetChains[i] !== 'VRSC' &&
+        _assetChains[i] !== 'DSEC') {
       _items.push({
         label: translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`),
         icon: _assetChains[i].toLowerCase(),
