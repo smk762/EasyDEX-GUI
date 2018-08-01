@@ -17,6 +17,7 @@ import {
 import Store from '../../../store';
 import devlog from '../../../util/devlog';
 import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const { shell } = window.require('electron');
 
@@ -227,7 +228,7 @@ class ToolsMergeUTXO extends React.Component {
   }
 
   openExplorerWindow(txid, coin) {
-    const url = `http://${coin}.explorer.supernet.org/tx/${txid}`;
+    const url = explorerList[coin].split('/').length - 1 > 2 ? `${explorerList[coin]}${txid}` : `${explorerList[coin]}/tx/${txid}`;
     return shell.openExternal(url);
   }
 

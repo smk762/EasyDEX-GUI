@@ -48,7 +48,7 @@ class WalletsTxInfo extends React.Component {
     } else {
       if (nextProps.ActiveCoin &&
           nextProps.ActiveCoin.txhistory &&
-          nextProps.ActiveCoin.showTransactionInfoTxIndex) {
+          nextProps.ActiveCoin.showTransactionInfoTxIndex > -1) {
         const txInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
 
         if (txInfo &&
@@ -106,7 +106,7 @@ class WalletsTxInfo extends React.Component {
         this.props.ActiveCoin.activeSection === 'default') {
       if (this.props.ActiveCoin.mode === 'native') {
         if (this.props.ActiveCoin.txhistory &&
-            this.props.ActiveCoin.showTransactionInfoTxIndex) {
+            this.props.ActiveCoin.showTransactionInfoTxIndex > -1) {
           const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
 
           return WalletsTxInfoRender.call(this, txInfo);
