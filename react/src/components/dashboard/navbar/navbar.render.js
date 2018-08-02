@@ -46,7 +46,7 @@ const NavbarRender = function() {
             { this.props.ActiveCoin &&
               (/*this._checkAC() || */
               this.props.ActiveCoin.coin === 'KMD' &&
-                this.props.ActiveCoin.mode === 'spv') &&
+                this.props.ActiveCoin.mode === 'native') &&
               <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr

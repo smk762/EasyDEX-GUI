@@ -80,7 +80,6 @@ export const loginWithPin = (key, pubkey) => {
     .then(response => response.json())
     .then(json => {
       if (json.msg === 'success') {
-        // Store.dispatch(shepherdElectrumAuth(json.result));
         resolve(json);
       } else {
         Store.dispatch(
@@ -167,4 +166,73 @@ export const loadPinList = () => {
       );
     });
   }
+}
+
+export const changePin = (oldKey, newKey, pubkey) => {
+  const payload = {
+    key: oldKey,
+    pubkey,
+    token,
+  };
+
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://127.0.0.1:${agamaPort}/shepherd/decryptkey`,
+      fetchType(JSON.stringify(payload)).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          'decryptKey',
+          'Error',
+          'error'
+        )
+      );
+      resolve({ msg: 'error' });
+    })
+    .then(response => response.json())
+    .then(json => {
+      if (json.msg === 'success') {
+        const string = json.result;
+        // resolve(json);
+        // encrypt seed with a new key
+        const payload = {
+          string,
+          key: newKey,
+          token,
+          pubkey,
+        };
+
+        fetch(
+          `http://127.0.0.1:${agamaPort}/shepherd/encryptkey`,
+          fetchType(JSON.stringify(payload)).post
+        )
+        .catch((error) => {
+          console.log(error);
+          Store.dispatch(
+            triggerToaster(
+              'encryptKey',
+              'Error',
+              'error'
+            )
+          );
+          resolve({ msg: 'error' });
+        })
+        .then(response => response.json())
+        .then(json => {
+          resolve(json);
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            json.result,
+            translate('API.PIN_DECRYPT_ERR'),
+            'error'
+          )
+        );
+        resolve(json);
+      }
+    });
+  });
 }
