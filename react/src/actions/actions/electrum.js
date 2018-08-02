@@ -332,7 +332,7 @@ export const shepherdElectrumCoinsState = (json) => {
 }
 
 // value in sats
-export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, btcFee, isKv, opreturn) => {
+export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
   value = Math.floor(value);
 
   return dispatch => {
@@ -340,6 +340,7 @@ export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, 
       token,
       coin,
       value,
+      customFee,
       address: changeAddress,
       change: changeAddress,
       opreturn,
@@ -351,6 +352,7 @@ export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, 
       token,
       coin,
       value,
+      customFee,
       address: sendToAddress,
       change: changeAddress,
       gui: true,
@@ -379,6 +381,7 @@ export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, 
   }
 }
 
+// kmd interest claiming
 export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAddress, btcFee) => {
   value = Math.floor(value);
 
@@ -414,7 +417,7 @@ export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAd
   });
 }
 
-export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, btcFee, isKv, opreturn) => {
+export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
@@ -422,6 +425,7 @@ export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, change
       token,
       coin,
       value,
+      customFee,
       address: changeAddress,
       change: changeAddress,
       opreturn,
@@ -433,6 +437,7 @@ export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, change
       token,
       coin,
       value,
+      customFee,
       address: sendToAddress,
       change: changeAddress,
       gui: true,

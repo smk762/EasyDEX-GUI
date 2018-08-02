@@ -2,7 +2,10 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import ReactTooltip from 'react-tooltip';
-import { formatValue } from 'agama-wallet-lib/src/utils';
+import {
+  formatValue,
+  isPositiveNumber,
+} from 'agama-wallet-lib/src/utils';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
@@ -111,7 +114,7 @@ export const _SendFormRender = function() {
               autoComplete="off" />
           </div>
           <div className={ 'col-lg-6 form-group form-material' + (this.isTransparentTx() && this.props.ActiveCoin.mode === 'native' ? '' : ' hide') }>
-            { this.state.sendTo.length <= 34 &&
+            { this.state.sendTo.length <= 34 && // TODO: proper pub addr check
               <span className="pointer">
                 <label className="switch">
                   <input
@@ -130,29 +133,44 @@ export const _SendFormRender = function() {
             }
           </div>
           { this.renderBTCFees() }
-          <div className="col-lg-6 form-group form-material hide">
-            <label
-              className="control-label"
-              htmlFor="kmdWalletFee">
-              { translate('INDEX.FEE') }
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="fee"
-              onChange={ this.updateInput }
-              id="kmdWalletFee"
-              placeholder="0.000"
-              value={ this.state.fee !== 0 ? this.state.fee : '' }
-              autoComplete="off" />
-          </div>
-          <div className="col-lg-12 hide">
-            <span>
-              <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
-              { this.state.amount } - { this.state.fee }/kb = { Number(this.state.amount) - Number(this.state.fee) }&nbsp;
-              { this.props.ActiveCoin.coin }
-            </span>
-          </div>
+          { this.props.ActiveCoin.mode === 'spv' &&
+            Config.spv.allowCustomFees &&
+            <div className="col-lg-12 form-group form-material">
+              <label
+                className="control-label"
+                htmlFor="kmdWalletFee">
+                { translate('INDEX.FEE_PER_TX') }
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="fee"
+                onChange={ this.updateInput }
+                id="kmdWalletFee"
+                placeholder="0.0001"
+                value={ this.state.fee !== 0 ? this.state.fee : '' }
+                autoComplete="off" />
+              <button
+                type="button"
+                className="btn btn-default btn-send-self"
+                onClick={ this.setDefaultFee }>
+                { translate('INDEX.DEFAULT') }
+              </button>
+            </div>
+          }
+          { this.props.ActiveCoin.mode === 'spv' &&
+            Config.spv.allowCustomFees &&
+            this.state.amount > 0 &&
+            isPositiveNumber(this.state.fee) &&
+            isPositiveNumber(this.state.amount) &&
+            <div className="col-lg-12">
+              <span>
+                <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
+                { this.state.amount } + { this.state.fee } = { Number((Number(this.state.amount) + Number(this.state.fee)).toFixed(8)) }&nbsp;
+                { this.props.ActiveCoin.coin }
+              </span>
+            </div>
+          }
           { (!this.isFullySynced() || !navigator.onLine) &&
             this.props.ActiveCoin &&
             this.props.ActiveCoin.mode === 'native' &&
@@ -361,6 +379,7 @@ export const SendRender = function() {
               { this.state.spvPreflightRes &&
                 <div className="row padding-top-20">
                   { this.state.spvPreflightRes.change === 0 &&
+                    (formatValue((this.state.spvPreflightRes.value * 0.00000001) - (this.state.spvPreflightRes.fee * 0.00000001)) > 0) &&
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.ADJUSTED_AMOUNT') }</strong>
                       <span>
@@ -386,7 +405,7 @@ export const SendRender = function() {
                       { Math.abs(formatValue(this.state.spvPreflightRes.totalInterest * 0.00000001)) } { translate('SEND.TO') } { this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub }
                     </div>
                   }
-                  { this.state.spvPreflightRes.change > 0 &&
+                  { this.state.spvPreflightRes.change >= 0 &&
                     <div className="col-lg-12 col-sm-12 col-xs-12">
                       <strong>{ translate('SEND.TOTAL_AMOUNT_DESC') }</strong>&nbsp;
                       { formatValue((this.state.spvPreflightRes.value * 0.00000001) + (this.state.spvPreflightRes.fee * 0.00000001)) }

@@ -139,6 +139,7 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    DEFAULT: 'Default',
     NEW_VERSION: 'New version',
     GENERATING_CSV: 'Generating CSV',
     TX_HISTORY_EXPORT: 'Transaction history export',
@@ -315,6 +316,7 @@ const LANG_EN = {
     SEND_FROM: 'Send From',
     SEND_TO: 'Send To',
     FEE: 'Fee',
+    FEE_PER_TX: 'Fee (per tx)',
     TOTAL: 'Total',
     AMOUNT_SM: 'amount',
     DONT_SEND: 'Don\'t Send Transaction. Just give me signed transaction bytes.',
@@ -986,6 +988,7 @@ const LANG_EN = {
     QR_COIN_MISMATCH_MESSAGE_END: ' active in your wallet. Please, check that you have same coin active that you try to import!',
     QR_COIN_MISMATCH_TITLE: 'Coin Mismatch',
     SEND_NATIVE_SYNC_WARNING: 'Your wallet is not fully synced! Please wait until it reached 100% to avoid possible transaction send implications.',
+    WARNING_FEE_EXCEEDS_DEFAULT_THRESHOLD: 'Provided fee exceeds default fee @template@ times!',
   },
   FIAT_CURRENCIES: {
     AUD: 'Australian Dollar',

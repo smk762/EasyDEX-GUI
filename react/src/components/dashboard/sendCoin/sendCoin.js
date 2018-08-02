@@ -38,6 +38,7 @@ import {
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
+const FEE_EXCEEDS_DEFAULT_THRESHOLD = 5; // N fold increase
 
 // TODO: - render z address trim
 
@@ -99,6 +100,7 @@ class SendCoin extends React.Component {
     this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
     this.toggleKvSend = this.toggleKvSend.bind(this);
     this.verifyPin = this.verifyPin.bind(this);
+    this.setDefaultFee = this.setDefaultFee.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
   }
 
@@ -133,6 +135,12 @@ class SendCoin extends React.Component {
     });
   }
 
+  setDefaultFee() {
+    this.setState({
+      fee: fromSats(mainWindow.spvFees[this.props.ActiveCoin.coin]),
+    });
+  }
+
   setSendAmountAll() {
     const _amount = this.state.amount;
     const _amountSats = toSats(this.state.amount);
@@ -146,7 +154,7 @@ class SendCoin extends React.Component {
       });
     } else {
       this.setState({
-        amount: Number(fromSats((this.props.ActiveCoin.balance.balanceSats - Math.abs(this.props.ActiveCoin.balance.unconfirmedSats) - _fees[this.props.ActiveCoin.coin])).toFixed(8)),
+        amount: Number(fromSats((this.props.ActiveCoin.balance.balanceSats - Math.abs(this.props.ActiveCoin.balance.unconfirmedSats) - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin]))).toFixed(8)),
       });
     }
   }
@@ -221,6 +229,14 @@ class SendCoin extends React.Component {
           }
         });
       }
+    }
+
+    if (this.props.ActiveCoin.mode === 'spv' &&
+        !this.state.fee &&
+        this.props.ActiveCoin.coin !== 'BTC') {
+      this.setState({
+        fee: fromSats(mainWindow.spvFees[this.props.ActiveCoin.coin]),
+      });
     }
   }
 
@@ -592,6 +608,7 @@ class SendCoin extends React.Component {
             this.state.sendTo,
             this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
             this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null,
+            Number((toSats(this.state.fee)).toFixed(8)),
             this.state.kvSend,
             kvHex,
           )
@@ -661,6 +678,7 @@ class SendCoin extends React.Component {
             this.state.sendTo,
             this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
             this.props.ActiveCoin.coin === 'BTC' ? this.state.btcFeesSize : null,
+            Number((toSats(this.state.fee)).toFixed(8)),
             this.state.kvSend,
             this.state.kvHex,
           )
@@ -674,16 +692,17 @@ class SendCoin extends React.Component {
     let valid = true;
 
     if (this.props.ActiveCoin.mode === 'spv') {
+      const _customFee = toSats(this.state.fee);
       const _amount = this.state.amount;
       const _amountSats = Math.floor(toSats(this.state.amount));
       const _balanceSats = this.props.ActiveCoin.balance.balanceSats - Math.abs(this.props.ActiveCoin.balance.unconfirmedSats);
       let _fees = mainWindow.spvFees;
       _fees.BTC = 0;
 
-      if (Number(_amountSats) + _fees[this.props.ActiveCoin.coin] > _balanceSats) {
+      if (Number(_amountSats) + (_customFee || _fees[this.props.ActiveCoin.coin]) > _balanceSats) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((fromSats(_balanceSats - _fees[this.props.ActiveCoin.coin])).toFixed(8))} ${this.props.ActiveCoin.coin}`,
+            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((fromSats(_balanceSats - (_customFee || _fees[this.props.ActiveCoin.coin]))).toFixed(8))} ${this.props.ActiveCoin.coin}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -698,6 +717,31 @@ class SendCoin extends React.Component {
           )
         );
         valid = false;
+      }
+
+      if (this.state.fee &&
+          !isPositiveNumber(this.state.fee)) {
+        Store.dispatch(
+          triggerToaster(
+            translate('SEND.FEE_POSITIVE_NUMBER'),
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      }
+
+      if (isPositiveNumber(this.state.fee) &&
+          Number(toSats(this.state.fee)) > _fees[this.props.ActiveCoin.coin] * FEE_EXCEEDS_DEFAULT_THRESHOLD &&
+          this.props.ActiveCoin.coin !== 'BTC') {
+        Store.dispatch(
+          triggerToaster(
+            translate('SEND.WARNING_FEE_EXCEEDS_DEFAULT_THRESHOLD', FEE_EXCEEDS_DEFAULT_THRESHOLD),
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error',
+            false
+          )
+        );
       }
     }
 
