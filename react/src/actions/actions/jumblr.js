@@ -2,7 +2,11 @@ import {
   triggerToaster,
   getNewKMDAddresses,
 } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
 
@@ -12,12 +16,12 @@ const getNewAddress = (coin) => {
       mode: null,
       chain: coin,
       cmd: 'getnewaddress',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -44,13 +48,13 @@ export const setJumblrAddress = (coin, type, address) => {
       chain: coin,
       cmd: type === 'deposit' ? 'jumblr_deposit' : 'jumblr_secret',
       params: [address],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
-      fetchType(JSON.stringify({ payload })).post      
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
@@ -76,13 +80,13 @@ export const pauseJumblr = (coin) => {
       chain: coin,
       cmd: 'jumblr_pause',
       params: [],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
-      fetchType(JSON.stringify({ payload })).post      
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
@@ -108,13 +112,13 @@ export const resumeJumblr = (coin) => {
       chain: coin,
       cmd: 'jumblr_resume',
       params: [],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
-      fetchType(JSON.stringify({ payload })).post      
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
@@ -140,12 +144,12 @@ const dumpPrivkey = (coin, key) => {
       chain: coin,
       cmd: 'dumpprivkey',
       params: [key],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -179,12 +183,12 @@ export const importPrivkey = (coin, key, rescan = false, isZKey) => {
         '',
         rescan
       ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {

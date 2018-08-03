@@ -3,17 +3,17 @@ import {
   GET_DEBUG_LOG,
   LOAD_APP_CONFIG,
   LOAD_APP_INFO,
-  CLI
+  CLI,
 } from '../actions/storeType';
 
-export function Settings(state = {
+export const Settings = (state = {
   wifkey: null,
   address: null,
   debugLog: null,
   appSettings: null,
   appInfo: null,
   cli: null,
-}, action) {
+}, action) => {
   switch (action.type) {
     case GET_WIF_KEY:
       return {

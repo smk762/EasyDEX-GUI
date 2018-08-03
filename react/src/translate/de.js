@@ -1,4 +1,4 @@
-export const LANG_DE = {
+const LANG_DE = {
   'WALLETS_INFO': {
     'ADDRESS': 'Adresse',
     'ADDRESS_LOCAL': 'Adresse lokal',
@@ -813,3 +813,5 @@ export const LANG_DE = {
     'NATIVE_MODE': 'Nativer Modus'
   }
 }
+
+export default LANG_DE;

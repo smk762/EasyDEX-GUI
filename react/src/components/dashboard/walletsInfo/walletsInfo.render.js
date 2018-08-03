@@ -1,7 +1,10 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import { secondsToString } from 'agama-wallet-lib/src/time';
-import { formatBytes } from 'agama-wallet-lib/src/utils';
+import {
+  formatBytes,
+  fromSats,
+} from 'agama-wallet-lib/src/utils';
 
 const WalletsInfoRender = function() {
   if (this.props.ActiveCoin.mode === 'native') {
@@ -378,7 +381,7 @@ const WalletsInfoRender = function() {
                   <tr>
                     <td>{ translate('INDEX.PAY_TX_FEE') }</td>
                     <td>
-                      { _server.txfee }
+                      { fromSats(_server.txfee) } ({ _server.txfee } sats)
                     </td>
                   </tr>
                   <tr>

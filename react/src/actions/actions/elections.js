@@ -1,5 +1,8 @@
 import translate from '../../translate/translate';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import { triggerToaster } from '../actionCreators';
 import Store from '../../store';
 import urlParams from '../../util/url';
@@ -8,12 +11,12 @@ import fetchType from '../../util/fetchType';
 export const shepherdElectionsBalance = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/getbalance${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/getbalance${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -36,7 +39,7 @@ export const shepherdElectionsBalance = (coin, address) => {
 export const shepherdElectionsTransactions = (coin, address, type) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
       full: true,
@@ -44,7 +47,7 @@ export const shepherdElectionsTransactions = (coin, address, type) => {
       maxlength: 20,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/listtransactions${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/elections/listtransactions${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -67,10 +70,10 @@ export const shepherdElectionsTransactions = (coin, address, type) => {
 export const shepherdElectionsStatus = () => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/status`,
+      `http://127.0.0.1:${agamaPort}/shepherd/elections/status`,
       fetchType(
         JSON.stringify({
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -94,13 +97,13 @@ export const shepherdElectionsStatus = () => {
 export const shepherdElectionsLogin = (seed, network) => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/login`,
+      `http://127.0.0.1:${agamaPort}/shepherd/elections/login`,
       fetchType(
         JSON.stringify({
           seed,
           network,
           iguana: true,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -124,10 +127,10 @@ export const shepherdElectionsLogin = (seed, network) => {
 export const shepherdElectionsLogout = () => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/logout`,
+      `http://127.0.0.1:${agamaPort}/shepherd/elections/logout`,
       fetchType(
         JSON.stringify({
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -153,7 +156,7 @@ export const shepherdElectionsSend = (coin, value, sendToAddress, changeAddress,
 
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
       value,
@@ -164,7 +167,7 @@ export const shepherdElectionsSend = (coin, value, sendToAddress, changeAddress,
       verify: false
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -187,10 +190,10 @@ export const shepherdElectionsSend = (coin, value, sendToAddress, changeAddress,
 export const shepherdElectionsSendMany = (coin, targets, change, opreturn) => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx-multiout`,
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx-multiout`,
       fetchType(
         JSON.stringify({
-          token: Config.token,
+          token,
           coin,
           targets,
           change,

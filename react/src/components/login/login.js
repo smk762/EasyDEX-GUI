@@ -142,9 +142,6 @@ class Login extends React.Component {
     Store.dispatch(toggleNotaryElectionsModal(true));
   }
 
-  // the setInterval handler for 'activeCoins'
-  _iguanaActiveCoins = null;
-
   toggleLoginSettingsDropdownSection(sectionName) {
     Store.dispatch(toggleLoginSettingsModal(true));
 
@@ -381,6 +378,7 @@ class Login extends React.Component {
     this.resizeLoginTextarea();
 
     this.setState({
+      seedExtraSpaces: false,
       trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
       loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
@@ -789,9 +787,9 @@ class Login extends React.Component {
               alt={ _comps[i].toUpperCase() }
               width="30px"
               height="30px" />
-              { i !== _comps.length - 1 &&
-                <span className="margin-left-10 margin-right-10">+</span>
-              }
+            { i !== _comps.length - 1 &&
+              <span className="margin-left-10 margin-right-10">+</span>
+            }
           </span>
         );
       }
@@ -805,7 +803,7 @@ class Login extends React.Component {
             alt={ option.value.toUpperCase() }
             width="30px"
             height="30px" />
-            <span className="margin-left-10">{ option.value.toUpperCase() }</span>
+          <span className="margin-left-10">{ option.value.toUpperCase() }</span>
         </div>
       );
     }

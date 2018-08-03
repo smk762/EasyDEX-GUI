@@ -174,7 +174,7 @@ class ZcparamsFetchModal extends React.Component {
       _items.push(
         <option
           key={ `zcparams-dloptions-list-${key}` }
-          value={ `${key}` }>{ `${key}` }</option>
+          value={ key }>{ key }</option>
       );
     }
 

@@ -1,28 +1,30 @@
 import { triggerToaster } from '../actionCreators';
 import { CLI } from '../storeType';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import Store from '../../store';
+import urlParams from '../../util/url';
+import fetchType from '../../util/fetchType';
 
 export const shepherdCliPromise = (mode, chain, cmd, params) => {
-  let _payload = {
+  let payload = {
     mode,
     chain,
     cmd,
-    token: Config.token,
+    token,
   };
 
   if (params) {
-    _payload.params = params;
+    payload.params = params;
   }
 
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ payload: _payload }),
-    })
+    fetch(
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
@@ -39,21 +41,18 @@ export const shepherdCliPromise = (mode, chain, cmd, params) => {
 }
 
 export const shepherdCli = (mode, chain, cmd) => {
-  const _payload = {
+  const payload = {
     mode,
     chain,
     cmd,
-    token: Config.token,
+    token,
   };
 
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 'payload': _payload }),
-    })
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
     .catch((error) => {
       console.log(error);
       dispatch(

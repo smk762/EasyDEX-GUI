@@ -7,38 +7,6 @@ import Config from '../../../config';
 const NavbarRender = function() {
   return (
     <nav className="site-navbar navbar navbar-default navbar-fixed-top navbar-mega">
-      { /*<div className="navbar-header">
-        <button
-          type="button"
-          className="navbar-toggle hamburger hamburger-close navbar-toggle-left hided">
-          <span className="sr-only">{ translate('INDEX.TOGGLE_NAV') }</span>
-          <span className="hamburger-bar"></span>
-        </button>
-        <button
-          type="button"
-          className="navbar-toggle collapsed">
-          <i className="icon md-more"></i>
-        </button>
-        <div className="navbar-brand navbar-brand-center site-gridmenu-toggle">
-          <img
-            className="navbar-brand-logo hidden-xs"
-            src="assets/images/agama-logo-side.svg"
-            height="100"
-            width="100"
-            title={ translate('ABOUT.AGAMA_WALLET') } />
-          <img
-            className="navbar-brand-logo hidden-md hidden-sm hidden-lg"
-            src="assets/images/agama-icon.svg"
-            title={ translate('ABOUT.AGAMA_WALLET') } />
-          <span className="navbar-brand-text hidden-xs"></span>
-        </div>
-        <button
-          type="button"
-          className="navbar-toggle collapsed">
-          <span className="sr-only">{ translate('INDEX.TOGGLE_SEARCH') }</span>
-          <i className="icon md-search"></i>
-        </button>
-      </div>*/ }
       <div className="navbar-header">
         <div className="navbar-brand navbar-brand-center site-gridmenu-toggle">
           <img
@@ -135,7 +103,7 @@ const NavbarRender = function() {
               </a>
             </li>
             <li
-              className={ 'pointer dropdown' + (this.state.openDropMenu ? ' open' : '') }
+              className={ 'pointer dropdown' + (this.state.openDropMenu ? ' open' : '') + (this.props.Main.newUpdateAvailable.result === 'update' ? ' new-update-icon' : '') }
               onClick={ this.openDropMenu }>
               <a className="navbar-avatar dropdown-toggle">
                 <span className="navbar-avatar-inner">
@@ -145,6 +113,13 @@ const NavbarRender = function() {
                 </span>
               </a>
               <ul className="dropdown-menu">
+                { this.props.Main.newUpdateAvailable.result === 'update' &&
+                  <li className="new-update-icon-link">
+                    <a onClick={ this.openKomodoPlatformLink }>
+                      <i className="icon fa-level-up"></i> { translate('INDEX.NEW_VERSION') }
+                    </a>
+                  </li>
+                }
                 { !this.isSectionActive('settings') &&
                   <li>
                     <a onClick={ () => this.dashboardChangeSection('settings') }>

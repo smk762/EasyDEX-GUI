@@ -796,6 +796,7 @@ class WalletsData extends React.Component {
 const mapStateToProps = (state) => {
   return {
     ActiveCoin: {
+      coins: state.ActiveCoin.coins,
       coin: state.ActiveCoin.coin,
       mode: state.ActiveCoin.mode,
       send: state.ActiveCoin.send,

@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import 'bluebird';
+import mainWindow from '../util/mainWindow';
 
 import translate from '../translate/translate';
 import {
@@ -193,6 +194,8 @@ export const dashboardChangeActiveCoinState = (coin, mode, skipCoinsArrayUpdate)
 }
 
 export const dashboardChangeActiveCoin = (coin, mode, skipCoinsArrayUpdate) => {
+  mainWindow.activeCoin = coin;
+
   return dispatch => {
     dispatch(dashboardChangeActiveCoinState(coin, mode, skipCoinsArrayUpdate));
   }

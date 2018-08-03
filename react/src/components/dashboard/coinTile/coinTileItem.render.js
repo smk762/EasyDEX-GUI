@@ -83,6 +83,12 @@ const CoinTileItemRender = function() {
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP') }
               </li>
             }
+            { this.renderStopCoinButton() &&
+              item.mode === 'native' &&
+              <li onClick={ this.stopAllCoind }>
+                <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP_ALL') }
+              </li>
+            }
             { this.renderRemoveCoinButton() &&
               <li onClick={ () => this.removeCoin(item.coin, item.mode) }>
                 <i className="icon fa-trash-o margin-right-5"></i> { translate('DASHBOARD.REMOVE') }

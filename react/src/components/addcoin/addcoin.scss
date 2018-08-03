@@ -44,13 +44,15 @@
     }
   }
 
-  .form-material label.floating-label {
-    color: #757575;
-    left: 16px;
-  }
-  .form-material .form-control.focus~.floating-label,
-  .form-material .form-control:focus~.floating-label {
-    color: #FF6600;
+  .form-material {
+      label.floating-label {
+      color: #757575;
+      left: 16px;
+    }
+    .form-control.focus~.floating-label,
+    .form-control:focus~.floating-label {
+      color: #FF6600;
+    }
   }
   .seed-extra-spaces-warning {
     right: -3px !important;

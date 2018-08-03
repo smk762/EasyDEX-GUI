@@ -7,6 +7,7 @@ import {
   shepherdElectrumCoins,
 } from '../../actions/actionCreators';
 import mainWindow from '../../util/mainWindow';
+import Config from '../../config';
 
 class Main extends React.Component {
   constructor(props) {
@@ -18,7 +19,6 @@ class Main extends React.Component {
 
   componentDidMount() {
     const appVersion = mainWindow.appBasicInfo;
-    const appConfig = mainWindow.appConfig;
 
     if (appVersion) {
       document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta)`;
@@ -26,6 +26,11 @@ class Main extends React.Component {
 
     document.addEventListener('dragover', event => event.preventDefault());
     document.addEventListener('drop', event => event.preventDefault());
+
+    // apply dark theme
+    if (Config.darkmode) {
+      document.body.setAttribute('darkmode', true);
+    }
   }
 
   componentWillMount() {

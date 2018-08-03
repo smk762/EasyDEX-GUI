@@ -43,7 +43,6 @@ class CoinTileItem extends React.Component {
   constructor() {
     super();
     this.state = {
-      appConfig: {},
       activeCoin: null,
       activeCoinMode: null,
       propsUpdatedCounter: 0,
@@ -52,18 +51,13 @@ class CoinTileItem extends React.Component {
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
     this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.stopAllCoind = this.stopAllCoind.bind(this);
   }
 
   componentWillMount() {
-    const appConfig = mainWindow.appConfig;
-
     if (!this.props.ActiveCoin.coin) {
       this.autoSetActiveCoin();
     }
-
-    this.setState({
-      appConfig,
-    });
 
     document.addEventListener(
       'click',
@@ -116,7 +110,17 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  renderStopCoinButton(item) {
+  renderStopAllCoinsButton() {
+    if (this.props.Main &&
+        this.props.Main.coins &&
+        this.props.Main.coins.native &&
+        this.props.Main.coins.native.length &&
+        this.props.Main.coins.native.length > 1) {
+      return true;
+    }
+  }
+
+  renderStopCoinButton() {
     if (this.props.Main &&
         this.props.Main.coins &&
         this.props.Main.coins.native &&
@@ -130,8 +134,7 @@ class CoinTileItem extends React.Component {
         this.props.Main.coins &&
         ((this.props.Main.coins.native &&
         this.props.Main.coins.native.length &&
-        this.state.appConfig &&
-        !this.state.appConfig.stopNativeDaemonsOnQuit) ||
+        !Config.stopNativeDaemonsOnQuit) ||
         (this.props.Main.coins.spv &&
         this.props.Main.coins.spv.length))) {
       return true;
@@ -166,7 +169,11 @@ class CoinTileItem extends React.Component {
             skipCoin !== 'KMD') {
           _coin = 'KMD';
           _mode = 'native';
-        } else if (_coinMode.KMD && _coinMode.KMD === 'spv' && skipCoin !== 'KMD') {
+        } else if (
+          _coinMode.KMD &&
+          _coinMode.KMD === 'spv' &&
+          skipCoin !== 'KMD'
+        ) {
           _coin = 'KMD';
           _mode = 'spv';
         }
@@ -235,6 +242,47 @@ class CoinTileItem extends React.Component {
     });
   }
 
+  stopAllCoind() {
+    const _coins = this.props.Main.coins.native;
+
+    this.setState({
+      toggledCoinMenu: null,
+    });
+
+    for (let i = 0; i < _coins.length; i++) {
+      const coin = _coins[i];
+
+      shepherdStopCoind(coin)
+      .then((res) => {
+        if (res.msg === 'error') {
+          Store.dispatch(
+            triggerToaster(
+              translate('TOASTR.COIN_UNABLE_TO_STOP', coin),
+              translate('TOASTR.ERROR'),
+              'error'
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              `${coin} ${translate('TOASTR.COIN_IS_STOPPED')}`,
+              translate('TOASTR.COIN_NOTIFICATION'),
+              'success'
+            )
+          );
+        }
+
+        if (i === _coins.length - 1) {
+          this.autoSetActiveCoin(coin);
+          setTimeout(() => {
+            Store.dispatch(getDexCoins());
+            Store.dispatch(activeHandle());
+          }, 500);
+        }
+      });
+    }
+  }
+
   dispatchCoinActions(coin, mode) {
     if (this.props.Dashboard &&
         this.props.Dashboard.activeSection === 'wallets') {
@@ -279,7 +327,12 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-      } else if (mode === 'spv' && this.props.Dashboard.electrumCoins && this.props.Dashboard.electrumCoins[coin] && this.props.Dashboard.electrumCoins[coin].pub) {
+      } else if (
+        mode === 'spv' &&
+        this.props.Dashboard.electrumCoins &&
+        this.props.Dashboard.electrumCoins[coin] &&
+        this.props.Dashboard.electrumCoins[coin].pub
+      ) {
         Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
 
         if (this.props.ActiveCoin.activeSection === 'default') {
