@@ -5,6 +5,8 @@ import ReactTooltip from 'react-tooltip';
 import {
   formatValue,
   isPositiveNumber,
+  fromSats,
+  toSats,
 } from 'agama-wallet-lib/src/utils';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
@@ -372,14 +374,14 @@ export const SendRender = function() {
                     <strong>{ translate('SEND.FEE') }</strong>
                   </div>
                   <div className="col-lg-12 col-sm-12 col-xs-12">
-                    { formatValue(this.state.spvPreflightRes.fee * 0.00000001) } ({ this.state.spvPreflightRes.fee } { translate('SEND.SATS') })
+                    { formatValue(fromSats(this.state.spvPreflightRes.fee)) } ({ this.state.spvPreflightRes.fee } { translate('SEND.SATS') })
                   </div>
                 </div>
               }
               { this.state.spvPreflightRes &&
                 <div className="row padding-top-20">
                   { this.state.spvPreflightRes.change === 0 &&
-                    (formatValue((this.state.spvPreflightRes.value * 0.00000001) - (this.state.spvPreflightRes.fee * 0.00000001)) > 0) &&
+                    (formatValue((fromSats(this.state.spvPreflightRes.value)) - (fromSats(this.state.spvPreflightRes.fee))) > 0) &&
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.ADJUSTED_AMOUNT') }</strong>
                       <span>
@@ -390,25 +392,25 @@ export const SendRender = function() {
                           effect="solid"
                           className="text-left" />
                       </span>
-                      &nbsp;{ formatValue((this.state.spvPreflightRes.value * 0.00000001) - (this.state.spvPreflightRes.fee * 0.00000001)) }
+                      &nbsp;{ formatValue((fromSats(this.state.spvPreflightRes.value)) - (fromSats(this.state.spvPreflightRes.fee))) }
                     </div>
                   }
                   { this.state.spvPreflightRes.estimatedFee < 0 &&
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.KMD_INTEREST') }</strong>&nbsp;
-                      { Math.abs(formatValue(this.state.spvPreflightRes.estimatedFee * 0.00000001)) } { translate('SEND.TO') } { this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub }
+                      { Math.abs(formatValue(fromSats(this.state.spvPreflightRes.estimatedFee))) } { translate('SEND.TO') } { this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub }
                     </div>
                   }
                   { this.state.spvPreflightRes.totalInterest > 0 &&
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.KMD_INTEREST') }</strong>&nbsp;
-                      { Math.abs(formatValue(this.state.spvPreflightRes.totalInterest * 0.00000001)) } { translate('SEND.TO') } { this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub }
+                      { Math.abs(formatValue(fromSats(this.state.spvPreflightRes.totalInterest))) } { translate('SEND.TO') } { this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub }
                     </div>
                   }
                   { this.state.spvPreflightRes.change >= 0 &&
                     <div className="col-lg-12 col-sm-12 col-xs-12">
                       <strong>{ translate('SEND.TOTAL_AMOUNT_DESC') }</strong>&nbsp;
-                      { formatValue((this.state.spvPreflightRes.value * 0.00000001) + (this.state.spvPreflightRes.fee * 0.00000001)) }
+                      { formatValue((fromSats(this.state.spvPreflightRes.value)) + fromSats((this.state.spvPreflightRes.fee))) }
                     </div>
                   }
                 </div>
