@@ -9,7 +9,7 @@ import fetchType from '../../util/fetchType';
 const fiatRates = (pricesJson) => {
   return dispatch => {
     return fetch(
-      `https://www.atomicexplorer.com/api/rates/kmd`,
+      'https://www.atomicexplorer.com/api/rates/kmd?currency=all',
       fetchType.get
     )
     .catch((error) => {

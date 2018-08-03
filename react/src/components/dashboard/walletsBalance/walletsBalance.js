@@ -11,6 +11,7 @@ import ReactTooltip from 'react-tooltip';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Store from '../../../store';
+import FiatSymbol from '../fiat/fiatSymbol';
 
 import WalletsBalanceRender from './walletsBalance.render';
 
@@ -120,17 +121,17 @@ class WalletsBalance extends React.Component {
 
       if (this.props.ActiveCoin.coin === 'KMD') {
         if (_prices.fiat &&
-            _prices.fiat.USD) {
-          _fiatPriceTotal = formatValue(_balance * _prices.fiat.USD);
-          _fiatPricePerCoin = _prices.fiat.USD;
+            _prices.fiat[Config.defaultFiatCurrency.toUpperCase()]) {
+          _fiatPriceTotal = formatValue(_balance * _prices.fiat[Config.defaultFiatCurrency.toUpperCase()]);
+          _fiatPricePerCoin = _prices.fiat[Config.defaultFiatCurrency.toUpperCase()];
         }
       } else {
         if (_prices.fiat &&
-            _prices.fiat.USD &&
+            _prices.fiat[Config.defaultFiatCurrency.toUpperCase()] &&
             _prices[`${this.props.ActiveCoin.coin}/KMD`] &&
             _prices[`${this.props.ActiveCoin.coin}/KMD`].low) {
-          _fiatPriceTotal = _balance * _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
-          _fiatPricePerCoin = _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
+          _fiatPriceTotal = _balance * _prices.fiat[Config.defaultFiatCurrency.toUpperCase()] * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
+          _fiatPricePerCoin = _prices.fiat[Config.defaultFiatCurrency.toUpperCase()] * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
         }
       }
 
@@ -141,8 +142,11 @@ class WalletsBalance extends React.Component {
             _fiatPricePerCoin > 0 &&
             <span>
               <div
-                data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ $${formatValue(_fiatPricePerCoin)}` }
-                className="text-right">${ formatValue(_fiatPriceTotal) }</div>
+                data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ ${formatValue(_fiatPricePerCoin)} ${Config.defaultFiatCurrency.toUpperCase()}` }
+                data-html={ true }
+                className="text-right">
+                <FiatSymbol symbol={ Config.defaultFiatCurrency } />{ formatValue(_fiatPriceTotal) }
+              </div>
               <ReactTooltip
                 effect="solid"
                 className="text-left" />

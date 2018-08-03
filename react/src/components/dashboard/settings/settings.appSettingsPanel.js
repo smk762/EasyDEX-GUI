@@ -151,15 +151,15 @@ class AppSettingsPanel extends React.Component {
     );
   }
 
-  renderSelectOptions(data, name) {
+  renderSelectOptions(data, translateSelector, name) {
     let _items = [];
 
     for (let i = 0; i < data.length; i++) {
       _items.push(
         <option
           key={ `settings-${name}-opt-${i}` }
-          value={ data[i].name }>
-          { data[i].label }
+          value={ data[i] }>
+          { translate(`${translateSelector}.${data[i].toUpperCase()}`) }
         </option>
       );
     }
@@ -348,7 +348,7 @@ class AppSettingsPanel extends React.Component {
                     name={ `${key}` }
                     value={ _appConfig[key] }
                     onChange={ (event) => this.updateInputSettings(event, key) }>
-                    { this.renderSelectOptions(this.state.appConfigSchema[key].data, key) }
+                    { this.renderSelectOptions(this.state.appConfigSchema[key].data, this.state.appConfigSchema[key].translateSelector, key) }
                   </select>
                 }
               </td>
