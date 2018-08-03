@@ -1,6 +1,6 @@
 /* dark */
 body[darkmode="true"] {
-  background-color: #4c4f69;
+  background-color: #575e98;
 
   .switch {
     position: relative;
@@ -247,7 +247,7 @@ body[darkmode="true"] {
   input[type="password"],
   textarea {
     background: #2f3140;
-    border: solid 1px #2f3140;
+    border: solid 1px rgba(255, 255, 255, 0.15);
     color: #fff !important;
   }
 
@@ -305,7 +305,35 @@ body[darkmode="true"] {
 
   .site-navbar,
   .navbar-container {
-    background: #2f3246 !important;
+    background: #41455a !important;
     color: #fff !important;
+  }
+  .navbar-default .navbar-toolbar>.active>a,
+  .navbar-default .navbar-toolbar>.active>a:focus,
+  .navbar-default .navbar-toolbar>.active>a:hover,
+  .navbar-default .navbar-toolbar>li>a {
+    color: #fff !important;
+  }
+  .page-aside,
+  .page-header-bordered {
+    background: #3b3d4e !important;
+    color: #fff;
+  }
+  .navbar-default .navbar-toolbar>.active>a,
+  .navbar-default .navbar-toolbar>.active>a:focus,
+  .navbar-default .navbar-toolbar>.active>a:hover {
+    background-color: #545771;
+  }
+  .coin-logo.breadcrumb {
+    color: #fff;
+  }
+  .list-group-item .widget,
+  .list-group-item .widget-content {
+    background-color: #2e3144 !important;
+  }
+  .page-main,
+  .page-content {
+    background: #3b3d4e !important;
+    border-color: #504d6b;
   }
 }
