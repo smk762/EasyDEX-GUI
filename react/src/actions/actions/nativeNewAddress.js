@@ -28,8 +28,8 @@ export const getNewKMDAddresses = (coin, pubpriv, mode) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getNewKMDAddresses',
-          'Error',
+          translate('API.getNewAddress') + ' (code: getNewKMDAddresses)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

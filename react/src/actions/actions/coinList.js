@@ -18,8 +18,8 @@ export const shepherdElectrumLock = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumLock',
-          'Error',
+          translate('API.shepherdElectrumLock') + ' (code: shepherdElectrumLock)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -39,8 +39,8 @@ export const shepherdElectrumLogout = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumLogout',
-          'Error',
+          translate('API.shepherdElectrumLogout') + ' (code: shepherdElectrumLogout)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -60,8 +60,8 @@ export const shepherdStopCoind = (coin) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdStopCoind',
-          'Error',
+          translate('API.shepherdStopCoind') + ' (code: shepherdStopCoind)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -90,8 +90,8 @@ export const shepherdRemoveCoin = (coin, mode) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdRemoveCoin',
-          'Error',
+          translate('API.shepherdRemoveCoin') + ' (code: shepherdRemoveCoin)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -125,8 +125,8 @@ export const shepherdGetCoinList = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdGetCoinList',
-          'Error',
+          translate('API.shepherdGetCoinList') + ' (code: shepherdGetCoinList)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -150,8 +150,8 @@ export const shepherdPostCoinList = (data) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdPostCoinList',
-          'Error',
+          translate('API.shepherdPostCoinList') + ' (code: shepherdPostCoinList)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -180,8 +180,8 @@ export const shepherdClearCoindFolder = (coin, keepWalletDat) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdClearCoindFolder',
-          'Error',
+          translate('API.shepherdClearCoindFolder') + ' (code: shepherdClearCoindFolder)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

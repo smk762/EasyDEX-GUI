@@ -7,6 +7,7 @@ import Config, {
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
+import translate from '../../translate/translate';
 
 export const getTxDetails = (coin, txid, type) => {
   return new Promise((resolve, reject) => {
@@ -43,8 +44,8 @@ export const getTxDetails = (coin, txid, type) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'getTransaction',
-          'Error',
+          translate('API.shepherdElectrumListunspent') + ' (code: getTransaction)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

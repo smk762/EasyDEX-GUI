@@ -29,8 +29,8 @@ export const getNativePeers = (coin) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getNativePeers',
-          'Error',
+          translate('API.getNativePeers') + ' (code: getNativePeers)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -61,8 +61,8 @@ export const getNativeNettotals = (coin) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getNativeNettotals',
-          'Error',
+          translate('API.getNativeNettotals') + ' (code: getNativeNettotals)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

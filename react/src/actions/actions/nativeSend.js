@@ -64,8 +64,8 @@ export const sendNativeTx = (coin, _payload) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'sendNativeTx',
-          'Error',
+          translate('API.sendNativeTx') + ' (code: sendNativeTx)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -151,8 +151,8 @@ export const getKMDOPID = (opid, coin) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getKMDOPID',
-          'Error',
+          translate('API.txDataFail') + ' (code: getKMDOPID)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -190,8 +190,8 @@ export const sendToAddressPromise = (coin, address, amount) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'sendToAddress',
-          'Error',
+          translate('API.sendNativeTx') + ' (code: sendToAddressPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -236,8 +236,8 @@ export const validateAddressPromise = (coin, address) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'validateAddressPromise',
-          'Error',
+          translate('API.validateAddress') + ' (code: validateAddressPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

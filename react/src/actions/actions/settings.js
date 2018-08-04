@@ -36,8 +36,8 @@ export const getAppInfo = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getAppInfo',
-          'Error',
+          translate('API.getSettings') + ' (code: getAppInfo)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -122,8 +122,8 @@ export const getDebugLog = (target, linesCount, acName) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getDebugLog',
-          'Error',
+          translate('API.getSettings') + ' (code: getDebugLog)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -148,8 +148,8 @@ export const saveAppConfig = (_payload) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'saveAppConfig',
-          'Error',
+          translate('API.getSettings') + ' (code: saveAppConfig)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -188,8 +188,8 @@ export function getAppConfig() {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getAppConfig',
-          'Error',
+          translate('API.getSettings') + ' (code: getAppConfig)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -209,8 +209,8 @@ export const resetAppConfig = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'resetAppConfig',
-          'Error',
+          translate('API.getSettings') + ' (code: resetAppConfig)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -245,8 +245,8 @@ export const coindGetStdout = (chain) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'coindGetStdout',
-          'Error',
+          translate('API.getSettings') + ' (code: coindGetStdout)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -279,8 +279,8 @@ export const getWalletDatKeys = (chain, keyMatchPattern) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'getWalletDatKeys',
-          'Error',
+          translate('API.getSettings') + ' (code: getWalletDatKeys)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -311,8 +311,8 @@ export const dumpPrivKey = (coin, address, isZaddr) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'dumpPrivKey',
-          'Error',
+          translate('API.dumpPrivKey') + ' (code: dumpPrivKeyPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -343,8 +343,8 @@ export const validateAddress = (coin, address, isZaddr) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'validateAddress',
-          'Error',
+          translate('API.validateAddress') + ' (code: validateAddressPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -366,8 +366,8 @@ export const resetSPVCache = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'resetSPVCache',
-          'Error',
+          translate('API.getSettings') + ' (code: resetSPVCache)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

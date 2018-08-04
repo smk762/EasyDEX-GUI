@@ -23,8 +23,8 @@ export const shepherdElectrumTransactionsCSV = (coin, address) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumTransactionsCSV',
-          'Error',
+          translate('API.shepherdElectrumTransactionsCSV') + ' (code: shepherdElectrumTransactionsCSV)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -51,8 +51,8 @@ export const shepherdNativeTransactionsCSV = (coin) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumTransactionsCSV',
-          'Error',
+          translate('API.shepherdElectrumTransactionsCSV') + ' (code: shepherdElectrumTransactionsCSV)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

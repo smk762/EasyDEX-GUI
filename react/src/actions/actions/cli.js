@@ -7,6 +7,7 @@ import Config, {
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
 export const shepherdCliPromise = (mode, chain, cmd, params) => {
   let payload = {
@@ -29,8 +30,8 @@ export const shepherdCliPromise = (mode, chain, cmd, params) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdCli',
-          'Error',
+          translate('API.shepherdCli') + ' (code: shepherdCli)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -57,7 +58,8 @@ export const shepherdCli = (mode, chain, cmd) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdCli',
+          translate('API.shepherdCli') + ' (code: shepherdCli)',
+          translate('TOASTR.ERROR'),
           'Error',
           'error'
         )

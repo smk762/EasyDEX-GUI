@@ -7,6 +7,7 @@ import Config, {
 import { DASHBOARD_UPDATE } from '../storeType';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
+import translate from '../../translate/translate';
 
 export const getDashboardUpdate = (coin, activeCoinProps) => {
   return dispatch => {
@@ -24,8 +25,8 @@ export const getDashboardUpdate = (coin, activeCoinProps) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getDashboardUpdate',
-          'Error',
+          translate('API.shepherdElectrumBip39Keys') + ' (code: getDashboardUpdate)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

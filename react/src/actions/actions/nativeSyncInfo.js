@@ -116,8 +116,8 @@ export const getSyncInfoNative = (coin, skipDebug, skipRemote, suppressErrors) =
       if (!suppressErrors) { // rescan case
         dispatch(
           triggerToaster(
-            'getSyncInfo',
-            'Error',
+            translate('API.getSyncInfo') + ' (code: getSyncInfo)',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -222,8 +222,8 @@ export const getBlockTemplate = (_json, coin) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getBlockTemplate',
-          'Error',
+          translate('API.getSyncInfo') + ' (code: getBlockTemplate)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -280,8 +280,8 @@ export const getDebugLogProgress = (_json, coin) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getDebugLogProgress',
-          'Error',
+          translate('API.getSyncInfo') + ' (code: getDebugLogProgress)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

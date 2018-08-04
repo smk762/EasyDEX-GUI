@@ -6,6 +6,7 @@ import Config, {
 } from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
 export const getListUnspent = (coin) => {
   return new Promise((resolve, reject) => {
@@ -25,8 +26,8 @@ export const getListUnspent = (coin) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'getListUnspent',
-          'Error',
+          translate('API.shepherdElectrumListunspent') + ' (code: getListUnspent)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -74,8 +75,8 @@ export const getRawTransaction = (coin, txid) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'getTransaction',
-          'Error',
+          translate('API.shepherdElectrumListunspent') + ' (code: getListUnspent)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

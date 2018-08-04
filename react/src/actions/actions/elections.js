@@ -23,8 +23,8 @@ export const shepherdElectionsBalance = (coin, address) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectionsBalance',
-          'Error',
+          translate('API.shepherdElectionsBalance') + ' (code: shepherdElectionsBalance)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -54,8 +54,8 @@ export const shepherdElectionsTransactions = (coin, address, type) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectionsTransactions',
-          'Error',
+          translate('API.shepherdElectionsTransactions') + ' (code: shepherdElectionsTransactions)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -81,8 +81,8 @@ export const shepherdElectionsStatus = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsStatus',
-          'Error',
+          translate('API.shepherdElectionsStatus') + ' (code: shepherdElectionsStatus)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -111,8 +111,8 @@ export const shepherdElectionsLogin = (seed, network) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsLogin',
-          'Error',
+          translate('API.shepherdElectionsLogin') + ' (code: shepherdElectionsLogin)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -138,8 +138,8 @@ export const shepherdElectionsLogout = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsLogout',
-          'Error',
+          translate('API.shepherdElectionsLogout') + ' (code: shepherdElectionsLogout)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -174,8 +174,8 @@ export const shepherdElectionsSend = (coin, value, sendToAddress, changeAddress,
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsSend',
-          'Error',
+          translate('API.shepherdElectionsSend') + ' (code: shepherdElectionsSend)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -208,7 +208,8 @@ export const shepherdElectionsSendMany = (coin, targets, change, opreturn) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsSendMany',
+          translate('API.shepherdElectionsSendMany') + ' (code: shepherdElectionsSendMany)',
+          translate('TOASTR.ERROR'),
           'Error',
           'error'
         )

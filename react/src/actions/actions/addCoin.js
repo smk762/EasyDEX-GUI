@@ -43,8 +43,8 @@ export const activeHandle = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'activeHandle',
-          'Error',
+          translate('API.activeHandle') + ' (code: activeHandle)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -74,8 +74,8 @@ export const shepherdElectrumAuth = (seed) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumAuth',
-          'Error',
+          translate('API.shepherdElectrumAuth') + ' (code: shepherdElectrumAuth)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -89,7 +89,7 @@ export const shepherdElectrumAuth = (seed) => {
         dispatch(
           triggerToaster(
             translate('TOASTR.INCORRECT_WIF'),
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -112,8 +112,8 @@ export const shepherdElectrumAddCoin = (coin) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumAddCoin',
-          'Error',
+          translate('API.shepherdElectrumAddCoin') + ' (code: shepherdElectrumAddCoin)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -262,8 +262,8 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('FAILED_SHEPHERD_HERD'),
-          translate('TOASTR.SERVICE_NOTIFICATION'),
+          translate('API.shepherdHerd') + ' (code: shepherdHerd)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -361,7 +361,8 @@ export const _shepherdGetConfig = (coin, mode, startupParams) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          '_shepherdGetConfig',
+          translate('API._shepherdGetConfig') + ' (code: _shepherdGetConfig)',
+          translate('TOASTR.ERROR'),
           'Error',
           'error'
         )
@@ -398,8 +399,8 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
         console.log(error);
         dispatch(
           triggerToaster(
-            'shepherdGetConfig',
-            'Error',
+            translate('API.shepherdGetConfig') + ' (code: shepherdGetConfig)',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -431,8 +432,8 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
         console.log(error);
         dispatch(
           triggerToaster(
-            'shepherdGetConfig',
-            'Error',
+            translate('API.shepherdGetConfig') + ' (code: shepherdGetConfig)',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );

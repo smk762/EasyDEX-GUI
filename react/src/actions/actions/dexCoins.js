@@ -8,6 +8,7 @@ import Config, {
 } from '../../config';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
 // TODO: find out why it errors on slow systems
 export const getDexCoins = () => {
@@ -23,8 +24,8 @@ export const getDexCoins = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getDexCoins',
-          'Error',
+          translate('API.getDexCoins') + ' (code: getDexCoins)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

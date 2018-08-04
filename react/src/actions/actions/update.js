@@ -8,6 +8,7 @@ import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import { NEW_UPDATE_AVAILABLE } from '../storeType';
+import translate from '../../translate/translate';
 
 export const newUpdateAvailable = () => {
   return dispatch => {
@@ -48,8 +49,8 @@ export const checkForUpdateUIPromise = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'checkForUpdateUIPromise',
-          'Error',
+          translate('API.getUpdate') + ' (code: checkForUpdateUIPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -72,8 +73,8 @@ export const updateUIPromise = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'updateUIPromise',
-          'Error',
+          translate('API.getUpdate') + ' (code: updateUIPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -97,8 +98,8 @@ export const downloadZCashParamsPromise = (dloption) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'downloadZCashParamsPromise',
-          'Error',
+          translate('API.downloadZCashParamsPromise') + ' (code: updateUIPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

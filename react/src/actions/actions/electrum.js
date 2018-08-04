@@ -69,7 +69,8 @@ export const shepherdGetLocalBTCFees = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdGetLocalBTCFees',
+          translate('API.shepherdGetLocalBTCFees') + ' (code: shepherdGetLocalBTCFees)',
+          translate('TOASTR.ERROR'),
           'Error',
           'error'
         )
@@ -98,8 +99,8 @@ export const shepherdElectrumSetServer = (coin, address, port) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSetServer',
-          'Error',
+          translate('API.shepherdElectrumSetServer') + ' (code: shepherdElectrumSetServer)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -127,8 +128,8 @@ export const shepherdElectrumCheckServerConnection = (address, port, proto) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumCheckServerConnection',
-          'Error',
+          translate('API.shepherdElectrumCheckServerConnection') + ' (code: shepherdElectrumCheckServerConnection)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -157,8 +158,8 @@ export const shepherdElectrumKeys = (seed) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumKeys',
-          'Error',
+          translate('API.shepherdElectrumKeys') + ' (code: shepherdElectrumKeys)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -185,8 +186,8 @@ export const shepherdElectrumBalance = (coin, address) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumBalance',
-          'Error',
+          translate('API.shepherdElectrumBalance') + ' (code: shepherdElectrumBalance)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -235,8 +236,8 @@ export const shepherdElectrumTransactions = (coin, address) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumTransactions',
-          'Error',
+          translate('API.shepherdElectrumTransactions') + ' (code: shepherdElectrumTransactions)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -269,8 +270,8 @@ export const shepherdElectrumKVTransactionsPromise = (coin, address) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumTransactionsKV',
-          'Error',
+          translate('API.shepherdElectrumTransactionsKV') + ' (code: shepherdElectrumTransactionsKV)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -311,8 +312,8 @@ export const shepherdElectrumCoins = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumCoins',
-          'Error',
+          translate('API.shepherdElectrumCoins') + ' (code: shepherdElectrumCoins)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -368,8 +369,8 @@ export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, 
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumSend',
-          'Error',
+          translate('API.shepherdElectrumSend') + ' (code: shepherdElectrumSend)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -404,8 +405,8 @@ export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAd
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSendPromise',
-          'Error',
+          translate('API.shepherdElectrumSend') + ' (code: shepherdElectrumSendPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -453,8 +454,8 @@ export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, change
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSendPreflight',
-          'Error',
+          translate('API.shepherdElectrumSend') + ' (code: shepherdElectrumSendPreflight)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -482,8 +483,8 @@ export const shepherdElectrumListunspent = (coin, address) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumListunspent',
-          'Error',
+          translate('API.shepherdElectrumListunspent') + ' (code: shepherdElectrumListunspent)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -513,8 +514,8 @@ export const shepherdElectrumBip39Keys = (seed, match, addressdepth, accounts) =
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSetServer',
-          'Error',
+          translate('API.shepherdElectrumBip39Keys') + ' (code: shepherdElectrumBip39Keys)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -544,8 +545,8 @@ export const shepherdElectrumSplitUtxoPromise = (payload) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSendPromise',
-          'Error',
+          translate('API.shepherdElectrumSend') + ' (code: shepherdElectrumSplitUtxoPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -572,8 +573,8 @@ export const shepherdElectrumKvServersList = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumKvServersList',
-          'Error',
+          translate('API.shepherdElectrumKvServersList') + ' (code: shepherdElectrumKvServersList)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

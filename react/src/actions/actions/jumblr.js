@@ -9,6 +9,7 @@ import Config, {
 } from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
 const getNewAddress = (coin) => {
   return new Promise((resolve, reject) => {
@@ -28,8 +29,8 @@ const getNewAddress = (coin) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'genJumblrAddress + getKMDAddressesNative',
-          'Error',
+          translate('API.getNewAddress') + ' (code: genJumblrAddress + getKMDAddressesNative)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -60,8 +61,8 @@ export const setJumblrAddress = (coin, type, address) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'setJumblrAddress',
-          'Error',
+          translate('API.setJumblrAddress') + ' (code: setJumblrAddress)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -92,8 +93,8 @@ export const pauseJumblr = (coin) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'pauseJumblr',
-          'Error',
+          translate('API.pauseJumblr') + ' (code: pauseJumblr)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -124,8 +125,8 @@ export const resumeJumblr = (coin) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'resumeJumblr',
-          'Error',
+          translate('API.resumeJumblr') + ' (code: resumeJumblr)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -156,8 +157,8 @@ const dumpPrivkey = (coin, key) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'dumpPrivkey ',
-          'Error',
+          translate('API.dumpPrivkey') + ' (code: dumpPrivkey)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -195,8 +196,8 @@ export const importPrivkey = (coin, key, rescan = false, isZKey) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'importPrivkey ',
-          'Error',
+          translate('API.importPrivkey') + ' (code: importPrivkey)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

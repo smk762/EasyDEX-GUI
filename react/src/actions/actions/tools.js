@@ -26,8 +26,8 @@ export const shepherdToolsSeedKeys = (seed) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdToolsSeedKeys',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsSeedKeys)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -54,8 +54,8 @@ export const shepherdToolsBalance = (coin, address) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdToolsBalance',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsBalance)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -84,8 +84,8 @@ export const shepherdToolsTransactions = (coin, address) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdToolsTransactions',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsTransactions)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -119,8 +119,8 @@ export const shepherdToolsBuildUnsigned = (coin, value, sendToAddress, changeAdd
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdToolsBuildUnsigned',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsBuildUnsigned)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -148,8 +148,8 @@ export const shepherdToolsListunspent = (coin, address) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdToolsListunspent',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsListunspent)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -177,8 +177,8 @@ export const shepherdToolsPushTx = (network, rawtx) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdToolsPushTx',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsPushTx)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -205,8 +205,8 @@ export const shepherdToolsWifToKP = (coin, wif) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdToolsWifToKP',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsWifToKP)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -235,8 +235,8 @@ export const shepherdToolsSeedToWif = (seed, network, iguana) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdToolsSeedToWif',
-          'Error',
+          translate('API.getTools') + ' (code: shepherdToolsSeedToWif)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

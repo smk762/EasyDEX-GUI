@@ -1,7 +1,6 @@
 import Config, {
   token,
   agamaPort,
-  rpc2cli,
 } from '../../config';
 import {
   getDecryptedPassphrase,
@@ -31,8 +30,8 @@ export const encryptPassphrase = (string, key, suppressToastr, customPinName) =>
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'encryptKey',
-          'Error',
+          translate('API.encryptKey') + ' (code: encryptKey)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -115,8 +114,8 @@ export const modifyPin = (pubkey, remove, pubkeynew) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'modifyPin',
-          'Error',
+          translate('API.encryptKey') + ' (code: modifyPin)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -153,8 +152,8 @@ export const loadPinList = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getPinList',
-          'Error',
+          translate('API.encryptKey') + ' (code: getPinList)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -184,8 +183,8 @@ export const changePin = (oldKey, newKey, pubkey) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'decryptKey',
-          'Error',
+          translate('API.encryptKey') + ' (code: decryptKey)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -212,8 +211,8 @@ export const changePin = (oldKey, newKey, pubkey) => {
           console.log(error);
           Store.dispatch(
             triggerToaster(
-              'encryptKey',
-              'Error',
+              translate('API.encryptKey') + ' (code: changePin + encryptKey)',
+              translate('TOASTR.ERROR'),
               'error'
             )
           );

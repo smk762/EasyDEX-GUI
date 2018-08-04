@@ -6,6 +6,7 @@ import Config, {
 } from '../../config';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
 export const shepherdGetSysInfo = () => {
   return dispatch => {
@@ -20,8 +21,8 @@ export const shepherdGetSysInfo = () => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdGetSysInfo',
-          'Error',
+          translate('API.getSettings') + ' (code: shepherdGetSysInfo)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       )
