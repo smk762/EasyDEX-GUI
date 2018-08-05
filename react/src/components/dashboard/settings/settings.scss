@@ -209,3 +209,15 @@
 .zcparams-progress {
   min-height: 140px;
 }
+
+#SettingsAccordion .settings-address-book {
+  table td:last-child {
+    width: inherit;
+  }
+  .edit-block {
+    i {
+      position: relative;
+      top: 8px;
+    }
+  }
+}

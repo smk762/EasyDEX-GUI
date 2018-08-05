@@ -4,6 +4,7 @@ import {
   LOAD_APP_CONFIG,
   LOAD_APP_INFO,
   CLI,
+  ADDRESS_BOOK,
 } from '../actions/storeType';
 
 export const Settings = (state = {
@@ -13,6 +14,7 @@ export const Settings = (state = {
   appSettings: null,
   appInfo: null,
   cli: null,
+  addressBook: {},
 }, action) => {
   switch (action.type) {
     case GET_WIF_KEY:
@@ -40,6 +42,11 @@ export const Settings = (state = {
       return {
         ...state,
         cli: action.data,
+      };
+    case ADDRESS_BOOK:
+      return {
+        ...state,
+        addressBook: action.addressBook,
       };
     default:
       return state;

@@ -86,7 +86,7 @@ class CoindClearDataDirPanel extends React.Component {
 
     _items.push(
       <option
-        key={ `coind-clear-data-coins-none` }
+        key="coind-clear-data-coins-none"
         value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
     );
 

@@ -311,22 +311,36 @@ export const SendRender = function() {
               <h3 className="panel-title">
                 { translate('INDEX.SEND') } { this.props.ActiveCoin.coin }
               </h3>
-              { this.props.ActiveCoin.mode === 'spv' &&
-                Config.experimentalFeatures &&
-                kvCoins[this.props.ActiveCoin.coin] &&
+              { ((this.props.ActiveCoin.mode === 'spv' && Config.experimentalFeatures && kvCoins[this.props.ActiveCoin.coin]) ||
+                  (this.props.ActiveCoin.mode === 'spv' && Config.coinControl)) &&
                 <div className="kv-select-block">
-                  <button
-                    type="button"
-                    className={ 'btn btn-default' + (this.state.kvSend ? ' active' : '') }
-                    onClick={ this.toggleKvSend }>
-                    { translate('KV.SEND_KV') }
-                  </button>
-                  <button
-                    type="button"
-                    className={ 'btn btn-default margin-left-10' + (!this.state.kvSend ? ' active' : '') }
-                    onClick={ this.toggleKvSend }>
-                    { translate('KV.SEND_TX') }
-                  </button>
+                  { this.props.ActiveCoin.mode === 'spv' &&
+                    Config.experimentalFeatures &&
+                    kvCoins[this.props.ActiveCoin.coin] &&
+                    <span>
+                      <button
+                        type="button"
+                        className={ 'btn btn-default' + (this.state.kvSend ? ' active' : '') }
+                        onClick={ this.toggleKvSend }>
+                        { translate('KV.SEND_KV') }
+                      </button>
+                      <button
+                        type="button"
+                        className={ 'btn btn-default margin-left-10' + (!this.state.kvSend ? ' active' : '') }
+                        onClick={ this.toggleKvSend }>
+                        { translate('KV.SEND_TX') }
+                      </button>
+                    </span>
+                  }
+                  { this.props.ActiveCoin.mode === 'spv' &&
+                    Config.coinControl &&
+                    <button
+                      type="button"
+                      className={ 'btn btn-default margin-left-10' + (!this.state.kvSend ? ' active' : '') }
+                      onClick={ this.toggleKvSend }>
+                      { translate('SEND.COIN_CONTROL') }
+                    </button>
+                  }
                 </div>
               }
             </div>

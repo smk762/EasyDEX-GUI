@@ -302,17 +302,6 @@ class SeedEncryptPanel extends React.Component {
     }, 100);
   }
 
-  renderLB(_translationID) {
-    const _translationComponents = translate(_translationID).split('<br>');
-
-    return _translationComponents.map((_translation) =>
-      <span key={ `settings-label-${Math.random(0, 9) * 10}` }>
-        { _translation }
-        <br />
-      </span>
-    );
-  }
-
   renderPinsList() {
     const _pins = this.props.Login.pinList;
     let _items = [];

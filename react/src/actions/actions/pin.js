@@ -160,9 +160,11 @@ export const loadPinList = () => {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(
-        getPinList(json.result)
-      );
+      if (typeof json.result === 'string') {
+        dispatch(getPinList([]));
+      } else {
+        dispatch(getPinList(json.result));
+      }
     });
   }
 }

@@ -8,7 +8,6 @@ import AppInfoPanel from  './settings.appInfoPanel';
 import AppSettingsPanel from './settings.appSettingsPanel';
 import CliPanel from './settings.cliPanel';
 import DebugLogPanel from './settings.debugLogPanel';
-// import FiatCurrencyPanel from './settings.fiatCurrencyPanel';
 import ExportKeysPanel from './settings.exportKeysPanel';
 // import ImportKeysPanel from './settings.importKeysPanel';
 import SPVServersPanel from './settings.spvServersPanel';
@@ -17,6 +16,8 @@ import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
 import CoindClearDataDirPanel from './settings.coindClearDataDirPanel';
 import Bip39KeysPanel from './settings.bip39KeysPanel';
 import SeedEncryptPanel from './settings.seedEncryptPanel';
+import AddressBookPanel from './settings.addressBookPanel';
+
 import mainWindow from '../../../util/mainWindow';
 
 // import WalletBackupPanel from './settings.walletBackupPanel';
@@ -34,13 +35,6 @@ import mainWindow from '../../../util/mainWindow';
                   title={ translate('INDEX.WALLET_BACKUP') }
                   icon="icon wb-briefcase">
                   <WalletBackupPanel />
-                </PanelSection>
-              }
-              { !this.props.disableWalletSpecificUI &&
-                <PanelSection
-                  title={ translate('INDEX.FIAT_CURRENCY') }
-                  icon="icon fa-money">
-                  <FiatCurrencyPanel />
                 </PanelSection>
               }
               { !this.props.disableWalletSpecificUI &&
@@ -146,6 +140,11 @@ export const SettingsRender = function() {
                   <CliPanel />
                 </PanelSection>
               }
+              <PanelSection
+                title={ translate('SETTINGS.ADDRESS_BOOK') }
+                icon="icon fa-address-book">
+                <AddressBookPanel />
+              </PanelSection>
               { /*this.state.isExperimentalOn &&
                 <PanelSection
                   title={ translate('INDEX.UPDATE') }

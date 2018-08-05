@@ -6,6 +6,7 @@ import {
   triggerToaster,
   prices,
   newUpdateAvailable,
+  loadAddressBook,
 } from '../../../actions/actionCreators';
 import { getCoinTitle } from '../../../util/coinHelper';
 import Config from '../../../config';
@@ -36,6 +37,8 @@ class WalletsMain extends React.Component {
   }
 
   componentWillMount() {
+    Store.dispatch(loadAddressBook());
+
     if (!Config.dev) {
       Store.dispatch(newUpdateAvailable());
 

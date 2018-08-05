@@ -58,6 +58,7 @@ export * from './actions/prices';
 export * from './actions/elections';
 export * from './actions/pin';
 export * from './actions/csv';
+export * from './actions/addressBook';
 
 export const changeActiveAddress = (address) => {
   return {
@@ -270,7 +271,7 @@ export const toggleClaimInterestModal = (display) => {
 export const getPinList = (pinList) => {
   return {
     type: GET_PIN_LIST,
-    pinList: pinList,
+    pinList,
   }
 }
 
