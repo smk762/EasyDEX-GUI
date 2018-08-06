@@ -73,7 +73,24 @@ export const loadAddressBook = () => {
       if (typeof json.result === 'string') {
         dispatch(loadAddressBookState([]));
       } else {
-        dispatch(loadAddressBookState(json.result));
+        const res = json.result;
+        let _items = [];
+
+        // convert obj to array
+        Object.keys(res).map((key, index) => {
+          if (!_items[res[key].coin]) {
+            _items[res[key].coin] = [];
+          }
+          _items[res[key].coin].push({
+            pub: key,
+            title: res[key].title,
+          });
+        });
+
+        dispatch(loadAddressBookState({
+          obj: json.result,
+          arr: _items,
+        }));
       }
     });
   }

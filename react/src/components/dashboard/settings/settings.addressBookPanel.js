@@ -80,13 +80,13 @@ class AddressBookPanel extends React.Component {
         type,
       },
       address: id,
-      coin: this.props.Settings.addressBook[id].coin,
-      title: this.props.Settings.addressBook[id].title,
+      coin: this.props.Settings.addressBook.obj[id].coin,
+      title: this.props.Settings.addressBook.obj[id].title,
     });
   }
 
   save() {
-    let oldAddressBookData = this.props.Settings.addressBook && Object.keys(this.props.Settings.addressBook).length ? JSON.parse(JSON.stringify(this.props.Settings.addressBook)) : {};
+    let oldAddressBookData = this.props.Settings.addressBook && this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length ? JSON.parse(JSON.stringify(this.props.Settings.addressBook.obj)) : {};
 
     oldAddressBookData[this.state.address] = {
       coin: this.state.coin,
@@ -139,7 +139,7 @@ class AddressBookPanel extends React.Component {
 
   confirmAction(id, type) {
     if (type === 'delete') {
-      let oldAddressBookData = this.props.Settings.addressBook && Object.keys(this.props.Settings.addressBook).length ? JSON.parse(JSON.stringify(this.props.Settings.addressBook)) : {};
+      let oldAddressBookData = this.props.Settings.addressBook && this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length ? JSON.parse(JSON.stringify(this.props.Settings.addressBook.obj)) : {};
 
       delete oldAddressBookData[id];
 
@@ -205,7 +205,7 @@ class AddressBookPanel extends React.Component {
   }
 
   renderAddressBook() {
-    const _addressBookItems = this.props.Settings.addressBook;
+    const _addressBookItems = this.props.Settings.addressBook && this.props.Settings.addressBook.obj ? this.props.Settings.addressBook.obj : {};
     let _items = [];
 
     for (let key in _addressBookItems) {
@@ -245,7 +245,7 @@ class AddressBookPanel extends React.Component {
               <td className="edit-block">
                 <i
                   onClick={ () => this.confirmAction(key) }
-                  className="icon fa-check margin-left-20 margin-right-20 inline"></i>
+                  className="icon fa-check margin-right-20 inline"></i>
                 <i
                   onClick={ () => this.cancelAction() }
                   className="icon fa-close inline"></i>
@@ -325,7 +325,9 @@ class AddressBookPanel extends React.Component {
             <div className="padding-bottom-20">{ translate('SETTINGS.THIS_SECTION_ALLOWS_YOU_TO_MANAGE_ADDRESS_BOOK') }</div>
           </div>
         </div>
-        { Object.keys(this.props.Settings.addressBook).length > 0 &&
+        { this.props.Settings.addressBook &&
+          this.props.Settings.addressBook .obj &&
+          Object.keys(this.props.Settings.addressBook.obj).length > 0 &&
           <div className="row">
             <div className="col-sm-12">
             <div className="col-sm-12 col-xs-12 no-padding margin-bottom-20 text-right">
@@ -340,7 +342,7 @@ class AddressBookPanel extends React.Component {
             </div>
           </div>
         }
-        { (this.state.createNewItem || Object.keys(this.props.Settings.addressBook).length === 0) &&
+        { (this.state.createNewItem || (this.props.Settings.addressBook && this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length === 0)) &&
           <div className="row">
             <div className="col-sm-6">
               <div

@@ -822,7 +822,7 @@ const LANG_EN = {
     NATIVE_MODE_DESC_P8: 'try to keep Agama running',
     NATIVE_MODE_DESC_P9: 'until the whole process is finished.',
     OR_USE_A_SHORTCUT: 'or use a shortcut',
-    PIN_LOGIN_INFO: 'You can login be entering a login seed or by selecting a pin',
+    PIN_LOGIN_INFO: 'You can login by entering a login seed or by selecting a pin',
     QUICK_ACCESS: 'Quick access',
     PWD_REQ: 'Password is required.',
     WALLET_SEED_REQ: 'Wallet seed is required.',

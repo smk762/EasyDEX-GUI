@@ -67,3 +67,16 @@
     }
   }
 }
+
+.btn-send-address-book-dropdown {
+  position: absolute;
+  right: 16px;
+  top: 20px;
+  padding: 0 6px 0 11px;
+}
+
+.coin-tile-context-menu--address-book {
+  left: inherit !important;
+  right: 17px;
+  min-width: 125px;
+}

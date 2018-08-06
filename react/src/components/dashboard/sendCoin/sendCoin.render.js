@@ -69,12 +69,31 @@ export const _SendFormRender = function() {
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             { this.props.ActiveCoin.mode === 'spv' &&
+              ((this.props.AddressBook && this.props.AddressBook.arr && !this.props.AddressBook.arr[this.props.ActiveCoin.coin]) ||
+              (this.props.AddressBook && !this.props.AddressBook.arr)) &&
               <button
                 type="button"
                 className="btn btn-default btn-send-self"
                 onClick={ this.setSendToSelf }>
                 { translate('SEND.SELF') }
               </button>
+            }
+            { this.props.AddressBook &&
+              this.props.AddressBook.arr &&
+              this.props.AddressBook.arr[this.props.ActiveCoin.coin] &&
+              <button
+                type="button"
+                className="btn btn-default btn-send-address-book-dropdown"
+                onClick={ this.toggleAddressBookDropdown }>
+                { translate('SETTINGS.ADDRESS_BOOK') } <i className="icon fa-angle-down"></i>
+              </button>
+            }
+            { this.state.addressBookSelectorOpen &&
+              <div className="coin-tile-context-menu coin-tile-context-menu--address-book">
+                <ul>
+                  { this.renderAddressBookDropdown() }
+                </ul>
+              </div>
             }
             <label
               className="control-label"
@@ -312,7 +331,7 @@ export const SendRender = function() {
                 { translate('INDEX.SEND') } { this.props.ActiveCoin.coin }
               </h3>
               { ((this.props.ActiveCoin.mode === 'spv' && Config.experimentalFeatures && kvCoins[this.props.ActiveCoin.coin]) ||
-                  (this.props.ActiveCoin.mode === 'spv' && Config.coinControl)) &&
+                 (this.props.ActiveCoin.mode === 'spv' && Config.coinControl)) &&
                 <div className="kv-select-block">
                   { this.props.ActiveCoin.mode === 'spv' &&
                     Config.experimentalFeatures &&

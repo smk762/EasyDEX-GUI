@@ -73,13 +73,15 @@ class SendCoin extends React.Component {
       btcFeesSize: 0,
       btcFeesTimeBasedStep: 1,
       spvPreflightRes: null,
+      pin: '',
+      noUtxo: false,
+      addressBookSelectorOpen: false,
+      // kv
       kvSend: false,
       kvSendTag: '',
       kvSendTitle: '',
       kvSendContent: '',
       kvHex: '',
-      pin: '',
-      noUtxo: false,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -99,9 +101,18 @@ class SendCoin extends React.Component {
     this.onSliderChange = this.onSliderChange.bind(this);
     this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
     this.toggleKvSend = this.toggleKvSend.bind(this);
+    this.toggleAddressBookDropdown = this.toggleAddressBookDropdown.bind(this);
     this.verifyPin = this.verifyPin.bind(this);
     this.setDefaultFee = this.setDefaultFee.bind(this);
+    this.setToAddress = this.setToAddress.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  setToAddress(pub) {
+    this.setState({
+      sendTo: pub,
+      addressBookSelectorOpen: false,
+    });
   }
 
   verifyPin() {
@@ -132,6 +143,12 @@ class SendCoin extends React.Component {
       kvSend: !this.state.kvSend,
       amount: this.state.kvSend ? '' : 0.0001,
       sendTo: this.state.kvSend ? '' : this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+    });
+  }
+
+  toggleAddressBookDropdown() {
+    this.setState({
+      addressBookSelectorOpen: !this.state.addressBookSelectorOpen,
     });
   }
 
@@ -281,13 +298,20 @@ class SendCoin extends React.Component {
   }
 
   handleClickOutside(e) {
+    let _state = {};
+
     if (e.srcElement.className !== 'btn dropdown-toggle btn-info' &&
         (e.srcElement.offsetParent && e.srcElement.offsetParent.className !== 'btn dropdown-toggle btn-info') &&
         (e.path && e.path[4] && e.path[4].className.indexOf('showkmdwalletaddrs') === -1)) {
-      this.setState({
-        addressSelectorOpen: false,
-      });
+      _state.addressSelectorOpen = false;
     }
+
+    if (e.srcElement.className !== 'fa fa-angle-down' &&
+        e.srcElement.className.indexOf('btn-send-address-book-dropdown') === -1) {
+      _state.addressBookSelectorOpen = false;
+    }
+
+    this.setState(_state);
   }
 
   checkZAddressCount(props) {
@@ -943,6 +967,29 @@ class SendCoin extends React.Component {
     }
   }
 
+  renderAddressBookDropdown() {
+    const _addressBook = this.props.AddressBook.arr[this.props.ActiveCoin.coin];
+    let _items = [];
+
+    if (this.props.ActiveCoin.mode === 'spv') {
+      _items.push(
+        <li
+          key={ `send-address-book-item-self` }
+          onClick={ () => this.setToAddress(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) }>{ translate('SEND.SELF') }</li>
+      );
+    }
+
+    for (let i = 0; i < _addressBook.length; i++) {
+      _items.push(
+        <li
+          key={ `send-address-book-item-${i}` }
+          onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
+      );
+    }
+
+    return _items;
+  }
+
   render() {
     if (this.props &&
         this.props.ActiveCoin &&
@@ -967,6 +1014,7 @@ const mapStateToProps = (state, props) => {
       progress: state.ActiveCoin.progress,
     },
     Dashboard: state.Dashboard,
+    AddressBook: state.Settings.addressBook,
   };
 
   if (props &&
