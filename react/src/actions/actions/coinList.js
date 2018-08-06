@@ -103,7 +103,7 @@ export const shepherdRemoveCoin = (coin, mode) => {
         Store.dispatch(
           triggerToaster(
             `${coin} ${translate('API.DAEMON_IS_STILL_RUNNING')}`,
-            'Warning',
+            translate('API.WARNING'),
             'warning'
           )
         );

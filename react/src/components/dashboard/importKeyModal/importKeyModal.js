@@ -197,7 +197,7 @@ class ImportKeyModal extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -234,7 +234,7 @@ class ImportKeyModal extends React.Component {
       Store.dispatch(
         triggerToaster(
           translate('INDEX.EMPTY_PASSPHRASE_FIELD'),
-          'Error',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

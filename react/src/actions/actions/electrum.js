@@ -71,7 +71,6 @@ export const shepherdGetLocalBTCFees = () => {
         triggerToaster(
           translate('API.shepherdGetLocalBTCFees') + ' (code: shepherdGetLocalBTCFees)',
           translate('TOASTR.ERROR'),
-          'Error',
           'error'
         )
       );
@@ -201,7 +200,7 @@ export const shepherdElectrumBalance = (coin, address) => {
           dispatch(
             triggerToaster(
               json.electrumres.message,
-              'Error',
+              translate('TOASTR.ERROR'),
               'error'
             )
           );

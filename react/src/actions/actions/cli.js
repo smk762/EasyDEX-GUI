@@ -60,7 +60,6 @@ export const shepherdCli = (mode, chain, cmd) => {
         triggerToaster(
           translate('API.shepherdCli') + ' (code: shepherdCli)',
           translate('TOASTR.ERROR'),
-          'Error',
           'error'
         )
       );

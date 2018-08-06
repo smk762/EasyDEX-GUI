@@ -278,7 +278,7 @@ class ClaimInterestModal extends React.Component {
             Store.dispatch(
               triggerToaster(
                 sendPreflight.result,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );

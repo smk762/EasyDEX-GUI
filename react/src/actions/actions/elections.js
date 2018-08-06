@@ -210,7 +210,6 @@ export const shepherdElectionsSendMany = (coin, targets, change, opreturn) => {
         triggerToaster(
           translate('API.shepherdElectionsSendMany') + ' (code: shepherdElectionsSendMany)',
           translate('TOASTR.ERROR'),
-          'Error',
           'error'
         )
       );

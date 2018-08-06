@@ -69,8 +69,8 @@ export const loginWithPin = (key, pubkey) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'decryptKey',
-          'Error',
+          translate('API.decryptKey') + ' (code: decryptKey)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

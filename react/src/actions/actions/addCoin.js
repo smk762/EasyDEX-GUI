@@ -363,7 +363,6 @@ export const _shepherdGetConfig = (coin, mode, startupParams) => {
         triggerToaster(
           translate('API._shepherdGetConfig') + ' (code: _shepherdGetConfig)',
           translate('TOASTR.ERROR'),
-          'Error',
           'error'
         )
       );

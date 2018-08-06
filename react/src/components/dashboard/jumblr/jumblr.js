@@ -71,7 +71,7 @@ class Jumblr extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -99,7 +99,7 @@ class Jumblr extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -197,7 +197,7 @@ class Jumblr extends React.Component {
             Store.dispatch(
               triggerToaster(
                 json.error.message,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );
@@ -329,7 +329,7 @@ class Jumblr extends React.Component {
               Store.dispatch(
                 triggerToaster(
                   json.error.message,
-                  'Error',
+                  translate('TOASTR.ERROR'),
                   'error'
                 )
               );
@@ -377,7 +377,7 @@ class Jumblr extends React.Component {
             Store.dispatch(
               triggerToaster(
                 json.error.message,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );
@@ -405,7 +405,7 @@ class Jumblr extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );

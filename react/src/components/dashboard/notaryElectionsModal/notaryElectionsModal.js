@@ -405,8 +405,8 @@ class NotaryElectionsModal extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            'loginSeed',
-            'Error',
+            translate('API.authError') + ' (code: loginSeed)',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );

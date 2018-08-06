@@ -164,6 +164,8 @@ const LANG_EN = {
     'getTools': 'Unable to get tools data',
     'getUpdate': 'Unable to get update data',
     'downloadZCashParamsPromise': 'Unable to fetch Zcash params',
+    'decryptKey': 'Unable to decrypt data',
+    'authError': 'Unable to get auth data',
   },
   NN_ELECTIONS: {
     WRONG_ADDR_FORMAT: 'Wrong address format',
