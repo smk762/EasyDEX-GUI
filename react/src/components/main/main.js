@@ -21,7 +21,7 @@ class Main extends React.Component {
     const appVersion = mainWindow.appBasicInfo;
 
     if (appVersion) {
-      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta)`;
+      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : (mainWindow.arch === 'spv-only' ? '-spv-only' : '-32bit')}-beta)`;
     }
 
     document.addEventListener('dragover', event => event.preventDefault());
