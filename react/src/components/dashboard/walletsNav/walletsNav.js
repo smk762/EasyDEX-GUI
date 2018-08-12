@@ -11,10 +11,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
-import {
-  WalletsNavNoWalletRender,
-  WalletsNavWithWalletRender,
-} from './walletsNav.render';
+import WalletsNavWithWalletRender from './walletsNav.render';
 
 const NET_INFO_INTERVAL = 10000;
 

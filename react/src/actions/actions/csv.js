@@ -2,6 +2,7 @@ import translate from '../../translate/translate';
 import Config, {
   token,
   agamaPort,
+  rpc2cli,
 } from '../../config';
 import { triggerToaster } from '../actionCreators';
 import Store from '../../store';
@@ -41,7 +42,7 @@ export const shepherdNativeTransactionsCSV = (coin) => {
     const _urlParams = {
       token,
       coin,
-      rpc2cli: Config.rpc2cli,
+      rpc2cli,
     };
     fetch(
       `http://127.0.0.1:${agamaPort}/shepherd/electrum/listtransactions/csv${urlParams(_urlParams)}`,

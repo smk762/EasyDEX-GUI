@@ -37,7 +37,7 @@ import CoinTileItemRender from './coinTileItem.render';
 const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE_RCP2CLI = 40000;
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.failedRPCAttemptsThreshold || 10;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.native.failedRPCAttemptsThreshold || 10;
 
 class CoinTileItem extends React.Component {
   constructor() {
@@ -134,7 +134,7 @@ class CoinTileItem extends React.Component {
         this.props.Main.coins &&
         ((this.props.Main.coins.native &&
         this.props.Main.coins.native.length &&
-        !Config.stopNativeDaemonsOnQuit) ||
+        !Config.native.stopNativeDaemonsOnQuit) ||
         (this.props.Main.coins.spv &&
         this.props.Main.coins.spv.length))) {
       return true;

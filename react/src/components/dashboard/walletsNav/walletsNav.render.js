@@ -3,35 +3,18 @@ import ReactTooltip from 'react-tooltip';
 import translate from '../../../translate/translate';
 import mainWindow from '../../../util/mainWindow';
 
-export const WalletsNavNoWalletRender = function() {
-  return (
-    <div>
-      <div className="col-xs-12 padding-top-20">
-        <div className="alert alert-info alert-dismissible">
-          <span className="font-size-24 text-align-center">
-            <i className="icon fa-paw"></i> { translate('INDEX.NO_WALLET_CAPS') }
-          </span>
-          <br/>
-          { translate('INDEX.PLEASE_SELECT_A_WALLET') }.
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const WalletsNavWithWalletRender = function() {
+const WalletsNavWithWalletRender = function() {
   const pubKeys = mainWindow.getPubkeys();
 
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 ' + (this.props.ActiveCoin.mode === 'spv' || (pubKeys[this.props.ActiveCoin.coin.toLowerCase()] && pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
-        id="header-dashboard"
-        style={{ marginBottom: '30px' }}>
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (this.props.ActiveCoin.mode === 'spv' || (pubKeys[this.props.ActiveCoin.coin.toLowerCase()] && pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
+        id="header-dashboard">
         { this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'spv' &&
           <div>
-            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+            <strong className="unselectable">{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
             <span className="blur">{
               this.props &&
               this.props.Dashboard &&
@@ -104,3 +87,5 @@ export const WalletsNavWithWalletRender = function() {
     </div>
   );
 };
+
+export default WalletsNavWithWalletRender;
