@@ -36,8 +36,7 @@ import getRandomElectrumServer from '../../../util/serverRandom';
 import DoubleScrollbar from 'react-double-scrollbar';
 import mainWindow from '../../../util/mainWindow';
 
-/*import { SocketProvider } from 'socket.io-react';
-import io from 'socket.io-client';
+/*import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);*/
 
