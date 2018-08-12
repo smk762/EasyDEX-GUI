@@ -641,7 +641,7 @@ const LANG_EN = {
     IMMATURE: 'Immature',
     ZADDR_NOT_LISTED: 'Address not listed by wallet',
     ADDR_COPIED: 'Address Copied',
-    QR_ERR_NO_VIDEO_DEVICE: 'Error: No video input devices found!',
+    QR_ERR_NO_VIDEO_DEVICE: 'Error: no video input devices found!',
     QR_ERR_UNKNOWN: 'Error: unknown error!',
     SPV_CONN_ERROR: 'Connection error!',
     SPV_CONN_ERROR_P1: 'Go to "Settings", select "SPV Server List" tab, choose new server and click "OK".',
@@ -861,7 +861,7 @@ const LANG_EN = {
     TO_SEND_FEEDBACK_P2: 'or send an email to support@komodoplatform.com',
   },
   SETTINGS: {
-    SWEEP_KEYS: 'Sweep keys',
+    SWEEP_KEY: 'Sweep keys',
     ADDRESS_BOOK_SAVED: 'Address book is saved',
     SAVE: 'Save',
     TITLE: 'Title',
