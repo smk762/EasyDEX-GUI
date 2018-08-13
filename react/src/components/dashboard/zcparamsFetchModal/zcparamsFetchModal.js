@@ -8,11 +8,9 @@ import Store from '../../../store';
 import Config from '../../../config';
 import translate from '../../../translate/translate';
 import mainWindow from '../../../util/mainWindow';
+import io from 'socket.io-client';
 
 import ZcparamsFetchModalRender from './zcparamsFetchModal.render';
-
-import { SocketProvider } from 'socket.io-react';
-import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 

@@ -528,16 +528,14 @@ const LoginRender = function() {
                     }
                   </div>
                 }
-                <button
-                  type="button"
-                  className="btn btn-success btn-block margin-top-20 btn-generate-qr">
+                <div className="btn btn-success btn-block margin-top-20 btn-generate-qr">
                   <QRModal
                     qrSize="256"
                     modalSize="md"
                     title={ translate('LOGIN.SEED_QR_RECOVERY') }
                     fileName="agama-seed"
                     content={ this.state.randomSeed } />
-                </button>
+                </div>
               </div>
               <button
                 type="button"
