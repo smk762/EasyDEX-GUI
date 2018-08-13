@@ -26,13 +26,13 @@ const WalletsInfoRender = function() {
               </tr>
               <tr>
                 <td>{ translate('WALLETS_INFO.ADDRESS') }</td>
-                <td>
+                <td className="selectable">
                   { _netPeers[i].addr }
                 </td>
               </tr>
               <tr>
                 <td>{ translate('WALLETS_INFO.ADDRESS_LOCAL') }</td>
-                <td>
+                <td className="selectable">
                   { _netPeers[i].addrlocal }
                 </td>
               </tr>
@@ -259,7 +259,7 @@ const WalletsInfoRender = function() {
                     <td>
                       { translate('INDEX.NOTARIZED') } { translate('INDEX.HASH') }
                     </td>
-                    <td>
+                    <td className="selectable">
                       { _progress.notarizedhash ?
                         _progress.notarizedhash.substring(
                           0,
@@ -306,7 +306,7 @@ const WalletsInfoRender = function() {
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.PAY_TX_FEE') }</td>
-                    <td>
+                    <td className="selectable">
                       { _progress.paytxfee }
                     </td>
                   </tr>
@@ -318,7 +318,7 @@ const WalletsInfoRender = function() {
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.ERRORS') }</td>
-                    <td>
+                    <td className="selectable">
                       { _progress.errors }
                     </td>
                   </tr>
@@ -362,20 +362,20 @@ const WalletsInfoRender = function() {
                 <tbody>
                   <tr>
                     <td>{ translate('INDEX.SPV_SERVER_IP') }</td>
-                    <td>
+                    <td className="selectable">
                       { _server.server.ip }
                     </td>
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.SPV_SERVER_PORT') }</td>
-                    <td>
+                    <td className="selectable">
                       { _server.server.port }
                     </td>
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.SPV_SERVER_CON_TYPE') }</td>
-                    <td>
-                      TCP
+                    <td className="selectable">
+                      { _server.server.proto }
                     </td>
                   </tr>
                   <tr>
