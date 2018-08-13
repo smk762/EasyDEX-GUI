@@ -18,7 +18,7 @@ class About extends React.Component {
         <div className="page-content">
           <h2>{ translate('ABOUT.ABOUT_AGAMA') }</h2>
           <p>{ translate('ABOUT.AGAMA_MODES') }</p>
-          <ul>
+          <ul className="padding-bottom-20">
             <li>
               <span className="font-weight-600">{ translate('INDEX.NATIVE_MODE') }</span>:&nbsp;
               { translate('ABOUT.NATIVE_MODE_DESC') }
@@ -28,20 +28,15 @@ class About extends React.Component {
               { translate('ADD_COIN.LITE_MODE_DESC') }
             </li>
           </ul>
-          <br />
 
-          <span className="font-weight-600">{ translate('ABOUT.AGAMA_NOTE') }</span>
-
-          <br /><br />
+          <p className="font-weight-600 padding-bottom-20">{ translate('ABOUT.AGAMA_NOTE') }</p>
 
           <div className="font-weight-600">{ translate('ABOUT.TESTERS') }</div>
-          { translate('ABOUT.TESTERS_P1') } <a className="link" onClick={ () => this.openExternalWindow('https://komodoplatform.com/komodo-wallets') }>{ translate('ABOUT.TESTERS_P2') }</a>.
-          { translate('ABOUT.TESTERS_P3') } <a className="link" onClick={ () => this.openExternalWindow('https://sprnt.slack.com/messages/C0HT9MH96/') }>#testing-agama</a> Slack { translate('ABOUT.CHANNEL') }. <a className="link" onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>{ translate('ABOUT.GET_AN_INVITE') }</a> { translate('ABOUT.GET_AN_INVITE_P2') }.
+          { translate('ABOUT.TESTERS_P1') } <a className="link" onClick={ () => this.openExternalWindow('https://komodoplatform.com/komodo-wallets') }>{ translate('ABOUT.TESTERS_P2') }</a>.&nbsp;
+          { translate('ABOUT.TESTERS_P3') } <a className="link" onClick={ () => this.openExternalWindow('https://sprnt.slack.com/messages/C0HT9MH96/') }>#testing-agama</a> Slack { translate('ABOUT.CHANNEL') }. <a className="link" onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>{ translate('ABOUT.GET_AN_INVITE') }</a> { translate('ABOUT.GET_AN_INVITE_P2') }.&nbsp;
           { translate('ABOUT.TESTERS_P4') }
 
-          <br /><br />
-
-          { translate('ABOUT.AGAMA_DAPPS') }
+          <div className="padding-top-20">{ translate('ABOUT.AGAMA_DAPPS') }</div>
           <ul>
             <li>
               <span className="font-weight-600">Jumblr</span>: { translate('ABOUT.JUMBLR_DESC') }
