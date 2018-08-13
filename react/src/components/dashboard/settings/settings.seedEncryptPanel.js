@@ -318,11 +318,11 @@ class SeedEncryptPanel extends React.Component {
                 onClick={ () => this.triggerAction(i, 'delete') }
                 className="icon fa-trash"></i>
             </td>
-            <td>{ _pins[i] }</td>
+            <td className="selectable">{ _pins[i] }</td>
             { this.props.Settings.appInfo &&
               this.props.Settings.appInfo.dirs &&
-              this.props.Settings.appInfo.dirs.cacheLocation &&
-              <td>{ this.props.Settings.appInfo.dirs.cacheLocation }/{ _pins[i] }.pin</td>
+              this.props.Settings.appInfo.dirs.agamaDir &&
+              <td className="selectable">{ this.props.Settings.appInfo.dirs.agamaDir }/shepherd/pin/{ _pins[i] }.pin</td>
             }
           </tr>
         );
