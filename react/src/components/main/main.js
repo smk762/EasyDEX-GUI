@@ -5,6 +5,7 @@ import {
   getDexCoins,
   activeHandle,
   shepherdElectrumCoins,
+  loadAddressBook,
 } from '../../actions/actionCreators';
 import mainWindow from '../../util/mainWindow';
 import Config from '../../config';
@@ -34,6 +35,7 @@ class Main extends React.Component {
   }
 
   componentWillMount() {
+    Store.dispatch(loadAddressBook());
     Store.dispatch(getDexCoins());
     Store.dispatch(activeHandle());
     Store.dispatch(shepherdElectrumCoins());
