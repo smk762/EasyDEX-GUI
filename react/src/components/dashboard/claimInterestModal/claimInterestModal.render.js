@@ -20,7 +20,7 @@ export const _ClaimInterestTableRender = function() {
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') + ' TXID' }
             </button>
           </td>
-          <td className="blur">{ _transactionsList[i].address }</td>
+          <td className="blur selectable">{ _transactionsList[i].address }</td>
           <td className={ _transactionsList[i].amount > 10 ? 'green bold' : '' }>{ _transactionsList[i].amount }</td>
           <td>{ _transactionsList[i].interest }</td>
           <td className="locktime center">

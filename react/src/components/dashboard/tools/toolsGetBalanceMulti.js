@@ -121,7 +121,7 @@ class ToolsGetBalanceMulti extends React.Component {
       for (let key in balances) {
         _items.push(
           <tr key={ `tools-balances-multi-${key}` }>
-            <td className="blur">{ key }</td>
+            <td className="blur selectable">{ key }</td>
             <td>{ balances[key] } KMD</td>
           </tr>
         );

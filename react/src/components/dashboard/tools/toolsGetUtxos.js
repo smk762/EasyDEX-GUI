@@ -66,7 +66,7 @@ class ToolsGetUtxos extends React.Component {
             { _coin[0] === 'KMD' &&
               <td>{ _utxos[i].locktime }</td>
             }
-            <td className="blur">{ _utxos[i].txid }</td>
+            <td className="blur selectable">{ _utxos[i].txid }</td>
           </tr>
         );
       }

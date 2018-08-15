@@ -112,7 +112,7 @@ class WalletsData extends React.Component {
             triggerToaster(
               `${translate('INDEX.CSV_EXPORT_SAVED')} ${res.result}`,
               translate('INDEX.TX_HISTORY_EXPORT'),
-              'success toastr-wide',
+              'success toastr-wide selectable',
               false
             )
           );
@@ -138,7 +138,7 @@ class WalletsData extends React.Component {
             triggerToaster(
               `${translate('INDEX.CSV_EXPORT_SAVED')} ${res.result}`,
               translate('INDEX.TX_HISTORY_EXPORT'),
-              'success toastr-wide',
+              'success toastr-wide selectable',
               false
             )
           );
@@ -181,7 +181,10 @@ class WalletsData extends React.Component {
         }
       });
     } else {
-      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(shepherdElectrumTransactions(
+        this.props.ActiveCoin.coin,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+      ));
     }
   }
 
@@ -295,6 +298,7 @@ class WalletsData extends React.Component {
       id: 'destination-address',
       Header: translate('INDEX.DEST_ADDRESS'),
       Footer: translate('INDEX.DEST_ADDRESS'),
+      className: 'selectable',
       accessor: (tx) => AddressRender.call(this, tx),
     };
 
@@ -357,13 +361,14 @@ class WalletsData extends React.Component {
         Footer: translate('KV.TAG'),
         headerClassName: 'hidden-xs hidden-sm',
         footerClassName: 'hidden-xs hidden-sm',
-        className: 'hidden-xs hidden-sm',
+        className: 'hidden-xs hidden-sm selectable',
         accessor: (tx) => tx.opreturn.kvDecoded.tag,
       },
       {
         id: 'title',
         Header: translate('KV.TITLE'),
         Footer: translate('KV.TITLE'),
+        className: 'selectable',
         accessor: (tx) => tx.opreturn.kvDecoded.content.title,
       },
       {
@@ -376,7 +381,7 @@ class WalletsData extends React.Component {
         id: 'tx-detail',
         Header: translate('KV.CONTENT'),
         Footer: translate('KV.CONTENT'),
-        className: 'colum--txinfo',
+        className: 'colum--txinfo selectable',
         headerClassName: 'colum--txinfo',
         footerClassName: 'colum--txinfo',
         accessor: (tx) => TransactionDetailRender.call(this, tx),
@@ -522,8 +527,8 @@ class WalletsData extends React.Component {
 
   spvAutoReconnect() {
     if (this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none') {
-      let _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
-      let _server = [
+      const _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
+      const _server = [
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.ip,
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port,
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.proto
@@ -612,10 +617,9 @@ class WalletsData extends React.Component {
               { translate('DASHBOARD.SPV_CONN_ERROR') }
             </div>
             <div className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
-              <div className="color-warning">{ translate('DASHBOARD.SPV_AUTO_SWITCH') }...</div>
-              <br />
+              <div className="color-warning padding-bottom-20">{ translate('DASHBOARD.SPV_AUTO_SWITCH') }...</div>
               <strong>{ translate('DASHBOARD.HOW_TO_SWITCH_MANUALLY') }:</strong>
-              <br/>{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }
+              <div className="padding-top-10">{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }</div>
             </div>
           </td>
         </tr>
@@ -738,7 +742,7 @@ class WalletsData extends React.Component {
           <i className={ 'icon fa-eye' + (this.state.addressType === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
           <span className="text">
             [ { this.renderAddressAmount() } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
-            { _currentAddress }
+            <span className="selectable">{ _currentAddress }</span>
           </span>
         </span>
       );

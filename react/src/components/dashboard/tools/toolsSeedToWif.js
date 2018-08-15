@@ -152,10 +152,10 @@ class ToolsSeedToWif extends React.Component {
         { this.state.s2wResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
             <div>
-              <strong>WIF:</strong> <span className="blur">{ this.state.s2wResult.keys.priv }</span>
+              <strong>WIF:</strong> <span className="blur selectable">{ this.state.s2wResult.keys.priv }</span>
             </div>
             <div className="margin-top-10">
-              <strong>Pub:</strong> <span className="blur">{ this.state.s2wResult.keys.pub }</span>
+              <strong>Pub:</strong> <span className="blur selectable">{ this.state.s2wResult.keys.pub }</span>
             </div>
           </div>
         }

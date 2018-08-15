@@ -66,6 +66,7 @@ class ReceiveCoin extends React.Component {
 
   validateCoinAddress(address, isZaddr) {
     this.toggleAddressMenu(address);
+
     validateAddress(this.props.coin, address, isZaddr)
     .then((json) => {
       let _items = [];

@@ -102,7 +102,7 @@ export const ChainActivationNotificationRender = function() {
           this.props.ActiveCoin.coin === 'KMD' &&
           <div className="alert alert-warning alert-dismissible margin-bottom-50">
             <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P1') }</p>
-            <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P2') }</p>
+            <p className="selectable">{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P2') }</p>
             <p className="padding-bottom-15">{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P3') }</p>
             <button
               type="button"

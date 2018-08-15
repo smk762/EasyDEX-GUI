@@ -222,7 +222,7 @@ class DebugLogPanel extends React.Component {
               </div>
               <div className="row">
                 <div className="col-sm-12 col-xs-12 text-align-left">
-                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0 selectable">
                   { this.renderDebugLogData() }
                   </div>
                 </div>
@@ -230,7 +230,7 @@ class DebugLogPanel extends React.Component {
             </div>
           }
           { this.state.toggleAppRuntimeLog &&
-            <div className="margin-top-20">{ this.renderAppRuntimeLog() }</div>
+            <div className="margin-top-20 selectable">{ this.renderAppRuntimeLog() }</div>
           }
         </div>
       </div>

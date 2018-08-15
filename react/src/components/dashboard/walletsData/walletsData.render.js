@@ -76,7 +76,9 @@ export const AddressItemRender = function(address, type, amount, coin) {
       className={ address === this.state.currentAddress ? 'selected' : '' }>
       <a onClick={ () => this.updateAddressSelection(address) }>
         <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-        <span className="text">[ { amount } { coin } ]  { address }</span>
+        <span className="text">
+          [ { amount } { coin } ]  <span className="selectable">{ address }</span>
+        </span>
         <span className="glyphicon glyphicon-ok check-mark"></span>
       </a>
     </li>
@@ -94,7 +96,7 @@ export const AddressListRender = function() {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          data-tip={ `${translate('KMD_NATIVE.SELECT_ADDRESS')}` }
+          data-tip={ translate('KMD_NATIVE.SELECT_ADDRESS') }
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
           <span className="bs-caret">

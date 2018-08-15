@@ -125,10 +125,10 @@ class ToolsWifToWif extends React.Component {
         { this.state.w2wResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
             <div>
-              <strong>WIF:</strong> <span className="blur">{ this.state.w2wResult.keys.priv }</span>
+              <strong>WIF:</strong> <span className="blur selectable">{ this.state.w2wResult.keys.priv }</span>
             </div>
             <div className="margin-top-10">
-              <strong>Pub:</strong> <span className="blur">{ this.state.w2wResult.keys.pub }</span>
+              <strong>Pub:</strong> <span className="blur selectable">{ this.state.w2wResult.keys.pub }</span>
             </div>
           </div>
         }

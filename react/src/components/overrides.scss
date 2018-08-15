@@ -50,6 +50,11 @@ body {
   user-select: none;
 }
 
+.selectable {
+  user-select: auto;
+  cursor: inherit;
+}
+
 .seed-toggle {
   position: absolute;
   right: 0;
@@ -422,4 +427,8 @@ button,
 .form-material .control-label.bold,
 .bold {
   font-weight: 700;
+}
+
+.word-break--all {
+  word-break: all;
 }

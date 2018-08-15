@@ -41,7 +41,7 @@ export const getNewKMDAddresses = (coin, pubpriv, mode) => {
         triggerToaster(
           json.result ? json.result : json,
           translate('KMD_NATIVE.NEW_ADDR_GENERATED'),
-          'info',
+          'info selectable',
           false
         )
       );

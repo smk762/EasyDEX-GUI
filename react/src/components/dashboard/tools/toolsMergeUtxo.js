@@ -243,10 +243,10 @@ class ToolsMergeUTXO extends React.Component {
         _items.push(
           <tr key={ `tools-utxos-${i}` }>
             <td>{ _utxos[i].amount }</td>
-            <td className="blur">{ _utxos[i].address }</td>
+            <td className="blur selectable">{ _utxos[i].address }</td>
             <td>{ _utxos[i].confirmations }</td>
             <td>{ _utxos[i].vout }</td>
-            <td className="blur">{ _utxos[i].txid }</td>
+            <td className="blur selectable">{ _utxos[i].txid }</td>
           </tr>
         );
       }
@@ -299,7 +299,7 @@ class ToolsMergeUTXO extends React.Component {
             options={ [{
                 label: 'Komodo (KMD)',
                 icon: 'KMD',
-                value: `KMD|native`,
+                value: 'KMD|native',
               }].concat(addCoinOptionsAC())
             } />
         </div>
@@ -319,12 +319,12 @@ class ToolsMergeUTXO extends React.Component {
         </div>
         { this.state.utxoMergeAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            Pub: { this.state.utxoMergeAddress }
+            Pub: <span className="selectable">{ this.state.utxoMergeAddress }</span>
           </div>
         }
         { this.state.utxoMergeAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            WIF: { this.state.utxoMergeWif }
+            WIF: <span className="selectable">{ this.state.utxoMergeWif }</span>
           </div>
         }
         <div className="col-sm-12 form-group no-padding-left margin-top-20 padding-bottom-10">
@@ -389,7 +389,7 @@ class ToolsMergeUTXO extends React.Component {
         }
         { this.state.utxoMergePushResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            TXID: <div className="blur" style={{ wordBreak: 'break-all' }}>{ this.state.utxoMergePushResult }</div>
+            TXID: <div className="blur selectable word-break--all">{ this.state.utxoMergePushResult }</div>
             { isKomodoCoin(this.state.utxoMergeCoin.split('|')[0]) &&
               <div className="margin-top-10">
                 <button

@@ -97,7 +97,7 @@ export const ImportKeyModalRender = function() {
                   this.state.passphraseWif &&
                   <div className="margin-top-60">
                     <p>
-                      <strong>{ translate('IMPORT_KEY.ADDRESS') }: </strong> { this.state.passphraseAddress }
+                      <strong>{ translate('IMPORT_KEY.ADDRESS') }: </strong> <span className="selectable">{ this.state.passphraseAddress }</span>
                       <button
                         className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
                         title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -106,7 +106,7 @@ export const ImportKeyModalRender = function() {
                       </button>
                     </p>
                     <p>
-                      <strong>WIF: </strong> { this.state.passphraseWif }
+                      <strong>WIF: </strong> <span className="selectable">{ this.state.passphraseWif }</span>
                       <button
                         className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
                         title={ translate('INDEX.COPY_TO_CLIPBOARD') }

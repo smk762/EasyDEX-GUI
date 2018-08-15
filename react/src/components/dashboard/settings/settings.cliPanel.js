@@ -184,7 +184,7 @@ class CliPanel extends React.Component {
               onClick={ () => this.execCliCmd() }>{ translate('INDEX.EXECUTE') }</button>
           </div>
           <div className="col-sm-12 col-xs-12 text-align-left">
-            <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+            <div className="padding-top-40 padding-bottom-20 horizontal-padding-0 selectable">
               { this.renderCliResponse() }
             </div>
           </div>

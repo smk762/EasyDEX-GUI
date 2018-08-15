@@ -346,7 +346,9 @@ class SeedEncryptPanel extends React.Component {
                 <div className="margin-bottom-20">
                   <strong>{ translate('SETTINGS.RENAME_PIN') }</strong>
                 </div>
-                <div className="margin-bottom-10">{ translate('SETTINGS.OLD_PIN_NAME') }: { _pins[i] }</div>
+                <div className="margin-bottom-10">
+                  { translate('SETTINGS.OLD_PIN_NAME') }: <span className="selectable">{ _pins[i] }</span>
+                </div>
                 <div className="margin-bottom-10">
                   <input
                     type="text"

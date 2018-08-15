@@ -72,7 +72,7 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tbody>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter(translate('TX_INFO.ADDRESS')) }</td>
-                                <td className="blur">
+                                <td className="blur selectable">
                                   { this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.address : this.state.txDetails.details[0].address }
                                 </td>
                               </tr>
@@ -97,7 +97,7 @@ const WalletsTxInfoRender = function(txInfo) {
                               { this.state.txDetails.blockindex &&
                                 <tr>
                                   <td>{ this.capitalizeFirstLetter('blockindex') }</td>
-                                  <td>
+                                  <td className="selectable">
                                     { this.state.txDetails.blockindex }
                                   </td>
                                 </tr>
@@ -105,7 +105,7 @@ const WalletsTxInfoRender = function(txInfo) {
                               { this.state.txDetails.blockhash &&
                                 <tr>
                                   <td>{ this.props.ActiveCoin.mode === 'spv' ? this.capitalizeFirstLetter('blockheight') : this.capitalizeFirstLetter('blockhash') }</td>
-                                  <td>
+                                  <td className="selectable">
                                     { this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.height : this.state.txDetails.blockhash }
                                   </td>
                                 </tr>
@@ -120,7 +120,7 @@ const WalletsTxInfoRender = function(txInfo) {
                               }
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('txid') }</td>
-                                <td className="blur">
+                                <td className="blur selectable">
                                   { this.state.txDetails.txid }
                                 </td>
                               </tr>
@@ -154,25 +154,25 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tbody>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('txid') }</td>
-                                <td>
+                                <td className="selectable">
                                   { txInfo.txid }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('walletconflicts') }</td>
-                                <td>
+                                <td className="selectable">
                                   { txInfo.walletconflicts ? txInfo.walletconflicts.length : '' }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('vjoinsplit') }</td>
-                                <td>
+                                <td className="selectable">
                                   { txInfo.vjoinsplit }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('details') }</td>
-                                <td>
+                                <td className="selectable">
                                   { txInfo.details }
                                 </td>
                               </tr>
@@ -207,13 +207,13 @@ const WalletsTxInfoRender = function(txInfo) {
                             <tbody>
                               <tr>
                                 <td>{ translate('KV.TAG') }</td>
-                                <td>
+                                <td className="selectable">
                                   { this.state.txDetails.opreturn.kvDecoded.tag }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ translate('KV.TITLE') }</td>
-                                <td>
+                                <td className="selectable">
                                   { this.state.txDetails.opreturn.kvDecoded.content.title }
                                 </td>
                               </tr>
@@ -226,7 +226,7 @@ const WalletsTxInfoRender = function(txInfo) {
                             </tbody>
                           </table>
                           <div
-                            className="kv-content padding-top-20"
+                            className="kv-content padding-top-20 selectable"
                             dangerouslySetInnerHTML={{ __html: renderKvContent(this.state.txDetails.opreturn.kvDecoded.content.body) }}>
                           </div>
                         </div>

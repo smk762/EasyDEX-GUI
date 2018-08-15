@@ -10,9 +10,7 @@ import { SettingsRender } from './settings.render';
 import mainWindow from '../../../util/mainWindow';
 
 /*
-  TODO:
-  1) add fiat section
-  2) batch export/import wallet addresses
+  TODO: batch export/import wallet addresses
 */
 class Settings extends React.Component {
   constructor(props) {

@@ -109,11 +109,15 @@ class ToolsOfflineSigScan extends React.Component {
                 <div className="margin-bottom-15">
                   { this.state.rawTx2Push.split(':')[0].toUpperCase() } { translate('TOOLS.TX_PUSHED') }!
                 </div>
-                <div>TxID { this.state.txPushResult }</div>
+                <div>
+                  TxID <span className="selectable">{ this.state.txPushResult }</span>
+                </div>
               </div>
             }
             { this.state.txPushResult.length !== 64 &&
-              <div>{ translate('TOOLS.ERROR') }: { this.state.txPushResult }</div>
+              <div>
+                { translate('TOOLS.ERROR') }: <span className="selectable">{ this.state.txPushResult }</span>
+              </div>
             }
           </div>
         }

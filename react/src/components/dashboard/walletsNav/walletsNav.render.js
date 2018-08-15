@@ -14,8 +14,8 @@ const WalletsNavWithWalletRender = function() {
         { this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'spv' &&
           <div>
-            <strong className="unselectable">{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
-            <span className="blur">{
+            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+            <span className="blur selectable">{
               this.props &&
               this.props.Dashboard &&
               this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin] &&

@@ -13,8 +13,8 @@ export const JumblrRenderSecretAddressList = function(type) {
     for (let i = 0; i < _jumblrAddressList.length; i++) {
       _items.push(
         <tr key={ `jumblr-secret-address-${i}` }>
-          <td>{ _jumblrAddressList[i].address }</td>
-          <td>{ _jumblrAddressList[i].wif }</td>
+          <td className="selectable">{ _jumblrAddressList[i].address }</td>
+          <td className="selectable">{ _jumblrAddressList[i].wif }</td>
         </tr>
       );
     }
@@ -251,7 +251,7 @@ export const JumblrRender = function() {
                       <div className="padding-top-40">
                         <strong>{ translate('JUMBLR.YOUR_JUMBLR_DEPOSIT_ADDRESS') }:</strong>
                         <p>
-                          { this.state.jumblrDepositAddress.address }
+                          <span className="selectable">{ this.state.jumblrDepositAddress.address }</span>
                           <button
                             className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                             title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -260,7 +260,7 @@ export const JumblrRender = function() {
                           </button>
                         </p>
                         <p>
-                          { this.state.jumblrDepositAddress.wif }
+                          <span className="selectable">{ this.state.jumblrDepositAddress.wif }</span>
                           <button
                             className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                             title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -352,7 +352,7 @@ export const JumblrRender = function() {
                                 <strong>{ translate('INDEX.ADDRESS') }</strong>
                               </td>
                               <td>
-                                <strong>Wif</strong>
+                                <strong>WIF</strong>
                               </td>
                             </tr>
                           </thead>
@@ -461,7 +461,7 @@ export const JumblrRender = function() {
                                   <strong>{ translate('INDEX.ADDRESS') }</strong>
                                 </td>
                                 <td>
-                                  <strong>Wif</strong>
+                                  <strong>WIF</strong>
                                 </td>
                               </tr>
                             </thead>

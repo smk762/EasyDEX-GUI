@@ -925,7 +925,9 @@ class SendCoin extends React.Component {
             </div>
             <div className="send-target-block">
               { this.state.btcFeesType !== 'advanced' &&
-                <span>{ translate('SEND.CONF_TIME') } <strong>{ _confTime[this.state.btcFeesTimeBasedStep] }</strong></span>
+                <span>
+                  { translate('SEND.CONF_TIME') } <strong>{ _confTime[this.state.btcFeesTimeBasedStep] }</strong>
+                </span>
               }
               { this.state.btcFeesType === 'advanced' &&
                 <span>{ translate('SEND.ADVANCED_SELECTION') }</span>

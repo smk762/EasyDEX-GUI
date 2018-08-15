@@ -222,7 +222,8 @@ class Bip39KeysPanel extends React.Component {
             <div className="col-sm-12 margin-top-30 margin-bottom-20">
               { this.state.keys !== 'empty' &&
                 <div>
-                  <strong>WIF:</strong> <span className="blur">{ this.state.keys.priv }</span>
+                  <strong>Pub:</strong> <span className="blur selectable">{ this.state.keys.pub }</span>
+                  <strong>WIF:</strong> <span className="blur selectable">{ this.state.keys.priv }</span>
                   <button
                     className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                     title={ translate('INDEX.COPY_TO_CLIPBOARD') }

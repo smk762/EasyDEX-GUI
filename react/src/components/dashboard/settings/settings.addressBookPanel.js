@@ -8,7 +8,6 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
-import ReactTooltip from 'react-tooltip';
 import { cryptoCoins } from '../../../util/coinHelper';
 import Config from '../../../config';
 
@@ -220,9 +219,9 @@ class AddressBookPanel extends React.Component {
                 onClick={ () => this.triggerAction(key, 'delete') }
                 className="icon fa-trash"></i>
             </td>
-            <td>{ key }</td>
+            <td className="seletable">{ key }</td>
             <td>{ translate('CRYPTO.' + _addressBookItems[key].coin) + (_addressBookItems[key].coin.toLowerCase() === 'kmd' ? ' (Chips/Assetchains)' : '') }</td>
-            <td>{ _addressBookItems[key].title }</td>
+            <td className="seletable">{ _addressBookItems[key].title }</td>
           </tr>
         );
       } else {

@@ -56,7 +56,7 @@ export const AddressItemRender = function(address, type) {
         <ReactTooltip
           effect="solid"
           className="text-left" />
-        { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
+        <span className="selectable">{ type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }</span>
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&

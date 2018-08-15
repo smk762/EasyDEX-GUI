@@ -6,8 +6,6 @@ import {
   checkForUpdateUIPromise,
   updateUIPromise,
 } from '../../../actions/actionCreators';
-
-import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
@@ -94,7 +92,7 @@ class AppUpdatePanel extends React.Component {
 
   _updateUIPromise() {
     let _updateLog = [];
-    
+
     updateProgressBar.patch = 0;
     _updateLog.push(`${translate('INDEX.DOWNLOADING_UI_UPDATE')}...`);
     this.setState(Object.assign({}, this.state, {

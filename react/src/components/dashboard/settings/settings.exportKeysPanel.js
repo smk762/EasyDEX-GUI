@@ -108,7 +108,8 @@ class ExportKeysPanel extends React.Component {
         items.push(
           <tr key={ _key }>
             <td className="padding-bottom-30">
-              <strong className="padding-right-20">{ _key }</strong>{ _wifKeys[_key].pub }
+              <strong className="padding-right-20">{ _key }</strong>
+              <span className="selectable">{ _wifKeys[_key].pub }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -117,7 +118,7 @@ class ExportKeysPanel extends React.Component {
               </button>
             </td>
             <td className="padding-bottom-30 padding-left-15">
-              { _wifKeys[_key].priv }
+              <span className="selectable">{ _wifKeys[_key].priv }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -259,7 +260,7 @@ class ExportKeysPanel extends React.Component {
         { this.state.decryptedPassphrase &&
           <div className="row">
             <div className="col-sm-12 padding-top-15 margin-left-10">
-              <strong>{ translate('TOOLS.SEED') }:</strong> { this.state.decryptedPassphrase }
+              <strong>{ translate('TOOLS.SEED') }:</strong> <span className="selectable">{ this.state.decryptedPassphrase }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }

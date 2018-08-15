@@ -2,7 +2,6 @@ import React from 'react';
 
 import Navbar from '../navbar/navbar';
 import CoinTile from '../coinTile/coinTile';
-import EDEX from '../edex/edex';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
@@ -49,7 +48,7 @@ const DashboardRender = function() {
           <Jumblr  />
         }
         { this.isSectionActive('settings') &&
-          <Settings disableWalletSpecificUI={false} />
+          <Settings disableWalletSpecificUI={ false } />
         }
         { this.isSectionActive('about') &&
           <About />

@@ -17,7 +17,7 @@ const LoginRender = function() {
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
-          <div className="brand unselectable">
+          <div className="brand">
             <img
               className="brand-img"
               src="assets/images/agama-login-logo.svg"
@@ -32,7 +32,7 @@ const LoginRender = function() {
               <i className="icon fa-thumbs-up"></i> Notary Elections 2018
             </a>*/
           }
-          <div className="login-settings-dropdown margin-bottom-30 unselectable">
+          <div className="login-settings-dropdown margin-bottom-30">
             <div>
               <span
                 className="login-settings-dropdown-trigger"
@@ -65,11 +65,11 @@ const LoginRender = function() {
           </div>
 
           <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
-            <h4 className="color-white unselectable">
+            <h4 className="color-white">
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
             { this.props.Login.pinList.length > 0 &&
-              <div className="margin-top-25 margin-bottom-70 unselectable">{ translate('LOGIN.PIN_LOGIN_INFO') }</div>
+              <div className="margin-top-25 margin-bottom-70">{ translate('LOGIN.PIN_LOGIN_INFO') }</div>
             }
             { this.props.Login.pinList.length > 0 &&
               <div className="pin-login-block">
@@ -150,7 +150,7 @@ const LoginRender = function() {
             }
             { this.state.seedExtraSpaces &&
               <span>
-                <i className="icon fa-warning seed-extra-spaces-warning unselectable"
+                <i className="icon fa-warning seed-extra-spaces-warning"
                   data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
                   data-html={ true }></i>
                 <ReactTooltip
@@ -194,7 +194,7 @@ const LoginRender = function() {
           </div>
 
           <div className={ this.state.activeLoginSection === 'activateCoin' ? 'show' : 'hide' }>
-            <h4 className="color-white unselectable">
+            <h4 className="color-white">
               { translate('INDEX.WELCOME_PLEASE_ADD') }
             </h4>
             <div className="form-group form-material floating width-540 vertical-margin-30 auto-side-margin">
@@ -316,7 +316,7 @@ const LoginRender = function() {
 
           <div className={ this.state.activeLoginSection === 'signup' ? 'show' : 'hide' }>
             <div className="register-form">
-              <h4 className="hint color-white unselectable">
+              <h4 className="hint color-white">
                 { translate('INDEX.SELECT_SEED_TYPE') }:
               </h4>
               <div className="row">

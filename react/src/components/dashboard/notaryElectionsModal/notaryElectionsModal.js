@@ -613,36 +613,36 @@ class NotaryElectionsModal extends React.Component {
                       this.state.userType === 'voter' &&
                       <div className="elections-voter-ui">
                         <div className={ 'elections-map' + (this.state.voteType === 'multi' ? ' disable' : '') }>
-                          <img src={ `assets/images/world-map.png` } />
+                          <img src="assets/images/world-map.png" />
                           <div className={ 'elections-map-node elections-map-node--na' + (this.state.region === 'na' ? ' active' : '') }>
                             <label className="notary-elections-node-title">NA</label>
                             <img
                               onClick={ () => this.setRegion('na') }
-                              src={ `assets/images/cryptologo/kmd.png` } />
+                              src="assets/images/cryptologo/kmd.png" />
                           </div>
                           <div className={ 'elections-map-node elections-map-node--sh' + (this.state.region === 'sh' ? ' active' : '') }>
                             <label className="notary-elections-node-title">SH</label>
                             <img
                               onClick={ () => this.setRegion('sh') }
-                              src={ `assets/images/cryptologo/kmd.png` } />
+                              src="assets/images/cryptologo/kmd.png" />
                           </div>
                           <div className={ 'elections-map-node elections-map-node--ae' + (this.state.region === 'ae' ? ' active' : '') }>
                             <label className="notary-elections-node-title">AE</label>
                             <img
                               onClick={ () => this.setRegion('ae') }
-                              src={ `assets/images/cryptologo/kmd.png` } />
+                              src="assets/images/cryptologo/kmd.png" />
                           </div>
                           <div className={ 'elections-map-node elections-map-node--eu' + (this.state.region === 'eu' ? ' active' : '') }>
                             <label className="notary-elections-node-title">EU</label>
                             <img
                               onClick={ () => this.setRegion('eu') }
-                              src={ `assets/images/cryptologo/kmd.png` } />
+                              src="assets/images/cryptologo/kmd.png" />
                           </div>
                         </div>
                       </div>
                     }
                     { this.state.isAuth &&
-                      <div className={ `elections-balance` + (this.state.userType === 'candidate' ? ' margin-top-25' : '') }>
+                      <div className={ 'elections-balance' + (this.state.userType === 'candidate' ? ' margin-top-25' : '') }>
                         { translate('INDEX.YOU_HAVE') } <strong>{ this.state.balance }</strong> VOTE
                       </div>
                     }

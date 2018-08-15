@@ -66,7 +66,7 @@ class ToolsPubCheck extends React.Component {
             </div>
           }
           { !this.state.pubResult.coin &&
-            <div>{ this.state.pubResult }</div>
+            <div className="selectable">{ this.state.pubResult }</div>
           }
           </div>
         }
