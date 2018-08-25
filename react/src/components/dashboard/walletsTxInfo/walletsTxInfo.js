@@ -1,14 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { translate } from '../../../translate/translate';
-import { sortByDate } from '../../../util/sort';
+import translate from '../../../translate/translate';
 import {
   toggleDashboardTxInfoModal,
   getTxDetails,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
-import explorerList from '../../../util/explorerList';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import Config from '../../../config';
+
+const { shell } = window.require('electron');
 
 class WalletsTxInfo extends React.Component {
   constructor() {
@@ -41,11 +43,12 @@ class WalletsTxInfo extends React.Component {
       this.setState(Object.assign({}, this.state, {
         txDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
         rawTxDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
+        activeTab: Config.experimentalFeatures && nextProps.ActiveCoin.showTransactionInfoTxIndex && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn.kvDecoded ? 4 : 0,
       }));
     } else {
       if (nextProps.ActiveCoin &&
           nextProps.ActiveCoin.txhistory &&
-          nextProps.ActiveCoin.showTransactionInfoTxIndex) {
+          nextProps.ActiveCoin.showTransactionInfoTxIndex > -1) {
         const txInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
 
         if (txInfo &&
@@ -93,25 +96,7 @@ class WalletsTxInfo extends React.Component {
 
   openExplorerWindow(txid) {
     const url = explorerList[this.props.ActiveCoin.coin].split('/').length - 1 > 2 ? `${explorerList[this.props.ActiveCoin.coin]}${txid}` : `${explorerList[this.props.ActiveCoin.coin]}/tx/${txid}`;
-    const remote = window.require('electron').remote;
-    const BrowserWindow = remote.BrowserWindow;
-
-    const externalWindow = new BrowserWindow({
-      width: 1280,
-      height: 800,
-      title: `${translate('INDEX.LOADING')}...`,
-      icon: remote.getCurrentWindow().iguanaIcon,
-      webPreferences: {
-        nodeIntegration: false,
-      },
-    });
-
-    externalWindow.loadURL(url);
-    externalWindow.webContents.on('did-finish-load', () => {
-      setTimeout(() => {
-        externalWindow.show();
-      }, 40);
-    });
+    return shell.openExternal(url);
   }
 
   render() {
@@ -121,7 +106,7 @@ class WalletsTxInfo extends React.Component {
         this.props.ActiveCoin.activeSection === 'default') {
       if (this.props.ActiveCoin.mode === 'native') {
         if (this.props.ActiveCoin.txhistory &&
-            this.props.ActiveCoin.showTransactionInfoTxIndex) {
+            this.props.ActiveCoin.showTransactionInfoTxIndex > -1) {
           const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
 
           return WalletsTxInfoRender.call(this, txInfo);
