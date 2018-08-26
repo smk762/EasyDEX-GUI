@@ -38,7 +38,10 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
             </li>
-            <li className={ (this.isSectionActive('dex') ? 'active nav-top-menu' : 'nav-top-menu') + (mainWindow.argv.indexOf('dexonly') > -1 ? '' : ' hide') }>
+            <li className={
+              (this.isSectionActive('dex') ? 'active nav-top-menu' : 'nav-top-menu') +
+              (mainWindow.argv.indexOf('dexonly') > -1 ? '' : ' hide')
+            }>
               <a onClick={ () => this.dashboardChangeSection('dex') }>
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
@@ -46,7 +49,7 @@ const NavbarRender = function() {
             { this.props.ActiveCoin &&
               (/*this._checkAC() || */
               this.props.ActiveCoin.coin === 'KMD' &&
-                this.props.ActiveCoin.mode === 'native') &&
+              this.props.ActiveCoin.mode === 'native') &&
               <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr
@@ -103,7 +106,11 @@ const NavbarRender = function() {
               </a>
             </li>
             <li
-              className={ 'pointer dropdown' + (this.state.openDropMenu ? ' open' : '') + (this.props.Main.newUpdateAvailable.result === 'update' ? ' new-update-icon' : '') }
+              className={
+                'pointer dropdown' +
+                (this.state.openDropMenu ? ' open' : '') +
+                (this.props.Main.newUpdateAvailable.result === 'update' ? ' new-update-icon' : '')
+              }
               onClick={ this.openDropMenu }>
               <a className="navbar-avatar dropdown-toggle">
                 <span className="navbar-avatar-inner">
@@ -143,7 +150,8 @@ const NavbarRender = function() {
                 }
                 <li>
                   <a onClick={ this._toggleBlurSensitiveData }>
-                    <i className={ 'icon fa-eye' + (!this.props.Main.blurSensitiveData ? '-slash' : '') }></i> { this.props.Main.blurSensitiveData ? translate('INDEX.SHOW_SENSITIVE_DATA') : translate('INDEX.HIDE_SENSITIVE_DATA') }
+                    <i className={ 'nbps icon fa-eye' + (!this.props.Main.blurSensitiveData ? '-slash' : '') }></i>
+                    { translate('INDEX.' + (this.props.Main.blurSensitiveData ? 'SHOW_SENSITIVE_DATA' : 'HIDE_SENSITIVE_DATA')) }
                   </a>
                 </li>
                 { this.isRenderSpvLockLogout() &&
