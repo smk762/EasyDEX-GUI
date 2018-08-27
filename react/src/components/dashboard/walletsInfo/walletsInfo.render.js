@@ -197,6 +197,9 @@ const WalletsInfoRender = function() {
             </div>
             <div className="table-responsive">
               { _netTotals &&
+                _netTotals.timemillis &&
+                _netTotals.totalbytesrecv &&
+                _netTotals.totalbytessent &&
                 <table className="table table-striped">
                   <tbody>
                     <tr>
@@ -230,7 +233,7 @@ const WalletsInfoRender = function() {
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">
-                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodo' : `${this.props.ActiveCoin.coin}` }&nbsp;
+                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodo' : this.props.ActiveCoin.coin }&nbsp;
                 { translate('INDEX.INFO') }
               </h3>
             </div>

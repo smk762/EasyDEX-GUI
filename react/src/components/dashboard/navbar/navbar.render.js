@@ -33,7 +33,7 @@ const NavbarRender = function() {
                 </i>
               </a>
             </li>
-            <li className={ this.isSectionActive('wallets') ? 'active nav-top-menu' : 'nav-top-menu' }>
+            <li className={ 'nav-top-menu' + (this.isSectionActive('wallets') ? ' active' : '') }>
               <a onClick={ () => this.dashboardChangeSection('wallets') }>
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
@@ -50,7 +50,7 @@ const NavbarRender = function() {
               (/*this._checkAC() || */
               this.props.ActiveCoin.coin === 'KMD' &&
               this.props.ActiveCoin.mode === 'native') &&
-              <li className={ this.isSectionActive('jumblr') ? 'active nav-top-menu' : 'nav-top-menu' }>
+              <li className={ 'nav-top-menu' + (this.isSectionActive('jumblr') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr
                 </a>
@@ -69,7 +69,7 @@ const NavbarRender = function() {
               </a>
             </li>*/ }
             { Config.experimentalFeatures &&
-              <li className={ this.isSectionActive('tools') ? 'active nav-top-menu' : 'nav-top-menu' }>
+              <li className={ 'nav-top-menu' + (this.isSectionActive('tools') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('tools') }>
                   <i className="site-menu-icon"></i> { translate('TOOLS.TOOLS') }
                 </a>
