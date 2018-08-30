@@ -288,6 +288,8 @@ select {
 .Select {
   cursor: pointer;
   text-align: left;
+  padding-right: 0;
+  padding-left: 0;
 
   img {
     border-radius: 50%;
