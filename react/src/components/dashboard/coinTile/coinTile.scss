@@ -71,3 +71,11 @@
   margin-top: -26px;
   margin-left: 14px;
 }
+
+.widget {
+  &.active {
+    .bg-white {
+      box-shadow: inset 1px 1px 10px #ccc;
+    }
+  }
+}

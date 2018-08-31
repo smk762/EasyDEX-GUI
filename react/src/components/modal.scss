@@ -1,0 +1,17 @@
+.modal {
+  .modal-content {
+    .modal-header {
+      .close {
+        font-size: 28px;
+        position: absolute;
+        z-index: 100;
+        right: 20px;
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

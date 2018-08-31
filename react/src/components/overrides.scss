@@ -6,6 +6,10 @@
   }
 }
 
+body {
+  padding-top: 44px;
+}
+
 .page-main {
   background: #f3f4f5;
 }
@@ -14,18 +18,6 @@
   button {
     margin-right: 5px;
   }
-}
-
-.widget {
-  &.active {
-    .bg-white {
-      box-shadow: inset 1px 1px 10px #ccc;
-    }
-  }
-}
-
-body {
-  padding-top: 44px;
 }
 
 #section-dashboard {
@@ -126,20 +118,6 @@ body {
   width: 200px;
 }
 
-.bootstrap-select {
-  > .dropdown-toggle {
-    z-index: 0;
-  }
-}
-
-select {
-  &.form-control {
-    &.form-material {
-      color: #757575;
-    }
-  }
-}
-
 .site-navbar {
   .navbar-brand-logo {
     height: 32px;
@@ -196,31 +174,6 @@ select {
   font-weight: bold;
 }
 
-.modal {
-  .modal-content {
-    .modal-header {
-      .close {
-        font-size: 28px;
-        position: absolute;
-        z-index: 100;
-        right: 20px;
-        opacity: 0.5;
-
-        &:hover {
-          opacity: 1;
-        }
-      }
-    }
-  }
-}
-
-.tx-interest {
-  display: block;
-  color: #4caf50;
-  font-size: 13px;
-  padding-top: 5px;
-}
-
 .color-warning {
   color: #FF6600;
 }
@@ -263,12 +216,6 @@ select {
   position: absolute;
 }
 
-#section-iguana-wallet-settings {
-  > .row {
-    background: #f3f4f5;
-  }
-}
-
 .inline {
   display: inline-block;
 }
@@ -285,48 +232,6 @@ select {
   margin: 0 !important;
 }
 
-.Select {
-  cursor: pointer;
-  text-align: left;
-  padding-right: 0;
-  padding-left: 0;
-
-  img {
-    border-radius: 50%;
-  }
-
-  * { color: #757575 !important; }
-
-  .Select-clear {
-    display: none;
-  }
-  .Select-control {
-    height: 40px !important;
-
-    .Select-placeholder,
-    .Select-value {
-      line-height: 36px !important;
-    }
-  }
-}
-.Select-menu-outer {
-  max-height: 253px !important;
-}
-.Select-menu {
-  max-height: 250px !important;
-}
-.Select.is-open,
-.Select.is-focused {
-  .Select-control {
-    border-color: #FF6600 !important;
-    box-shadow: none !important;
-  }
-  .Select-menu-outer {
-    border-color: #FF6600 !important;
-    border-top-color: #d9d9d9 !important;
-  }
-}
-
 .__react_component_tooltip {
   &.type-dark {
     background-color: #000;
@@ -335,49 +240,6 @@ select {
 
 .cursor-default {
   cursor: default;
-}
-
-.rc-slider {
-  .rc-slider-handle {
-    position: absolute;
-    margin-left: -10px;
-    margin-top: -7px;
-    width: 20px;
-    height: 20px;
-  }
-
-  .rc-slider-mark {
-    top: 23px;
-    font-size: 14px;
-  }
-
-  .rc-slider-rail,
-  .rc-slider-track {
-    height: 6px;
-  }
-
-  .rc-slider-rail {
-    background-color: #dcdcdc;
-  }
-
-  .rc-slider-track {
-    background-color: #51c4f9;
-  }
-
-  .rc-slider-handle {
-    border-color: #51c4f9;
-  }
-
-  .rc-slider-dot {
-    bottom: -5px;
-    width: 12px;
-    height: 12px;
-    border-color: #dcdcdc;
-  }
-
-  .rc-slider-dot-active {
-    border-color: #51c4f9 !important;
-  }
 }
 
 .page-aside {

@@ -110,7 +110,12 @@
   display: block;
   margin: 0 auto;
 }
-
+.tx-interest {
+  display: block;
+  color: #4caf50;
+  font-size: 13px;
+  padding-top: 5px;
+}
 .tx-history-vin-len-err {
   background: #FF6600;
   color: #fff;
