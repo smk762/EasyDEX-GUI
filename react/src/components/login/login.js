@@ -532,7 +532,7 @@ class Login extends React.Component {
   handleRegisterWallet() {
     const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
     const isSeedBlank = this.isBlank(this.state.randomSeed);
-    const stringEntropy = mainWindow.checkStringEntropy(this.state.customWalletSeed);
+    const stringEntropy = mainWindow.checkStringEntropy(this.state.randomSeed);
     const _customSeed = this.state.customWalletSeed;
 
     if (!stringEntropy &&

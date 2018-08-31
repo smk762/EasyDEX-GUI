@@ -587,7 +587,6 @@ export const shepherdElectrumKvServersList = () => {
 
 export const shepherdElectrumSweep = (coin, value, sendToAddress, changeAddress, push, wif, btcFee) => {
   value = Math.floor(value);
-  const isTest = true;
 
   return new Promise((resolve, reject) => {
     const payload = {
@@ -614,8 +613,8 @@ export const shepherdElectrumSweep = (coin, value, sendToAddress, changeAddress,
     };
 
     fetch(
-      !isTest ? `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      !isTest ? fetchType(JSON.stringify(payload)).post : fetchType.get
+      `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);
