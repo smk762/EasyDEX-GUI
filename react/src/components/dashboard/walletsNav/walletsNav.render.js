@@ -5,38 +5,39 @@ import mainWindow from '../../../util/mainWindow';
 
 const WalletsNavWithWalletRender = function() {
   const pubKeys = mainWindow.getPubkeys();
+  const _coin = this.props.ActiveCoin.coin;
 
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (this.props.ActiveCoin.mode === 'spv' || (pubKeys[this.props.ActiveCoin.coin.toLowerCase()] && pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (this.props.ActiveCoin.mode === 'spv' || (pubKeys[_coin.toLowerCase()] && pubKeys[_coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
         id="header-dashboard">
         { this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'spv' &&
           <div>
-            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
             <span className="blur selectable">{
               this.props &&
               this.props.Dashboard &&
-              this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin] &&
-              this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : '-'
+              this.props.Dashboard.electrumCoins[_coin] &&
+              this.props.Dashboard.electrumCoins[_coin].pub ? this.props.Dashboard.electrumCoins[_coin].pub : '-'
             }</span>
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
-              onClick={ () => this.copyMyAddress(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) }>
+              onClick={ () => this.copyMyAddress(this.props.Dashboard.electrumCoins[_coin].pub) }>
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
             </button>
           </div>
         }
         { this.props.ActiveCoin &&
-          this.props.ActiveCoin.coin &&
-          pubKeys[this.props.ActiveCoin.coin.toLowerCase()] &&
+          _coin &&
+          pubKeys[_coin.toLowerCase()] &&
           <div>
-            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? this.props.ActiveCoin.coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
-            { pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub }
+            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+            { pubKeys[_coin.toLowerCase()].pub }
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
-              onClick={ () => this.copyMyAddress(pubKeys[this.props.ActiveCoin.coin.toLowerCase()].pub) }>
+              onClick={ () => this.copyMyAddress(pubKeys[_coin.toLowerCase()].pub) }>
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
             </button>
           </div>

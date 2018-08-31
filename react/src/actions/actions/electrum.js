@@ -584,3 +584,52 @@ export const shepherdElectrumKvServersList = () => {
     });
   });
 }
+
+export const shepherdElectrumSweep = (coin, value, sendToAddress, changeAddress, push, wif, btcFee) => {
+  value = Math.floor(value);
+  const isTest = true;
+
+  return new Promise((resolve, reject) => {
+    const payload = {
+      token,
+      coin,
+      value,
+      address: sendToAddress,
+      change: changeAddress,
+      verify: true,
+      push,
+      wif,
+      btcFee,
+    };
+    const _urlParams = {
+      token,
+      coin,
+      value,
+      address: sendToAddress,
+      change: changeAddress,
+      verify: true,
+      push,
+      wif,
+      btcFee,
+    };
+
+    fetch(
+      !isTest ? `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      !isTest ? fetchType(JSON.stringify(payload)).post : fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.shepherdElectrumSend') + ' (code: shepherdElectrumSweep)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
