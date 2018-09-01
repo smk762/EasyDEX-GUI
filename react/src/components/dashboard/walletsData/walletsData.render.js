@@ -166,7 +166,7 @@ export const TxTypeRender = function(category) {
   } else if (category === 'self') {
     return (
       <span className="label label-info self-send">
-        <span>self</span>
+        <span>{ translate('INDEX.SELF_SM') }</span>
       </span>
     );
   }
@@ -247,9 +247,19 @@ export const TxAmountRender = function(tx) {
 };
 
 export const TxHistoryListRender = function() {
+  let _data;
+
+  if (this.props.ActiveCoin.coins[mainWindow.activeCoin] &&
+      this.props.ActiveCoin.coins[mainWindow.activeCoin].txhistory &&
+      !this.state.searchTerm) {
+    _data = this.props.ActiveCoin.coins[mainWindow.activeCoin].txhistory;
+  }
+
+  _data = _data || this.state.filteredItemsList;
+
   return (
     <ReactTable
-      data={ (this.props.ActiveCoin.coins[mainWindow.activeCoin] && !this.state.searchTerm ? this.props.ActiveCoin.coins[mainWindow.activeCoin].txhistory : null) || this.state.filteredItemsList }
+      data={ _data }
       columns={ this.state.itemsListColumns }
       minRows="0"
       sortable={ true }

@@ -197,6 +197,7 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    SELF_SM: 'self',
     DEFAULT: 'Default',
     NEW_VERSION: 'New version',
     GENERATING_CSV: 'Generating CSV',
