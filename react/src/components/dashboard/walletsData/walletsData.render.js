@@ -2,11 +2,12 @@ import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import translate from '../../../translate/translate';
 import ReactTable from 'react-table';
-import TablePaginationRenderer from './pagination';
+import TablePaginationRenderer from '../pagination/pagination';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
 import mainWindow from '../../../util/mainWindow';
+import { tableSorting } from '../pagination/utils';
 
 const kvCoins = {
   'KV': true,
