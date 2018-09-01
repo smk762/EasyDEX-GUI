@@ -14,7 +14,6 @@
 .rt-tr-group.-odd .-padRow {
   display: none;
 }
-
 .ReactTable {
   border: none;
 
@@ -33,7 +32,7 @@
     text-align: center;
   }
   .rt-table {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: none;
   }
   .rt-thead .rt-th,
   .rt-thead .rt-td {
@@ -59,13 +58,16 @@
   .rt-thead {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
+    .rt-th,
+    .rt-td {
+      border: none;
+    }
     .rt-th.-sort-asc,
     .rt-td.-sort-asc,
     .rt-th.-sort-desc,
     .rt-td.-sort-desc{
       box-shadow: none;
     }
-
     .rt-th.-sort-asc div:nth-child(1):after {
       font-family: FontAwesome;
       padding-left: 5px;
