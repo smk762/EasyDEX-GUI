@@ -74,3 +74,31 @@
     color: #757575;
   }
 }
+
+.navbar-toolbar {
+  .dropdown-menu:not(.dropdown-menu-media) {
+    overflow-y: auto;
+  }
+  > li {
+    > a {
+      &.padding-top-16 {
+        padding-top: 16px;
+      }
+    }
+  }
+}
+
+.site-navbar {
+  .navbar-brand-logo {
+    height: 32px;
+    width: 110px;
+
+    &.hidden-lg {
+      display: none;
+    }
+  }
+}
+
+.navbar-brand {
+  padding: 22px 15px;
+}

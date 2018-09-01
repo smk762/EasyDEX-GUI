@@ -79,3 +79,10 @@
     }
   }
 }
+
+.page-aside-inner {
+  .wallet-widgets-list {
+    overflow-y: auto;
+    height: 100%;
+  }
+}

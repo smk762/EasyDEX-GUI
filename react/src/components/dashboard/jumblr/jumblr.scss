@@ -42,12 +42,11 @@
     top: 60px;
     right: 32px;
   }
-  input.labelauty+label,
-  input.labelauty+label {
+  input.labelauty + label {
     background: #d6d5d5;
     color: #504e4e;
   }
-  input.labelauty:checked+label {
+  input.labelauty:checked + label {
     color: #fff;
     background-color: #3949ab;
   }
@@ -103,4 +102,9 @@
     color: #fff;
     background: #ff9800;
   }
+}
+
+.jumblr-header {
+  font-size: 24px;
+  text-align: center;
 }

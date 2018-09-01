@@ -1,3 +1,7 @@
+body {
+  padding-top: 44px;
+}
+
 #app {
   height: 100%;
 
@@ -6,22 +10,8 @@
   }
 }
 
-body {
-  padding-top: 44px;
-}
-
 .page-main {
   background: #f3f4f5;
-}
-
-#kmd_header_button {
-  button {
-    margin-right: 5px;
-  }
-}
-
-#section-dashboard {
-  height: 100%;
 }
 
 #edexcoin_dashboardinfo a,
@@ -72,27 +62,8 @@ body {
   transition: height 0.3s ease-out;
 }
 
-.page-aside-inner {
-  .wallet-widgets-list {
-    overflow-y: auto;
-    height: 100%;
-  }
-}
-
-.btn-outline-primary {
-  color: #FF6600;
-  background-color: #fff;
-  border-color: #FF6600;
-}
-
 .center {
   text-align: center;
-}
-
-.dropdown-menu {
-  li {
-    cursor: pointer;
-  }
 }
 
 .pointer {
@@ -103,11 +74,6 @@ body {
   text-align: center;
 }
 
-.coin-logo {
-  &.breadcrumb {
-    z-index: 99;
-  }
-}
 .breadcrumb > li + li:before {
   display: none;
 }
@@ -116,17 +82,6 @@ body {
   opacity: 0;
   height: 10px;
   width: 200px;
-}
-
-.site-navbar {
-  .navbar-brand-logo {
-    height: 32px;
-    width: 110px;
-  }
-}
-
-.navbar-brand {
-  padding: 22px 15px;
 }
 
 .panel-actions {
@@ -163,11 +118,6 @@ body {
 .alert-warning {
   width: 97.1%;
   margin: 0 auto;
-}
-
-.page-content-native {
-  position: relative;
-  top: -20px;
 }
 
 .bold {
@@ -210,12 +160,6 @@ body {
   color: #f96868;
 }
 
-.modal-close-overlay {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-}
-
 .inline {
   display: inline-block;
 }
@@ -251,15 +195,7 @@ body {
   width: 100%;
 }
 
-.navbar-toolbar .dropdown-menu:not(.dropdown-menu-media) {
-  overflow-y: auto;
-}
-
 .kmd-mobile-icon {
-  display: none;
-}
-
-.site-navbar .navbar-brand-logo.hidden-lg {
   display: none;
 }
 
@@ -279,11 +215,6 @@ button,
   user-select: none;
 }
 
-.kv-content {
-  overflow-y: auto;
-  max-height: 300px;
-}
-
 .overflow-x {
   overflow-x: auto;
 }
@@ -299,4 +230,30 @@ button,
 
 .nbsp {
   margin-right: 3px;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.text {
+  &-align-center {
+    text-align: center;
+  }
+  &-align-left {
+    text-align: left;
+  }
+}
+
+.margin-top-30 {
+  margin-top: 30px;
+}
+
+.color-white {
+  color: #fff;
+}
+
+.horizontal-padding-0 {
+  padding-left: 0;
+  padding-right: 0;
 }
