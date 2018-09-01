@@ -141,7 +141,7 @@ export const TxTypeRender = function(category) {
   ) {
     return (
       <span className="label label-success">
-        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') } &nbsp; &nbsp;</span>
+        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') }</span>
       </span>
     );
   } else if (category === 'generate') {
@@ -350,7 +350,7 @@ export const WalletsDataRender = function() {
                         </div>
                       }
                     </div>
-                    <div className="row">
+                    <div className="row txhistory-table">
                       { this.renderTxHistoryList() }
                     </div>
                   </div>
