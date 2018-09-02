@@ -326,6 +326,7 @@ const LoginRender = function() {
                       <label className="switch">
                         <input
                           type="checkbox"
+                          readOnly
                           checked={ this.isCustomWalletSeed() } />
                         <div
                           className="slider"
@@ -437,6 +438,7 @@ const LoginRender = function() {
                           <label className="switch">
                             <input
                               type="checkbox"
+                              readOnly
                               checked={ this.shouldEncryptSeed() } />
                             <div
                               className="slider"
@@ -490,6 +492,7 @@ const LoginRender = function() {
                             <label className="switch">
                               <input
                                 type="checkbox"
+                                readOnly
                                 checked={ this.state.isCustomPinFilename } />
                               <div
                                 className="slider"
