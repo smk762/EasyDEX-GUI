@@ -275,7 +275,7 @@ class AddCoin extends React.Component {
           checked: defaultMode === 'mining' ? true : false,
         },
         mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
-      }
+      };
 
       this.setState(Object.assign({}, this.state, {
         coins: _coins,
@@ -289,7 +289,6 @@ class AddCoin extends React.Component {
 
     _coins[index] = {
       selectedCoin: _selectedCoin,
-
       spvMode: {
         disabled: _selectedCoin.indexOf('spv') > -1 ? false : true,
         checked: _value === '0' ? true : false,
@@ -323,11 +322,6 @@ class AddCoin extends React.Component {
   activateCoin() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
     const _coin = this.state.coins[0];
-
-    if (this.isCoinAlreadyAdded(coin)) {
-      this.dismiss();
-      return;
-    }
 
     this.verifyZcashParamsExist(_coin.mode)
     .then((res) => {
@@ -399,28 +393,24 @@ class AddCoin extends React.Component {
   activateAllCoins() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
 
-    if (!this.isCoinAlreadyAdded(coin)) {
-      Store.dispatch(
-        addCoin(
-          coin,
-          this.state.coins[0].mode,
-        )
-      );
-    }
+    Store.dispatch(
+      addCoin(
+        coin,
+        this.state.coins[0].mode,
+      )
+    );
 
     for (let i = 1; i < this.state.coins.length; i++) {
       const _item = this.state.coins[i];
       const itemCoin = _item.selectedCoin.split('|')[0];
 
       setTimeout(() => {
-        if (!this.isCoinAlreadyAdded(itemCoin)) {
-          Store.dispatch(
-            addCoin(
-              itemCoin,
-              _item.mode,
-            )
-          );
-        }
+        Store.dispatch(
+          addCoin(
+            itemCoin,
+            _item.mode,
+          )
+        );
 
         if (i === this.state.coins.length - 1) {
           let _coins = [];
@@ -485,34 +475,6 @@ class AddCoin extends React.Component {
     return (
       AddCoinRender.call(this)
     );
-  }
-
-  isCoinAlreadyAdded(coin) {
-    const modes = [
-      'spv',
-      'native',
-      'staking',
-      'mining'
-    ];
-
-    for (let mode of modes) {
-      if (this.existingCoins[mode] &&
-          this.existingCoins[mode].indexOf(coin) !== -1) {
-        const message = `${coin} ${translate('ADD_COIN.ALREADY_ADDED')} ${translate('ADD_COIN.IN')} ${mode} ${translate('ADD_COIN.MODE')}`;
-
-        Store.dispatch(
-          triggerToaster(
-            message,
-            translate('ADD_COIN.COIN_ALREADY_ADDED'),
-            'error'
-          )
-        );
-
-        return true;
-      }
-    }
-
-    return false;
   }
 }
 

@@ -5,8 +5,9 @@ import { cryptoCoins } from '../../util/coinHelper';
 
 let _prepCoinsList;
 let coins = cryptoCoins;
+let _activeCoins;
 
-const prepCoinsList = () => {
+const prepCoinsList = (filterActiveCoins) => {
   const availableKMDModes = mainWindow.arch === 'x64' ? 'spv|native' : 'spv';
   let _coins = [];
 
@@ -14,13 +15,24 @@ const prepCoinsList = () => {
     coins = coins.slice(0, 2);
   }
 
-  for (let i = 0; i < coins.length; i++) {
-    if (mainWindow.electrumServers[coins[i].toLowerCase()]) {
-      _coins.push({
-        label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
-        icon: coins[i],
-        value: `${coins[i]}|${coins[i] === 'KMD' ? availableKMDModes : 'spv'}`,
-      });
+  if (filterActiveCoins) {
+    for (let i = 0; i < _prepCoinsList.length; i++) {
+      if (_activeCoins.spv.indexOf(_prepCoinsList[i].icon.toUpperCase()) === -1 &&
+          _activeCoins.native.indexOf(_prepCoinsList[i].icon.toUpperCase()) === -1) {
+        _coins.push(_prepCoinsList[i]);
+      }
+    }
+  } else {
+    for (let i = 0; i < coins.length; i++) {
+      if (mainWindow.electrumServers[coins[i].toLowerCase()] &&
+          _activeCoins.spv.indexOf(coins[i].toUpperCase()) === -1 &&
+          _activeCoins.native.indexOf(coins[i].toUpperCase()) === -1) {
+        _coins.push({
+          label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
+          icon: coins[i],
+          value: `${coins[i]}|${coins[i] === 'KMD' ? availableKMDModes : 'spv'}`,
+        });
+      }
     }
   }
 
@@ -29,9 +41,11 @@ const prepCoinsList = () => {
   return _coins;
 };
 
-const addCoinOptionsCrypto = () => {
+const addCoinOptionsCrypto = (activeCoins) => {
+  _activeCoins = activeCoins;
+
   if (_prepCoinsList) {
-    return _prepCoinsList;
+    return prepCoinsList();
   } else {
     return prepCoinsList();
   }

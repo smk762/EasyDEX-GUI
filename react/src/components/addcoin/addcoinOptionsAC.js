@@ -3,7 +3,7 @@ import mainWindow from '../../util/mainWindow';
 import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 
-const addCoinOptionsAC = () => {
+const addCoinOptionsAC = (activeCoins) => {
   const _assetChains = kmdAssetChains;
   let _items = [];
 
@@ -15,7 +15,9 @@ const addCoinOptionsAC = () => {
     }
 
     if (_assetChains[i] !== 'MVP' &&
-        _assetChains[i] !== 'VRSC') {
+        _assetChains[i] !== 'VRSC' &&
+        activeCoins.spv.indexOf(_assetChains[i].toUpperCase()) === -1 &&
+        activeCoins.native.indexOf(_assetChains[i].toUpperCase()) === -1) {
       _items.push({
         label: `${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`)}${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`).indexOf('(') === -1 && translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) !== _assetChains[i].toUpperCase() ? ' (' + _assetChains[i].toUpperCase() + ')' : ''}`,
         icon: _assetChains[i].toLowerCase(),
@@ -34,7 +36,6 @@ const addCoinOptionsAC = () => {
 
     for (let key in _customAssetChains) {
       for (let i = 0; i < _customAssetChains[key].length; i++) {
-
         _items.push({
           label: `${translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`)}${translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`).indexOf('(') === -1 && translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`) !== _customAssetChains[key][i].toUpperCase() ? ' (' + _customAssetChains[key][i].toUpperCase() + ')' : ''}`,
           icon: _customAssetChains[key][i].toLowerCase(),
