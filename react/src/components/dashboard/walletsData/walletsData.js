@@ -595,47 +595,34 @@ class WalletsData extends React.Component {
     if (this.state.itemsList === 'loading') {
       if (this.isFullySynced()) {
         return (
-          <tr className="hover--none">
-            <td
-              colSpan="7"
-              className="table-cell-offset-16">{ translate('INDEX.LOADING_HISTORY') }...</td>
-          </tr>
+          <div className="padding-left-15">{ translate('INDEX.LOADING_HISTORY') }...</div>
         );
       } else {
         return (
-          <tr className="hover--none">
-            <td
-              colSpan="7"
-              className="table-cell-offset-16">{ translate('INDEX.SYNC_IN_PROGRESS') }...</td>
-          </tr>
+          <div className="padding-left-15">{ translate('INDEX.SYNC_IN_PROGRESS') }...</div>
         );
       }
     } else if (this.state.itemsList === 'no data') {
       return (
-        <tr className="hover--none">
-          <td
-            colSpan="7"
-            className="table-cell-offset-16">{ translate('INDEX.NO_DATA') }</td>
-        </tr>
+        <div className="padding-left-15">{ translate('INDEX.NO_DATA') }</div>
       );
     } else if (this.state.itemsList === 'connection error') {
       return (
-        <tr className="hover--none">
-          <td
-            colSpan="7"
-            className="table-cell-offset-16">
-            <div className="color-warning">
-              { translate('DASHBOARD.SPV_CONN_ERROR') }
-            </div>
-            <div className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
-              <div className="color-warning padding-bottom-20">{ translate('DASHBOARD.SPV_AUTO_SWITCH') }...</div>
-              <strong>{ translate('DASHBOARD.HOW_TO_SWITCH_MANUALLY') }:</strong>
-              <div className="padding-top-10">{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }</div>
-            </div>
-          </td>
-        </tr>
+        <div className="padding-left-15">
+          <div className="color-warning">
+            { translate('DASHBOARD.SPV_CONN_ERROR') }
+          </div>
+          <div className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
+            <div className="color-warning padding-bottom-20">{ translate('DASHBOARD.SPV_AUTO_SWITCH') }...</div>
+            <strong>{ translate('DASHBOARD.HOW_TO_SWITCH_MANUALLY') }:</strong>
+            <div className="padding-top-10">{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }</div>
+          </div>
+        </div>
       );
-    } else if (this.state.itemsList && this.state.itemsList.length) {
+    } else if (
+      this.state.itemsList &&
+      this.state.itemsList.length
+    ) {
       return (
         <DoubleScrollbar>
           { TxHistoryListRender.call(this) }
