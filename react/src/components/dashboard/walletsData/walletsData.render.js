@@ -56,8 +56,8 @@ export const TransactionDetailRender = function(transactionIndex) {
   );
 };
 
-export const AddressRender = function(tx) {
-  if (!tx.address) {
+export const AddressRender = function(address) {
+  if (!address) {
     return (
       <span>
         <span className="label label-dark">
@@ -67,7 +67,9 @@ export const AddressRender = function(tx) {
     );
   }
 
-  return (<span className="blur">{ tx.address }</span>);
+  return (
+    <span className="blur">{ address }</span>
+  );
 };
 
 export const AddressItemRender = function(address, type, amount, coin) {
@@ -173,22 +175,11 @@ export const TxTypeRender = function(category) {
 };
 
 export const TxAmountRender = function(tx) {
-  let _amountNegative;
-
-  if ((tx.category === 'send' ||
-      tx.category === 'sent') ||
-      (tx.type === 'send' ||
-      tx.type === 'sent')) {
-    _amountNegative = -1;
-  } else {
-    _amountNegative = 1;
-  }
-
   if (Config.roundValues) {
     return (
       <span>
-        <span data-tip={ tx.amount * _amountNegative }>
-          { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN')) : '' }
+        <span data-tip={ tx.amount }>
+          { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (formatValue(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
           { tx.interest &&
             <span
               className="tx-interest"
@@ -220,7 +211,7 @@ export const TxAmountRender = function(tx) {
 
   return (
     <span>
-      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN')) : '' }
+      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (tx.amount || translate('DASHBOARD.UNKNOWN')) : '' }
       { tx.interest &&
         <span
           className="tx-interest"

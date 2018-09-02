@@ -95,6 +95,17 @@ class WalletsData extends React.Component {
     );
   }
 
+  isOutValue(tx) {
+    if ((tx.category === 'send' || tx.category === 'sent') ||
+        (tx.type === 'send' || tx.type === 'sent') &&
+        tx.amount > 0) {
+      tx.amount = tx.amount * -1;
+      return tx;
+    } else {
+      return tx;
+    }
+  }
+
   exportToCSV() {
     this.setState({
       generatingCSV: true,
@@ -236,7 +247,8 @@ class WalletsData extends React.Component {
       className: 'colum--direction',
       headerClassName: 'colum--direction',
       footerClassName: 'colum--direction',
-      accessor: (tx) => TxTypeRender.call(this, tx.category || tx.type),
+      Cell: row => TxTypeRender.call(this, row.value),
+      accessor: (tx) => tx.category || tx.type,
       maxWidth: '110',
     },
     {
@@ -246,20 +258,32 @@ class WalletsData extends React.Component {
       headerClassName: 'hidden-xs hidden-sm',
       footerClassName: 'hidden-xs hidden-sm',
       className: 'hidden-xs hidden-sm',
-      accessor: (tx) => TxConfsRender.call(this, tx.confirmations),
+      Cell: row => TxConfsRender.call(this, row.value),
+      accessor: (tx) => tx.confirmations,
       maxWidth: '180',
     },
     {
       id: 'amount',
       Header: translate('INDEX.AMOUNT'),
       Footer: translate('INDEX.AMOUNT'),
-      accessor: (tx) => TxAmountRender.call(this, tx),
+      Cell: row => TxAmountRender.call(this, this.isOutValue(row.value)),
+      accessor: (tx) => tx,
+      sortMethod: (a, b) => {
+        if (a.amount > b.amount) {
+          return 1;
+        }
+        if (a.amount < b.amount) {
+          return -1;
+        }
+        return 0;
+      },
     },
     {
       id: 'timestamp',
       Header: translate('INDEX.TIME'),
       Footer: translate('INDEX.TIME'),
-      accessor: (tx) => secondsToString(tx.timestamp || tx.time || tx.blocktime),
+      Cell: row => secondsToString(row.value),
+      accessor: (tx) => tx.timestamp || tx.time || tx.blocktime,
     }];
 
     if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
@@ -276,7 +300,7 @@ class WalletsData extends React.Component {
       Header: translate('INDEX.DEST_ADDRESS'),
       Footer: translate('INDEX.DEST_ADDRESS'),
       className: 'selectable',
-      accessor: (tx) => AddressRender.call(this, tx),
+      accessor: (tx) => AddressRender.call(this, tx.address),
       maxWidth: '350',
     };
 
@@ -296,6 +320,8 @@ class WalletsData extends React.Component {
         footerClassName: 'colum--txinfo',
         accessor: (tx) => TransactionDetailRender.call(this, tx),
         maxWidth: '100',
+        sortable: false,
+        filterable: false,
       };
 
       if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
@@ -313,6 +339,8 @@ class WalletsData extends React.Component {
         footerClassName: 'colum--txinfo',
         Cell: props => TransactionDetailRender.call(this, props.index),
         maxWidth: '100',
+        sortable: false,
+        filterable: false,
       };
 
       if (itemsCount <= BOTTOM_BAR_DISPLAY_THRESHOLD) {
@@ -322,6 +350,7 @@ class WalletsData extends React.Component {
       columns.push(_col);
     }
 
+    // TODO: kv sorting
     if (this.state &&
         this.state.kvView) {
       columns = [];
