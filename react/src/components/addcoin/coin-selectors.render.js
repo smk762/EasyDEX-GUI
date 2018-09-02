@@ -46,7 +46,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             onChange={ (event) => this.updateSelectedCoin(event, i) }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
+            options={ addCoinOptionsCrypto(this.props.Main.coins).concat(addCoinOptionsAC(this.props.Main.coins)) } />
         </div>
         <div className={ this.hasMoreThanOneCoin() && ((item.mode === '-1' || item.mode === -1) || (item.mode === '1' || item.mode === 1) || (item.mode === '2' || item.mode === 2)) ? 'col-sm-6' : 'hide' }>
           <div className="toggle-box padding-bottom-10">
@@ -82,7 +82,8 @@ const CoinSelectorsRender = function(item, coin, i) {
               name={ `mode-${i}` }
               id={ `addcoin_mdl_basilisk_mode_login-${i}` }
               disabled={ item.spvMode.disabled }
-              checked={ item.spvMode.checked } />
+              checked={ item.spvMode.checked }
+              readOnly />
             <label
               htmlFor={ `addcoin_mdl_basilisk_mode_login-${i}` }
               onClick={ () => this.updateSelectedMode('0', i) }
@@ -115,7 +116,8 @@ const CoinSelectorsRender = function(item, coin, i) {
               name={ `mode-${i}` }
               id={ `addcoin_mdl_native_mode_login-${i}` }
               disabled={ item.nativeMode.disabled }
-              checked={ item.nativeMode.checked } />
+              checked={ item.nativeMode.checked }
+              readOnly />
             <label
               htmlFor={ `addcoin_mdl_native_mode_login-${i}` }
               onClick={ () => this.updateSelectedMode('-1', i) }
@@ -148,7 +150,8 @@ const CoinSelectorsRender = function(item, coin, i) {
               name={ `mode-${i}` }
               id={ `addcoin_mdl_staking_mode_login-${i}` }
               disabled={ item.stakingMode.disabled }
-              checked={ item.stakingMode.checked } />
+              checked={ item.stakingMode.checked }
+              readOnly />
             <label
               htmlFor={ `addcoin_mdl_staking_mode_login-${i}` }
               onClick={ () => this.updateSelectedMode('1', i) }
@@ -181,7 +184,8 @@ const CoinSelectorsRender = function(item, coin, i) {
               name={ `mode-${i}` }
               id={ `addcoin_mdl_mining_mode_login-${i}` }
               disabled={ item.miningMode.disabled }
-              checked={ item.miningMode.checked } />
+              checked={ item.miningMode.checked }
+              readOnly />
             <label
               htmlFor={ `addcoin_mdl_mining_mode_login-${i}` }
               onClick={ () => this.updateSelectedMode('2', i) }
