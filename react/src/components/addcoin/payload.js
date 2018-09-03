@@ -143,4 +143,8 @@ export const acConfig = {
 		ac_supply: 7000000,
 		addnode: '185.148.147.30',
 	},
+	MGNX: {
+		ac_supply: 12465001,
+		addnode: '45.76.32.178'
+	}
 };
