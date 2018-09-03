@@ -1,5 +1,10 @@
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers'
 
+// https://stackoverflow.com/questions/5467129/sort-javascript-object-by-key
+export const sortObject = (o) => {
+  return Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {});
+}
+
 export const getCoinTitle = (coin) => {
   let coinlogo;
   let coinname;
