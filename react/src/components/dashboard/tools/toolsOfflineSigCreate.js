@@ -156,7 +156,10 @@ class ToolsOfflineSigCreate extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'selectedCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
+            options={
+              addCoinOptionsCrypto('skip')
+              .concat(addCoinOptionsAC('skip'))
+            } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label

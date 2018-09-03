@@ -25,6 +25,19 @@ class ToolsPubCheck extends React.Component {
     });
   }
 
+  renderCoins() {
+    const _coins = this.state.pubResult.coin;
+    let _items = [];
+
+    for (let i = 0; i < _coins.length; i++) {
+      _items.push(
+        <div key={ `tools-pub-check-${i}` }>{ _coins[i] }</div>
+      );
+    }
+
+    return _items;
+  }
+
   render() {
     return (
       <div className="row margin-left-10">
@@ -57,11 +70,7 @@ class ToolsPubCheck extends React.Component {
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
           { this.state.pubResult.coin &&
             <div>
-              <div>{ translate('TOOLS.COINS') }: {
-                this.state.pubResult.coin.map((item) => {
-                  return(<div key={ `tools-pub-check-${item}` }>{ item }</div>);
-                })
-              }</div>
+              <div>{ translate('TOOLS.COINS') }: { this.renderCoins() }</div>
               <div className="margin-top-10">{ translate('TOOLS.VERSION') }: { this.state.pubResult.version }</div>
             </div>
           }

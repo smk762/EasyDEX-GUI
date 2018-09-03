@@ -373,7 +373,7 @@ class ToolsSplitUTXO extends React.Component {
               label: 'Komodo (KMD)',
               icon: 'KMD',
               value: `KMD|native`,
-            }].concat(addCoinOptionsAC()) } />
+            }].concat(addCoinOptionsAC('skip')) } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
