@@ -174,7 +174,8 @@ class DebugLogPanel extends React.Component {
                   type="checkbox"
                   name="settings-app-debug-toggle"
                   value={ this.state.toggleAppRuntimeLog }
-                  checked={ this.state.toggleAppRuntimeLog } />
+                  checked={ this.state.toggleAppRuntimeLog }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleAppRuntimeLog }></div>

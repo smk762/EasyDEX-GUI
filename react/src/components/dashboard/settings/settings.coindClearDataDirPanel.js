@@ -131,7 +131,8 @@ class CoindClearDataDirPanel extends React.Component {
                       type="checkbox"
                       name="settings-app-debug-toggle"
                       value={ this.state.keepWalletDat }
-                      checked={ this.state.keepWalletDat } />
+                      checked={ this.state.keepWalletDat }
+                      readOnly />
                     <div
                       className="slider"
                       onClick={ this.toggleKeepWalletDat }></div>

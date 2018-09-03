@@ -238,7 +238,8 @@ class AppSettingsPanel extends React.Component {
                           type="checkbox"
                           name={ `${key}__${_key}` }
                           value={ _appConfig[key] }
-                          checked={ _appConfig[key][_key] } />
+                          checked={ _appConfig[key][_key] }
+                          readOnly />
                         <div
                           className="slider"
                           onClick={ (event) => this.updateInputSettings(event, key, _key) }></div>
@@ -334,7 +335,8 @@ class AppSettingsPanel extends React.Component {
                         type="checkbox"
                         name={ `${key}` }
                         value={ _appConfig[key] }
-                        checked={ _appConfig[key] } />
+                        checked={ _appConfig[key] }
+                        readOnly />
                       <div
                         className="slider"
                         onClick={ (event) => this.updateInputSettings(event, key) }></div>
@@ -377,7 +379,8 @@ class AppSettingsPanel extends React.Component {
                 type="checkbox"
                 name={ `kmd-main-sync-only` }
                 value={ this.props.Dashboard.skipFullDashboardUpdate }
-                checked={ this.props.Dashboard.skipFullDashboardUpdate } />
+                checked={ this.props.Dashboard.skipFullDashboardUpdate }
+                readOnly />
               <div
                 className="slider"
                 onClick={ this._skipFullDashboardUpdate }></div>
