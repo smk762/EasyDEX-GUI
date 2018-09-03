@@ -14,10 +14,18 @@
       }
     }
   }
+  .modal-body {
+    max-height: 80vh;
+  }
 }
 
 .modal-close-overlay {
   width: 100%;
   height: 100%;
   position: absolute;
+}
+
+.modal-backdrop {
+  transition: opacity 0.3s;
+  opacity: 0.5;
 }
