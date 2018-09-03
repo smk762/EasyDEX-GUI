@@ -51,6 +51,13 @@ class QRModal extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.setState(Object.assign({}, this.state, {
+      modalIsOpen: false,
+      className: 'hide',
+    }));
+  }
+
   saveAsImage(e) {
     const qrCanvas = document.getElementById('qrModalCanvas' + this.props.content);
     const canvas = qrCanvas.getElementsByTagName('canvas');
