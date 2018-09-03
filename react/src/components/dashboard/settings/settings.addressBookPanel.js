@@ -30,7 +30,7 @@ const prepCoinsList = () => {
 
   _prepCoinsList = _coins;
 
-  return _coins;
+  return _coins.sort();
 };
 
 const SEED_TRIM_TIMEOUT = 5000;

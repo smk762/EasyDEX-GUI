@@ -69,6 +69,8 @@ class NativeWalletDatKeysPanel extends React.Component {
     let _items = [];
     let _nativeCoins = coindList();
 
+    _nativeCoins.sort();
+
     _items.push(
       <option
         key={ `coind-walletdat-coins-none` }

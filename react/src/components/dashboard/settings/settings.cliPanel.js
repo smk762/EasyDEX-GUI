@@ -26,6 +26,8 @@ class CliPanel extends React.Component {
     if (allCoins) {
       if (mode === 'all') {
         modes.map((mode) => {
+          allCoins[mode].sort();
+
           allCoins[mode].map((coin) => {
             items.push(
               <option
@@ -37,6 +39,8 @@ class CliPanel extends React.Component {
           });
         });
       } else {
+        allCoins[mode].sort();
+
         allCoins[mode].map((coin) => {
           items.push(
             <option

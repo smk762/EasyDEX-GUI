@@ -89,6 +89,8 @@ class SPVServersPanel extends React.Component {
     let _items = [];
     let _spvCoins = this.props.Main.coins.spv;
 
+    _spvCoins.sort();
+
     for (let i = 0; i < _spvCoins.length; i++) {
       if (this.props.Dashboard.electrumCoins[_spvCoins[i]] &&
           this.props.Dashboard.electrumCoins[_spvCoins[i]].serverList &&
