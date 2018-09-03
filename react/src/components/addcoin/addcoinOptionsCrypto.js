@@ -36,21 +36,23 @@ const prepCoinsList = (filterActiveCoins) => {
 
   if (filterActiveCoins) {
     for (let i = 0; i < _prepCoinsList.length; i++) {
-      if (_activeCoins &&
+      if (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
+          _activeCoins &&
           _activeCoins.spv &&
           _activeCoins.spv.indexOf(_prepCoinsList[i].icon.toUpperCase()) === -1 &&
-          _activeCoins.native.indexOf(_prepCoinsList[i].icon.toUpperCase()) === -1) {
+          _activeCoins.native.indexOf(_prepCoinsList[i].icon.toUpperCase()) === -1)) {
         _items.push(_prepCoinsList[i]);
       }
     }
   } else {
     for (let i = 0; i < coins.length; i++) {
       if (mainWindow.electrumServers[coins[i].toLowerCase()] &&
-          (_activeCoins &&
+          (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
+           _activeCoins &&
            _activeCoins.spv &&
            _activeCoins.native &&
           _activeCoins.spv.indexOf(coins[i].toUpperCase()) === -1 &&
-          _activeCoins.native.indexOf(coins[i].toUpperCase()) === -1)) {
+          _activeCoins.native.indexOf(coins[i].toUpperCase()) === -1))) {
         _items.push({
           label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
           icon: coins[i],

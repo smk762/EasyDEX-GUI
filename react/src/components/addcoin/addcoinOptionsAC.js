@@ -4,6 +4,20 @@ import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 import { sortObject } from '../../util/coinHelper';
 
+const _disabledAC = {
+  spv: [
+    'axo',
+    'etomic',
+    'mesh',
+    'ceal',
+    'dsec',
+  ],
+  all: [
+    'mvp',
+    'vrsc',
+  ],
+};
+
 // sort coins by their title
 let coinsList = [];
 let _coins = {};
@@ -25,19 +39,19 @@ const addCoinOptionsAC = (activeCoins) => {
   _assetChains = coinsList;
 
   for (let i = 0; i < _assetChains.length; i++) {
-    let availableModes = _assetChains[i] !== 'AXO' && _assetChains[i] !== 'ETOMIC' && _assetChains[i] !== 'MESH' && _assetChains[i] !== 'CEAL' && _assetChains[i] !== 'DSEC' ? 'spv|native' : 'native';
+    let availableModes = _disabledAC.spv.indexOf(_assetChains[i].toLowerCase()) === -1 ? 'spv|native' : 'native';
 
     if (mainWindow.arch !== 'x64') {
       availableModes = 'spv';
     }
 
-    if (_assetChains[i] !== 'MVP' &&
-        _assetChains[i] !== 'VRSC' &&
-        (activeCoins &&
+    if (_disabledAC.all.indexOf(_assetChains[i].toLowerCase()) === -1 &&
+        (activeCoins === 'skip' || (activeCoins !== 'skip' &&
+         activeCoins &&
          activeCoins.spv &&
          activeCoins.native &&
          activeCoins.spv.indexOf(_assetChains[i].toUpperCase()) === -1 &&
-         activeCoins.native.indexOf(_assetChains[i].toUpperCase()) === -1)) {
+         activeCoins.native.indexOf(_assetChains[i].toUpperCase()) === -1))) {
       _items.push({
         label: `${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`)}${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`).indexOf('(') === -1 && translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) !== _assetChains[i].toUpperCase() ? ' (' + _assetChains[i].toUpperCase() + ')' : ''}`,
         icon: _assetChains[i].toLowerCase(),
