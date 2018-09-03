@@ -61,8 +61,7 @@ export const SettingsRender = function() {
             { mainWindow.arch === 'x64' &&
               <PanelSection
                 title={ translate('INDEX.DEBUG_LOG') }
-                icon="icon fa-bug"
-                openByDefault={ this.props.disableWalletSpecificUI }>
+                icon="icon fa-bug">
                 <DebugLogPanel />
               </PanelSection>
             }
