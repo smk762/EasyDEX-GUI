@@ -12,9 +12,7 @@ export const QRModalRender = function() {
         onClick={ this.openModal }>
         <i className="icon fa-qrcode margin-right-5"></i> { translate('DASHBOARD.GENERATE_SM') } { translate('INDEX.QR_CODE') }
       </span>
-      <div
-        className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }
-        id="QRModal">
+      <div className={ `modal modal-3d-sign ${this.state.className}` }>
         <div className={ `modal-dialog modal-center modal-${this.props.modalSize || 'sm' }` }>
           <div className="modal-content">
             <div className="modal-header bg-orange-a400 wallet-send-header">
@@ -24,7 +22,12 @@ export const QRModalRender = function() {
                 onClick={ this.closeModal }>
                 <span>×</span>
               </button>
-              <h4 className="modal-title white text-left">{ this.props.title || translate('INDEX.SCAN_QR_CODE') }</h4>
+              <h4 className="modal-title white text-left">
+              {
+                this.props.title ||
+                translate('INDEX.SCAN_QR_CODE')
+              }
+              </h4>
             </div>
             <div className="modal-body">
               <div className="animsition vertical-align fade-in">
@@ -50,7 +53,7 @@ export const QRModalRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </span>
   );
 };
@@ -65,9 +68,7 @@ export const QRModalReaderRender = function() {
           <i className="icon fa-qrcode"></i>
           { translate('INDEX.SCAN_QR_CODE') }
         </button>
-        <div
-          className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }
-          id="QRReadModal">
+        <div className={ `modal modal-3d-sign ${this.state.className}` }>
           <div
             onClick={ this.closeModal }
             className="modal-close-overlay"></div>
@@ -86,8 +87,8 @@ export const QRModalReaderRender = function() {
                   <h4 className="modal-title white text-left">{ translate('INDEX.SCAN_QRCODE_WEBCAM') }</h4>
                 </div>
                 <div className="modal-body">
-                  <div className="animsition vertical-align fade-in">
-                    <div className="page-content vertical-align-middle webcam-frame">
+                  <div className="animsition vertical-align">
+                    <div className="page-content vertical-align-middle">
                       { !this.state.error &&
                         <QrReader
                           delay={ 50 }
@@ -102,7 +103,7 @@ export const QRModalReaderRender = function() {
               </div>
             </div>
           </div>
-        <div className={ 'modal-backdrop ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }></div>
+        <div className={ `modal-backdrop ${this.state.className}` }></div>
       </span>
     );
   } else {
