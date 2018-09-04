@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Store from '../../../store';
 import translate from '../../../translate/translate';
 import {
@@ -16,6 +15,7 @@ class QRModal extends React.Component {
       errorShown: false,
       className: 'hide',
     };
+    this.mounted = false;
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleScan = this.handleScan.bind(this);
@@ -33,10 +33,25 @@ class QRModal extends React.Component {
     }
   }
 
+  componentWillMount() {
+    this.mounted = true;
+  }
+
+  componentWillUnmount() {
+    this.setState(Object.assign({}, this.state, {
+      open: false,
+      className: 'hide',
+    }));
+
+    this.mounted = false;
+  }
+
   handleError(err) {
-    this.setState({
-      error: translate('DASHBOARD.' + (err.name === 'NoVideoInputDevicesError' ? 'QR_ERR_NO_VIDEO_DEVICE' : 'QR_ERR_UNKNOWN')),
-    });
+    if (this.mounted) {
+      this.setState({
+        error: translate('DASHBOARD.' + (err.name === 'NoVideoInputDevicesError' ? 'QR_ERR_NO_VIDEO_DEVICE' : 'QR_ERR_UNKNOWN')),
+      });
+    }
   }
 
   openModal() {
@@ -68,13 +83,6 @@ class QRModal extends React.Component {
         this.props.cbOnClose();
       }
     }, 300);
-  }
-
-  componentWillUnmount() {
-    this.setState(Object.assign({}, this.state, {
-      open: false,
-      className: 'hide',
-    }));
   }
 
   saveAsImage(e) {
