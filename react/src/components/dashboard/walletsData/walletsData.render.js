@@ -211,11 +211,11 @@ export const TxAmountRender = function(tx) {
 
   return (
     <span>
-      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (tx.amount || translate('DASHBOARD.UNKNOWN')) : '' }
+      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (Number(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
       { tx.interest &&
         <span
           className="tx-interest"
-          data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
+          data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(Number(tx.interest))}` }>+{ Math.abs(Number(tx.interest)) }</span>
       }
       { tx.interest &&
         <ReactTooltip
