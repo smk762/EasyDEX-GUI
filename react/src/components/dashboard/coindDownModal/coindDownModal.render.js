@@ -10,9 +10,7 @@ const CoindDownModalRender = function() {
 
   return (
     <div>
-      <div
-        className={ 'modal modal-3d-sign coind-down-modal ' + (this.state.display ? 'show in' : 'fade hide') }
-        id="AddCoinDilogModel-login">
+      <div className={ `modal modal-3d-sign coind-down-modal ${this.state.className}` }>
         <div
           onClick={ this.dismiss }
           className="modal-close-overlay"></div>
@@ -44,7 +42,8 @@ const CoindDownModalRender = function() {
                       <input
                         type="checkbox"
                         value="on"
-                        checked={ this.state.toggleDebugLog } />
+                        checked={ this.state.toggleDebugLog }
+                        readOnly />
                       <div
                         className="slider"
                         onClick={ this.toggleDebugLog }></div>
@@ -78,7 +77,7 @@ const CoindDownModalRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.display ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </div>
   );
 };
