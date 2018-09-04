@@ -110,7 +110,7 @@ class ReceiveCoin extends React.Component {
           e.srcElement.className.indexOf('receive-address-context-menu-trigger') === -1 &&
           e.srcElement.className.indexOf('fa-qrcode') === -1 &&
           e.srcElement.className.indexOf('receive-address-context-menu-get-qr') === -1 &&
-          e.srcElement.className.indexOf('qrcode-modal') === -1 ? null : this.state.toggledAddressMenu,
+          e.srcElement.className.indexOf('qrcode-modal') === -1 && e.srcElement.offsetParent.className.indexOf('modal') && e.srcElement.offsetParent.className.indexOf('close') ? null : this.state.toggledAddressMenu,
       });
     }
   }
