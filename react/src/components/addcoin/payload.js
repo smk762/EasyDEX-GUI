@@ -143,4 +143,10 @@ export const acConfig = {
 		ac_supply: 7000000,
 		addnode: '185.148.147.30',
 	},
+	CALL: {
+		ac_supply: 52500000,
+		ac_reward: 1250000000,
+		ac_end: 4200000,
+		ac_halving: 1400000
+	},
 };
