@@ -49,7 +49,7 @@ class AddCoin extends React.Component {
       },
       display: false,
       actionsMenu: false,
-      modalClassName: 'hide',
+      className: 'hide',
       isExperimentalOn: false,
       // staking ac
       loginPassphrase: '',
@@ -215,16 +215,15 @@ class AddCoin extends React.Component {
     if (addCoinProps &&
         addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
-        display: addCoinProps.display,
-        modalClassName: 'show fade',
+        className: addCoinProps.display ? 'show fade' : 'show out',
       }));
 
       setTimeout(() => {
         this.setState(Object.assign({}, this.state, {
           display: addCoinProps.display,
-          modalClassName: addCoinProps.display ? 'show in' : 'hide',
+          className: addCoinProps.display ? 'show in' : 'hide',
         }));
-      }, 100);
+      }, addCoinProps.display ? 50 : 300);
     }
   }
 
@@ -464,7 +463,9 @@ class AddCoin extends React.Component {
       _items.push(
         <option
           key={ `addcoin-genproclimit-${i}` }
-          value={ i }>{ translate('ADD_COIN.MINING_THREADS') }: { i + 1}</option>
+          value={ i }>
+          { translate('ADD_COIN.MINING_THREADS') }: { i + 1}
+        </option>
       );
     }
 

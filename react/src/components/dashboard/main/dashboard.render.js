@@ -28,12 +28,8 @@ const DashboardRender = function() {
         id="section-dashboard">
         <Navbar />
         <CoindDownModal />
-        { this.props.Dashboard.displayImportKeyModal &&
-          <ImportKeyModal />
-        }
-        { this.props.Dashboard.displayZcparamsModal &&
-          <ZcparamsFetchModal />
-        }
+        <ImportKeyModal />
+        <ZcparamsFetchModal />
         <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
           <CoinTile />
           <WalletsNav />

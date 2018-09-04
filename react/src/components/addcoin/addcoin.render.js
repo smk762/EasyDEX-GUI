@@ -1,12 +1,11 @@
 import React from 'react';
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
-// TODO: add modal close on modal overlay click evt
 
 const AddCoinRender = function() {
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
-      <div className={ `modal modal-3d-sign add-coin-modal ${this.state.modalClassName}` }>
+      <div className={ `modal modal-3d-sign add-coin-modal ${this.state.className}` }>
         <div
           onClick={ this.dismiss }
           className="modal-close-overlay"></div>
@@ -77,7 +76,7 @@ const AddCoinRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.display ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </div>
   )
 };

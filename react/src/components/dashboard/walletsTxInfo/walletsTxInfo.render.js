@@ -13,7 +13,7 @@ const renderKvContent = (content) => {
        .replace(/'/g, '&#039;')
        .replace('\n\n', '<br/><br/>')
        .replace('\n', '<br/>');
- }
+}
 
 const WalletsTxInfoRender = function(txInfo) {
   return (

@@ -5,9 +5,7 @@ import QRCode from 'qrcode.react';
 export const InvoiceModalRender = function() {
   return (
     <span>
-      <div
-        className={ 'modal modal-3d-sign ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }
-        id="QRModal">
+      <div className={ `modal modal-3d-sign ${this.state.className}` }>
         <div
           onClick={ this.closeModal }
           className="modal-close-overlay"></div>
@@ -26,7 +24,7 @@ export const InvoiceModalRender = function() {
               <h4 className="modal-title white text-left">{ translate('INDEX.CREATE_INVOICE_QR') }</h4>
             </div>
             <div className="modal-body">
-              <div className="animsition fade-in">
+              <div className={ 'animsition ' + (this.state.modalIsOpen ? 'fade-in' : 'fade-out') }>
                 <div className="page-content">
                   <div className="row">
                     <div className="col-lg-8 form-group form-material vertical-align-middle">
@@ -97,7 +95,7 @@ export const InvoiceModalRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.modalIsOpen ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </span>
   );
 };

@@ -30,7 +30,7 @@ export const QRModalRender = function() {
               </h4>
             </div>
             <div className="modal-body">
-              <div className="animsition vertical-align fade-in">
+              <div className={ 'animsition vertical-align ' + (this.state.open ? 'fade-in' : 'fade-out') }>
                 <div
                   id={ 'qrModalCanvas' + this.props.content }
                   className="page-content vertical-align-middle text-center">
@@ -87,7 +87,7 @@ export const QRModalReaderRender = function() {
                   <h4 className="modal-title white text-left">{ translate('INDEX.SCAN_QRCODE_WEBCAM') }</h4>
                 </div>
                 <div className="modal-body">
-                  <div className="animsition vertical-align">
+                  <div className={ 'animsition vertical-align ' + (this.state.open ? 'fade-in' : 'fade-out') }>
                     <div className="page-content vertical-align-middle">
                       { !this.state.error &&
                         <QrReader

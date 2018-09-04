@@ -9,7 +9,9 @@ import { LoginSettingsModalRender } from './loginSettingsModal.render';
 class LoginSettingsModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      className: 'hide',
+    };
     this.closeLoginSettingsModal = this.closeLoginSettingsModal.bind(this);
   }
 

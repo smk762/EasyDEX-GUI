@@ -30,7 +30,14 @@ class InvoiceModal extends React.Component {
   openModal() {
     this.setState({
       modalIsOpen: true,
+      className: 'show fade',
     });
+
+    setTimeout(() => {
+      this.setState(Object.assign({}, this.state, {
+        className: 'show in',
+      }));
+    }, 50);
   }
 
   saveAsImage(e) {
@@ -67,8 +74,15 @@ class InvoiceModal extends React.Component {
 
   closeModal() {
     this.setState({
-      modalIsOpen: false,
+      className: 'show out',
     });
+
+    setTimeout(() => {
+      this.setState(Object.assign({}, this.state, {
+        modalIsOpen: false,
+        className: 'hide',
+      }));
+    }, 300);
   }
 
   hasNoAmount(address) {

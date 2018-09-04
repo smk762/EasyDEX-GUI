@@ -11,7 +11,7 @@ class QRModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalIsOpen: false,
+      open: false,
       error: null,
       errorShown: false,
       className: 'hide',
@@ -46,7 +46,7 @@ class QRModal extends React.Component {
 
     setTimeout(() => {
       this.setState(Object.assign({}, this.state, {
-        modalIsOpen: true,
+        open: true,
         className: 'show in',
       }));
     }, 50);
@@ -60,7 +60,7 @@ class QRModal extends React.Component {
     setTimeout(() => {
       this.setState(Object.assign({}, this.state, {
         errorShown: this.state.error ? true : false,
-        modalIsOpen: false,
+        open: false,
         className: 'hide',
       }));
 
@@ -72,7 +72,7 @@ class QRModal extends React.Component {
 
   componentWillUnmount() {
     this.setState(Object.assign({}, this.state, {
-      modalIsOpen: false,
+      open: false,
       className: 'hide',
     }));
   }

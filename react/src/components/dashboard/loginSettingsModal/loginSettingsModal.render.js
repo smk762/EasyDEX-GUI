@@ -6,7 +6,7 @@ import Settings from '../settings/settings';
 export const LoginSettingsModalRender = function() {
   return (
     <div>
-      <div className="modal show login-settings-modal ff">
+      <div className={ `modal show login-settings-modal ff ${this.state.className}` }>
         <div
           onClick={ this.closeLoginSettingsModal }
           className="modal-close-overlay"></div>
@@ -34,7 +34,7 @@ export const LoginSettingsModalRender = function() {
           </div>
         </div>
       </div>
-      <div className="modal-backdrop show in"></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </div>
   );
 };

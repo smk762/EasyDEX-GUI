@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip';
 export const ImportKeyModalRender = function() {
   return (
     <span>
-      <div className={ 'modal modal-import-key modal-3d-sign ' + (this.props.Dashboard.displayImportKeyModal ? 'show in' : 'fade hide') }>
+      <div className={ `modal modal-import-key modal-3d-sign ${this.state.className}` }>
         <div
           onClick={ this.closeModal }
           className="modal-close-overlay"></div>
@@ -212,7 +212,7 @@ export const ImportKeyModalRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.props.Dashboard.displayImportKeyModal ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </span>
   );
 };
