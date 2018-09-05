@@ -801,7 +801,7 @@ const LANG_DE = {
     'MESH': 'SpaceMesh (MESH)',
     'SUPERNET': 'SUPERNET (SUPERNET)',
     'WLC': 'WIRELESS (WIRELESS)',
-    'CALL': 'Capital'
+    'CALL': 'Capital (CALL)'
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Neue Passphrase erstellen',
