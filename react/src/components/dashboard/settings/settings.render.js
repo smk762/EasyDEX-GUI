@@ -59,6 +59,9 @@ export const SettingsRender = function() {
             uniqId={ 'SettingsAccordion' }
             singleOpen={ true }>
             { mainWindow.arch === 'x64' &&
+              this.props.Main.coins &&
+              this.props.Main.coins.native &&
+              Object.keys(this.props.Main.coins.native).length > 0 &&
               <PanelSection
                 title={ translate('INDEX.DEBUG_LOG') }
                 icon="icon fa-bug">

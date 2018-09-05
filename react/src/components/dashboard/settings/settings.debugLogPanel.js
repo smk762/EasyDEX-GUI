@@ -8,6 +8,8 @@ import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 
+// TODO: figure out a way to show app debug, url?
+
 class DebugLogPanel extends React.Component {
   constructor() {
     super();
@@ -27,7 +29,7 @@ class DebugLogPanel extends React.Component {
     this.checkInputVals = this.checkInputVals.bind(this);
   }
 
-  componentWillMount() {
+  /*componentWillMount() {
     if (this.props.Main.coins &&
         this.props.Main.coins.native &&
         Object.keys(this.props.Main.coins.native).length === 0) {
@@ -36,7 +38,7 @@ class DebugLogPanel extends React.Component {
       });
       this.getAppRuntimeLog();
     }
-  }
+  }*/
 
   readDebugLog() {
     let _target = this.state.debugTarget;
@@ -168,7 +170,7 @@ class DebugLogPanel extends React.Component {
             <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
           }
           <div className="margin-top-30">
-            <span className="pointer toggle">
+            <span className="pointer toggle hide">
               <label className="switch">
                 <input
                   type="checkbox"

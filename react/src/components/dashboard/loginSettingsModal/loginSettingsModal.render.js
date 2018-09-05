@@ -6,7 +6,7 @@ import Settings from '../settings/settings';
 export const LoginSettingsModalRender = function() {
   return (
     <div>
-      <div className={ `modal show login-settings-modal ff ${this.state.className}` }>
+      <div className={ `modal modal-3d-sign login-settings-modal ff ${this.state.className}` }>
         <div
           onClick={ this.closeLoginSettingsModal }
           className="modal-close-overlay"></div>
@@ -15,6 +15,17 @@ export const LoginSettingsModalRender = function() {
             onClick={ this.closeLoginSettingsModal }
             className="modal-close-overlay"></div>
           <div className="modal-content">
+            <div className="modal-header bg-orange-a400 wallet-send-header">
+              <button
+                type="button"
+                className="close white"
+                onClick={ this.closeLoginSettingsModal }>
+                <span>×</span>
+              </button>
+              <h4 className="modal-title white">
+                { translate(this.props.section === 'about' ? 'ABOUT.ABOUT_AGAMA' : 'INDEX.SETTINGS') }
+              </h4>
+            </div>
             <div className="modal-body modal-body-container">
               { this.props.section === 'settings' &&
                 <Settings disableWalletSpecificUI="true" />
@@ -22,14 +33,6 @@ export const LoginSettingsModalRender = function() {
               { this.props.section === 'about' &&
                 <About />
               }
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-default"
-                onClick={ this.closeLoginSettingsModal }>
-                { translate('INDEX.CLOSE') }
-              </button>
             </div>
           </div>
         </div>

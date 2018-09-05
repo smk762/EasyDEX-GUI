@@ -128,32 +128,6 @@ input[type='password'] {
   }
 }
 
-.login-settings-dropdown {
-  font-size: 16px;
-
-  .dropdown-menu {
-    left: 42%;
-    top: inherit;
-  }
-}
-
-.login-settings-dropdown-trigger {
-  cursor: pointer;
-}
-
-.login-settings-modal {
-  .modal-body {
-    overflow-y: scroll;
-    color: #757575;
-  }
-  .panel-title {
-    color: #757575;
-  }
-  a {
-    color: #fb8c00;
-  }
-}
-
 option.login-option {
   background-color: #757575;
   color: #fff;
