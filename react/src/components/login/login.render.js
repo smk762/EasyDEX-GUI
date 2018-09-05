@@ -10,9 +10,7 @@ import mainWindow from '../../util/mainWindow';
 const LoginRender = function() {
   return (
     <div>
-      { this.props.Dashboard.displayZcparamsModal &&
-        <ZcparamsFetchModal />
-      }
+      <ZcparamsFetchModal />
       <LoginSettingsModal section={ this.state.displayLoginSettingsDropdownSection } />
       { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">

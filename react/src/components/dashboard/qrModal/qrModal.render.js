@@ -66,7 +66,7 @@ export const QRModalReaderRender = function() {
           <i className="icon fa-qrcode"></i>
           { translate('INDEX.SCAN_QR_CODE') }
         </button>
-        <div className={ `modal modal-3d-sign qr-modal ${this.state.className}` }>
+        <div className={ `modal modal-3d-sign qr-modal-reader ${this.state.className}` }>
           <div
             onClick={ this.closeModal }
             className="modal-close-overlay"></div>

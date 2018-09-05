@@ -30,13 +30,15 @@ const DashboardRender = function() {
         <CoindDownModal />
         <ImportKeyModal />
         <ZcparamsFetchModal />
-        <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
-          <CoinTile />
-          <WalletsNav />
-          <WalletsTxInfo />
-          <WalletsMain />
-          <ClaimInterestModal />
-        </div>
+        { this.isSectionActive('wallets') &&
+          <div>
+            <CoinTile />
+            <WalletsNav />
+            <WalletsTxInfo />
+            <WalletsMain />
+            <ClaimInterestModal />
+          </div>
+        }
         { this.isSectionActive('edex') &&
           <EDEX />
         }

@@ -197,6 +197,7 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    TX_DETAILS: 'Transaction details',
     SELF_SM: 'self',
     DEFAULT: 'Default',
     NEW_VERSION: 'New version',
