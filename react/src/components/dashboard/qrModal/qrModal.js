@@ -64,7 +64,7 @@ class QRModal extends React.Component {
         open: true,
         className: 'show in',
       }));
-    }, 50);
+    }, 50); 
   }
 
   closeModal() {
