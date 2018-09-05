@@ -147,6 +147,8 @@ export const acConfig = {
 		ac_supply: 52500000,
 		ac_reward: 1250000000,
 		ac_end: 4200000,
-		ac_halving: 1400000
+		ac_halving: 1400000,
+		addnode: '185.162.65.14',
+		addnode: '185.162.65.15'
 	},
 };
