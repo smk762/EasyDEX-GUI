@@ -19,7 +19,7 @@ const WalletsTxInfoRender = function(txInfo) {
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
       <div
-        className="modal show"
+        className={ `modal modal-3d-sign tx-details-modal ${this.state.className}` }
         id="kmd_txid_info_mdl">
         <div
           onClick={ this.toggleTxInfoModal }
@@ -29,6 +29,17 @@ const WalletsTxInfoRender = function(txInfo) {
             onClick={ this.toggleTxInfoModal }
             className="modal-close-overlay"></div>
           <div className="modal-content">
+            <div className="modal-header bg-orange-a400 wallet-send-header">
+               <button
+                 type="button"
+                 className="close white"
+                 onClick={ this.toggleTxInfoModal }>
+                 <span>×</span>
+               </button>
+               <h4 className="modal-title white">
+                 { translate('INDEX.TX_DETAILS') }
+               </h4>
+             </div>
             <div className="modal-body modal-body-container">
               <div className="panel nav-tabs-horizontal">
                 <ul className="nav nav-tabs nav-tabs-line">
@@ -79,7 +90,7 @@ const WalletsTxInfoRender = function(txInfo) {
                               <tr>
                                 <td>{ this.capitalizeFirstLetter(translate('TX_INFO.AMOUNT')) }</td>
                                 <td>
-                                  { this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.amount : txInfo.amount }
+                                  { this.props.ActiveCoin.mode === 'spv' ? Number(this.state.txDetails.amount) === 0 ? translate('DASHBOARD.UNKNOWN') : Number(this.state.txDetails.amount) : txInfo.amount }
                                 </td>
                               </tr>
                               <tr>
@@ -183,8 +194,8 @@ const WalletsTxInfoRender = function(txInfo) {
                       { this.state.activeTab === 2 &&
                         <div className="tab-pane active">
                           <textarea
-                            className="full-width height-400"
-                            rows="20"
+                            className="full-width"
+                            rows="15"
                             cols="80"
                             defaultValue={ this.state.rawTxDetails.hex }
                             disabled></textarea>
@@ -193,8 +204,8 @@ const WalletsTxInfoRender = function(txInfo) {
                       { this.state.activeTab === 3 &&
                         <div className="tab-pane active">
                           <textarea
-                            className="full-width height-400"
-                            rows="40"
+                            className="full-width"
+                            rows="15"
                             cols="80"
                             defaultValue={ JSON.stringify(this.state.rawTxDetails, null, '\t') }
                             disabled></textarea>
@@ -249,17 +260,11 @@ const WalletsTxInfoRender = function(txInfo) {
                   <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.props.ActiveCoin.coin) }
                 </button>
               }
-              <button
-                type="button"
-                className="btn btn-default"
-                onClick={ this.toggleTxInfoModal }>
-                { translate('INDEX.CLOSE') }
-              </button>
             </div>
           </div>
         </div>
       </div>
-      <div className="modal-backdrop show in"></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </div>
   );
 };
