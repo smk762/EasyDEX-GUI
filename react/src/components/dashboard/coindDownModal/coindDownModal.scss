@@ -22,4 +22,8 @@
       }
     }
   }
+  textarea.form-control,
+  textarea.form-control:focus {
+    background-image: none;
+  }
 }

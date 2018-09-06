@@ -66,11 +66,6 @@ const CoindDownModalRender = function() {
                       className="form-control"
                       value={ !this.state.toggleDebugLog ? _debuglog : this.state.coindStdOut }></textarea>
                   </div>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block"
-                    id="loginbtn"
-                    onClick={ this.dismiss }>OK</button>
                 </div>
               </div>
             </div>
