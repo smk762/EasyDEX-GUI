@@ -237,6 +237,11 @@ option.login-option {
     left: 15px;
     color: #fff;
   }
+  .page-content {
+    margin: 0 auto;
+    float: none;
+    min-width: 600px;
+  }
 }
 
 .qrcode-modal + .modal {
