@@ -4,6 +4,12 @@ import ReactTooltip from 'react-tooltip';
 import { acConfig } from '../../addcoin/payload';
 import mainWindow from '../../../util/mainWindow';
 
+const testChains = [
+  'BEER',
+  'PIZZA',
+  'VOTE2018',
+];
+
 const CoinTileItemRender = function() {
   const { item } = this.props;
 
@@ -23,7 +29,7 @@ const CoinTileItemRender = function() {
               alt={ item.coinname }/>
           </a>
           <div className="coin-name">
-            { item.coinname } { item.coinlogo !== 'BEER' && item.coinlogo !== 'PIZZA' && item.coinlogo !== 'VOTE2018' && <span>({ item.coinlogo.toUpperCase() })</span> }
+            { item.coinname } { testChains.indexOf(item.coinlogo) === -1 && <span>({ item.coinlogo.toUpperCase() })</span> }
           </div>
         </div>
       </div>
@@ -38,8 +44,8 @@ const CoinTileItemRender = function() {
           className="text-left" />
       </button>
       { acConfig[item.coin.toUpperCase()] &&
-        acConfig[item.coin.toUpperCase()]['ac_reward'] &&
-        !acConfig[item.coin.toUpperCase()]['ac_stake'] &&
+        acConfig[item.coin.toUpperCase()].ac_reward &&
+        !acConfig[item.coin.toUpperCase()].ac_stake &&
         <span>
           <i
             data-tip={ translate('INDEX.MINING_IS_ENABLED') }
@@ -62,7 +68,7 @@ const CoinTileItemRender = function() {
         </span>
       }
       { acConfig[item.coin.toUpperCase()] &&
-        acConfig[item.coin.toUpperCase()]['ac_stake'] &&
+        acConfig[item.coin.toUpperCase()].ac_stake &&
         (mainWindow.getPubkeys()[item.coin.toLowerCase()] && mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
         <span>
           <span
@@ -85,6 +91,9 @@ const CoinTileItemRender = function() {
             }
             { this.renderStopCoinButton() &&
               item.mode === 'native' &&
+              this.props.Main.coins &&
+              this.props.Main.coins.native &&
+              Object.keys(this.props.Main.coins.native).length > 1 &&
               <li onClick={ this.stopAllCoind }>
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP_ALL') }
               </li>
