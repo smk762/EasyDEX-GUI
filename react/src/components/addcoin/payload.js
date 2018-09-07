@@ -83,6 +83,7 @@ export const acConfig = {
 	},
 	COQUI: {
 		ac_supply: 72000000,
+		ac_ccactivate: 200000,
  	},
 	CHAIN: {
   	ac_supply: 999999,
