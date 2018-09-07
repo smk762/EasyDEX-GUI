@@ -293,9 +293,10 @@ const CoinSelectorsRender = function(item, coin, i) {
           </div>
         </div>
       }
-      <div className="col-sm-12 no-padding">
-        { item.daemonParam === 'gen' &&
-          acConfig[_coinName] && acConfig[_coinName].genproclimit &&
+      { item.daemonParam === 'gen' &&
+        acConfig[_coinName] &&
+        acConfig[_coinName].genproclimit &&
+        <div className="col-sm-12 no-padding">
           <div className="col-sm-5 padding-bottom-30">
             <div className="toggle-box padding-bottom-10">
               <select
@@ -307,8 +308,8 @@ const CoinSelectorsRender = function(item, coin, i) {
               </select>
             </div>
           </div>
-        }
-      </div>
+        </div>
+      }
     </div>
   )
 };

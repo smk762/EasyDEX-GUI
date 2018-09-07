@@ -164,4 +164,15 @@ export const acConfig = {
 		],
 		genproclimit: true,
 	},
+	CCL: {
+		ac_supply: 200000000,
+		ac_end: 1,
+		ac_cc: 2,
+		addressindex: 1, // is this necessary(?)
+		spentindex: 1,
+		addnode: [
+			'142.93.136.89',
+			'195.201.22.89',
+		],
+	},
 };

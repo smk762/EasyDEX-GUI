@@ -11,6 +11,8 @@ const _disabledAC = {
     'mesh',
     'ceal',
     'dsec',
+    'mgnx',
+    'pirate',
   ],
   all: [
     'mvp',

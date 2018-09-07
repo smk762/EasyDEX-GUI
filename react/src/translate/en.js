@@ -1139,8 +1139,9 @@ const LANG_EN = {
     ZILLA: 'ChainZilla',
     DSEC: 'DevSec',
     VRSC: 'VerusCoin',
-	  MGNX: 'MagnaX',
+	MGNX: 'MagnaX',
     CALL: 'Capital',
+    CCL: 'CoinCollect',
   },
   CRYPTO: {
     STRAT: 'Stratis',
