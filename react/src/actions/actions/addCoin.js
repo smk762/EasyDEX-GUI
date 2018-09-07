@@ -169,23 +169,29 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
 
         if (pubKeys &&
             pubKeys[coin.toLowerCase()]) {
-          herdData['ac_options'].push(`-pubkey=${pubKeys[coin.toLowerCase()].pubHex}`);
+          herdData.ac_options.push(`-pubkey=${pubKeys[coin.toLowerCase()].pubHex}`);
         }
       } else if (key === 'genproclimit') {
         if (genproclimit) {
-          herdData['ac_options'].push(`-genproclimit=${genproclimit + 1}`);
+          herdData.ac_options.push(`-genproclimit=${genproclimit + 1}`);
         } else {
-          herdData['ac_options'].push('-genproclimit=1');
+          herdData.ac_options.push('-genproclimit=1');
+        }
+      } else if (
+        key === 'addnode' &&
+        typeof acConfig[coin][key] === 'object') {
+        for (let i = 0; i < acConfig[coin][key].length; i++) {
+          herdData.ac_options.push(`-addnode=${acConfig[coin][key][i]}`);          
         }
       } else {
-        herdData['ac_options'].push(`-${key}=${acConfig[coin][key]}`);
+        herdData.ac_options.push(`-${key}=${acConfig[coin][key]}`);
       }
     }
   }
 
   if (!acConfig[coin] ||
       (acConfig[coin] && !acConfig[coin].addnode)) {
-    herdData['ac_options'].push('-addnode=78.47.196.146');
+    herdData.ac_options.push('-addnode=78.47.196.146');
   }
 
   if (coin === 'ZEC') {
@@ -209,10 +215,10 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
   }
 
   if (startupParams) {
-    herdData['ac_custom_param'] = startupParams.type;
+    herdData.ac_custom_param = startupParams.type;
 
     if (startupParams.value) {
-      herdData['ac_custom_param_value'] = startupParams.value;
+      herdData.ac_custom_param_value = startupParams.value;
     }
   }
 
@@ -235,7 +241,6 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
       coin,
       mode
     );
-    // herdData.ac_options.push(`-ac_supply=${supply}`);
   }
 
   return dispatch => {

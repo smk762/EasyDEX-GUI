@@ -22,9 +22,11 @@ class Main extends React.Component {
     const appVersion = mainWindow.appBasicInfo;
 
     if (appVersion) {
-      document.title = `${appVersion.name} (v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : (mainWindow.arch === 'spv-only' ? '-spv-only' : '-32bit')}-beta)`;
+      const _version = `v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : (mainWindow.arch === 'spv-only' ? '-spv-only' : '-32bit')}-beta`;
+      document.title = `${appVersion.name} (${_version})`;
     }
 
+    // prevent drag n drop external files
     document.addEventListener('dragover', event => event.preventDefault());
     document.addEventListener('drop', event => event.preventDefault());
 

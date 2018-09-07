@@ -14,7 +14,7 @@ class InvoiceModal extends React.Component {
   constructor() {
     super();
     this.state = {
-      modalIsOpen: false,
+      open: false,
       content: '',
       qrAddress: '-1',
       qrAmount: 0,
@@ -29,8 +29,15 @@ class InvoiceModal extends React.Component {
 
   openModal() {
     this.setState({
-      modalIsOpen: true,
+      open: true,
+      className: 'show fade',
     });
+
+    setTimeout(() => {
+      this.setState({
+        className: 'show in',
+      });
+    }, 50);
   }
 
   saveAsImage(e) {
@@ -42,7 +49,7 @@ class InvoiceModal extends React.Component {
       const time = new Date().getTime();
 
       a.href = dataURL;
-      a.download = this.state.qrAddress + '_' + time;
+      a.download = `${this.state.qrAddress}_${time}`;
     } else {
       e.preventDefault();
       return;
@@ -67,8 +74,15 @@ class InvoiceModal extends React.Component {
 
   closeModal() {
     this.setState({
-      modalIsOpen: false,
+      className: 'show out',
     });
+
+    setTimeout(() => {
+      this.setState({
+        open: false,
+        className: 'hide',
+      });
+    }, 300);
   }
 
   hasNoAmount(address) {
@@ -121,7 +135,7 @@ class InvoiceModal extends React.Component {
   }
 
   render() {
-    if (this.state.modalIsOpen) {
+    if (this.state.open) {
       return <BodyEnd>{ InvoiceModalRender.call(this) }</BodyEnd>;
     } else {
       return InvoiceModalButtonRender.call(this);

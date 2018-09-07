@@ -56,7 +56,7 @@ class WalletMain extends React.Component {
   }
 
   render() {
-    if (mainWindow.argv.indexOf('dexonly') > -1) {
+    if (mainWindow.argv.indexOf('dexonly') > -1) { // deprecated
       return (
         <div className="full-height">
           <input

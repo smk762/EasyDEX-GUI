@@ -20,30 +20,29 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
       <ReactTooltip
         effect="solid"
         className="text-left" />
-      { this.state.toggledAddressMenu &&
-        this.state.toggledAddressMenu === address &&
-        <div className="receive-address-context-menu">
-          <ul>
-            <li onClick={ () => this._copyCoinAddress(address) }>
-              <i className="icon wb-copy margin-right-5"></i> { translate('INDEX.COPY') + ' ' + translate('RECEIVE.PUB_KEY') }
+      <div className={ this.state.toggledAddressMenu && this.state.toggledAddressMenu === address ? 'receive-address-context-menu' : 'hide' }>
+        <ul>
+          <li onClick={ () => this._copyCoinAddress(address) }>
+            <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PUB_KEY')}` }
+          </li>
+          { !address.canspend &&
+            this.props.mode !== 'spv' &&
+            <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
+              <i className="icon fa-key margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PRIV_KEY')}` }
             </li>
-            { !address.canspend &&
-              this.props.mode !== 'spv' &&
-              <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
-                <i className="icon fa-key margin-right-5"></i> { translate('INDEX.COPY') + ' ' + translate('RECEIVE.PRIV_KEY') }
-              </li>
-            }
-            { this.props.mode !== 'spv' &&
-              <li onClick={ () => this.validateCoinAddress(address, type !== 'public' ? true : null) }>
-                <i className="icon fa-check margin-right-5"></i> { translate('RECEIVE.VALIDATE_ADDRESS') }
-              </li>
-            }
-            <li className="receive-address-context-menu-get-qr">
-              <QRModal content={ address } />
+          }
+          { this.props.mode !== 'spv' &&
+            <li onClick={ () => this.validateCoinAddress(address, type !== 'public' ? true : null) }>
+              <i className="icon fa-check margin-right-5"></i> { translate('RECEIVE.VALIDATE_ADDRESS') }
             </li>
-          </ul>
-        </div>
-      }
+          }
+          <li className="receive-address-context-menu-get-qr">
+            <QRModal
+              content={ address }
+              cbOnClose={ this.toggleAddressMenu } />
+          </li>
+        </ul>
+      </div>
     </td>
   );
 };
@@ -56,7 +55,9 @@ export const AddressItemRender = function(address, type) {
         <ReactTooltip
           effect="solid"
           className="text-left" />
-        <span className="selectable">{ type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }</span>
+        <span className="selectable">
+          { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
+        </span>
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
@@ -98,7 +99,8 @@ export const _ReceiveCoinTableRender = function() {
                 <input
                   type="checkbox"
                   value="on"
-                  checked={ this.state.hideZeroAddresses } />
+                  checked={ this.state.hideZeroAddresses }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleVisibleAddress }></div>
@@ -120,7 +122,8 @@ export const _ReceiveCoinTableRender = function() {
                 <input
                   type="checkbox"
                   value="on"
-                  checked={ this.state.toggleIsMine } />
+                  checked={ this.state.toggleIsMine }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleIsMine }></div>

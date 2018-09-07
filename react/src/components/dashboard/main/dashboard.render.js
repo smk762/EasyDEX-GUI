@@ -28,19 +28,17 @@ const DashboardRender = function() {
         id="section-dashboard">
         <Navbar />
         <CoindDownModal />
-        { this.props.Dashboard.displayImportKeyModal &&
-          <ImportKeyModal />
+        <ImportKeyModal />
+        <ZcparamsFetchModal />
+        { this.isSectionActive('wallets') &&
+          <div>
+            <CoinTile />
+            <WalletsNav />
+            <WalletsTxInfo />
+            <WalletsMain />
+            <ClaimInterestModal />
+          </div>
         }
-        { this.props.Dashboard.displayZcparamsModal &&
-          <ZcparamsFetchModal />
-        }
-        <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
-          <CoinTile />
-          <WalletsNav />
-          <WalletsTxInfo />
-          <WalletsMain />
-          <ClaimInterestModal />
-        </div>
         { this.isSectionActive('edex') &&
           <EDEX />
         }

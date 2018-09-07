@@ -34,6 +34,8 @@ class ImportKeyModal extends React.Component {
       trimPassphraseTimer: null,
       seedExtraSpaces: false,
       multipleWif: '',
+      className: 'hide',
+      open: false,
     };
     this.generateKeysFromPassphrase = this.generateKeysFromPassphrase.bind(this);
     this.toggleImportWithRescan = this.toggleImportWithRescan.bind(this);
@@ -46,6 +48,22 @@ class ImportKeyModal extends React.Component {
     this.importFromPassphrase = this.importFromPassphrase.bind(this);
     this.importFromWif = this.importFromWif.bind(this);
     this.toggleImportMulti = this.toggleImportMulti.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.Dashboard.displayImportKeyModal !== this.state.open) {
+      this.setState(Object.assign({}, this.state, {
+        className: nextProps.Dashboard.displayImportKeyModal ? 'show fade' : 'show out',
+      }));
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          open: nextProps.Dashboard.displayImportKeyModal,
+          className: nextProps.Dashboard.displayImportKeyModal ? 'show in' : 'hide',
+        }));
+      }, nextProps.Dashboard.displayImportKeyModal ? 50 : 300);
+    }
   }
 
   _copyCoinAddress(address) {
@@ -256,7 +274,18 @@ class ImportKeyModal extends React.Component {
   }
 
   closeModal() {
-    Store.dispatch(displayImportKeyModal(false));
+    this.setState(Object.assign({}, this.state, {
+      className: 'show out',
+    }));
+
+    setTimeout(() => {
+      this.setState(Object.assign({}, this.state, {
+        open: false,
+        className: 'hide',
+      }));
+
+      Store.dispatch(displayImportKeyModal(false));
+    }, 300);
   }
 
   render() {

@@ -166,7 +166,7 @@ export const _ClaimInterestTableRender = function() {
 export const ClaimInterestModalRender = function() {
   return (
     <span onClick={ this.closeDropMenu }>
-      <div className={ 'modal modal-claim-interest modal-3d-sign ' + (this.state.open ? 'show in' : 'fade hide') }>
+      <div className={ `modal modal-claim-interest modal-3d-sign ${this.state.className}` }>
         <div
           onClick={ this.closeModal }
           className="modal-close-overlay"></div>
@@ -195,7 +195,7 @@ export const ClaimInterestModalRender = function() {
                   className="icon fa-refresh pointer refresh-icon"
                   onClick={ this.loadListUnspent }></i>
               }
-              <div className="animsition vertical-align fade-in">
+              <div className={ 'animsition vertical-align ' + (this.state.open ? 'fade-in' : 'fade-out') }>
                 <div className="page-content vertical-align-middle full-width">
                   { this.state.isLoading &&
                     <span>{ translate('INDEX.LOADING') }...</span>
@@ -214,7 +214,7 @@ export const ClaimInterestModalRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.open ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </span>
   );
 };
