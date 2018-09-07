@@ -145,7 +145,13 @@ export const acConfig = {
 	},
 	MGNX: {
 		ac_supply: 12465001,
-		addnode: '45.76.32.178'
+		ac_staked: 90,
+		ac_reward: 2000000000,
+		ac_halving: 525960,
+		ac_cc: 2,
+		ac_end: 2629800,
+		addnode: '45.76.32.178',
+		genproclimit: true,
   },
 	CALL: {
 		ac_supply: 52500000,
@@ -156,5 +162,6 @@ export const acConfig = {
 			'185.162.65.14',
 			'185.162.65.15',
 		],
+		genproclimit: true,
 	},
 };
