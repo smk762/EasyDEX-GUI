@@ -1142,6 +1142,7 @@ const LANG_EN = {
 	MGNX: 'MagnaX',
     CALL: 'Capital',
     CCL: 'CoinCollect',
+    PIRATE: 'Pirate (Z address only)',
   },
   CRYPTO: {
     STRAT: 'Stratis',

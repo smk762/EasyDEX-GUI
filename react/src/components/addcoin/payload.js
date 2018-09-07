@@ -175,4 +175,15 @@ export const acConfig = {
 			'195.201.22.89',
 		],
 	},
+	PIRATE: {
+		ac_supply: 0,
+		ac_reward: 25600000000,
+		ac_halving: 77777,
+		ac_private: 1,
+		addnode: [
+			'136.243.102.225',
+			'78.47.205.239',
+		],
+		genproclimit: true,
+	},
 };
