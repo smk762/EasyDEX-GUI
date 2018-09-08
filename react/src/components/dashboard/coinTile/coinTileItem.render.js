@@ -43,7 +43,8 @@ const CoinTileItemRender = function() {
           effect="solid"
           className="text-left" />
       </button>
-      { acConfig[item.coin.toUpperCase()] &&
+      { item.mode === 'native' &&
+        acConfig[item.coin.toUpperCase()] &&
         acConfig[item.coin.toUpperCase()].ac_reward &&
         !acConfig[item.coin.toUpperCase()].ac_stake &&
         <span>
@@ -55,7 +56,8 @@ const CoinTileItemRender = function() {
             className="text-left" />
         </span>
       }
-      { acConfig[item.coin.toUpperCase()] &&
+      { item.mode === 'native' &&
+        acConfig[item.coin.toUpperCase()] &&
         acConfig[item.coin.toUpperCase()]['ac_stake'] &&
         (!mainWindow.getPubkeys()[item.coin.toLowerCase()] || !mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
         <span>
@@ -67,7 +69,8 @@ const CoinTileItemRender = function() {
             className="text-left" />
         </span>
       }
-      { acConfig[item.coin.toUpperCase()] &&
+      { item.mode === 'native' &&
+        acConfig[item.coin.toUpperCase()] &&
         acConfig[item.coin.toUpperCase()].ac_stake &&
         (mainWindow.getPubkeys()[item.coin.toLowerCase()] && mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
         <span>
