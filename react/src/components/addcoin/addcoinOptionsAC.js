@@ -14,9 +14,11 @@ const _disabledAC = {
     'mgnx',
     'pirate',
   ],
+  native: [
+    'vrsc',    
+  ],
   all: [
     'mvp',
-    'vrsc',
   ],
 };
 
@@ -41,7 +43,17 @@ const addCoinOptionsAC = (activeCoins) => {
   _assetChains = coinsList;
 
   for (let i = 0; i < _assetChains.length; i++) {
-    let availableModes = _disabledAC.spv.indexOf(_assetChains[i].toLowerCase()) === -1 ? 'spv|native' : 'native';
+    let availableModes;
+    
+    if (_disabledAC.spv.indexOf(_assetChains[i].toLowerCase()) === -1) {
+      availableModes = 'spv|native';
+    } else {
+      availableModes = 'native'
+    }
+
+    if (_disabledAC.native.indexOf(_assetChains[i].toLowerCase()) > -1) {
+      availableModes = 'spv';
+    }
 
     if (mainWindow.arch !== 'x64') {
       availableModes = 'spv';
