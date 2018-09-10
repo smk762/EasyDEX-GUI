@@ -96,7 +96,8 @@ class WalletsData extends React.Component {
   }
 
   isOutValue(tx) {
-    if ((tx.category === 'send' || tx.category === 'sent') ||
+    if (this.props.ActiveCoin.mode === 'spv' &&
+        (tx.category === 'send' || tx.category === 'sent') ||
         (tx.type === 'send' || tx.type === 'sent') &&
         tx.amount > 0) {
       tx.amount = tx.amount * -1;
