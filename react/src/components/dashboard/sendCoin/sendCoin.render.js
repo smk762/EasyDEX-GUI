@@ -555,7 +555,7 @@ export const SendRender = function() {
                       <tr>
                         <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
                         <td className="padding-left-30">
-                          { this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }
+                          <span className="selectable">{ this.props.ActiveCoin.mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }</span>
                           { ((this.props.ActiveCoin.mode === 'spv' &&
                             this.state.lastSendToResponse &&
                             this.state.lastSendToResponse.txid) ||
