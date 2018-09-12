@@ -607,6 +607,7 @@ const LANG_EN = {
   RECEIVE: {
     TOOGLE_ADDRESS: 'Toggle address context menu',
     PUB_KEY: 'pub key',
+    Z_KEY: 'z address',
     PRIV_KEY: 'priv key (WIF)',
     VALIDATE_ADDRESS: 'validate address',
     YOU_DONT_OWN_PRIV_KEYS: 'You don\'t own priv keys for this address',

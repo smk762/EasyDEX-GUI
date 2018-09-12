@@ -23,7 +23,7 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
       <div className={ this.state.toggledAddressMenu && this.state.toggledAddressMenu === address ? 'receive-address-context-menu' : 'hide' }>
         <ul>
           <li onClick={ () => this._copyCoinAddress(address) }>
-            <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PUB_KEY')}` }
+            <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.' + (type === 'public' ? 'PUB_KEY' : 'Z_KEY'))}` }
           </li>
           { !address.canspend &&
             this.props.mode !== 'spv' &&
