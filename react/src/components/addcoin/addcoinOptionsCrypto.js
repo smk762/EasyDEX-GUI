@@ -10,6 +10,11 @@ let _prepCoinsList;
 let coins = cryptoCoins;
 let _activeCoins;
 
+// disable non kmd coins
+if (!config.experimentalFeatures) {
+  coins = coins.slice(0, 2);
+}
+
 // sort coins by their title
 let _coins = [];
 let coinsList = [];
@@ -21,7 +26,10 @@ for (let i = 0; i < cryptoCoins.length; i++) {
 _coins = sortObject(_coins);
 
 for (let key in _coins) {
-  coinsList.push(_coins[key]);
+  if (config.experimentalFeatures ||
+      (!config.experimentalFeatures && (_coins[key] === 'KMD' || _coins[key] === 'CHIPS'))) {
+    coinsList.push(_coins[key]);
+  }
 }
 
 coins = coinsList;
@@ -29,10 +37,6 @@ coins = coinsList;
 const prepCoinsList = (filterActiveCoins) => {
   const availableKMDModes = mainWindow.arch === 'x64' ? 'spv|native' : 'spv';
   let _items = [];
-
-  if (!config.experimentalFeatures) {
-    coins = coins.slice(0, 2);
-  }
 
   if (filterActiveCoins) {
     for (let i = 0; i < _prepCoinsList.length; i++) {
