@@ -17,14 +17,13 @@ let coins = cryptoCoins;
 const prepCoinsList = () => {
   let _coins = [];
 
-  if (!Config.experimentalFeatures) {
-    coins = coins.slice(0, 2);
-  }
-
   for (let i = 0; i < coins.length; i++) {
-    if (mainWindow.electrumServers[coins[i].toLowerCase()] &&
-        coins[i] !== 'CHIPS') {
-      _coins.push(coins[i]);
+    if (Config.experimentalFeatures ||
+        (!Config.experimentalFeatures && (_coins[key] === 'KMD' || _coins[key] === 'CHIPS'))) {
+      if (mainWindow.electrumServers[coins[i].toLowerCase()] &&
+          coins[i] !== 'CHIPS') {
+        _coins.push(coins[i]);
+      }
     }
   }
 
@@ -325,7 +324,7 @@ class AddressBookPanel extends React.Component {
           </div>
         </div>
         { this.props.Settings.addressBook &&
-          this.props.Settings.addressBook .obj &&
+          this.props.Settings.addressBook.obj &&
           Object.keys(this.props.Settings.addressBook.obj).length > 0 &&
           <div className="row">
             <div className="col-sm-12">
@@ -341,7 +340,7 @@ class AddressBookPanel extends React.Component {
             </div>
           </div>
         }
-        { (this.state.createNewItem || (this.props.Settings.addressBook && this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length === 0)) &&
+        { (this.state.createNewItem || (this.props.Settings.addressBook && (!this.props.Settings.addressBook.obj || (this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length === 0)))) &&
           <div className="row">
             <div className="col-sm-6">
               <div
