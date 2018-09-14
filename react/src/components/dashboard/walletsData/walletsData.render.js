@@ -248,6 +248,11 @@ export const TxHistoryListRender = function() {
 
   _data = _data || this.state.filteredItemsList;
 
+  if (typeof _data === 'string' &&
+      typeof this.state.itemsList === 'object') {
+    _data = this.state.itemsList;
+  }
+
   return (
     <ReactTable
       data={ _data }
