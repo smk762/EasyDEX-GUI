@@ -19,7 +19,7 @@ const prepCoinsList = () => {
 
   for (let i = 0; i < coins.length; i++) {
     if (Config.experimentalFeatures ||
-        (!Config.experimentalFeatures && (_coins[key] === 'KMD' || _coins[key] === 'CHIPS'))) {
+        (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
       if (mainWindow.electrumServers[coins[i].toLowerCase()] &&
           coins[i] !== 'CHIPS') {
         _coins.push(coins[i]);
