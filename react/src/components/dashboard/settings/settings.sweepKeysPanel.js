@@ -5,6 +5,7 @@ import {
   copyString,
   shepherdElectrumListunspent,
   shepherdElectrumSweep,
+  shepherdGetRemoteTimestamp,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
