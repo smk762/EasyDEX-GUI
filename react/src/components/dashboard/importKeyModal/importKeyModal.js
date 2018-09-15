@@ -52,7 +52,7 @@ class ImportKeyModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.Dashboard.displayImportKeyModal !== this.state.open) {
+    if (nextProps.Dashboard.displayImportKeyModal !== this.state.open) {
       this.setState(Object.assign({}, this.state, {
         className: nextProps.Dashboard.displayImportKeyModal ? 'show fade' : 'show out',
       }));
