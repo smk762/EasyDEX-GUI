@@ -29,7 +29,10 @@ import {
   secondsToString,
   checkTimestamp,
 } from 'agama-wallet-lib/src/time';
-import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import {
+  explorerList,
+  isKomodoCoin,
+} from 'agama-wallet-lib/src/coin-helpers';
 import {
   isPositiveNumber,
   fromSats,
@@ -970,7 +973,8 @@ class SendCoin extends React.Component {
   }
 
   renderAddressBookDropdown() {
-    const _addressBook = this.props.AddressBook.arr[this.props.ActiveCoin.coin];
+    const _coin = isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin;
+    const _addressBook = this.props.AddressBook.arr[_coin];
     let _items = [];
 
     if (this.props.ActiveCoin.mode === 'spv') {

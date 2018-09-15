@@ -8,7 +8,10 @@ import {
   fromSats,
   toSats,
 } from 'agama-wallet-lib/src/utils';
-import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import {
+  explorerList,
+  isKomodoCoin,
+} from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
 
@@ -69,7 +72,7 @@ export const _SendFormRender = function() {
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             { this.props.ActiveCoin.mode === 'spv' &&
-              ((this.props.AddressBook && this.props.AddressBook.arr && !this.props.AddressBook.arr[this.props.ActiveCoin.coin]) ||
+              ((this.props.AddressBook && this.props.AddressBook.arr && !this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin]) ||
               (this.props.AddressBook && !this.props.AddressBook.arr)) &&
               <button
                 type="button"
@@ -80,7 +83,7 @@ export const _SendFormRender = function() {
             }
             { this.props.AddressBook &&
               this.props.AddressBook.arr &&
-              this.props.AddressBook.arr[this.props.ActiveCoin.coin] &&
+              this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin] &&
               <button
                 type="button"
                 className="btn btn-default btn-send-address-book-dropdown"
