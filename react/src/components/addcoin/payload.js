@@ -8,13 +8,13 @@ export const checkAC = (coinVal) => {
 }
 
 export const startCurrencyAssetChain = (confpath, coin, mode) => {
-	const assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
+	const assetChainPorts = window.require('electron').remote.getGlobal('app').assetChainPorts;
 
 	return assetChainPorts[coin];
 }
 
 export const startAssetChain = (confpath, coin, mode, getSuppyOnly) => {
-	const assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
+	const assetChainPorts = window.require('electron').remote.getGlobal('app').assetChainPorts;
 
 	if (mode === '-1') {
 		if (getSuppyOnly) {
@@ -26,10 +26,10 @@ export const startAssetChain = (confpath, coin, mode, getSuppyOnly) => {
 }
 
 export const startCrypto = (confpath, coin, mode) => {
-	const assetChainPorts = window.require('electron').remote.getCurrentWindow().assetChainPorts;
+	const assetChainPorts = window.require('electron').remote.getGlobal('app').assetChainPorts;
 
 	coin = coin === 'KMD' ? 'komodod' : coin;
 	return assetChainPorts[coin];
 }
 
-export const acConfig = window.require('electron').remote.getCurrentWindow().chainParams;;
+export const acConfig = window.require('electron').remote.getGlobal('app').chainParams;;
