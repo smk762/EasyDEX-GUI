@@ -178,7 +178,7 @@ export const importPrivkey = (coin, key, rescan = false, isZKey) => {
       cmd: isZKey ? 'z_importkey' : 'importprivkey',
       params: isZKey ? [
         key,
-        rescan
+        rescan ? 'yes': 'no',
       ] : [
         key,
         '',
