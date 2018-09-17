@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   copyCoinAddress,
   copyString,
-  shepherdElectrumKeys,
+  apiElectrumKeys,
   loginWithPin,
   triggerToaster,
 } from '../../../actions/actionCreators';
@@ -62,7 +62,7 @@ class ExportKeysPanel extends React.Component {
   }
 
   _exportWifKeys(pass) {
-    shepherdElectrumKeys(pass)
+    apiElectrumKeys(pass)
     .then((keys) => {
       if (keys === 'error') {
         Store.dispatch(

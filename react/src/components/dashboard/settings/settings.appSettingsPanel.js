@@ -11,7 +11,7 @@ import {
   saveAppConfig,
   skipFullDashboardUpdate,
   triggerToaster,
-  shepherdElectrumKvServersList,
+  apiElectrumKvServersList,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
@@ -27,12 +27,12 @@ class AppSettingsPanel extends React.Component {
     this._resetAppConfig = this._resetAppConfig.bind(this);
     this._skipFullDashboardUpdate = this._skipFullDashboardUpdate.bind(this);
     this._resetSPVCache = this._resetSPVCache.bind(this);
-    this._shepherdElectrumKvServersList = this._shepherdElectrumKvServersList.bind(this);
+    this._apiElectrumKvServersList = this._apiElectrumKvServersList.bind(this);
     this.updateInput = this.updateInput.bind(this);
   }
 
-  _shepherdElectrumKvServersList() {
-    shepherdElectrumKvServersList()
+  _apiElectrumKvServersList() {
+    apiElectrumKvServersList()
     .then((res) => {
       if (res.msg === 'success') {
         Store.dispatch(
@@ -282,7 +282,7 @@ class AppSettingsPanel extends React.Component {
                     <button
                       type="button"
                       className="btn btn-info waves-effect waves-light margin-left-15"
-                      onClick={ this._shepherdElectrumKvServersList }>
+                      onClick={ this._apiElectrumKvServersList }>
                       { translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS') }
                     </button>
                   </td>

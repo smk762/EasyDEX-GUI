@@ -4,7 +4,7 @@ import Store from '../../store';
 import {
   getDexCoins,
   activeHandle,
-  shepherdElectrumCoins,
+  apiElectrumCoins,
   loadAddressBook,
 } from '../../actions/actionCreators';
 import mainWindow from '../../util/mainWindow';
@@ -40,7 +40,7 @@ class Main extends React.Component {
     Store.dispatch(loadAddressBook());
     Store.dispatch(getDexCoins());
     Store.dispatch(activeHandle());
-    Store.dispatch(shepherdElectrumCoins());
+    Store.dispatch(apiElectrumCoins());
   }
 
   render() {

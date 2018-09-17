@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   toggleAddcoinModal,
-  shepherdElectrumAuth,
-  shepherdElectrumCoins,
+  apiElectrumAuth,
+  apiElectrumCoins,
   startInterval,
   getDexCoins,
   triggerToaster,
@@ -16,7 +16,7 @@ import {
   encryptPassphrase,
   loadPinList,
   loginWithPin,
-  shepherdElectrumLogout,
+  apiElectrumLogout,
   dashboardRemoveCoin,
 } from '../../actions/actionCreators';
 import Config from '../../config';
@@ -111,7 +111,7 @@ class Login extends React.Component {
       displayLoginSettingsDropdown: false,
     });
 
-    shepherdElectrumLogout()
+    apiElectrumLogout()
     .then((res) => {
       const _spvCoins = this.props.Main.coins.spv;
 
@@ -434,8 +434,8 @@ class Login extends React.Component {
 
       this.setState(this.defaultState);
 
-      Store.dispatch(shepherdElectrumAuth(this.state.loginPassphrase));
-      Store.dispatch(shepherdElectrumCoins());
+      Store.dispatch(apiElectrumAuth(this.state.loginPassphrase));
+      Store.dispatch(apiElectrumCoins());
     } else {
       mainWindow.pinAccess = this.state.selectedPin;
 
@@ -450,8 +450,8 @@ class Login extends React.Component {
 
           this.setState(this.defaultState);
 
-          Store.dispatch(shepherdElectrumAuth(res.result));
-          Store.dispatch(shepherdElectrumCoins());
+          Store.dispatch(apiElectrumAuth(res.result));
+          Store.dispatch(apiElectrumCoins());
         }
       });
     }
@@ -516,10 +516,10 @@ class Login extends React.Component {
     mainWindow.createSeed.firstLoginPH = md5(this.state.randomSeed);
 
     Store.dispatch(
-      shepherdElectrumAuth(this.state.randomSeedConfirm)
+      apiElectrumAuth(this.state.randomSeedConfirm)
     );
     Store.dispatch(
-      shepherdElectrumCoins()
+      apiElectrumCoins()
     );
 
     this.setState({
@@ -746,21 +746,21 @@ class Login extends React.Component {
     setTimeout(() => {
       Store.dispatch(activeHandle());
       if (type === 'native') {
-        Store.dispatch(shepherdElectrumCoins());
+        Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 500);
     setTimeout(() => {
       Store.dispatch(activeHandle());
       if (type === 'native') {
-        Store.dispatch(shepherdElectrumCoins());
+        Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 1000);
     setTimeout(() => {
       Store.dispatch(activeHandle());
       if (type === 'native') {
-        Store.dispatch(shepherdElectrumCoins());
+        Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, type === 'native' ? 5000 : 2000);

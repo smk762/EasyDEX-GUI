@@ -15,15 +15,15 @@ import {
   getSyncInfoNative,
   getDebugLog,
   getDashboardUpdate,
-  shepherdElectrumBalance,
-  shepherdElectrumTransactions,
-  shepherdElectrumCoins,
+  apiElectrumBalance,
+  apiElectrumTransactions,
+  apiElectrumCoins,
   electrumServerChanged,
-  shepherdStopCoind,
+  apiStopCoind,
   getDexCoins,
   activeHandle,
   triggerToaster,
-  shepherdRemoveCoin,
+  apiRemoveCoin,
   toggleCoindDownModal,
   dashboardRemoveCoin,
 } from '../../../actions/actionCreators';
@@ -190,7 +190,7 @@ class CoinTileItem extends React.Component {
       toggledCoinMenu: null,
     });
 
-    shepherdRemoveCoin(coin, mode)
+    apiRemoveCoin(coin, mode)
     .then((res) => {
       Store.dispatch(
         triggerToaster(
@@ -214,7 +214,7 @@ class CoinTileItem extends React.Component {
       toggledCoinMenu: null,
     });
 
-    shepherdStopCoind(coin)
+    apiStopCoind(coin)
     .then((res) => {
       if (res.msg === 'error') {
         Store.dispatch(
@@ -252,7 +252,7 @@ class CoinTileItem extends React.Component {
     for (let i = 0; i < _coins.length; i++) {
       const coin = _coins[i];
 
-      shepherdStopCoind(coin)
+      apiStopCoind(coin)
       .then((res) => {
         if (res.msg === 'error') {
           Store.dispatch(
@@ -333,10 +333,10 @@ class CoinTileItem extends React.Component {
         this.props.Dashboard.electrumCoins[coin] &&
         this.props.Dashboard.electrumCoins[coin].pub
       ) {
-        Store.dispatch(shepherdElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
+        Store.dispatch(apiElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
 
         if (this.props.ActiveCoin.activeSection === 'default') {
-          Store.dispatch(shepherdElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
+          Store.dispatch(apiElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
         }
       }
     }
@@ -388,8 +388,8 @@ class CoinTileItem extends React.Component {
         this.props.ActiveCoin.mode === 'spv' &&
         this.props.Dashboard &&
         this.props.Dashboard.activeSection === 'wallets') {
-      Store.dispatch(shepherdElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
-      Store.dispatch(shepherdElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(apiElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      Store.dispatch(apiElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
       Store.dispatch(electrumServerChanged(false));
       setTimeout(() => {
         Store.dispatch(electrumServerChanged(false));

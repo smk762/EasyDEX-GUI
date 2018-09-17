@@ -3,9 +3,9 @@ import translate from '../../../translate/translate';
 import { connect } from 'react-redux';
 import {
   copyString,
-  shepherdElectrumListunspent,
-  shepherdElectrumSweep,
-  shepherdGetRemoteTimestamp,
+  apiElectrumListunspent,
+  apiElectrumSweep,
+  apiGetRemoteTimestamp,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
@@ -91,7 +91,7 @@ class SweepKeysPanel extends React.Component {
         processingTx: true,
       });
 
-      shepherdElectrumSweep(
+      apiElectrumSweep(
         _coin,
         toSats(this.state.sweepPreflight.balance - 0.0001),
         this.props.Dashboard.electrumCoins[_coin].pub,
@@ -154,7 +154,7 @@ class SweepKeysPanel extends React.Component {
       sweepResult: null,
     });
 
-    shepherdElectrumListunspent(
+    apiElectrumListunspent(
       _coin,
       _kp.pub
     )
@@ -261,7 +261,7 @@ class SweepKeysPanel extends React.Component {
       });
 
       if (e.value.split('|')[0] === 'KMD') {
-        shepherdGetRemoteTimestamp()
+        apiGetRemoteTimestamp()
         .then((res) => {
           if (res.msg === 'success') {
             if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {

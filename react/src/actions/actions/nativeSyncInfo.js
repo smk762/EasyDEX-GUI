@@ -108,7 +108,7 @@ export const getSyncInfoNative = (coin, skipDebug, skipRemote, suppressErrors) =
     };
 
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -215,7 +215,7 @@ export const getBlockTemplate = (_json, coin) => {
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -273,7 +273,7 @@ export const getDebugLogProgress = (_json, coin) => {
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {

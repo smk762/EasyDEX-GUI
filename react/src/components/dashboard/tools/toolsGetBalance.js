@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -32,7 +32,7 @@ class ToolsGetBalance extends React.Component {
   getBalanceAlt() {
     const _coin = this.state.balanceCoin.split('|');
 
-    shepherdToolsBalance(_coin[0], this.state.balanceAddr)
+    apiToolsBalance(_coin[0], this.state.balanceAddr)
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({

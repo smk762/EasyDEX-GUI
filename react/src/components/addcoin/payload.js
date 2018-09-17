@@ -32,4 +32,4 @@ export const startCrypto = (confpath, coin, mode) => {
 	return assetChainPorts[coin];
 }
 
-export const acConfig = window.require('electron').remote.getGlobal('app').chainParams;;
+export const acConfig = window.require('electron').remote.getGlobal('app').chainParams;

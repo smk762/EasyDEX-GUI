@@ -7,11 +7,11 @@ import {
   sendNativeTx,
   getKMDOPID,
   clearLastSendToResponseState,
-  shepherdElectrumSend,
-  shepherdElectrumSendPreflight,
-  shepherdGetRemoteBTCFees,
-  shepherdGetLocalBTCFees,
-  shepherdGetRemoteTimestamp,
+  apiElectrumSend,
+  apiElectrumSendPreflight,
+  apiGetRemoteBTCFees,
+  apiGetLocalBTCFees,
+  apiGetRemoteTimestamp,
   copyString,
   loginWithPin,
 } from '../../../actions/actionCreators';
@@ -233,7 +233,7 @@ class SendCoin extends React.Component {
 
       if (this.props.ActiveCoin.mode === 'spv' &&
           this.props.ActiveCoin.coin === 'KMD') {
-        shepherdGetRemoteTimestamp()
+        apiGetRemoteTimestamp()
         .then((res) => {
           if (res.msg === 'success') {
             if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
@@ -531,7 +531,7 @@ class SendCoin extends React.Component {
   fetchBTCFees() {
     if (this.props.ActiveCoin.mode === 'spv' &&
         this.props.ActiveCoin.coin === 'BTC') {
-      shepherdGetRemoteBTCFees()
+      apiGetRemoteBTCFees()
       .then((res) => {
         if (res.msg === 'success') {
           // TODO: check, approx fiat value
@@ -540,7 +540,7 @@ class SendCoin extends React.Component {
             btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup[this.state.btcFeesTimeBasedStep]],
           });
         } else {
-          shepherdGetLocalBTCFees()
+          apiGetLocalBTCFees()
           .then((res) => {
             if (res.msg === 'success') {
               // TODO: check, approx fiat value
@@ -566,7 +566,7 @@ class SendCoin extends React.Component {
   changeSendCoinStep(step, back) {
     if (this.props.ActiveCoin.mode === 'spv' &&
         this.props.ActiveCoin.coin === 'KMD') {
-      shepherdGetRemoteTimestamp()
+      apiGetRemoteTimestamp()
       .then((res) => {
         if (res.msg === 'success') {
           if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
@@ -629,7 +629,7 @@ class SendCoin extends React.Component {
 
         // spv pre tx push request
         if (this.props.ActiveCoin.mode === 'spv') {
-          shepherdElectrumSendPreflight(
+          apiElectrumSendPreflight(
             this.props.ActiveCoin.coin,
             toSats(this.state.amount),
             this.state.sendTo,
@@ -699,7 +699,7 @@ class SendCoin extends React.Component {
       // no op
       if (this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) {
         Store.dispatch(
-          shepherdElectrumSend(
+          apiElectrumSend(
             this.props.ActiveCoin.coin,
             toSats(this.state.amount),
             this.state.sendTo,
@@ -904,12 +904,6 @@ class SendCoin extends React.Component {
       ];
       const _minTimeBased = 0;
       const _maxTimeBased = 3;
-
-      /*let _marks = {};
-
-      for (let i = _min; i < _max; i++) {
-        _marks[i] = i + 1;
-      }*/
 
       return (
         <div className="col-lg-12 form-group form-material">

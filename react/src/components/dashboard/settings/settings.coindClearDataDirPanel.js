@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import {
-  shepherdClearCoindFolder,
+  apiClearCoindFolder,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import { coindList } from '../../../util/coinHelper';
@@ -37,7 +37,7 @@ class CoindClearDataDirPanel extends React.Component {
     });
 
     setTimeout(() => {
-      shepherdClearCoindFolder(
+      apiClearCoindFolder(
         _coin,
         this.state.keepWalletDat ? this.state.keepWalletDat : null
       )

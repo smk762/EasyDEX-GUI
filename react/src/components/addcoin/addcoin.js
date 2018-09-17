@@ -6,8 +6,8 @@ import {
   addCoin,
   toggleAddcoinModal,
   triggerToaster,
-  shepherdGetCoinList,
-  shepherdPostCoinList,
+  apiGetCoinList,
+  apiPostCoinList,
   toggleZcparamsFetchModal,
 } from '../../actions/actionCreators';
 import Store from '../../store';
@@ -156,14 +156,14 @@ class AddCoin extends React.Component {
   }
 
   saveCoinSelection() {
-    shepherdPostCoinList(this.state.coins)
+    apiPostCoinList(this.state.coins)
     .then((json) => {
       this.toggleActionsMenu();
     });
   }
 
   loadCoinSelection() {
-    shepherdGetCoinList()
+    apiGetCoinList()
     .then((json) => {
       if (json.msg !== 'error') {
         this.setState(Object.assign({}, this.state, {

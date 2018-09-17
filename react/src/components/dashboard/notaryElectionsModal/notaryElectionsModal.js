@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import {
   toggleNotaryElectionsModal,
-  shepherdElectionsSend,
-  shepherdElectionsSendMany,
-  shepherdElectionsLogout,
-  shepherdElectionsLogin,
-  shepherdElectionsStatus,
+  apiElectionsSend,
+  apiElectionsSendMany,
+  apiElectionsLogout,
+  apiElectionsLogin,
+  apiElectionsStatus,
   triggerToaster,
-  shepherdElectionsBalance,
-  shepherdElectionsTransactions,
+  apiElectionsBalance,
+  apiElectionsTransactions,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
@@ -146,7 +146,7 @@ class NotaryElectionsModal extends React.Component {
         )
       );
     } else {
-      shepherdElectionsSendMany(
+      apiElectionsSendMany(
         this.state.coin,
         [{
           address: this.state.multiOutAddress1,
@@ -229,7 +229,7 @@ class NotaryElectionsModal extends React.Component {
       );
     } else {
       if (this.sendValidate()) {
-        shepherdElectionsSend(
+        apiElectionsSend(
           this.state.coin,
           toSats(this.state.amount) - 10000,
           this.state.address,
@@ -272,10 +272,10 @@ class NotaryElectionsModal extends React.Component {
   }
 
   sync() {
-    shepherdElectionsStatus()
+    apiElectionsStatus()
     .then((res) => {
       if (res.result !== 'unauth') {
-        shepherdElectionsBalance(this.state.coin, res.result)
+        apiElectionsBalance(this.state.coin, res.result)
         .then((res) => {
           if (res.msg === 'success') {
             this.setState({
@@ -284,7 +284,7 @@ class NotaryElectionsModal extends React.Component {
           }
         });
 
-        shepherdElectionsTransactions(
+        apiElectionsTransactions(
           this.state.coin,
           res.result,
           this.state.userType
@@ -410,7 +410,7 @@ class NotaryElectionsModal extends React.Component {
   }
 
   loginSeed() {
-    shepherdElectionsLogin(this.state.loginPassphrase, this.state.coin)
+    apiElectionsLogin(this.state.loginPassphrase, this.state.coin)
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -440,7 +440,7 @@ class NotaryElectionsModal extends React.Component {
   }
 
   logout() {
-    shepherdElectionsLogout()
+    apiElectionsLogout()
     .then((res) => {
       this.setState(this.defaultState);
     });

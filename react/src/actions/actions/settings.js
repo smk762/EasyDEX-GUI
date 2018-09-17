@@ -29,7 +29,7 @@ export const getAppInfo = () => {
       token,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/appinfo${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/appinfo${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -115,7 +115,7 @@ export const getDebugLog = (target, linesCount, acName) => {
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/debuglog`,
+      `http://127.0.0.1:${agamaPort}/api/debuglog`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -136,7 +136,7 @@ export const getDebugLog = (target, linesCount, acName) => {
 export const saveAppConfig = (_payload) => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/appconf`,
+      `http://127.0.0.1:${agamaPort}/api/appconf`,
       fetchType(
         JSON.stringify({
           payload: _payload,
@@ -181,7 +181,7 @@ export function getAppConfig() {
       token,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/appconf${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/appconf${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -202,7 +202,7 @@ export function getAppConfig() {
 export const resetAppConfig = () => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/appconf/reset`,
+      `http://127.0.0.1:${agamaPort}/api/appconf/reset`,
       fetchType(JSON.stringify({ token })).post
     )
     .catch((error) => {
@@ -238,7 +238,7 @@ export const coindGetStdout = (chain) => {
       chain,
     };
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/coind/stdout${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/coind/stdout${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -272,7 +272,7 @@ export const getWalletDatKeys = (chain, keyMatchPattern) => {
       chain,
     };
     fetch(
-      keyMatchPattern ? `http://127.0.0.1:${agamaPort}/shepherd/coindwalletkeys${urlParams(_urlParams1)}` : `http://127.0.0.1:${agamaPort}/shepherd/coindwalletkeys${urlParams(_urlParams2)}`,
+      keyMatchPattern ? `http://127.0.0.1:${agamaPort}/api/coindwalletkeys${urlParams(_urlParams1)}` : `http://127.0.0.1:${agamaPort}/api/coindwalletkeys${urlParams(_urlParams2)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -304,7 +304,7 @@ export const dumpPrivKey = (coin, address, isZaddr) => {
     };
 
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch(function(error) {
@@ -336,7 +336,7 @@ export const validateAddress = (coin, address, isZaddr) => {
     };
 
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch(function(error) {
@@ -359,7 +359,7 @@ export const validateAddress = (coin, address, isZaddr) => {
 export const resetSPVCache = () => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/cache/delete`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/cache/delete`,
       fetchType(JSON.stringify({ token })).post
     )
     .catch((error) => {

@@ -17,7 +17,7 @@ export const getDexCoins = () => {
       token,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/InstantDEX/allcoins${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/InstantDEX/allcoins${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {

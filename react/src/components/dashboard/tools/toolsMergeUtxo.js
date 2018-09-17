@@ -5,9 +5,9 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsSeedToWif,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsSeedToWif,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import devlog from '../../../util/devlog';
@@ -79,14 +79,14 @@ class ToolsMergeUTXO extends React.Component {
 
     // console.log(payload);
 
-    shepherdElectrumSplitUtxoPromise(payload)
+    apiElectrumSplitUtxoPromise(payload)
     .then((res) => {
       devlog(res);
 
       if (res.msg === 'success') {
         const _coin = this.state.utxoMergeCoin.split('|');
 
-        shepherdCliPromise(
+        apiCliPromise(
           null,
           _coin[0],
           'sendrawtransaction',
@@ -131,14 +131,14 @@ class ToolsMergeUTXO extends React.Component {
   getUtxoMerge() {
     const _coin = this.state.utxoMergeCoin.split('|');
 
-    shepherdToolsSeedToWif(
+    apiToolsSeedToWif(
       this.state.utxoMergeSeed,
       'KMD',
       true
     )
     .then((seed2kpRes) => {
       if (seed2kpRes.msg === 'success') {
-        shepherdCliPromise(null, _coin[0], 'listunspent')
+        apiCliPromise(null, _coin[0], 'listunspent')
         .then((res) => {
           // devlog(res);
 

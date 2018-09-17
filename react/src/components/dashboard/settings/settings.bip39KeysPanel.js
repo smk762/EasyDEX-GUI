@@ -2,7 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import { connect } from 'react-redux';
 import {
-  shepherdElectrumBip39Keys,
+  apiElectrumBip39Keys,
   copyCoinAddress,
   triggerToaster,
 } from '../../../actions/actionCreators';
@@ -97,7 +97,7 @@ class Bip39KeysPanel extends React.Component {
   }
 
   _getBip39Keys() {
-    shepherdElectrumBip39Keys(
+    apiElectrumBip39Keys(
       this.state.passphrase,
       this.state.match,
       this.state.addressdepth,

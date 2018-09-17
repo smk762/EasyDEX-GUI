@@ -19,14 +19,14 @@ export const getListUnspent = (coin) => {
     };
 
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.shepherdElectrumListunspent') + ' (code: getListUnspent)',
+          translate('API.apiElectrumListunspent') + ' (code: getListUnspent)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -68,14 +68,14 @@ export const getRawTransaction = (coin, txid) => {
     };
 
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.shepherdElectrumListunspent') + ' (code: getListUnspent)',
+          translate('API.apiElectrumListunspent') + ' (code: getListUnspent)',
           translate('TOASTR.ERROR'),
           'error'
         )

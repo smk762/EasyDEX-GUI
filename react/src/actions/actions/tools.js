@@ -9,10 +9,10 @@ import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 
-export const shepherdToolsSeedKeys = (seed) => {
+export const apiToolsSeedKeys = (seed) => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/keys`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/keys`,
       fetchType(
         JSON.stringify({
           seed,
@@ -26,7 +26,7 @@ export const shepherdToolsSeedKeys = (seed) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsSeedKeys)',
+          translate('API.getTools') + ' (code: apiToolsSeedKeys)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -39,7 +39,7 @@ export const shepherdToolsSeedKeys = (seed) => {
   });
 }
 
-export const shepherdToolsBalance = (coin, address) => {
+export const apiToolsBalance = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token: Config.token,
@@ -47,14 +47,14 @@ export const shepherdToolsBalance = (coin, address) => {
       address,
     };
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/getbalance${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/getbalance${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsBalance)',
+          translate('API.getTools') + ' (code: apiToolsBalance)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -67,7 +67,7 @@ export const shepherdToolsBalance = (coin, address) => {
   });
 }
 
-export const shepherdToolsTransactions = (coin, address) => {
+export const apiToolsTransactions = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token,
@@ -77,14 +77,14 @@ export const shepherdToolsTransactions = (coin, address) => {
       maxlength: 20,
     };
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/listtransactions${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsTransactions)',
+          translate('API.getTools') + ' (code: apiToolsTransactions)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -97,7 +97,7 @@ export const shepherdToolsTransactions = (coin, address) => {
   });
 }
 
-export const shepherdToolsBuildUnsigned = (coin, value, sendToAddress, changeAddress) => {
+export const apiToolsBuildUnsigned = (coin, value, sendToAddress, changeAddress) => {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
@@ -112,14 +112,14 @@ export const shepherdToolsBuildUnsigned = (coin, value, sendToAddress, changeAdd
       offline: true,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsBuildUnsigned)',
+          translate('API.getTools') + ' (code: apiToolsBuildUnsigned)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -132,7 +132,7 @@ export const shepherdToolsBuildUnsigned = (coin, value, sendToAddress, changeAdd
   });
 }
 
-export const shepherdToolsListunspent = (coin, address) => {
+export const apiToolsListunspent = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token,
@@ -141,14 +141,14 @@ export const shepherdToolsListunspent = (coin, address) => {
       full: true,
     };
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/listunspent${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/listunspent${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsListunspent)',
+          translate('API.getTools') + ' (code: apiToolsListunspent)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -161,10 +161,10 @@ export const shepherdToolsListunspent = (coin, address) => {
   });
 }
 
-export const shepherdToolsPushTx = (network, rawtx) => {
+export const apiToolsPushTx = (network, rawtx) => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/pushtx`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/pushtx`,
       fetchType(
         JSON.stringify({
           network,
@@ -177,7 +177,7 @@ export const shepherdToolsPushTx = (network, rawtx) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsPushTx)',
+          translate('API.getTools') + ' (code: apiToolsPushTx)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -190,7 +190,7 @@ export const shepherdToolsPushTx = (network, rawtx) => {
   });
 }
 
-export const shepherdToolsWifToKP = (coin, wif) => {
+export const apiToolsWifToKP = (coin, wif) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token,
@@ -198,14 +198,14 @@ export const shepherdToolsWifToKP = (coin, wif) => {
       wif,
     };
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/wiftopub${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/wiftopub${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsWifToKP)',
+          translate('API.getTools') + ' (code: apiToolsWifToKP)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -218,10 +218,10 @@ export const shepherdToolsWifToKP = (coin, wif) => {
   });
 }
 
-export const shepherdToolsSeedToWif = (seed, network, iguana) => {
+export const apiToolsSeedToWif = (seed, network, iguana) => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/seedtowif`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/seedtowif`,
       fetchType(
         JSON.stringify({
           seed,
@@ -235,7 +235,7 @@ export const shepherdToolsSeedToWif = (seed, network, iguana) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getTools') + ' (code: shepherdToolsSeedToWif)',
+          translate('API.getTools') + ' (code: apiToolsSeedToWif)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -249,7 +249,7 @@ export const shepherdToolsSeedToWif = (seed, network, iguana) => {
 }
 
 // remote bitcore api
-export const shepherdToolsMultiAddressBalance = (addressList, fallback) => {
+export const apiToolsMultiAddressBalance = (addressList, fallback) => {
   return new Promise((resolve, reject) => {
     fetch(
       fallback ? 'https://kmdexplorer.io/insight-api-komodo/addrs/utxo' : 'https://www.kmdexplorer.ru/insight-api-komodo/addrs/utxo',
@@ -261,7 +261,7 @@ export const shepherdToolsMultiAddressBalance = (addressList, fallback) => {
     )
     .catch((error) => {
       console.log(error);
-      console.warn(`shepherdToolsMultiAddressBalance has failed, ${fallback ? ' use fallback' : ' all routes have failed'}`);
+      console.warn(`apiToolsMultiAddressBalance has failed, ${fallback ? ' use fallback' : ' all routes have failed'}`);
 
       resolve({
         msg: 'error',

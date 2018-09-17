@@ -9,11 +9,11 @@ import {
   copyString,
   sendToAddressPromise,
   triggerToaster,
-  shepherdElectrumListunspent,
-  shepherdElectrumSendPreflight,
-  shepherdElectrumSendPromise,
+  apiElectrumListunspent,
+  apiElectrumSendPreflight,
+  apiElectrumSendPromise,
   validateAddressPromise,
-  shepherdGetRemoteTimestamp,
+  apiGetRemoteTimestamp,
 } from '../../../actions/actionCreators';
 import translate from '../../../translate/translate';
 import {
@@ -65,7 +65,7 @@ class ClaimInterestModal extends React.Component {
     }
 
     if (this.props.ActiveCoin.mode === 'spv') {
-      shepherdGetRemoteTimestamp()
+      apiGetRemoteTimestamp()
       .then((res) => {
         if (res.msg === 'success') {
           if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
@@ -132,7 +132,7 @@ class ClaimInterestModal extends React.Component {
     }, 1000);
 
     if (this.props.ActiveCoin.mode === 'spv') {
-      shepherdElectrumListunspent(
+      apiElectrumListunspent(
         this.props.ActiveCoin.coin,
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
       )
@@ -221,7 +221,7 @@ class ClaimInterestModal extends React.Component {
   }
 
   confirmClaimInterest() {
-    shepherdElectrumSendPromise(
+    apiElectrumSendPromise(
       this.props.ActiveCoin.coin,
       this.props.ActiveCoin.balance.balanceSats,
       this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
@@ -258,7 +258,7 @@ class ClaimInterestModal extends React.Component {
           spvPreflightSendInProgress: true,
         }));
 
-        shepherdElectrumSendPreflight(
+        apiElectrumSendPreflight(
           this.props.ActiveCoin.coin,
           this.props.ActiveCoin.balance.balanceSats,
           this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
@@ -438,7 +438,7 @@ class ClaimInterestModal extends React.Component {
       this.loadListUnspent();
 
       if (this.props.ActiveCoin.mode === 'spv') {
-        shepherdGetRemoteTimestamp()
+        apiGetRemoteTimestamp()
         .then((res) => {
           if (res.msg === 'success') {
             if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {

@@ -57,7 +57,7 @@ export const sendNativeTx = (coin, _payload) => {
     };
 
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -144,7 +144,7 @@ export const getKMDOPID = (opid, coin) => {
     };
 
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -183,7 +183,7 @@ export const sendToAddressPromise = (coin, address, amount) => {
     };
 
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -229,7 +229,7 @@ export const validateAddressPromise = (coin, address) => {
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${Config.agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {

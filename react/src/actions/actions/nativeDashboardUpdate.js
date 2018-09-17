@@ -12,7 +12,7 @@ import translate from '../../translate/translate';
 export const getDashboardUpdate = (coin, activeCoinProps) => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/native/dashboard/update`,
+      `http://127.0.0.1:${agamaPort}/api/native/dashboard/update`,
       fetchType(
         JSON.stringify({
           coin: coin,
@@ -25,7 +25,7 @@ export const getDashboardUpdate = (coin, activeCoinProps) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API.shepherdElectrumBip39Keys') + ' (code: getDashboardUpdate)',
+          translate('API.apiElectrumBip39Keys') + ' (code: getDashboardUpdate)',
           translate('TOASTR.ERROR'),
           'error'
         )

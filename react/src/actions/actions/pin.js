@@ -6,7 +6,7 @@ import {
   getDecryptedPassphrase,
   getPinList,
   triggerToaster,
-  shepherdElectrumAuth,
+  apiElectrumAuth,
 } from '../actionCreators';
 import translate from '../../translate/translate';
 import urlParams from '../../util/url';
@@ -23,7 +23,7 @@ export const encryptPassphrase = (string, key, suppressToastr, customPinName) =>
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/encryptkey`,
+      `http://127.0.0.1:${agamaPort}/api/encryptkey`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -62,7 +62,7 @@ export const loginWithPin = (key, pubkey) => {
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/decryptkey`,
+      `http://127.0.0.1:${agamaPort}/api/decryptkey`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -107,7 +107,7 @@ export const modifyPin = (pubkey, remove, pubkeynew) => {
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/modifypin`,
+      `http://127.0.0.1:${agamaPort}/api/modifypin`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -145,7 +145,7 @@ export const loadPinList = () => {
       token,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/getpinlist${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/getpinlist${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -178,7 +178,7 @@ export const changePin = (oldKey, newKey, pubkey) => {
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/decryptkey`,
+      `http://127.0.0.1:${agamaPort}/api/decryptkey`,
       fetchType(JSON.stringify(payload)).post
     )
     .catch((error) => {
@@ -206,7 +206,7 @@ export const changePin = (oldKey, newKey, pubkey) => {
         };
 
         fetch(
-          `http://127.0.0.1:${agamaPort}/shepherd/encryptkey`,
+          `http://127.0.0.1:${agamaPort}/api/encryptkey`,
           fetchType(JSON.stringify(payload)).post
         )
         .catch((error) => {

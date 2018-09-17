@@ -9,7 +9,7 @@ import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import translate from '../../translate/translate';
 
-export const shepherdCliPromise = (mode, chain, cmd, params) => {
+export const apiCliPromise = (mode, chain, cmd, params) => {
   let payload = {
     mode,
     chain,
@@ -23,14 +23,14 @@ export const shepherdCliPromise = (mode, chain, cmd, params) => {
 
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.shepherdCli') + ' (code: shepherdCli)',
+          translate('API.apiCli') + ' (code: apiCli)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -41,7 +41,7 @@ export const shepherdCliPromise = (mode, chain, cmd, params) => {
   });
 }
 
-export const shepherdCli = (mode, chain, cmd) => {
+export const apiCli = (mode, chain, cmd) => {
   const payload = {
     mode,
     chain,
@@ -51,14 +51,14 @@ export const shepherdCli = (mode, chain, cmd) => {
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API.shepherdCli') + ' (code: shepherdCli)',
+          translate('API.apiCli') + ' (code: apiCli)',
           translate('TOASTR.ERROR'),
           'error'
         )

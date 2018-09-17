@@ -6,8 +6,8 @@ import {
   stopInterval,
   startInterval,
   displayImportKeyModal,
-  shepherdElectrumLock,
-  shepherdElectrumLogout,
+  apiElectrumLock,
+  apiElectrumLogout,
   getDexCoins,
   activeHandle,
   dashboardRemoveCoin,
@@ -58,7 +58,7 @@ class Navbar extends React.Component {
   }
 
   spvLock() {
-    shepherdElectrumLock()
+    apiElectrumLock()
     .then((res) => {
       mainWindow.pinAccess = false;
       Store.dispatch(getDexCoins());
@@ -67,7 +67,7 @@ class Navbar extends React.Component {
   }
 
   spvLogout() {
-    shepherdElectrumLogout()
+    apiElectrumLogout()
     .then((res) => {
       const _spvCoins = this.props.Main.coins.spv;
 

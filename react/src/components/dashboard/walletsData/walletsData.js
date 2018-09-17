@@ -8,14 +8,14 @@ import {
   toggleDashboardTxInfoModal,
   changeActiveAddress,
   getDashboardUpdate,
-  shepherdElectrumKVTransactionsPromise,
-  shepherdElectrumTransactions,
+  apiElectrumKVTransactionsPromise,
+  apiElectrumTransactions,
   toggleClaimInterestModal,
-  shepherdElectrumCheckServerConnection,
-  shepherdElectrumSetServer,
+  apiElectrumCheckServerConnection,
+  apiElectrumSetServer,
   electrumServerChanged,
-  shepherdElectrumTransactionsCSV,
-  shepherdNativeTransactionsCSV,
+  apiElectrumTransactionsCSV,
+  apiNativeTransactionsCSV,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
@@ -113,7 +113,7 @@ class WalletsData extends React.Component {
     });
 
     if (this.props.ActiveCoin.mode === 'spv') {
-      shepherdElectrumTransactionsCSV(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub)
+      apiElectrumTransactionsCSV(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub)
       .then((res) => {
         this.setState({
           generatingCSV: false,
@@ -139,7 +139,7 @@ class WalletsData extends React.Component {
         }
       });
     } else {
-      shepherdNativeTransactionsCSV(this.props.ActiveCoin.coin)
+      apiNativeTransactionsCSV(this.props.ActiveCoin.coin)
       .then((res) => {
         this.setState({
           generatingCSV: false,
@@ -173,7 +173,7 @@ class WalletsData extends React.Component {
     });
 
     if (!this.state.kvView) {
-      shepherdElectrumKVTransactionsPromise(
+      apiElectrumKVTransactionsPromise(
         this.props.ActiveCoin.coin,
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
       )
@@ -193,7 +193,7 @@ class WalletsData extends React.Component {
         }
       });
     } else {
-      Store.dispatch(shepherdElectrumTransactions(
+      Store.dispatch(apiElectrumTransactions(
         this.props.ActiveCoin.coin,
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
       ));
@@ -436,7 +436,7 @@ class WalletsData extends React.Component {
     }, 1000);
 
     if (this.state.kvView) {
-      shepherdElectrumKVTransactionsPromise(
+      apiElectrumKVTransactionsPromise(
         this.props.ActiveCoin.coin,
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
       )
@@ -460,7 +460,7 @@ class WalletsData extends React.Component {
         Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
       } else if (this.props.ActiveCoin.mode === 'spv') {
         Store.dispatch(
-          shepherdElectrumTransactions(
+          apiElectrumTransactions(
             this.props.ActiveCoin.coin,
             this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
           )
@@ -547,10 +547,10 @@ class WalletsData extends React.Component {
       ];
       const _randomServer = getRandomElectrumServer(_spvServers, _server.join(':'));
 
-      shepherdElectrumCheckServerConnection(_randomServer.ip, _randomServer.port, _randomServer.proto)
+      apiElectrumCheckServerConnection(_randomServer.ip, _randomServer.port, _randomServer.proto)
       .then((res) => {
         if (res.result) {
-          shepherdElectrumSetServer(
+          apiElectrumSetServer(
             this.props.ActiveCoin.coin,
             _randomServer.ip,
             _randomServer.port

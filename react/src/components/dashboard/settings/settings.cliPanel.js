@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import { shepherdCli } from '../../../actions/actionCreators';
+import { apiCli } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 class CliPanel extends React.Component {
@@ -128,7 +128,7 @@ class CliPanel extends React.Component {
 
   execCliCmd() {
     Store.dispatch(
-      shepherdCli(
+      apiCli(
         'passthru',
         this.state.cliCoin,
         this.state.cliCmdString

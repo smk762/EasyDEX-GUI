@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import {
   getDashboardUpdate,
-  shepherdElectrumBalance,
+  apiElectrumBalance,
 } from '../../../actions/actionCreators';
 import mainWindow from '../../../util/mainWindow';
 import Config from '../../../config';
@@ -62,7 +62,7 @@ class WalletsBalance extends React.Component {
       Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
     } else if (this.props.ActiveCoin.mode === 'spv') {
       Store.dispatch(
-        shepherdElectrumBalance(
+        apiElectrumBalance(
           this.props.ActiveCoin.coin,
           this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
         )

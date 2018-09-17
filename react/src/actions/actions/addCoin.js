@@ -12,7 +12,7 @@ import {
   triggerToaster,
   toggleAddcoinModal,
   getDexCoins,
-  shepherdElectrumCoins,
+  apiElectrumCoins,
 } from '../actionCreators';
 import {
   startCurrencyAssetChain,
@@ -36,7 +36,7 @@ export const activeHandle = () => {
       token,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/auth/status${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/auth/status${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -58,10 +58,10 @@ export const activeHandle = () => {
   }
 }
 
-export const shepherdElectrumAuth = (seed) => {
+export const apiElectrumAuth = (seed) => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/login`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/login`,
       fetchType(
         JSON.stringify({
           seed,
@@ -74,7 +74,7 @@ export const shepherdElectrumAuth = (seed) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API.shepherdElectrumAuth') + ' (code: shepherdElectrumAuth)',
+          translate('API.apiElectrumAuth') + ' (code: apiElectrumAuth)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -84,7 +84,7 @@ export const shepherdElectrumAuth = (seed) => {
     .then(json => {
       if (json.msg !== 'error') {
         dispatch(activeHandle());
-        dispatch(shepherdElectrumCoins());
+        dispatch(apiElectrumCoins());
       } else {
         dispatch(
           triggerToaster(
@@ -98,21 +98,21 @@ export const shepherdElectrumAuth = (seed) => {
   }
 }
 
-export const shepherdElectrumAddCoin = (coin) => {
+export const apiElectrumAddCoin = (coin) => {
   return dispatch => {
     const _urlParams = {
       coin,
       token,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/electrum/coins/add${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/coins/add${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API.shepherdElectrumAddCoin') + ' (code: shepherdElectrumAddCoin)',
+          translate('API.apiElectrumAddCoin') + ' (code: apiElectrumAddCoin)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -131,11 +131,11 @@ export const addCoin = (coin, mode, startupParams, genproclimit) => {
   if (mode === 0 ||
       mode === '0') {
     return dispatch => {
-      dispatch(shepherdElectrumAddCoin(coin));
+      dispatch(apiElectrumAddCoin(coin));
     }
   } else {
     return dispatch => {
-      dispatch(shepherdGetConfig(coin, mode, startupParams, genproclimit));
+      dispatch(apiGetConfig(coin, mode, startupParams, genproclimit));
     }
   }
 }
@@ -151,7 +151,7 @@ const handleErrors = (response) => {
   }
 }
 
-export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
+export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
   let acData;
   let herdData = {
     ac_name: coin,
@@ -254,7 +254,7 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
     }
 
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/herd`,
+      `http://127.0.0.1:${agamaPort}/api/herd`,
       fetchType(
         JSON.stringify({
           herd: _herd,
@@ -267,7 +267,7 @@ export const shepherdHerd = (coin, mode, path, startupParams, genproclimit) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API.shepherdHerd') + ' (code: shepherdHerd)',
+          translate('API.apiHerd') + ' (code: apiHerd)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -313,22 +313,22 @@ export const addCoinResult = (coin, mode) => {
 
     if (Number(mode) === 0) {
       dispatch(activeHandle());
-      dispatch(shepherdElectrumCoins());
+      dispatch(apiElectrumCoins());
       dispatch(getDexCoins());
 
       setTimeout(() => {
         dispatch(activeHandle());
-        dispatch(shepherdElectrumCoins());
+        dispatch(apiElectrumCoins());
         dispatch(getDexCoins());
       }, 500);
       setTimeout(() => {
         dispatch(activeHandle());
-        dispatch(shepherdElectrumCoins());
+        dispatch(apiElectrumCoins());
         dispatch(getDexCoins());
       }, 1000);
       setTimeout(() => {
         dispatch(activeHandle());
-        dispatch(shepherdElectrumCoins());
+        dispatch(apiElectrumCoins());
         dispatch(getDexCoins());
       }, 2000);
     } else {
@@ -351,10 +351,10 @@ export const addCoinResult = (coin, mode) => {
   }
 }
 
-export const _shepherdGetConfig = (coin, mode, startupParams) => {
+export const _apiGetConfig = (coin, mode, startupParams) => {
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${agamaPort}/shepherd/getconf`,
+      `http://127.0.0.1:${agamaPort}/api/getconf`,
       fetchType(
         JSON.stringify({
           chain: 'komodod',
@@ -366,7 +366,7 @@ export const _shepherdGetConfig = (coin, mode, startupParams) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          translate('API._shepherdGetConfig') + ' (code: _shepherdGetConfig)',
+          translate('API._apiGetConfig') + ' (code: _apiGetConfig)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -375,7 +375,7 @@ export const _shepherdGetConfig = (coin, mode, startupParams) => {
     .then(response => response.json())
     .then(
       json => dispatch(
-        shepherdHerd(
+        apiHerd(
           coin,
           mode,
           json,
@@ -386,12 +386,12 @@ export const _shepherdGetConfig = (coin, mode, startupParams) => {
   }
 }
 
-export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
+export const apiGetConfig = (coin, mode, startupParams, genproclimit) => {
   if (coin === 'KMD' &&
       mode === '-1') {
     return dispatch => {
       return fetch(
-        `http://127.0.0.1:${agamaPort}/shepherd/getconf`,
+        `http://127.0.0.1:${agamaPort}/api/getconf`,
         fetchType(
           JSON.stringify({
             chain: 'komodod',
@@ -403,7 +403,7 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
         console.log(error);
         dispatch(
           triggerToaster(
-            translate('API.shepherdGetConfig') + ' (code: shepherdGetConfig)',
+            translate('API.apiGetConfig') + ' (code: apiGetConfig)',
             translate('TOASTR.ERROR'),
             'error'
           )
@@ -412,7 +412,7 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
       .then(response => response.json())
       .then(
         json => dispatch(
-          shepherdHerd(
+          apiHerd(
             coin,
             mode,
             json,
@@ -424,7 +424,7 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
   } else {
     return dispatch => {
       return fetch(
-        `http://127.0.0.1:${agamaPort}/shepherd/getconf`,
+        `http://127.0.0.1:${agamaPort}/api/getconf`,
         fetchType(
           JSON.stringify({
             chain: coin,
@@ -436,7 +436,7 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
         console.log(error);
         dispatch(
           triggerToaster(
-            translate('API.shepherdGetConfig') + ' (code: shepherdGetConfig)',
+            translate('API.apiGetConfig') + ' (code: apiGetConfig)',
             translate('TOASTR.ERROR'),
             'error'
           )
@@ -445,7 +445,7 @@ export const shepherdGetConfig = (coin, mode, startupParams, genproclimit) => {
       .then(response => response.json())
       .then(
         json => dispatch(
-          shepherdHerd(
+          apiHerd(
             coin,
             mode,
             json,

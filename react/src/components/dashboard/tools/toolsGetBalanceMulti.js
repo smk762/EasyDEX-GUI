@@ -3,7 +3,7 @@ import translate from '../../../translate/translate';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsMultiAddressBalance,
+  apiToolsMultiAddressBalance,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -26,7 +26,7 @@ class ToolsGetBalanceMulti extends React.Component {
 
     if (_addr &&
         _addr.length) {
-      shepherdToolsMultiAddressBalance(_addr.join(','))
+      apiToolsMultiAddressBalance(_addr.join(','))
       .then((res) => {
         if (res.msg === 'success') {
           if (!res.result.length) {
@@ -43,7 +43,7 @@ class ToolsGetBalanceMulti extends React.Component {
             balanceResult: res.result,
           });
         } else {
-          shepherdToolsMultiAddressBalance(_addr.join(','), true)
+          apiToolsMultiAddressBalance(_addr.join(','), true)
           .then((res) => {
             if (res.msg === 'success') {
               if (!res.result.length) {

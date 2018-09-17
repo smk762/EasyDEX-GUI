@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import devlog from '../../../util/devlog';
@@ -147,14 +147,14 @@ class ToolsSplitUTXO extends React.Component {
     devlog(payload);
     devlog(largestUTXO);
 
-    shepherdElectrumSplitUtxoPromise(payload)
+    apiElectrumSplitUtxoPromise(payload)
     .then((res) => {
       devlog(res);
 
       if (res.msg === 'success') {
         const _coin = this.state.utxoSplitCoin.split('|');
 
-        shepherdCliPromise(
+        apiCliPromise(
           null,
           _coin[0],
           'sendrawtransaction',
@@ -199,14 +199,14 @@ class ToolsSplitUTXO extends React.Component {
   getUtxoSplit() {
     const _coin = this.state.utxoSplitCoin.split('|');
 
-    shepherdToolsSeedToWif(
+    apiToolsSeedToWif(
       this.state.utxoSplitSeed,
       'KMD',
       true
     )
     .then((seed2kpRes) => {
       if (seed2kpRes.msg === 'success') {
-        shepherdCliPromise(
+        apiCliPromise(
           null,
           _coin[0],
           'listunspent'

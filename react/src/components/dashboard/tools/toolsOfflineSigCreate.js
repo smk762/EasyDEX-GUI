@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import QRCode from 'qrcode.react';
@@ -43,7 +43,7 @@ class ToolsOfflineSigCreate extends React.Component {
   getBalance() {
     const _coin = this.state.selectedCoin.split('|');
 
-    shepherdToolsBalance(_coin[0], this.state.sendFrom)
+    apiToolsBalance(_coin[0], this.state.sendFrom)
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -64,7 +64,7 @@ class ToolsOfflineSigCreate extends React.Component {
   getUnsignedTx() {
     const _coin = this.state.selectedCoin.split('|');
 
-    shepherdToolsBuildUnsigned(
+    apiToolsBuildUnsigned(
       _coin[0],
       toSats(this.state.amount),
       this.state.sendTo,

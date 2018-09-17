@@ -2,9 +2,9 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import { connect } from 'react-redux';
 import {
-  shepherdElectrumCheckServerConnection,
-  shepherdElectrumSetServer,
-  shepherdElectrumCoins,
+  apiElectrumCheckServerConnection,
+  apiElectrumSetServer,
+  apiElectrumCoins,
   electrumServerChanged,
   triggerToaster,
 } from '../../../actions/actionCreators';
@@ -37,10 +37,10 @@ class SPVServersPanel extends React.Component {
       _server = this.state[coin].split(':');
     }
 
-    shepherdElectrumCheckServerConnection(_server[0], _server[1], _server[2])
+    apiElectrumCheckServerConnection(_server[0], _server[1], _server[2])
     .then((res) => {
       if (res.result) {
-        shepherdElectrumSetServer(coin, _server[0], _server[1], _server[2])
+        apiElectrumSetServer(coin, _server[0], _server[1], _server[2])
         .then((serverSetRes) => {
           Store.dispatch(
             triggerToaster(
@@ -50,7 +50,7 @@ class SPVServersPanel extends React.Component {
             )
           );
           Store.dispatch(electrumServerChanged(true));
-          Store.dispatch(shepherdElectrumCoins());
+          Store.dispatch(apiElectrumCoins());
         });
       } else {
         Store.dispatch(
