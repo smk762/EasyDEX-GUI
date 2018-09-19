@@ -635,3 +635,32 @@ export const apiElectrumSweep = (coin, value, sendToAddress, changeAddress, push
     });
   });
 }
+
+export const apiElectrumPushTx = (coin, rawtx) => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/pushtx`,
+      fetchType(
+        JSON.stringify({
+          network: coin,
+          rawtx,
+          token,
+        })
+      ).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.apiElectrumPushTx') + ' (code: apiElectrumPushTx)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}

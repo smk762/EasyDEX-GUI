@@ -166,6 +166,7 @@ const LANG_EN = {
     'downloadZCashParamsPromise': 'Unable to fetch Zcash params',
     'decryptKey': 'Unable to decrypt data',
     'authError': 'Unable to get auth data',
+    'apiElectrumPushTx': 'Unable to push transaction',
   },
   NN_ELECTIONS: {
     WRONG_ADDR_FORMAT: 'Wrong address format',

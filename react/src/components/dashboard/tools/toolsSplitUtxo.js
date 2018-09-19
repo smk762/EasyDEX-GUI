@@ -38,6 +38,8 @@ class ToolsSplitUTXO extends React.Component {
       utxoSplitPushResult: null,
       utxoSplitShowUtxoList: false,
       splitUtxoApproximateVal: null,
+      isNative: false,
+      singleModeOnly: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
@@ -45,6 +47,14 @@ class ToolsSplitUTXO extends React.Component {
     this.splitUtxo = this.splitUtxo.bind(this);
     this.toggleSplitUtxoList = this.toggleSplitUtxoList.bind(this);
     this.splitUtxoApproximate = this.splitUtxoApproximate.bind(this);
+    this.toggleIsNative = this.toggleIsNative.bind(this);
+    this._getUtxoSplit = this._getUtxoSplit.bind(this);
+  }
+
+  toggleIsNative() {
+    this.setState({
+      isNative: !this.state.isNative,
+    });
   }
 
   toggleSplitUtxoList() {
@@ -196,21 +206,50 @@ class ToolsSplitUTXO extends React.Component {
     });
   }
 
+  _getUtxoSplit(coin, pub) {
+    return new Promise((resolve, reject) => {
+      if (this.state.isNative) {
+        console.warn('utxo split native');
+        apiCliPromise(
+          null,
+          coin,
+          'listunspent'
+        )
+        .then((res) => {
+          resolve(res);
+        });
+      } else {
+        console.warn('utxo split spv');
+        apiElectrumListunspent(
+          coin,
+          pub
+        )
+        .then((res) => {
+          resolve(res);
+        });
+      }
+    });
+  }
+
   getUtxoSplit() {
     const _coin = this.state.utxoSplitCoin.split('|');
 
     apiToolsSeedToWif(
       this.state.utxoSplitSeed,
-      'KMD',
+      _coin[0],
       true
     )
     .then((seed2kpRes) => {
       if (seed2kpRes.msg === 'success') {
-        apiCliPromise(
+        this._getUtxoSplit(
+          _coin[0],
+          seed2kpRes.result.keys.pub
+        )
+        /*apiCliPromise(
           null,
           _coin[0],
           'listunspent'
-        )
+        )*/
         .then((res) => {
           // devlog(res);
 
@@ -289,9 +328,25 @@ class ToolsSplitUTXO extends React.Component {
     if (e &&
         e.value &&
         e.value.indexOf('|')) {
-      this.setState({
-        [propName]: e.value,
-      });
+      const _val = e.value;
+      const _newState = {
+        [propName]: _val,
+      };
+
+      console.warn(_val);
+
+      if (_val.indexOf('|spv|native') > -1) {
+        _newState.singleModeOnly = false;
+        _newState.isNative = true;
+      } else if (_val.indexOf('|spv') > -1) {
+        _newState.singleModeOnly = true;
+        _newState.isNative = false;
+      } else {
+        _newState.singleModeOnly = true;
+        _newState.isNative = true;
+      }
+
+      this.setState(_newState);
     }
   }
 
@@ -369,11 +424,27 @@ class ToolsSplitUTXO extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'utxoSplitCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ [{
-              label: 'Komodo (KMD)',
-              icon: 'KMD',
-              value: `KMD|native`,
-            }].concat(addCoinOptionsAC('skip')) } />
+            options={
+              addCoinOptionsCrypto('skip')
+              .concat(addCoinOptionsAC('skip'))
+            } />
+        </div>
+        <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-50">
+          <span disabled={ this.state.singleModeOnly }>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={ this.state.isNative } />
+              <div
+                className="slider"
+                onClick={ this.toggleIsNative }></div>
+            </label>
+            <div
+              className="toggle-label margin-right-15 pointer"
+              onClick={ this.toggleIsNative }>
+              { translate('LOGIN.NATIVE_MODE_DESC_P2') }
+            </div>
+          </span>
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
