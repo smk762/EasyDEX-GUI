@@ -421,11 +421,10 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
-    const payload = {
+    let payload = {
       token,
       coin,
       value,
-      customFee,
       address: changeAddress,
       change: changeAddress,
       opreturn,
@@ -433,17 +432,21 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
       verify: true,
       push: false,
     };
-    const _urlParams = {
+    let _urlParams = {
       token,
       coin,
       value,
-      customFee,
       address: sendToAddress,
       change: changeAddress,
       gui: true,
       verify: true,
       push: false,
     };
+
+    if (customFee) {
+      payload.customFee = customFee;
+      _urlParams.customFee = customFee;
+    }
 
     fetch(
       isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
