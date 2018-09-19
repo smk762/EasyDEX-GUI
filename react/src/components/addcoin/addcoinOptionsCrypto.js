@@ -1,10 +1,8 @@
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import config from '../../config';
-import {
-  cryptoCoins,
-  sortObject,
-} from '../../util/coinHelper';
+import { cryptoCoins } from '../../util/coinHelper';
+import { sortObject } from 'agama-wallet-lib/src/utils';
 
 let _prepCoinsList;
 let coins = cryptoCoins;

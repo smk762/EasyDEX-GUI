@@ -2,7 +2,7 @@ import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
-import { sortObject } from '../../util/coinHelper';
+import { sortObject } from 'agama-wallet-lib/src/utils';
 
 const _disabledAC = {
   spv: [
@@ -15,7 +15,7 @@ const _disabledAC = {
     'pirate',
   ],
   native: [
-    'vrsc',    
+    'vrsc',
   ],
   all: [
     'mvp',
@@ -44,7 +44,7 @@ const addCoinOptionsAC = (activeCoins) => {
 
   for (let i = 0; i < _assetChains.length; i++) {
     let availableModes;
-    
+
     if (_disabledAC.spv.indexOf(_assetChains[i].toLowerCase()) === -1) {
       availableModes = 'spv|native';
     } else {
