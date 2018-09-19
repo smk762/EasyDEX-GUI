@@ -13,6 +13,7 @@ import {
   apiElectrumListunspent,
   apiCliPromise,
   apiElectrumSplitUtxoPromise,
+  apiElectrumPushTx,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import devlog from '../../../util/devlog';
@@ -49,6 +50,7 @@ class ToolsSplitUTXO extends React.Component {
     this.splitUtxoApproximate = this.splitUtxoApproximate.bind(this);
     this.toggleIsNative = this.toggleIsNative.bind(this);
     this._getUtxoSplit = this._getUtxoSplit.bind(this);
+    this._splitUtxo = this._splitUtxo.bind(this);
   }
 
   toggleIsNative() {
@@ -103,6 +105,30 @@ class ToolsSplitUTXO extends React.Component {
 
     this.setState({
       splitUtxoApproximateVal: largestUTXO.amount - totalOutSize > 0 ? totalOutSize : translate('TOOLS.UTXO_SPLIT_NOOP'),
+    });
+  }
+
+  _splitUtxo(coin, rawtx) {
+    return new Promise((resolve, reject) => {
+      if (this.state.isNative) {
+        apiCliPromise(
+          null,
+          coin,
+          'sendrawtransaction',
+          [rawtx]
+        )
+        .then((res) => {
+          resolve(res);
+        });
+      } else {
+        apiElectrumPushTx(
+          coin,
+          rawtx
+        )
+        .then((res) => {
+          resolve(res);
+        });
+      }
     });
   }
 
@@ -164,11 +190,9 @@ class ToolsSplitUTXO extends React.Component {
       if (res.msg === 'success') {
         const _coin = this.state.utxoSplitCoin.split('|');
 
-        apiCliPromise(
-          null,
+        this._splitUtxo(
           _coin[0],
-          'sendrawtransaction',
-          [res.result]
+          res.result
         )
         .then((res) => {
           devlog(res);
@@ -209,7 +233,6 @@ class ToolsSplitUTXO extends React.Component {
   _getUtxoSplit(coin, pub) {
     return new Promise((resolve, reject) => {
       if (this.state.isNative) {
-        console.warn('utxo split native');
         apiCliPromise(
           null,
           coin,
@@ -219,7 +242,6 @@ class ToolsSplitUTXO extends React.Component {
           resolve(res);
         });
       } else {
-        console.warn('utxo split spv');
         apiElectrumListunspent(
           coin,
           pub
@@ -245,11 +267,6 @@ class ToolsSplitUTXO extends React.Component {
           _coin[0],
           seed2kpRes.result.keys.pub
         )
-        /*apiCliPromise(
-          null,
-          _coin[0],
-          'listunspent'
-        )*/
         .then((res) => {
           // devlog(res);
 
