@@ -91,19 +91,26 @@ class AddressBookPanel extends React.Component {
       title: this.state.title,
     };
 
+    let _validationMsg;
     const _validateAddress = mainWindow.addressVersionCheck(this.state.coin, this.state.address);
-    let _msg;
 
     if (_validateAddress === 'Invalid pub address') {
-      _msg = _validateAddress;
+      _validationMsg = _validateAddress;
     } else if (!_validateAddress) {
-      _msg = `${this.state.address} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P1')} ${this.state.coin} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P2')}`;
+      _validationMsg = `${this.state.address} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P1')} ${this.state.coin} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P2')}`;
     }
 
-    if (_msg) {
+    // allow zc addresses
+    if (this.state.coin === 'KMD' &&
+        this.state.address.substring(0, 2) === 'zc' &&
+        this.state.address.length === 95) {
+      _validationMsg = null;
+    }
+
+    if (_validationMsg) {
       Store.dispatch(
         triggerToaster(
-          _msg,
+          _validationMsg,
           translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
@@ -218,7 +225,7 @@ class AddressBookPanel extends React.Component {
                 onClick={ () => this.triggerAction(key, 'delete') }
                 className="icon fa-trash"></i>
             </td>
-            <td className="seletable">{ key }</td>
+            <td className="seletable word-break--all">{ key }</td>
             <td>{ translate('CRYPTO.' + _addressBookItems[key].coin) + (_addressBookItems[key].coin.toLowerCase() === 'kmd' ? ' (Chips/Assetchains)' : '') }</td>
             <td className="seletable">{ _addressBookItems[key].title }</td>
           </tr>
@@ -229,7 +236,7 @@ class AddressBookPanel extends React.Component {
             { this.state.action.type === 'delete' &&
               <td colSpan="4">
                 <div className="margin-bottom-10 margin-top-10">
-                  { translate('SETTINGS.ENTRY_REMOVE_CONFIRM', key) }
+                  <span className="word-break--all">{ translate('SETTINGS.ENTRY_REMOVE_CONFIRM', key) }</span>
                   <i
                     onClick={ () => this.confirmAction(key, 'delete') }
                     className="icon fa-check margin-left-20 margin-right-20"></i>
