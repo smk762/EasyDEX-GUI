@@ -40,13 +40,23 @@ export const encryptPassphrase = (string, key, suppressToastr, customPinName) =>
     .then(response => response.json())
     .then(json => {
       if (!suppressToastr) {
-        Store.dispatch(
-          triggerToaster(
-            translate('INDEX.PASSPHRASE_SUCCESSFULLY_ENCRYPTED'),
-            translate('KMD_NATIVE.SUCCESS'),
-            'success'
-          )
-        );
+        if (json.msg === 'success') {
+          Store.dispatch(
+            triggerToaster(
+              translate('INDEX.PASSPHRASE_SUCCESSFULLY_ENCRYPTED'),
+              translate('KMD_NATIVE.SUCCESS'),
+              'success'
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              json.result,
+              translate('TOASTR.ERROR'),
+              'error'
+            )
+          );
+        }
       }
       resolve(json);
     });
