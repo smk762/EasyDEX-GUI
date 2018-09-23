@@ -1408,6 +1408,9 @@ const LANG_EN = {
     TRY: 'Turkish Lira (TRY)',
     USD: 'US Dollar (USD)',
   },
+  DICE: {
+    DICE: 'Dice',
+  },
 };
 
 export default LANG_EN;

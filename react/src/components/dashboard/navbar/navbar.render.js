@@ -82,6 +82,19 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
+            { Config.experimentalFeatures &&
+              this.props.ActiveCoin &&
+              this.props.ActiveCoin.mode === 'native' &&
+              <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
+                <a onClick={ () => this.dashboardChangeSection('dice') }>
+                  <img
+                    src="assets/images/dice.png"
+                    width="50"
+                    title={ translate('DICE.DICE') } />
+                  { translate('DICE.DICE') }
+                </a>
+              </li>
+            }
             { !navigator.onLine &&
               <li
                 className="nav-top-menu offline"
