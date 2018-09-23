@@ -125,7 +125,8 @@ export const ImportKeyModalRender = function() {
                     <label className="switch">
                       <input
                         type="checkbox"
-                        checked={ this.state.importWithRescan } />
+                        checked={ this.state.importWithRescan }
+                        readOnly />
                       <div
                         className="slider"
                         onClick={ this.toggleImportWithRescan }></div>
@@ -148,7 +149,8 @@ export const ImportKeyModalRender = function() {
                     <label className="switch">
                       <input
                         type="checkbox"
-                        checked={ this.state.importMulti } />
+                        checked={ this.state.importMulti }
+                        readOnly />
                       <div
                         className="slider"
                         onClick={ this.toggleImportMulti }></div>
