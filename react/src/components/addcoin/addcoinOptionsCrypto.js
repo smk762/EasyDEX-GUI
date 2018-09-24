@@ -48,7 +48,9 @@ const prepCoinsList = (filterActiveCoins) => {
     }
   } else {
     for (let i = 0; i < coins.length; i++) {
-      if (mainWindow.electrumServers[coins[i].toLowerCase()] &&
+      if (mainWindow &&
+          mainWindow.electrumServers &&
+          mainWindow.electrumServers[coins[i].toLowerCase()] &&
           (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
            _activeCoins &&
            _activeCoins.spv &&
