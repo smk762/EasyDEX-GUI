@@ -294,6 +294,19 @@ export const WalletsDataRender = function() {
                           onClick={ this.openClaimInterestModal }>
                           <i className="icon fa-dollar"></i> { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P3') }
                         </button>
+                        { this.props.ActiveCoin &&
+                          this.props.ActiveCoin.balance &&
+                          this.props.ActiveCoin.balance.utxoIssues &&
+                          <span>
+                            <i
+                              data-tip={ translate('DASHBOARD.KMD_UTXO_ISSUES') }
+                              data-html={ true }
+                              className="fa-exclamation-circle red dashboard-utxo-issues-icon"></i>
+                            <ReactTooltip
+                            effect="solid"
+                            className="text-left" />
+                          </span>
+                        }
                       </div>
                     }
                     { this.displayClaimInterestUI() === -777 &&

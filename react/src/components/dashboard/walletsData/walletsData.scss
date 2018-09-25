@@ -189,3 +189,17 @@
     }
   }
 }
+
+.dashboard-utxo-issues-icon {
+  position: absolute;
+  top: -5px;
+  margin-left: -11px;
+  font-size: 24px;
+  z-index: 10;
+
+  &:before {
+    color: #f96868;
+    background: #fff;
+    border-radius: 50%;  
+  }
+}

@@ -113,7 +113,10 @@ class WalletsData extends React.Component {
     });
 
     if (this.props.ActiveCoin.mode === 'spv') {
-      apiElectrumTransactionsCSV(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub)
+      apiElectrumTransactionsCSV(
+        this.props.ActiveCoin.coin,
+        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+      )
       .then((res) => {
         this.setState({
           generatingCSV: false,
@@ -206,7 +209,7 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.balance) {
       if (this.props.ActiveCoin.balance.interest &&
           this.props.ActiveCoin.balance.interest > 0) {
-        return this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 : 777;
+        return /*this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 :*/ 777;
       } else if (
         (this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) ||
         (this.props.ActiveCoin.balance.balance && this.props.ActiveCoin.balance.balance >= 10)
