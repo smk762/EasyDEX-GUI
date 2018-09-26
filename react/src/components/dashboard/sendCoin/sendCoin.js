@@ -467,7 +467,7 @@ class SendCoin extends React.Component {
     } else if (opid.status === 'failed') {
       isWaitingStatus = false;
       return (
-        <span>
+        <span className="selectable">
           <strong>{ translate('SEND.ERROR_CODE') }:</strong> <span>{ opid.error.code }</span>
           <br />
           <strong>{ translate('KMD_NATIVE.MESSAGE') }:</strong> <span>{ opid.error.message }</span>
@@ -476,7 +476,7 @@ class SendCoin extends React.Component {
     } else if (opid.status === 'success') {
       isWaitingStatus = false;
       return (
-        <span>
+        <span className="selectable">
           <strong>{ translate('KMD_NATIVE.TXID') }:</strong> <span>{ opid.result.txid }</span>
           <br />
           <strong>{ translate('KMD_NATIVE.EXECUTION_SECONDS') }:</strong> <span>{ opid.execution_secs }</span>
@@ -497,8 +497,8 @@ class SendCoin extends React.Component {
       return this.props.ActiveCoin.opids.map((opid) =>
         <tr key={ opid.id }>
           <td>{ this.renderOPIDLabel(opid) }</td>
-          <td>{ opid.id }</td>
-          <td>{ secondsToString(opid.creation_time) }</td>
+          <td className="selectable">{ opid.id }</td>
+          <td className="selectable">{ secondsToString(opid.creation_time) }</td>
           <td>{ this.renderOPIDResult(opid) }</td>
         </tr>
       );
