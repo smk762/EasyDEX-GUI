@@ -209,7 +209,7 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.balance) {
       if (this.props.ActiveCoin.balance.interest &&
           this.props.ActiveCoin.balance.interest > 0) {
-        return /*this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 :*/ 777;
+        return this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 : 777;
       } else if (
         (this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) ||
         (this.props.ActiveCoin.balance.balance && this.props.ActiveCoin.balance.balance >= 10)

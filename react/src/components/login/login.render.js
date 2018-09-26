@@ -432,7 +432,9 @@ const LoginRender = function() {
                   <div className="seed-encrypt-block">
                     <div className="form-group form-material floating text-left">
                       <div className="toggle-box vertical-padding-20">
-                        <span className="pointer">
+                        <span
+                          className="pointer"
+                          disabled>
                           <label className="switch">
                             <input
                               type="checkbox"
