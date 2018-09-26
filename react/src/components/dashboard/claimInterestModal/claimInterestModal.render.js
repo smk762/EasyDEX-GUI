@@ -81,7 +81,8 @@ export const _ClaimInterestTableRender = function() {
               <label className="switch">
                 <input
                   type="checkbox"
-                  checked={ this.state.showZeroInterest } />
+                  checked={ this.state.showZeroInterest }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleZeroInterest }></div>
