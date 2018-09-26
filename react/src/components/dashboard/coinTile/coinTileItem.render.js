@@ -129,6 +129,7 @@ const CoinTileItemRender = function() {
           <i
             onClick={ this.openCoindDownModal }
             data-tip={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
+            data-html={ true }
             className="icon fa-warning icon-native-connection-warning"></i>
           <ReactTooltip
             effect="solid"
