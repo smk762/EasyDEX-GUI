@@ -108,7 +108,7 @@ export const _SendFormRender = function() {
               onChange={ this.updateInput }
               value={ this.state.sendTo }
               id="kmdWalletSendTo"
-              placeholder={ this.props.ActiveCoin.mode === 'spv' ? translate('SEND.ENTER_ADDRESS') : translate('SEND.ENTER_T_OR_Z_ADDR') }
+              placeholder={  translate('SEND.' + (this.props.ActiveCoin.mode === 'spv' ? 'ENTER_ADDRESS' : 'SEND.ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>
@@ -143,7 +143,8 @@ export const _SendFormRender = function() {
                 <label className="switch">
                   <input
                     type="checkbox"
-                    checked={ this.state.subtractFee } />
+                    checked={ this.state.subtractFee }
+                    readOnly />
                   <div
                     className="slider"
                     onClick={ () => this.toggleSubtractFee() }></div>
