@@ -83,6 +83,7 @@ const NavbarRender = function() {
               </li>
             }
             { Config.experimentalFeatures &&
+              Config.dev &&
               this.props.ActiveCoin &&
               this.props.ActiveCoin.mode === 'native' &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
