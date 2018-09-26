@@ -108,7 +108,7 @@ class ExportKeysPanel extends React.Component {
         items.push(
           <tr key={ _key }>
             <td className="padding-bottom-30">
-              <strong className="padding-right-20">{ _key }</strong>
+              <strong className="padding-right-20">{ _key.toUpperCase() }</strong>
               <span className="selectable">{ _wifKeys[_key].pub }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
@@ -272,10 +272,10 @@ class ExportKeysPanel extends React.Component {
         }
         { this.state.keys &&
           <div className="row">
-            <div className="col-sm-12 padding-top-15">
+            <div className="col-sm-12 padding-top-15 overflow-x">
               <table className="table no-borders">
                 <tbody>
-                  <tr key={ `wif-export-table-header-pub` }>
+                  <tr key="wif-export-table-header-pub">
                     <td className="padding-bottom-20 padding-top-20">
                       <strong>{ translate('SETTINGS.ADDRESS_LIST') }</strong>
                     </td>
