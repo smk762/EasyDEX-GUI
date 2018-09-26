@@ -49,6 +49,10 @@ const LANG_EN = {
     KEYS_SEPARATED_BY_LINE: 'Keys, separated by a new line',
   },
   CLAIM_INTEREST: {
+    MONTHLY_CLAIMING_TIP: 'To maximize your rewards claim them once a month.',
+    NEED_TO_CLAIM: 'need to claim',
+    TIME_SINCE_LOCKTIME: 'Time passed since locktime',
+    TIME_TILL_REWARDS_STOP: 'Time until rewards stop accruing',
     SHOW_ZERO_INTEREST: 'Show zero rewards',
     REQ_P1: 'Requirements to accrue rewards',
     REQ_P2: 'spend transaction was made at least 1 hour ago, locktime field is set and amount is greater than',

@@ -152,6 +152,10 @@ class ClaimInterestModal extends React.Component {
               locktime: json[i].locktime,
               amount: Number(json[i].amount.toFixed(8)),
               interest: Number(json[i].interest.toFixed(8)),
+              timeElapsedFromLocktime: json[i].timeElapsedFromLocktime,
+              timeElapsedFromLocktimeInSeconds: json[i].timeElapsedFromLocktimeInSeconds,
+              timeTill1MonthInterestStopsInSeconds: json[i].timeTill1MonthInterestStopsInSeconds,
+              interestRulesCheckPass: json[i].interestRulesCheckPass,
               txid: json[i].txid,
             });
             _totalInterest += Number(json[i].interest.toFixed(8));

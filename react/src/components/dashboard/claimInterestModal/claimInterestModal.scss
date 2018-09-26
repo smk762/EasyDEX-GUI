@@ -20,6 +20,7 @@
       overflow-y: auto;
       overflow-x: auto;
       width: 100%;
+      padding-bottom: 50px;
     }
     .bold {
       font-weight: bold;
@@ -50,5 +51,8 @@
   }
   .modal-body {
     overflow-y: hidden;    
+  }
+  .time {
+    min-width: 150px;
   }
 }
