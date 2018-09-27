@@ -303,7 +303,9 @@ class SendCoin extends React.Component {
   handleClickOutside(e) {
     let _state = {};
 
-    if (e.srcElement.className !== 'btn dropdown-toggle btn-info' &&
+    if (e.srcElement &&
+        e.srcElement.className &&
+        e.srcElement.className !== 'btn dropdown-toggle btn-info' &&
         (e.srcElement.offsetParent && e.srcElement.offsetParent.className !== 'btn dropdown-toggle btn-info') &&
         (e.path && e.path[4] && e.path[4].className.indexOf('showkmdwalletaddrs') === -1)) {
       _state.addressSelectorOpen = false;
