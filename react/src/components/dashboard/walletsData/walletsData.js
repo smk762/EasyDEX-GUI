@@ -286,7 +286,7 @@ class WalletsData extends React.Component {
       id: 'timestamp',
       Header: translate('INDEX.TIME'),
       Footer: translate('INDEX.TIME'),
-      Cell: row => this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private && !row.value ? translate('DASHBOARD.NA') : secondsToString(row.value),
+      Cell: row => this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private && !row.value ? translate('DASHBOARD.NA') : secondsToString(row.value),
       accessor: (tx) => tx.timestamp || tx.time || tx.blocktime,
     }];
 

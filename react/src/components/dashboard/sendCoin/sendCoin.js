@@ -369,6 +369,7 @@ class SendCoin extends React.Component {
       _coinAddresses[type].map((address) => {
         if (type === 'private' &&
             mainWindow.chainParams &&
+            mainWindow.chainParams[this.props.ActiveCoin.coin] &&
             mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
             !this.state.sendFrom) {
           this.setState({
@@ -426,7 +427,7 @@ class SendCoin extends React.Component {
     } else {
       if (this.props.ActiveCoin.mode === 'spv' ||
           this.state.addressType === 'private' ||
-          (this.state.addressType === 'public' && mainWindow.chainParams && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) {
+          (this.state.addressType === 'public' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) {
         return (
           <span>
             { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }

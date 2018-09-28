@@ -13,6 +13,7 @@ const WalletsBalanceRender = function() {
       { this.renderBalance('transparent') !== -777 &&
         <div className="col-xs-12 flex">
           { mainWindow.chainParams &&
+            mainWindow.chainParams[this.props.ActiveCoin.coin] &&
             !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
             <div className={
               this.props.ActiveCoin.coin === 'CHIPS' ||
@@ -70,7 +71,7 @@ const WalletsBalanceRender = function() {
             </div>
           }
 
-          <div className={ ((this.props.ActiveCoin.mode === 'native' && Number(this.renderBalance('private'))) > 0 || mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) ? 'col-lg-3 col-xs-12' : 'hide' }>
+          <div className={ ((this.props.ActiveCoin.mode === 'native' && Number(this.renderBalance('private'))) > 0 || mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) ? 'col-lg-3 col-xs-12' : 'hide' }>
             <div className="widget widget-shadow">
               <div className="padding-20 padding-top-10">
                 <div className="clearfix cursor-default">
@@ -115,6 +116,7 @@ const WalletsBalanceRender = function() {
           </div>
 
           { mainWindow.chainParams &&
+            mainWindow.chainParams[this.props.ActiveCoin.coin] &&
             !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
             <div className={
               this.props.ActiveCoin.coin === 'CHIPS' ||

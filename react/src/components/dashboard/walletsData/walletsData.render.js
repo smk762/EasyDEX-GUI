@@ -23,6 +23,7 @@ export const TxConfsRender = function(confs) {
   } else if (
     this.props.ActiveCoin.mode === 'native' &&
     mainWindow.chainParams &&
+    mainWindow.chainParams[this.props.ActiveCoin.coin] &&
     mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) {
     return (
       <span>{ translate('DASHBOARD.NA') }</span>
