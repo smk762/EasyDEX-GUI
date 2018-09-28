@@ -35,19 +35,25 @@ export const AddressListRender = function() {
       </button>
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
-          <li
-            className="selected"
-            onClick={ () => this.updateAddressSelection(null, 'public', null) }>
-            <a>
-              <span className="text">
-                { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
-              </span>
-              <span
-                className="glyphicon glyphicon-ok check-mark pull-right"
-                style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
-            </a>
-          </li>
-          { this.renderAddressByType('public') }
+          { (this.props.ActiveCoin.mode === 'spv' ||
+            (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+            <li
+              className="selected"
+              onClick={ () => this.updateAddressSelection(null, 'public', null) }>
+              <a>
+                <span className="text">
+                  { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
+                </span>
+                <span
+                  className="glyphicon glyphicon-ok check-mark pull-right"
+                  style={{ display: this.state.sendFrom === null ? 'inline-block' : 'none' }}></span>
+              </a>
+            </li>
+          }
+          { (this.props.ActiveCoin.mode === 'spv' ||
+             (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+            this.renderAddressByType('public')
+          }
           { this.renderAddressByType('private') }
         </ul>
       </div>
@@ -108,7 +114,7 @@ export const _SendFormRender = function() {
               onChange={ this.updateInput }
               value={ this.state.sendTo }
               id="kmdWalletSendTo"
-              placeholder={  translate('SEND.' + (this.props.ActiveCoin.mode === 'spv' ? 'ENTER_ADDRESS' : 'SEND.ENTER_T_OR_Z_ADDR')) }
+              placeholder={ translate('SEND.' + (this.props.ActiveCoin.mode === 'spv' ? 'ENTER_ADDRESS' : 'ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>

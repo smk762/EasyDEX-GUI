@@ -14,6 +14,7 @@ import {
   apiGetRemoteTimestamp,
   copyString,
   loginWithPin,
+  addCoin,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -366,6 +367,16 @@ class SendCoin extends React.Component {
         _coinAddresses[type] &&
         _coinAddresses[type].length) {
       _coinAddresses[type].map((address) => {
+        if (type === 'private' &&
+            mainWindow.chainParams &&
+            mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
+            !this.state.sendFrom) {
+          this.setState({
+            sendFrom: address.address,
+            sendFromAmount: address.amount,
+          });
+        }        
+
         if (address.amount > 0 &&
             (type !== 'public' || (address.canspend && type === 'public'))) {
           _items.push(
@@ -413,11 +424,15 @@ class SendCoin extends React.Component {
         </span>
       );
     } else {
-      return (
-        <span>
-          { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
-        </span>
-      );
+      if (this.props.ActiveCoin.mode === 'spv' ||
+          this.state.addressType === 'private' ||
+          (this.state.addressType === 'public' && mainWindow.chainParams && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) {
+        return (
+          <span>
+            { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
+          </span>
+        );
+      }
     }
   }
 

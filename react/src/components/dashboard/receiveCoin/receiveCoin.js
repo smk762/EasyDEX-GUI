@@ -16,6 +16,7 @@ import {
   _ReceiveCoinTableRender,
 } from './receiveCoin.render';
 import translate from '../../../translate/translate';
+import mainWindow from '../../../util/mainWindow';
 
 // TODO: implement balance/interest sorting
 
@@ -189,9 +190,14 @@ class ReceiveCoin extends React.Component {
             items.pop();
           }
         } else {
-          items.push(
-            AddressItemRender.call(this, address, type)
-          );
+          if (type === 'private' ||
+              (type === 'public' &&
+              mainWindow.chainParams &&
+              !mainWindow.chainParams[this.props.coin].ac_private)) {
+            items.push(
+              AddressItemRender.call(this, address, type)
+            );
+          }
 
           if (!this.state.toggleIsMine &&
             !address.canspend &&
@@ -203,7 +209,8 @@ class ReceiveCoin extends React.Component {
 
       return items;
     } else {
-      if (this.props.electrumCoins && this.props.mode === 'spv' &&
+      if (this.props.electrumCoins &&
+          this.props.mode === 'spv' &&
           type === 'public') {
         let items = [];
 

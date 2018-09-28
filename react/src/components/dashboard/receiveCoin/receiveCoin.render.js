@@ -3,6 +3,7 @@ import translate from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import InvoiceModal from '../invoiceModal/invoiceModal';
 import ReactTooltip from 'react-tooltip';
+import mainWindow from '../../../util/mainWindow';
 
 export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
@@ -191,16 +192,21 @@ export const ReceiveCoinRender = function() {
                             <span className="caret"></span>
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
-                            <li>
-                              <a onClick={ () => this.getNewAddress('public') }>
-                                <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
-                              </a>
-                            </li>
-                            <li className={ this.props.coin === 'CHIPS' ? 'hide' : '' }>
-                              <a onClick={ () => this.getNewAddress('private') }>
-                                <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
-                              </a>
-                            </li>
+                           { mainWindow.chainParams &&
+                             !mainWindow.chainParams[this.props.coin].ac_private &&
+                              <li>
+                                <a onClick={ () => this.getNewAddress('public') }>
+                                  <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
+                                </a>
+                              </li>
+                            }
+                            { this.props.coin !== 'CHIPS' &&
+                              <li>
+                                <a onClick={ () => this.getNewAddress('private') }>
+                                  <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
+                                </a>
+                              </li>
+                            }
                           </ul>
                         </div>
                       }
