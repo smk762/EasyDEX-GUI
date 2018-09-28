@@ -67,7 +67,7 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
     };
   } else {
     let _listtransactions = json.result.listtransactions;
-
+    
     if (_listtransactions &&
         _listtransactions.error) {
       _listtransactions = null;
@@ -112,6 +112,26 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
         }
       }
 
+      let zlistreceivedbyaddressHistory = [];      
+      if (_addresses &&
+          _addresses.private &&
+          _addresses.private.length) {
+        for (let i = 0; i < _addresses.private.length; i++) {
+          if (_addresses.private[i].txs &&
+              _addresses.private[i].txs.length) {
+            for (let a = 0; a < _addresses.private[i].txs.length; a++) {
+              zlistreceivedbyaddressHistory.push({
+                txid: _addresses.private[i].txs[a].txid,
+                amount: _addresses.private[i].txs[a].amount,
+                address: _addresses.private[i].address,
+                type: 'received',
+                ztx: true,
+              });   
+            }
+          }
+        }
+      }
+
       json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
       json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
       json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);
@@ -120,7 +140,7 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
         type: DASHBOARD_UPDATE,
         progress: json.result.getinfo.result,
         opids: json.result.z_getoperationstatus.result,
-        txhistory: _listtransactions,
+        txhistory: zlistreceivedbyaddressHistory.length ? (_listtransactions !== 'loading' && _listtransactions !== 'no data' ? _listtransactions.concat(zlistreceivedbyaddressHistory) : zlistreceivedbyaddressHistory) : _listtransactions,
         balance: json.result.z_gettotalbalance.result,
         addresses: json.result.addresses,
         coin,

@@ -286,7 +286,7 @@ class WalletsData extends React.Component {
       id: 'timestamp',
       Header: translate('INDEX.TIME'),
       Footer: translate('INDEX.TIME'),
-      Cell: row => secondsToString(row.value),
+      Cell: row => this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private && !row.value ? translate('DASHBOARD.NA') : secondsToString(row.value),
       accessor: (tx) => tx.timestamp || tx.time || tx.blocktime,
     }];
 
@@ -631,11 +631,13 @@ class WalletsData extends React.Component {
         <DoubleScrollbar>
           { TxHistoryListRender.call(this) }
           { !this.state.kvView &&
+            (this.props.ActiveCoin.mode === 'spv' ||
+             (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
             <div className="margin-left-5 margin-top-30">
               <span
                 className="pointer"
                 onClick={ this.exportToCSV }>
-                <i className="icon fa-file-excel-o margin-right-10"></i>{ this.state.generatingCSV ? translate('INDEX.GENERATING_CSV') + '...' : translate('INDEX.EXPORT_TO_CSV') }
+                <i className="icon fa-file-excel-o margin-right-10"></i>{ translate('INDEX.' + (this.state.generatingCSV ? 'GENERATING_CSV' + '...' : 'EXPORT_TO_CSV')) }
               </span>
             </div>
           }

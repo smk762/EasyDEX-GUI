@@ -621,6 +621,7 @@ const LANG_EN = {
     DISPLAY_ALL_ADDR: 'Display all addresses including not mine (ismine:false)',
   },
   DASHBOARD: {
+    NA: 'N/A',
     KMD_UTXO_ISSUES: 'One or several of your UTXO are not generating rewards.<br>This could happen either if locktime field is not set or last time you claimed was over a month ago.<br>Please click on "Claim now" button to see details.',    
     SHOW_ALL_ADDR: 'Show all addresses',
     RPC_CONN_FAILURE: 'Unable to establish RPC connection!<br>Retries count',
