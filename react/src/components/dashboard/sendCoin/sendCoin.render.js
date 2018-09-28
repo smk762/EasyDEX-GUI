@@ -391,7 +391,7 @@ export const SendRender = function() {
                 <div className="col-xs-12">
                   <strong>{ translate('INDEX.TO') }</strong>
                 </div>
-                <div className="col-lg-6 col-sm-6 col-xs-12 overflow-hidden">{ this.state.sendTo }</div>
+                <div className="col-lg-6 col-sm-6 col-xs-12 word-break--all">{ this.state.sendTo }</div>
                 <div className="col-lg-6 col-sm-6 col-xs-6">
                   { this.state.amount } { this.props.ActiveCoin.coin }
                 </div>
@@ -405,7 +405,7 @@ export const SendRender = function() {
                   <div className="col-xs-12">
                     <strong>{ translate('INDEX.FROM') }</strong>
                   </div>
-                  <div className="col-lg-6 col-sm-6 col-xs-12 overflow-hidden">{ this.state.sendFrom }</div>
+                  <div className="col-lg-6 col-sm-6 col-xs-12 word-break--all">{ this.state.sendFrom }</div>
                   <div className="col-lg-6 col-sm-6 col-xs-6 confirm-currency-send-container">
                     { Number(this.state.amount) } { this.props.ActiveCoin.coin }
                   </div>
@@ -516,7 +516,7 @@ export const SendRender = function() {
               <h4 className="panel-title">
                 { translate('INDEX.TRANSACTION_RESULT') }
               </h4>
-              <div className="overflow-x">
+              <div>
                 { this.state.lastSendToResponse &&
                   !this.state.lastSendToResponse.msg &&
                   <table className="table table-hover table-striped">
@@ -541,7 +541,7 @@ export const SendRender = function() {
                           <td className="padding-left-30">
                           { translate('INDEX.SEND_FROM') }
                           </td>
-                          <td className="padding-left-30 selectable">
+                          <td className="padding-left-30 selectable word-break--all">
                             { this.props.ActiveCoin.mode === 'spv' ? this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub : this.state.sendFrom }
                           </td>
                         </tr>
@@ -550,7 +550,7 @@ export const SendRender = function() {
                         <td className="padding-left-30">
                         { translate('INDEX.SEND_TO') }
                         </td>
-                        <td className="padding-left-30 selectable">
+                        <td className="padding-left-30 selectable word-break--all">
                           { this.state.sendTo }
                         </td>
                       </tr>
