@@ -78,6 +78,10 @@
       box-shadow: inset 1px 1px 10px #ccc;
     }
   }
+  .coin-name {
+    word-break: break-word;
+    white-space: normal;
+  }
 }
 
 .page-aside-inner {
