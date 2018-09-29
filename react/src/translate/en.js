@@ -203,6 +203,7 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    Z_ADDR_ONLY: 'Z addresses only chain (ac_private=1).<br>Public addresses are not allowed.',
     TX_DETAILS: 'Transaction details',
     SELF_SM: 'self',
     DEFAULT: 'Default',
@@ -1151,7 +1152,7 @@ const LANG_EN = {
 	MGNX: 'MagnaX',
     CALL: 'Capital',
     CCL: 'CoinCollect',
-    PIRATE: 'Pirate (Z address only)',
+    PIRATE: 'Pirate',
   },
   CRYPTO: {
     STRAT: 'Stratis',

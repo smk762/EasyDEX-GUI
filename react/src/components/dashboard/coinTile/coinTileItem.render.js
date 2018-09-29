@@ -109,6 +109,19 @@ const CoinTileItemRender = function() {
           </ul>
         </div>
       }
+      { mainWindow.chainParams &&
+        mainWindow.chainParams[item.coin] &&
+        mainWindow.chainParams[item.coin].ac_private &&
+        <span>
+          <span
+            data-tip={ translate('INDEX.Z_ADDR_ONLY') }
+            data-html={ true }
+            className="icon ac-private custom-ac-icon">z</span>
+          <ReactTooltip
+            effect="solid"
+            className="text-left" />
+        </span> 
+      }
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&
         this.props.Dashboard.electrumCoins[item.coin] &&
