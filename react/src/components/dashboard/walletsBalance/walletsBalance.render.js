@@ -12,9 +12,11 @@ const WalletsBalanceRender = function() {
       className="wallet-widgets">
       { this.renderBalance('transparent') !== -777 &&
         <div className="col-xs-12 flex">
-          { mainWindow.chainParams &&
-            mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-            !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
+          { (this.props.ActiveCoin.mode === 'spv' ||
+             (this.props.ActiveCoin.mode === 'native' &&
+              mainWindow.chainParams &&
+              mainWindow.chainParams[this.props.ActiveCoin.coin] &&
+              !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
             <div className={
               this.props.ActiveCoin.coin === 'CHIPS' ||
               (this.props.ActiveCoin.mode === 'spv' && this.props.ActiveCoin.coin !== 'KMD') ||
@@ -115,9 +117,11 @@ const WalletsBalanceRender = function() {
             </div>
           </div>
 
-          { mainWindow.chainParams &&
-            mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-            !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
+          { (this.props.ActiveCoin.mode === 'spv' ||
+             (this.props.ActiveCoin.mode === 'native' &&
+              mainWindow.chainParams &&
+              mainWindow.chainParams[this.props.ActiveCoin.coin] &&
+              !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
             <div className={
               this.props.ActiveCoin.coin === 'CHIPS' ||
               (this.props.ActiveCoin.coin !== 'KMD' && this.props.ActiveCoin.mode === 'spv') ||
