@@ -33,7 +33,7 @@ class About extends React.Component {
 
           <div className="font-weight-600">{ translate('ABOUT.TESTERS') }</div>
           { translate('ABOUT.TESTERS_P1') } <a className="link" onClick={ () => this.openExternalWindow('https://komodoplatform.com/komodo-wallets') }>{ translate('ABOUT.TESTERS_P2') }</a>.&nbsp;
-          { translate('ABOUT.TESTERS_P3') } <a className="link" onClick={ () => this.openExternalWindow('https://sprnt.slack.com/messages/C0HT9MH96/') }>#testing-agama</a> Slack { translate('ABOUT.CHANNEL') }. <a className="link" onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>{ translate('ABOUT.GET_AN_INVITE') }</a> { translate('ABOUT.GET_AN_INVITE_P2') }.&nbsp;
+          { translate('ABOUT.TESTERS_P3') } <a className="link" onClick={ () => this.openExternalWindow('https://discordapp.com/channels/412898016371015680/453204571393622027') }>#agama-wallet</a> Discord { translate('ABOUT.CHANNEL') }. <a className="link" onClick={ () => this.openExternalWindow('https://komodoplatform.com/discord') }>{ translate('ABOUT.GET_AN_INVITE') }</a> { translate('ABOUT.GET_AN_INVITE_P2') }.&nbsp;
           { translate('ABOUT.TESTERS_P4') }
 
           <div className="padding-top-20">{ translate('ABOUT.AGAMA_DAPPS') }</div>

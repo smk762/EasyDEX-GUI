@@ -91,7 +91,7 @@ const LANG_EN = {
     BARTER_DEX_DESC_ALT: 'A decentralized coin exchange.',
     CHANNEL: 'channel',
     GET_AN_INVITE: 'Get an invite',
-    GET_AN_INVITE_P2: 'to our slack if you\'re not registered yet'
+    GET_AN_INVITE_P2: 'to our Discord if you\'re not registered yet'
   },
   API: {
     WARNING: 'Warning',
