@@ -76,8 +76,10 @@ export const ImportKeyModalRender = function() {
                           <span>
                             <i className="icon fa-warning seed-extra-spaces-warning"
                               data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                              data-html={ true }></i>
+                              data-html={ true }
+                              data-for="importKey1"></i>
                             <ReactTooltip
+                              id="importKey1"
                               effect="solid"
                               className="text-left" />
                           </span>
@@ -144,8 +146,10 @@ export const ImportKeyModalRender = function() {
                       { translate('IMPORT_KEY.TRIGGER_RESCAN') }
                       <i
                         className="icon fa-question-circle settings-help"
-                        data-tip={ translate('IMPORT_KEY.RESCAN_TIP') }></i>
+                        data-tip={ translate('IMPORT_KEY.RESCAN_TIP') }
+                        data-for="importKey2"></i>
                       <ReactTooltip
+                        id="importKey2"
                         effect="solid"
                         className="text-left" />
                     </div>
@@ -168,8 +172,10 @@ export const ImportKeyModalRender = function() {
                       { translate('IMPORT_KEY.IMPORT_MULTI_KEYS') }
                       <i
                         className="icon fa-question-circle settings-help"
-                        data-tip={ translate('IMPORT_KEY.IMPORT_MULTI_KEYS_DESC') }></i>
+                        data-tip={ translate('IMPORT_KEY.IMPORT_MULTI_KEYS_DESC') }
+                        data-for="importKey3"></i>
                       <ReactTooltip
+                        id="importKey3"
                         effect="solid"
                         className="text-left" />
                     </div>

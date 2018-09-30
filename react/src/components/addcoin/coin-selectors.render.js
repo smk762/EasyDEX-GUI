@@ -267,8 +267,10 @@ const CoinSelectorsRender = function(item, coin, i) {
             <span>
               <i className="icon fa-warning seed-extra-spaces-warning"
                 data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                data-html={ true }></i>
+                data-html={ true }
+                data-for="coinSelector"></i>
               <ReactTooltip
+                id="coinSelector"
                 effect="solid"
                 className="text-left" />
             </span>

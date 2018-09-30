@@ -33,8 +33,10 @@ export const TxConfsRender = function(confs) {
       <span>
         <i
           className="icon fa-warning color-warning margin-right-5"
-          data-tip={ translate('DASHBOARD.FAILED_TX_INFO') }></i>
+          data-tip={ translate('DASHBOARD.FAILED_TX_INFO') }
+          data-for="txHistory1"></i>
         <ReactTooltip
+          id="txHistory1"
           effect="solid"
           className="text-left" />
       </span>
@@ -108,6 +110,7 @@ export const AddressListRender = function() {
           type="button"
           className="btn dropdown-toggle btn-info"
           data-tip={ translate('KMD_NATIVE.SELECT_ADDRESS') }
+          data-for="txHistory2"
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
           <span className="bs-caret">
@@ -115,6 +118,7 @@ export const AddressListRender = function() {
           </span>
         </button>
         <ReactTooltip
+          id="txHistory2"
           effect="solid"
           className="text-left" />
         <div className="dropdown-menu open">
@@ -186,20 +190,25 @@ export const TxAmountRender = function(tx) {
   if (Config.roundValues) {
     return (
       <span>
-        <span data-tip={ tx.amount }>
+        <span
+          data-for="txHistory3"
+          data-tip={ tx.amount }>
           { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (formatValue(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
           { tx.interest &&
             <span
               className="tx-interest"
+              data-for="txHistory4"
               data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
           }
           { tx.interest &&
             <ReactTooltip
+              id="txHistory4"
               effect="solid"
               className="text-left" />
           }
         </span>
         <ReactTooltip
+          id="txHistory4"
           effect="solid"
           className="text-left" />
         { tx.vinLen > tx.vinMaxLen &&
@@ -207,8 +216,10 @@ export const TxAmountRender = function(tx) {
             <i
               className="icon fa-question tx-history-vin-len-err"
               data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
-              data-html={ true }></i>
+              data-html={ true }
+              data-for="txHistory5"></i>
             <ReactTooltip
+              id="txHistory5"
               effect="solid"
               className="text-left" />
           </span>
@@ -223,10 +234,12 @@ export const TxAmountRender = function(tx) {
       { tx.interest &&
         <span
           className="tx-interest"
+          data-for="txHistory6"
           data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(Number(tx.interest))}` }>+{ Math.abs(Number(tx.interest)) }</span>
       }
       { tx.interest &&
         <ReactTooltip
+          id="txHistory6"
           effect="solid"
           className="text-left" />
       }
@@ -234,9 +247,11 @@ export const TxAmountRender = function(tx) {
         <span>
           <i
             className="icon fa-question tx-history-vin-len-err"
+            data-for="txHistory7"
             data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
             data-html={ true }></i>
           <ReactTooltip
+            id="txHistory7"
             effect="solid"
             className="text-left" />
         </span>
@@ -309,10 +324,12 @@ export const WalletsDataRender = function() {
                             <i
                               data-tip={ translate('DASHBOARD.KMD_UTXO_ISSUES') }
                               data-html={ true }
+                              data-for="txHistory8"
                               className="fa-exclamation-circle red dashboard-utxo-issues-icon"></i>
                             <ReactTooltip
-                            effect="solid"
-                            className="text-left" />
+                              id="txHistory8"
+                              effect="solid"
+                              className="text-left" />
                           </span>
                         }
                       </div>

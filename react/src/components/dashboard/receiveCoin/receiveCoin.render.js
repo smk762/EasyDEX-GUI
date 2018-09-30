@@ -15,10 +15,12 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
       <button
         onClick={ () => this.toggleAddressMenu(address) }
         data-tip={ translate('RECEIVE.TOOGLE_ADDRESS') }
+        data-for="receiveCoin1"
         className="btn btn-default btn-xs clipboard-edexaddr margin-left-10 receive-address-context-menu-trigger">
         <i className="fa fa-ellipsis-v receive-address-context-menu-trigger"></i>
       </button>
       <ReactTooltip
+        id="receiveCoin1"
         effect="solid"
         className="text-left" />
       <div className={ this.state.toggledAddressMenu && this.state.toggledAddressMenu === address ? 'receive-address-context-menu' : 'hide' }>
@@ -52,8 +54,11 @@ export const AddressItemRender = function(address, type) {
   return (
     <tr key={ address.address }>
       { this.renderAddressActions(address.address, type) }
-      <td data-tip={ type !== 'public' ? address.address : '' }>
+      <td
+        data-tip={ type !== 'public' ? address.address : '' }
+        data-for="receiveCoin2">
         <ReactTooltip
+          id="receiveCoin2"
           effect="solid"
           className="text-left" />
         <span className="selectable">
@@ -65,8 +70,10 @@ export const AddressItemRender = function(address, type) {
           <span>
             <i
               data-tip={ translate('RECEIVE.YOU_DONT_OWN_PRIV_KEYS') }
+              data-for="receiveCoin3"
               className="fa fa-ban margin-left-10"></i>
             <ReactTooltip
+              id="receiveCoin3"
               effect="solid"
               className="text-left" />
           </span>
@@ -78,8 +85,11 @@ export const AddressItemRender = function(address, type) {
           type === 'public' &&
           this.props.mode !== 'spv' &&
           <span>
-            <span data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
+            <span
+              data-for="receiveCoin4"
+              data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
             <ReactTooltip
+              id="receiveCoin4"
               effect="solid"
               className="text-left" />
           </span>
@@ -118,7 +128,9 @@ export const _ReceiveCoinTableRender = function() {
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-20 padding-bottom-15 push-right">
           { this.props.mode !== 'spv' &&
-            <div data-tip={ translate('RECEIVE.DISPLAY_ALL_ADDR') }>
+            <div
+              data-for="receiveCoin5"
+              data-tip={ translate('RECEIVE.DISPLAY_ALL_ADDR') }>
               <label className="switch">
                 <input
                   type="checkbox"
@@ -138,6 +150,7 @@ export const _ReceiveCoinTableRender = function() {
           }
           { this.props.mode !== 'spv' &&
             <ReactTooltip
+              id="receiveCoin5"
               effect="solid"
               className="text-left" />
           }

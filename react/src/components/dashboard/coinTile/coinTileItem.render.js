@@ -38,8 +38,10 @@ const CoinTileItemRender = function() {
         className="btn btn-default btn-xs clipboard-edexaddr coin-tile-context-menu-trigger coind-actions-menu">
         <i
           data-tip={ translate('INDEX.TOGGLE_COIN_CONTEXT_MENU') }
+          data-for="coinTile1"
           className="fa fa-ellipsis-v coin-tile-context-menu-trigger"></i>
         <ReactTooltip
+          id="coinTile1"
           effect="solid"
           className="text-left" />
       </button>
@@ -50,8 +52,10 @@ const CoinTileItemRender = function() {
         <span>
           <i
             data-tip={ translate('INDEX.MINING_IS_ENABLED') }
+            data-for="coinTile2"
             className="icon fa-gavel custom-ac-icon"></i>
           <ReactTooltip
+            id="coinTile2"
             effect="solid"
             className="text-left" />
         </span>
@@ -63,8 +67,10 @@ const CoinTileItemRender = function() {
         <span>
           <i
             data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
+            data-for="coinTile3"
             className="icon fa-strikethrough custom-ac-icon"></i>
           <ReactTooltip
+            id="coinTitle3"
             effect="solid"
             className="text-left" />
         </span>
@@ -76,8 +82,10 @@ const CoinTileItemRender = function() {
         <span>
           <span
             data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
+            data-for="coinTile4"
             className="icon staking custom-ac-icon">S</span>
           <ReactTooltip
+            id="coinTile4"
             effect="solid"
             className="text-left" />
         </span>
@@ -116,8 +124,10 @@ const CoinTileItemRender = function() {
           <span
             data-tip={ translate('INDEX.Z_ADDR_ONLY') }
             data-html={ true }
+            data-for="coinTile5"
             className="icon ac-private custom-ac-icon">z</span>
           <ReactTooltip
+            id="coinTitle5"
             effect="solid"
             className="text-left" />
         </span> 
@@ -130,8 +140,10 @@ const CoinTileItemRender = function() {
         <span>
           <i
             data-tip={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
+            data-for="coinTile6"
             className="icon fa-info-circle icon-spv-connection-warning"></i>
           <ReactTooltip
+            id="coinTile6"
             effect="solid"
             className="text-left" />
         </span>
@@ -143,8 +155,10 @@ const CoinTileItemRender = function() {
             onClick={ this.openCoindDownModal }
             data-tip={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
             data-html={ true }
+            data-for="coinTile7"
             className="icon fa-warning icon-native-connection-warning"></i>
           <ReactTooltip
+            id="coinTile7"
             effect="solid"
             className="text-left" />
         </span>

@@ -364,8 +364,10 @@ class SweepKeysPanel extends React.Component {
                   <span>
                     <i className="icon fa-warning seed-extra-spaces-warning"
                       data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                      data-html={ true }></i>
+                      data-html={ true }
+                      data-for="sweepKeys"></i>
                     <ReactTooltip
+                      id="sweepKeys"
                       effect="solid"
                       className="text-left" />
                   </span>

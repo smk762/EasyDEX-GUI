@@ -430,8 +430,10 @@ export const SendRender = function() {
                       <span>
                         <i
                           className="icon fa-question-circle settings-help send-btc"
+                          data-for="sendCoin2"
                           data-tip={ translate('SEND.MAX_AVAIL_AMOUNT_TO_SPEND') }></i>
                         <ReactTooltip
+                          id="sendCoin2"
                           effect="solid"
                           className="text-left" />
                       </span>

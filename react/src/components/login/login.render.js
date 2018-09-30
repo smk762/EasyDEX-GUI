@@ -150,8 +150,10 @@ const LoginRender = function() {
               <span>
                 <i className="icon fa-warning seed-extra-spaces-warning"
                   data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                  data-html={ true }></i>
+                  data-html={ true }
+                  data-for="login1"></i>
                 <ReactTooltip
+                  id="login1"
                   effect="solid"
                   className="text-left" />
               </span>
@@ -213,8 +215,10 @@ const LoginRender = function() {
                     <i
                       className="icon fa-question-circle login-help"
                       data-tip={ `<strong>${ translate('LOGIN.NATIVE_MODE_DESC_P1') }</strong> <u>${ translate('LOGIN.NATIVE_MODE_DESC_P2') }</u> ${ translate('LOGIN.NATIVE_MODE_DESC_P3') }<br/>${ translate('LOGIN.NATIVE_MODE_DESC_P4') } <strong>${ translate('LOGIN.NATIVE_MODE_DESC_P5') }</strong> ${ translate('LOGIN.NATIVE_MODE_DESC_P6') }<br/>${ translate('LOGIN.NATIVE_MODE_DESC_P7') } <u>${ translate('LOGIN.NATIVE_MODE_DESC_P8') }</u> ${ translate('LOGIN.NATIVE_MODE_DESC_P9') }` }
-                      data-html={ true }></i>
+                      data-html={ true }
+                      data-for="login2"></i>
                     <ReactTooltip
+                      id="login2"
                       effect="solid"
                       className="text-left" />
                   </div>
@@ -263,8 +267,10 @@ const LoginRender = function() {
                   <i
                     className="icon fa-question-circle login-help"
                     data-tip={ `${ translate('LOGIN.SPV_MODE_DESC_P1') } <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ${ translate('LOGIN.SPV_MODE_DESC_P3') }<br/>${ translate('LOGIN.SPV_MODE_DESC_P4') }` }
-                    data-html={ true }></i>
+                    data-html={ true }
+                    data-for="login3"></i>
                   <ReactTooltip
+                    id="login3"
                     effect="solid"
                     className="text-left" />
                 </div>
@@ -453,8 +459,10 @@ const LoginRender = function() {
                         <i
                           className="icon fa-question-circle login-help"
                           data-tip={ `${translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P1')}<br />${translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P2')}` }
-                          data-html={ true }></i>
+                          data-html={ true }
+                          data-for="login4"></i>
                         <ReactTooltip
+                          id="login4"
                           effect="solid"
                           className="text-left" />
                       </div>
@@ -507,8 +515,10 @@ const LoginRender = function() {
                           <i
                             className="icon fa-question-circle login-help"
                             data-tip={ translate('LOGIN.CUSTOM_PIN_FNAME_INFO') }
-                            data-html={ true }></i>
+                            data-html={ true }
+                            data-for="login5"></i>
                           <ReactTooltip
+                            id="login5"
                             effect="solid"
                             className="text-left" />
                         </div>
