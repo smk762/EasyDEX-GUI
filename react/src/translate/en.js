@@ -1001,6 +1001,7 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    ENTER_Z_ADDR: 'Enter z address',
     COIN_CONTROL: 'Coin control',
     NO_VALID_UTXO_ERR: 'No valid UTXO is available. Your previous transaction is still in unconfirmed state. Please retry later.',
     PIN_NUMBER: 'Pin number',
