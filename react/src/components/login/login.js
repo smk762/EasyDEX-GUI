@@ -18,6 +18,8 @@ import {
   loginWithPin,
   apiElectrumLogout,
   dashboardRemoveCoin,
+  dashboardChangeSectionState,
+  toggleDashboardActiveSection,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -434,6 +436,8 @@ class Login extends React.Component {
 
       this.setState(this.defaultState);
 
+      Store.dispatch(dashboardChangeSectionState('wallets'));
+      Store.dispatch(toggleDashboardActiveSection('default'));
       Store.dispatch(apiElectrumAuth(this.state.loginPassphrase));
       Store.dispatch(apiElectrumCoins());
     } else {
@@ -450,6 +454,8 @@ class Login extends React.Component {
 
           this.setState(this.defaultState);
 
+          Store.dispatch(dashboardChangeSectionState('wallets'));
+          Store.dispatch(toggleDashboardActiveSection('default'));
           Store.dispatch(apiElectrumAuth(res.result));
           Store.dispatch(apiElectrumCoins());
         }
