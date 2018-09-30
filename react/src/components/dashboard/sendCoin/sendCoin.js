@@ -15,6 +15,7 @@ import {
   copyString,
   loginWithPin,
   addCoin,
+  validateAddress,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -734,6 +735,7 @@ class SendCoin extends React.Component {
 
   // TODO: reduce to a single toast
   validateSendFormData() {
+    const isAcPrivate = this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private ? true : false;
     let valid = true;
 
     if (this.props.ActiveCoin.mode === 'spv') {
@@ -801,7 +803,8 @@ class SendCoin extends React.Component {
         _msg = `${this.state.sendTo} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P1')} ${this.props.ActiveCoin.coin} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P2')}`;
       }
 
-      if (_msg) {
+      if (_msg &&
+        !isAcPrivate) {
         Store.dispatch(
           triggerToaster(
             _msg,
@@ -865,6 +868,28 @@ class SendCoin extends React.Component {
       }
     }
 
+    // validate z address, ac_private mandatory
+    if ((this.props.ActiveCoin.mode === 'native' &&
+        isAcPrivate) ||
+        (this.state.sendTo &&
+        this.state.sendTo.substring(0, 2) === 'zc' &&
+        this.state.sendTo.length > 64)) {
+      validateAddress(this.props.ActiveCoin.coin, this.state.sendTo, true)
+      .then((json) => {
+        if (!json ||
+            (json && json.error) ||
+            (json && json.isvalid === false)) {
+          Store.dispatch(
+            triggerToaster(
+              json && json.isvalid === false ? translate('SEND.INVALID_Z_ADDRESS') : json.error.message,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
+        }
+      });
+    }
+
     return valid;
   }
 
@@ -907,7 +932,9 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'spv' &&
         this.props.ActiveCoin.coin === 'BTC' &&
         !this.state.btcFees.lastUpdated) {
-      return (<div className="col-lg-6 form-group form-material">{ translate('SEND.FETCHING_BTC_FEES') }...</div>);
+      return (
+        <div className="col-lg-6 form-group form-material">{ translate('SEND.FETCHING_BTC_FEES') }...</div>
+      );
     } else if (
       this.props.ActiveCoin.mode === 'spv' &&
       this.props.ActiveCoin.coin === 'BTC' &&
@@ -961,7 +988,7 @@ class SendCoin extends React.Component {
                 0: 'fast',
                 1: 'average',
                 2: 'slow',
-                3: 'advanced'
+                3: 'advanced',
               }} />
             { this.state.btcFeesType === 'advanced' &&
               <div className="margin-bottom-20">
@@ -994,7 +1021,7 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'spv') {
       _items.push(
         <li
-          key={ `send-address-book-item-self` }
+          key="send-address-book-item-self"
           onClick={ () => this.setToAddress(this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub) }>{ translate('SEND.SELF') }</li>
       );
     }
