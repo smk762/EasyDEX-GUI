@@ -48,20 +48,24 @@ const prepCoinsList = (filterActiveCoins) => {
     }
   } else {
     for (let i = 0; i < coins.length; i++) {
-      if (mainWindow &&
-          mainWindow.electrumServers &&
-          mainWindow.electrumServers[coins[i].toLowerCase()] &&
-          (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
-           _activeCoins &&
-           _activeCoins.spv &&
-           _activeCoins.native &&
-          _activeCoins.spv.indexOf(coins[i].toUpperCase()) === -1 &&
-          _activeCoins.native.indexOf(coins[i].toUpperCase()) === -1))) {
-        _items.push({
-          label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
-          icon: coins[i],
-          value: `${coins[i]}|${coins[i] === 'KMD' ? availableKMDModes : 'spv'}`,
-        });
+      try {
+        if (mainWindow &&
+            mainWindow.electrumServers &&
+            mainWindow.electrumServers[coins[i].toLowerCase()] &&
+            (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
+            _activeCoins &&
+            _activeCoins.spv &&
+            _activeCoins.native &&
+            _activeCoins.spv.indexOf(coins[i].toUpperCase()) === -1 &&
+            _activeCoins.native.indexOf(coins[i].toUpperCase()) === -1))) {
+          _items.push({
+            label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
+            icon: coins[i],
+            value: `${coins[i]}|${coins[i] === 'KMD' ? availableKMDModes : 'spv'}`,
+          });
+        }
+      } catch (e) {
+        console.warn('electron remote error' + e);
       }
     }
   }

@@ -20,11 +20,15 @@ const prepCoinsList = () => {
   for (let i = 0; i < coins.length; i++) {
     if (Config.experimentalFeatures ||
         (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
-      if (mainWindow &&
-        mainWindow.electrumServers &&
-        mainWindow.electrumServers[coins[i].toLowerCase()] &&
-          coins[i] !== 'CHIPS') {
-        _coins.push(coins[i]);
+      try {
+        if (mainWindow &&
+            mainWindow.electrumServers &&
+            mainWindow.electrumServers[coins[i].toLowerCase()] &&
+            coins[i] !== 'CHIPS') {
+          _coins.push(coins[i]);
+        }
+      } catch (e) {
+        console.warn('electron remote error' + e);
       }
     }
   }
