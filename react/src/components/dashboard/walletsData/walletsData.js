@@ -632,7 +632,7 @@ class WalletsData extends React.Component {
           { TxHistoryListRender.call(this) }
           { !this.state.kvView &&
             (this.props.ActiveCoin.mode === 'spv' ||
-             (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+             (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
             <div className="margin-left-5 margin-top-30">
               <span
                 className="pointer"
