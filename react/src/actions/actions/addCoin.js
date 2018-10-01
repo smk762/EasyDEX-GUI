@@ -158,7 +158,6 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
     ac_options: [
       '-daemon=0',
       '-server',
-      `-ac_name=${coin}`,
     ],
   };
 
