@@ -59,6 +59,7 @@ export * from './actions/elections';
 export * from './actions/pin';
 export * from './actions/csv';
 export * from './actions/addressBook';
+export * from './actions/dice';
 
 export const changeActiveAddress = (address) => {
   return {
