@@ -16,7 +16,8 @@ const WalletsBalanceRender = function() {
              (this.props.ActiveCoin.mode === 'native' &&
               mainWindow.chainParams &&
               mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-              !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+              !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) ||
+              (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin === 'KMD')) &&
             <div className={
               this.props.ActiveCoin.coin === 'CHIPS' ||
               (this.props.ActiveCoin.mode === 'spv' && this.props.ActiveCoin.coin !== 'KMD') ||
@@ -121,7 +122,8 @@ const WalletsBalanceRender = function() {
              (this.props.ActiveCoin.mode === 'native' &&
               mainWindow.chainParams &&
               mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-              !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+              !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) ||
+              (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin === 'KMD')) &&
             <div className={
               this.props.ActiveCoin.coin === 'CHIPS' ||
               (this.props.ActiveCoin.coin !== 'KMD' && this.props.ActiveCoin.mode === 'spv') ||
