@@ -75,10 +75,10 @@ const CoinTileItemRender = function() {
         acConfig[item.coin.toUpperCase()] &&
         acConfig[item.coin.toUpperCase()].ac_stake &&
         (mainWindow.getPubkeys()[item.coin.toLowerCase()] && mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
-        <span
+        <i
           data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
           data-for="coinTile4"
-          className="icon staking custom-ac-icon">S</span>
+          className="icon staking custom-ac-icon">S</i>
       }
       <ReactTooltip
         id="coinTile4"
@@ -114,11 +114,11 @@ const CoinTileItemRender = function() {
       { mainWindow.chainParams &&
         mainWindow.chainParams[item.coin] &&
         mainWindow.chainParams[item.coin].ac_private &&
-        <span
+        <i
           data-tip={ translate('INDEX.Z_ADDR_ONLY') }
           data-html={ true }
           data-for="coinTile5"
-          className="icon ac-private custom-ac-icon">z</span>
+          className="icon ac-private custom-ac-icon">z</i>
       }
       <ReactTooltip
         id="coinTile5"
