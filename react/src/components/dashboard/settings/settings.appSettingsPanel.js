@@ -181,18 +181,16 @@ class AppSettingsPanel extends React.Component {
               <td className="padding-15">
                 { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
                 { this.state.appConfigSchema[key].info &&
-                  <span>
-                    <i
-                      className="icon fa-question-circle settings-help"
-                      data-tip={ this.state.appConfigSchema[key].info }
-                      data-for="appSettings1"
-                      data-html={ true }></i>
-                    <ReactTooltip
-                      id="appSettings1"
-                      effect="solid"
-                      className="text-left" />
-                  </span>
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    data-tip={ this.state.appConfigSchema[key].info }
+                    data-for="appSettings1"
+                    data-html={ true }></i>
                 }
+                <ReactTooltip
+                  id="appSettings1"
+                  effect="solid"
+                  className="text-left" />
               </td>
               <td className="padding-15"></td>
             </tr>
@@ -204,18 +202,16 @@ class AppSettingsPanel extends React.Component {
                 <td className="padding-15 padding-left-30">
                   { this.state.appConfigSchema[key][_key].displayName ? this.state.appConfigSchema[key][_key].displayName : _key }
                   { this.state.appConfigSchema[key][_key].info &&
-                    <span>
-                      <i
-                        className="icon fa-question-circle settings-help"
-                        data-tip={ this.state.appConfigSchema[key][_key].info }
-                        data-html={ true }
-                        data-for="appSettings2"></i>
-                      <ReactTooltip
-                        id="appSettings2"
-                        effect="solid"
-                        className="text-left" />
-                    </span>
+                    <i
+                      className="icon fa-question-circle settings-help"
+                      data-tip={ this.state.appConfigSchema[key][_key].info }
+                      data-html={ true }
+                      data-for="appSettings2"></i>
                   }
+                  <ReactTooltip
+                    id="appSettings2"
+                    effect="solid"
+                    className="text-left" />
                 </td>
                 <td className="padding-15">
                   { this.state.appConfigSchema[key][_key].type === 'number' &&
@@ -303,18 +299,16 @@ class AppSettingsPanel extends React.Component {
               <td className="padding-15">
                 { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
                 { this.state.appConfigSchema[key].info &&
-                  <span>
-                    <i
-                      className="icon fa-question-circle settings-help"
-                      data-tip={ this.state.appConfigSchema[key].info }
-                      data-html={ true }
-                      data-for="appSettings3"></i>
-                    <ReactTooltip
-                      id="appSettings3"
-                      effect="solid"
-                      className="text-left" />
-                  </span>
+                  <i
+                    className="icon fa-question-circle settings-help"
+                    data-tip={ this.state.appConfigSchema[key].info }
+                    data-html={ true }
+                    data-for="appSettings3"></i>
                 }
+                <ReactTooltip
+                  id="appSettings3"
+                  effect="solid"
+                  className="text-left" />
               </td>
               <td className="padding-15">
                 { this.state.appConfigSchema[key].type === 'number' &&

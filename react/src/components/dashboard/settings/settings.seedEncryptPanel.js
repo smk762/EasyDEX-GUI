@@ -524,17 +524,15 @@ class SeedEncryptPanel extends React.Component {
                       htmlFor="encryptKeyConfirm">{ translate('LOGIN.SEED_ENCRYPT_KEY_CONF') }</label>
                   </div>
                   { this.state.seedExtraSpaces &&
-                    <span>
-                      <i className="icon fa-warning seed-extra-spaces-warning"
-                        data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                        data-html={ true }
-                        data-for="seedEncrypt"></i>
-                      <ReactTooltip
-                        id="seedEncrypt"
-                        effect="solid"
-                        className="text-left" />
-                    </span>
+                    <i className="icon fa-warning seed-extra-spaces-warning"
+                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                      data-html={ true }
+                      data-for="seedEncrypt"></i>
                   }
+                  <ReactTooltip
+                    id="seedEncrypt"
+                    effect="solid"
+                    className="text-left" />
                 </div>
                 <div className="col-sm-12 col-xs-12 text-align-center">
                   <button

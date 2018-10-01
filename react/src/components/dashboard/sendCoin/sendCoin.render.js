@@ -427,19 +427,17 @@ export const SendRender = function() {
                     (formatValue((fromSats(this.state.spvPreflightRes.value)) - (fromSats(this.state.spvPreflightRes.fee))) > 0) &&
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.ADJUSTED_AMOUNT') }</strong>
-                      <span>
-                        <i
-                          className="icon fa-question-circle settings-help send-btc"
-                          data-for="sendCoin2"
-                          data-tip={ translate('SEND.MAX_AVAIL_AMOUNT_TO_SPEND') }></i>
-                        <ReactTooltip
-                          id="sendCoin2"
-                          effect="solid"
-                          className="text-left" />
-                      </span>
+                      <i
+                        className="icon fa-question-circle settings-help send-btc"
+                        data-for="sendCoin2"
+                        data-tip={ translate('SEND.MAX_AVAIL_AMOUNT_TO_SPEND') }></i>
                       &nbsp;{ formatValue((fromSats(this.state.spvPreflightRes.value)) - (fromSats(this.state.spvPreflightRes.fee))) }
                     </div>
                   }
+                  <ReactTooltip
+                    id="sendCoin2"
+                    effect="solid"
+                    className="text-left" />
                   { this.state.spvPreflightRes.estimatedFee < 0 &&
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-bottom-20">
                       <strong>{ translate('SEND.KMD_INTEREST') }</strong>&nbsp;

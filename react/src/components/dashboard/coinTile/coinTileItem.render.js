@@ -49,47 +49,41 @@ const CoinTileItemRender = function() {
         acConfig[item.coin.toUpperCase()] &&
         acConfig[item.coin.toUpperCase()].ac_reward &&
         !acConfig[item.coin.toUpperCase()].ac_stake &&
-        <span>
-          <i
-            data-tip={ translate('INDEX.MINING_IS_ENABLED') }
-            data-for="coinTile2"
-            className="icon fa-gavel custom-ac-icon"></i>
-          <ReactTooltip
-            id="coinTile2"
-            effect="solid"
-            className="text-left" />
-        </span>
+        <i
+          data-tip={ translate('INDEX.MINING_IS_ENABLED') }
+          data-for="coinTile2"
+          className="icon fa-gavel custom-ac-icon"></i>
       }
+      <ReactTooltip
+        id="coinTile2"
+        effect="solid"
+        className="text-left" />
       { item.mode === 'native' &&
         acConfig[item.coin.toUpperCase()] &&
         acConfig[item.coin.toUpperCase()]['ac_stake'] &&
         (!mainWindow.getPubkeys()[item.coin.toLowerCase()] || !mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
-        <span>
-          <i
-            data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
-            data-for="coinTile3"
-            className="icon fa-strikethrough custom-ac-icon"></i>
-          <ReactTooltip
-            id="coinTitle3"
-            effect="solid"
-            className="text-left" />
-        </span>
+        <i
+          data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
+          data-for="coinTile3"
+          className="icon fa-strikethrough custom-ac-icon"></i>
       }
+      <ReactTooltip
+        id="coinTitle3"
+        effect="solid"
+        className="text-left" />
       { item.mode === 'native' &&
         acConfig[item.coin.toUpperCase()] &&
         acConfig[item.coin.toUpperCase()].ac_stake &&
         (mainWindow.getPubkeys()[item.coin.toLowerCase()] && mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
-        <span>
-          <span
-            data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
-            data-for="coinTile4"
-            className="icon staking custom-ac-icon">S</span>
-          <ReactTooltip
-            id="coinTile4"
-            effect="solid"
-            className="text-left" />
-        </span>
+        <span
+          data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
+          data-for="coinTile4"
+          className="icon staking custom-ac-icon">S</span>
       }
+      <ReactTooltip
+        id="coinTile4"
+        effect="solid"
+        className="text-left" />
       { this.state.toggledCoinMenu &&
         this.state.toggledCoinMenu === item.coin &&
         <div className="coin-tile-context-menu">
@@ -120,49 +114,43 @@ const CoinTileItemRender = function() {
       { mainWindow.chainParams &&
         mainWindow.chainParams[item.coin] &&
         mainWindow.chainParams[item.coin].ac_private &&
-        <span>
-          <span
-            data-tip={ translate('INDEX.Z_ADDR_ONLY') }
-            data-html={ true }
-            data-for="coinTile5"
-            className="icon ac-private custom-ac-icon">z</span>
-          <ReactTooltip
-            id="coinTitle5"
-            effect="solid"
-            className="text-left" />
-        </span> 
+        <span
+          data-tip={ translate('INDEX.Z_ADDR_ONLY') }
+          data-html={ true }
+          data-for="coinTile5"
+          className="icon ac-private custom-ac-icon">z</span>
       }
+      <ReactTooltip
+        id="coinTile5"
+        effect="solid"
+        className="text-left" />
       { this.props.Dashboard &&
         this.props.Dashboard.electrumCoins &&
         this.props.Dashboard.electrumCoins[item.coin] &&
         this.props.Dashboard.electrumCoins[item.coin].serverList &&
         this.props.Dashboard.electrumCoins[item.coin].serverList === 'none' &&
-        <span>
-          <i
-            data-tip={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
-            data-for="coinTile6"
-            className="icon fa-info-circle icon-spv-connection-warning"></i>
-          <ReactTooltip
-            id="coinTile6"
-            effect="solid"
-            className="text-left" />
-        </span>
+        <i
+          data-tip={ translate('SETTINGS.SPV_SINGLE_SERVER_NOTICE') }
+          data-for="coinTile6"
+          className="icon fa-info-circle icon-spv-connection-warning"></i>
       }
+      <ReactTooltip
+        id="coinTile6"
+        effect="solid"
+        className="text-left" />
       { this.renderCoinConError(item) &&
         !this.props.ActiveCoin.rescanInProgress &&
-        <span>
-          <i
-            onClick={ this.openCoindDownModal }
-            data-tip={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
-            data-html={ true }
-            data-for="coinTile7"
-            className="icon fa-warning icon-native-connection-warning"></i>
-          <ReactTooltip
-            id="coinTile7"
-            effect="solid"
-            className="text-left" />
-        </span>
+        <i
+          onClick={ this.openCoindDownModal }
+          data-tip={ `${translate('DASHBOARD.RPC_CONN_FAILURE')}: ${this.props.ActiveCoin.getinfoFetchFailures}.` }
+          data-html={ true }
+          data-for="coinTile7"
+          className="icon fa-warning icon-native-connection-warning"></i>
       }
+      <ReactTooltip
+        id="coinTile7"
+        effect="solid"
+        className="text-left" />
     </div>
   );
 };

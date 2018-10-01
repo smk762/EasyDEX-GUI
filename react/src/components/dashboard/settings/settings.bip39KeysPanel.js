@@ -147,17 +147,15 @@ class Bip39KeysPanel extends React.Component {
                     className="floating-label"
                     htmlFor="passphrase">{ translate('INDEX.PASSPHRASE') }</label>
                   { this.state.seedExtraSpaces &&
-                    <span>
-                      <i className="icon fa-warning seed-extra-spaces-warning"
-                        data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                        data-html={ true }
-                        data-for="bip39"></i>
-                      <ReactTooltip
-                        id="bip39"
-                        effect="solid"
-                        className="text-left" />
-                    </span>
+                    <i className="icon fa-warning seed-extra-spaces-warning"
+                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                      data-html={ true }
+                      data-for="bip39"></i>
                   }
+                  <ReactTooltip
+                    id="bip39"
+                    effect="solid"
+                    className="text-left" />
                 </div>
               </div>
               <div className="col-sm-5 no-padding-left">

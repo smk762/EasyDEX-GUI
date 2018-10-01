@@ -264,17 +264,15 @@ const CoinSelectorsRender = function(item, coin, i) {
               htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
           </div>
           { this.state.seedExtraSpaces &&
-            <span>
-              <i className="icon fa-warning seed-extra-spaces-warning"
-                data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                data-html={ true }
-                data-for="coinSelector"></i>
-              <ReactTooltip
-                id="coinSelector"
-                effect="solid"
-                className="text-left" />
-            </span>
+            <i className="icon fa-warning seed-extra-spaces-warning"
+              data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+              data-html={ true }
+              data-for="coinSelector"></i>
           }
+          <ReactTooltip
+            id="coinSelector"
+            effect="solid"
+            className="text-left" />
         </div>
       }
       { !this.hasMoreThanOneCoin() &&

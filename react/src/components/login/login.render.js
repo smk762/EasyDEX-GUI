@@ -147,17 +147,15 @@ const LoginRender = function() {
               </div>
             }
             { this.state.seedExtraSpaces &&
-              <span>
-                <i className="icon fa-warning seed-extra-spaces-warning"
-                  data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                  data-html={ true }
-                  data-for="login1"></i>
-                <ReactTooltip
-                  id="login1"
-                  effect="solid"
-                  className="text-left" />
-              </span>
+              <i className="icon fa-warning seed-extra-spaces-warning"
+                data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                data-html={ true }
+                data-for="login1"></i>
             }
+            <ReactTooltip
+              id="login1"
+              effect="solid"
+              className="text-left" />
 
             <button
               type="button"

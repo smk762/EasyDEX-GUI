@@ -49,17 +49,15 @@ const WalletsBalanceRender = function() {
                         { this.props.ActiveCoin.coin === 'CHIPS' || this.props.ActiveCoin.mode === 'spv' ? translate('INDEX.BALANCE') : translate('INDEX.TRANSPARENT_BALANCE') }
                         { this.props.ActiveCoin.mode === 'spv' &&
                           Number(this.props.ActiveCoin.balance.unconfirmed) < 0 &&
-                          <span>
-                            <i
-                              className="icon fa-info-circle margin-left-5 icon-unconf-balance"
-                              data-tip={ `${translate('INDEX.UNCONFIRMED_BALANCE')} ${Math.abs(this.props.ActiveCoin.balance.unconfirmed)}` }
-                              data-for="balance2"></i>
-                            <ReactTooltip
-                              id="balance2"
-                              effect="solid"
-                              className="text-left" />
-                          </span>
+                          <i
+                            className="icon fa-info-circle margin-left-5 icon-unconf-balance"
+                            data-tip={ `${translate('INDEX.UNCONFIRMED_BALANCE')} ${Math.abs(this.props.ActiveCoin.balance.unconfirmed)}` }
+                            data-for="balance2"></i>
                         }
+                        <ReactTooltip
+                          id="balance2"
+                          effect="solid"
+                          className="text-left" />
                       </div>
                       <span className="pull-right padding-top-10 font-size-22">
                         { this.renderBalance('transparent', true) }

@@ -140,20 +140,18 @@ class WalletsBalance extends React.Component {
           <div className="text-right">{ _balance }</div>
           { _fiatPriceTotal > 0 &&
             _fiatPricePerCoin > 0 &&
-            <span>
-              <div
-                data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ ${formatValue(_fiatPricePerCoin)} ${Config.defaultFiatCurrency.toUpperCase()}` }
-                data-html={ true }
-                data-for="balance1"
-                className="text-right">
-                <FiatSymbol symbol={ Config.defaultFiatCurrency } />{ formatValue(_fiatPriceTotal) }
-              </div>
-              <ReactTooltip
-                id="balance1"
-                effect="solid"
-                className="text-left" />
-            </span>
+            <div
+              data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ ${formatValue(_fiatPricePerCoin)} ${Config.defaultFiatCurrency.toUpperCase()}` }
+              data-html={ true }
+              data-for="balance1"
+              className="text-right">
+              <FiatSymbol symbol={ Config.defaultFiatCurrency } />{ formatValue(_fiatPriceTotal) }
+            </div>
           }
+          <ReactTooltip
+            id="balance1"
+            effect="solid"
+            className="text-left" />
         </div>
       );
     } else {

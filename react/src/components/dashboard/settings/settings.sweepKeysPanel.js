@@ -361,17 +361,15 @@ class SweepKeysPanel extends React.Component {
                     htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
                 }
                 { this.state.seedExtraSpaces &&
-                  <span>
-                    <i className="icon fa-warning seed-extra-spaces-warning"
-                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                      data-html={ true }
-                      data-for="sweepKeys"></i>
-                    <ReactTooltip
-                      id="sweepKeys"
-                      effect="solid"
-                      className="text-left" />
-                  </span>
+                  <i className="icon fa-warning seed-extra-spaces-warning"
+                    data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                    data-html={ true }
+                    data-for="sweepKeys"></i>
                 }
+                <ReactTooltip
+                  id="sweepKeys"
+                  effect="solid"
+                  className="text-left" />
               </div>
               { !this.state.sweepPreflight &&
                 <div className="col-sm-12 col-xs-12 text-align-center">

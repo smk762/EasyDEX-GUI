@@ -236,17 +236,15 @@ class ExportKeysPanel extends React.Component {
                     htmlFor="wifkeysPassphrase">{ translate('SETTINGS.PW_PIN') }</label>
                 }
                 { this.state.seedExtraSpaces &&
-                  <span>
-                    <i className="icon fa-warning seed-extra-spaces-warning"
-                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                      data-html={ true }
-                      data-for="exportKeys"></i>
-                    <ReactTooltip
-                      id="exportKeys"
-                      effect="solid"
-                      className="text-left" />
-                  </span>
+                  <i className="icon fa-warning seed-extra-spaces-warning"
+                    data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                    data-html={ true }
+                    data-for="exportKeys"></i>
                 }
+                <ReactTooltip
+                  id="exportKeys"
+                  effect="solid"
+                  className="text-left" />
               </div>
               <div className="col-sm-12 col-xs-12 text-align-center">
                 <button

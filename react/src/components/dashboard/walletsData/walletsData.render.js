@@ -200,30 +200,26 @@ export const TxAmountRender = function(tx) {
               data-for="txHistory4"
               data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
           }
-          { tx.interest &&
-            <ReactTooltip
-              id="txHistory4"
-              effect="solid"
-              className="text-left" />
-          }
+          <ReactTooltip
+            id="txHistory4"
+            effect="solid"
+            className="text-left" />
         </span>
         <ReactTooltip
           id="txHistory4"
           effect="solid"
           className="text-left" />
         { tx.vinLen > tx.vinMaxLen &&
-          <span>
-            <i
-              className="icon fa-question tx-history-vin-len-err"
-              data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
-              data-html={ true }
-              data-for="txHistory5"></i>
-            <ReactTooltip
-              id="txHistory5"
-              effect="solid"
-              className="text-left" />
-          </span>
+          <i
+            className="icon fa-question tx-history-vin-len-err"
+            data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
+            data-html={ true }
+            data-for="txHistory5"></i>
         }
+        <ReactTooltip
+          id="txHistory5"
+          effect="solid"
+          className="text-left" />
       </span>
     );
   }
@@ -237,25 +233,21 @@ export const TxAmountRender = function(tx) {
           data-for="txHistory6"
           data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(Number(tx.interest))}` }>+{ Math.abs(Number(tx.interest)) }</span>
       }
-      { tx.interest &&
-        <ReactTooltip
-          id="txHistory6"
-          effect="solid"
-          className="text-left" />
-      }
+      <ReactTooltip
+        id="txHistory6"
+        effect="solid"
+        className="text-left" />
       { tx.vinLen > tx.vinMaxLen &&
-        <span>
-          <i
-            className="icon fa-question tx-history-vin-len-err"
-            data-for="txHistory7"
-            data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
-            data-html={ true }></i>
-          <ReactTooltip
-            id="txHistory7"
-            effect="solid"
-            className="text-left" />
-        </span>
+        <i
+          className="icon fa-question tx-history-vin-len-err"
+          data-for="txHistory7"
+          data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
+          data-html={ true }></i>
       }
+      <ReactTooltip
+        id="txHistory7"
+        effect="solid"
+        className="text-left" />
     </span>
   );
 };
@@ -320,18 +312,16 @@ export const WalletsDataRender = function() {
                         { this.props.ActiveCoin &&
                           this.props.ActiveCoin.balance &&
                           this.props.ActiveCoin.balance.utxoIssues &&
-                          <span>
-                            <i
-                              data-tip={ translate('DASHBOARD.KMD_UTXO_ISSUES') }
-                              data-html={ true }
-                              data-for="txHistory8"
-                              className="fa-exclamation-circle red dashboard-utxo-issues-icon"></i>
-                            <ReactTooltip
-                              id="txHistory8"
-                              effect="solid"
-                              className="text-left" />
-                          </span>
+                          <i
+                            data-tip={ translate('DASHBOARD.KMD_UTXO_ISSUES') }
+                            data-html={ true }
+                            data-for="txHistory8"
+                            className="fa-exclamation-circle red dashboard-utxo-issues-icon"></i>
                         }
+                        <ReactTooltip
+                          id="txHistory8"
+                          effect="solid"
+                          className="text-left" />
                       </div>
                     }
                     { this.displayClaimInterestUI() === -777 &&

@@ -67,33 +67,29 @@ export const AddressItemRender = function(address, type) {
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
-          <span>
-            <i
-              data-tip={ translate('RECEIVE.YOU_DONT_OWN_PRIV_KEYS') }
-              data-for="receiveCoin3"
-              className="fa fa-ban margin-left-10"></i>
-            <ReactTooltip
-              id="receiveCoin3"
-              effect="solid"
-              className="text-left" />
-          </span>
+          <i
+            data-tip={ translate('RECEIVE.YOU_DONT_OWN_PRIV_KEYS') }
+            data-for="receiveCoin3"
+            className="fa fa-ban margin-left-10"></i>
         }
+        <ReactTooltip
+          id="receiveCoin3"
+          effect="solid"
+          className="text-left" />
       </td>
       <td>
         <span>{ address.amount }</span>
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
-          <span>
-            <span
-              data-for="receiveCoin4"
-              data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
-            <ReactTooltip
-              id="receiveCoin4"
-              effect="solid"
-              className="text-left" />
-          </span>
+          <span
+            data-for="receiveCoin4"
+            data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
         }
+        <ReactTooltip
+          id="receiveCoin4"
+          effect="solid"
+          className="text-left" />
       </td>
     </tr>
   );
@@ -148,12 +144,10 @@ export const _ReceiveCoinTableRender = function() {
               </div>
             </div>
           }
-          { this.props.mode !== 'spv' &&
-            <ReactTooltip
-              id="receiveCoin5"
-              effect="solid"
-              className="text-left" />
-          }
+          <ReactTooltip
+            id="receiveCoin5"
+            effect="solid"
+            className="text-left" />
         </div>
       }
       <table className="table table-hover dataTable table-striped">

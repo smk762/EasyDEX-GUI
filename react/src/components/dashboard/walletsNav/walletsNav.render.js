@@ -73,17 +73,15 @@ const WalletsNavWithWalletRender = function() {
               <i className="icon fa-inbox"></i> <span className="placeholder">{ translate('INDEX.RECEIVE') }</span>
             </button>
             { (this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly()) &&
-              <span>
-                <i
-                  className="icon fa-question-circle settings-help"
-                  data-tip={ translate('INDEX.LITE_MODE_WATCHONLY') }
-                  data-for="walletsNav"></i>
-                <ReactTooltip
-                  id="walletsNav"
-                  effect="solid"
-                  className="text-top" />
-              </span>
+              <i
+                className="icon fa-question-circle settings-help"
+                data-tip={ translate('INDEX.LITE_MODE_WATCHONLY') }
+                data-for="walletsNav"></i>
             }
+            <ReactTooltip
+              id="walletsNav"
+              effect="solid"
+              className="text-top" />
           </div>
         </div>
       </div>

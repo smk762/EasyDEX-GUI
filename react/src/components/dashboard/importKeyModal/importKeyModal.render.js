@@ -73,17 +73,15 @@ export const ImportKeyModalRender = function() {
                           className="floating-label"
                           htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') }</label>
                         { this.state.seedExtraSpaces &&
-                          <span>
-                            <i className="icon fa-warning seed-extra-spaces-warning"
-                              data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                              data-html={ true }
-                              data-for="importKey1"></i>
-                            <ReactTooltip
-                              id="importKey1"
-                              effect="solid"
-                              className="text-left" />
-                          </span>
+                          <i className="icon fa-warning seed-extra-spaces-warning"
+                            data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                            data-html={ true }
+                            data-for="importKey1"></i>
                         }
+                        <ReactTooltip
+                          id="importKey1"
+                          effect="solid"
+                          className="text-left" />
                       </div>
                       <div className="text-align-center">
                         <button

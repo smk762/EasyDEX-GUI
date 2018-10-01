@@ -102,13 +102,13 @@ const NavbarRender = function() {
                 data-tip={ translate('INDEX.WALLET_OFFLINE') }
                 data-for="navbar">
                 <span className="offline-icon"></span> { translate('INDEX.OFFLINE') }
-                <ReactTooltip
-                  id="navbar"
-                  effect="solid"
-                  className="text-left" />
               </li>
             }
           </ul>
+          <ReactTooltip
+              id="importKey1"
+              effect="solid"
+              className="text-left" />
           <ul className="nav navbar-toolbar navbar-right navbar-toolbar-right">
             <li>
               <a

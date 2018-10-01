@@ -606,17 +606,16 @@ class NotaryElectionsModal extends React.Component {
                         onClick={ this.toggleSeedInputVisibility }></i>
                       { this.state.seedExtraSpaces &&
                         this.state.userType === 'voter' &&
-                        <span>
-                          <i className="icon fa-warning seed-extra-spaces-warning"
-                            data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                            data-html={ true }
-                            data-for="notary"></i>
-                          <ReactTooltip
-                            id="notary"
-                            effect="solid"
-                            className="text-left" />
-                        </span>
+                        <i
+                          className="icon fa-warning seed-extra-spaces-warning"
+                          data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                          data-html={ true }
+                          data-for="notary"></i>
                       }
+                      <ReactTooltip
+                        id="notary"
+                        effect="solid"
+                        className="text-left" />
                       <button
                         onClick={ this.loginSeed }
                         disabled={
