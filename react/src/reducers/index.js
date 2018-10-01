@@ -10,6 +10,7 @@ import Settings from './settings';
 import Interval from './interval';
 import Login from './login';
 import Dex from './dex';
+import Dice from './dice';
 
 const appReducer = combineReducers({
   AddCoin,
@@ -21,16 +22,13 @@ const appReducer = combineReducers({
   Interval,
   Login,
   Dex,
+  Dice,
   routing: routerReducer,
 });
 
 // reset app state on logout
 const initialState = appReducer({}, {});
 const rootReducer = (state, action) => {
-  /*if (action.type === 'LOGOUT') {
-    state = initialState;
-  }*/
-
   return appReducer(state, action);
 }
 

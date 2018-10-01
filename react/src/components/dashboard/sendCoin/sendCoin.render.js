@@ -109,7 +109,7 @@ export const _SendFormRender = function() {
               htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
             <input
               type="text"
-              className="form-control"
+              className={ 'form-control' + (this.props.AddressBook && this.props.AddressBook.arr && this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin] ? ' send-to-padding-right' : '') }
               name="sendTo"
               onChange={ this.updateInput }
               value={ this.state.sendTo }
