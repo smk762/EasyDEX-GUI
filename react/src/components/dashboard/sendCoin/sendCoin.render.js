@@ -78,8 +78,7 @@ export const _SendFormRender = function() {
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             { this.props.ActiveCoin.mode === 'spv' &&
-              ((this.props.AddressBook && this.props.AddressBook.arr && !this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin]) ||
-              (this.props.AddressBook && !this.props.AddressBook.arr)) &&
+              this.renderAddressBookDropdown(true) < 1 &&
               <button
                 type="button"
                 className="btn btn-default btn-send-self"
@@ -90,6 +89,7 @@ export const _SendFormRender = function() {
             { this.props.AddressBook &&
               this.props.AddressBook.arr &&
               this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin] &&
+              this.renderAddressBookDropdown(true) > 0 &&
               <button
                 type="button"
                 className="btn btn-default btn-send-address-book-dropdown"

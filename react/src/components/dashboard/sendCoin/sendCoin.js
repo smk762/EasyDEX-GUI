@@ -1013,9 +1013,9 @@ class SendCoin extends React.Component {
     }
   }
 
-  renderAddressBookDropdown() {
+  renderAddressBookDropdown(countAddressesSpv) {
     const _coin = isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin;
-    const _addressBook = this.props.AddressBook.arr[_coin];
+    const _addressBook = this.props.AddressBook && this.props.AddressBook.arr ? this.props.AddressBook.arr[_coin] : [];
     let _items = [];
 
     if (this.props.ActiveCoin.mode === 'spv') {
@@ -1027,14 +1027,21 @@ class SendCoin extends React.Component {
     }
 
     for (let i = 0; i < _addressBook.length; i++) {
-      _items.push(
-        <li
-          key={ `send-address-book-item-${i}` }
-          onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
-      );
+      if (this.props.ActiveCoin.mode === 'native' ||
+          (this.props.ActiveCoin.mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
+        _items.push(
+          <li
+            key={ `send-address-book-item-${i}` }
+            onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
+        );
+      }
     }
 
-    return _items;
+    if (countAddressesSpv) {
+      return this.props.ActiveCoin.mode === 'spv' ? _items.length - 1 : _items.length;
+    } else {
+      return _items;
+    }
   }
 
   render() {
