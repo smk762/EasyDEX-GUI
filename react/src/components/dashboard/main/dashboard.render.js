@@ -19,6 +19,7 @@ import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
+import Dice from '../dice/dice';
 
 const DashboardRender = function() {
   return (
@@ -37,6 +38,11 @@ const DashboardRender = function() {
             <WalletsTxInfo />
             <WalletsMain />
             <ClaimInterestModal />
+          </div>
+        }
+        { this.isSectionActive('dice') &&
+          <div>
+            <Dice />
           </div>
         }
         { this.isSectionActive('edex') &&
