@@ -16,6 +16,7 @@ import {
   loginWithPin,
   addCoin,
   validateAddress,
+  clearOPIDs,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -110,7 +111,12 @@ class SendCoin extends React.Component {
     this.verifyPin = this.verifyPin.bind(this);
     this.setDefaultFee = this.setDefaultFee.bind(this);
     this.setToAddress = this.setToAddress.bind(this);
+    this.clearOPIDsManual = this.clearOPIDsManual.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  clearOPIDsManual() {
+    Store.dispatch(clearOPIDs(this.props.ActiveCoin.coin));
   }
 
   setToAddress(pub) {

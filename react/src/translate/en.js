@@ -1001,6 +1001,9 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    ALL_OPID_CLEARED: 'All Z transaction(s) traces are cleared!',
+    CLEAR_ALL: 'Clear all',
+    CLEAR_ALL_DESC: 'For maximum privacy it\'s advised to clear all traces of your outgoing z transactions including runtime data.<br>If you want this action to take place automatically see Settings/App config section.',
     SELECT_ADDRESS: 'Select an address',
     INVALID_Z_ADDRESS: 'Invalid Z address',
     ENTER_Z_ADDR: 'Enter Z address',

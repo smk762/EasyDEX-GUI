@@ -3,7 +3,10 @@ import {
   DASHBOARD_ACTIVE_COIN_SENDTO,
 } from '../storeType';
 import translate from '../../translate/translate';
-import { triggerToaster } from '../actionCreators';
+import {
+  triggerToaster,
+  getDashboardUpdate,
+} from '../actionCreators';
 import Config, {
   token,
   agamaPort,
@@ -247,4 +250,46 @@ export const validateAddressPromise = (coin, address) => {
       resolve(json);
     });
   });
+}
+
+export const clearOPIDs = (coin) => {
+  return dispatch => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'z_getoperationresult',
+      rpc2cli,
+      token,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.txDataFail') + ' (code: clearOPIDs)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      json = json.result;
+
+      if (json.length) {
+        dispatch(
+          triggerToaster(
+            translate('SEND.ALL_OPID_CLEARED'),
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'success'
+          )
+        );
+        Store.dispatch(getDashboardUpdate(coin));
+      }
+    });
+  };
 }

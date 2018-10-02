@@ -662,6 +662,23 @@ export const SendRender = function() {
                         <h3 className="panel-title">
                           { translate('INDEX.OPERATIONS_STATUSES') }
                         </h3>
+                        <span className="send-clear-opids">
+                          <span
+                            className="pointer"
+                            onClick={ this.clearOPIDsManual }>
+                            <i className="icon fa-trash margin-right-5"></i>
+                            { translate('SEND.CLEAR_ALL') }
+                          </span>
+                          <i
+                            className="icon fa-question-circle settings-help margin-left-10"
+                            data-tip={ translate('SEND.CLEAR_ALL_DESC') }
+                            data-html={ true }
+                            data-for="clearOpids"></i>
+                          <ReactTooltip
+                            id="clearOpids"
+                            effect="solid"
+                            className="text-left" />
+                        </span>
                       </header>
                       <div className="panel-body">
                         <table
