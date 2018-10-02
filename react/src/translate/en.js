@@ -731,7 +731,7 @@ const LANG_EN = {
     GETTING_TXID_INFO: 'Getting txid info for updating funds data',
     REFRESHING_FUNDS: 'Refreshing Wallet Funds',
     TX_FAILED: 'Sent Transaction failed. Please check send Transaction page for details.',
-    TX_SENT_ALT: 'Transaction sent successfully. Check send section for details.',
+    TX_SENT_ALT: 'Transaction sent successfully. Check Operation Statuses section for details below. It may take sometime for it to appear on your screen.',
     COIN_STARTED: 'coin started',
     ADDR_ALREADY_REG: 'address already registered on network.',
     REG: 'Registered',
