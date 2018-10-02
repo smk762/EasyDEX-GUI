@@ -117,6 +117,7 @@ class SendCoin extends React.Component {
     this.setState({
       sendTo: pub,
       addressBookSelectorOpen: false,
+      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && pub.substring(0, 2) === 'zc' && pub.length === 95 ? true : false,      
     });
   }
 
@@ -341,7 +342,7 @@ class SendCoin extends React.Component {
     if (_addresses &&
         (!_addresses.private || _addresses.private.length === 0)) {
       updatedState = {
-        renderAddressDropdown: false,
+        renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false,
         lastSendToResponse: props.ActiveCoin.lastSendToResponse,
         coin: props.ActiveCoin.coin,
       };
@@ -433,6 +434,10 @@ class SendCoin extends React.Component {
           <span>
             { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
           </span>
+        );
+      } else {
+        return (
+          <span>{ translate('SEND.SELECT_ADDRESS') }</span>
         );
       }
     }
@@ -545,6 +550,12 @@ class SendCoin extends React.Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
+
+    setTimeout(() => {
+      this.setState({
+        renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false,
+      });
+    }, 100);
   }
 
   fetchBTCFees() {

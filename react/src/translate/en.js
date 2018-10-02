@@ -1001,6 +1001,7 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    SELECT_ADDRESS: 'Select an address',
     INVALID_Z_ADDRESS: 'Invalid Z address',
     ENTER_Z_ADDR: 'Enter Z address',
     COIN_CONTROL: 'Coin control',

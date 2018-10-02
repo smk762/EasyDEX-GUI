@@ -37,6 +37,7 @@ export const AddressListRender = function() {
         <ul className="dropdown-menu inner">
           { (this.props.ActiveCoin.mode === 'spv' ||
             (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+            (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.length !== 95)) &&
             <li
               className="selected"
               onClick={ () => this.updateAddressSelection(null, 'public', null) }>
@@ -120,7 +121,7 @@ export const _SendFormRender = function() {
           </div>
           <div className="col-lg-12 form-group form-material">
             { (this.props.ActiveCoin.mode === 'spv' ||
-                (this.props.ActiveCoin.mode === 'native' && this.state.sendFrom)) &&
+               (this.props.ActiveCoin.mode === 'native' && this.state.sendFrom)) &&
               <button
                 type="button"
                 className="btn btn-default btn-send-self"
