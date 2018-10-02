@@ -780,6 +780,24 @@ class Login extends React.Component {
     }, type === 'native' ? 5000 : 2000);
   }
 
+  renderPinsList() {
+    const _pins = this.props.Login.pinList;
+    let _items = [];
+
+    for (let i = 0; i < _pins.length; i++) {
+      _items.push(
+        <option
+          className="login-option"
+          value={ _pins[i] }
+          key={ _pins[i] }>
+          { _pins[i] }
+        </option>
+      );
+    }
+
+    return _items;
+  }
+
   renderSwallModal() {
     if (this.state.displaySeedBackupModal) {
       return SwallModalRender.call(this);

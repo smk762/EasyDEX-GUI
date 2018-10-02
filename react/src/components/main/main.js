@@ -22,7 +22,9 @@ class Main extends React.Component {
     const appVersion = mainWindow.appBasicInfo;
 
     if (appVersion) {
-      const _version = `v${appVersion.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : (mainWindow.arch === 'spv-only' ? '-spv-only' : '-32bit')}-beta`;
+      const _arch = `${mainWindow.arch === 'x64' ? '' : (mainWindow.arch === 'spv-only' ? '-spv-only' : '-32bit')}-beta`;
+      const _version = `v${appVersion.version.replace('version=', '')}${_arch}`;
+      
       document.title = `${appVersion.name} (${_version})`;
     }
 

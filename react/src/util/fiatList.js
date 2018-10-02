@@ -33,4 +33,4 @@ const fiatList = [
   'try',
 ];
 
-default export fiatList;
+export default fiatList;

@@ -23,13 +23,6 @@ const LoginRender = function() {
               height="160"
               alt="SuperNET Agama" />
           </div>
-          { /*mainWindow.nnVoteChain &&
-            <a
-              className="login-nn-elections"
-              onClick={ () => this._toggleNotaryElectionsModal() }>
-              <i className="icon fa-thumbs-up"></i> Notary Elections 2018
-            </a>*/
-          }
           <div className="login-settings-dropdown margin-bottom-30">
             <div>
               <span
@@ -39,27 +32,29 @@ const LoginRender = function() {
                 <span className="login-settings-dropdown-label">{ translate('LOGIN.QUICK_ACCESS') }</span>
               </span>
             </div>
-            <div>
-              <ul className={ this.state.displayLoginSettingsDropdown ? 'dropdown-menu show' : 'hide' }>
-                <li>
-                  <a onClick={ () => this.toggleLoginSettingsDropdownSection('settings') }>
-                    <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
-                  </a>
-                </li>
-                <li>
-                  <a onClick={ () => this.toggleLoginSettingsDropdownSection('about') }>
-                    <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
-                  </a>
-                </li>
-                { this.renderResetSPVCoinsOption() &&
+            { this.state.displayLoginSettingsDropdown &&
+              <div>
+                <ul className="dropdown-menu show">
                   <li>
-                    <a onClick={ this.resetSPVCoins }>
-                      <i className="icon fa-trash"></i> { translate('LOGIN.QMENU_REMOVE_SPV') }
+                    <a onClick={ () => this.toggleLoginSettingsDropdownSection('settings') }>
+                      <i className="icon md-settings"></i> { translate('INDEX.SETTINGS') }
                     </a>
                   </li>
-                }
-              </ul>
-            </div>
+                  <li>
+                    <a onClick={ () => this.toggleLoginSettingsDropdownSection('about') }>
+                      <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
+                    </a>
+                  </li>
+                  { this.renderResetSPVCoinsOption() &&
+                    <li>
+                      <a onClick={ this.resetSPVCoins }>
+                        <i className="icon fa-trash"></i> { translate('LOGIN.QMENU_REMOVE_SPV') }
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
           </div>
 
           <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
@@ -82,18 +77,16 @@ const LoginRender = function() {
                     autoFocus>
                     <option
                       className="login-option"
-                      value="">{ translate('INDEX.SELECT_PIN_NAME') }</option>
-                    { this.props.Login.pinList.map((pin) => {
-                      return <option
-                              className="login-option"
-                              value={ pin }
-                              key={ pin }>{ pin }</option>
-                      })
-                    }
+                      value="">
+                      { translate('INDEX.SELECT_PIN_NAME') }
+                    </option>
+                    { this.renderPinsList() }
                   </select>
                   <label
                     className="floating-label margin-bottom-20"
-                    htmlFor="selectedPin">{ translate('LOGIN.PIN_PW_ACCESS') }</label>
+                    htmlFor="selectedPin">
+                    { translate('LOGIN.PIN_PW_ACCESS') }
+                  </label>
                 </div>
                 <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40 margin-bottom-80">
                   <input
@@ -132,7 +125,9 @@ const LoginRender = function() {
                 onClick={ this.toggleSeedInputVisibility }></i>
               <label
                 className="floating-label"
-                htmlFor="inputPassword">{ translate('INDEX.WALLET_SEED') }</label>
+                htmlFor="inputPassword">
+                { translate('INDEX.WALLET_SEED') }
+              </label>
               <div className="qr-modal-login-block">
                 <QRModal
                   mode="scan"
@@ -141,7 +136,7 @@ const LoginRender = function() {
             </div>
             { this.state.loginPassPhraseSeedType &&
               <div
-                className={ `form-group form-material floating horizontal-padding-0 seed-type-block ` + (this.props.Login.pinList.length > 0 ? 'margin-top-130' : 'margin-top-20') }
+                className={ 'form-group form-material floating horizontal-padding-0 seed-type-block ' + (this.props.Login.pinList.length > 0 ? 'margin-top-130' : 'margin-top-20') }
                 style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
                 <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
               </div>
@@ -156,7 +151,6 @@ const LoginRender = function() {
               id="login1"
               effect="solid"
               className="text-left" />
-
             <button
               type="button"
               className="btn btn-primary btn-block margin-top-20"
@@ -191,39 +185,110 @@ const LoginRender = function() {
             </div>
           </div>
 
-          <div className={ this.state.activeLoginSection === 'activateCoin' ? 'show' : 'hide' }>
-            <h4 className="color-white">
-              { translate('INDEX.WELCOME_PLEASE_ADD') }
-            </h4>
-            <div className="form-group form-material floating width-540 vertical-margin-30 auto-side-margin">
-              <button
-                className="btn btn-lg btn-primary btn-block ladda-button"
-                onClick={ this.toggleActivateCoinForm }
-                disabled={ !this.props.Main }>
-                <span className="ladda-label">
-                  { translate('INDEX.ACTIVATE_COIN') }
-                </span>
-              </button>
-              <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
-              { mainWindow.arch === 'x64' &&
+          { this.state.activeLoginSection === 'activateCoin' &&
+            <div className="show">
+              <h4 className="color-white">
+                { translate('INDEX.WELCOME_PLEASE_ADD') }
+              </h4>
+              <div className="form-group form-material floating width-540 vertical-margin-30 auto-side-margin">
+                <button
+                  className="btn btn-lg btn-primary btn-block ladda-button"
+                  onClick={ this.toggleActivateCoinForm }
+                  disabled={ !this.props.Main }>
+                  <span className="ladda-label">
+                    { translate('INDEX.ACTIVATE_COIN') }
+                  </span>
+                </button>
+                <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
+                { mainWindow.arch === 'x64' &&
+                  <div className="addcoin-shortcut">
+                    <div>
+                      <i className="icon fa-cube margin-right-5"></i>
+                      { translate('INDEX.NATIVE_MODE') }
+                      <i
+                        className="icon fa-question-circle login-help"
+                        data-tip={
+                          `<strong>${ translate('LOGIN.NATIVE_MODE_DESC_P1') }</strong> ` +
+                          `<u>${ translate('LOGIN.NATIVE_MODE_DESC_P2') }</u> ` +
+                          translate('LOGIN.NATIVE_MODE_DESC_P3') +
+                          '<br/>' +
+                          translate('LOGIN.NATIVE_MODE_DESC_P4') +
+                          ` <strong>${ translate('LOGIN.NATIVE_MODE_DESC_P5') }</strong> ` +
+                          translate('LOGIN.NATIVE_MODE_DESC_P6') +
+                          '<br/>' +
+                          translate('LOGIN.NATIVE_MODE_DESC_P7') +
+                          ` <u>${ translate('LOGIN.NATIVE_MODE_DESC_P8') }</u> ` +
+                          translate('LOGIN.NATIVE_MODE_DESC_P9')
+                        }
+                        data-html={ true }
+                        data-for="login2"></i>
+                      <ReactTooltip
+                        id="login2"
+                        effect="solid"
+                        className="text-left" />
+                    </div>
+                    <Select
+                      name="selectedShortcutNative"
+                      value={ this.state.selectedShortcutNative }
+                      onChange={ (event) => this.updateSelectedShortcut(event, 'native') }
+                      optionRenderer={ this.renderShortcutOption }
+                      valueRenderer={ this.renderShortcutOption }
+                      options={[
+                        {
+                          value: 'kmd',
+                          label: 'kmd',
+                        },
+                        {
+                          value: 'bntn',
+                          label: 'bntn',
+                        },
+                        {
+                          value: 'mnz',
+                          label: 'mnz',
+                        },
+                        {
+                          value: 'btch',
+                          label: 'btch',
+                        },
+                        {
+                          value: 'revs',
+                          label: 'revs',
+                        },
+                        {
+                          value: 'jumblr',
+                          label: 'jumblr',
+                        },
+                        {
+                          value: 'kmd+revs+jumblr',
+                          label: 'kmd+revs+jumblr',
+                        },
+                      ]} />
+                  </div>
+                }
                 <div className="addcoin-shortcut">
                   <div>
-                    <i className="icon fa-cube margin-right-5"></i>
-                    { translate('INDEX.NATIVE_MODE') }
+                    <i className="icon fa-flash margin-right-5"></i>
+                    { translate('INDEX.SPV_MODE') }
                     <i
                       className="icon fa-question-circle login-help"
-                      data-tip={ `<strong>${ translate('LOGIN.NATIVE_MODE_DESC_P1') }</strong> <u>${ translate('LOGIN.NATIVE_MODE_DESC_P2') }</u> ${ translate('LOGIN.NATIVE_MODE_DESC_P3') }<br/>${ translate('LOGIN.NATIVE_MODE_DESC_P4') } <strong>${ translate('LOGIN.NATIVE_MODE_DESC_P5') }</strong> ${ translate('LOGIN.NATIVE_MODE_DESC_P6') }<br/>${ translate('LOGIN.NATIVE_MODE_DESC_P7') } <u>${ translate('LOGIN.NATIVE_MODE_DESC_P8') }</u> ${ translate('LOGIN.NATIVE_MODE_DESC_P9') }` }
+                      data-tip={ 
+                        translate('LOGIN.SPV_MODE_DESC_P1') +
+                        ` <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ` +
+                        translate('LOGIN.SPV_MODE_DESC_P3') +
+                        '<br/>' +
+                        translate('LOGIN.SPV_MODE_DESC_P4')
+                      }
                       data-html={ true }
-                      data-for="login2"></i>
+                      data-for="login3"></i>
                     <ReactTooltip
-                      id="login2"
+                      id="login3"
                       effect="solid"
                       className="text-left" />
                   </div>
                   <Select
-                    name="selectedShortcutNative"
-                    value={ this.state.selectedShortcutNative }
-                    onChange={ (event) => this.updateSelectedShortcut(event, 'native') }
+                    name="selectedShortcutSPV"
+                    value={ this.state.selectedShortcutSPV }
+                    onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
                     optionRenderer={ this.renderShortcutOption }
                     valueRenderer={ this.renderShortcutOption }
                     options={[
@@ -232,16 +297,20 @@ const LoginRender = function() {
                         label: 'kmd',
                       },
                       {
+                        value: 'chips',
+                        label: 'chips',
+                      },
+                      {
                         value: 'bntn',
                         label: 'bntn',
                       },
                       {
-                        value: 'mnz',
-                        label: 'mnz',
-                      },
-                      {
                         value: 'btch',
                         label: 'btch',
+                      },
+                      {
+                        value: 'mnz',
+                        label: 'mnz',
                       },
                       {
                         value: 'revs',
@@ -257,64 +326,9 @@ const LoginRender = function() {
                       },
                     ]} />
                 </div>
-              }
-              <div className="addcoin-shortcut">
-                <div>
-                  <i className="icon fa-flash margin-right-5"></i>
-                  { translate('INDEX.SPV_MODE') }
-                  <i
-                    className="icon fa-question-circle login-help"
-                    data-tip={ `${ translate('LOGIN.SPV_MODE_DESC_P1') } <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ${ translate('LOGIN.SPV_MODE_DESC_P3') }<br/>${ translate('LOGIN.SPV_MODE_DESC_P4') }` }
-                    data-html={ true }
-                    data-for="login3"></i>
-                  <ReactTooltip
-                    id="login3"
-                    effect="solid"
-                    className="text-left" />
-                </div>
-                <Select
-                  name="selectedShortcutSPV"
-                  value={ this.state.selectedShortcutSPV }
-                  onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
-                  optionRenderer={ this.renderShortcutOption }
-                  valueRenderer={ this.renderShortcutOption }
-                  options={[
-                    {
-                      value: 'kmd',
-                      label: 'kmd',
-                    },
-                    {
-                      value: 'chips',
-                      label: 'chips',
-                    },
-                    {
-                      value: 'bntn',
-                      label: 'bntn',
-                    },
-                    {
-                      value: 'btch',
-                      label: 'btch',
-                    },
-                    {
-                      value: 'mnz',
-                      label: 'mnz',
-                    },
-                    {
-                      value: 'revs',
-                      label: 'revs',
-                    },
-                    {
-                      value: 'jumblr',
-                      label: 'jumblr',
-                    },
-                    {
-                      value: 'kmd+revs+jumblr',
-                      label: 'kmd+revs+jumblr',
-                    },
-                  ]} />
               </div>
             </div>
-          </div>
+          }
 
           <div className={ this.state.activeLoginSection === 'signup' ? 'show' : 'hide' }>
             <div className="register-form">
@@ -402,18 +416,11 @@ const LoginRender = function() {
                   onClick={ () => this.copyPassPhraseToClipboard() }>
                   { translate('INDEX.COPY') }
                 </button>
-                {/*<span className={ this.state.isCustomSeedWeak ? 'tooltiptext' : 'hide' }>
-                  <strong>{ translate('INDEX.WEAK_SEED') }</strong><br /><br />
-                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN') }<br />
-                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN1') }<br />
-                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN2') }<br />
-                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN3') }<br />
-                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN4') }<br />
-                  { translate('INDEX.YOUR_SEED_MUST_CONTAIN5') }<br />
-                </span>*/}
                 <label
                   className="floating-label"
-                  htmlFor="walletseed">{ translate('INDEX.WALLET_SEED') }</label>
+                  htmlFor="walletseed">
+                  { translate('INDEX.WALLET_SEED') }
+                </label>
               </div>
               <div className="form-group form-material floating">
                 <textarea
@@ -423,15 +430,21 @@ const LoginRender = function() {
                   value={ this.state.randomSeedConfirm }
                   onChange={ this.updateRegisterConfirmPassPhraseInput }
                   id="rwalletseed"></textarea>
-                <span className={ this.state.isSeedBlank ? 'help-block' : 'hide' }>
-                  { translate('LOGIN.MUST_ENTER_SEED') }.
-                </span>
-                <span className={ this.state.isSeedConfirmError ? 'help-block' : 'hide' }>
-                  { translate('LOGIN.ENTER_VALUE_AGAIN') }.
-                </span>
+                { this.state.isSeedBlank &&
+                  <span className="help-block">
+                    { translate('LOGIN.MUST_ENTER_SEED') }.
+                  </span>
+                }
+                { this.state.isSeedConfirmError &&
+                  <span className="help-block">
+                    { translate('LOGIN.ENTER_VALUE_AGAIN') }.
+                  </span>
+                }
                 <label
                   className="floating-label"
-                  htmlFor="rwalletseed">{ translate('INDEX.CONFIRM_SEED') }</label>
+                  htmlFor="rwalletseed">
+                  { translate('INDEX.CONFIRM_SEED') }
+                </label>
                 { !this.isCustomWalletSeed() &&
                   <div className="seed-encrypt-block">
                     <div className="form-group form-material floating text-left">
@@ -456,7 +469,11 @@ const LoginRender = function() {
                         </span>
                         <i
                           className="icon fa-question-circle login-help"
-                          data-tip={ `${translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P1')}<br />${translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P2')}` }
+                          data-tip={ 
+                            translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P1') +
+                            '<br />' +
+                            translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P2')
+                          }
                           data-html={ true }
                           data-for="login4"></i>
                         <ReactTooltip
@@ -478,7 +495,9 @@ const LoginRender = function() {
                             value={ this.state.encryptKey || '' } />
                           <label
                             className="floating-label"
-                            htmlFor="encryptKey">{ translate('LOGIN.SEED_ENCRYPT_KEY') }</label>
+                            htmlFor="encryptKey">
+                            { translate('LOGIN.SEED_ENCRYPT_KEY') }
+                          </label>
                         </div>
                         <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
                           <input
@@ -491,7 +510,9 @@ const LoginRender = function() {
                             value={ this.state.encryptKeyConfirm || '' } />
                           <label
                             className="floating-label"
-                            htmlFor="encryptKeyConfirm">{ translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }</label>
+                            htmlFor="encryptKeyConfirm">
+                            { translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }
+                          </label>
                         </div>
                         <div className="toggle-box vertical-padding-20 text-left">
                           <span className="pointer">
@@ -532,7 +553,9 @@ const LoginRender = function() {
                               value={ this.state.customPinFilename || '' } />
                             <label
                               className="floating-label"
-                              htmlFor="customPinFilename">{ translate('LOGIN.CUSTOM_PIN_FNAME') }</label>
+                              htmlFor="customPinFilename">
+                              { translate('LOGIN.CUSTOM_PIN_FNAME') }
+                            </label>
                           </div>
                         }
                       </div>
