@@ -219,13 +219,13 @@ const WalletsTxInfoRender = function(txInfo) {
                               <tr>
                                 <td>{ translate('KV.TAG') }</td>
                                 <td className="selectable">
-                                  { this.state.txDetails.opreturn.kvDecoded.tag }
+                                  { renderKvContent(this.state.txDetails.opreturn.kvDecoded.tag) }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ translate('KV.TITLE') }</td>
                                 <td className="selectable">
-                                  { this.state.txDetails.opreturn.kvDecoded.content.title }
+                                  { renderKvContent(this.state.txDetails.opreturn.kvDecoded.content.title) }
                                 </td>
                               </tr>
                               <tr>
