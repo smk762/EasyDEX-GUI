@@ -199,7 +199,7 @@ export const ReceiveCoinRender = function() {
                             <span className="caret"></span>
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
-                           { (this.props.coin !== 'KMD' ||
+                           { (this.props.coin === 'KMD' ||
                               (mainWindow.chainParams &&
                                mainWindow.chainParams[this.props.coin] &&
                                !mainWindow.chainParams[this.props.coin].ac_private)) &&
