@@ -67,7 +67,7 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
     };
   } else {
     let _listtransactions = json.result.listtransactions;
-    
+
     if (_listtransactions &&
         _listtransactions.error) {
       _listtransactions = null;
@@ -112,7 +112,7 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
         }
       }
 
-      let zlistreceivedbyaddressHistory = [];      
+      let zlistreceivedbyaddressHistory = [];
       if (_addresses &&
           _addresses.private &&
           _addresses.private.length) {
@@ -126,15 +126,19 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
                 address: _addresses.private[i].address,
                 type: 'received',
                 ztx: true,
-              });   
+              });
             }
           }
         }
       }
 
-      json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
-      json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
-      json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);
+      if (json &&
+          json.result !== 'error' &&
+          json.result) {
+        json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
+        json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
+        json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);
+      }
 
       return {
         type: DASHBOARD_UPDATE,
