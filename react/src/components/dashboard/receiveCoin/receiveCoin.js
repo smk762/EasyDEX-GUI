@@ -192,7 +192,7 @@ class ReceiveCoin extends React.Component {
         } else {
           if (type === 'private' ||
               (type === 'public' &&
-              (this.props.coin !== 'KMD' ||
+               (this.props.coin === 'KMD' ||
                 (mainWindow.chainParams &&
                  mainWindow.chainParams[this.props.coin] &&
                  !mainWindow.chainParams[this.props.coin].ac_private)))) {

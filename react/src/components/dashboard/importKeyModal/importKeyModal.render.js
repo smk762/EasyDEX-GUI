@@ -25,9 +25,10 @@ export const ImportKeyModalRender = function() {
               <h4 className="modal-title white text-left">{ translate('IMPORT_KEY.IMPORT_KEY') }</h4>
             </div>
             <div className="modal-body">
-              { mainWindow.chainParams &&
-                mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-                !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
+              { (this.props.ActiveCoin.coin === 'KMD' ||
+                (mainWindow.chainParams &&
+                 mainWindow.chainParams[this.props.ActiveCoin.coin] &&
+                 !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
                 <div>
                   <div className="padding-bottom-40">
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P1') }&nbsp;

@@ -36,7 +36,7 @@ export const AddressListRender = function() {
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
           { (this.props.ActiveCoin.mode === 'spv' ||
-            (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+            (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
             (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.length !== 95)) &&
             <li
               className="selected"
@@ -52,7 +52,7 @@ export const AddressListRender = function() {
             </li>
           }
           { (this.props.ActiveCoin.mode === 'spv' ||
-             (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+             (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
             this.renderAddressByType('public')
           }
           { this.renderAddressByType('private') }
@@ -66,7 +66,7 @@ export const _SendFormRender = function() {
   return (
     <div className="extcoin-send-form">
       { (this.state.renderAddressDropdown ||
-        (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+        (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             <label className="control-label padding-bottom-10">
@@ -117,7 +117,7 @@ export const _SendFormRender = function() {
               onChange={ this.updateInput }
               value={ this.state.sendTo }
               id="kmdWalletSendTo"
-              placeholder={ translate('SEND.' + (this.props.ActiveCoin.mode === 'spv' ? 'ENTER_ADDRESS' : (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
+              placeholder={ translate('SEND.' + (this.props.ActiveCoin.mode === 'spv' ? 'ENTER_ADDRESS' : (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>

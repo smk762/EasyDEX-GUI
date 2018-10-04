@@ -438,7 +438,7 @@ class SendCoin extends React.Component {
     } else {
       if (this.props.ActiveCoin.mode === 'spv' ||
           this.state.addressType === 'private' ||
-          (this.state.addressType === 'public' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) {
+          (this.state.addressType === 'public' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) {
         return (
           <span>
             { this.props.ActiveCoin.mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${this.props.ActiveCoin.coin} ] ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}` : translate('INDEX.T_FUNDS') }
@@ -757,7 +757,7 @@ class SendCoin extends React.Component {
 
   // TODO: reduce to a single toast
   validateSendFormData() {
-    const isAcPrivate = this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private ? true : false;
+    const isAcPrivate = this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private ? true : false;
     let valid = true;
 
     if (this.props.ActiveCoin.mode === 'spv') {
@@ -1037,7 +1037,7 @@ class SendCoin extends React.Component {
 
   renderAddressBookDropdown(countAddressesSpv) {
     const _coin = isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin;
-    const _addressBook = this.props.AddressBook && this.props.AddressBook.arr ? this.props.AddressBook.arr[_coin] : [];
+    const _addressBook = this.props.AddressBook && this.props.AddressBook.arr && typeof this.props.AddressBook.arr === 'object' ? this.props.AddressBook.arr[_coin] : [];
     let _items = [];
 
     if (this.props.ActiveCoin.mode === 'spv') {
