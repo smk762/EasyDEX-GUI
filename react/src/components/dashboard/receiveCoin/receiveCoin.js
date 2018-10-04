@@ -192,9 +192,10 @@ class ReceiveCoin extends React.Component {
         } else {
           if (type === 'private' ||
               (type === 'public' &&
-              mainWindow.chainParams &&
-              mainWindow.chainParams[this.props.coin] &&
-              !mainWindow.chainParams[this.props.coin].ac_private)) {
+              (this.props.coin !== 'KMD' ||
+                (mainWindow.chainParams &&
+                 mainWindow.chainParams[this.props.coin] &&
+                 !mainWindow.chainParams[this.props.coin].ac_private)))) {
             items.push(
               AddressItemRender.call(this, address, type)
             );

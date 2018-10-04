@@ -199,9 +199,10 @@ export const ReceiveCoinRender = function() {
                             <span className="caret"></span>
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
-                           { mainWindow.chainParams &&
-                             mainWindow.chainParams[this.props.coin] &&
-                             !mainWindow.chainParams[this.props.coin].ac_private &&
+                           { (this.props.coin !== 'KMD' ||
+                              (mainWindow.chainParams &&
+                               mainWindow.chainParams[this.props.coin] &&
+                               !mainWindow.chainParams[this.props.coin].ac_private)) &&
                               <li>
                                 <a onClick={ () => this.getNewAddress('public') }>
                                   <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
