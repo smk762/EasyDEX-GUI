@@ -200,6 +200,7 @@ export const ReceiveCoinRender = function() {
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
                            { mainWindow.chainParams &&
+                             mainWindow.chainParams[this.props.coin] &&
                              !mainWindow.chainParams[this.props.coin].ac_private &&
                               <li>
                                 <a onClick={ () => this.getNewAddress('public') }>
