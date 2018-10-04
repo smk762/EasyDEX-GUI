@@ -348,10 +348,13 @@ class SendCoin extends React.Component {
     if (_addresses &&
         (!_addresses.private || _addresses.private.length === 0)) {
       updatedState = {
-        renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false,
         lastSendToResponse: props.ActiveCoin.lastSendToResponse,
         coin: props.ActiveCoin.coin,
       };
+
+      if ( this.props.ActiveCoin.mode === 'native') {
+        updatedState.renderAddressDropdown = this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false;
+      }
     } else {
       updatedState = {
         renderAddressDropdown: true,
@@ -557,11 +560,13 @@ class SendCoin extends React.Component {
       [e.target.name]: e.target.value,
     });
 
-    setTimeout(() => {
-      this.setState({
-        renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false,
-      });
-    }, 100);
+    if (this.props.ActiveCoin.mode === 'native') {
+      setTimeout(() => {
+        this.setState({
+          renderAddressDropdown: this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false,
+        });
+      }, 100);
+    }
   }
 
   fetchBTCFees() {

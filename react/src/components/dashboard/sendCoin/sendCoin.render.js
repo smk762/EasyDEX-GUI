@@ -65,7 +65,8 @@ export const AddressListRender = function() {
 export const _SendFormRender = function() {
   return (
     <div className="extcoin-send-form">
-      { this.state.renderAddressDropdown &&
+      { (this.state.renderAddressDropdown ||
+        (this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             <label className="control-label padding-bottom-10">
@@ -89,6 +90,7 @@ export const _SendFormRender = function() {
             }
             { this.props.AddressBook &&
               this.props.AddressBook.arr &&
+              typeof this.props.AddressBook.arr === 'object' &&
               this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin] &&
               this.renderAddressBookDropdown(true) > 0 &&
               <button
@@ -110,7 +112,7 @@ export const _SendFormRender = function() {
               htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
             <input
               type="text"
-              className={ 'form-control' + (this.props.AddressBook && this.props.AddressBook.arr && this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin] ? ' send-to-padding-right' : '') }
+              className={ 'form-control' + (this.props.AddressBook && this.props.AddressBook.arr && typeof this.props.AddressBook.arr === 'object' && this.props.AddressBook.arr[isKomodoCoin(this.props.ActiveCoin.coin) ? 'KMD' : this.props.ActiveCoin.coin] ? ' send-to-padding-right' : '') }
               name="sendTo"
               onChange={ this.updateInput }
               value={ this.state.sendTo }
