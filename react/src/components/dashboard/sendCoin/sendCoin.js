@@ -123,7 +123,7 @@ class SendCoin extends React.Component {
     this.setState({
       sendTo: pub,
       addressBookSelectorOpen: false,
-      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && pub.substring(0, 2) === 'zc' && pub.length === 95 ? true : false,      
+      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && pub.substring(0, 2) === 'zc' && pub.length === 95 ? true : this.state.renderAddressDropdown,      
     });
   }
 
@@ -353,7 +353,7 @@ class SendCoin extends React.Component {
       };
 
       if ( this.props.ActiveCoin.mode === 'native') {
-        updatedState.renderAddressDropdown = this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false;
+        updatedState.renderAddressDropdown = this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown;
       }
     } else {
       updatedState = {
@@ -563,7 +563,7 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       setTimeout(() => {
         this.setState({
-          renderAddressDropdown: this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : false,
+          renderAddressDropdown: this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown,
         });
       }, 100);
     }
