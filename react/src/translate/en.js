@@ -55,7 +55,7 @@ const LANG_EN = {
     TIME_TILL_REWARDS_STOP: 'Time until rewards stop accruing',
     SHOW_ZERO_INTEREST: 'Show zero rewards',
     REQ_P1: 'Requirements to accrue rewards',
-    REQ_P2: 'spend transaction was made at least 1 hour ago, locktime field is set and amount is greater than',
+    REQ_P2: 'spend transaction was at least 1 hour ago, locktime field is set and amount is greater than',
     CLAIM_INTEREST: 'Claim @template@ rewards',
     LOADING: 'Loading rewards data',
     NO_DATA: 'No data',
@@ -623,7 +623,7 @@ const LANG_EN = {
   },
   DASHBOARD: {
     NA: 'N/A',
-    KMD_UTXO_ISSUES: 'One or several of your UTXO are not generating rewards.<br>This could happen either if utxo size is less than 10 KMD, locktime field is not set or last time you claimed was over a month ago.<br>Please click on "Claim now" button to see details.',    
+    KMD_UTXO_ISSUES: 'One or several of your UTXO are not generating rewards.<br>This could happen either if utxo size is less than 10 KMD, locktime field is not set or last time you claimed was over a month ago.<br>Please click on "Claim now" button to see details.',
     SHOW_ALL_ADDR: 'Show all addresses',
     RPC_CONN_FAILURE: 'Unable to establish RPC connection!<br>Retries count',
     REMOVE: 'Remove',

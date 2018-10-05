@@ -52,7 +52,7 @@ export const AddressListRender = function() {
             </li>
           }
           { (this.props.ActiveCoin.mode === 'spv' ||
-             (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+             ((this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin === 'KMD') || (this.props.ActiveCoin.mode === 'native' && this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private))) &&
             this.renderAddressByType('public')
           }
           { this.renderAddressByType('private') }
