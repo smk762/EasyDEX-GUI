@@ -36,10 +36,9 @@ export const getSyncInfoNativeKMD = (skipDebug, json, skipRemote) => {
     }
   } else {
     const coin = 'KMD';
-    // https://www.kmd.host/
     return dispatch => {
       return fetch(
-        'https://kmd.explorer.supernet.org/api/status?q=getInfo',
+        'https://kmdexplorer.io/insight-api-komodo/status?q=getInfo',
         fetchType.get
       )
       .catch((error) => {
