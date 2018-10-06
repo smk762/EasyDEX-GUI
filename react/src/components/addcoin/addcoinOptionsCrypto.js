@@ -1,5 +1,5 @@
 import translate from '../../translate/translate';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { electrumServers } from '../../util/mainWindow';
 import config from '../../config';
 import { cryptoCoins } from '../../util/coinHelper';
 import { sortObject } from 'agama-wallet-lib/src/utils';
@@ -49,9 +49,8 @@ const prepCoinsList = (filterActiveCoins) => {
   } else {
     for (let i = 0; i < coins.length; i++) {
       try {
-        if (mainWindow &&
-            mainWindow.electrumServers &&
-            mainWindow.electrumServers[coins[i].toLowerCase()] &&
+        if (electrumServers &&
+            electrumServers[coins[i].toLowerCase()] &&
             (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
             _activeCoins &&
             _activeCoins.spv &&

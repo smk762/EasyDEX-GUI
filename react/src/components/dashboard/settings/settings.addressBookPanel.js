@@ -7,7 +7,7 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { electrumServers } from '../../../util/mainWindow';
 import { cryptoCoins } from '../../../util/coinHelper';
 import Config from '../../../config';
 
@@ -21,9 +21,8 @@ const prepCoinsList = () => {
     if (Config.experimentalFeatures ||
         (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
       try {
-        if (mainWindow &&
-            mainWindow.electrumServers &&
-            mainWindow.electrumServers[coins[i].toLowerCase()] &&
+        if (electrumServers &&
+            electrumServers[coins[i].toLowerCase()] &&
             coins[i] !== 'CHIPS') {
           _coins.push(coins[i]);
         }
