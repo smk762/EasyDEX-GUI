@@ -283,7 +283,13 @@ export const apiElectrumKVTransactionsPromise = (coin, address) => {
 }
 
 export const apiElectrumTransactionsState = (json) => {
-  json = json.result;
+  if (json) {
+    json = json.result;
+  } else {
+    json = {
+      error: 'error',
+    };
+  }
 
   if (json &&
       json.error) {
