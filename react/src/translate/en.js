@@ -1159,6 +1159,7 @@ const LANG_EN = {
     CALL: 'Capital',
     CCL: 'CoinCollect',
     PIRATE: 'Pirate',
+	KOIN: 'Koinon Coin',  
   },
   CRYPTO: {
     STRAT: 'Stratis',
