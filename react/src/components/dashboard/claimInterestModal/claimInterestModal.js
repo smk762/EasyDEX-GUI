@@ -60,11 +60,13 @@ class ClaimInterestModal extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.ActiveCoin.mode === 'native') {
+    const _mode = this.props.ActiveCoin.mode;
+
+    if (_mode === 'native') {
       this.loadListUnspent();
     }
 
-    if (this.props.ActiveCoin.mode === 'spv') {
+    if (_mode === 'spv') {
       apiGetRemoteTimestamp()
       .then((res) => {
         if (res.msg === 'success') {
@@ -84,12 +86,14 @@ class ClaimInterestModal extends React.Component {
   }
 
   isFullySynced() {
-    if (this.props.ActiveCoin.progress &&
-        this.props.ActiveCoin.progress.longestchain &&
-        this.props.ActiveCoin.progress.blocks &&
-        this.props.ActiveCoin.progress.longestchain > 0 &&
-        this.props.ActiveCoin.progress.blocks > 0 &&
-        Number(this.props.ActiveCoin.progress.blocks) * 100 / Number(this.props.ActiveCoin.progress.longestchain) === 100) {
+    const _progress = this.props.ActiveCoin.progress;
+
+    if (_progress &&
+        _progress.longestchain &&
+        _progress.blocks &&
+        _progress.longestchain > 0 &&
+        _progress.blocks > 0 &&
+        Number(_progress.blocks) * 100 / Number(_progress.longestchain) === 100) {
       return true;
     }
   }
@@ -118,6 +122,8 @@ class ClaimInterestModal extends React.Component {
   }
 
   loadListUnspent() {
+    const _coin = this.props.ActiveCoin.coin;
+    const _mode = this.props.ActiveCoin.mode;
     let _transactionsList = [];
     let _totalInterest = 0;
     let _zeroInterestUtxo = false;
@@ -131,10 +137,10 @@ class ClaimInterestModal extends React.Component {
       });
     }, 1000);
 
-    if (this.props.ActiveCoin.mode === 'spv') {
+    if (_mode === 'spv') {
       apiElectrumListunspent(
-        this.props.ActiveCoin.coin,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        _coin,
+        this.props.Dashboard.electrumCoins[_coin].pub
       )
       .then((json) => {
         if (json !== 'error' &&
@@ -178,14 +184,14 @@ class ClaimInterestModal extends React.Component {
         }
       });
     } else {
-      getListUnspent(this.props.ActiveCoin.coin)
+      getListUnspent(_coin)
       .then((json) => {
         if (json &&
             json.length) {
           let _addresses = {};
 
           for (let i = 0; i < json.length; i++) {
-            getRawTransaction(this.props.ActiveCoin.coin, json[i].txid)
+            getRawTransaction(_coin, json[i].txid)
             .then((_json) => {
               if (json[i].interest === 0) {
                 _zeroInterestUtxo = true;
@@ -225,11 +231,15 @@ class ClaimInterestModal extends React.Component {
   }
 
   confirmClaimInterest() {
+    const _coin = this.props.ActiveCoin.coin;
+    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+    const _balance = this.props.ActiveCoin.balance;
+
     apiElectrumSendPromise(
-      this.props.ActiveCoin.coin,
-      this.props.ActiveCoin.balance.balanceSats,
-      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+      _coin,
+      _balance.balanceSats,
+      _pub,
+      _pub
     )
     .then((res) => {
       if (res.msg === 'error') {
@@ -243,7 +253,7 @@ class ClaimInterestModal extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
+            `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${_pub}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
             false
@@ -255,7 +265,10 @@ class ClaimInterestModal extends React.Component {
   }
 
   claimInterest(address, amount) {
-    if (this.props.ActiveCoin.coin === 'KMD') {
+    const _coin = this.props.ActiveCoin.coin;
+    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+
+    if (_coin === 'KMD') {
       if (this.props.ActiveCoin.mode === 'spv') {
         this.setState(Object.assign({}, this.state, {
           spvVerificationWarning: false,
@@ -263,10 +276,10 @@ class ClaimInterestModal extends React.Component {
         }));
 
         apiElectrumSendPreflight(
-          this.props.ActiveCoin.coin,
-          this.props.ActiveCoin.balance.balanceSats,
-          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+          _coin,
+          _balance.balanceSats,
+          _pub,
+          _pub
         )
         .then((sendPreflight) => {
           if (sendPreflight &&
@@ -294,7 +307,7 @@ class ClaimInterestModal extends React.Component {
         });
       } else {
         validateAddressPromise(
-          this.props.ActiveCoin.coin,
+          _coin,
           this.state.selectedAddress
         )
         .then((json) => {
@@ -315,9 +328,9 @@ class ClaimInterestModal extends React.Component {
             !json.result.isscript
           ) {
             sendToAddressPromise(
-              this.props.ActiveCoin.coin,
+              _coin,
               this.state.selectedAddress,
-              this.props.ActiveCoin.balance.transparent
+              _balance.transparent
             )
             .then((json) => {
               if (json.error &&
@@ -360,12 +373,14 @@ class ClaimInterestModal extends React.Component {
   }
 
   checkTransactionsListLength() {
-    if (this.state.transactionsList &&
-        this.state.transactionsList.length) {
+    const _txlist = this.state.transactionsList;
+
+    if (_txlist &&
+      _txlist.length) {
       return true;
     } else if (
-      !this.state.transactionsList ||
-      !this.state.transactionsList.length
+      !_txlist ||
+      !_txlist.length
     ) {
       return false;
     }
@@ -395,9 +410,9 @@ class ClaimInterestModal extends React.Component {
           key={ key }>
           <a onClick={ () => this.updateAddressSelection(key) }>
             <span className="text">{ key }</span>
-            <span
-              className="glyphicon glyphicon-ok check-mark pull-right"
-              style={{ display: this.state.selectedAddress === key ? 'inline-block' : 'none' }}></span>
+            { this.state.selectedAddress === key &&
+              <span className="glyphicon glyphicon-ok check-mark pull-right"></span>
+            }
           </a>
         </li>
       );
@@ -424,17 +439,19 @@ class ClaimInterestModal extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.Dashboard.displayClaimInterestModal !== this.state.open) {
+    const _display = props.Dashboard.displayClaimInterestModal;
+
+    if (_display !== this.state.open) {
       this.setState({
-        className: props.Dashboard.displayClaimInterestModal ? 'show fade' : 'show out',
+        className: _display ? 'show fade' : 'show out',
       });
 
       setTimeout(() => {
         this.setState(Object.assign({}, this.state, {
-          open: props.Dashboard.displayClaimInterestModal,
-          className: props.Dashboard.displayClaimInterestModal ? 'show in' : 'hide',
+          open: _display,
+          className: _display ? 'show in' : 'hide',
         }));
-      }, props.Dashboard.displayClaimInterestModal ? 50 : 300);
+      }, _display ? 50 : 300);
     }
 
     if (!this.state.open &&

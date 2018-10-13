@@ -89,7 +89,9 @@ class CoindClearDataDirPanel extends React.Component {
     _items.push(
       <option
         key="coind-clear-data-coins-none"
-        value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
+        value="none">
+        { translate('SETTINGS.PICK_A_COIN') }
+      </option>
     );
 
     for (let i = 0; i < _nativeCoins.length; i++) {
@@ -97,7 +99,9 @@ class CoindClearDataDirPanel extends React.Component {
         _items.push(
           <option
             key={ `coind-clear-data-coins-${ _nativeCoins[i] }` }
-            value={ `${_nativeCoins[i]}` }>{ `${_nativeCoins[i]}` }</option>
+            value={ `${_nativeCoins[i]}` }>
+            { `${_nativeCoins[i]}` }
+          </option>
         );
       }
     }
@@ -139,7 +143,9 @@ class CoindClearDataDirPanel extends React.Component {
                   </label>
                   <span
                     className="title"
-                    onClick={ this.toggleKeepWalletDat }>{ translate('SETTINGS.KEEP') } wallet.dat</span>
+                    onClick={ this.toggleKeepWalletDat }>
+                    { translate('SETTINGS.KEEP') } wallet.dat
+                  </span>
                 </span>
                 { !this.state.displayYesNo &&
                   <button
@@ -154,7 +160,9 @@ class CoindClearDataDirPanel extends React.Component {
                   </button>
                 }
                 { this.state.displayYesNo &&
-                  <div className="margin-top-20">{ translate('SETTINGS.DATADIR_DELETE_PROMPT', this.state.coin) }</div>
+                  <div className="margin-top-20">
+                  { translate('SETTINGS.DATADIR_DELETE_PROMPT', this.state.coin) }
+                  </div>
                 }
                 { this.state.displayYesNo &&
                   <button

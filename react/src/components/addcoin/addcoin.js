@@ -85,8 +85,9 @@ class AddCoin extends React.Component {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-        document.querySelector('#loginPassphrase').style.height = '1px';
-        document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
+        const _login = document.querySelector('#loginPassphrase');
+        _login.style.height = '1px';
+        _login.style.height = `${(15 + _login.scrollHeight)}px`;
       }
     }, 100);
   }
@@ -320,16 +321,17 @@ class AddCoin extends React.Component {
   }
 
   activateCoin() {
-    const coin = this.state.coins[0].selectedCoin.split('|')[0];
     const _coin = this.state.coins[0];
-
+    const coin = _coin.selectedCoin.split('|')[0];
+    const coinuc = coin.toLowerCase();
+    
     this.verifyZcashParamsExist(_coin.mode)
     .then((res) => {
       if (res) {
         const seed = this.state.loginPassphrase;
 
         if (seed) {
-          mainWindow.setPubkey(seed, coin.toLowerCase());
+          mainWindow.setPubkey(seed, coinuc);
         }
 
         if (!_coin.daemonParam) {
@@ -343,8 +345,8 @@ class AddCoin extends React.Component {
             _coin.mode,
             { type: _coin.daemonParam },
             _coin.daemonParam === 'gen' &&
-            acConfig[coin.toUpperCase()] &&
-            acConfig[coin.toUpperCase()].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+            acConfig[coinuc] &&
+            acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
           ));
         }
 

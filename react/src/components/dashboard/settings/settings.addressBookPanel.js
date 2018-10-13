@@ -89,26 +89,29 @@ class AddressBookPanel extends React.Component {
   }
 
   save() {
-    let oldAddressBookData = this.props.Settings.addressBook && this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length ? JSON.parse(JSON.stringify(this.props.Settings.addressBook.obj)) : {};
+    const _addressBook = this.props.Settings.addressBook;
+    const _address = this.state.address;
+    const _coin = this.state.coin;
+    let oldAddressBookData = _addressBook && _addressBook.obj && Object.keys(_addressBook.obj).length ? JSON.parse(JSON.stringify(_addressBook.obj)) : {};
 
-    oldAddressBookData[this.state.address] = {
-      coin: this.state.coin,
+    oldAddressBookData[_address] = {
+      coin: _coin,
       title: this.state.title,
     };
 
     let _validationMsg;
-    const _validateAddress = mainWindow.addressVersionCheck(this.state.coin, this.state.address);
+    const _validateAddress = mainWindow.addressVersionCheck(_coin, _address);
 
     if (_validateAddress === 'Invalid pub address') {
       _validationMsg = _validateAddress;
     } else if (!_validateAddress) {
-      _validationMsg = `${this.state.address} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P1')} ${this.state.coin} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P2')}`;
+      _validationMsg = `${_address} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P1')} ${_coin} ${translate('SEND.VALIDATION_IS_NOT_VALID_ADDR_P2')}`;
     }
 
     // allow zc addresses
-    if (this.state.coin === 'KMD' &&
-        this.state.address.substring(0, 2) === 'zc' &&
-        this.state.address.length === 95) {
+    if (_coin === 'KMD' &&
+        _address.substring(0, 2) === 'zc' &&
+        _address.length === 95) {
       _validationMsg = null;
     }
 
@@ -149,8 +152,9 @@ class AddressBookPanel extends React.Component {
 
   confirmAction(id, type) {
     if (type === 'delete') {
-      let oldAddressBookData = this.props.Settings.addressBook && this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length ? JSON.parse(JSON.stringify(this.props.Settings.addressBook.obj)) : {};
-
+      const _addressBook = this.props.Settings.addressBook;
+      let oldAddressBookData = _addressBook && _addressBook.obj && Object.keys(_addressBook.obj).length ? JSON.parse(JSON.stringify(_addressBook.obj)) : {};
+      
       delete oldAddressBookData[id];
 
       modifyAddressBook(oldAddressBookData)
@@ -207,7 +211,9 @@ class AddressBookPanel extends React.Component {
       _items.push(
         <option
           key={ `coind-stdout-coins-${i}` }
-          value={ `${_coins[i]}` }>{ translate('CRYPTO.' + _coins[i]) + (_coins[i].toLowerCase() === 'kmd' ? ' (Chips/Assetchains)' : '') }</option>
+          value={ `${_coins[i]}` }>
+          { translate('CRYPTO.' + _coins[i]) + (_coins[i].toLowerCase() === 'kmd' ? ' (Chips/Asset chains)' : '') }
+        </option>
       );
     }
 
@@ -215,7 +221,9 @@ class AddressBookPanel extends React.Component {
   }
 
   renderAddressBook() {
-    const _addressBookItems = this.props.Settings.addressBook && this.props.Settings.addressBook.obj ? this.props.Settings.addressBook.obj : {};
+    const _addressBook = this.props.Settings.addressBook;
+    const _addressBookItems = _addressBook && _addressBook.obj ? _addressBook.obj : {};
+    
     let _items = [];
 
     for (let key in _addressBookItems) {
@@ -231,7 +239,9 @@ class AddressBookPanel extends React.Component {
                 className="icon fa-trash"></i>
             </td>
             <td className="seletable word-break--all">{ key }</td>
-            <td>{ translate('CRYPTO.' + _addressBookItems[key].coin) + (_addressBookItems[key].coin.toLowerCase() === 'kmd' ? ' (Chips/Assetchains)' : '') }</td>
+            <td>
+            { translate('CRYPTO.' + _addressBookItems[key].coin) + (_addressBookItems[key].coin.toLowerCase() === 'kmd' ? ' (Chips/Asset chains)' : '') }
+            </td>
             <td className="seletable">{ _addressBookItems[key].title }</td>
           </tr>
         );
@@ -328,16 +338,20 @@ class AddressBookPanel extends React.Component {
   }
 
   render() {
+    const _addressBook = this.props.Settings.addressBook;
+
     return (
       <div className="settings-address-book">
         <div className="row">
           <div className="col-sm-12">
-            <div className="padding-bottom-20">{ translate('SETTINGS.THIS_SECTION_ALLOWS_YOU_TO_MANAGE_ADDRESS_BOOK') }</div>
+            <div className="padding-bottom-20">
+            { translate('SETTINGS.THIS_SECTION_ALLOWS_YOU_TO_MANAGE_ADDRESS_BOOK') }
+            </div>
           </div>
         </div>
-        { this.props.Settings.addressBook &&
-          this.props.Settings.addressBook.obj &&
-          Object.keys(this.props.Settings.addressBook.obj).length > 0 &&
+        { _addressBook &&
+          _addressBook.obj &&
+          Object.keys(_addressBook.obj).length > 0 &&
           <div className="row">
             <div className="col-sm-12">
             <div className="col-sm-12 col-xs-12 no-padding margin-bottom-20 text-right">
@@ -352,7 +366,7 @@ class AddressBookPanel extends React.Component {
             </div>
           </div>
         }
-        { (this.state.createNewItem || (this.props.Settings.addressBook && (!this.props.Settings.addressBook.obj || (this.props.Settings.addressBook.obj && Object.keys(this.props.Settings.addressBook.obj).length === 0)))) &&
+        { (this.state.createNewItem || (_addressBook && (!_addressBook.obj || (_addressBook.obj && Object.keys(_addressBook.obj).length === 0)))) &&
           <div className="row">
             <div className="col-sm-6">
               <div
@@ -369,7 +383,9 @@ class AddressBookPanel extends React.Component {
                       value={ this.state.address || '' } />
                     <label
                       className="floating-label"
-                      htmlFor="address">{ translate('SETTINGS.ADDRESS') }</label>
+                      htmlFor="address">
+                      { translate('SETTINGS.ADDRESS') }
+                    </label>
                   </div>
                   <div className="form-group form-material floating text-left margin-top-60">
                     <select
@@ -391,7 +407,9 @@ class AddressBookPanel extends React.Component {
                       value={ this.state.title || '' } />
                     <label
                       className="floating-label"
-                      htmlFor="title">{ translate('SETTINGS.TITLE') }</label>
+                      htmlFor="title">
+                      { translate('SETTINGS.TITLE') }
+                    </label>
                   </div>
                 </div>
                 <div className="col-sm-12 col-xs-12 text-align-center">

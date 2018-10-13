@@ -6,11 +6,13 @@ import mainWindow from '../../../util/mainWindow';
 const WalletsNavWithWalletRender = function() {
   const pubKeys = mainWindow.getPubkeys();
   const _coin = this.props.ActiveCoin.coin;
+  const _mode = this.props.ActiveCoin.mode;
+  const _electrumCoin = this.props.Dashboard.electrumCoins[_coin];
 
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (this.props.ActiveCoin.mode === 'spv' || (pubKeys[_coin.toLowerCase()] && pubKeys[_coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (_mode === 'spv' || (pubKeys[_coin.toLowerCase()] && pubKeys[_coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
         id="header-dashboard">
         { this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'spv' &&
@@ -19,12 +21,12 @@ const WalletsNavWithWalletRender = function() {
             <span className="blur selectable">{
               this.props &&
               this.props.Dashboard &&
-              this.props.Dashboard.electrumCoins[_coin] &&
-              this.props.Dashboard.electrumCoins[_coin].pub ? this.props.Dashboard.electrumCoins[_coin].pub : '-'
+              _electrumCoin &&
+              _electrumCoin.pub ? _electrumCoin.pub : '-'
             }</span>
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
-              onClick={ () => this.copyMyAddress(this.props.Dashboard.electrumCoins[_coin].pub) }>
+              onClick={ () => this.copyMyAddress(_electrumCoin.pub) }>
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
             </button>
           </div>
@@ -57,7 +59,7 @@ const WalletsNavWithWalletRender = function() {
               <i className="icon md-view-dashboard"></i> <span className="placeholder">{ translate('INDEX.TRANSACTIONS') }</span>
             </button>
             { this.props.ActiveCoin &&
-              (this.props.ActiveCoin.mode === 'native' || (this.props.ActiveCoin.mode === 'spv' && !mainWindow.isWatchOnly())) &&
+              (_mode === 'native' || (_mode === 'spv' && !mainWindow.isWatchOnly())) &&
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light"
@@ -72,7 +74,7 @@ const WalletsNavWithWalletRender = function() {
               onClick={ () => this.toggleReceiveCoinForm(!this.props.ActiveCoin.receive) }>
               <i className="icon fa-inbox"></i> <span className="placeholder">{ translate('INDEX.RECEIVE') }</span>
             </button>
-            { (this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly()) &&
+            { (_mode === 'spv' && mainWindow.isWatchOnly()) &&
               <i
                 className="icon fa-question-circle settings-help"
                 data-tip={ translate('INDEX.LITE_MODE_WATCHONLY') }

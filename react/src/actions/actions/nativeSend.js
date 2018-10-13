@@ -87,7 +87,7 @@ export const sendNativeTx = (coin, _payload) => {
         if (json.indexOf('"code":-4') > -1) {
           dispatch(
             triggerToaster(
-              JSON.parse(json).error.message.indexOf('too large') > -1 ? translate('API.TX_TOO_LARGE') : translate('API.WALLETDAT_MISMATCH'),
+              translate('API.' + (JSON.parse(json).error.message.indexOf('too large') > -1 ? 'TX_TOO_LARGE' : 'WALLETDAT_MISMATCH')),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -181,7 +181,7 @@ export const sendToAddressPromise = (coin, address, amount) => {
         amount,
         'KMD interest claim request',
         'KMD interest claim request',
-        true
+        true,
       ],
     };
 

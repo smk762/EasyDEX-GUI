@@ -44,10 +44,12 @@ class Dashboard extends React.Component {
   }
 
   componentWillReceiveProps() {
-    if (this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.native &&
-        this.props.Main.coins.native.length &&
+    const _main = this.props.Main;
+
+    if (_main &&
+        _main.coins &&
+        _main.coins.native &&
+        _main.coins.native.length &&
         !this.props.Dashboard.displayZcparamsModal) {
       this.setState({
         zcashParamsVerifyTriggered: true,
@@ -67,23 +69,25 @@ class Dashboard extends React.Component {
   }
 
   displayDashboard() {
+    const _main = this.props.Main;
+
     return this.props &&
-      (this.props.Main &&
-      this.props.Main.coins &&
-      this.props.Main.coins.native &&
-      this.props.Main.coins.native.length &&
-      !this.props.Main.coins.spv.length) ||
-      (this.props.Main &&
-      this.props.Main.coins &&
-      this.props.Main.coins.spv &&
-      this.props.Main.coins.spv.length &&
-      this.props.Main.isLoggedIn) ||
-      (this.props.Main &&
-      this.props.Main.coins &&
-      this.props.Main.coins.native &&
-      this.props.Main.coins.native.length &&
-      !this.props.Main.coins.spv.length &&
-      this.props.Main.isLoggedIn);
+      (_main &&
+       _main.coins &&
+       _main.coins.native &&
+       _main.coins.native.length &&
+       !_main.coins.spv.length) ||
+      (_main &&
+       _main.coins &&
+       _main.coins.spv &&
+       _main.coins.spv.length &&
+       _main.isLoggedIn) ||
+      (_main &&
+       _main.coins &&
+       _main.coins.native &&
+       _main.coins.native.length &&
+       !_main.coins.spv.length &&
+       _main.isLoggedIn);
   }
 
   render() {

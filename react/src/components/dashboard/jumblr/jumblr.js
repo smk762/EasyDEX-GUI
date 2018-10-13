@@ -214,7 +214,7 @@ class Jumblr extends React.Component {
             if (_apiSuccessCount === this.state.secretAddressCount - 1) {
               Store.dispatch(
                 triggerToaster(
-                  this.state.secretAddressCount > 1 ? translate('TOASTR.JUMBLR_SECRET_ADDRESSES_SET') : translate('TOASTR.JUMBLR_SECRET_ADDRESS_SET'),
+                  translate('TOASTR.' + (this.state.secretAddressCount > 1 ? 'JUMBLR_SECRET_ADDRESSES_SET' : 'JUMBLR_SECRET_ADDRESS_SET')),
                   'Jumblr',
                   'success'
                 )
@@ -305,7 +305,10 @@ class Jumblr extends React.Component {
           }
           const _genKeys = this.generateKeys(`${this.state.jumblrPassphraseImport} ${_postfix}`);
 
-          importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
+          importPrivkey(
+            this.props.ActiveCoin.coin,
+            _genKeys.wif
+          )
           .then((json) => {
             if (!json.id &&
                 !json.result &&
@@ -318,7 +321,7 @@ class Jumblr extends React.Component {
               if (_apiSuccessCount === this.state.secretAddressCountImport - 1) {
                 Store.dispatch(
                   triggerToaster(
-                    this.state.secretAddressCountImport > 1 ? translate('TOASTR.JUMBLR_SECRET_ADDRESSES_IMPORTED') : translate('TOASTR.JUMBLR_SECRET_ADDRESS_IMPORTED'),
+                    translate('TOASTR.' + (this.state.secretAddressCountImport > 1 ? 'JUMBLR_SECRET_ADDRESSES_IMPORTED' : 'JUMBLR_SECRET_ADDRESS_IMPORTED')),
                     'Jumblr',
                     'success'
                   )
@@ -361,7 +364,10 @@ class Jumblr extends React.Component {
   generateJumblrDepositAddress() {
     const _genKeys = this.generateKeys(this.state.randomSeed);;
 
-    importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
+    importPrivkey(
+      this.props.ActiveCoin.coin,
+      _genKeys.wif
+    )
     .then((json) => {
       if (!json.id &&
           !json.result &&

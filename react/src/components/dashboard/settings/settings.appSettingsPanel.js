@@ -34,23 +34,13 @@ class AppSettingsPanel extends React.Component {
   _apiElectrumKvServersList() {
     apiElectrumKvServersList()
     .then((res) => {
-      if (res.msg === 'success') {
-        Store.dispatch(
-          triggerToaster(
-            translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS_DONE'),
-            translate('INDEX.SETTINGS'),
-            'success'
-          )
-        );
-      } else {
-        Store.dispatch(
-          triggerToaster(
-            translate('SETTINGS.DOWNLOAD_KV_ELECTRUMS_ERR'),
-            translate('INDEX.SETTINGS'),
-            'error'
-          )
-        );
-      }
+      Store.dispatch(
+        triggerToaster(
+          translate('SETTINGS.' (res.msg === 'success' ? 'DOWNLOAD_KV_ELECTRUMS_DONE' : 'DOWNLOAD_KV_ELECTRUMS_ERR')),
+          translate('INDEX.SETTINGS'),
+          'error'
+        )
+      );
     });
   }
 
@@ -83,16 +73,17 @@ class AppSettingsPanel extends React.Component {
 
   _saveAppConfig() {
     const _appSettings = this.state.appSettings;
+    const _configSchema = this.state.appConfigSchema;
     let _appSettingsPristine = Object.assign({}, this.props.Settings.appSettings);
     let isError = false;
     let saveAfterPathCheck = false;
 
     for (let key in _appSettings) {
       if (typeof _appSettings[key] !== 'object') {
-        _appSettingsPristine[key] = this.state.appConfigSchema[key] && this.state.appConfigSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
+        _appSettingsPristine[key] = _configSchema[key] && _configSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
 
-        if (this.state.appConfigSchema[key] &&
-            this.state.appConfigSchema[key].type === 'folder' &&
+        if (_configSchema[key] &&
+          _configSchema[key].type === 'folder' &&
             _appSettings[key] &&
             _appSettings[key].length) {
           const _testLocation = mainWindow.testLocation;
@@ -127,7 +118,7 @@ class AppSettingsPanel extends React.Component {
         }
       } else {
         for (let keyChild in _appSettings[key]) {
-          _appSettingsPristine[key][keyChild] = this.state.appConfigSchema[key][keyChild].type === 'number' ? Number(_appSettings[key][keyChild]) : _appSettings[key][keyChild];
+          _appSettingsPristine[key][keyChild] = _configSchema[key][keyChild].type === 'number' ? Number(_appSettings[key][keyChild]) : _appSettings[key][keyChild];
         }
       }
     }
@@ -169,21 +160,22 @@ class AppSettingsPanel extends React.Component {
 
   renderConfigEditForm() {
     const _appConfig = this.state.appSettings;
+    const _configSchema = this.state.appConfigSchema
     let items = [];
 
     for (let key in _appConfig) {
-      if (this.state.appConfigSchema[key] &&
+      if (_configSchema[key] &&
           typeof _appConfig[key] === 'object') {
-        if ((this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type !== 'select') ||
-            (this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type === 'select' && Config.experimentalFeatures)) {
+        if ((_configSchema[key].display && _configSchema[key].type !== 'select') ||
+            (_configSchema[key].display && _configSchema[key].type === 'select' && Config.experimentalFeatures)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
-                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
-                { this.state.appConfigSchema[key].info &&
+                { _configSchema[key].displayName ? _configSchema[key].displayName : key }
+                { _configSchema[key].info &&
                   <i
                     className="icon fa-question-circle settings-help"
-                    data-tip={ this.state.appConfigSchema[key].info }
+                    data-tip={ _configSchema[key].info }
                     data-for="appSettings1"
                     data-html={ true }></i>
                 }
@@ -200,11 +192,11 @@ class AppSettingsPanel extends React.Component {
             items.push(
               <tr key={ `app-settings-${key}-${_key}` }>
                 <td className="padding-15 padding-left-30">
-                  { this.state.appConfigSchema[key][_key].displayName ? this.state.appConfigSchema[key][_key].displayName : _key }
-                  { this.state.appConfigSchema[key][_key].info &&
+                  { _configSchema[key][_key].displayName ? _configSchema[key][_key].displayName : _key }
+                  { _configSchema[key][_key].info &&
                     <i
                       className="icon fa-question-circle settings-help"
-                      data-tip={ this.state.appConfigSchema[key][_key].info }
+                      data-tip={ _configSchema[key][_key].info }
                       data-html={ true }
                       data-for="appSettings2"></i>
                   }
@@ -214,7 +206,7 @@ class AppSettingsPanel extends React.Component {
                     className="text-left" />
                 </td>
                 <td className="padding-15">
-                  { this.state.appConfigSchema[key][_key].type === 'number' &&
+                  { _configSchema[key][_key].type === 'number' &&
                     <input
                       type="number"
                       pattern="[0-9]*"
@@ -222,16 +214,16 @@ class AppSettingsPanel extends React.Component {
                       value={ _appConfig[key][_key] }
                       onChange={ (event) => this.updateInputSettings(event, key, _key) } />
                   }
-                  { (this.state.appConfigSchema[key][_key].type === 'string' ||
-                    this.state.appConfigSchema[key][_key].type === 'folder') &&
+                  { (_configSchema[key][_key].type === 'string' ||
+                    _configSchema[key][_key].type === 'folder') &&
                     <input
                       type="text"
                       name={ `${key}__${_key}` }
                       value={ _appConfig[key][_key] }
-                      className={ this.state.appConfigSchema[key][_key].type === 'folder' ? 'full-width': '' }
+                      className={ _configSchema[key][_key].type === 'folder' ? 'full-width': '' }
                       onChange={ (event) => this.updateInputSettings(event, key, _key) } />
                   }
-                  { this.state.appConfigSchema[key][_key].type === 'boolean' &&
+                  { _configSchema[key][_key].type === 'boolean' &&
                     <span className="pointer toggle">
                       <label className="switch">
                         <input
@@ -250,17 +242,19 @@ class AppSettingsPanel extends React.Component {
               </tr>
             );
 
+            const _appInfo = this.props.Settings.appInfo;
+
             if (key === 'spv' &&
                 _key === 'cache' &&
-                this.props.Settings.appInfo &&
-                this.props.Settings.appInfo.cacheSize &&
-                this.props.Settings.appInfo.cacheSize !== '2 Bytes') {
+                _appInfo &&
+                _appInfo.cacheSize &&
+                _appInfo.cacheSize !== '2 Bytes') {
               items.push(
                 <tr key={ `app-settings-${key}-${_key}-size` }>
                   <td
                     colSpan="2"
                     className="padding-15 padding-left-30">
-                    { translate('SETTINGS.CURRENT_CACHE_SIZE') }: <strong>{ this.props.Settings.appInfo.cacheSize }</strong>
+                    { translate('SETTINGS.CURRENT_CACHE_SIZE') }: <strong>{ _appInfo.cacheSize }</strong>
                     <button
                       type="button"
                       className="btn btn-info waves-effect waves-light margin-left-30"
@@ -292,16 +286,16 @@ class AppSettingsPanel extends React.Component {
           }
         }
       } else {
-        if ((this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type !== 'select') ||
-            (this.state.appConfigSchema[key] && this.state.appConfigSchema[key].display && this.state.appConfigSchema[key].type === 'select' && Config.experimentalFeatures)) {
+        if ((_configSchema[key] && _configSchema[key].display && _configSchema[key].type !== 'select') ||
+            (_configSchema[key] && _configSchema[key].display && _configSchema[key].type === 'select' && Config.experimentalFeatures)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
-                { this.state.appConfigSchema[key].displayName ? this.state.appConfigSchema[key].displayName : key }
-                { this.state.appConfigSchema[key].info &&
+                { _configSchema[key].displayName ? _configSchema[key].displayName : key }
+                { _configSchema[key].info &&
                   <i
                     className="icon fa-question-circle settings-help"
-                    data-tip={ this.state.appConfigSchema[key].info }
+                    data-tip={ _configSchema[key].info }
                     data-html={ true }
                     data-for="appSettings3"></i>
                 }
@@ -311,7 +305,7 @@ class AppSettingsPanel extends React.Component {
                   className="text-left" />
               </td>
               <td className="padding-15">
-                { this.state.appConfigSchema[key].type === 'number' &&
+                { _configSchema[key].type === 'number' &&
                   <input
                     type="number"
                     pattern="[0-9]*"
@@ -319,16 +313,16 @@ class AppSettingsPanel extends React.Component {
                     value={ _appConfig[key] }
                     onChange={ (event) => this.updateInputSettings(event, key) } />
                 }
-                { (this.state.appConfigSchema[key].type === 'string' ||
-                  this.state.appConfigSchema[key].type === 'folder') &&
+                { (_configSchema[key].type === 'string' ||
+                  _configSchema[key].type === 'folder') &&
                   <input
                     type="text"
                     name={ `${key}` }
                     value={ _appConfig[key] }
-                    className={ this.state.appConfigSchema[key].type === 'folder' ? 'full-width': '' }
+                    className={ _configSchema[key].type === 'folder' ? 'full-width': '' }
                     onChange={ (event) => this.updateInputSettings(event, key) } />
                 }
-                { this.state.appConfigSchema[key].type === 'boolean' &&
+                { _configSchema[key].type === 'boolean' &&
                   <span className="pointer toggle">
                     <label className="switch">
                       <input
@@ -343,14 +337,14 @@ class AppSettingsPanel extends React.Component {
                     </label>
                   </span>
                 }
-                { this.state.appConfigSchema[key].type === 'select' &&
+                { _configSchema[key].type === 'select' &&
                   Config.experimentalFeatures &&
                   <select
                     className="form-control select-settings"
                     name={ `${key}` }
                     value={ _appConfig[key] }
                     onChange={ (event) => this.updateInputSettings(event, key) }>
-                    { this.renderSelectOptions(this.state.appConfigSchema[key].data, this.state.appConfigSchema[key].translateSelector, key) }
+                    { this.renderSelectOptions(_configSchema[key].data, _configSchema[key].translateSelector, key) }
                   </select>
                 }
               </td>
@@ -361,7 +355,7 @@ class AppSettingsPanel extends React.Component {
     }
 
     items.push(
-      <tr key={ `kmd-main-sync-only` }>
+      <tr key="kmd-main-sync-only">
         <td className="padding-15">
           { translate('SETTINGS.KMD_MAIN_SYNC_ONLY') }
           <i
@@ -379,7 +373,7 @@ class AppSettingsPanel extends React.Component {
             <label className="switch">
               <input
                 type="checkbox"
-                name={ `kmd-main-sync-only` }
+                name="kmd-main-sync-only"
                 value={ this.props.Dashboard.skipFullDashboardUpdate }
                 checked={ this.props.Dashboard.skipFullDashboardUpdate }
                 readOnly />
@@ -402,36 +396,31 @@ class AppSettingsPanel extends React.Component {
   }
 
   updateInputSettings(e, parentKey, childKey) {
+    const _configSchema = this.state.appConfigSchema;
+    const _val = e.target.value;
+    const _name = e.target.name;    
     let _appSettings = this.state.appSettings;
     let _appSettingsPrev = Object.assign({}, _appSettings);
 
     if (!childKey &&
-        this.state.appConfigSchema[parentKey].type === 'boolean') {
+        _configSchema[parentKey].type === 'boolean') {
       _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
     } else if (
       childKey &&
-      this.state.appConfigSchema[parentKey][childKey].type === 'boolean'
+      _configSchema[parentKey][childKey].type === 'boolean'
     ) {
       _appSettings[parentKey][childKey] = typeof _appSettings[parentKey][childKey] !== undefined ? !_appSettings[parentKey][childKey] : !this.state.appSettings[parentKey][childKey];
     } else if (
-      (!childKey && this.state.appConfigSchema[parentKey].type === 'number') ||
-      (childKey && this.state.appConfigSchema[parentKey][childKey].type === 'number')
+      (!childKey && _configSchema[parentKey].type === 'number') ||
+      (childKey && _configSchema[parentKey][childKey].type === 'number')
     ) {
       if (!childKey) {
-        if (e.target.value === '') {
-          _appSettings[e.target.name] = _appSettingsPrev[e.target.name];
-        } else {
-          _appSettings[e.target.name] = e.target.value.replace(/[^0-9]+/g, '');
-        }
+        _appSettings[_name] = _val === '' ? _appSettingsPrev[_name] : _val.replace(/[^0-9]+/g, '');
       } else {
-        if (e.target.value === '') {
-          _appSettings[parentKey][childKey] = _appSettingsPrev[parentKey][childKey];
-        } else {
-          _appSettings[parentKey][childKey] = e.target.value.replace(/[^0-9]+/g, '');
-        }
+        _appSettings[parentKey][childKey] = _val === '' ? _appSettingsPrev[parentKey][childKey] : _val.replace(/[^0-9]+/g, '');
       }
     } else {
-      _appSettings[e.target.name] = e.target.value;
+      _appSettings[_name] = _val;
     }
 
     this.setState({

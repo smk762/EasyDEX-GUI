@@ -11,8 +11,10 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import devlog from '../../../util/devlog';
-import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
-import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import {
+  isKomodoCoin,
+  explorerList,
+} from 'agama-wallet-lib/src/coin-helpers';
 import { toSats } from 'agama-wallet-lib/src/utils';
 
 const { shell } = window.require('electron');
@@ -283,7 +285,9 @@ class ToolsMergeUTXO extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-50">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.COIN') }
+          </label>
           <Select
             name="utxoMergeCoin"
             className="col-sm-3"
@@ -291,17 +295,21 @@ class ToolsMergeUTXO extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'utxoMergeCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ [{
+            options={
+              [{
                 label: 'Komodo (KMD)',
                 icon: 'KMD',
                 value: 'KMD|native',
-              }].concat(addCoinOptionsAC('skip'))
+              }]
+              .concat(addCoinOptionsAC('skip'))
             } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.SEED') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.SEED') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3 blur"
@@ -339,7 +347,8 @@ class ToolsMergeUTXO extends React.Component {
           <label className="switch">
             <input
               type="checkbox"
-              checked={ this.state.utxoMergeShowUtxoList } />
+              checked={ this.state.utxoMergeShowUtxoList }
+              readOnly />
             <div
               className="slider"
               onClick={ this.toggleMergeUtxoList }></div>
@@ -358,7 +367,9 @@ class ToolsMergeUTXO extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left padding-top-20 padding-bottom-20">
           <label
             className="control-label col-sm-2 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.UTXO_COUNT_TO_MERGE') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.UTXO_COUNT_TO_MERGE') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3"

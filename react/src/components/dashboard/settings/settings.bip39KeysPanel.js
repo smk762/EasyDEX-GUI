@@ -84,10 +84,11 @@ class Bip39KeysPanel extends React.Component {
 
   resizeLoginTextarea() {
     // auto-size textarea
+    const _ta = document.querySelector('#passphraseTextarea');
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-        document.querySelector('#passphraseTextarea').style.height = '1px';
-        document.querySelector('#passphraseTextarea').style.height = `${(15 + document.querySelector('#passphraseTextarea').scrollHeight)}px`;
+        _ta.style.height = '1px';
+        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
       }
     }, 100);
   }
@@ -145,9 +146,12 @@ class Bip39KeysPanel extends React.Component {
                     onClick={ this.toggleSeedInputVisibility }></i>
                   <label
                     className="floating-label"
-                    htmlFor="passphrase">{ translate('INDEX.PASSPHRASE') }</label>
+                    htmlFor="passphrase">
+                    { translate('INDEX.PASSPHRASE') }
+                  </label>
                   { this.state.seedExtraSpaces &&
-                    <i className="icon fa-warning seed-extra-spaces-warning"
+                    <i
+                      className="icon fa-warning seed-extra-spaces-warning"
                       data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
                       data-html={ true }
                       data-for="bip39"></i>

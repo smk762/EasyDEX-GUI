@@ -51,10 +51,12 @@ class CoindDownModal extends React.Component {
   }
 
   getCoindGetStdout() {
-    coindGetStdout(this.props.ActiveCoin.coin)
+    const _coin = this.props.ActiveCoin.coin;
+
+    coindGetStdout(_coin)
     .then((res) => {
       this.setState({
-        coindStdOut: res.msg === 'success' ? res.result : `${translate('INDEX.ERROR_READING')} ${this.props.ActiveCoin.coin} stdout`,
+        coindStdOut: res.msg === 'success' ? res.result : `${translate('INDEX.ERROR_READING')} ${_coin} stdout`,
       });
     });
   }
@@ -80,19 +82,21 @@ class CoindDownModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const _displayProps = nextProps.displayCoindDownModal;
+
     if (this.props.displayCoindDownModal !== this.state.open) {
       this.setState(Object.assign({}, this.state, {
-        className: nextProps.displayCoindDownModal && this.check() ? 'show fade' : 'show out',
+        className: _displayProps && this.check() ? 'show fade' : 'show out',
       }));
 
       setTimeout(() => {
         this.setState(Object.assign({}, this.state, {
-          open: nextProps.displayCoindDownModal,
-          className: nextProps.displayCoindDownModal && this.check() ? 'show in' : 'hide',
+          open: _displayProps,
+          className: _displayProps && this.check() ? 'show in' : 'hide',
         }));
-      }, nextProps.displayCoindDownModal ? 50 : 300);
+      }, _displayProps ? 50 : 300);
 
-      if (nextProps.displayCoindDownModal) {
+      if (_displayProps) {
         this.getCoindGetStdout();
       }
     }

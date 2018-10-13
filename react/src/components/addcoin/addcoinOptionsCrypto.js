@@ -49,14 +49,16 @@ const prepCoinsList = (filterActiveCoins) => {
   } else {
     for (let i = 0; i < coins.length; i++) {
       try {
+        const _coin = coins[i].toLowerCase();
+
         if (electrumServers &&
-            electrumServers[coins[i].toLowerCase()] &&
+            electrumServers[_coin] &&
             (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
             _activeCoins &&
             _activeCoins.spv &&
             _activeCoins.native &&
-            _activeCoins.spv.indexOf(coins[i].toUpperCase()) === -1 &&
-            _activeCoins.native.indexOf(coins[i].toUpperCase()) === -1))) {
+            _activeCoins.spv.indexOf(_coin) === -1 &&
+            _activeCoins.native.indexOf(_coin) === -1))) {
           _items.push({
             label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
             icon: coins[i],

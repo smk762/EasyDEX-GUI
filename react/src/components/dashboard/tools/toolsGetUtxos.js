@@ -141,7 +141,9 @@ class ToolsGetUtxos extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.COIN') }
+          </label>
           <Select
             name="utxoCoin"
             className="col-sm-3"

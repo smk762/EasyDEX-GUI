@@ -34,27 +34,31 @@ const AddCoinRender = function() {
                 onClick={ this.toggleActionsMenu }>
                 <i className={ 'fa-chevron-' + (this.state.actionsMenu ? 'up' : 'down') }></i>
               </button>
-              <span className={ !this.state.actionsMenu ? 'hide' : '' }>
-                <button
-                  className="btn btn-outline-primary btn-save-coin-selection"
-                  onClick={ this.saveCoinSelection }>
-                  { translate('ADD_COIN.SAVE_SELECTION') }
-                </button>
-                <button
-                  className="btn btn-outline-primary btn-load-coin-selection"
-                  onClick={ this.loadCoinSelection }>
-                  { translate('ADD_COIN.LOAD_SELECTION') }
-                </button>
-              </span>
+              { this.state.actionsMenu &&
+                <span>
+                  <button
+                    className="btn btn-outline-primary btn-save-coin-selection"
+                    onClick={ this.saveCoinSelection }>
+                    { translate('ADD_COIN.SAVE_SELECTION') }
+                  </button>
+                  <button
+                    className="btn btn-outline-primary btn-load-coin-selection"
+                    onClick={ this.loadCoinSelection }>
+                    { translate('ADD_COIN.LOAD_SELECTION') }
+                  </button>
+                </span>
+              }
               { this.renderCoinSelectors() }
-              <div className={ 'text-align-center vertical-margin-20 horizontal-margin-0 padding-bottom-20 ' + (this.hasMoreThanOneCoin() ? 'col-sm-12' : 'hide') }>
-                <button
-                  type="button"
-                  className="btn btn-primary col-sm-4 float-none"
-                  onClick={ this.activateAllCoins }>
-                  { translate('ADD_COIN.ACTIVATE_ALL') }
-                </button>
-              </div>
+              { !this.hasMoreThanOneCoin() &&
+                <div className="text-align-center vertical-margin-20 horizontal-margin-0 padding-bottom-20 col-sm-12">
+                  <button
+                    type="button"
+                    className="btn btn-primary col-sm-4 float-none"
+                    onClick={ this.activateAllCoins }>
+                    { translate('ADD_COIN.ACTIVATE_ALL') }
+                  </button>
+                </div>
+              }
               { mainWindow.arch === 'x64' &&
                 <div className="col-sm-12">
                   <p>

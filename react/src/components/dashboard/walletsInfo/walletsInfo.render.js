@@ -11,6 +11,7 @@ const WalletsInfoRender = function() {
     const _progress = this.props.ActiveCoin.progress;
     const _netTotals = this.props.ActiveCoin.net.totals;
     const _netPeers = this.props.ActiveCoin.net.peers;
+    const _coin = this.props.ActiveCoin.coin;
     let _peerItems = [];
 
     if (_netPeers) {
@@ -180,7 +181,7 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { this.props.ActiveCoin.coin === 'KMD' &&
+          { _coin === 'KMD' &&
             this.displayClaimInterestUI() &&
             <div>
               <button
@@ -233,7 +234,7 @@ const WalletsInfoRender = function() {
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">
-                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodo' : this.props.ActiveCoin.coin }&nbsp;
+                { _coin === 'KMD' ? 'Komodo' : _coin }&nbsp;
                 { translate('INDEX.INFO') }
               </h3>
             </div>
@@ -351,7 +352,7 @@ const WalletsInfoRender = function() {
     );
   } else if (this.props.ActiveCoin.mode === 'spv') {
     const _balance = this.props.ActiveCoin.balance;
-    const _server = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin];
+    const _server = this.props.Dashboard.electrumCoins[_coin];
 
     return (
       <div>
@@ -403,7 +404,7 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { this.props.ActiveCoin.coin === 'KMD' &&
+          { _coin === 'KMD' &&
             this.props.ActiveCoin.mode !== 'spv' &&
             <div>
               <button

@@ -83,10 +83,12 @@ class WalletsProgress extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.ActiveCoin &&
-        props.ActiveCoin.progress &&
-        Number(props.ActiveCoin.progress.longestchain) === 0) {
-      let _progress = props.ActiveCoin.progress;
+    const _coin = props.ActiveCoin;
+
+    if (_coin &&
+      _coin.progress &&
+        Number(_coin.progress.longestchain) === 0) {
+      let _progress = _coin.progress;
 
       if (this.state.prevProgress &&
           this.state.prevProgress.longestchain &&
@@ -137,12 +139,14 @@ class WalletsProgress extends React.Component {
   }
 
   isWinSyncPercBelowThreshold() {
-    if (this.state.prevProgress &&
-        this.state.prevProgress.longestchain &&
-        this.state.prevProgress.blocks &&
-        this.state.prevProgress.longestchain > 0 &&
-        this.state.prevProgress.blocks > 0) {
-      if (Number(this.state.prevProgress.blocks) * 100 / Number(this.state.prevProgress.longestchain) < 30) {
+    const _prevProgress = this.state.prevProgress;
+
+    if (_prevProgress &&
+        _prevProgress.longestchain &&
+        _prevProgress.blocks &&
+        _prevProgress.longestchain > 0 &&
+        _prevProgress.blocks > 0) {
+      if (Number(_prevProgress.blocks) * 100 / Number(_prevProgress.longestchain) < 30) {
         return true;
       }
     } else {
@@ -169,10 +173,11 @@ class WalletsProgress extends React.Component {
   }
 
   parseActivatingBestChainProgress() {
+    const _debugLogProps = this.props.Settings.debugLog;
     let _debugLogLine;
 
-    if (this.props.Settings.debugLog.indexOf('\n') > -1) {
-      const _debugLogMulti = this.props.Settings.debugLog.split('\n');
+    if (_debugLogProps.indexOf('\n') > -1) {
+      const _debugLogMulti = _debugLogProps.split('\n');
 
       for (let i = 0; i < _debugLogMulti.length; i++) {
         if (_debugLogMulti[i].indexOf('progress=') > -1) {
@@ -180,7 +185,7 @@ class WalletsProgress extends React.Component {
         }
       }
     } else {
-      _debugLogLine = this.props.Settings.debugLog;
+      _debugLogLine = _debugLogProps;
     }
 
     if (_debugLogLine) {
@@ -202,9 +207,11 @@ class WalletsProgress extends React.Component {
         }
       }
 
-      if (this.props.ActiveCoin.progress.remoteKMDNode &&
-          this.props.ActiveCoin.progress.remoteKMDNode.blocks) {
-        const longestHeight = this.props.ActiveCoin.progress.remoteKMDNode.blocks;
+      const _coinProgress = this.props.ActiveCoin.progress;
+
+      if (_coinProgress.remoteKMDNode &&
+        _coinProgress.remoteKMDNode.blocks) {
+        const longestHeight = _coinProgress.remoteKMDNode.blocks;
 
         return [
           currentBestChain,
@@ -262,8 +269,10 @@ class WalletsProgress extends React.Component {
   }
 
   renderRescanProgress() {
+    const _coinProgress = this.props.ActiveCoin.progress;
+
     if (this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
-        ((this.props.ActiveCoin.rescanInProgress) || (this.props.ActiveCoin.progress && this.props.ActiveCoin.progress.code && this.props.ActiveCoin.progress.code === -28 && this.props.ActiveCoin.progress.message === 'Rescanning...'))) {
+        ((this.props.ActiveCoin.rescanInProgress) || (_coinProgress && _coinProgress.code && _coinProgress.code === -28 && _coinProgress.message === 'Rescanning...'))) {
       const temp = this.props.Settings.debugLog.split(' ');
       let currentProgress;
 
@@ -280,13 +289,16 @@ class WalletsProgress extends React.Component {
   }
 
   renderActivatingBestChainProgress() {
+    const _coinProgress = this.props.ActiveCoin.progress;
+    const _debugLog = this.props.Settings.debugLog;
+
     if (this.props.Settings &&
-        this.props.Settings.debugLog &&
+        _debugLog &&
         !this.props.ActiveCoin.rescanInProgress) {
-      if (this.props.Settings.debugLog.indexOf('UpdateTip') > -1 &&
-          !this.props.ActiveCoin.progress &&
-          !this.props.ActiveCoin.progress.blocks) {
-        const temp = this.props.Settings.debugLog.split(' ');
+      if (_debugLog.indexOf('UpdateTip') > -1 &&
+          !_coinProgress &&
+          !_coinProgress.blocks) {
+        const temp = _debugLog.split(' ');
         let currentBestChain;
         let currentProgress;
 
@@ -300,25 +312,26 @@ class WalletsProgress extends React.Component {
         }
 
         // fallback to local data if remote node is inaccessible
-        if (this.props.ActiveCoin.progress.remoteKMDNode &&
-            !this.props.ActiveCoin.progress.remoteKMDNode.blocks) {
+        const _remoteNode = this.props.ActiveCoin.progress.remoteKMDNode;
+        if (_remoteNode &&
+            !_remoteNode.blocks) {
           return (
             `: ${currentProgress}% (${ translate('INDEX.ACTIVATING_SM') })`
           );
         } else {
-          if (this.props.ActiveCoin.progress.remoteKMDNode &&
-              this.props.ActiveCoin.progress.remoteKMDNode.blocks) {
+          if (_remoteNode &&
+              _remoteNode.blocks) {
             return(
-              `: ${Math.floor(currentBestChain * 100 / this.props.ActiveCoin.progress.remoteKMDNode.blocks)}% (${ translate('INDEX.BLOCKS_SM') } ${currentBestChain} / ${this.props.ActiveCoin.progress.remoteKMDNode.blocks})`
+              `: ${Math.floor(currentBestChain * 100 / _remoteNode.blocks)}% (${ translate('INDEX.BLOCKS_SM') } ${currentBestChain} / ${_remoteNode.blocks})`
             );
           }
         }
       } else if (
-          this.props.Settings.debugLog.indexOf('Still rescanning') > -1 &&
-          !this.props.ActiveCoin.progress ||
-          !this.props.ActiveCoin.progress.blocks
+          _debugLog.indexOf('Still rescanning') > -1 &&
+          !_coinProgress ||
+          !_coinProgress.blocks
       ) {
-        const temp = this.props.Settings.debugLog.split(' ');
+        const temp = _debugLog.split(' ');
         let currentProgress;
 
         for (let i = 0; i < temp.length; i++) {
@@ -328,10 +341,10 @@ class WalletsProgress extends React.Component {
         }
 
         // activating best chain
-        if (this.props.ActiveCoin.progress &&
-            this.props.ActiveCoin.progress.code &&
-            this.props.ActiveCoin.progress.code === -28 &&
-            this.props.Settings.debugLog) {
+        if (_coinProgress &&
+            _coinProgress.code &&
+            _coinProgress.code === -28 &&
+            _debugLog) {
           const _blocks = this.parseActivatingBestChainProgress();
 
           if (_blocks &&
@@ -351,13 +364,13 @@ class WalletsProgress extends React.Component {
             return null;
           }
         }
-      } else if (this.props.Settings.debugLog.indexOf('Rescanning last') > -1) {
+      } else if (_debugLog.indexOf('Rescanning last') > -1) {
         return (
           `: (${ translate('INDEX.RESCANNING_LAST_BLOCKS') })`
         );
       } else if (
-          this.props.Settings.debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
-          this.props.Settings.debugLog.indexOf('Reindexing block file') > -1
+        _debugLog.indexOf('LoadExternalBlockFile:') > -1 ||
+        _debugLog.indexOf('Reindexing block file') > -1
       ) {
         return (
           `: (${ translate('INDEX.REINDEX') })`

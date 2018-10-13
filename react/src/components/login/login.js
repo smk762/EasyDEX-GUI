@@ -120,7 +120,11 @@ class Login extends React.Component {
       mainWindow.pinAccess = false;
 
       if (!this.props.Main.coins.native.length) {
-        Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+        Store.dispatch(dashboardChangeActiveCoin(
+          null,
+          null,
+          true
+        ));
       }
 
       setTimeout(() => {
@@ -128,14 +132,21 @@ class Login extends React.Component {
           Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
         }
         if (!this.props.Main.coins.native.length) {
-          Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+          Store.dispatch(dashboardChangeActiveCoin(
+            null,
+            null,
+            true
+          ));
         }
 
         Store.dispatch(getDexCoins());
         Store.dispatch(activeHandle());
 
         if (this.props.Main.coins.native.length) {
-          Store.dispatch(dashboardChangeActiveCoin(this.props.Main.coins.native[0], 'native'));    
+          Store.dispatch(dashboardChangeActiveCoin(
+            this.props.Main.coins.native[0],
+            'native'
+          ));    
         }
       }, 500);
 

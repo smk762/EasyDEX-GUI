@@ -108,14 +108,16 @@ class WalletsData extends React.Component {
   }
 
   exportToCSV() {
+    const _coin = this.props.ActiveCoin.coin;
+
     this.setState({
       generatingCSV: true,
     });
 
     if (this.props.ActiveCoin.mode === 'spv') {
       apiElectrumTransactionsCSV(
-        this.props.ActiveCoin.coin,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        _coin,
+        this.props.Dashboard.electrumCoins[_coin].pub
       )
       .then((res) => {
         this.setState({
@@ -142,7 +144,7 @@ class WalletsData extends React.Component {
         }
       });
     } else {
-      apiNativeTransactionsCSV(this.props.ActiveCoin.coin)
+      apiNativeTransactionsCSV(_coin)
       .then((res) => {
         this.setState({
           generatingCSV: false,
@@ -171,14 +173,17 @@ class WalletsData extends React.Component {
   }
 
   toggleKvView() {
+    const _coin = this.props.ActiveCoin.coin;
+    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+
     this.setState({
       kvView: !this.state.kvView,
     });
 
     if (!this.state.kvView) {
       apiElectrumKVTransactionsPromise(
-        this.props.ActiveCoin.coin,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        _coin,
+        _pub
       )
       .then((res) => {
         // console.warn('kvHistory', res);
@@ -197,22 +202,24 @@ class WalletsData extends React.Component {
       });
     } else {
       Store.dispatch(apiElectrumTransactions(
-        this.props.ActiveCoin.coin,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        _coin,
+        _pub
       ));
     }
   }
 
   displayClaimInterestUI() {
+    const _balance = this.props.ActiveCoin.balance;
+
     if (this.props.ActiveCoin &&
         this.props.ActiveCoin.coin === 'KMD' &&
-        this.props.ActiveCoin.balance) {
-      if (this.props.ActiveCoin.balance.interest &&
-          this.props.ActiveCoin.balance.interest > 0) {
+        _balance) {
+      if (_balance.interest &&
+        _balance.interest > 0) {
         return this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 : 777;
       } else if (
-        (this.props.ActiveCoin.balance.transparent && this.props.ActiveCoin.balance.transparent >= 10) ||
-        (this.props.ActiveCoin.balance.balance && this.props.ActiveCoin.balance.balance >= 10)
+        (_balance.transparent && _balance.transparent >= 10) ||
+        (_balance.balance && _balance.balance >= 10)
       ) {
         return -777;
       }
@@ -224,6 +231,7 @@ class WalletsData extends React.Component {
   }
 
   generateItemsListColumns(itemsCount) {
+    const _isAcPrivate = this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
     let columns = [];
     let _col;
 
@@ -286,7 +294,7 @@ class WalletsData extends React.Component {
       id: 'timestamp',
       Header: translate('INDEX.TIME'),
       Footer: translate('INDEX.TIME'),
-      Cell: row => this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private && !row.value ? translate('DASHBOARD.NA') : secondsToString(row.value),
+      Cell: row => _isAcPrivate && !row.value ? translate('DASHBOARD.NA') : secondsToString(row.value),
       accessor: (tx) => tx.timestamp || tx.time || tx.blocktime,
     }];
 
@@ -415,13 +423,15 @@ class WalletsData extends React.Component {
   }
 
   handleClickOutside(e) {
+    const _srcElement = e ? e.srcElement : null;
+
     if (e &&
-        e.srcElement &&
-        e.srcElement.className !== 'btn dropdown-toggle btn-info' &&
-        (e.srcElement.offsetParent && e.srcElement.offsetParent.className !== 'btn dropdown-toggle btn-info') &&
+        _srcElement &&
+        _srcElement.className !== 'btn dropdown-toggle btn-info' &&
+        (_srcElement.offsetParent && _srcElement.offsetParent.className !== 'btn dropdown-toggle btn-info') &&
         (e.path && e.path[4] && e.path[4].className.indexOf('showkmdwalletaddrs') === -1) &&
-        (e.srcElement.offsetParent && e.srcElement.offsetParent.className.indexOf('dropdown') === -1) &&
-        e.srcElement.className !== 'dropdown-toggle btn-xs btn-default') {
+        (_srcElement.offsetParent && _srcElement.offsetParent.className.indexOf('dropdown') === -1) &&
+        _srcElement.className !== 'dropdown-toggle btn-xs btn-default') {
       this.setState({
         addressSelectorOpen: false,
       });
@@ -429,6 +439,10 @@ class WalletsData extends React.Component {
   }
 
   refreshTxHistory() {
+    const _coin = this.props.ActiveCoin.coin;
+    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+    const _mode = this.props.ActiveCoin.mode;
+
     this.setState({
       loading: true,
     });
@@ -440,8 +454,8 @@ class WalletsData extends React.Component {
 
     if (this.state.kvView) {
       apiElectrumKVTransactionsPromise(
-        this.props.ActiveCoin.coin,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        _coin,
+        _pub
       )
       .then((res) => {
         // console.warn('kvHistory', res);
@@ -459,13 +473,13 @@ class WalletsData extends React.Component {
         }
       });
     } else {
-      if (this.props.ActiveCoin.mode === 'native') {
-        Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
-      } else if (this.props.ActiveCoin.mode === 'spv') {
+      if (_mode === 'native') {
+        Store.dispatch(getDashboardUpdate(_coin));
+      } else if (_mode === 'spv') {
         Store.dispatch(
           apiElectrumTransactions(
-            this.props.ActiveCoin.coin,
-            this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+            _coin,
+            _pub
           )
         );
       }
@@ -541,27 +555,40 @@ class WalletsData extends React.Component {
   }
 
   spvAutoReconnect() {
-    if (this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none') {
-      const _spvServers = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList;
-      const _server = [
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.ip,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.port,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].server.proto
-      ];
-      const _randomServer = getRandomElectrumServer(_spvServers, _server.join(':'));
+    const _coin = this.props.ActiveCoin.coin;
+    const _electrumCoin = this.props.Dashboard.electrumCoins[_coin];
 
-      apiElectrumCheckServerConnection(_randomServer.ip, _randomServer.port, _randomServer.proto)
+    if (_electrumCoin.serverList !== 'none') {
+      const _spvServers = _electrumCoin.serverList;
+      const _server = [
+        _electrumCoin.server.ip,
+        _electrumCoin.server.port,
+        _electrumCoin.server.proto,
+      ];
+      const _randomServer = getRandomElectrumServer(
+        _spvServers,
+        _server.join(':')
+      );
+
+      apiElectrumCheckServerConnection(
+        _randomServer.ip,
+        _randomServer.port,
+        _randomServer.proto
+      )
       .then((res) => {
+        const _server = `${_randomServer.ip}:${_randomServer.port}:${_randomServer.proto}`;
+        const _coin = this.props.ActiveCoin.coin;
+
         if (res.result) {
           apiElectrumSetServer(
-            this.props.ActiveCoin.coin,
+            _coin,
             _randomServer.ip,
             _randomServer.port
           )
           .then((serverSetRes) => {
             Store.dispatch(
               triggerToaster(
-                `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_randomServer.ip}:${_randomServer.port}:${_randomServer.proto}`,
+                `${_coin} SPV ${translate('DASHBOARD.SERVER_SET_TO')} ${_server}`,
                 translate('TOASTR.WALLET_NOTIFICATION'),
                 'success'
               )
@@ -571,7 +598,7 @@ class WalletsData extends React.Component {
         } else {
           Store.dispatch(
             triggerToaster(
-              `${this.props.ActiveCoin.coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_randomServer.ip}:${_randomServer.port}:${_randomServer.proto} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
+              `${_coin} SPV ${translate('DASHBOARD.SERVER_SM')} ${_server} ${translate('DASHBOARD.IS_UNREACHABLE')}!`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -627,12 +654,14 @@ class WalletsData extends React.Component {
       this.state.itemsList &&
       this.state.itemsList.length
     ) {
+      const _isAcPrivate = this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
+      
       return (
         <DoubleScrollbar>
           { TxHistoryListRender.call(this) }
           { !this.state.kvView &&
             (this.props.ActiveCoin.mode === 'spv' ||
-             (this.props.ActiveCoin.mode === 'native' && (this.props.ActiveCoin.coin === 'KMD' || (this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)))) &&
+             (this.props.ActiveCoin.mode === 'native' && (this.props.ActiveCoin.coin === 'KMD' || _isAcPrivate))) &&
             <div className="margin-left-5 margin-top-30">
               <span
                 className="pointer"
@@ -688,7 +717,13 @@ class WalletsData extends React.Component {
         }
 
         items.push(
-          AddressItemRender.call(this, address, type, _amount, _coin)
+          AddressItemRender.call(
+            this,
+            address,
+            type,
+            _amount,
+            _coin
+          )
         );
       }
 
@@ -699,9 +734,11 @@ class WalletsData extends React.Component {
   }
 
   hasPublicAddresses() {
-    return this.props.ActiveCoin.addresses &&
-      this.props.ActiveCoin.addresses.public &&
-      this.props.ActiveCoin.addresses.public.length;
+    const _addresses = this.props.ActiveCoin.addresses;
+
+    return _addresses &&
+      _addresses &&
+      _addresses.public.length;
   }
 
   renderAddressAmount() {

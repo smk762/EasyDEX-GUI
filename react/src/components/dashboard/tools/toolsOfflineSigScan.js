@@ -38,7 +38,7 @@ class ToolsOfflineSigScan extends React.Component {
   }
 
   sendTx(rawTx2Push) {
-    let _txData = rawTx2Push.split(':');
+    const _txData = rawTx2Push.split(':');
 
     // console.warn(_txData);
 

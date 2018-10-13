@@ -247,7 +247,10 @@ class SeedEncryptPanel extends React.Component {
             )
           );
         } else {
-          encryptPassphrase(this.state.wifkeysPassphrase, this.state.encryptKey)
+          encryptPassphrase(
+            this.state.wifkeysPassphrase,
+            this.state.encryptKey
+          )
           .then((res) => {
             if (res.msg === 'success') {
               Store.dispatch(loadPinList());
@@ -322,7 +325,9 @@ class SeedEncryptPanel extends React.Component {
             { this.props.Settings.appInfo &&
               this.props.Settings.appInfo.dirs &&
               this.props.Settings.appInfo.dirs.agamaDir &&
-              <td className="selectable">{ this.props.Settings.appInfo.dirs.agamaDir }/shepherd/pin/{ _pins[i] }.pin</td>
+              <td className="selectable">
+              { this.props.Settings.appInfo.dirs.agamaDir }/shepherd/pin/{ _pins[i] }.pin
+              </td>
             }
           </tr>
         );
@@ -496,7 +501,9 @@ class SeedEncryptPanel extends React.Component {
                     onClick={ this.toggleSeedInputVisibility }></i>
                   <label
                     className="floating-label"
-                    htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
+                    htmlFor="wifkeysPassphrase">
+                    { translate('INDEX.PASSPHRASE') } / WIF
+                  </label>
                   <div className="form-group form-material floating text-left margin-top-60">
                     <input
                       type="password"
@@ -508,7 +515,9 @@ class SeedEncryptPanel extends React.Component {
                       value={ this.state.encryptKey || '' } />
                     <label
                       className="floating-label"
-                      htmlFor="encryptKey">{ translate('LOGIN.SEED_ENCRYPT_KEY') }</label>
+                      htmlFor="encryptKey">
+                      { translate('LOGIN.SEED_ENCRYPT_KEY') }
+                    </label>
                   </div>
                   <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
                     <input
@@ -521,7 +530,9 @@ class SeedEncryptPanel extends React.Component {
                       value={ this.state.encryptKeyConfirm || '' } />
                     <label
                       className="floating-label"
-                      htmlFor="encryptKeyConfirm">{ translate('LOGIN.SEED_ENCRYPT_KEY_CONF') }</label>
+                      htmlFor="encryptKeyConfirm">
+                      { translate('LOGIN.SEED_ENCRYPT_KEY_CONF') }
+                    </label>
                   </div>
                   { this.state.seedExtraSpaces &&
                     <i className="icon fa-warning seed-extra-spaces-warning"
@@ -543,7 +554,9 @@ class SeedEncryptPanel extends React.Component {
                       !this.state.encryptKey ||
                       !this.state.encryptKeyConfirm
                     }
-                    onClick={ this.encryptSeed }>{ translate('SETTINGS.ENCRYPT') }</button>
+                    onClick={ this.encryptSeed }>
+                    { translate('SETTINGS.ENCRYPT') }
+                  </button>
                 </div>
               </div>
             </div>

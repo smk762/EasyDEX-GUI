@@ -160,7 +160,9 @@ class ToolsGetBalanceMulti extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.COIN') }
+          </label>
           <Select
             name="balanceCoin"
             className="col-sm-3"
@@ -177,7 +179,9 @@ class ToolsGetBalanceMulti extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-3 no-padding-left padding-bottom-10"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.ADDR') }
+          </label>
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <textarea

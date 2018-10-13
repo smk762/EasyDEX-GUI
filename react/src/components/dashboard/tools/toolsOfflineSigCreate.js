@@ -148,7 +148,9 @@ class ToolsOfflineSigCreate extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.COIN') }
+          </label>
           <Select
             name="selectedCoin"
             className="col-sm-3"
@@ -164,7 +166,9 @@ class ToolsOfflineSigCreate extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_FROM') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('INDEX.SEND_FROM') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3 blur"
@@ -184,13 +188,17 @@ class ToolsOfflineSigCreate extends React.Component {
             { translate('TOOLS.GET_BALANCE') }
           </button>
           { this.state.balance &&
-            <label className="margin-left-20">{ translate('TOOLS.BALANCE') }: { this.state.balance.balance }</label>
+            <label className="margin-left-20">
+            { translate('TOOLS.BALANCE') }: { this.state.balance.balance }
+            </label>
           }
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('INDEX.SEND_TO') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3 blur"
@@ -228,7 +236,9 @@ class ToolsOfflineSigCreate extends React.Component {
         </div>
         { this.state.tx2qr &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
-            <label className="control-label col-sm-1 no-padding-left">{ translate('TOOLS.QR_PAYLOAD') }</label>
+            <label className="control-label col-sm-1 no-padding-left">
+            { translate('TOOLS.QR_PAYLOAD') }
+            </label>
             <textarea
               rows="5"
               cols="20"
@@ -242,7 +252,9 @@ class ToolsOfflineSigCreate extends React.Component {
             { translate('TOOLS.UTXO_COUNT') }: { this.state.utxo.length }
             </label>
             { this.state.utxo.length > 3 &&
-              <div className="col-red margin-left-20 margin-top-5">{ translate('TOOLS.UTXO_COUNT_TO_MERGE') }</div>
+              <div className="col-red margin-left-20 margin-top-5">
+              { translate('TOOLS.UTXO_COUNT_TO_MERGE') }
+              </div>
             }
           </div>
         }

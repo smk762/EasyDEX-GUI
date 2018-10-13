@@ -99,8 +99,9 @@ export const AddressItemRender = function(address, type, amount, coin) {
 };
 
 export const AddressListRender = function() {
-  const isMultiPublicAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.public && this.props.ActiveCoin.addresses.public.length > 1;
-  const isMultiPrivateAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.private && this.props.ActiveCoin.addresses.private.length > 1;
+  const _addresses = this.props.ActiveCoin.addresses;
+  const isMultiPublicAddress = _addresses && _addresses.public && _addresses.public.length > 1;
+  const isMultiPrivateAddress = _addresses && _addresses.private && _addresses.private.length > 1;
 
   if (isMultiPublicAddress ||
       isMultiPrivateAddress) {
@@ -198,7 +199,9 @@ export const TxAmountRender = function(tx) {
             <span
               className="tx-interest"
               data-for="txHistory4"
-              data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
+              data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>
+              +{ formatValue(Math.abs(tx.interest)) }
+            </span>
           }
           <ReactTooltip
             id="txHistory4"
@@ -231,7 +234,9 @@ export const TxAmountRender = function(tx) {
         <span
           className="tx-interest"
           data-for="txHistory6"
-          data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(Number(tx.interest))}` }>+{ Math.abs(Number(tx.interest)) }</span>
+          data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(Number(tx.interest))}` }>
+          +{ Math.abs(Number(tx.interest)) }
+        </span>
       }
       <ReactTooltip
         id="txHistory6"
@@ -253,12 +258,13 @@ export const TxAmountRender = function(tx) {
 };
 
 export const TxHistoryListRender = function() {
+  const _activeCoin = this.props.ActiveCoin.coins[mainWindow.activeCoin];
   let _data;
 
-  if (this.props.ActiveCoin.coins[mainWindow.activeCoin] &&
-      this.props.ActiveCoin.coins[mainWindow.activeCoin].txhistory &&
+  if (_activeCoin &&
+      _activeCoin.txhistory &&
       !this.state.searchTerm) {
-    _data = this.props.ActiveCoin.coins[mainWindow.activeCoin].txhistory;
+    _data = _activeCoin.txhistory;
   }
 
   _data = _data || this.state.filteredItemsList;
@@ -290,11 +296,13 @@ export const TxHistoryListRender = function() {
 };
 
 export const WalletsDataRender = function() {
+  const _balance = this.props.ActiveCoin.balance;
+  const _txhistory = this.props.ActiveCoin.txhistory;
+
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
-        { (this.displayClaimInterestUI() === 777 ||
-          this.displayClaimInterestUI() === -777) &&
+        { (this.displayClaimInterestUI() === 777 || this.displayClaimInterestUI() === -777) &&
           <div className="col-xs-12 margin-top-20 backround-gray">
             <div className="panel no-margin">
               <div>
@@ -302,7 +310,7 @@ export const WalletsDataRender = function() {
                   <div className="panel no-margin padding-top-10 padding-bottom-10 center">
                     { this.displayClaimInterestUI() === 777 &&
                       <div>
-                        { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P1') } <strong>{ this.props.ActiveCoin.balance.interest }</strong> KMD { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P2') }.
+                        { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P1') } <strong>{ _balance.interest }</strong> KMD { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P2') }.
                         <button
                           type="button"
                           className="btn btn-success waves-effect waves-light dashboard-claim-interest-btn"
@@ -310,8 +318,8 @@ export const WalletsDataRender = function() {
                           <i className="icon fa-dollar"></i> { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P3') }
                         </button>
                         { this.props.ActiveCoin &&
-                          this.props.ActiveCoin.balance &&
-                          this.props.ActiveCoin.balance.utxoIssues &&
+                          _balance &&
+                          _balance.utxoIssues &&
                           <i
                             data-tip={ translate('DASHBOARD.KMD_UTXO_ISSUES') }
                             data-html={ true }
@@ -365,17 +373,17 @@ export const WalletsDataRender = function() {
                         type="button"
                         className="btn btn-default btn-switch-kv"
                         onClick={ this.toggleKvView }>
-                        { !this.state.kvView ? translate('KV.KV_VIEW') : translate('KV.TX_VIEW') }
+                        { translate('KV.' + (!this.state.kvView ? 'KV_VIEW' : 'TX_VIEW')) }
                       </button>
                     }
                   </header>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
-                      { this.props.ActiveCoin.txhistory !== 'loading' &&
-                        this.props.ActiveCoin.txhistory !== 'no data' &&
-                        this.props.ActiveCoin.txhistory !== 'connection error' &&
-                        this.props.ActiveCoin.txhistory !== 'connection error or incomplete data' &&
-                        this.props.ActiveCoin.txhistory !== 'cant get current height' &&
+                      { _txhistory !== 'loading' &&
+                        _txhistory !== 'no data' &&
+                        _txhistory !== 'connection error' &&
+                        _txhistory !== 'connection error or incomplete data' &&
+                        _txhistory !== 'cant get current height' &&
                         !this.state.kvView &&
                         <div className="col-sm-4 search-box">
                           <input

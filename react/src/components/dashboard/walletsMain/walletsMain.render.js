@@ -12,6 +12,8 @@ import {
 import translate from '../../../translate/translate';
 
 const WalletsMainRender = function() {
+  const _coin = this.props.ActiveCoin.coin;
+
   return (
     <div className="page margin-left-0">
       <div className="padding-top-0">
@@ -19,20 +21,20 @@ const WalletsMainRender = function() {
           id="easydex-header-div"
           className="background-color-white"
           style={ this.getCoinStyle('transparent') }>
-          <ol className={ 'coin-logo breadcrumb' + (this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? ' coin-logo-wide' : '') + ' native-coin-logo' }>
+          <ol className={ 'coin-logo breadcrumb' + (_coin === 'KMD' || _coin === 'JUMBLR' || _coin === 'MESH' || _coin === 'MVP' ? ' coin-logo-wide' : '') + ' native-coin-logo' }>
             <li className="header-easydex-section">
               { this.getCoinStyle('title') &&
                 <img
-                  className={ 'coin-icon' + (this.props.ActiveCoin.coin === 'KMD' ? ' kmd' : '') }
+                  className={ 'coin-icon' + (_coin === 'KMD' ? ' kmd' : '') }
                   src={ this.getCoinStyle('title') } />
               }
-              { this.props.ActiveCoin.coin === 'KMD' &&
+              { _coin === 'KMD' &&
                 <img
                   className="kmd-mobile-icon"
-                  src={ `assets/images/cryptologo/${this.props.ActiveCoin.coin.toLowerCase()}.png` } />
+                  src={ `assets/images/cryptologo/${_coin.toLowerCase()}.png` } />
               }
-              <span className={ `margin-left-20 easydex-section-image ${(this.props.ActiveCoin.coin === 'KMD' || this.props.ActiveCoin.coin === 'JUMBLR' || this.props.ActiveCoin.coin === 'MESH' || this.props.ActiveCoin.coin === 'MVP' ? 'hide' : '')}` }>
-                { translate((isKomodoCoin(this.props.ActiveCoin.coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + this.props.ActiveCoin.coin.toUpperCase()) }
+              <span className={ `margin-left-20 easydex-section-image ${(_coin === 'KMD' || _coin === 'JUMBLR' || _coin === 'MESH' || _coin === 'MVP' ? 'hide' : '')}` }>
+                { translate((isKomodoCoin(_coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + _coin.toUpperCase()) }
               </span>
             </li>
           </ol>

@@ -26,10 +26,11 @@ class SPVServersPanel extends React.Component {
   }
 
   setElectrumServer(coin) {
+    const _propsServer = this.props.Dashboard.electrumCoins[coin].server;
     let _server = [
-      this.props.Dashboard.electrumCoins[coin].server.ip,
-      this.props.Dashboard.electrumCoins[coin].server.port,
-      this.props.Dashboard.electrumCoins[coin].server.proto
+      _propsServer.ip,
+      _propsServer.port,
+      _propsServer.proto
     ];
 
     if (this.state &&
@@ -37,14 +38,25 @@ class SPVServersPanel extends React.Component {
       _server = this.state[coin].split(':');
     }
 
-    apiElectrumCheckServerConnection(_server[0], _server[1], _server[2])
+    apiElectrumCheckServerConnection(
+      _server[0],
+      _server[1],
+      _server[2]
+    )
     .then((res) => {
+      const __server = `${_server[0]}:${_server[1]}:${_server[2]}`;
+
       if (res.result) {
-        apiElectrumSetServer(coin, _server[0], _server[1], _server[2])
+        apiElectrumSetServer(
+          coin,
+          _server[0],
+          _server[1],
+          _server[2]
+        )
         .then((serverSetRes) => {
           Store.dispatch(
             triggerToaster(
-              `${coin} ${translate('SETTINGS.SPV_SERVER_SET_TO')} ${_server[0]}:${_server[1]}:${_server[2]}`,
+              `${coin} ${translate('SETTINGS.SPV_SERVER_SET_TO')} ${__server}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'success'
             )
@@ -55,7 +67,7 @@ class SPVServersPanel extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            `${coin} ${translate('SETTINGS.SPV_SERVER')} ${_server[0]}:${_server[1]}:${_server[2]} ${translate('SETTINGS.IS_UNREACHABLE')}!`,
+            `${coin} ${translate('SETTINGS.SPV_SERVER')} ${__server} ${translate('SETTINGS.IS_UNREACHABLE')}!`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -92,9 +104,13 @@ class SPVServersPanel extends React.Component {
     _spvCoins.sort();
 
     for (let i = 0; i < _spvCoins.length; i++) {
-      if (this.props.Dashboard.electrumCoins[_spvCoins[i]] &&
-          this.props.Dashboard.electrumCoins[_spvCoins[i]].serverList &&
-          this.props.Dashboard.electrumCoins[_spvCoins[i]].serverList !== 'none') {
+      const _electrumCoin = this.props.Dashboard.electrumCoins[_spvCoins[i]];
+      
+      if (_electrumCoin &&
+          _electrumCoin.serverList &&
+          _electrumCoin.serverList !== 'none') {
+        const _server = `${_electrumCoin.server.ip}:${_electrumCoin.server.port}:${_electrumCoin.server.proto}`;
+
         _items.push(
           <div
             className={ 'row' + (_spvCoins.length > 1 ? ' padding-bottom-30' : '') }
@@ -105,7 +121,7 @@ class SPVServersPanel extends React.Component {
                 <select
                   className="form-control form-material"
                   name={ _spvCoins[i] }
-                  value={ (this.state && this.state[_spvCoins[i]]) || this.props.Dashboard.electrumCoins[_spvCoins[i]].server.ip + ':' + this.props.Dashboard.electrumCoins[_spvCoins[i]].server.port + ':' + this.props.Dashboard.electrumCoins[_spvCoins[i]].server.proto }
+                  value={ (this.state && this.state[_spvCoins[i]]) || _server }
                   onChange={ (event) => this.updateInput(event) }
                   autoFocus>
                   { this.renderServerListSelectorOptions(_spvCoins[i]) }
