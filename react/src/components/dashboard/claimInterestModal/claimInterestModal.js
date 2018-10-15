@@ -267,6 +267,7 @@ class ClaimInterestModal extends React.Component {
   claimInterest(address, amount) {
     const _coin = this.props.ActiveCoin.coin;
     const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+    const _balance = this.props.ActiveCoin.balance;
 
     if (_coin === 'KMD') {
       if (this.props.ActiveCoin.mode === 'spv') {
