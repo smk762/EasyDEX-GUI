@@ -22,7 +22,7 @@ export const _ClaimInterestTableRender = function() {
             </button>
           </td>
           <td className="blur selectable">{ _transactionsList[i].address }</td>
-          <td className={ _transactionsList[i].amount >= 10 ? (!_transactionsList[i].interestRulesCheckPass ? 'red bold' : 'green bold') : '' }>
+          <td className={ _transactionsList[i].amount < 10 || !_transactionsList[i].interestRulesCheckPass ? 'red bold' : 'green bold' }>
           { _transactionsList[i].amount }
           </td>
           <td>{ _transactionsList[i].interest }</td>
