@@ -55,7 +55,7 @@ const WalletsBalanceRender = function() {
                           Number(_balanceUnconf) < 0 &&
                           <i
                             className="icon fa-info-circle margin-left-5 icon-unconf-balance"
-                            data-tip={ `${translate('INDEX.UNCONFIRMED_BALANCE')} ${Math.abs(t_balanceUnconf)}` }
+                            data-tip={ `${translate('INDEX.UNCONFIRMED_BALANCE')} ${Math.abs(_balanceUnconf)}` }
                             data-for="balance2"></i>
                         }
                         <ReactTooltip
