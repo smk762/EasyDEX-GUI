@@ -311,7 +311,7 @@ class CoinTileItem extends React.Component {
           }
         }
 
-        if ((!t_dashboard.displayCoindDownModal || _coin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) &&
+        if ((!_dashboard.displayCoindDownModal || _coin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) &&
             _coin.progress &&
             _coin.progress.blocks &&
             _coin.progress.longestchain &&
