@@ -74,7 +74,7 @@ export const _ClaimInterestTableRender = function() {
           </p>
         }
         <p>
-          <strong>{ translate('CLAIM_INTEREST.CLAIM_INTEREST_FEE') }:</strong> 0.0001 KMD (10000 sats).
+          <strong>{ translate('CLAIM_INTEREST.CLAIM_INTEREST_FEE') }:</strong> { this.props.ActiveCoin.mode === 'native' ? '0.0001' : '0.0002' } KMD ({ this.props.ActiveCoin.mode === 'native' ? '10000' : '20000' }.
         </p>
       </div>
       { this.state.totalInterest > 0 &&
