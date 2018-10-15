@@ -7,11 +7,13 @@ import {
 } from 'agama-wallet-lib/src/utils';
 
 const WalletsInfoRender = function() {
-  if (this.props.ActiveCoin.mode === 'native') {
+  const _coin = this.props.ActiveCoin.coin;
+  const _mode = this.props.ActiveCoin.mode;
+
+  if (_mode === 'native') {
     const _progress = this.props.ActiveCoin.progress;
     const _netTotals = this.props.ActiveCoin.net.totals;
     const _netPeers = this.props.ActiveCoin.net.peers;
-    const _coin = this.props.ActiveCoin.coin;
     let _peerItems = [];
 
     if (_netPeers) {
@@ -350,7 +352,7 @@ const WalletsInfoRender = function() {
         </div>
       </div>
     );
-  } else if (this.props.ActiveCoin.mode === 'spv') {
+  } else if (_mode === 'spv') {
     const _balance = this.props.ActiveCoin.balance;
     const _server = this.props.Dashboard.electrumCoins[_coin];
 
@@ -405,7 +407,7 @@ const WalletsInfoRender = function() {
             </div>
           </div>
           { _coin === 'KMD' &&
-            this.props.ActiveCoin.mode !== 'spv' &&
+            _mode !== 'spv' &&
             <div>
               <button
                 type="button"
