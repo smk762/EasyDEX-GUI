@@ -1159,6 +1159,8 @@ const LANG_EN = {
     CALL: 'Capital',
     CCL: 'CoinCollect',
     PIRATE: 'Pirate',
+	KOIN: 'Koinon Coin',
+    DION: 'DionPay',
   },
   CRYPTO: {
     STRAT: 'Stratis',
