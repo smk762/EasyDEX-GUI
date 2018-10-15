@@ -13,6 +13,7 @@ const _disabledAC = {
     'dsec',
     'mgnx',
     'pirate',
+    'koin',
   ],
   native: [
     'vrsc',
