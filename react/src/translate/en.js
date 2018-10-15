@@ -1155,11 +1155,11 @@ const LANG_EN = {
     ZILLA: 'ChainZilla',
     DSEC: 'DevSec',
     VRSC: 'VerusCoin',
-	MGNX: 'MagnaX',
+  	MGNX: 'MagnaX',
     CALL: 'Capital',
     CCL: 'CoinCollect',
     PIRATE: 'Pirate',
-	KOIN: 'Koinon Coin',
+    KOIN: 'Koinon Coin',
     DION: 'DionPay',
   },
   CRYPTO: {

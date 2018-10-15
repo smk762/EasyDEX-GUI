@@ -49,7 +49,7 @@ const AddCoinRender = function() {
                 </span>
               }
               { this.renderCoinSelectors() }
-              { !this.hasMoreThanOneCoin() &&
+              { this.hasMoreThanOneCoin() &&
                 <div className="text-align-center vertical-margin-20 horizontal-margin-0 padding-bottom-20 col-sm-12">
                   <button
                     type="button"
