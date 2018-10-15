@@ -4,6 +4,8 @@ import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 import { sortObject } from 'agama-wallet-lib/src/utils';
 
+// TODO: detect if ac has electrums or not
+
 const _disabledAC = {
   spv: [
     'axo',

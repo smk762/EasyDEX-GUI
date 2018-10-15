@@ -326,7 +326,7 @@ class CoinTileItem extends React.Component {
           );
 
           if (!_dashboard.skipFullDashboardUpdate) {
-            Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
+            Store.dispatch(getDashboardUpdate(coin, _coin));
           }
         } else {
           Store.dispatch(
