@@ -49,6 +49,7 @@ const LANG_EN = {
     KEYS_SEPARATED_BY_LINE: 'Keys, separated by a new line',
   },
   CLAIM_INTEREST: {
+    ACTUAL_LOCKTIME_SEC: 'Actual time passed since locktime ',
     MONTHLY_CLAIMING_TIP: 'To maximize your rewards claim them once a month.',
     NEED_TO_CLAIM: 'need to claim',
     TIME_SINCE_LOCKTIME: 'Time passed since locktime',
