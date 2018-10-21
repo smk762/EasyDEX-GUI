@@ -161,6 +161,8 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
     ],
   };
 
+  console.warn('actions addcoin genproclimit', genproclimit);
+
   if (acConfig[coin]) {
     for (let key in acConfig[coin]) {
       if (key === 'pubkey') {
@@ -172,7 +174,7 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
         }
       } else if (key === 'genproclimit') {
         if (genproclimit > 0) {
-          herdData.ac_options.push(`-genproclimit=${genproclimit + 1}`);
+          herdData.ac_options.push(`-genproclimit=${genproclimit}`);
         } else {
           herdData.ac_options.push('-genproclimit=0');
         }

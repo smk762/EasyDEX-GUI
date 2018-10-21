@@ -2,7 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
 import { acConfig } from '../../addcoin/payload';
-import mainWindow, { mainWindowNonCached } from '../../../util/mainWindow';
+import mainWindow from '../../../util/mainWindow';
 
 const testChains = [
   'BEER',
@@ -15,11 +15,8 @@ const CoinTileItemRender = function() {
   const _coinuc = item.coin.toUpperCase();
   const _coinlc = item.coin.toLowerCase();
   const _pubkey = mainWindow.getPubkeys()[_coinlc];
-  const _coindStartParams = mainWindowNonCached.getStartParams();
-  const _coindStartParamsString = _coindStartParams && _coindStartParams[_coinuc] ? _coindStartParams[_coinuc].join(' ') : '';
+  const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';
   
-  console.log('_coindStartParams', _coindStartParams);
-
   return (
     <div className="list-group-item col-xlg-6 col-lg-12 wallet-widgets-info pointer">
       <span className={ `badge up badge-${item.modecolor}` }>
@@ -56,7 +53,7 @@ const CoinTileItemRender = function() {
         acConfig[_coinuc] &&
         acConfig[_coinuc].ac_reward &&
         !acConfig[_coinuc].ac_stake &&
-        _coindStartParams[_coinuc] &&
+        _coindStartParamsString &&
         (_coindStartParamsString.indexOf('-genproclimit=') > -1 && _coindStartParamsString.indexOf('-genproclimit=0') === -1) &&
         <i
           data-tip={ translate('INDEX.MINING_IS_ENABLED') }
