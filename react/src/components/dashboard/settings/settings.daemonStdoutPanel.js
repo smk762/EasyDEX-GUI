@@ -48,6 +48,8 @@ class DaemonStdoutPanel extends React.Component {
     let _items = [];
     let _nativeCoins = this.props.Main.coins.native;
 
+    _nativeCoins.sort();
+
     for (let i = 0; i < _nativeCoins.length; i++) {
       _items.push(
         <option

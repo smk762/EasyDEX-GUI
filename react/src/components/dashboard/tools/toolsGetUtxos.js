@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -32,7 +32,7 @@ class ToolsGetUtxos extends React.Component {
   getUtxos() {
     const _coin = this.state.utxoCoin.split('|');
 
-    shepherdElectrumListunspent(_coin[0], this.state.utxoAddr)
+    apiElectrumListunspent(_coin[0], this.state.utxoAddr)
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -66,7 +66,7 @@ class ToolsGetUtxos extends React.Component {
             { _coin[0] === 'KMD' &&
               <td>{ _utxos[i].locktime }</td>
             }
-            <td>{ _utxos[i].txid }</td>
+            <td className="blur selectable">{ _utxos[i].txid }</td>
           </tr>
         );
       }
@@ -149,7 +149,10 @@ class ToolsGetUtxos extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'utxoCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
+            options={
+              addCoinOptionsCrypto('skip')
+              .concat(addCoinOptionsAC('skip'))
+            } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
@@ -157,7 +160,7 @@ class ToolsGetUtxos extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="utxoAddr"
             onChange={ this.updateInput }
             value={ this.state.utxoAddr }

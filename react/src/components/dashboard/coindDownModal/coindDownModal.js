@@ -11,7 +11,7 @@ import translate from '../../../translate/translate';
 
 import CoindDownModalRender from './coindDownModal.render';
 
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.failedRPCAttemptsThreshold || 10;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.native.failedRPCAttemptsThreshold || 10;
 
 class CoindDownModal extends React.Component {
   constructor() {
@@ -21,6 +21,8 @@ class CoindDownModal extends React.Component {
       kmdMainPassiveMode: false,
       coindStdOut: translate('INDEX.LOADING') + '...',
       toggleDebugLog: true,
+      className: 'hide',
+      open: false,
     };
     this.dismiss = this.dismiss.bind(this);
     this.getCoindGetStdout = this.getCoindGetStdout.bind(this);
@@ -58,7 +60,17 @@ class CoindDownModal extends React.Component {
   }
 
   dismiss() {
-    Store.dispatch(toggleCoindDownModal(false));
+    this.setState(Object.assign({}, this.state, {
+      className: 'show out',
+    }));
+
+    setTimeout(() => {
+      this.setState(Object.assign({}, this.state, {
+        open: false,
+        className: 'hide',
+      }));
+      Store.dispatch(toggleCoindDownModal(false));
+    }, 300);
   }
 
   componentWillMount() {
@@ -68,10 +80,17 @@ class CoindDownModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.displayCoindDownModal !== nextProps.displayCoindDownModal) {
+    if (this.props.displayCoindDownModal !== this.state.open) {
       this.setState(Object.assign({}, this.state, {
-        display: nextProps.displayCoindDownModal,
+        className: nextProps.displayCoindDownModal && this.check() ? 'show fade' : 'show out',
       }));
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          open: nextProps.displayCoindDownModal,
+          className: nextProps.displayCoindDownModal && this.check() ? 'show in' : 'hide',
+        }));
+      }, nextProps.displayCoindDownModal ? 50 : 300);
 
       if (nextProps.displayCoindDownModal) {
         this.getCoindGetStdout();
@@ -79,14 +98,15 @@ class CoindDownModal extends React.Component {
     }
   }
 
-  render() {
-    if (this.state.display &&
-        !this.state.kmdMainPassiveMode &&
+  check() {
+    if (!this.state.kmdMainPassiveMode &&
         this.props.ActiveCoin.getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) {
-      return CoindDownModalRender.call(this);
+      return true;
     }
+  }
 
-    return null;
+  render() {
+    return CoindDownModalRender.call(this);
   }
 }
 

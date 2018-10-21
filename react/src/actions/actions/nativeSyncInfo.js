@@ -6,7 +6,11 @@ import {
   triggerToaster,
   getDebugLog,
 } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import fetchType from '../../util/fetchType';
@@ -99,12 +103,12 @@ export const getSyncInfoNative = (coin, skipDebug, skipRemote, suppressErrors) =
       mode: null,
       chain: coin,
       cmd: 'getinfo',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
@@ -112,8 +116,8 @@ export const getSyncInfoNative = (coin, skipDebug, skipRemote, suppressErrors) =
       if (!suppressErrors) { // rescan case
         dispatch(
           triggerToaster(
-            'getSyncInfo',
-            'Error',
+            translate('API.getSyncInfo') + ' (code: getSyncInfo)',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -124,74 +128,76 @@ export const getSyncInfoNative = (coin, skipDebug, skipRemote, suppressErrors) =
       return _response;
     })
     .then(json => {
-      if (json === 'Work queue depth exceeded') {
-        if (coin === 'KMD') {
-          dispatch(getDebugLog('komodo', 100));
-        } else {
-          dispatch(getDebugLog('komodo', 100, coin));
-        }
-        dispatch(
-          getSyncInfoNativeState(
-            {
-              result: 'daemon is busy',
-              error: null,
-              id: null,
-            },
-            coin,
-            true,
-            skipRemote
-          )
-        );
-      } else {
-        if (!json ||
-            json.indexOf('"code":-777') > -1) {
-          const _kmdMainPassiveMode = mainWindow.kmdMainPassiveMode;
-
-          if (_kmdMainPassiveMode) {
-            dispatch(
-              triggerToaster(
-                translate('API.KMD_PASSIVE_ERROR'),
-                translate('API.CONN_ERROR'),
-                'warning',
-                false
-              )
-            );
-          }
-
+      if (mainWindow.activeCoin === coin) {
+        if (json === 'Work queue depth exceeded') {
           if (coin === 'KMD') {
-            dispatch(getDebugLog('komodo', 50));
+            dispatch(getDebugLog('komodo', 100));
           } else {
-            dispatch(getDebugLog('komodo', 50, coin));
+            dispatch(getDebugLog('komodo', 100, coin));
           }
-        } else {
-          json = JSON.parse(json);
-        }
-
-        if (json.error &&
-            json.error.message.indexOf('Activating best') === -1) {
-          if (coin === 'KMD') {
-            dispatch(getDebugLog('komodo', 1));
-          } else {
-            dispatch(getDebugLog('komodo', 1, coin));
-          }
-        }
-
-        if (coin === 'CHIPS') {
-          dispatch(
-            getBlockTemplate(
-              json,
-              coin
-            )
-          );
-        } else {
           dispatch(
             getSyncInfoNativeState(
-              json,
+              {
+                result: 'daemon is busy',
+                error: null,
+                id: null,
+              },
               coin,
-              skipDebug,
+              true,
               skipRemote
             )
           );
+        } else {
+          if (!json ||
+              json.indexOf('"code":-777') > -1) {
+            const _kmdMainPassiveMode = mainWindow.kmdMainPassiveMode;
+
+            if (_kmdMainPassiveMode) {
+              dispatch(
+                triggerToaster(
+                  translate('API.KMD_PASSIVE_ERROR'),
+                  translate('API.CONN_ERROR'),
+                  'warning',
+                  false
+                )
+              );
+            }
+
+            if (coin === 'KMD') {
+              dispatch(getDebugLog('komodo', 50));
+            } else {
+              dispatch(getDebugLog('komodo', 50, coin));
+            }
+          } else {
+            json = JSON.parse(json);
+          }
+
+          if (json.error &&
+              json.error.message.indexOf('Activating best') === -1) {
+            if (coin === 'KMD') {
+              dispatch(getDebugLog('komodo', 1));
+            } else {
+              dispatch(getDebugLog('komodo', 1, coin));
+            }
+          }
+
+          if (coin === 'CHIPS') {
+            dispatch(
+              getBlockTemplate(
+                json,
+                coin
+              )
+            );
+          } else {
+            dispatch(
+              getSyncInfoNativeState(
+                json,
+                coin,
+                skipDebug,
+                skipRemote
+              )
+            );
+          }
         }
       }
     });
@@ -203,21 +209,21 @@ export const getBlockTemplate = (_json, coin) => {
     mode: null,
     chain: coin,
     cmd: 'getblocktemplate',
-    rpc2cli: Config.rpc2cli,
-    token: Config.token,
+    rpc2cli,
+    token,
   };
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getBlockTemplate',
-          'Error',
+          translate('API.getSyncInfo') + ' (code: getBlockTemplate)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -262,20 +268,20 @@ export const getDebugLogProgress = (_json, coin) => {
     mode: null,
     chain: coin,
     cmd: 'debug',
-    token: Config.token,
+    token,
   };
 
   return dispatch => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getDebugLogProgress',
-          'Error',
+          translate('API.getSyncInfo') + ' (code: getDebugLogProgress)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -285,41 +291,43 @@ export const getDebugLogProgress = (_json, coin) => {
       return _response;
     })
     .then(json => {
-      if (json) {
-        json = JSON.parse(json);
-      }
-
-      if (json.result &&
-          json.result.blocks &&
-          json.result.headers) {
-        _json.result.longestchain = json.result.headers;
-        _json.result.progress = json.result.blocks * 100 / json.result.headers;
-      } else if (json.result && json.result.indexOf('UpdateTip:') > -1) {
-        const _debugProgress = json.result.split(' ');
-        let _height = '';
-        let _progress = '';
-
-        for (let i = 0; i < _debugProgress.length; i++) {
-          if (_debugProgress[i].indexOf('height=') > -1) {
-            _height = Number(_debugProgress[i].replace('height=', ''));
-          }
-          if (_debugProgress[i].indexOf('progress=') > -1) {
-            _progress = Number(_debugProgress[i].replace('progress=', ''));
-          }
-
-          _json.result.progress = _progress * 100;
+      if (mainWindow.activeCoin === coin) {
+        if (json) {
+          json = JSON.parse(json);
         }
-      }
 
-      if (_json.result &&
-          _json.result.progress) {
-        dispatch(
-          getSyncInfoNativeState(
-            _json,
-            coin,
-            true
-          )
-        );
+        if (json.result &&
+            json.result.blocks &&
+            json.result.headers) {
+          _json.result.longestchain = json.result.headers;
+          _json.result.progress = json.result.blocks * 100 / json.result.headers;
+        } else if (json.result && json.result.indexOf('UpdateTip:') > -1) {
+          const _debugProgress = json.result.split(' ');
+          let _height = '';
+          let _progress = '';
+
+          for (let i = 0; i < _debugProgress.length; i++) {
+            if (_debugProgress[i].indexOf('height=') > -1) {
+              _height = Number(_debugProgress[i].replace('height=', ''));
+            }
+            if (_debugProgress[i].indexOf('progress=') > -1) {
+              _progress = Number(_debugProgress[i].replace('progress=', ''));
+            }
+
+            _json.result.progress = _progress * 100;
+          }
+        }
+
+        if (_json.result &&
+            _json.result.progress) {
+          dispatch(
+            getSyncInfoNativeState(
+              _json,
+              coin,
+              true
+            )
+          );
+        }
       }
     });
   }

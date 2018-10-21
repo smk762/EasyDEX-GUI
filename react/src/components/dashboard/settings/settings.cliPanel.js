@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import { shepherdCli } from '../../../actions/actionCreators';
+import { apiCli } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 class CliPanel extends React.Component {
@@ -26,6 +26,8 @@ class CliPanel extends React.Component {
     if (allCoins) {
       if (mode === 'all') {
         modes.map((mode) => {
+          allCoins[mode].sort();
+
           allCoins[mode].map((coin) => {
             items.push(
               <option
@@ -37,6 +39,8 @@ class CliPanel extends React.Component {
           });
         });
       } else {
+        allCoins[mode].sort();
+
         allCoins[mode].map((coin) => {
           items.push(
             <option
@@ -124,7 +128,7 @@ class CliPanel extends React.Component {
 
   execCliCmd() {
     Store.dispatch(
-      shepherdCli(
+      apiCli(
         'passthru',
         this.state.cliCoin,
         this.state.cliCmdString
@@ -184,7 +188,7 @@ class CliPanel extends React.Component {
               onClick={ () => this.execCliCmd() }>{ translate('INDEX.EXECUTE') }</button>
           </div>
           <div className="col-sm-12 col-xs-12 text-align-left">
-            <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+            <div className="padding-top-40 padding-bottom-20 horizontal-padding-0 selectable">
               { this.renderCliResponse() }
             </div>
           </div>

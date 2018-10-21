@@ -1,7 +1,12 @@
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
 export const getListUnspent = (coin) => {
   return new Promise((resolve, reject) => {
@@ -9,20 +14,20 @@ export const getListUnspent = (coin) => {
       mode: null,
       chain: coin,
       cmd: 'listunspent',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'getListUnspent',
-          'Error',
+          translate('API.apiElectrumListunspent') + ' (code: getListUnspent)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -58,20 +63,20 @@ export const getRawTransaction = (coin, txid) => {
         txid,
         1
       ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'getTransaction',
-          'Error',
+          translate('API.apiElectrumListunspent') + ' (code: getListUnspent)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

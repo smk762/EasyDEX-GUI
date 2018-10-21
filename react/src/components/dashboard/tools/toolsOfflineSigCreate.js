@@ -5,18 +5,19 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import QRCode from 'qrcode.react';
 import QRModal from '../qrModal/qrModal';
+import { toSats } from 'agama-wallet-lib/src/utils';
 
 class ToolsOfflineSigCreate extends React.Component {
   constructor() {
@@ -42,7 +43,7 @@ class ToolsOfflineSigCreate extends React.Component {
   getBalance() {
     const _coin = this.state.selectedCoin.split('|');
 
-    shepherdToolsBalance(_coin[0], this.state.sendFrom)
+    apiToolsBalance(_coin[0], this.state.sendFrom)
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -63,9 +64,9 @@ class ToolsOfflineSigCreate extends React.Component {
   getUnsignedTx() {
     const _coin = this.state.selectedCoin.split('|');
 
-    shepherdToolsBuildUnsigned(
+    apiToolsBuildUnsigned(
       _coin[0],
-      this.state.amount * 100000000,
+      toSats(this.state.amount),
       this.state.sendTo,
       this.state.sendFrom
     )
@@ -155,7 +156,10 @@ class ToolsOfflineSigCreate extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'selectedCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
+            options={
+              addCoinOptionsCrypto('skip')
+              .concat(addCoinOptionsAC('skip'))
+            } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
@@ -163,7 +167,7 @@ class ToolsOfflineSigCreate extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_FROM') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="sendFrom"
             onChange={ this.updateInput }
             value={ this.state.sendFrom }
@@ -189,7 +193,7 @@ class ToolsOfflineSigCreate extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('INDEX.SEND_TO') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="sendTo"
             onChange={ this.updateInput }
             value={ this.state.sendTo }

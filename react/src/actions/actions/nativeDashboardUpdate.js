@@ -1,29 +1,23 @@
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import { DASHBOARD_UPDATE } from '../storeType';
 import fetchType from '../../util/fetchType';
+import mainWindow from '../../util/mainWindow';
+import translate from '../../translate/translate';
 
 export const getDashboardUpdate = (coin, activeCoinProps) => {
   return dispatch => {
-    const _fetchConfig = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        coin: coin,
-        rpc2cli: Config.rpc2cli,
-        token: Config.token,
-      }),
-    };
-
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/native/dashboard/update`,
+      `http://127.0.0.1:${agamaPort}/api/native/dashboard/update`,
       fetchType(
         JSON.stringify({
           coin: coin,
-          rpc2cli: Config.rpc2cli,
-          token: Config.token,
+          rpc2cli,
+          token,
         })
       ).post
     )
@@ -31,22 +25,24 @@ export const getDashboardUpdate = (coin, activeCoinProps) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getDashboardUpdate',
-          'Error',
+          translate('API.apiElectrumBip39Keys') + ' (code: getDashboardUpdate)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(getDashboardUpdateState(json, coin));
+      if (mainWindow.activeCoin === coin) {
+        dispatch(getDashboardUpdateState(json, coin));
 
-      // dirty hack to trigger dashboard render
-      if (!activeCoinProps ||
-          (activeCoinProps && !activeCoinProps.balance && !activeCoinProps.addresses)) {
-        setTimeout(() => {
-          dispatch(getDashboardUpdateState(json, coin));
-        }, 100);
+        // dirty hack to trigger dashboard render
+        if (!activeCoinProps ||
+            (activeCoinProps && !activeCoinProps.balance && !activeCoinProps.addresses)) {
+          setTimeout(() => {
+            dispatch(getDashboardUpdateState(json, coin));
+          }, 100);
+        }
       }
     });
   }
@@ -57,7 +53,6 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
   if (fakeResponse ||
       ((json.result.getinfo.error && json.result.getinfo.error === 'daemon is busy') &&
       (json.result.z_getoperationstatus.error && json.result.z_getoperationstatus.error === 'daemon is busy') &&
-      (json.result.listtransactions.error && json.result.listtransactions.error === 'daemon is busy') &&
       (json.result.listtransactions.error && json.result.listtransactions.error === 'daemon is busy'))) {
     return {
       type: DASHBOARD_UPDATE,
@@ -100,7 +95,7 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
           total: json.result.getbalance.result,
         },
         addresses: json.result.addresses,
-        coin: coin,
+        coin,
         getinfoFetchFailures: 0,
         rescanInProgress: false,
       };
@@ -117,18 +112,42 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
         }
       }
 
-      json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
-      json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
-      json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);
+      let zlistreceivedbyaddressHistory = [];
+      if (_addresses &&
+          _addresses.private &&
+          _addresses.private.length) {
+        for (let i = 0; i < _addresses.private.length; i++) {
+          if (_addresses.private[i].txs &&
+              _addresses.private[i].txs.length) {
+            for (let a = 0; a < _addresses.private[i].txs.length; a++) {
+              zlistreceivedbyaddressHistory.push({
+                txid: _addresses.private[i].txs[a].txid,
+                amount: _addresses.private[i].txs[a].amount,
+                address: _addresses.private[i].address,
+                type: 'received',
+                ztx: true,
+              });
+            }
+          }
+        }
+      }
+
+      if (json &&
+          json.result !== 'error' &&
+          json.result) {
+        json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
+        json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
+        json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);
+      }
 
       return {
         type: DASHBOARD_UPDATE,
         progress: json.result.getinfo.result,
         opids: json.result.z_getoperationstatus.result,
-        txhistory: _listtransactions,
+        txhistory: zlistreceivedbyaddressHistory.length ? (_listtransactions !== 'loading' && _listtransactions !== 'no data' ? _listtransactions.concat(zlistreceivedbyaddressHistory) : zlistreceivedbyaddressHistory) : _listtransactions,
         balance: json.result.z_gettotalbalance.result,
         addresses: json.result.addresses,
-        coin: coin,
+        coin,
         getinfoFetchFailures: 0,
         rescanInProgress: false,
       };

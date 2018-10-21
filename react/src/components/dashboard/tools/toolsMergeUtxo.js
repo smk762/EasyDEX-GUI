@@ -5,20 +5,17 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsSeedToWif,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import { isKomodoCoin } from '../../../util/coinHelper';
 import devlog from '../../../util/devlog';
+import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import { toSats } from 'agama-wallet-lib/src/utils';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class ToolsMergeUTXO extends React.Component {
   constructor() {
@@ -62,8 +59,8 @@ class ToolsMergeUTXO extends React.Component {
     }
 
     for (let i = 0; i < _utxos.length; i++) {
-      _utxos[i].amount = Number(_utxos[i].amount) * 100000000;
-      _utxos[i].interest = Number(_utxos[i].interest) * 100000000;
+      _utxos[i].amount = Number(toSats(_utxos[i].amount));
+      _utxos[i].interest = Number(toSats(_utxos[i].interest));
       _interest += (_utxos[i].interest ? _utxos[i].interest : 0);
     }
 
@@ -73,23 +70,23 @@ class ToolsMergeUTXO extends React.Component {
     const payload = {
       wif,
       network: 'komodo',
-      targets: [Math.floor(totalOutSize * 100000000) - 10000 + _interest],
+      targets: [Math.floor(toSats(totalOutSize)) - 10000 + _interest],
       utxo: _utxos,
       changeAddress: address,
       outputAddress: address,
       change: 0,
     };
 
-    console.log(payload);
+    // console.log(payload);
 
-    shepherdElectrumSplitUtxoPromise(payload)
+    apiElectrumSplitUtxoPromise(payload)
     .then((res) => {
       devlog(res);
 
       if (res.msg === 'success') {
         const _coin = this.state.utxoMergeCoin.split('|');
 
-        shepherdCliPromise(
+        apiCliPromise(
           null,
           _coin[0],
           'sendrawtransaction',
@@ -134,14 +131,14 @@ class ToolsMergeUTXO extends React.Component {
   getUtxoMerge() {
     const _coin = this.state.utxoMergeCoin.split('|');
 
-    shepherdToolsSeedToWif(
+    apiToolsSeedToWif(
       this.state.utxoMergeSeed,
       'KMD',
       true
     )
     .then((seed2kpRes) => {
       if (seed2kpRes.msg === 'success') {
-        shepherdCliPromise(null, _coin[0], 'listunspent')
+        apiCliPromise(null, _coin[0], 'listunspent')
         .then((res) => {
           // devlog(res);
 
@@ -227,8 +224,8 @@ class ToolsMergeUTXO extends React.Component {
   }
 
   openExplorerWindow(txid, coin) {
-    const url = `http://${coin}.explorer.supernet.org/tx/${txid}`;
-    return shell.openExternal(url);    
+    const url = explorerList[coin].split('/').length - 1 > 2 ? `${explorerList[coin]}${txid}` : `${explorerList[coin]}/tx/${txid}`;
+    return shell.openExternal(url);
   }
 
   renderUTXOSplitMergeResponse(type) {
@@ -241,10 +238,10 @@ class ToolsMergeUTXO extends React.Component {
         _items.push(
           <tr key={ `tools-utxos-${i}` }>
             <td>{ _utxos[i].amount }</td>
-            <td>{ _utxos[i].address }</td>
+            <td className="blur selectable">{ _utxos[i].address }</td>
             <td>{ _utxos[i].confirmations }</td>
             <td>{ _utxos[i].vout }</td>
-            <td>{ _utxos[i].txid }</td>
+            <td className="blur selectable">{ _utxos[i].txid }</td>
           </tr>
         );
       }
@@ -255,7 +252,7 @@ class ToolsMergeUTXO extends React.Component {
         <thead>
           <tr>
             <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.ADDRESS') }</th>
+            <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
             <th>TxID</th>
@@ -267,7 +264,7 @@ class ToolsMergeUTXO extends React.Component {
         <tfoot>
           <tr>
             <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.ADDRESS') }</th>
+            <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
             <th>TxID</th>
@@ -297,8 +294,8 @@ class ToolsMergeUTXO extends React.Component {
             options={ [{
                 label: 'Komodo (KMD)',
                 icon: 'KMD',
-                value: `KMD|native`,
-              }].concat(addCoinOptionsAC())
+                value: 'KMD|native',
+              }].concat(addCoinOptionsAC('skip'))
             } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
@@ -307,7 +304,7 @@ class ToolsMergeUTXO extends React.Component {
             htmlFor="kmdWalletSendTo">{ translate('TOOLS.SEED') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="utxoMergeSeed"
             onChange={ this.updateInput }
             value={ this.state.utxoMergeSeed }
@@ -317,12 +314,12 @@ class ToolsMergeUTXO extends React.Component {
         </div>
         { this.state.utxoMergeAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            Pub: { this.state.utxoMergeAddress }
+            Pub: <span className="selectable">{ this.state.utxoMergeAddress }</span>
           </div>
         }
         { this.state.utxoMergeAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            WIF: { this.state.utxoMergeWif }
+            WIF: <span className="selectable">{ this.state.utxoMergeWif }</span>
           </div>
         }
         <div className="col-sm-12 form-group no-padding-left margin-top-20 padding-bottom-10">
@@ -387,7 +384,7 @@ class ToolsMergeUTXO extends React.Component {
         }
         { this.state.utxoMergePushResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            TXID: <div style={{ wordBreak: 'break-all' }}>{ this.state.utxoMergePushResult }</div>
+            TXID: <div className="blur selectable word-break--all">{ this.state.utxoMergePushResult }</div>
             { isKomodoCoin(this.state.utxoMergeCoin.split('|')[0]) &&
               <div className="margin-top-10">
                 <button

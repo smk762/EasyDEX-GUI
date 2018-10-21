@@ -6,20 +6,21 @@ import {
   stopInterval,
   startInterval,
   displayImportKeyModal,
-  shepherdElectrumLock,
-  shepherdElectrumLogout,
+  apiElectrumLock,
+  apiElectrumLogout,
   getDexCoins,
   activeHandle,
   dashboardRemoveCoin,
   dashboardChangeActiveCoin,
   toggleNotaryElectionsModal,
+  toggleBlurSensitiveData,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
 import { checkAC } from '../../addcoin/payload';
 import mainWindow from '../../../util/mainWindow';
-
 import NavbarRender from './navbar.render';
+const { shell } = window.require('electron');
 
 class Navbar extends React.Component {
   constructor() {
@@ -32,8 +33,18 @@ class Navbar extends React.Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this._toggleNotaryElectionsModal = this._toggleNotaryElectionsModal.bind(this);
     this._checkAC = this._checkAC.bind(this);
+    this._toggleBlurSensitiveData = this._toggleBlurSensitiveData.bind(this);
     this.spvLock = this.spvLock.bind(this);
     this.spvLogout = this.spvLogout.bind(this);
+    this.openKomodoPlatformLink = this.openKomodoPlatformLink.bind(this);
+  }
+
+  openKomodoPlatformLink() {
+    return shell.openExternal('https://komodoplatform.com/komodo-wallets');
+  }
+
+  _toggleBlurSensitiveData() {
+    Store.dispatch(toggleBlurSensitiveData(!this.props.Main.blurSensitiveData));
   }
 
   isRenderSpvLockLogout() {
@@ -47,7 +58,7 @@ class Navbar extends React.Component {
   }
 
   spvLock() {
-    shepherdElectrumLock()
+    apiElectrumLock()
     .then((res) => {
       mainWindow.pinAccess = false;
       Store.dispatch(getDexCoins());
@@ -56,7 +67,7 @@ class Navbar extends React.Component {
   }
 
   spvLogout() {
-    shepherdElectrumLogout()
+    apiElectrumLogout()
     .then((res) => {
       const _spvCoins = this.props.Main.coins.spv;
 
@@ -72,6 +83,13 @@ class Navbar extends React.Component {
         }
         if (!this.props.Main.coins.native.length) {
           Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+        }
+
+        Store.dispatch(getDexCoins());
+        Store.dispatch(activeHandle());
+
+        if (this.props.Main.coins.native.length) {
+          Store.dispatch(dashboardChangeActiveCoin(this.props.Main.coins.native[0], 'native'));    
         }
       }, 500);
 
@@ -105,7 +123,9 @@ class Navbar extends React.Component {
   }
 
   handleClickOutside(e) {
-    if (e.srcElement.className !== 'dropdown-menu' &&
+    if (e &&
+        e.srcElement &&
+        e.srcElement.className !== 'dropdown-menu' &&
         e.srcElement.className !== 'icon fa-bars' &&
         e.srcElement.title !== 'top menu' &&
         (e.srcElement.offsetParent && e.srcElement.offsetParent.className !== 'navbar-avatar-inner') &&
@@ -168,6 +188,8 @@ const mapStateToProps = (state) => {
     Main: {
       isLoggedIn: state.Main.isLoggedIn,
       coins: state.Main.coins,
+      blurSensitiveData: state.Main.blurSensitiveData,
+      newUpdateAvailable: state.Main.newUpdateAvailable,
     },
   };
 };

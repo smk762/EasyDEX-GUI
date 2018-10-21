@@ -1,34 +1,37 @@
 import { triggerToaster } from '../actionCreators';
 import { CLI } from '../storeType';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import Store from '../../store';
+import urlParams from '../../util/url';
+import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
-export const shepherdCliPromise = (mode, chain, cmd, params) => {
-  let _payload = {
+export const apiCliPromise = (mode, chain, cmd, params) => {
+  let payload = {
     mode,
     chain,
     cmd,
-    token: Config.token,
+    token,
   };
 
   if (params) {
-    _payload.params = params;
+    payload.params = params;
   }
 
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ payload: _payload }),
-    })
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdCli',
-          'Error',
+          translate('API.apiCli') + ' (code: apiCli)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -38,28 +41,25 @@ export const shepherdCliPromise = (mode, chain, cmd, params) => {
   });
 }
 
-export const shepherdCli = (mode, chain, cmd) => {
-  const _payload = {
+export const apiCli = (mode, chain, cmd) => {
+  const payload = {
     mode,
     chain,
     cmd,
-    token: Config.token,
+    token,
   };
 
   return dispatch => {
-    return fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/cli`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 'payload': _payload }),
-    })
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdCli',
-          'Error',
+          translate('API.apiCli') + ' (code: apiCli)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

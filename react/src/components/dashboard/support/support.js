@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class Support extends React.Component {
   constructor() {
@@ -27,29 +27,29 @@ class Support extends React.Component {
                     src="assets/images/cryptologo/supernet.png"
                     alt={ translate('SETTINGS.SUPPORT_TICKETS') } />
                   <div className="support-box-title">{ translate('SETTINGS.SUPPORT_TICKETS') }</div>
-                  <div className="support-box-link">support.supernet.org</div>
+                  <div className="support-box-link">support.komodoplatform.com</div>
                 </div>
               </div>
               <div className="support-box-wrapper">
                 <div
                   className="support-box"
-                  onClick={ () => this.openExternalWindow('https://sprnt.slack.com') }>
+                  onClick={ () => this.openExternalWindow('https://discordapp.com/channels/412898016371015680/453204571393622027') }>
                   <img
-                    src="assets/images/support/slack-icon.png"
-                    alt="Slack" />
-                  <div className="support-box-title">Slack</div>
-                  <div className="support-box-link">sprnt.slack.com</div>
+                    src="assets/images/support/discord-icon.png"
+                    alt="Discord" />
+                  <div className="support-box-title">Discord</div>
+                  <div className="support-box-link">discordapp.com</div>
                 </div>
               </div>
               <div className="support-box-wrapper">
                 <div
                   className="support-box"
-                  onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>
+                  onClick={ () => this.openExternalWindow('https://komodoplatform.com/discord') }>
                   <img
-                    src="assets/images/support/slack-invite-icon.png"
-                    alt={ translate('SETTINGS.GET_SLACK_INVITE') } />
-                  <div className="support-box-title">{ translate('SETTINGS.GET_SLACK_INVITE') }</div>
-                  <div className="support-box-link">slackinvite.supernet.org</div>
+                    src="assets/images/support/discord-invite-icon.png"
+                    alt={ translate('SETTINGS.GET_DISCORD_INVITE') } />
+                  <div className="support-box-title">{ translate('SETTINGS.GET_DISCORD_INVITE') }</div>
+                  <div className="support-box-link">komodoplatform.com/discord</div>
                 </div>
               </div>
               <div className="support-box-wrapper">
@@ -71,7 +71,7 @@ class Support extends React.Component {
                 { translate('SUPPORT.FOR_GUIDES') } <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/home') }>https://support.komodoplatform.com/support/home</a>
               </p>
               <p>
-              { translate('SUPPORT.TO_SEND_FEEDBACK') } <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/tickets/new') }>https://support.komodoplatform.com/support/tickets/new</a>
+              { translate('SUPPORT.TO_SEND_FEEDBACK_P1') } <a className="pointer" onClick={ () => this.openExternalWindow('https://support.komodoplatform.com/support/tickets/new') }>https://support.komodoplatform.com/support/tickets/new</a> { translate('SUPPORT.TO_SEND_FEEDBACK_P2') }
               </p>
             </div>
           </div>

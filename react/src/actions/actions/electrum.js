@@ -4,7 +4,10 @@ import {
   DASHBOARD_ELECTRUM_COINS,
 } from '../storeType';
 import translate from '../../translate/translate';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import {
   triggerToaster,
   sendToAddressState,
@@ -12,25 +15,37 @@ import {
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import mainWindow from '../../util/mainWindow';
 
 // TODO: dev display errors
 
 // src: atomicexplorer
-export const shepherdGetRemoteBTCFees = () => {
+export const apiGetRemoteTimestamp = () => {
   return new Promise((resolve, reject) => {
     fetch(
-      `https://www.atomicexplorer.com/api/btc/fees`,
+      'https://www.atomicexplorer.com/api/timestamp/now',
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
-      /*Store.dispatch(
-        triggerToaster(
-          'shepherdGetRemoteBTCFees',
-          'Error',
-          'error'
-        )
-      );*/
+      resolve({ msg: 'error' });
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+// src: atomicexplorer
+export const apiGetRemoteBTCFees = () => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      'https://www.atomicexplorer.com/api/btc/fees',
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
       resolve({ msg: 'error' });
     })
     .then(response => response.json())
@@ -41,21 +56,21 @@ export const shepherdGetRemoteBTCFees = () => {
 }
 
 // btc fees fallback
-export const shepherdGetLocalBTCFees = () => {
+export const apiGetLocalBTCFees = () => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/btcfees${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/btcfees${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdGetLocalBTCFees',
-          'Error',
+          translate('API.apiGetLocalBTCFees') + ' (code: apiGetLocalBTCFees)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -67,24 +82,24 @@ export const shepherdGetLocalBTCFees = () => {
   });
 }
 
-export const shepherdElectrumSetServer = (coin, address, port) => {
+export const apiElectrumSetServer = (coin, address, port) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
       port,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/coins/server/set${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/coins/server/set${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSetServer',
-          'Error',
+          translate('API.apiElectrumSetServer') + ' (code: apiElectrumSetServer)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -96,23 +111,24 @@ export const shepherdElectrumSetServer = (coin, address, port) => {
   });
 }
 
-export const shepherdElectrumCheckServerConnection = (address, port) => {
+export const apiElectrumCheckServerConnection = (address, port, proto) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       address,
       port,
+      proto,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/servers/test${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/servers/test${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumCheckServerConnection',
-          'Error',
+          translate('API.apiElectrumCheckServerConnection') + ' (code: apiElectrumCheckServerConnection)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -124,16 +140,16 @@ export const shepherdElectrumCheckServerConnection = (address, port) => {
   });
 }
 
-export const shepherdElectrumKeys = (seed) => {
+export const apiElectrumKeys = (seed) => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/keys`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/keys`,
       fetchType(
         JSON.stringify({
           seed,
           active: true,
           iguana: true,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -141,8 +157,8 @@ export const shepherdElectrumKeys = (seed) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumKeys',
-          'Error',
+          translate('API.apiElectrumKeys') + ' (code: apiElectrumKeys)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -154,72 +170,119 @@ export const shepherdElectrumKeys = (seed) => {
   });
 }
 
-export const shepherdElectrumBalance = (coin, address) => {
+export const apiElectrumBalance = (coin, address) => {
   return dispatch => {
     const _urlParams = {
-      token: Config.token,
+      token,
       address,
       coin,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/getbalance${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/getbalance${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumBalance',
-          'Error',
+          translate('API.apiElectrumBalance') + ' (code: apiElectrumBalance)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(shepherdElectrumBalanceState(json));
+      if (mainWindow.activeCoin === coin) {
+        if (json &&
+            json.electrumres &&
+            json.electrumres.code) {
+          dispatch(
+            triggerToaster(
+              json.electrumres.message,
+              translate('TOASTR.ERROR'),
+              'error'
+            )
+          );
+        }
+        dispatch(apiElectrumBalanceState(json));
+      }
     });
   }
 }
 
-export const shepherdElectrumBalanceState = (json) => {
+export const apiElectrumBalanceState = (json) => {
   return {
     type: DASHBOARD_ELECTRUM_BALANCE,
     balance: json.result,
   }
 }
 
-export const shepherdElectrumTransactions = (coin, address) => {
+export const apiElectrumTransactions = (coin, address) => {
   return dispatch => {
     const _urlParams = {
-      token: Config.token,
+      token,
       address,
       coin,
       full: true,
       maxlength: 20,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listtransactions${urlParams(_urlParams)}`,
-      fetchType.get  
+      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions${urlParams(_urlParams)}`,
+      fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumTransactions',
-          'Error',
+          translate('API.apiElectrumTransactions') + ' (code: apiElectrumTransactions)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(shepherdElectrumTransactionsState(json));
+      if (mainWindow.activeCoin === coin) {
+        dispatch(apiElectrumTransactionsState(json));
+      }
     });
   }
 }
 
-export const shepherdElectrumTransactionsState= (json) => {
+export const apiElectrumKVTransactionsPromise = (coin, address) => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+      address,
+      coin,
+      full: true,
+      maxlength: 20,
+      kv: true,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.apiElectrumTransactionsKV') + ' (code: apiElectrumTransactionsKV)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export const apiElectrumTransactionsState = (json) => {
   json = json.result;
 
   if (json &&
@@ -235,33 +298,33 @@ export const shepherdElectrumTransactionsState= (json) => {
   }
 }
 
-export const shepherdElectrumCoins = () => {
+export const apiElectrumCoins = () => {
   return dispatch => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/coins${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/coins${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumCoins',
-          'Error',
+          translate('API.apiElectrumCoins') + ' (code: apiElectrumCoins)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(shepherdElectrumCoinsState(json));
+      dispatch(apiElectrumCoinsState(json));
     });
   }
 }
 
-export const shepherdElectrumCoinsState = (json) => {
+export const apiElectrumCoinsState = (json) => {
   return {
     type: DASHBOARD_ELECTRUM_COINS,
     electrumCoins: json.result,
@@ -269,30 +332,44 @@ export const shepherdElectrumCoinsState = (json) => {
 }
 
 // value in sats
-export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, btcFee) => {
+export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
   value = Math.floor(value);
 
   return dispatch => {
-    const _urlParams = {
-      token: Config.token,
+    const payload = {
+      token,
       coin,
       value,
+      customFee,
+      address: changeAddress,
+      change: changeAddress,
+      opreturn,
+      gui: true,
+      verify: true,
+      push: true,
+    };
+    const _urlParams = {
+      token,
+      coin,
+      value,
+      customFee,
       address: sendToAddress,
       change: changeAddress,
       gui: true,
-      push: true,
       verify: true,
+      push: true,
     };
+
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      fetchType.get
+      isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectrumSend',
-          'Error',
+          translate('API.apiElectrumSend') + ' (code: apiElectrumSend)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -304,12 +381,13 @@ export const shepherdElectrumSend = (coin, value, sendToAddress, changeAddress, 
   }
 }
 
-export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAddress, btcFee) => {
+// kmd interest claiming
+export const apiElectrumSendPromise = (coin, value, sendToAddress, changeAddress, btcFee) => {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       value,
       address: sendToAddress,
@@ -318,16 +396,16 @@ export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAd
       verify: true,
       push: true,
     };
-    return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      fetchType.get  
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSendPromise',
-          'Error',
+          translate('API.apiElectrumSend') + ' (code: apiElectrumSendPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -339,12 +417,23 @@ export const shepherdElectrumSendPromise = (coin, value, sendToAddress, changeAd
   });
 }
 
-export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, btcFee) => {
+export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
-    const _urlParams = {
-      token: Config.token,
+    let payload = {
+      token,
+      coin,
+      value,
+      address: changeAddress,
+      change: changeAddress,
+      opreturn,
+      gui: true,
+      verify: true,
+      push: false,
+    };
+    let _urlParams = {
+      token,
       coin,
       value,
       address: sendToAddress,
@@ -352,17 +441,23 @@ export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, change
       gui: true,
       verify: true,
       push: false,
-    };  
+    };
+
+    if (customFee) {
+      payload.customFee = customFee;
+      _urlParams.customFee = customFee;
+    }
+
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      fetchType.get
+      isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSendPreflight',
-          'Error',
+          translate('API.apiElectrumSend') + ' (code: apiElectrumSendPreflight)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -374,24 +469,24 @@ export const shepherdElectrumSendPreflight = (coin, value, sendToAddress, change
   });
 }
 
-export const shepherdElectrumListunspent = (coin, address) => {
+export const apiElectrumListunspent = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
       full: true,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listunspent${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/listunspent${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumListunspent',
-          'Error',
+          translate('API.apiElectrumListunspent') + ' (code: apiElectrumListunspent)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -403,17 +498,17 @@ export const shepherdElectrumListunspent = (coin, address) => {
   });
 }
 
-export const shepherdElectrumBip39Keys = (seed, match, addressdepth, accounts) => {
+export const apiElectrumBip39Keys = (seed, match, addressdepth, accounts) => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/seed/bip39/match`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/seed/bip39/match`,
       fetchType(
         JSON.stringify({
           seed,
           match,
           addressdepth,
           accounts,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -421,8 +516,8 @@ export const shepherdElectrumBip39Keys = (seed, match, addressdepth, accounts) =
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSetServer',
-          'Error',
+          translate('API.apiElectrumBip39Keys') + ' (code: apiElectrumBip39Keys)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -435,16 +530,16 @@ export const shepherdElectrumBip39Keys = (seed, match, addressdepth, accounts) =
 }
 
 // split utxo
-export const shepherdElectrumSplitUtxoPromise = (payload) => {
-  console.warn('shepherdElectrumSplitUtxoPromise', payload);
+export const apiElectrumSplitUtxoPromise = (payload) => {
+  console.warn('apiElectrumSplitUtxoPromise', payload);
 
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx-split`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx-split`,
       fetchType(
         JSON.stringify({
           payload,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -452,8 +547,113 @@ export const shepherdElectrumSplitUtxoPromise = (payload) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumSendPromise',
-          'Error',
+          translate('API.apiElectrumSend') + ' (code: apiElectrumSplitUtxoPromise)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+// get kv electrums list
+export const apiElectrumKvServersList = () => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+      save: true,
+    };
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/kv/servers${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.apiElectrumKvServersList') + ' (code: apiElectrumKvServersList)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export const apiElectrumSweep = (coin, value, sendToAddress, changeAddress, push, wif, btcFee) => {
+  value = Math.floor(value);
+
+  return new Promise((resolve, reject) => {
+    const payload = {
+      token,
+      coin,
+      value,
+      address: sendToAddress,
+      change: changeAddress,
+      verify: true,
+      push,
+      wif,
+      btcFee,
+    };
+    const _urlParams = {
+      token,
+      coin,
+      value,
+      address: sendToAddress,
+      change: changeAddress,
+      verify: true,
+      push,
+      wif,
+      btcFee,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
+      fetchType(JSON.stringify(payload)).post : fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.apiElectrumSend') + ' (code: apiElectrumSweep)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export const apiElectrumPushTx = (coin, rawtx) => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/pushtx`,
+      fetchType(
+        JSON.stringify({
+          network: coin,
+          rawtx,
+          token,
+        })
+      ).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.apiElectrumPushTx') + ' (code: apiElectrumPushTx)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

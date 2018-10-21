@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import sortByDate from '../../../util/sort';
 import {
   toggleDashboardTxInfoModal,
   getTxDetails,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
-import explorerList from '../../../util/explorerList';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import Config from '../../../config';
 
-const shell = window.require('electron').shell;
+const { shell } = window.require('electron');
 
 class WalletsTxInfo extends React.Component {
   constructor() {
@@ -19,6 +19,7 @@ class WalletsTxInfo extends React.Component {
       activeTab: 0,
       txDetails: null,
       rawTxDetails: null,
+      className: 'hide',
     };
     this.toggleTxInfoModal = this.toggleTxInfoModal.bind(this);
     this.loadTxDetails = this.loadTxDetails.bind(this);
@@ -26,11 +27,17 @@ class WalletsTxInfo extends React.Component {
   }
 
   toggleTxInfoModal() {
-    Store.dispatch(toggleDashboardTxInfoModal(false));
-
     this.setState(Object.assign({}, this.state, {
-      activeTab: 0,
+      className: 'show out',
     }));
+
+    setTimeout(() => {
+      Store.dispatch(toggleDashboardTxInfoModal(false));
+
+      this.setState(Object.assign({}, this.state, {
+        activeTab: 0,
+      }));
+    }, 300);
   }
 
   capitalizeFirstLetter(string) {
@@ -39,21 +46,39 @@ class WalletsTxInfo extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.ActiveCoin.mode === 'spv' &&
-        nextProps.ActiveCoin) {
+        nextProps.ActiveCoin &&
+        this.props.ActiveCoin.showTransactionInfoTxIndex !== nextProps.ActiveCoin.showTransactionInfoTxIndex) {
       this.setState(Object.assign({}, this.state, {
         txDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
         rawTxDetails: nextProps.ActiveCoin.showTransactionInfoTxIndex,
+        activeTab: Config.experimentalFeatures && nextProps.ActiveCoin.showTransactionInfoTxIndex && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn && nextProps.ActiveCoin.showTransactionInfoTxIndex.opreturn.kvDecoded ? 4 : 0,
+        className: nextProps.ActiveCoin.showTransactionInfo ? 'show fade' : 'show out',
       }));
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          className: nextProps.ActiveCoin.showTransactionInfo ? 'show in' : 'hide',
+        }));
+      }, nextProps.ActiveCoin.showTransactionInfo ? 50 : 300);
     } else {
       if (nextProps.ActiveCoin &&
           nextProps.ActiveCoin.txhistory &&
-          nextProps.ActiveCoin.showTransactionInfoTxIndex) {
+          nextProps.ActiveCoin.showTransactionInfoTxIndex > -1) {
         const txInfo = nextProps.ActiveCoin.txhistory[nextProps.ActiveCoin.showTransactionInfoTxIndex];
 
         if (txInfo &&
             this.props.ActiveCoin.showTransactionInfoTxIndex !== nextProps.ActiveCoin.showTransactionInfoTxIndex) {
           this.loadTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
           this.loadRawTxDetails(nextProps.ActiveCoin.coin, txInfo.txid);
+          this.setState({
+            className: nextProps.ActiveCoin.showTransactionInfo ? 'show fade' : 'show out',
+          });
+
+          setTimeout(() => {
+            this.setState(Object.assign({}, this.state, {
+              className: nextProps.ActiveCoin.showTransactionInfo ? 'show in' : 'hide',
+            }));
+          }, nextProps.ActiveCoin.showTransactionInfo ? 50 : 300);
         }
       }
     }
@@ -105,7 +130,7 @@ class WalletsTxInfo extends React.Component {
         this.props.ActiveCoin.activeSection === 'default') {
       if (this.props.ActiveCoin.mode === 'native') {
         if (this.props.ActiveCoin.txhistory &&
-            this.props.ActiveCoin.showTransactionInfoTxIndex) {
+            this.props.ActiveCoin.showTransactionInfoTxIndex > -1) {
           const txInfo = this.props.ActiveCoin.txhistory[this.props.ActiveCoin.showTransactionInfoTxIndex];
 
           return WalletsTxInfoRender.call(this, txInfo);

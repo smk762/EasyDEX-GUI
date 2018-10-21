@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -32,7 +32,7 @@ class ToolsWifToWif extends React.Component {
   wif2wif() {
     const _coin = this.state.w2wCoin.split('|');
 
-    shepherdToolsWifToKP(_coin[0], this.state.w2wWif)
+    apiToolsWifToKP(_coin[0], this.state.w2wWif)
     .then((res) => {
       // console.warn(res);
 
@@ -98,7 +98,10 @@ class ToolsWifToWif extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'w2wCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
+            options={
+              addCoinOptionsCrypto('skip')
+              .concat(addCoinOptionsAC('skip'))
+            } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
@@ -106,7 +109,7 @@ class ToolsWifToWif extends React.Component {
             htmlFor="kmdWalletSendTo">WIF</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="w2wWif"
             onChange={ this.updateInput }
             value={ this.state.w2wWif }
@@ -125,10 +128,10 @@ class ToolsWifToWif extends React.Component {
         { this.state.w2wResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
             <div>
-              <strong>WIF:</strong> { this.state.w2wResult.keys.priv }
+              <strong>WIF:</strong> <span className="blur selectable">{ this.state.w2wResult.keys.priv }</span>
             </div>
             <div className="margin-top-10">
-              <strong>Pub:</strong> { this.state.w2wResult.keys.pub }
+              <strong>Pub:</strong> <span className="blur selectable">{ this.state.w2wResult.keys.pub }</span>
             </div>
           </div>
         }

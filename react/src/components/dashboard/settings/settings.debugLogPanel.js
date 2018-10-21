@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import Config from '../../../config';
-import { secondsToString } from '../../../util/time';
 import { coindList } from '../../../util/coinHelper';
 import { getDebugLog } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
+import { secondsToString } from 'agama-wallet-lib/src/time';
+
+// TODO: figure out a way to show app debug, url?
 
 class DebugLogPanel extends React.Component {
   constructor() {
@@ -27,7 +29,7 @@ class DebugLogPanel extends React.Component {
     this.checkInputVals = this.checkInputVals.bind(this);
   }
 
-  componentWillMount() {
+  /*componentWillMount() {
     if (this.props.Main.coins &&
         this.props.Main.coins.native &&
         Object.keys(this.props.Main.coins.native).length === 0) {
@@ -36,7 +38,7 @@ class DebugLogPanel extends React.Component {
       });
       this.getAppRuntimeLog();
     }
-  }
+  }*/
 
   readDebugLog() {
     let _target = this.state.debugTarget;
@@ -126,6 +128,8 @@ class DebugLogPanel extends React.Component {
     let _items = [];
     let _nativeCoins = coindList();
 
+    _nativeCoins.sort();
+
     _items.push(
       <option
         key={ `coind-walletdat-coins-none` }
@@ -166,13 +170,14 @@ class DebugLogPanel extends React.Component {
             <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
           }
           <div className="margin-top-30">
-            <span className="pointer toggle">
+            <span className="pointer toggle hide">
               <label className="switch">
                 <input
                   type="checkbox"
                   name="settings-app-debug-toggle"
                   value={ this.state.toggleAppRuntimeLog }
-                  checked={ this.state.toggleAppRuntimeLog } />
+                  checked={ this.state.toggleAppRuntimeLog }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleAppRuntimeLog }></div>
@@ -222,7 +227,7 @@ class DebugLogPanel extends React.Component {
               </div>
               <div className="row">
                 <div className="col-sm-12 col-xs-12 text-align-left">
-                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0 selectable">
                   { this.renderDebugLogData() }
                   </div>
                 </div>
@@ -230,7 +235,7 @@ class DebugLogPanel extends React.Component {
             </div>
           }
           { this.state.toggleAppRuntimeLog &&
-            <div className="margin-top-20">{ this.renderAppRuntimeLog() }</div>
+            <div className="margin-top-20 selectable">{ this.renderAppRuntimeLog() }</div>
           }
         </div>
       </div>

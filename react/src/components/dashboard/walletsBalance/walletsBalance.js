@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import {
   getDashboardUpdate,
-  shepherdElectrumBalance,
+  apiElectrumBalance,
 } from '../../../actions/actionCreators';
 import mainWindow from '../../../util/mainWindow';
 import Config from '../../../config';
-import formatValue from '../../../util/formatValue';
 import ReactTooltip from 'react-tooltip';
-
+import { secondsToString } from 'agama-wallet-lib/src/time';
+import { formatValue } from 'agama-wallet-lib/src/utils';
 import Store from '../../../store';
+import FiatSymbol from '../fiat/fiatSymbol';
 
 import WalletsBalanceRender from './walletsBalance.render';
 
@@ -61,7 +62,7 @@ class WalletsBalance extends React.Component {
       Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
     } else if (this.props.ActiveCoin.mode === 'spv') {
       Store.dispatch(
-        shepherdElectrumBalance(
+        apiElectrumBalance(
           this.props.ActiveCoin.coin,
           this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
         )
@@ -90,7 +91,7 @@ class WalletsBalance extends React.Component {
         if (type === 'total' &&
             this.props.ActiveCoin.balance &&
             this.props.ActiveCoin.balance.total) {
-          _balance = this.props.ActiveCoin.balance.total;
+          _balance = Number(this.props.ActiveCoin.balance.total) - Number(Math.abs(this.props.ActiveCoin.balance.unconfirmed));
         }
 
         if (type === 'interest' &&
@@ -102,11 +103,13 @@ class WalletsBalance extends React.Component {
         if (type === 'transparent' &&
             this.props.ActiveCoin.balance &&
             this.props.ActiveCoin.balance.balance) {
-          _balance = this.props.ActiveCoin.balance.balance;
+          _balance = Number(this.props.ActiveCoin.balance.balance) - Number(Math.abs(this.props.ActiveCoin.balance.unconfirmed));
         }
       } else {
-        _balance = this.props.ActiveCoin.balance.balance;
+        _balance = Number(this.props.ActiveCoin.balance.balance) - Number(Math.abs(this.props.ActiveCoin.balance.unconfirmed));
       }
+
+      _balance = _balance.toFixed(8);
     }
 
     if (mainWindow.appConfig.fiatRates &&
@@ -118,17 +121,17 @@ class WalletsBalance extends React.Component {
 
       if (this.props.ActiveCoin.coin === 'KMD') {
         if (_prices.fiat &&
-            _prices.fiat.USD) {
-          _fiatPriceTotal = formatValue(_balance * _prices.fiat.USD);
-          _fiatPricePerCoin = _prices.fiat.USD;
+            _prices.fiat[Config.defaultFiatCurrency.toUpperCase()]) {
+          _fiatPriceTotal = formatValue(_balance * _prices.fiat[Config.defaultFiatCurrency.toUpperCase()]);
+          _fiatPricePerCoin = _prices.fiat[Config.defaultFiatCurrency.toUpperCase()];
         }
       } else {
         if (_prices.fiat &&
-            _prices.fiat.USD &&
+            _prices.fiat[Config.defaultFiatCurrency.toUpperCase()] &&
             _prices[`${this.props.ActiveCoin.coin}/KMD`] &&
             _prices[`${this.props.ActiveCoin.coin}/KMD`].low) {
-          _fiatPriceTotal = _balance * _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
-          _fiatPricePerCoin = _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
+          _fiatPriceTotal = _balance * _prices.fiat[Config.defaultFiatCurrency.toUpperCase()] * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
+          _fiatPricePerCoin = _prices.fiat[Config.defaultFiatCurrency.toUpperCase()] * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
         }
       }
 
@@ -137,15 +140,18 @@ class WalletsBalance extends React.Component {
           <div className="text-right">{ _balance }</div>
           { _fiatPriceTotal > 0 &&
             _fiatPricePerCoin > 0 &&
-            <span>
-              <div
-                data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ $${formatValue(_fiatPricePerCoin)}` }
-                className="text-right">${ formatValue(_fiatPriceTotal) }</div>
-              <ReactTooltip
-                effect="solid"
-                className="text-left" />
-            </span>
+            <div
+              data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ ${formatValue(_fiatPricePerCoin)} ${Config.defaultFiatCurrency.toUpperCase()}` }
+              data-html={ true }
+              data-for="balance1"
+              className="text-right">
+              <FiatSymbol symbol={ Config.defaultFiatCurrency } />{ formatValue(_fiatPriceTotal) }
+            </div>
           }
+          <ReactTooltip
+            id="balance1"
+            effect="solid"
+            className="text-left" />
         </div>
       );
     } else {

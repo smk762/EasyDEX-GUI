@@ -5,11 +5,11 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import QRCode from 'qrcode.react';

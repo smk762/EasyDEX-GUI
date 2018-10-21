@@ -2,7 +2,6 @@ import React from 'react';
 
 import Navbar from '../navbar/navbar';
 import CoinTile from '../coinTile/coinTile';
-import EDEX from '../edex/edex';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
@@ -20,28 +19,32 @@ import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
+import Dice from '../dice/dice';
 
 const DashboardRender = function() {
   return (
-    <div className="full-height">
+    <div className={ 'full-height' + (this.props.Main.blurSensitiveData ? ' blur-sensitive-data' : '') }>
       <div
         className={ this.isSectionActive('wallets') ? 'page-main' : '' }
         id="section-dashboard">
         <Navbar />
         <CoindDownModal />
-        { this.props.Dashboard.displayImportKeyModal &&
-          <ImportKeyModal />
+        <ImportKeyModal />
+        <ZcparamsFetchModal />
+        { this.isSectionActive('wallets') &&
+          <div>
+            <CoinTile />
+            <WalletsNav />
+            <WalletsTxInfo />
+            <WalletsMain />
+            <ClaimInterestModal />
+          </div>
         }
-        { this.props.Dashboard.displayZcparamsModal &&
-          <ZcparamsFetchModal />
+        { this.isSectionActive('dice') &&
+          <div>
+            <Dice />
+          </div>
         }
-        <div className={ this.isSectionActive('wallets') ? 'show' : 'hide' }>
-          <CoinTile />
-          <WalletsNav />
-          <WalletsTxInfo />
-          <WalletsMain />
-          <ClaimInterestModal />
-        </div>
         { this.isSectionActive('edex') &&
           <EDEX />
         }
@@ -49,7 +52,7 @@ const DashboardRender = function() {
           <Jumblr  />
         }
         { this.isSectionActive('settings') &&
-          <Settings disableWalletSpecificUI={false} />
+          <Settings disableWalletSpecificUI={ false } />
         }
         { this.isSectionActive('about') &&
           <About />

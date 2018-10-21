@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   copyCoinAddress,
   copyString,
-  shepherdElectrumKeys,
+  apiElectrumKeys,
   loginWithPin,
   triggerToaster,
 } from '../../../actions/actionCreators';
@@ -62,12 +62,12 @@ class ExportKeysPanel extends React.Component {
   }
 
   _exportWifKeys(pass) {
-    shepherdElectrumKeys(pass)
+    apiElectrumKeys(pass)
     .then((keys) => {
       if (keys === 'error') {
         Store.dispatch(
           triggerToaster(
-            translate('SETTINGS.WRONG_PASSPHRASE') + ' ' + translate('SETTINGS.OR_WIF_FORMAT'),
+            `${translate('SETTINGS.WRONG_PASSPHRASE')} ${translate('SETTINGS.OR_WIF_FORMAT')}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -108,7 +108,8 @@ class ExportKeysPanel extends React.Component {
         items.push(
           <tr key={ _key }>
             <td className="padding-bottom-30">
-              <strong className="padding-right-20">{ _key }</strong>{ _wifKeys[_key].pub }
+              <strong className="padding-right-20">{ _key.toUpperCase() }</strong>
+              <span className="selectable">{ _wifKeys[_key].pub }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -117,7 +118,7 @@ class ExportKeysPanel extends React.Component {
               </button>
             </td>
             <td className="padding-bottom-30 padding-left-15">
-              { _wifKeys[_key].priv }
+              <span className="selectable">{ _wifKeys[_key].priv }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -214,7 +215,7 @@ class ExportKeysPanel extends React.Component {
                   onChange={ this.updateInput }
                   value={ this.state.wifkeysPassphrase } />
                 <textarea
-                  className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                  className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
                   autoComplete="off"
                   id="wifkeysPassphraseTextarea"
                   ref="wifkeysPassphraseTextarea"
@@ -235,15 +236,15 @@ class ExportKeysPanel extends React.Component {
                     htmlFor="wifkeysPassphrase">{ translate('SETTINGS.PW_PIN') }</label>
                 }
                 { this.state.seedExtraSpaces &&
-                  <span>
-                    <i className="icon fa-warning seed-extra-spaces-warning"
-                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                      data-html={ true }></i>
-                    <ReactTooltip
-                      effect="solid"
-                      className="text-left" />
-                  </span>
+                  <i className="icon fa-warning seed-extra-spaces-warning"
+                    data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                    data-html={ true }
+                    data-for="exportKeys"></i>
                 }
+                <ReactTooltip
+                  id="exportKeys"
+                  effect="solid"
+                  className="text-left" />
               </div>
               <div className="col-sm-12 col-xs-12 text-align-center">
                 <button
@@ -259,7 +260,7 @@ class ExportKeysPanel extends React.Component {
         { this.state.decryptedPassphrase &&
           <div className="row">
             <div className="col-sm-12 padding-top-15 margin-left-10">
-              <strong>{ translate('TOOLS.SEED') }:</strong> { this.state.decryptedPassphrase }
+              <strong>{ translate('TOOLS.SEED') }:</strong> <span className="selectable">{ this.state.decryptedPassphrase }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -271,10 +272,10 @@ class ExportKeysPanel extends React.Component {
         }
         { this.state.keys &&
           <div className="row">
-            <div className="col-sm-12 padding-top-15">
+            <div className="col-sm-12 padding-top-15 overflow-x">
               <table className="table no-borders">
                 <tbody>
-                  <tr key={ `wif-export-table-header-pub` }>
+                  <tr key="wif-export-table-header-pub">
                     <td className="padding-bottom-20 padding-top-20">
                       <strong>{ translate('SETTINGS.ADDRESS_LIST') }</strong>
                     </td>

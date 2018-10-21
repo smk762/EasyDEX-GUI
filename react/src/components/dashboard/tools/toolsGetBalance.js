@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -32,7 +32,7 @@ class ToolsGetBalance extends React.Component {
   getBalanceAlt() {
     const _coin = this.state.balanceCoin.split('|');
 
-    shepherdToolsBalance(_coin[0], this.state.balanceAddr)
+    apiToolsBalance(_coin[0], this.state.balanceAddr)
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -96,19 +96,22 @@ class ToolsGetBalance extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'balanceCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
+            options={
+              addCoinOptionsCrypto('skip')
+              .concat(addCoinOptionsAC('skip'))
+            } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDRESS') }</label>
+            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
           <input
             type="text"
-            className="form-control col-sm-3"
+            className="form-control col-sm-3 blur"
             name="balanceAddr"
             onChange={ this.updateInput }
             value={ this.state.balanceAddr }
-            placeholder={ translate('SEND.ENTER_ADDRESS') }
+            placeholder={ translate('SEND.ENTER_ADDR') }
             autoComplete="off"
             required />
         </div>

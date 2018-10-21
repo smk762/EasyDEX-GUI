@@ -5,17 +5,17 @@ import translate from '../../../translate/translate';
 import {
   triggerToaster,
   prices,
+  newUpdateAvailable,
 } from '../../../actions/actionCreators';
 import { getCoinTitle } from '../../../util/coinHelper';
 import Config from '../../../config';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
-
-import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 const PRICES_UPDATE_INTERVAL = 120000; // every 2m
+const NEW_UPDATE_CHECK_INTERVAL = 14400; // every 4h
 
 class WalletsMain extends React.Component {
   constructor() {
@@ -26,12 +26,22 @@ class WalletsMain extends React.Component {
   }
 
   componentWillUnmount() {
+    mainWindow.activeCoin = null;
+
     if (this.pricesInterval) {
       clearInterval(this.pricesInterval);
     }
   }
 
   componentWillMount() {
+    if (!Config.dev) {
+      Store.dispatch(newUpdateAvailable());
+
+      setInterval(() => {
+        Store.dispatch(newUpdateAvailable());
+      }, NEW_UPDATE_CHECK_INTERVAL);
+    }
+
     if (Config.fiatRates) {
       Store.dispatch(prices());
       this.pricesInterval = setInterval(() => {
@@ -115,11 +125,8 @@ class WalletsMain extends React.Component {
 
       if (getCoinTitle(this.props.ActiveCoin.coin).titleBG) {
         _iconPath = `assets/images/native/${getCoinTitle(this.props.ActiveCoin.coin).logo.toLowerCase()}_header_title_logo.png`;
-      } else if (
-        !getCoinTitle(this.props.ActiveCoin.coin).titleBG &&
-        getCoinTitle(this.props.ActiveCoin.coin).logo
-      ) {
-        _iconPath = `assets/images/cryptologo/${getCoinTitle(this.props.ActiveCoin.coin).logo.toLowerCase()}.png`;
+      } else if (!getCoinTitle(this.props.ActiveCoin.coin).titleBG) {
+        _iconPath = `assets/images/cryptologo/${this.props.ActiveCoin.coin.toLowerCase()}.png`;
       }
 
       return _iconPath;

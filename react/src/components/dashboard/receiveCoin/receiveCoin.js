@@ -16,6 +16,7 @@ import {
   _ReceiveCoinTableRender,
 } from './receiveCoin.render';
 import translate from '../../../translate/translate';
+import mainWindow from '../../../util/mainWindow';
 
 // TODO: implement balance/interest sorting
 
@@ -66,6 +67,7 @@ class ReceiveCoin extends React.Component {
 
   validateCoinAddress(address, isZaddr) {
     this.toggleAddressMenu(address);
+
     validateAddress(this.props.coin, address, isZaddr)
     .then((json) => {
       let _items = [];
@@ -109,7 +111,7 @@ class ReceiveCoin extends React.Component {
           e.srcElement.className.indexOf('receive-address-context-menu-trigger') === -1 &&
           e.srcElement.className.indexOf('fa-qrcode') === -1 &&
           e.srcElement.className.indexOf('receive-address-context-menu-get-qr') === -1 &&
-          e.srcElement.className.indexOf('qrcode-modal') === -1 ? null : this.state.toggledAddressMenu,
+          e.srcElement.className.indexOf('qrcode-modal') === -1 && e.srcElement.offsetParent.className.indexOf('modal') && e.srcElement.offsetParent.className.indexOf('close') ? null : this.state.toggledAddressMenu,
       });
     }
   }
@@ -188,9 +190,16 @@ class ReceiveCoin extends React.Component {
             items.pop();
           }
         } else {
-          items.push(
-            AddressItemRender.call(this, address, type)
-          );
+          if (type === 'private' ||
+              (type === 'public' &&
+               (this.props.coin === 'KMD' ||
+                (mainWindow.chainParams &&
+                 mainWindow.chainParams[this.props.coin] &&
+                 !mainWindow.chainParams[this.props.coin].ac_private)))) {
+            items.push(
+              AddressItemRender.call(this, address, type)
+            );
+          }
 
           if (!this.state.toggleIsMine &&
             !address.canspend &&
@@ -202,7 +211,8 @@ class ReceiveCoin extends React.Component {
 
       return items;
     } else {
-      if (this.props.electrumCoins && this.props.mode === 'spv' &&
+      if (this.props.electrumCoins &&
+          this.props.mode === 'spv' &&
           type === 'public') {
         let items = [];
 

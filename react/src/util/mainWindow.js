@@ -1,2 +1,2 @@
-const mainWindow = window.require('electron').remote.getCurrentWindow();
+const mainWindow = window.require('electron').remote.getGlobal('app');
 export default mainWindow;

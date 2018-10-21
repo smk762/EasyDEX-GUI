@@ -30,47 +30,47 @@ class AppInfoPanel extends React.Component {
           <div className="col-sm-12 padding-top-15">
             <h5>{ translate('SETTINGS.APP_RELEASE') }</h5>
             <p>
-              { translate('SETTINGS.NAME') }: { this.props.Settings.appInfo.releaseInfo.name }
+              { translate('SETTINGS.NAME') }: <span className="selectable">{ this.props.Settings.appInfo.releaseInfo.name }</span>
               <br />
-              { translate('SETTINGS.VERSION') }: { `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta` }
+              { translate('SETTINGS.VERSION') }: <span className="selectable">{ `${this.props.Settings.appInfo.releaseInfo.version.replace('version=', '')}${mainWindow.arch === 'x64' ? '' : '-32bit'}-beta` }</span>
             </p>
             <h5>{ translate('SETTINGS.SYS_INFO') }</h5>
             <p>
-              { translate('SETTINGS.ARCH') }: { this.props.Settings.appInfo.sysInfo.arch }
+              { translate('SETTINGS.ARCH') }: <span className="selectable">{ this.props.Settings.appInfo.sysInfo.arch }</span>
               <br />
-              { translate('SETTINGS.OS_TYPE') }: { this.props.Settings.appInfo.sysInfo.os_type }
+              { translate('SETTINGS.OS_TYPE') }: <span className="selectable">{ this.props.Settings.appInfo.sysInfo.os_type }</span>
               <br />
-              { translate('SETTINGS.OS_PLATFORM') }: { this.props.Settings.appInfo.sysInfo.platform }
+              { translate('SETTINGS.OS_PLATFORM') }: <span className="selectable">{ this.props.Settings.appInfo.sysInfo.platform }</span>
               <br />
-              { translate('SETTINGS.OS_RELEASE') }: { this.props.Settings.appInfo.sysInfo.os_release }
+              { translate('SETTINGS.OS_RELEASE') }: <span className="selectable">{ this.props.Settings.appInfo.sysInfo.os_release }</span>
               <br />
-              { translate('SETTINGS.CPU') }: { this.props.Settings.appInfo.sysInfo.cpu }
+              { translate('SETTINGS.CPU') }: <span className="selectable">{ this.props.Settings.appInfo.sysInfo.cpu }</span>
               <br />
-              { translate('SETTINGS.CPU_CORES') }: { this.props.Settings.appInfo.sysInfo.cpu_cores }
+              { translate('SETTINGS.CPU_CORES') }: <span className="selectable">{ this.props.Settings.appInfo.sysInfo.cpu_cores }</span>
               <br />
-              { translate('SETTINGS.MEM') }: { this.props.Settings.appInfo.sysInfo.totalmem_readable }
+              { translate('SETTINGS.MEM') }: <span className="selectable">{ this.props.Settings.appInfo.sysInfo.totalmem_readable }</span>
             </p>
             { mainWindow.arch === 'x64' &&
               <h5>{ translate('SETTINGS.LOCATIONS') }</h5>
             }
             { mainWindow.arch === 'x64' &&
               <p>
-                { translate('SETTINGS.CACHE') }: { this.props.Settings.appInfo.dirs.cacheLocation }
+                { translate('SETTINGS.CACHE') }: <span className="selectable">{ this.props.Settings.appInfo.dirs.cacheLocation }</span>
                 <br />
-                { translate('SETTINGS.CONFIG') }: { this.props.Settings.appInfo.dirs.configLocation }
+                { translate('SETTINGS.CONFIG') }: <span className="selectable">{ this.props.Settings.appInfo.dirs.configLocation }</span>
                 <br />
-                Komodo { translate('SETTINGS.BIN') }: { this.props.Settings.appInfo.dirs.komododBin }
+                Komodo { translate('SETTINGS.BIN') }: <span className="selectable">{ this.props.Settings.appInfo.dirs.komododBin }</span>
                 <br />
-                Komodo { translate('SETTINGS.DIR') }: { this.props.Settings.appInfo.dirs.komodoDir }
+                Komodo { translate('SETTINGS.DIR') }: <span className="selectable">{ this.props.Settings.appInfo.dirs.komodoDir }</span>
                 <br />
-                Komodo wallet.dat: { this.props.Settings.appInfo.dirs.komodoDir }
+                Komodo wallet.dat: <span className="selectable">{ this.props.Settings.appInfo.dirs.komodoDir }</span>
               </p>
             }
             { mainWindow.arch === 'x64' &&
               <h5>{ translate('SETTINGS.DAEMON_PORTS') }</h5>
             }
             { mainWindow.arch === 'x64' &&
-              <p>{ _items }</p>
+              <p className="selectable">{ _items }</p>
             }
           </div>
         </div>

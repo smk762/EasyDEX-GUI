@@ -1,22 +1,25 @@
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import Store from '../../store';
 import translate from '../../translate/translate';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 
-export const shepherdElectrumLock = () => {
+export const apiElectrumLock = () => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/lock`,
-      fetchType(JSON.stringify({ token: Config.token })).post
+      `http://127.0.0.1:${agamaPort}/api/electrum/lock`,
+      fetchType(JSON.stringify({ token })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumLock',
-          'Error',
+          translate('API.apiElectrumLock') + ' (code: apiElectrumLock)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -26,18 +29,18 @@ export const shepherdElectrumLock = () => {
   });
 }
 
-export const shepherdElectrumLogout = () => {
+export const apiElectrumLogout = () => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/logout`,
-      fetchType(JSON.stringify({ token: Config.token })).post
+      `http://127.0.0.1:${agamaPort}/api/electrum/logout`,
+      fetchType(JSON.stringify({ token })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumLogout',
-          'Error',
+          translate('API.apiElectrumLogout') + ' (code: apiElectrumLogout)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -47,18 +50,18 @@ export const shepherdElectrumLogout = () => {
   });
 }
 
-export const shepherdStopCoind = (coin) => {
+export const apiStopCoind = (coin) => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/coind/stop`,
-      fetchType(coin === 'KMD' ? JSON.stringify({ token: Config.token }) : JSON.stringify({ chain: coin, token: Config.token })).post
+      `http://127.0.0.1:${agamaPort}/api/coind/stop`,
+      fetchType(coin === 'KMD' ? JSON.stringify({ token }) : JSON.stringify({ chain: coin, token })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdStopCoind',
-          'Error',
+          translate('API.apiStopCoind') + ' (code: apiStopCoind)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -68,18 +71,18 @@ export const shepherdStopCoind = (coin) => {
   });
 }
 
-export const shepherdRemoveCoin = (coin, mode) => {
+export const apiRemoveCoin = (coin, mode) => {
   return new Promise((resolve, reject, dispatch) => {
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/coins/remove`,
+      `http://127.0.0.1:${agamaPort}/api/coins/remove`,
       fetchType(
         JSON.stringify(coin === 'KMD' && mode === 'native' ? {
           mode,
-          token: Config.token,
+          token,
         } : {
           mode,
           chain: coin,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -87,8 +90,8 @@ export const shepherdRemoveCoin = (coin, mode) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdRemoveCoin',
-          'Error',
+          translate('API.apiRemoveCoin') + ' (code: apiRemoveCoin)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -100,7 +103,7 @@ export const shepherdRemoveCoin = (coin, mode) => {
         Store.dispatch(
           triggerToaster(
             `${coin} ${translate('API.DAEMON_IS_STILL_RUNNING')}`,
-            'Warning',
+            translate('API.WARNING'),
             'warning'
           )
         );
@@ -109,21 +112,21 @@ export const shepherdRemoveCoin = (coin, mode) => {
   });
 }
 
-export const shepherdGetCoinList = () => {
+export const apiGetCoinList = () => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/coinslist${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/coinslist${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdGetCoinList',
-          'Error',
+          translate('API.apiGetCoinList') + ' (code: apiGetCoinList)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -133,13 +136,13 @@ export const shepherdGetCoinList = () => {
   });
 }
 
-export const shepherdPostCoinList = (data) => {
+export const apiPostCoinList = (data) => {
   return new Promise((resolve, reject) => {
-    fetch(`http://127.0.0.1:${Config.agamaPort}/shepherd/coinslist`,
+    fetch(`http://127.0.0.1:${agamaPort}/api/coinslist`,
       fetchType(
         JSON.stringify({
           payload: data,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -147,8 +150,8 @@ export const shepherdPostCoinList = (data) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdPostCoinList',
-          'Error',
+          translate('API.apiPostCoinList') + ' (code: apiPostCoinList)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -158,27 +161,27 @@ export const shepherdPostCoinList = (data) => {
   });
 }
 
-export const shepherdClearCoindFolder = (coin, keepWalletDat) => {
+export const apiClearCoindFolder = (coin, keepWalletDat) => {
   return new Promise((resolve, reject) => {
     const _urlParams1 = {
-      token: Config.token,
+      token,
       coin,
       keepwallet: true,
     };
     const _urlParams2 = {
-      token: Config.token,
+      token,
       coin,
     };
     fetch(
-      keepWalletDat ? `http://127.0.0.1:${Config.agamaPort}/shepherd/kick${urlParams(_urlParams1)}` : `http://127.0.0.1:${Config.agamaPort}/shepherd/kick${urlParams(_urlParams2)}`,
+      keepWalletDat ? `http://127.0.0.1:${agamaPort}/api/kick${urlParams(_urlParams1)}` : `http://127.0.0.1:${Config.agamaPort}/api/kick${urlParams(_urlParams2)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdClearCoindFolder',
-          'Error',
+          translate('API.apiClearCoindFolder') + ' (code: apiClearCoindFolder)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

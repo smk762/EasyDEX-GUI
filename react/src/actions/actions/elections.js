@@ -1,27 +1,30 @@
 import translate from '../../translate/translate';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import { triggerToaster } from '../actionCreators';
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 
-export const shepherdElectionsBalance = (coin, address) => {
+export const apiElectionsBalance = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/getbalance${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/getbalance${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectionsBalance',
-          'Error',
+          translate('API.apiElectionsBalance') + ' (code: apiElectionsBalance)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -33,10 +36,10 @@ export const shepherdElectionsBalance = (coin, address) => {
   });
 }
 
-export const shepherdElectionsTransactions = (coin, address, type) => {
+export const apiElectionsTransactions = (coin, address, type) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
       full: true,
@@ -44,15 +47,15 @@ export const shepherdElectionsTransactions = (coin, address, type) => {
       maxlength: 20,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/listtransactions${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/elections/listtransactions${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'shepherdElectionsTransactions',
-          'Error',
+          translate('API.apiElectionsTransactions') + ' (code: apiElectionsTransactions)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -64,13 +67,13 @@ export const shepherdElectionsTransactions = (coin, address, type) => {
   });
 }
 
-export const shepherdElectionsStatus = () => {
+export const apiElectionsStatus = () => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/status`,
+      `http://127.0.0.1:${agamaPort}/api/elections/status`,
       fetchType(
         JSON.stringify({
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -78,8 +81,8 @@ export const shepherdElectionsStatus = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsStatus',
-          'Error',
+          translate('API.apiElectionsStatus') + ' (code: apiElectionsStatus)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -91,16 +94,16 @@ export const shepherdElectionsStatus = () => {
   });
 }
 
-export const shepherdElectionsLogin = (seed, network) => {
+export const apiElectionsLogin = (seed, network) => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/login`,
+      `http://127.0.0.1:${agamaPort}/api/elections/login`,
       fetchType(
         JSON.stringify({
           seed,
           network,
           iguana: true,
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -108,8 +111,8 @@ export const shepherdElectionsLogin = (seed, network) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsLogin',
-          'Error',
+          translate('API.apiElectionsLogin') + ' (code: apiElectionsLogin)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -121,13 +124,13 @@ export const shepherdElectionsLogin = (seed, network) => {
   });
 }
 
-export const shepherdElectionsLogout = () => {
+export const apiElectionsLogout = () => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/elections/logout`,
+      `http://127.0.0.1:${agamaPort}/api/elections/logout`,
       fetchType(
         JSON.stringify({
-          token: Config.token,
+          token,
         })
       ).post
     )
@@ -135,8 +138,8 @@ export const shepherdElectionsLogout = () => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsLogout',
-          'Error',
+          translate('API.apiElectionsLogout') + ' (code: apiElectionsLogout)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -148,12 +151,12 @@ export const shepherdElectionsLogout = () => {
   });
 }
 
-export const shepherdElectionsSend = (coin, value, sendToAddress, changeAddress, opreturn) => {
+export const apiElectionsSend = (coin, value, sendToAddress, changeAddress, opreturn) => {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
       address,
       value,
@@ -164,15 +167,15 @@ export const shepherdElectionsSend = (coin, value, sendToAddress, changeAddress,
       verify: false
     };
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsSend',
-          'Error',
+          translate('API.apiElectionsSend') + ' (code: apiElectionsSend)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -184,13 +187,13 @@ export const shepherdElectionsSend = (coin, value, sendToAddress, changeAddress,
   });
 }
 
-export const shepherdElectionsSendMany = (coin, targets, change, opreturn) => {
+export const apiElectionsSendMany = (coin, targets, change, opreturn) => {
   return new Promise((resolve, reject) => {
     return fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/createrawtx-multiout`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx-multiout`,
       fetchType(
         JSON.stringify({
-          token: Config.token,
+          token,
           coin,
           targets,
           change,
@@ -205,8 +208,8 @@ export const shepherdElectionsSendMany = (coin, targets, change, opreturn) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectionsSendMany',
-          'Error',
+          translate('API.apiElectionsSendMany') + ' (code: apiElectionsSendMany)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

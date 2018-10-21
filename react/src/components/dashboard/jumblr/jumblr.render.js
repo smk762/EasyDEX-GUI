@@ -1,6 +1,5 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-
 import WalletsHeader from '../walletsHeader/walletsHeader';
 import SendCoin from '../sendCoin/sendCoin';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
@@ -14,8 +13,8 @@ export const JumblrRenderSecretAddressList = function(type) {
     for (let i = 0; i < _jumblrAddressList.length; i++) {
       _items.push(
         <tr key={ `jumblr-secret-address-${i}` }>
-          <td>{ _jumblrAddressList[i].address }</td>
-          <td>{ _jumblrAddressList[i].wif }</td>
+          <td className="selectable">{ _jumblrAddressList[i].address }</td>
+          <td className="selectable">{ _jumblrAddressList[i].wif }</td>
         </tr>
       );
     }
@@ -47,15 +46,18 @@ export const JumblrRender = function() {
 
           <div className="col-xs-12">
             <div className="alert alert-info alert-dismissible">
-              <button
+              { /*<button
                 type="button"
                 className="close">
                 <span>×</span>
-              </button>
+              </button>*/ }
               <span className="jumblr-header">
                 <i className="icon fa-paw"></i> { translate('JUMBLR.ABOUT') }
               </span>
               <br />
+              <p>
+                <strong>{ translate('JUMBLR.NOTICE_BOTH_NODES') }</strong>
+              </p>
               <p>{ translate('JUMBLR.JUMBLR_FUNCTIONS') }</p>
               <p>
                 <strong>{ translate('JUMBLR.TIP') }:</strong> { translate('JUMBLR.TIP_DESC') }.
@@ -68,11 +70,11 @@ export const JumblrRender = function() {
               <input
                 type="radio"
                 className="to-labelauty labelauty"
-                name={ `mode-public` }
-                id={ `mode-public` }
+                name="mode-public"
+                id="mode-public"
                 checked={ this.state.jumblrMode === 'public' ? true : false } />
               <label
-                htmlFor={ `mode-public` }
+                htmlFor="mode-public"
                 className="no-margin"
                 onClick={ () => this.switchJumblrMode('public') }>
                 <span
@@ -98,11 +100,11 @@ export const JumblrRender = function() {
               <input
                 type="radio"
                 className="to-labelauty labelauty"
-                name={ `mode-private` }
-                id={ `mode-private` }
+                name="mode-private"
+                id="mode-private"
                 checked={ this.state.jumblrMode === 'private' ? true : false } />
               <label
-                htmlFor={ `mode-private` }
+                htmlFor="mode-private"
                 className="no-margin"
                 onClick={ () => this.switchJumblrMode('private') }>
                 <span
@@ -213,33 +215,31 @@ export const JumblrRender = function() {
                         <li>{ translate('JUMBLR.FEW_SECURITY_NOTES_DESC5') }</li>
                       </ul>
                     </div>
-                    { this.state.jumblrDepositAddressPBased &&
-                      <div className="padding-bottom-30">
-                        <div className="padding-bottom-20">
-                          <p>
-                            <strong>{ translate('JUMBLR.PLEASE_WRITE_DOWN_PASSPHRASE') }</strong>
-                          </p>
-                          <p>{ translate('JUMBLR.THIS_IS_YOUR_MAIN_RECOVERY') }</p>
-                          <p>{ translate('JUMBLR.ALL_JUMBLR_ADDRESSES_CAN_BE') }</p>
-                          <p>
-                            <strong>{ translate('JUMBLR.TIP') }:</strong> { this.renderLB('JUMBLR.DONT_USE_SMART_EDITORS') }
-                          </p>
-                        </div>
-                        <label>{ translate('INDEX.PASSPHRASE') }</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="loginPassphrase"
-                          onChange={ this.returnPassphrase }
-                          value={ this.state.randomSeed } />
-                        <button
-                          className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
-                          title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                          onClick={ () => this.copyPassphrase() }>
-                          <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
-                        </button>
+                    <div className="padding-bottom-30">
+                      <div className="padding-bottom-20">
+                        <p>
+                          <strong>{ translate('JUMBLR.PLEASE_WRITE_DOWN_PASSPHRASE') }</strong>
+                        </p>
+                        <p>{ translate('JUMBLR.THIS_IS_YOUR_MAIN_RECOVERY') }</p>
+                        <p>{ translate('JUMBLR.ALL_JUMBLR_ADDRESSES_CAN_BE') }</p>
+                        <p>
+                          <strong>{ translate('JUMBLR.TIP') }:</strong> { this.renderLB('JUMBLR.DONT_USE_SMART_EDITORS') }
+                        </p>
                       </div>
-                    }
+                      <label>{ translate('INDEX.PASSPHRASE') }</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="loginPassphrase"
+                        onChange={ this.returnPassphrase }
+                        value={ this.state.randomSeed } />
+                      <button
+                        className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
+                        title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                        onClick={ () => this.copyPassphrase() }>
+                        <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                      </button>
+                    </div>
                     <button
                       type="button"
                       className="btn btn-info waves-effect waves-light"
@@ -251,7 +251,7 @@ export const JumblrRender = function() {
                       <div className="padding-top-40">
                         <strong>{ translate('JUMBLR.YOUR_JUMBLR_DEPOSIT_ADDRESS') }:</strong>
                         <p>
-                          { this.state.jumblrDepositAddress.address }
+                          <span className="selectable">{ this.state.jumblrDepositAddress.address }</span>
                           <button
                             className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                             title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -260,7 +260,7 @@ export const JumblrRender = function() {
                           </button>
                         </p>
                         <p>
-                          { this.state.jumblrDepositAddress.wif }
+                          <span className="selectable">{ this.state.jumblrDepositAddress.wif }</span>
                           <button
                             className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                             title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -288,23 +288,21 @@ export const JumblrRender = function() {
                       { translate('JUMBLR.JUMBLR_SECRET_DESC_P6') }.
                     </p>
 
-                    { this.state.jumblrDepositAddressPBased &&
-                      <div className="padding-bottom-20 padding-top-20">
-                        <label>{ translate('JUMBLR.PASSPHRASE') }</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="jumblrPassphrase"
-                          onChange={ this.returnPassphrase }
-                          value={ this.state.randomSeed } />
-                        <button
-                          className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
-                          title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                          onClick={ () => this.copyPassphrase() }>
-                          <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
-                        </button>
-                      </div>
-                    }
+                    <div className="padding-bottom-20 padding-top-20">
+                      <label>{ translate('JUMBLR.PASSPHRASE') }</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="jumblrPassphrase"
+                        onChange={ this.returnPassphrase }
+                        value={ this.state.randomSeed } />
+                      <button
+                        className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
+                        title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                        onClick={ () => this.copyPassphrase() }>
+                        <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                      </button>
+                    </div>
                     <div className="col-xs-2 nofloat padding-top-30">
                       { translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }
                     </div>
@@ -354,7 +352,7 @@ export const JumblrRender = function() {
                                 <strong>{ translate('INDEX.ADDRESS') }</strong>
                               </td>
                               <td>
-                                <strong>Wif</strong>
+                                <strong>WIF</strong>
                               </td>
                             </tr>
                           </thead>
@@ -405,17 +403,15 @@ export const JumblrRender = function() {
                       </p>
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P3') }</p>
                       <p>{ translate('JUMBLR.SECRET_REGEN_DESC_P4') }</p>
-                      { this.state.jumblrDepositAddressPBased &&
-                        <div className="padding-bottom-20 padding-top-20">
-                          <label>{ translate('INDEX.PASSPHRASE') }</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name="jumblrPassphraseImport"
-                            onChange={ (event) => this.passphraseOnChange(event) }
-                            value={ this.state.jumblrPassphraseImport } />
-                        </div>
-                      }
+                      <div className="padding-bottom-20 padding-top-20">
+                        <label>{ translate('INDEX.PASSPHRASE') }</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="jumblrPassphraseImport"
+                          onChange={ (event) => this.passphraseOnChange(event) }
+                          value={ this.state.jumblrPassphraseImport } />
+                      </div>
                       <div className="col-xs-2 nofloat padding-top-30">
                         { translate('JUMBLR.NUMBER_OF_SECRET_ADDR') }
                       </div>
@@ -465,7 +461,7 @@ export const JumblrRender = function() {
                                   <strong>{ translate('INDEX.ADDRESS') }</strong>
                                 </td>
                                 <td>
-                                  <strong>Wif</strong>
+                                  <strong>WIF</strong>
                                 </td>
                               </tr>
                             </thead>

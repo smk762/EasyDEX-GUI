@@ -2,7 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import { connect } from 'react-redux';
 import {
-  shepherdElectrumBip39Keys,
+  apiElectrumBip39Keys,
   copyCoinAddress,
   triggerToaster,
 } from '../../../actions/actionCreators';
@@ -97,7 +97,7 @@ class Bip39KeysPanel extends React.Component {
   }
 
   _getBip39Keys() {
-    shepherdElectrumBip39Keys(
+    apiElectrumBip39Keys(
       this.state.passphrase,
       this.state.match,
       this.state.addressdepth,
@@ -125,7 +125,7 @@ class Bip39KeysPanel extends React.Component {
                 <div className="form-group form-material floating">
                   <input
                     type="password"
-                    className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                    className={ !this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
                     autoComplete="off"
                     name="passphrase"
                     ref="passphrase"
@@ -133,7 +133,7 @@ class Bip39KeysPanel extends React.Component {
                     onChange={ this.updateInput }
                     value={ this.state.passphrase } />
                   <textarea
-                    className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                    className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
                     autoComplete="off"
                     id="passphraseTextarea"
                     ref="passphraseTextarea"
@@ -147,21 +147,21 @@ class Bip39KeysPanel extends React.Component {
                     className="floating-label"
                     htmlFor="passphrase">{ translate('INDEX.PASSPHRASE') }</label>
                   { this.state.seedExtraSpaces &&
-                    <span>
-                      <i className="icon fa-warning seed-extra-spaces-warning"
-                        data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                        data-html={ true }></i>
-                      <ReactTooltip
-                        effect="solid"
-                        className="text-left" />
-                    </span>
+                    <i className="icon fa-warning seed-extra-spaces-warning"
+                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                      data-html={ true }
+                      data-for="bip39"></i>
                   }
+                  <ReactTooltip
+                    id="bip39"
+                    effect="solid"
+                    className="text-left" />
                 </div>
               </div>
               <div className="col-sm-5 no-padding-left">
                 <input
                   type="text"
-                  className="form-control margin-top-10"
+                  className="form-control margin-top-10 blur"
                   autoComplete="off"
                   name="match"
                   onChange={ this.updateInput }
@@ -222,7 +222,8 @@ class Bip39KeysPanel extends React.Component {
             <div className="col-sm-12 margin-top-30 margin-bottom-20">
               { this.state.keys !== 'empty' &&
                 <div>
-                  <strong>WIF:</strong> <span>{ this.state.keys.priv }</span>
+                  <strong>Pub:</strong> <span className="blur selectable">{ this.state.keys.pub }</span>
+                  <strong>WIF:</strong> <span className="blur selectable">{ this.state.keys.priv }</span>
                   <button
                     className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                     title={ translate('INDEX.COPY_TO_CLIPBOARD') }

@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import 'bluebird';
+import mainWindow from '../util/mainWindow';
 
 import translate from '../translate/translate';
 import {
@@ -31,6 +32,7 @@ import {
   DISPLAY_ZCASH_PARAMS_FETCH,
   DASHBOARD_REMOVE_COIN,
   DISPLAY_NOTARY_ELECTIONS_MODAL,
+  BLUR_SENSITIVE_DATA,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -55,6 +57,9 @@ export * from './actions/tools';
 export * from './actions/prices';
 export * from './actions/elections';
 export * from './actions/pin';
+export * from './actions/csv';
+export * from './actions/addressBook';
+export * from './actions/dice';
 
 export const changeActiveAddress = (address) => {
   return {
@@ -74,7 +79,7 @@ export const toggleDashboardTxInfoModal = (display, txIndex) => {
   return {
     type: DASHBOARD_ACTIVE_TXINFO_MODAL,
     showTransactionInfo: display,
-    showTransactionInfoTxIndex: txIndex,
+    showTransactionInfoTxIndex: !display ? null : txIndex,
   }
 }
 
@@ -191,6 +196,8 @@ export const dashboardChangeActiveCoinState = (coin, mode, skipCoinsArrayUpdate)
 }
 
 export const dashboardChangeActiveCoin = (coin, mode, skipCoinsArrayUpdate) => {
+  mainWindow.activeCoin = coin;
+
   return dispatch => {
     dispatch(dashboardChangeActiveCoinState(coin, mode, skipCoinsArrayUpdate));
   }
@@ -265,7 +272,7 @@ export const toggleClaimInterestModal = (display) => {
 export const getPinList = (pinList) => {
   return {
     type: GET_PIN_LIST,
-    pinList: pinList,
+    pinList,
   }
 }
 
@@ -308,5 +315,12 @@ export const toggleNotaryElectionsModal = (display) => {
   return {
     type: DISPLAY_NOTARY_ELECTIONS_MODAL,
     displayNotaryElectionsModal: display,
+  }
+}
+
+export const toggleBlurSensitiveData = (display) => {
+  return {
+    type: BLUR_SENSITIVE_DATA,
+    blurSensitiveData: display,
   }
 }

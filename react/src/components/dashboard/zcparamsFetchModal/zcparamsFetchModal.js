@@ -8,11 +8,9 @@ import Store from '../../../store';
 import Config from '../../../config';
 import translate from '../../../translate/translate';
 import mainWindow from '../../../util/mainWindow';
+import io from 'socket.io-client';
 
 import ZcparamsFetchModalRender from './zcparamsFetchModal.render';
-
-import { SocketProvider } from 'socket.io-react';
-import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
 
@@ -27,11 +25,12 @@ class ZcparamsFetchModal extends React.Component {
   constructor() {
     super();
     this.state = {
-      display: true,
+      open: false,
       updateLog: [],
       zcparamsSources: {},
       dlOption: 'agama.komodoplatform.com',
       done: false,
+      className: 'hide',
     };
     this.dismiss = this.dismiss.bind(this);
     this._downloadZCashParamsPromise = this._downloadZCashParamsPromise.bind(this);
@@ -54,7 +53,18 @@ class ZcparamsFetchModal extends React.Component {
   }
 
   dismiss() {
-    Store.dispatch(toggleZcparamsFetchModal(false));
+    this.setState(Object.assign({}, this.state, {
+      className: 'show out',
+    }));
+
+    setTimeout(() => {
+      this.setState(Object.assign({}, this.state, {
+        open: false,
+        className: 'hide',
+      }));
+
+      Store.dispatch(toggleZcparamsFetchModal(false));
+    }, 300);
   }
 
   componentWillUnmount() {
@@ -70,10 +80,17 @@ class ZcparamsFetchModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.displayZcparamsModal !== nextProps.displayZcparamsModal) {
+    if (this.props.displayZcparamsModal !== this.state.open) {
       this.setState(Object.assign({}, this.state, {
-        display: nextProps.displayZcparamsModal,
+        className: nextProps.displayZcparamsModal ? 'show fade' : 'show out',
       }));
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          open: nextProps.displayZcparamsModal,
+          className: nextProps.displayZcparamsModal ? 'show in' : 'hide',
+        }));
+      }, nextProps.displayZcparamsModal ? 50 : 300);
     }
   }
 
@@ -81,26 +98,28 @@ class ZcparamsFetchModal extends React.Component {
     if (data &&
         data.msg &&
         data.msg.type === 'zcpdownload') {
-      if (data.msg.status === 'progress' &&
-          data.msg.progress &&
-          data.msg.progress < 100) {
+      const _msg = data.msg;
+
+      if (_msg.status === 'progress' &&
+          _msg.progress &&
+          _msg.progress < 100) {
         this.setState(Object.assign({}, this.state, {
-          updateProgressPatch: data.msg.progress,
+          updateProgressPatch: _msg.progress,
         }));
-        updateProgressBar.zcparams[data.msg.file] = data.msg.progress;
+        updateProgressBar.zcparams[_msg.file] = _msg.progress;
       } else {
-        if (data.msg.status === 'progress' &&
-            data.msg.progress &&
-            data.msg.progress === 100) {
+        if (_msg.status === 'progress' &&
+            _msg.progress &&
+            _msg.progress === 100) {
           let _updateLog = this.state.updateLog;
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
           }));
-          updateProgressBar.zcparams[data.msg.file] = 100;
-        } else if (data.msg.status === 'done') {
+          updateProgressBar.zcparams[_msg.file] = 100;
+        } else if (_msg.status === 'done') {
           let _updateLog = this.state.updateLog;
 
-          if (data.msg.file === 'proving') {
+          if (_msg.file === 'proving') {
             _updateLog = [];
             _updateLog.push(translate('ZCPARAMS_FETCH.BOTH_KEYS_VERIFIED'));
             _updateLog.push(translate('ZCPARAMS_FETCH.CLOSE_THE_MODAL'));
@@ -119,11 +138,11 @@ class ZcparamsFetchModal extends React.Component {
               updateLog: _updateLog,
             }));
           }
-          updateProgressBar.zcparams[data.msg.file] = -1;
-        } else if (data.msg.status === 'error') {
+          updateProgressBar.zcparams[_msg.file] = -1;
+        } else if (_msg.status === 'error') {
           let _updateLog = this.state.updateLog;
 
-          _updateLog.push(`${translate('ZCPARAMS_FETCH.ZCPARAMS_VERIFICATION_ERROR_P1')} ${data.msg.file} ${translate('ZCPARAMS_FETCH.ZCPARAMS_VERIFICATION_ERROR_P2')}`);
+          _updateLog.push(`${translate('ZCPARAMS_FETCH.ZCPARAMS_VERIFICATION_ERROR_P1')} ${_msg.file} ${translate('ZCPARAMS_FETCH.ZCPARAMS_VERIFICATION_ERROR_P2')}`);
           this.setState(Object.assign({}, this.state, {
             updateLog: _updateLog,
             done: true,
@@ -174,7 +193,9 @@ class ZcparamsFetchModal extends React.Component {
       _items.push(
         <option
           key={ `zcparams-dloptions-list-${key}` }
-          value={ `${key}` }>{ `${key}` }</option>
+          value={ key }>
+          { key }
+        </option>
       );
     }
 
@@ -188,16 +209,15 @@ class ZcparamsFetchModal extends React.Component {
   }
 
   render() {
-    if (this.state.display) {
-      return ZcparamsFetchModalRender.call(this);
-    }
-
-    return null;
+    return ZcparamsFetchModalRender.call(this);
   }
 }
 
 const mapStateToProps = (state) => {
   return {
+    ActiveCoin: {
+      coin: state.ActiveCoin.coin,
+    },
     displayZcparamsModal: state.Dashboard.displayZcparamsModal,
   };
 };

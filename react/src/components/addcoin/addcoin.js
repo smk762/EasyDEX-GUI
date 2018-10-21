@@ -6,13 +6,14 @@ import {
   addCoin,
   toggleAddcoinModal,
   triggerToaster,
-  shepherdGetCoinList,
-  shepherdPostCoinList,
+  apiGetCoinList,
+  apiPostCoinList,
   toggleZcparamsFetchModal,
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
 import mainWindow from '../../util/mainWindow';
+import { acConfig } from '../addcoin/payload';
 
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
@@ -45,10 +46,11 @@ class AddCoin extends React.Component {
         },
         mode: -2,
         daemonParam: null,
+        genProcLimit: 1,
       },
       display: false,
       actionsMenu: false,
-      modalClassName: 'hide',
+      className: 'hide',
       isExperimentalOn: false,
       // staking ac
       loginPassphrase: '',
@@ -154,14 +156,14 @@ class AddCoin extends React.Component {
   }
 
   saveCoinSelection() {
-    shepherdPostCoinList(this.state.coins)
+    apiPostCoinList(this.state.coins)
     .then((json) => {
       this.toggleActionsMenu();
     });
   }
 
   loadCoinSelection() {
-    shepherdGetCoinList()
+    apiGetCoinList()
     .then((json) => {
       if (json.msg !== 'error') {
         this.setState(Object.assign({}, this.state, {
@@ -214,16 +216,15 @@ class AddCoin extends React.Component {
     if (addCoinProps &&
         addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
-        display: addCoinProps.display,
-        modalClassName: 'show fade',
+        className: addCoinProps.display ? 'show fade' : 'show out',
       }));
 
       setTimeout(() => {
         this.setState(Object.assign({}, this.state, {
           display: addCoinProps.display,
-          modalClassName: addCoinProps.display ? 'show in' : 'hide',
+          className: addCoinProps.display ? 'show in' : 'hide',
         }));
-      }, 100);
+      }, addCoinProps.display ? 50 : 300);
     }
   }
 
@@ -274,7 +275,7 @@ class AddCoin extends React.Component {
           checked: defaultMode === 'mining' ? true : false,
         },
         mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
-      }
+      };
 
       this.setState(Object.assign({}, this.state, {
         coins: _coins,
@@ -288,7 +289,6 @@ class AddCoin extends React.Component {
 
     _coins[index] = {
       selectedCoin: _selectedCoin,
-
       spvMode: {
         disabled: _selectedCoin.indexOf('spv') > -1 ? false : true,
         checked: _value === '0' ? true : false,
@@ -323,11 +323,6 @@ class AddCoin extends React.Component {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
     const _coin = this.state.coins[0];
 
-    if (this.isCoinAlreadyAdded(coin)) {
-      this.dismiss();
-      return;
-    }
-
     this.verifyZcashParamsExist(_coin.mode)
     .then((res) => {
       if (res) {
@@ -346,7 +341,10 @@ class AddCoin extends React.Component {
           Store.dispatch(addCoin(
             coin,
             _coin.mode,
-            { type: _coin.daemonParam }
+            { type: _coin.daemonParam },
+            _coin.daemonParam === 'gen' &&
+            acConfig[coin.toUpperCase()] &&
+            acConfig[coin.toUpperCase()].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
           ));
         }
 
@@ -354,6 +352,15 @@ class AddCoin extends React.Component {
         this.addNewItem();
 
         Store.dispatch(toggleAddcoinModal(false, false));
+
+        setTimeout(() => {
+          this.setState({
+            loginPassphrase: '',
+            seedInputVisibility: false,
+            seedExtraSpaces: false,
+            trimPassphraseTimer: null,
+          });
+        }, 100);
       }
     });
   }
@@ -388,28 +395,24 @@ class AddCoin extends React.Component {
   activateAllCoins() {
     const coin = this.state.coins[0].selectedCoin.split('|')[0];
 
-    if (!this.isCoinAlreadyAdded(coin)) {
-      Store.dispatch(
-        addCoin(
-          coin,
-          this.state.coins[0].mode,
-        )
-      );
-    }
+    Store.dispatch(
+      addCoin(
+        coin,
+        this.state.coins[0].mode,
+      )
+    );
 
     for (let i = 1; i < this.state.coins.length; i++) {
       const _item = this.state.coins[i];
       const itemCoin = _item.selectedCoin.split('|')[0];
 
       setTimeout(() => {
-        if (!this.isCoinAlreadyAdded(itemCoin)) {
-          Store.dispatch(
-            addCoin(
-              itemCoin,
-              _item.mode,
-            )
-          );
-        }
+        Store.dispatch(
+          addCoin(
+            itemCoin,
+            _item.mode,
+          )
+        );
 
         if (i === this.state.coins.length - 1) {
           let _coins = [];
@@ -420,6 +423,15 @@ class AddCoin extends React.Component {
           }));
 
           Store.dispatch(toggleAddcoinModal(false, false));
+
+          setTimeout(() => {
+            this.setState({
+              loginPassphrase: '',
+              seedInputVisibility: false,
+              seedExtraSpaces: false,
+              trimPassphraseTimer: null,
+            });
+          }, 100);
         }
       }, 2000 * i);
     }
@@ -446,38 +458,27 @@ class AddCoin extends React.Component {
     return items;
   }
 
+  renderGenproclimitOptions() {
+    const _max = 32;
+    let _items = [];
+
+    for (let i = 0; i < _max; i++) {
+      _items.push(
+        <option
+          key={ `addcoin-genproclimit-${i}` }
+          value={ i }>
+          { translate('ADD_COIN.MINING_THREADS') }: { i + 1}
+        </option>
+      );
+    }
+
+    return _items;
+  }
+
   render() {
     return (
       AddCoinRender.call(this)
     );
-  }
-
-  isCoinAlreadyAdded(coin) {
-    const modes = [
-      'spv',
-      'native',
-      'staking',
-      'mining'
-    ];
-
-    for (let mode of modes) {
-      if (this.existingCoins[mode] &&
-          this.existingCoins[mode].indexOf(coin) !== -1) {
-        const message = `${coin} ${translate('ADD_COIN.ALREADY_ADDED')} ${translate('ADD_COIN.IN')} ${mode} ${translate('ADD_COIN.MODE')}`;
-
-        Store.dispatch(
-          triggerToaster(
-            message,
-            translate('ADD_COIN.COIN_ALREADY_ADDED'),
-            'error'
-          )
-        );
-
-        return true;
-      }
-    }
-
-    return false;
   }
 }
 

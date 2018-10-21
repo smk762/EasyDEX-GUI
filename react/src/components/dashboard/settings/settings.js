@@ -10,9 +10,7 @@ import { SettingsRender } from './settings.render';
 import mainWindow from '../../../util/mainWindow';
 
 /*
-  TODO:
-  1) add fiat section
-  2) batch export/import wallet addresses
+  TODO: batch export/import wallet addresses
 */
 class Settings extends React.Component {
   constructor(props) {
@@ -28,7 +26,8 @@ class Settings extends React.Component {
         this.props.Main.coins &&
         this.props.Main.coins.spv) {
       for (let i = 0; i < this.props.Main.coins.spv.length; i++) {
-        if (this.props.Dashboard.electrumCoins[this.props.Main.coins.spv[i]].serverList) {
+        if (this.props.Dashboard.electrumCoins[this.props.Main.coins.spv[i]] &&
+            this.props.Dashboard.electrumCoins[this.props.Main.coins.spv[i]].serverList) {
           return true;
         }
       }

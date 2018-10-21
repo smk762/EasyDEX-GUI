@@ -2,6 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import Spinner from '../spinner/spinner';
 import ReactTooltip from 'react-tooltip';
+const { secondsElapsedToString } = require('agama-wallet-lib/src/time');
 
 export const _ClaimInterestTableRender = function() {
   const _transactionsList = this.state.transactionsList;
@@ -20,24 +21,35 @@ export const _ClaimInterestTableRender = function() {
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') + ' TXID' }
             </button>
           </td>
-          <td>{ _transactionsList[i].address }</td>
-          <td className={ _transactionsList[i].amount > 10 ? 'green bold' : '' }>{ _transactionsList[i].amount }</td>
+          <td className="blur selectable">{ _transactionsList[i].address }</td>
+          <td className={ _transactionsList[i].amount >= 10 ? (!_transactionsList[i].interestRulesCheckPass ? 'red bold' : 'green bold') : '' }>
+          { _transactionsList[i].amount }
+          </td>
           <td>{ _transactionsList[i].interest }</td>
           <td className="locktime center">
-            { _transactionsList[i].locktime &&
+            { _transactionsList[i].locktime > 0 &&
               <i
                 data-tip={ `${translate('CLAIM_INTEREST.LOCKTIME_IS_SET_TO')} ${_transactionsList[i].locktime}` }
+                data-for="claimInterest"
                 className="fa-check-circle green"></i>
             }
-            { !_transactionsList[i].locktime &&
+            { (!_transactionsList[i].locktime || (_transactionsList[i].locktime && _transactionsList[i].locktime === 0)) &&
               <i
                 data-tip={ translate('CLAIM_INTEREST.LOCKTIME_IS_UNSET') }
+                data-for="claimInterest"
                 className="fa-exclamation-circle red"></i>
             }
             <ReactTooltip
+              id="claimInterest"
               effect="solid"
               className="text-left" />
           </td>
+          { this.props.ActiveCoin.mode === 'spv' &&
+            <td className="time">{ secondsElapsedToString(_transactionsList[i].timeElapsedFromLocktimeInSeconds, true) }</td>
+          }
+          { this.props.ActiveCoin.mode === 'spv' &&
+            <td className="time">{ !_transactionsList[i].timeTill1MonthInterestStopsInSeconds ? translate('CLAIM_INTEREST.NEED_TO_CLAIM') : secondsElapsedToString(_transactionsList[i].timeTill1MonthInterestStopsInSeconds, true) }</td>
+          }
         </tr>
       );
     }
@@ -50,7 +62,10 @@ export const _ClaimInterestTableRender = function() {
           <strong>{ translate('CLAIM_INTEREST.REQ_P1') }:</strong> { translate('CLAIM_INTEREST.REQ_P2') } <strong>10 KMD</strong>
         </p>
         <p>
-          <strong>{ translate('CLAIM_INTEREST.TIP') }:</strong> { translate('CLAIM_INTEREST.TIP_DESC') }
+          <strong>{ translate('CLAIM_INTEREST.TIP') } #1:</strong> { translate('CLAIM_INTEREST.TIP_DESC') }
+        </p>
+        <p>
+          <strong>{ translate('CLAIM_INTEREST.TIP') } #2:</strong> { translate('CLAIM_INTEREST.MONTHLY_CLAIMING_TIP') }
         </p>
         { this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'native' &&
@@ -69,7 +84,8 @@ export const _ClaimInterestTableRender = function() {
               <label className="switch">
                 <input
                   type="checkbox"
-                  checked={ this.state.showZeroInterest } />
+                  checked={ this.state.showZeroInterest }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleZeroInterest }></div>
@@ -91,7 +107,7 @@ export const _ClaimInterestTableRender = function() {
                 <i className="icon fa-dollar margin-right-5"></i>
               }
               { !this.state.spvPreflightSendInProgress &&
-                <span>{ translate('CLAIM_INTEREST.CLAIM_INTEREST', `${this.state.totalInterest} KMD `) }</span>
+                <span>{ translate('CLAIM_INTEREST.CLAIM_INTEREST', `${Number((this.state.totalInterest).toFixed(8))} KMD `) }</span>
               }
               { this.state.spvPreflightSendInProgress &&
                 <span>{ translate('SEND.SPV_VERIFYING') }...</span>
@@ -143,6 +159,12 @@ export const _ClaimInterestTableRender = function() {
               <th>{ translate('INDEX.AMOUNT') }</th>
               <th>{ translate('INDEX.INTEREST') }</th>
               <th>Locktime</th>
+              { this.props.ActiveCoin.mode === 'spv' &&
+                <th className="time">{ translate('CLAIM_INTEREST.TIME_SINCE_LOCKTIME') }</th>
+              }
+              { this.props.ActiveCoin.mode === 'spv' &&
+                <th className="time">{ translate('CLAIM_INTEREST.TIME_TILL_REWARDS_STOP') }</th>
+              }
             </tr>
           </thead>
           <tbody>
@@ -155,6 +177,12 @@ export const _ClaimInterestTableRender = function() {
               <th>{ translate('INDEX.AMOUNT') }</th>
               <th>{ translate('INDEX.INTEREST') }</th>
               <th>Locktime</th>
+              { this.props.ActiveCoin.mode === 'spv' &&
+                <th className="time">{ translate('CLAIM_INTEREST.TIME_SINCE_LOCKTIME') }</th>
+              }
+              { this.props.ActiveCoin.mode === 'spv' &&
+                <th className="time">{ translate('CLAIM_INTEREST.TIME_TILL_REWARDS_STOP') }</th>
+              }
             </tr>
           </tfoot>
         </table>
@@ -166,7 +194,7 @@ export const _ClaimInterestTableRender = function() {
 export const ClaimInterestModalRender = function() {
   return (
     <span onClick={ this.closeDropMenu }>
-      <div className={ 'modal modal-claim-interest modal-3d-sign ' + (this.state.open ? 'show in' : 'fade hide') }>
+      <div className={ `modal modal-claim-interest modal-3d-sign ${this.state.className}` }>
         <div
           onClick={ this.closeModal }
           className="modal-close-overlay"></div>
@@ -195,7 +223,7 @@ export const ClaimInterestModalRender = function() {
                   className="icon fa-refresh pointer refresh-icon"
                   onClick={ this.loadListUnspent }></i>
               }
-              <div className="animsition vertical-align fade-in">
+              <div className={ 'animsition vertical-align ' + (this.state.open ? 'fade-in' : 'fade-out') }>
                 <div className="page-content vertical-align-middle full-width">
                   { this.state.isLoading &&
                     <span>{ translate('INDEX.LOADING') }...</span>
@@ -214,7 +242,7 @@ export const ClaimInterestModalRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.open ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </span>
   );
 };

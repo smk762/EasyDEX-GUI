@@ -9,16 +9,23 @@ import {
   copyString,
   sendToAddressPromise,
   triggerToaster,
-  shepherdElectrumListunspent,
-  shepherdElectrumSendPreflight,
-  shepherdElectrumSendPromise,
+  apiElectrumListunspent,
+  apiElectrumSendPreflight,
+  apiElectrumSendPromise,
   validateAddressPromise,
+  apiGetRemoteTimestamp,
 } from '../../../actions/actionCreators';
 import translate from '../../../translate/translate';
 import {
   ClaimInterestModalRender,
-  _ClaimInterestTableRender
+  _ClaimInterestTableRender,
 } from './claimInterestModal.render';
+import {
+  secondsToString,
+  checkTimestamp,
+} from 'agama-wallet-lib/src/time';
+
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
 
 // TODO: promises
 
@@ -38,6 +45,7 @@ class ClaimInterestModal extends React.Component {
       addressSelectorOpen: false,
       selectedAddress: null,
       loading: false,
+      className: 'hide',
     };
     this.claimInterestTableRender = this.claimInterestTableRender.bind(this);
     this.toggleZeroInterest = this.toggleZeroInterest.bind(this);
@@ -54,6 +62,24 @@ class ClaimInterestModal extends React.Component {
   componentWillMount() {
     if (this.props.ActiveCoin.mode === 'native') {
       this.loadListUnspent();
+    }
+
+    if (this.props.ActiveCoin.mode === 'spv') {
+      apiGetRemoteTimestamp()
+      .then((res) => {
+        if (res.msg === 'success') {
+          if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
+            Store.dispatch(
+              triggerToaster(
+                translate('SEND.CLOCK_OUT_OF_SYNC'),
+                translate('TOASTR.WALLET_NOTIFICATION'),
+                'warning',
+                false
+              )
+            );
+          }
+        }
+      });
     }
   }
 
@@ -106,10 +132,11 @@ class ClaimInterestModal extends React.Component {
     }, 1000);
 
     if (this.props.ActiveCoin.mode === 'spv') {
-      shepherdElectrumListunspent(
+      apiElectrumListunspent(
         this.props.ActiveCoin.coin,
         this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
-      ).then((json) => {
+      )
+      .then((json) => {
         if (json !== 'error' &&
             json.result &&
             typeof json.result !== 'string') {
@@ -125,6 +152,10 @@ class ClaimInterestModal extends React.Component {
               locktime: json[i].locktime,
               amount: Number(json[i].amount.toFixed(8)),
               interest: Number(json[i].interest.toFixed(8)),
+              timeElapsedFromLocktime: json[i].timeElapsedFromLocktime,
+              timeElapsedFromLocktimeInSeconds: json[i].timeElapsedFromLocktimeInSeconds,
+              timeTill1MonthInterestStopsInSeconds: json[i].timeTill1MonthInterestStopsInSeconds,
+              interestRulesCheckPass: json[i].interestRulesCheckPass,
               txid: json[i].txid,
             });
             _totalInterest += Number(json[i].interest.toFixed(8));
@@ -194,12 +225,13 @@ class ClaimInterestModal extends React.Component {
   }
 
   confirmClaimInterest() {
-    shepherdElectrumSendPromise(
+    apiElectrumSendPromise(
       this.props.ActiveCoin.coin,
       this.props.ActiveCoin.balance.balanceSats,
       this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
       this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
-    ).then((res) => {
+    )
+    .then((res) => {
       if (res.msg === 'error') {
         Store.dispatch(
           triggerToaster(
@@ -230,12 +262,13 @@ class ClaimInterestModal extends React.Component {
           spvPreflightSendInProgress: true,
         }));
 
-        shepherdElectrumSendPreflight(
+        apiElectrumSendPreflight(
           this.props.ActiveCoin.coin,
           this.props.ActiveCoin.balance.balanceSats,
           this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
           this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
-        ).then((sendPreflight) => {
+        )
+        .then((sendPreflight) => {
           if (sendPreflight &&
               sendPreflight.msg === 'success') {
             this.setState(Object.assign({}, this.state, {
@@ -250,7 +283,7 @@ class ClaimInterestModal extends React.Component {
             Store.dispatch(
               triggerToaster(
                 sendPreflight.result,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );
@@ -274,12 +307,19 @@ class ClaimInterestModal extends React.Component {
                 'error'
               )
             );
-          } else if (json.result && !json.result.iswatchonly && json.result.ismine && json.result.isvalid && !json.result.isscript) {
+          } else if (
+            json.result &&
+            !json.result.iswatchonly &&
+            json.result.ismine &&
+            json.result.isvalid &&
+            !json.result.isscript
+          ) {
             sendToAddressPromise(
               this.props.ActiveCoin.coin,
               this.state.selectedAddress,
               this.props.ActiveCoin.balance.transparent
-            ).then((json) => {
+            )
+            .then((json) => {
               if (json.error &&
                   json.error.code) {
                 Store.dispatch(
@@ -289,7 +329,11 @@ class ClaimInterestModal extends React.Component {
                     'error'
                   )
                 );
-              } else if (json.result && json.result.length && json.result.length === 64) {
+              } else if (
+                json.result &&
+                json.result.length &&
+                json.result.length === 64
+              ) {
                 Store.dispatch(
                   triggerToaster(
                     `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.state.selectedAddress}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
@@ -319,7 +363,10 @@ class ClaimInterestModal extends React.Component {
     if (this.state.transactionsList &&
         this.state.transactionsList.length) {
       return true;
-    } else if (!this.state.transactionsList || !this.state.transactionsList.length) {
+    } else if (
+      !this.state.transactionsList ||
+      !this.state.transactionsList.length
+    ) {
       return false;
     }
   }
@@ -379,13 +426,38 @@ class ClaimInterestModal extends React.Component {
   componentWillReceiveProps(props) {
     if (props.Dashboard.displayClaimInterestModal !== this.state.open) {
       this.setState({
-        open: props.Dashboard.displayClaimInterestModal,
+        className: props.Dashboard.displayClaimInterestModal ? 'show fade' : 'show out',
       });
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          open: props.Dashboard.displayClaimInterestModal,
+          className: props.Dashboard.displayClaimInterestModal ? 'show in' : 'hide',
+        }));
+      }, props.Dashboard.displayClaimInterestModal ? 50 : 300);
     }
 
     if (!this.state.open &&
         props.Dashboard.displayClaimInterestModal) {
       this.loadListUnspent();
+
+      if (this.props.ActiveCoin.mode === 'spv') {
+        apiGetRemoteTimestamp()
+        .then((res) => {
+          if (res.msg === 'success') {
+            if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
+              Store.dispatch(
+                triggerToaster(
+                  translate('SEND.CLOCK_OUT_OF_SYNC'),
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'warning',
+                  false
+                )
+              );
+            }
+          }
+        });
+      }
     }
   }
 

@@ -18,8 +18,9 @@
     .table-scroll {
       max-height: 366px;
       overflow-y: auto;
-      overflow-x: hidden;
+      overflow-x: auto;
       width: 100%;
+      padding-bottom: 50px;
     }
     .bold {
       font-weight: bold;
@@ -47,5 +48,11 @@
     .bootstrap-select {
       max-width: 400px;
     }
+  }
+  .modal-body {
+    overflow-y: hidden;    
+  }
+  .time {
+    min-width: 150px;
   }
 }

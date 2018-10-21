@@ -1,15 +1,16 @@
 import { GET_PIN_LIST } from '../actions/storeType';
 
-export function Login(state = {
+export const Login = (state = {
   pinList: [],
-}, action) {
+}, action) => {
   if (state === null) state = { pinList: [] };
 
   switch (action.type) {
     case GET_PIN_LIST:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         pinList: action.pinList,
-      });
+      };
     default:
       return state;
   }

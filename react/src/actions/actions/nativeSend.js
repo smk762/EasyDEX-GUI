@@ -3,8 +3,15 @@ import {
   DASHBOARD_ACTIVE_COIN_SENDTO,
 } from '../storeType';
 import translate from '../../translate/translate';
-import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import {
+  triggerToaster,
+  getDashboardUpdate,
+} from '../actionCreators';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
 
@@ -24,8 +31,8 @@ export const sendNativeTx = (coin, _payload) => {
       mode: null,
       chain: coin,
       cmd: _apiMethod,
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
       params:
         (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
         (_payload.subtractFee ?
@@ -53,15 +60,15 @@ export const sendNativeTx = (coin, _payload) => {
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'sendNativeTx',
-          'Error',
+          translate('API.sendNativeTx') + ' (code: sendNativeTx)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -80,7 +87,7 @@ export const sendNativeTx = (coin, _payload) => {
         if (json.indexOf('"code":-4') > -1) {
           dispatch(
             triggerToaster(
-              translate('API.WALLETDAT_MISMATCH'),
+              JSON.parse(json).error.message.indexOf('too large') > -1 ? translate('API.TX_TOO_LARGE') : translate('API.WALLETDAT_MISMATCH'),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -95,7 +102,7 @@ export const sendNativeTx = (coin, _payload) => {
             )
           );
         } else {
-          if (Config.rpc2cli) {
+          if (rpc2cli) {
             _message = JSON.parse(json).error.message;
           }
 
@@ -135,20 +142,20 @@ export const getKMDOPID = (opid, coin) => {
       mode: null,
       chain: coin,
       cmd: 'z_getoperationstatus',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getKMDOPID',
-          'Error',
+          translate('API.txDataFail') + ' (code: getKMDOPID)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -167,8 +174,8 @@ export const sendToAddressPromise = (coin, address, amount) => {
       mode: null,
       chain: coin,
       cmd: 'sendtoaddress',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
       params: [
         address,
         amount,
@@ -179,15 +186,15 @@ export const sendToAddressPromise = (coin, address, amount) => {
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'sendToAddress',
-          'Error',
+          translate('API.sendNativeTx') + ' (code: sendToAddressPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -220,20 +227,20 @@ export const validateAddressPromise = (coin, address) => {
       chain: coin,
       cmd: 'validateaddress',
       params: [ address ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${Config.agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'validateAddressPromise',
-          'Error',
+          translate('API.validateAddress') + ' (code: validateAddressPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -243,4 +250,46 @@ export const validateAddressPromise = (coin, address) => {
       resolve(json);
     });
   });
+}
+
+export const clearOPIDs = (coin) => {
+  return dispatch => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'z_getoperationresult',
+      rpc2cli,
+      token,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.txDataFail') + ' (code: clearOPIDs)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      json = json.result;
+
+      if (json.length) {
+        dispatch(
+          triggerToaster(
+            translate('SEND.ALL_OPID_CLEARED'),
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'success'
+          )
+        );
+        Store.dispatch(getDashboardUpdate(coin));
+      }
+    });
+  };
 }

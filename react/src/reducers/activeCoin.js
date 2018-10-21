@@ -20,11 +20,12 @@ import {
   DASHBOARD_REMOVE_COIN,
   DASHBOARD_ACTIVE_COIN_NET_PEERS,
   DASHBOARD_ACTIVE_COIN_NET_TOTALS,
+  KV_HISTORY,
 } from '../actions/storeType';
 
 // TODO: refactor current coin props copy on change
 
-export function ActiveCoin(state = {
+export const ActiveCoin = (state = {
   coins: {},
   coin: null,
   mode: null,
@@ -46,7 +47,7 @@ export function ActiveCoin(state = {
     peers: null,
     totals: null,
   },
-}, action) {
+}, action) => {
   switch (action.type) {
     case DASHBOARD_REMOVE_COIN:
       delete state.coins[action.coin];

@@ -9,18 +9,11 @@ import fetchType from '../../util/fetchType';
 const fiatRates = (pricesJson) => {
   return dispatch => {
     return fetch(
-      `https://www.atomicexplorer.com/api/rates/kmd`,
+      'https://www.atomicexplorer.com/api/rates/kmd?currency=all',
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
-      /*dispatch(
-        triggerToaster(
-          'fiatRates',
-          'Error',
-          'error'
-        )
-      );*/
     })
     .then(response => response.json())
     .then(json => {
@@ -40,13 +33,6 @@ export const prices = () => {
     )
     .catch((error) => {
       console.log(error);
-      /*dispatch(
-        triggerToaster(
-          'prices',
-          'Error',
-          'error'
-        )
-      );*/
     })
     .then(response => response.json())
     .then(json => {
