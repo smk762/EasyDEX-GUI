@@ -1125,6 +1125,7 @@ const LANG_EN = {
     BOTS: 'BOTS',
     CEAL: 'CEAL NET',
     COQUI: 'COQUI',
+    KMDICE: 'KMDICE',
     CHAIN: 'Chainmakers',
     GLXT: 'GLXToken',
     EQL: 'Equaliser',
