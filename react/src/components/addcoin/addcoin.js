@@ -323,7 +323,7 @@ class AddCoin extends React.Component {
   activateCoin() {
     const _coin = this.state.coins[0];
     const coin = _coin.selectedCoin.split('|')[0];
-    const coinuc = coin.toLowerCase();
+    const coinuc = coin.toUpperCase();
     
     this.verifyZcashParamsExist(_coin.mode)
     .then((res) => {
@@ -331,7 +331,7 @@ class AddCoin extends React.Component {
         const seed = this.state.loginPassphrase;
 
         if (seed) {
-          mainWindow.setPubkey(seed, coinuc);
+          mainWindow.setPubkey(seed, coin.toLowerCase());
         }
 
         if (!_coin.daemonParam) {
@@ -346,7 +346,7 @@ class AddCoin extends React.Component {
             { type: _coin.daemonParam },
             _coin.daemonParam === 'gen' &&
             acConfig[coinuc] &&
-            acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+            acConfig[coinuc].genproclimit ? Number(this.state.genProcLimit || 1) : 0,
           ));
         }
 

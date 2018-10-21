@@ -171,6 +171,7 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
           herdData.ac_options.push(`-pubkey=${pubKeys[coin.toLowerCase()].pubHex}`);
         }
       } else if (key === 'genproclimit') {
+        console.warn('genproclimit', genproclimit);
         if (genproclimit > 0) {
           herdData.ac_options.push(`-genproclimit=${genproclimit + 1}`);
         } else {
