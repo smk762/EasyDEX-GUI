@@ -10,7 +10,7 @@ const WalletsBalanceRender = function() {
   const _isAcPrivate = mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
   const _mode = this.props.ActiveCoin.mode;
   const _coin = this.props.ActiveCoin.coin;
-  const _balanceUnconf = this.props.ActiveCoin.balance.unconfirmed;
+  const _balanceUnconf = this.props.ActiveCoin.balance && this.props.ActiveCoin.balance.unconfirmed ? this.props.ActiveCoin.balance.unconfirmed : 0;
 
   return (
     <div
