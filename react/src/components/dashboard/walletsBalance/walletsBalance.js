@@ -53,7 +53,6 @@ class WalletsBalance extends React.Component {
   refreshBalance() {
     const _mode = this.props.ActiveCoin.mode;
     const _coin = this.props.ActiveCoin.coin;
-    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
 
     this.setState({
       loading: true,
@@ -67,6 +66,8 @@ class WalletsBalance extends React.Component {
     if (_mode === 'native') {
       Store.dispatch(getDashboardUpdate(_coin));
     } else if (_mode === 'spv') {
+      const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+
       Store.dispatch(
         apiElectrumBalance(
           _coin,

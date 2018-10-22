@@ -440,7 +440,6 @@ class WalletsData extends React.Component {
 
   refreshTxHistory() {
     const _coin = this.props.ActiveCoin.coin;
-    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
     const _mode = this.props.ActiveCoin.mode;
 
     this.setState({
@@ -476,6 +475,8 @@ class WalletsData extends React.Component {
       if (_mode === 'native') {
         Store.dispatch(getDashboardUpdate(_coin));
       } else if (_mode === 'spv') {
+        const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+                
         Store.dispatch(
           apiElectrumTransactions(
             _coin,
