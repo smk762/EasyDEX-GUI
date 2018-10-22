@@ -323,8 +323,6 @@ class AddCoin extends React.Component {
     this.setState(Object.assign({}, this.state, {
       coins: _coins,
     }));
-
-    console.warn('updateGenproclimitParam', this.state.coins);
   }
 
   handleKeydown(e) {

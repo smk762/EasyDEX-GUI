@@ -161,8 +161,6 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
     ],
   };
 
-  console.warn('actions addcoin genproclimit', genproclimit);
-
   if (acConfig[coin]) {
     for (let key in acConfig[coin]) {
       if (key === 'pubkey') {

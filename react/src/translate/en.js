@@ -173,6 +173,7 @@ const LANG_EN = {
     'decryptKey': 'Unable to decrypt data',
     'authError': 'Unable to get auth data',
     'apiElectrumPushTx': 'Unable to push transaction',
+    'zmergeToAddressPromise': 'Unable to merge funds',
   },
   NN_ELECTIONS: {
     WRONG_ADDR_FORMAT: 'Wrong address format',
