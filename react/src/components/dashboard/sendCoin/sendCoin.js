@@ -726,7 +726,6 @@ class SendCoin extends React.Component {
   handleSubmit() {
     const _coin = this.props.ActiveCoin.coin;
     const _mode = this.props.ActiveCoin.mode;
-    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
 
     if (!this.validateSendFormData()) {
       return;
@@ -752,6 +751,8 @@ class SendCoin extends React.Component {
       }
     } else if (_mode === 'spv') {
       // no op
+      const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+      
       if (_pub) {
         Store.dispatch(
           apiElectrumSend(
