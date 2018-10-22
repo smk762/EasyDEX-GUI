@@ -24,6 +24,7 @@ import {
   SendRender,
   SendFormRender,
   _SendFormRender,
+  ZmergeToAddressRender,
 } from './sendCoin.render';
 import mainWindow from '../../../util/mainWindow';
 import Slider, { Range } from 'rc-slider';
@@ -88,6 +89,14 @@ class SendCoin extends React.Component {
       kvSendTitle: '',
       kvSendContent: '',
       kvHex: '',
+      // z_mergetoaddress
+      enableZmergetoaddress: false,
+      zmtaSrc: '*',
+      zmtaDest: '',
+      zmtaAdvanced: false,
+      zmtaFee: 0.0001,
+      zmtaTlimit: 50,
+      zmtaZlimit: 10,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -113,7 +122,21 @@ class SendCoin extends React.Component {
     this.setToAddress = this.setToAddress.bind(this);
     this.clearOPIDsManual = this.clearOPIDsManual.bind(this);
     this._checkCurrentTimestamp = this._checkCurrentTimestamp.bind(this);
+    this.toggleZmergetoaddress = this.toggleZmergetoaddress.bind(this);
+    this.toggleZmtaAdvanced = this.toggleZmtaAdvanced.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  toggleZmergetoaddress() {
+    this.setState({
+      enableZmergetoaddress: !this.state.enableZmergetoaddress,
+    });
+  }
+
+  toggleZmtaAdvanced() {
+    this.setState({
+      zmtaAdvanced: !this.state.zmtaAdvanced,
+    });
   }
 
   _checkCurrentTimestamp() {
@@ -846,7 +869,7 @@ class SendCoin extends React.Component {
       }
 
       if (_msg &&
-        !isAcPrivate) {
+          !isAcPrivate) {
         Store.dispatch(
           triggerToaster(
             _msg,
@@ -1099,6 +1122,10 @@ class SendCoin extends React.Component {
     } else {
       return _items;
     }
+  }
+
+  renderZmergeToAddress() {
+    return ZmergeToAddressRender.call(this);
   }
 
   render() {

@@ -293,3 +293,42 @@ export const clearOPIDs = (coin) => {
     });
   };
 }
+
+// transparentLimit and shieldedLimit set to 0 to use as many as can fit into 1 tx
+export const zmergeToAddressPromise = (coin, src, dest, fee = 0.0001, transparentLimit = 50, shieldedLimit = 10) => {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'z_mergetoaddress',
+      rpc2cli,
+      token,
+      params: [
+        src,
+        dest,
+        fee,
+        transparentLimit,
+        shieldedLimit,
+      ],
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.zmergeToAddressPromise') + ' (code: zmergeToAddressPromise)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}

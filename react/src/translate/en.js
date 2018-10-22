@@ -1003,6 +1003,10 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    USE_ZMERGETOADDRESS: 'Merge funds (z_mergetoaddress)',
+    ANY: 'Any address(es)',
+    ANY_TADDR: 'Any transparent address(es)',
+    ANY_ZADDR: 'Any z address(es)',
     ALL_OPID_CLEARED: 'All Z transaction(s) traces are cleared!',
     CLEAR_ALL: 'Clear all',
     CLEAR_ALL_DESC: 'For maximum privacy it\'s advised to clear all traces of your outgoing z transactions including runtime data.<br>If you want this action to take place automatically see Settings/App config section.',
