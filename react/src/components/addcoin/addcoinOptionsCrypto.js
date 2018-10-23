@@ -70,6 +70,14 @@ const prepCoinsList = (filterActiveCoins) => {
         console.warn('electron remote error' + e);
       }
     }
+
+    if (config.experimentalFeatures) {
+      _items.push({
+        label: `${translate('CRYPTO.ETH')} (ETH)`,
+        icon: 'ETH',
+        value: 'ETH|ropsten',
+      });
+    }
   }
 
   _prepCoinsList = _items;

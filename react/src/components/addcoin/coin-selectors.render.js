@@ -77,7 +77,10 @@ const CoinSelectorsRender = function(item, coin, i) {
             type="button"
             className="btn btn-primary"
             onClick={ () => this.activateCoin(i) }
-            disabled={ item.mode === -2 }>
+            disabled={
+              item.mode === -2 &&
+              (item.selectedCoin ? item.selectedCoin.indexOf('ETH') === -1 : false)
+            }>
             { translate('INDEX.ACTIVATE_COIN') }
           </button>
         </div>
