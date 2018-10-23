@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import { shepherdCli } from '../../../actions/actionCreators';
+import { apiCli } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
 class CliPanel extends React.Component {
@@ -17,7 +17,7 @@ class CliPanel extends React.Component {
   renderActiveCoinsList(mode) {
     const modes = [
       'native',
-      'full'
+      'full',
     ];
 
     const allCoins = this.props.Main.coins;
@@ -26,6 +26,8 @@ class CliPanel extends React.Component {
     if (allCoins) {
       if (mode === 'all') {
         modes.map((mode) => {
+          allCoins[mode].sort();
+
           allCoins[mode].map((coin) => {
             items.push(
               <option
@@ -37,6 +39,8 @@ class CliPanel extends React.Component {
           });
         });
       } else {
+        allCoins[mode].sort();
+
         allCoins[mode].map((coin) => {
           items.push(
             <option
@@ -60,6 +64,7 @@ class CliPanel extends React.Component {
     let _items = [];
 
     if (_cliResponse) {
+      const _random = Math.random(0, 9) * 10;
       let _cliResponseParsed;
       let responseType;
 
@@ -74,25 +79,33 @@ class CliPanel extends React.Component {
 
         for (let i = 0; i < _cliResponseParsed.length; i++) {
           _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed[i], null, '\t') }</div>
+            <div key={ `cli-response-${_random}` }>
+            { JSON.stringify(_cliResponseParsed[i], null, '\t') }
+            </div>
           );
         }
       }
+
       if (Object.prototype.toString.call(_cliResponseParsed) === '[object]' ||
           typeof _cliResponseParsed === 'object') {
         responseType = 'object';
 
         _items.push(
-          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ JSON.stringify(_cliResponseParsed, null, '\t') }</div>
+          <div key={ `cli-response-${_random}` }>
+          { JSON.stringify(_cliResponseParsed, null, '\t') }
+          </div>
         );
       }
+
       if (Object.prototype.toString.call(_cliResponseParsed) === 'number' ||
           typeof _cliResponseParsed === 'boolean' ||
           _cliResponseParsed === 'wrong cli string format') {
         responseType = 'number';
 
         _items.push(
-          <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{ _cliResponseParsed.toString() }</div>
+          <div key={ `cli-response-${_random}` }>
+          { _cliResponseParsed.toString() }
+          </div>
         );
       }
 
@@ -104,7 +117,9 @@ class CliPanel extends React.Component {
 
         for (let i = 0; i < _cliResponseParsed.length; i++) {
           _items.push(
-            <div key={ `cli-response-${Math.random(0, 9) * 10}` }>{  _cliResponseParsed[i] }</div>
+            <div key={ `cli-response-${_random}` }>
+            {  _cliResponseParsed[i] }
+            </div>
           );
         }
       }
@@ -124,7 +139,7 @@ class CliPanel extends React.Component {
 
   execCliCmd() {
     Store.dispatch(
-      shepherdCli(
+      apiCli(
         'passthru',
         this.state.cliCoin,
         this.state.cliCmdString
@@ -159,7 +174,9 @@ class CliPanel extends React.Component {
             </select>
             <label
               className="floating-label"
-              htmlFor="settingsDelectDebugLogOptions">{ translate('INDEX.COIN') }</label>
+              htmlFor="settingsDelectDebugLogOptions">
+              { translate('INDEX.COIN') }
+            </label>
           </div>
           <div className="form-group form-material floating">
             <textarea
@@ -171,7 +188,9 @@ class CliPanel extends React.Component {
               onChange={ this.updateInput }></textarea>
             <label
               className="floating-label"
-              htmlFor="readDebugLogLines">{ translate('INDEX.TYPE_CLI_CMD') }</label>
+              htmlFor="readDebugLogLines">
+              { translate('INDEX.TYPE_CLI_CMD') }
+            </label>
           </div>
           <div className="col-sm-12 col-xs-12 text-align-center">
             <button
@@ -181,10 +200,12 @@ class CliPanel extends React.Component {
                 !this.state.cliCoin ||
                 !this.state.cliCmdString
               }
-              onClick={ () => this.execCliCmd() }>{ translate('INDEX.EXECUTE') }</button>
+              onClick={ () => this.execCliCmd() }>
+              { translate('INDEX.EXECUTE') }
+            </button>
           </div>
           <div className="col-sm-12 col-xs-12 text-align-left">
-            <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+            <div className="padding-top-40 padding-bottom-20 horizontal-padding-0 selectable">
               { this.renderCliResponse() }
             </div>
           </div>

@@ -3,6 +3,7 @@ import translate from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import InvoiceModal from '../invoiceModal/invoiceModal';
 import ReactTooltip from 'react-tooltip';
+import mainWindow from '../../../util/mainWindow';
 
 export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
@@ -14,10 +15,12 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
       <button
         onClick={ () => this.toggleAddressMenu(address) }
         data-tip={ translate('RECEIVE.TOOGLE_ADDRESS') }
+        data-for="receiveCoin1"
         className="btn btn-default btn-xs clipboard-edexaddr margin-left-10 receive-address-context-menu-trigger">
         <i className="fa fa-ellipsis-v receive-address-context-menu-trigger"></i>
       </button>
       <ReactTooltip
+        id="receiveCoin1"
         effect="solid"
         className="text-left" />
       { this.state.toggledAddressMenu &&
@@ -25,12 +28,12 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
         <div className="receive-address-context-menu">
           <ul>
             <li onClick={ () => this._copyCoinAddress(address) }>
-              <i className="icon wb-copy margin-right-5"></i> { translate('INDEX.COPY') + ' ' + translate('RECEIVE.PUB_KEY') }
+              <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.' + (type === 'public' ? 'PUB_KEY' : 'Z_KEY'))}` }
             </li>
             { !address.canspend &&
               this.props.mode !== 'spv' &&
               <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
-                <i className="icon fa-key margin-right-5"></i> { translate('INDEX.COPY') + ' ' + translate('RECEIVE.PRIV_KEY') }
+                <i className="icon fa-key margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PRIV_KEY')}` }
               </li>
             }
             { this.props.mode !== 'spv' &&
@@ -39,7 +42,9 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
               </li>
             }
             <li className="receive-address-context-menu-get-qr">
-              <QRModal content={ address } />
+              <QRModal
+                content={ address }
+                cbOnClose={ this.toggleAddressMenu } />
             </li>
           </ul>
         </div>
@@ -52,36 +57,42 @@ export const AddressItemRender = function(address, type) {
   return (
     <tr key={ address.address }>
       { this.renderAddressActions(address.address, type) }
-      <td data-tip={ type !== 'public' ? address.address : '' }>
+      <td
+        data-tip={ type !== 'public' ? address.address : '' }
+        data-for="receiveCoin2">
         <ReactTooltip
+          id="receiveCoin2"
           effect="solid"
           className="text-left" />
-        { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
+        <span className="selectable">
+          { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
+        </span>
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
-          <span>
-            <i
-              data-tip={ translate('RECEIVE.YOU_DONT_OWN_PRIV_KEYS') }
-              className="fa fa-ban margin-left-10"></i>
-            <ReactTooltip
-              effect="solid"
-              className="text-left" />
-          </span>
+          <i
+            data-tip={ translate('RECEIVE.YOU_DONT_OWN_PRIV_KEYS') }
+            data-for="receiveCoin3"
+            className="fa fa-ban margin-left-10"></i>
         }
+        <ReactTooltip
+          id="receiveCoin3"
+          effect="solid"
+          className="text-left" />
       </td>
       <td>
         <span>{ address.amount }</span>
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
-          <span>
-            <span data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
-            <ReactTooltip
-              effect="solid"
-              className="text-left" />
-          </span>
+          <span
+            data-for="receiveCoin4"
+            data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
         }
+        <ReactTooltip
+          id="receiveCoin4"
+          effect="solid"
+          className="text-left" />
       </td>
     </tr>
   );
@@ -98,7 +109,8 @@ export const _ReceiveCoinTableRender = function() {
                 <input
                   type="checkbox"
                   value="on"
-                  checked={ this.state.hideZeroAddresses } />
+                  checked={ this.state.hideZeroAddresses }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleVisibleAddress }></div>
@@ -115,12 +127,15 @@ export const _ReceiveCoinTableRender = function() {
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-20 padding-bottom-15 push-right">
           { this.props.mode !== 'spv' &&
-            <div data-tip={ translate('RECEIVE.DISPLAY_ALL_ADDR') }>
+            <div
+              data-for="receiveCoin5"
+              data-tip={ translate('RECEIVE.DISPLAY_ALL_ADDR') }>
               <label className="switch">
                 <input
                   type="checkbox"
                   value="on"
-                  checked={ this.state.toggleIsMine } />
+                  checked={ this.state.toggleIsMine }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleIsMine }></div>
@@ -132,11 +147,10 @@ export const _ReceiveCoinTableRender = function() {
               </div>
             </div>
           }
-          { this.props.mode !== 'spv' &&
-            <ReactTooltip
-              effect="solid"
-              className="text-left" />
-          }
+          <ReactTooltip
+            id="receiveCoin5"
+            effect="solid"
+            className="text-left" />
         </div>
       }
       <table className="table table-hover dataTable table-striped">
@@ -188,16 +202,23 @@ export const ReceiveCoinRender = function() {
                             <span className="caret"></span>
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
-                            <li>
-                              <a onClick={ () => this.getNewAddress('public') }>
-                                <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
-                              </a>
-                            </li>
-                            <li className={ this.props.coin === 'CHIPS' ? 'hide' : '' }>
-                              <a onClick={ () => this.getNewAddress('private') }>
-                                <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
-                              </a>
-                            </li>
+                           { (this.props.coin === 'KMD' ||
+                              (mainWindow.chainParams &&
+                               mainWindow.chainParams[this.props.coin] &&
+                               !mainWindow.chainParams[this.props.coin].ac_private)) &&
+                              <li>
+                                <a onClick={ () => this.getNewAddress('public') }>
+                                  <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
+                                </a>
+                              </li>
+                            }
+                            { this.props.coin !== 'CHIPS' &&
+                              <li>
+                                <a onClick={ () => this.getNewAddress('private') }>
+                                  <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }
+                                </a>
+                              </li>
+                            }
                           </ul>
                         </div>
                       }

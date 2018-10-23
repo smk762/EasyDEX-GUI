@@ -33,23 +33,23 @@ class Support extends React.Component {
               <div className="support-box-wrapper">
                 <div
                   className="support-box"
-                  onClick={ () => this.openExternalWindow('https://sprnt.slack.com') }>
+                  onClick={ () => this.openExternalWindow('https://discordapp.com/channels/412898016371015680/453204571393622027') }>
                   <img
-                    src="assets/images/support/slack-icon.png"
-                    alt="Slack" />
-                  <div className="support-box-title">Slack</div>
-                  <div className="support-box-link">sprnt.slack.com</div>
+                    src="assets/images/support/discord-icon.png"
+                    alt="Discord" />
+                  <div className="support-box-title">Discord</div>
+                  <div className="support-box-link">discordapp.com</div>
                 </div>
               </div>
               <div className="support-box-wrapper">
                 <div
                   className="support-box"
-                  onClick={ () => this.openExternalWindow('http://slackinvite.supernet.org/') }>
+                  onClick={ () => this.openExternalWindow('https://komodoplatform.com/discord') }>
                   <img
-                    src="assets/images/support/slack-invite-icon.png"
-                    alt={ translate('SETTINGS.GET_SLACK_INVITE') } />
-                  <div className="support-box-title">{ translate('SETTINGS.GET_SLACK_INVITE') }</div>
-                  <div className="support-box-link">slackinvite.supernet.org</div>
+                    src="assets/images/support/discord-invite-icon.png"
+                    alt={ translate('SETTINGS.GET_DISCORD_INVITE') } />
+                  <div className="support-box-title">{ translate('SETTINGS.GET_DISCORD_INVITE') }</div>
+                  <div className="support-box-link">komodoplatform.com/discord</div>
                 </div>
               </div>
               <div className="support-box-wrapper">

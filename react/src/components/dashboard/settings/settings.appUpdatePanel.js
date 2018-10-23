@@ -6,8 +6,6 @@ import {
   checkForUpdateUIPromise,
   updateUIPromise,
 } from '../../../actions/actionCreators';
-
-import { SocketProvider } from 'socket.io-react';
 import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
@@ -94,7 +92,7 @@ class AppUpdatePanel extends React.Component {
 
   _updateUIPromise() {
     let _updateLog = [];
-    
+
     updateProgressBar.patch = 0;
     _updateLog.push(`${translate('INDEX.DOWNLOADING_UI_UPDATE')}...`);
     this.setState(Object.assign({}, this.state, {
@@ -139,12 +137,14 @@ class AppUpdatePanel extends React.Component {
           <hr />
           <h5>{ translate('SETTINGS.PROGRESS') }</h5>
           <div className="padding-bottom-15">{ items }</div>
-          <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
-            <div
-              className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-              style={{ width: `${updateProgressBar.patch}%` }}>
+          { updateProgressBar.patch > -1 &&
+            <div className="progress progress-sm">
+              <div
+                className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                style={{ width: `${updateProgressBar.patch}%` }}>
+              </div>
             </div>
-          </div>
+          }
         </div>
       );
     } else {

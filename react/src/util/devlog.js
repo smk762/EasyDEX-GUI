@@ -1,5 +1,5 @@
 const devlog = (msg) => {
-  const mainWindow = window.require('electron').remote.getCurrentWindow();
+  const mainWindow = window.require('electron').remote.getGlobal('app');
 
   if (mainWindow.appConfig.dev) {
     console.warn(msg);

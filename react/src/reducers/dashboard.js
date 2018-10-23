@@ -11,7 +11,7 @@ import {
   PRICES,
 } from '../actions/storeType';
 
-export function Dashboard(state = {
+export const Dashboard = (state = {
   activeSection: 'wallets',
   activeHandle: null,
   displayCoindDownModal: false,
@@ -22,7 +22,7 @@ export function Dashboard(state = {
   eletrumServerChanged: false,
   displayZcparamsModal: false,
   prices: null,
-}, action) {
+}, action) => {
   switch (action.type) {
     case DASHBOARD_ELECTRUM_COINS:
       return {

@@ -2,10 +2,12 @@ import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import translate from '../../../translate/translate';
 import ReactTable from 'react-table';
-import TablePaginationRenderer from './pagination';
+import TablePaginationRenderer from '../pagination/pagination';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
+import mainWindow from '../../../util/mainWindow';
+import { tableSorting } from '../pagination/utils';
 
 const kvCoins = {
   'KV': true,
@@ -18,13 +20,23 @@ export const TxConfsRender = function(confs) {
     return (
       <span>{ confs }</span>
     );
+  } else if (
+    this.props.ActiveCoin.mode === 'native' &&
+    mainWindow.chainParams &&
+    mainWindow.chainParams[this.props.ActiveCoin.coin] &&
+    mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) {
+    return (
+      <span>{ translate('DASHBOARD.NA') }</span>
+    );
   } else {
     return (
       <span>
         <i
           className="icon fa-warning color-warning margin-right-5"
-          data-tip={ translate('DASHBOARD.FAILED_TX_INFO') }></i>
+          data-tip={ translate('DASHBOARD.FAILED_TX_INFO') }
+          data-for="txHistory1"></i>
         <ReactTooltip
+          id="txHistory1"
           effect="solid"
           className="text-left" />
       </span>
@@ -54,8 +66,8 @@ export const TransactionDetailRender = function(transactionIndex) {
   );
 };
 
-export const AddressRender = function(tx) {
-  if (!tx.address) {
+export const AddressRender = function(address) {
+  if (!address) {
     return (
       <span>
         <span className="label label-dark">
@@ -65,7 +77,9 @@ export const AddressRender = function(tx) {
     );
   }
 
-  return (<span className="blur">{ tx.address }</span>);
+  return (
+    <span className="blur">{ address }</span>
+  );
 };
 
 export const AddressItemRender = function(address, type, amount, coin) {
@@ -75,7 +89,9 @@ export const AddressItemRender = function(address, type, amount, coin) {
       className={ address === this.state.currentAddress ? 'selected' : '' }>
       <a onClick={ () => this.updateAddressSelection(address) }>
         <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
-        <span className="text">[ { amount } { coin } ]  { address }</span>
+        <span className="text">
+          [ { amount } { coin } ]  <span className="selectable">{ address }</span>
+        </span>
         <span className="glyphicon glyphicon-ok check-mark"></span>
       </a>
     </li>
@@ -83,8 +99,9 @@ export const AddressItemRender = function(address, type, amount, coin) {
 };
 
 export const AddressListRender = function() {
-  const isMultiPublicAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.public && this.props.ActiveCoin.addresses.public.length > 1;
-  const isMultiPrivateAddress = this.props.ActiveCoin.addresses && this.props.ActiveCoin.addresses.private && this.props.ActiveCoin.addresses.private.length > 1;
+  const _addresses = this.props.ActiveCoin.addresses;
+  const isMultiPublicAddress = _addresses && _addresses.public && _addresses.public.length > 1;
+  const isMultiPrivateAddress = _addresses && _addresses.private && _addresses.private.length > 1;
 
   if (isMultiPublicAddress ||
       isMultiPrivateAddress) {
@@ -93,7 +110,8 @@ export const AddressListRender = function() {
         <button
           type="button"
           className="btn dropdown-toggle btn-info"
-          data-tip={ `${translate('KMD_NATIVE.SELECT_ADDRESS')}` }
+          data-tip={ translate('KMD_NATIVE.SELECT_ADDRESS') }
+          data-for="txHistory2"
           onClick={ this.openDropMenu }>
           <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() } </span>&nbsp;
           <span className="bs-caret">
@@ -101,6 +119,7 @@ export const AddressListRender = function() {
           </span>
         </button>
         <ReactTooltip
+          id="txHistory2"
           effect="solid"
           className="text-left" />
         <div className="dropdown-menu open">
@@ -138,7 +157,7 @@ export const TxTypeRender = function(category) {
   ) {
     return (
       <span className="label label-success">
-        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') } &nbsp; &nbsp;</span>
+        <i className="icon fa-arrow-circle-right"></i> <span>{ translate('DASHBOARD.IN') }</span>
       </span>
     );
   } else if (category === 'generate') {
@@ -162,90 +181,102 @@ export const TxTypeRender = function(category) {
   } else if (category === 'self') {
     return (
       <span className="label label-info self-send">
-        <span>self</span>
+        <span>{ translate('INDEX.SELF_SM') }</span>
       </span>
     );
   }
 };
 
 export const TxAmountRender = function(tx) {
-  let _amountNegative;
-
-  if ((tx.category === 'send' ||
-      tx.category === 'sent') ||
-      (tx.type === 'send' ||
-      tx.type === 'sent')) {
-    _amountNegative = -1;
-  } else {
-    _amountNegative = 1;
-  }
-
   if (Config.roundValues) {
     return (
       <span>
-        <span data-tip={ tx.amount * _amountNegative }>
-          { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (formatValue(tx.amount) * _amountNegative || translate('DASHBOARD.UNKNOWN')) : '' }
+        <span
+          data-for="txHistory3"
+          data-tip={ tx.amount }>
+          { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (formatValue(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
           { tx.interest &&
             <span
               className="tx-interest"
-              data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>+{ formatValue(Math.abs(tx.interest)) }</span>
+              data-for="txHistory4"
+              data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${formatValue(Math.abs(tx.interest))}` }>
+              +{ formatValue(Math.abs(tx.interest)) }
+            </span>
           }
-          { tx.interest &&
-            <ReactTooltip
-              effect="solid"
-              className="text-left" />
-          }
+          <ReactTooltip
+            id="txHistory4"
+            effect="solid"
+            className="text-left" />
         </span>
         <ReactTooltip
+          id="txHistory4"
           effect="solid"
           className="text-left" />
         { tx.vinLen > tx.vinMaxLen &&
-          <span>
-            <i
-              className="icon fa-question tx-history-vin-len-err"
-              data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
-              data-html={ true }></i>
-            <ReactTooltip
-              effect="solid"
-              className="text-left" />
-          </span>
+          <i
+            className="icon fa-question tx-history-vin-len-err"
+            data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
+            data-html={ true }
+            data-for="txHistory5"></i>
         }
+        <ReactTooltip
+          id="txHistory5"
+          effect="solid"
+          className="text-left" />
       </span>
     );
   }
 
   return (
     <span>
-      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (tx.amount * _amountNegative || translate('DASHBOARD.UNKNOWN')) : '' }
+      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (Number(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
       { tx.interest &&
         <span
           className="tx-interest"
-          data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(tx.interest)}` }>+{ Math.abs(tx.interest) }</span>
-      }
-      { tx.interest &&
-        <ReactTooltip
-          effect="solid"
-          className="text-left" />
-      }
-      { tx.vinLen > tx.vinMaxLen &&
-        <span>
-          <i
-            className="icon fa-question tx-history-vin-len-err"
-            data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
-            data-html={ true }></i>
-          <ReactTooltip
-            effect="solid"
-            className="text-left" />
+          data-for="txHistory6"
+          data-tip={ `${translate('DASHBOARD.SPV_CLAIMED_INTEREST')} ${Math.abs(Number(tx.interest))}` }>
+          +{ Math.abs(Number(tx.interest)) }
         </span>
       }
+      <ReactTooltip
+        id="txHistory6"
+        effect="solid"
+        className="text-left" />
+      { tx.vinLen > tx.vinMaxLen &&
+        <i
+          className="icon fa-question tx-history-vin-len-err"
+          data-for="txHistory7"
+          data-tip={ translate('INDEX.SPV_TX_VIN_COUNT_WARN') }
+          data-html={ true }></i>
+      }
+      <ReactTooltip
+        id="txHistory7"
+        effect="solid"
+        className="text-left" />
     </span>
   );
 };
 
 export const TxHistoryListRender = function() {
+  const _activeCoin = this.props.ActiveCoin.coins[mainWindow.activeCoin];
+  let _data;
+
+  if (_activeCoin &&
+      _activeCoin.txhistory &&
+      !this.state.searchTerm) {
+    _data = _activeCoin.txhistory;
+  }
+
+  _data = _data || this.state.filteredItemsList;
+
+  if (typeof _data === 'string' &&
+      typeof this.state.itemsList === 'object') {
+    _data = this.state.itemsList;
+  }
+
   return (
     <ReactTable
-      data={ this.state.filteredItemsList }
+      data={ _data }
       columns={ this.state.itemsListColumns }
       minRows="0"
       sortable={ true }
@@ -265,11 +296,13 @@ export const TxHistoryListRender = function() {
 };
 
 export const WalletsDataRender = function() {
+  const _balance = this.props.ActiveCoin.balance;
+  const _txhistory = this.props.ActiveCoin.txhistory;
+
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
-        { (this.displayClaimInterestUI() === 777 ||
-          this.displayClaimInterestUI() === -777) &&
+        { (this.displayClaimInterestUI() === 777 || this.displayClaimInterestUI() === -777) &&
           <div className="col-xs-12 margin-top-20 backround-gray">
             <div className="panel no-margin">
               <div>
@@ -277,13 +310,26 @@ export const WalletsDataRender = function() {
                   <div className="panel no-margin padding-top-10 padding-bottom-10 center">
                     { this.displayClaimInterestUI() === 777 &&
                       <div>
-                        { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P1') } <strong>{ this.props.ActiveCoin.balance.interest }</strong> KMD { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P2') }.
+                        { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P1') } <strong>{ _balance.interest }</strong> KMD { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P2') }.
                         <button
                           type="button"
                           className="btn btn-success waves-effect waves-light dashboard-claim-interest-btn"
                           onClick={ this.openClaimInterestModal }>
                           <i className="icon fa-dollar"></i> { translate('DASHBOARD.CLAIM_INTEREST_HELPER_BAR_P3') }
                         </button>
+                        { this.props.ActiveCoin &&
+                          _balance &&
+                          _balance.utxoIssues &&
+                          <i
+                            data-tip={ translate('DASHBOARD.KMD_UTXO_ISSUES') }
+                            data-html={ true }
+                            data-for="txHistory8"
+                            className="fa-exclamation-circle red dashboard-utxo-issues-icon"></i>
+                        }
+                        <ReactTooltip
+                          id="txHistory8"
+                          effect="solid"
+                          className="text-left" />
                       </div>
                     }
                     { this.displayClaimInterestUI() === -777 &&
@@ -327,17 +373,17 @@ export const WalletsDataRender = function() {
                         type="button"
                         className="btn btn-default btn-switch-kv"
                         onClick={ this.toggleKvView }>
-                        { !this.state.kvView ? translate('KV.KV_VIEW') : translate('KV.TX_VIEW') }
+                        { translate('KV.' + (!this.state.kvView ? 'KV_VIEW' : 'TX_VIEW')) }
                       </button>
                     }
                   </header>
                   <div className="panel-body">
                     <div className="row padding-bottom-30 padding-top-10">
-                      { this.props.ActiveCoin.txhistory !== 'loading' &&
-                        this.props.ActiveCoin.txhistory !== 'no data' &&
-                        this.props.ActiveCoin.txhistory !== 'connection error' &&
-                        this.props.ActiveCoin.txhistory !== 'connection error or incomplete data' &&
-                        this.props.ActiveCoin.txhistory !== 'cant get current height' &&
+                      { _txhistory !== 'loading' &&
+                        _txhistory !== 'no data' &&
+                        _txhistory !== 'connection error' &&
+                        _txhistory !== 'connection error or incomplete data' &&
+                        _txhistory !== 'cant get current height' &&
                         !this.state.kvView &&
                         <div className="col-sm-4 search-box">
                           <input
@@ -347,7 +393,7 @@ export const WalletsDataRender = function() {
                         </div>
                       }
                     </div>
-                    <div className="row">
+                    <div className="row txhistory-table">
                       { this.renderTxHistoryList() }
                     </div>
                   </div>

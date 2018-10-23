@@ -16,7 +16,7 @@ import {
   DEX_ACTIVE_SECTION,
 } from '../actions/storeType';
 
-export function Dex(state = {
+export const Dex = (state = {
   display: false,
   isAuth: false,
   asks: [],
@@ -35,7 +35,7 @@ export function Dex(state = {
   coinsHelper: {},
   electrumServersList: {},
   section: 'coins',
-}, action) {
+}, action) => {
   switch (action.type) {
     case DEX_CACHE_PRELOAD:
       return {

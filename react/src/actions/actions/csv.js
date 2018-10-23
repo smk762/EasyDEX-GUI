@@ -1,29 +1,31 @@
 import translate from '../../translate/translate';
-import Config from '../../config';
-import {
-  triggerToaster,
-} from '../actionCreators';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
+import { triggerToaster } from '../actionCreators';
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 
-export const shepherdElectrumTransactionsCSV = (coin, address) => {
+export const apiElectrumTransactionsCSV = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       address,
       coin,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listtransactions/csv${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions/csv${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumTransactionsCSV',
-          'Error',
+          translate('API.apiElectrumTransactionsCSV') + ' (code: apiElectrumTransactionsCSV)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -35,23 +37,23 @@ export const shepherdElectrumTransactionsCSV = (coin, address) => {
   });
 }
 
-export const shepherdNativeTransactionsCSV = (coin) => {
+export const apiNativeTransactionsCSV = (coin) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       coin,
-      rpc2cli: Config.rpc2cli,
+      rpc2cli,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/electrum/listtransactions/csv${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions/csv${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'shepherdElectrumTransactionsCSV',
-          'Error',
+          translate('API.apiElectrumTransactionsCSV') + ' (code: apiElectrumTransactionsCSV)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

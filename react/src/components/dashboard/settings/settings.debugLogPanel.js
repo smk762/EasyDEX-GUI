@@ -8,6 +8,8 @@ import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 
+// TODO: figure out a way to show app debug, url?
+
 class DebugLogPanel extends React.Component {
   constructor() {
     super();
@@ -27,7 +29,7 @@ class DebugLogPanel extends React.Component {
     this.checkInputVals = this.checkInputVals.bind(this);
   }
 
-  componentWillMount() {
+  /*componentWillMount() {
     if (this.props.Main.coins &&
         this.props.Main.coins.native &&
         Object.keys(this.props.Main.coins.native).length === 0) {
@@ -36,7 +38,7 @@ class DebugLogPanel extends React.Component {
       });
       this.getAppRuntimeLog();
     }
-  }
+  }*/
 
   readDebugLog() {
     let _target = this.state.debugTarget;
@@ -66,7 +68,9 @@ class DebugLogPanel extends React.Component {
       _items.push(
         <p key={ `app-runtime-log-entry-${i}` }>
           <span>{ secondsToString(_appRuntimeLog[i].time, true) }</span>
-          <span className="padding-left-30">{ typeof _appRuntimeLog[i].msg === 'string' ? _appRuntimeLog[i].msg : JSON.stringify(_appRuntimeLog[i].msg, null, '') }</span>
+          <span className="padding-left-30">
+          { typeof _appRuntimeLog[i].msg === 'string' ? _appRuntimeLog[i].msg : JSON.stringify(_appRuntimeLog[i].msg, null, '') }
+          </span>
         </p>
       );
     }
@@ -94,13 +98,15 @@ class DebugLogPanel extends React.Component {
   }
 
   renderDebugLogData() {
-    if (this.props.Settings.debugLog &&
+    const _debugLog = this.props.Settings.debugLog;
+
+    if (_debugLog &&
         !this.state.pristine) {
-      const _debugLogDataRows = this.props.Settings.debugLog.split('\n');
+      const _debugLogDataRows = _debugLog.split('\n');
 
       if (_debugLogDataRows &&
           _debugLogDataRows.length &&
-          this.props.Settings.debugLog.indexOf('ENOENT') === -1) {
+          _debugLog.indexOf('ENOENT') === -1) {
         return _debugLogDataRows.map((_row) =>
           <div
             key={ `settings-debuglog-${Math.random(0, 9) * 10}` }
@@ -126,10 +132,14 @@ class DebugLogPanel extends React.Component {
     let _items = [];
     let _nativeCoins = coindList();
 
+    _nativeCoins.sort();
+
     _items.push(
       <option
         key={ `coind-walletdat-coins-none` }
-        value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
+        value="none">
+        { translate('SETTINGS.PICK_A_COIN') }
+      </option>
     );
 
     for (let i = 0; i < _nativeCoins.length; i++) {
@@ -140,7 +150,9 @@ class DebugLogPanel extends React.Component {
       _items.push(
         <option
           key={ `coind-debuglog-coins-${ _nativeCoins[i] }` }
-          value={ `${_nativeCoins[i]}` }>{ `${_nativeCoins[i]}` }</option>
+          value={ `${_nativeCoins[i]}` }>
+          { `${_nativeCoins[i]}` }
+        </option>
       );
     }
 
@@ -148,44 +160,51 @@ class DebugLogPanel extends React.Component {
   }
 
   checkInputVals() {
-    if (!Number(this.state.debugLinesCount) ||
-        Number(this.state.debugLinesCount) < 1 ||
-        !this.state.debugLinesCount ||
+    const _debugLinesCount = this.state.debugLinesCount;
+
+    if (!Number(_debugLinesCount) ||
+        Number(_debugLinesCount) < 1 ||
+        !_debugLinesCount ||
         this.state.debugTarget === 'none') {
       return true;
     }
   }
 
   render() {
+    const _coins = this.props.Main.coins;
+
     return (
       <div className="row">
         <div className="col-sm-12">
-          { this.props.Main.coins &&
-            this.props.Main.coins.native &&
-            Object.keys(this.props.Main.coins.native).length > 0 &&
+          { _coins &&
+            _coins.native &&
+            Object.keys(_coins.native).length > 0 &&
             <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
           }
           <div className="margin-top-30">
-            <span className="pointer toggle">
+            <span className="pointer toggle hide">
               <label className="switch">
                 <input
                   type="checkbox"
                   name="settings-app-debug-toggle"
                   value={ this.state.toggleAppRuntimeLog }
-                  checked={ this.state.toggleAppRuntimeLog } />
+                  checked={ this.state.toggleAppRuntimeLog }
+                  readOnly />
                 <div
                   className="slider"
                   onClick={ this.toggleAppRuntimeLog }></div>
               </label>
               <span
                 className="title"
-                onClick={ this.toggleAppRuntimeLog }>{ translate('SETTINGS.SHOW_APP_RUNTIME_LOG') }</span>
+                onClick={ this.toggleAppRuntimeLog }>
+                { translate('SETTINGS.SHOW_APP_RUNTIME_LOG') }
+              </span>
             </span>
           </div>
           { !this.state.toggleAppRuntimeLog &&
-            this.props.Main.coins &&
-            this.props.Main.coins.native &&
-            Object.keys(this.props.Main.coins.native).length > 0 &&
+            _coins &&
+            _coins.native &&
+            Object.keys(_coins.native).length > 0 &&
             <div className="read-debug-log-import-form">
               <div className="form-group form-material floating">
                 <input
@@ -197,7 +216,9 @@ class DebugLogPanel extends React.Component {
                   onChange={ this.updateInput } />
                 <label
                   className="floating-label"
-                  htmlFor="readDebugLogLines">{ translate('INDEX.DEBUG_LOG_LINES') }</label>
+                  htmlFor="readDebugLogLines">
+                  { translate('INDEX.DEBUG_LOG_LINES') }
+                </label>
               </div>
               <div className="form-group form-material floating">
                 <select
@@ -209,7 +230,9 @@ class DebugLogPanel extends React.Component {
                 </select>
                 <label
                   className="floating-label"
-                  htmlFor="settingsDelectDebugLogOptions">{ translate('INDEX.TARGET') }</label>
+                  htmlFor="settingsDelectDebugLogOptions">
+                  { translate('INDEX.TARGET') }
+                </label>
               </div>
               <div className="col-sm-12 col-xs-12 text-align-center">
                 <button
@@ -222,7 +245,7 @@ class DebugLogPanel extends React.Component {
               </div>
               <div className="row">
                 <div className="col-sm-12 col-xs-12 text-align-left">
-                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0">
+                  <div className="padding-top-40 padding-bottom-20 horizontal-padding-0 selectable">
                   { this.renderDebugLogData() }
                   </div>
                 </div>
@@ -230,7 +253,9 @@ class DebugLogPanel extends React.Component {
             </div>
           }
           { this.state.toggleAppRuntimeLog &&
-            <div className="margin-top-20">{ this.renderAppRuntimeLog() }</div>
+            <div className="margin-top-20 selectable">
+            { this.renderAppRuntimeLog() }
+            </div>
           }
         </div>
       </div>

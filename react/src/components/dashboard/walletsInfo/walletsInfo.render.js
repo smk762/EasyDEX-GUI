@@ -1,10 +1,16 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import { secondsToString } from 'agama-wallet-lib/src/time';
-import { formatBytes } from 'agama-wallet-lib/src/utils';
+import {
+  formatBytes,
+  fromSats,
+} from 'agama-wallet-lib/src/utils';
 
 const WalletsInfoRender = function() {
-  if (this.props.ActiveCoin.mode === 'native') {
+  const _coin = this.props.ActiveCoin.coin;
+  const _mode = this.props.ActiveCoin.mode;
+
+  if (_mode === 'native') {
     const _progress = this.props.ActiveCoin.progress;
     const _netTotals = this.props.ActiveCoin.net.totals;
     const _netPeers = this.props.ActiveCoin.net.peers;
@@ -23,13 +29,13 @@ const WalletsInfoRender = function() {
               </tr>
               <tr>
                 <td>{ translate('WALLETS_INFO.ADDRESS') }</td>
-                <td>
+                <td className="selectable">
                   { _netPeers[i].addr }
                 </td>
               </tr>
               <tr>
                 <td>{ translate('WALLETS_INFO.ADDRESS_LOCAL') }</td>
-                <td>
+                <td className="selectable">
                   { _netPeers[i].addrlocal }
                 </td>
               </tr>
@@ -177,14 +183,14 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { this.props.ActiveCoin.coin === 'KMD' &&
+          { _coin === 'KMD' &&
             this.displayClaimInterestUI() &&
             <div>
               <button
                 type="button"
                 className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
                 onClick={ () => this.openClaimInterestModal() }>
-                  <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
+                <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
               </button>
             </div>
           }
@@ -194,6 +200,9 @@ const WalletsInfoRender = function() {
             </div>
             <div className="table-responsive">
               { _netTotals &&
+                _netTotals.timemillis &&
+                _netTotals.totalbytesrecv &&
+                _netTotals.totalbytessent &&
                 <table className="table table-striped">
                   <tbody>
                     <tr>
@@ -227,7 +236,7 @@ const WalletsInfoRender = function() {
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">
-                { this.props.ActiveCoin.coin === 'KMD' ? 'Komodo' : `${this.props.ActiveCoin.coin}` }&nbsp;
+                { _coin === 'KMD' ? 'Komodo' : _coin }&nbsp;
                 { translate('INDEX.INFO') }
               </h3>
             </div>
@@ -256,7 +265,7 @@ const WalletsInfoRender = function() {
                     <td>
                       { translate('INDEX.NOTARIZED') } { translate('INDEX.HASH') }
                     </td>
-                    <td>
+                    <td className="selectable">
                       { _progress.notarizedhash ?
                         _progress.notarizedhash.substring(
                           0,
@@ -303,7 +312,7 @@ const WalletsInfoRender = function() {
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.PAY_TX_FEE') }</td>
-                    <td>
+                    <td className="selectable">
                       { _progress.paytxfee }
                     </td>
                   </tr>
@@ -315,7 +324,7 @@ const WalletsInfoRender = function() {
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.ERRORS') }</td>
-                    <td>
+                    <td className="selectable">
                       { _progress.errors }
                     </td>
                   </tr>
@@ -343,9 +352,9 @@ const WalletsInfoRender = function() {
         </div>
       </div>
     );
-  } else if (this.props.ActiveCoin.mode === 'spv') {
+  } else if (_mode === 'spv') {
     const _balance = this.props.ActiveCoin.balance;
-    const _server = this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin];
+    const _server = this.props.Dashboard.electrumCoins[_coin];
 
     return (
       <div>
@@ -359,26 +368,26 @@ const WalletsInfoRender = function() {
                 <tbody>
                   <tr>
                     <td>{ translate('INDEX.SPV_SERVER_IP') }</td>
-                    <td>
+                    <td className="selectable">
                       { _server.server.ip }
                     </td>
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.SPV_SERVER_PORT') }</td>
-                    <td>
+                    <td className="selectable">
                       { _server.server.port }
                     </td>
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.SPV_SERVER_CON_TYPE') }</td>
-                    <td>
-                      TCP
+                    <td className="selectable">
+                      { _server.server.proto }
                     </td>
                   </tr>
                   <tr>
                     <td>{ translate('INDEX.PAY_TX_FEE') }</td>
                     <td>
-                      { _server.txfee }
+                      { fromSats(_server.txfee) } ({ _server.txfee } sats)
                     </td>
                   </tr>
                   <tr>
@@ -397,8 +406,8 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { this.props.ActiveCoin.coin === 'KMD' &&
-            this.props.ActiveCoin.mode !== 'spv' &&
+          { _coin === 'KMD' &&
+            _mode !== 'spv' &&
             <div>
               <button
                 type="button"

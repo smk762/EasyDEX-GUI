@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   toggleAddcoinModal,
-  shepherdElectrumAuth,
-  shepherdElectrumCoins,
+  apiElectrumAuth,
+  apiElectrumCoins,
   startInterval,
   getDexCoins,
   triggerToaster,
@@ -16,8 +16,10 @@ import {
   encryptPassphrase,
   loadPinList,
   loginWithPin,
-  shepherdElectrumLogout,
+  apiElectrumLogout,
   dashboardRemoveCoin,
+  dashboardChangeSectionState,
+  toggleDashboardActiveSection,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -111,14 +113,18 @@ class Login extends React.Component {
       displayLoginSettingsDropdown: false,
     });
 
-    shepherdElectrumLogout()
+    apiElectrumLogout()
     .then((res) => {
       const _spvCoins = this.props.Main.coins.spv;
 
       mainWindow.pinAccess = false;
 
       if (!this.props.Main.coins.native.length) {
-        Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+        Store.dispatch(dashboardChangeActiveCoin(
+          null,
+          null,
+          true
+        ));
       }
 
       setTimeout(() => {
@@ -126,12 +132,27 @@ class Login extends React.Component {
           Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
         }
         if (!this.props.Main.coins.native.length) {
-          Store.dispatch(dashboardChangeActiveCoin(null, null, true));
+          Store.dispatch(dashboardChangeActiveCoin(
+            null,
+            null,
+            true
+          ));
+        }
+
+        Store.dispatch(getDexCoins());
+        Store.dispatch(activeHandle());
+
+        if (this.props.Main.coins.native.length) {
+          Store.dispatch(dashboardChangeActiveCoin(
+            this.props.Main.coins.native[0],
+            'native'
+          ));    
         }
       }, 500);
 
       Store.dispatch(getDexCoins());
       Store.dispatch(activeHandle());
+      Store.dispatch(dashboardChangeActiveCoin());
     });
   }
 
@@ -141,9 +162,6 @@ class Login extends React.Component {
     });
     Store.dispatch(toggleNotaryElectionsModal(true));
   }
-
-  // the setInterval handler for 'activeCoins'
-  _iguanaActiveCoins = null;
 
   toggleLoginSettingsDropdownSection(sectionName) {
     Store.dispatch(toggleLoginSettingsModal(true));
@@ -381,6 +399,7 @@ class Login extends React.Component {
     this.resizeLoginTextarea();
 
     this.setState({
+      seedExtraSpaces: false,
       trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
       loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
@@ -436,8 +455,10 @@ class Login extends React.Component {
 
       this.setState(this.defaultState);
 
-      Store.dispatch(shepherdElectrumAuth(this.state.loginPassphrase));
-      Store.dispatch(shepherdElectrumCoins());
+      Store.dispatch(dashboardChangeSectionState('wallets'));
+      Store.dispatch(toggleDashboardActiveSection('default'));
+      Store.dispatch(apiElectrumAuth(this.state.loginPassphrase));
+      Store.dispatch(apiElectrumCoins());
     } else {
       mainWindow.pinAccess = this.state.selectedPin;
 
@@ -452,8 +473,10 @@ class Login extends React.Component {
 
           this.setState(this.defaultState);
 
-          Store.dispatch(shepherdElectrumAuth(res.result));
-          Store.dispatch(shepherdElectrumCoins());
+          Store.dispatch(dashboardChangeSectionState('wallets'));
+          Store.dispatch(toggleDashboardActiveSection('default'));
+          Store.dispatch(apiElectrumAuth(res.result));
+          Store.dispatch(apiElectrumCoins());
         }
       });
     }
@@ -518,10 +541,10 @@ class Login extends React.Component {
     mainWindow.createSeed.firstLoginPH = md5(this.state.randomSeed);
 
     Store.dispatch(
-      shepherdElectrumAuth(this.state.randomSeedConfirm)
+      apiElectrumAuth(this.state.randomSeedConfirm)
     );
     Store.dispatch(
-      shepherdElectrumCoins()
+      apiElectrumCoins()
     );
 
     this.setState({
@@ -534,7 +557,7 @@ class Login extends React.Component {
   handleRegisterWallet() {
     const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
     const isSeedBlank = this.isBlank(this.state.randomSeed);
-    const stringEntropy = mainWindow.checkStringEntropy(this.state.customWalletSeed);
+    const stringEntropy = mainWindow.checkStringEntropy(this.state.randomSeed);
     const _customSeed = this.state.customWalletSeed;
 
     if (!stringEntropy &&
@@ -748,24 +771,42 @@ class Login extends React.Component {
     setTimeout(() => {
       Store.dispatch(activeHandle());
       if (type === 'native') {
-        Store.dispatch(shepherdElectrumCoins());
+        Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 500);
     setTimeout(() => {
       Store.dispatch(activeHandle());
       if (type === 'native') {
-        Store.dispatch(shepherdElectrumCoins());
+        Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 1000);
     setTimeout(() => {
       Store.dispatch(activeHandle());
       if (type === 'native') {
-        Store.dispatch(shepherdElectrumCoins());
+        Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, type === 'native' ? 5000 : 2000);
+  }
+
+  renderPinsList() {
+    const _pins = this.props.Login.pinList;
+    let _items = [];
+
+    for (let i = 0; i < _pins.length; i++) {
+      _items.push(
+        <option
+          className="login-option"
+          value={ _pins[i] }
+          key={ _pins[i] }>
+          { _pins[i] }
+        </option>
+      );
+    }
+
+    return _items;
   }
 
   renderSwallModal() {
@@ -789,9 +830,9 @@ class Login extends React.Component {
               alt={ _comps[i].toUpperCase() }
               width="30px"
               height="30px" />
-              { i !== _comps.length - 1 &&
-                <span className="margin-left-10 margin-right-10">+</span>
-              }
+            { i !== _comps.length - 1 &&
+              <span className="margin-left-10 margin-right-10">+</span>
+            }
           </span>
         );
       }
@@ -805,7 +846,7 @@ class Login extends React.Component {
             alt={ option.value.toUpperCase() }
             width="30px"
             height="30px" />
-            <span className="margin-left-10">{ option.value.toUpperCase() }</span>
+          <span className="margin-left-10">{ option.value.toUpperCase() }</span>
         </div>
       );
     }

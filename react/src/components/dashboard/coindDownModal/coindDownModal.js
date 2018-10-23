@@ -11,7 +11,7 @@ import translate from '../../../translate/translate';
 
 import CoindDownModalRender from './coindDownModal.render';
 
-const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.failedRPCAttemptsThreshold || 10;
+const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.native.failedRPCAttemptsThreshold || 10;
 
 class CoindDownModal extends React.Component {
   constructor() {
@@ -21,6 +21,8 @@ class CoindDownModal extends React.Component {
       kmdMainPassiveMode: false,
       coindStdOut: translate('INDEX.LOADING') + '...',
       toggleDebugLog: true,
+      className: 'hide',
+      open: false,
     };
     this.dismiss = this.dismiss.bind(this);
     this.getCoindGetStdout = this.getCoindGetStdout.bind(this);
@@ -49,16 +51,28 @@ class CoindDownModal extends React.Component {
   }
 
   getCoindGetStdout() {
-    coindGetStdout(this.props.ActiveCoin.coin)
+    const _coin = this.props.ActiveCoin.coin;
+
+    coindGetStdout(_coin)
     .then((res) => {
       this.setState({
-        coindStdOut: res.msg === 'success' ? res.result : `${translate('INDEX.ERROR_READING')} ${this.props.ActiveCoin.coin} stdout`,
+        coindStdOut: res.msg === 'success' ? res.result : `${translate('INDEX.ERROR_READING')} ${_coin} stdout`,
       });
     });
   }
 
   dismiss() {
-    Store.dispatch(toggleCoindDownModal(false));
+    this.setState(Object.assign({}, this.state, {
+      className: 'show out',
+    }));
+
+    setTimeout(() => {
+      this.setState(Object.assign({}, this.state, {
+        open: false,
+        className: 'hide',
+      }));
+      Store.dispatch(toggleCoindDownModal(false));
+    }, 300);
   }
 
   componentWillMount() {
@@ -68,25 +82,35 @@ class CoindDownModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.displayCoindDownModal !== nextProps.displayCoindDownModal) {
+    const _displayProps = nextProps.displayCoindDownModal;
+
+    if (this.props.displayCoindDownModal !== this.state.open) {
       this.setState(Object.assign({}, this.state, {
-        display: nextProps.displayCoindDownModal,
+        className: _displayProps && this.check() ? 'show fade' : 'show out',
       }));
 
-      if (nextProps.displayCoindDownModal) {
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          open: _displayProps,
+          className: _displayProps && this.check() ? 'show in' : 'hide',
+        }));
+      }, _displayProps ? 50 : 300);
+
+      if (_displayProps) {
         this.getCoindGetStdout();
       }
     }
   }
 
-  render() {
-    if (this.state.display &&
-        !this.state.kmdMainPassiveMode &&
+  check() {
+    if (!this.state.kmdMainPassiveMode &&
         this.props.ActiveCoin.getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) {
-      return CoindDownModalRender.call(this);
+      return true;
     }
+  }
 
-    return null;
+  render() {
+    return CoindDownModalRender.call(this);
   }
 }
 

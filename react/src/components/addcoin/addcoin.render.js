@@ -1,12 +1,11 @@
 import React from 'react';
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
-// TODO: add modal close on modal overlay click evt
 
 const AddCoinRender = function() {
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
-      <div className={ `modal modal-3d-sign add-coin-modal ${this.state.modalClassName}` }>
+      <div className={ `modal modal-3d-sign add-coin-modal ${this.state.className}` }>
         <div
           onClick={ this.dismiss }
           className="modal-close-overlay"></div>
@@ -35,27 +34,31 @@ const AddCoinRender = function() {
                 onClick={ this.toggleActionsMenu }>
                 <i className={ 'fa-chevron-' + (this.state.actionsMenu ? 'up' : 'down') }></i>
               </button>
-              <span className={ !this.state.actionsMenu ? 'hide' : '' }>
-                <button
-                  className="btn btn-outline-primary btn-save-coin-selection"
-                  onClick={ this.saveCoinSelection }>
-                  { translate('ADD_COIN.SAVE_SELECTION') }
-                </button>
-                <button
-                  className="btn btn-outline-primary btn-load-coin-selection"
-                  onClick={ this.loadCoinSelection }>
-                  { translate('ADD_COIN.LOAD_SELECTION') }
-                </button>
-              </span>
+              { this.state.actionsMenu &&
+                <span>
+                  <button
+                    className="btn btn-outline-primary btn-save-coin-selection"
+                    onClick={ this.saveCoinSelection }>
+                    { translate('ADD_COIN.SAVE_SELECTION') }
+                  </button>
+                  <button
+                    className="btn btn-outline-primary btn-load-coin-selection"
+                    onClick={ this.loadCoinSelection }>
+                    { translate('ADD_COIN.LOAD_SELECTION') }
+                  </button>
+                </span>
+              }
               { this.renderCoinSelectors() }
-              <div className={ 'text-align-center vertical-margin-20 horizontal-margin-0 padding-bottom-20 ' + (this.hasMoreThanOneCoin() ? 'col-sm-12' : 'hide') }>
-                <button
-                  type="button"
-                  className="btn btn-primary col-sm-4 float-none"
-                  onClick={ this.activateAllCoins }>
-                  { translate('ADD_COIN.ACTIVATE_ALL') }
-                </button>
-              </div>
+              { this.hasMoreThanOneCoin() &&
+                <div className="text-align-center vertical-margin-20 horizontal-margin-0 padding-bottom-20 col-sm-12">
+                  <button
+                    type="button"
+                    className="btn btn-primary col-sm-4 float-none"
+                    onClick={ this.activateAllCoins }>
+                    { translate('ADD_COIN.ACTIVATE_ALL') }
+                  </button>
+                </div>
+              }
               { mainWindow.arch === 'x64' &&
                 <div className="col-sm-12">
                   <p>
@@ -77,7 +80,7 @@ const AddCoinRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.display ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </div>
   )
 };

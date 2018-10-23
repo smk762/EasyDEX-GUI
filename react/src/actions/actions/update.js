@@ -1,24 +1,56 @@
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
+import { NEW_UPDATE_AVAILABLE } from '../storeType';
+import translate from '../../translate/translate';
+
+export const newUpdateAvailable = () => {
+  return dispatch => {
+    const _urlParams = {
+      token,
+    };
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/update/patch/check${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(newUpdateAvailableState(json));
+    });
+  }
+}
+
+const newUpdateAvailableState = (json) => {
+  return {
+    type: NEW_UPDATE_AVAILABLE,
+    newUpdateAvailable: json,
+  }
+}
 
 export const checkForUpdateUIPromise = () => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/update/patch/check${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/update/patch/check${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'checkForUpdateUIPromise',
-          'Error',
+          translate('API.getUpdate') + ' (code: checkForUpdateUIPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -31,18 +63,18 @@ export const checkForUpdateUIPromise = () => {
 export const updateUIPromise = () => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/update/patch${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/update/patch${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'updateUIPromise',
-          'Error',
+          translate('API.getUpdate') + ' (code: updateUIPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -55,19 +87,19 @@ export const updateUIPromise = () => {
 export const downloadZCashParamsPromise = (dloption) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
-      token: Config.token,
+      token,
       dloption,
     };
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/zcparamsdl${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/zcparamsdl${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'downloadZCashParamsPromise',
-          'Error',
+          translate('API.downloadZCashParamsPromise') + ' (code: updateUIPromise)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

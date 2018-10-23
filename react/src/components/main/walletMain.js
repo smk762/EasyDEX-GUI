@@ -56,7 +56,7 @@ class WalletMain extends React.Component {
   }
 
   render() {
-    if (mainWindow.argv.indexOf('dexonly') > -1) {
+    if (mainWindow.argv.indexOf('dexonly') > -1) { // deprecated
       return (
         <div className="full-height">
           <input
@@ -75,7 +75,7 @@ class WalletMain extends React.Component {
           <AddCoin />
           <Login />
           <NotaryElectionsModal />
-          <Toaster {...this.props.toaster} />
+          <Toaster { ...this.props.toaster } />
         </div>
       );
     }
@@ -99,4 +99,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(WalletMain);
-

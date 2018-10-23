@@ -35,7 +35,14 @@
 @import '../components/overrides.scss';
 @import '../components/switch.scss';
 @import '../components/contextMenu.scss';
+@import '../components/rcSlider.scss';
+@import '../components/select.scss';
 @import '../components/responsive.scss';
+@import '../components/modal.scss';
+@import '../components/dropdownMenu.scss';
+@import '../components/dashboard/walletsTxInfo/walletsTxInfo.scss';
+@import '../components/dashboard/walletsMain/walletsMain.scss';
+@import '../components/dashboard/walletsProgress/walletsProgress.scss';
 @import '../components/dashboard/walletsHeader/walletsHeader.scss';
 @import '../components/dashboard/walletsInfo/walletsInfo.scss';
 @import '../components/dashboard/sendCoin/sendCoin.scss';
@@ -61,5 +68,8 @@
 @import '~rc-slider/assets/index.css';
 
 /* dex */
-@import 'dex/main.scss';
-@import '../components/dex/dexMain.scss';
+/*@import 'dex/main.scss';
+@import '../components/dex/dexMain.scss';*/
+
+/* dark mode */
+/*@import '../components/dark.scss';*/

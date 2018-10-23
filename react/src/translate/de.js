@@ -1,4 +1,4 @@
-export const LANG_DE = {
+const LANG_DE = {
   'WALLETS_INFO': {
     'ADDRESS': 'Adresse',
     'ADDRESS_LOCAL': 'Adresse lokal',
@@ -800,7 +800,8 @@ export const LANG_DE = {
     'MSHARK': 'MSHARK (MSHARK)',
     'MESH': 'SpaceMesh (MESH)',
     'SUPERNET': 'SUPERNET (SUPERNET)',
-    'WLC': 'WIRELESS (WIRELESS)'
+    'WLC': 'WIRELESS (WIRELESS)',
+    'CALL': 'Capital (CALL)'
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Neue Passphrase erstellen',
@@ -813,3 +814,5 @@ export const LANG_DE = {
     'NATIVE_MODE': 'Nativer Modus'
   }
 }
+
+export default LANG_DE;

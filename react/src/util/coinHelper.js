@@ -285,7 +285,8 @@ export const coindList = () => {
   const _coins = [
     'KMD',
     'CHIPS',
-  ].concat(kmdAssetChains);
+  ]
+  .concat(kmdAssetChains);
 
   return _coins;
 }

@@ -2,9 +2,14 @@ import {
   triggerToaster,
   getNewKMDAddresses,
 } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
 
 const getNewAddress = (coin) => {
   return new Promise((resolve, reject) => {
@@ -12,20 +17,20 @@ const getNewAddress = (coin) => {
       mode: null,
       chain: coin,
       cmd: 'getnewaddress',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'genJumblrAddress + getKMDAddressesNative',
-          'Error',
+          translate('API.getNewAddress') + ' (code: genJumblrAddress + getKMDAddressesNative)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -44,20 +49,20 @@ export const setJumblrAddress = (coin, type, address) => {
       chain: coin,
       cmd: type === 'deposit' ? 'jumblr_deposit' : 'jumblr_secret',
       params: [address],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
-      fetchType(JSON.stringify({ payload })).post      
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'setJumblrAddress',
-          'Error',
+          translate('API.setJumblrAddress') + ' (code: setJumblrAddress)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -76,20 +81,20 @@ export const pauseJumblr = (coin) => {
       chain: coin,
       cmd: 'jumblr_pause',
       params: [],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
-      fetchType(JSON.stringify({ payload })).post      
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'pauseJumblr',
-          'Error',
+          translate('API.pauseJumblr') + ' (code: pauseJumblr)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -108,20 +113,20 @@ export const resumeJumblr = (coin) => {
       chain: coin,
       cmd: 'jumblr_resume',
       params: [],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
-      fetchType(JSON.stringify({ payload })).post      
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'resumeJumblr',
-          'Error',
+          translate('API.resumeJumblr') + ' (code: resumeJumblr)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -140,20 +145,20 @@ const dumpPrivkey = (coin, key) => {
       chain: coin,
       cmd: 'dumpprivkey',
       params: [key],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'dumpPrivkey ',
-          'Error',
+          translate('API.dumpPrivkey') + ' (code: dumpPrivkey)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -173,26 +178,26 @@ export const importPrivkey = (coin, key, rescan = false, isZKey) => {
       cmd: isZKey ? 'z_importkey' : 'importprivkey',
       params: isZKey ? [
         key,
-        rescan
+        rescan ? 'yes': 'no',
       ] : [
         key,
         '',
         rescan
       ],
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          'importPrivkey ',
-          'Error',
+          translate('API.importPrivkey') + ' (code: importPrivkey)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

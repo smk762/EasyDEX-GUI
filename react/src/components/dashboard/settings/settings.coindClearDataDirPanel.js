@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import {
-  shepherdClearCoindFolder,
+  apiClearCoindFolder,
   triggerToaster,
 } from '../../../actions/actionCreators';
 import { coindList } from '../../../util/coinHelper';
@@ -37,7 +37,7 @@ class CoindClearDataDirPanel extends React.Component {
     });
 
     setTimeout(() => {
-      shepherdClearCoindFolder(
+      apiClearCoindFolder(
         _coin,
         this.state.keepWalletDat ? this.state.keepWalletDat : null
       )
@@ -84,10 +84,14 @@ class CoindClearDataDirPanel extends React.Component {
     let _items = [];
     let _nativeCoins = coindList();
 
+    _nativeCoins.sort();
+
     _items.push(
       <option
-        key={ `coind-clear-data-coins-none` }
-        value="none">{ translate('SETTINGS.PICK_A_COIN') }</option>
+        key="coind-clear-data-coins-none"
+        value="none">
+        { translate('SETTINGS.PICK_A_COIN') }
+      </option>
     );
 
     for (let i = 0; i < _nativeCoins.length; i++) {
@@ -95,7 +99,9 @@ class CoindClearDataDirPanel extends React.Component {
         _items.push(
           <option
             key={ `coind-clear-data-coins-${ _nativeCoins[i] }` }
-            value={ `${_nativeCoins[i]}` }>{ `${_nativeCoins[i]}` }</option>
+            value={ `${_nativeCoins[i]}` }>
+            { `${_nativeCoins[i]}` }
+          </option>
         );
       }
     }
@@ -129,14 +135,17 @@ class CoindClearDataDirPanel extends React.Component {
                       type="checkbox"
                       name="settings-app-debug-toggle"
                       value={ this.state.keepWalletDat }
-                      checked={ this.state.keepWalletDat } />
+                      checked={ this.state.keepWalletDat }
+                      readOnly />
                     <div
                       className="slider"
                       onClick={ this.toggleKeepWalletDat }></div>
                   </label>
                   <span
                     className="title"
-                    onClick={ this.toggleKeepWalletDat }>{ translate('SETTINGS.KEEP') } wallet.dat</span>
+                    onClick={ this.toggleKeepWalletDat }>
+                    { translate('SETTINGS.KEEP') } wallet.dat
+                  </span>
                 </span>
                 { !this.state.displayYesNo &&
                   <button
@@ -151,7 +160,9 @@ class CoindClearDataDirPanel extends React.Component {
                   </button>
                 }
                 { this.state.displayYesNo &&
-                  <div className="margin-top-20">{ translate('SETTINGS.DATADIR_DELETE_PROMPT', this.state.coin) }</div>
+                  <div className="margin-top-20">
+                  { translate('SETTINGS.DATADIR_DELETE_PROMPT', this.state.coin) }
+                  </div>
                 }
                 { this.state.displayYesNo &&
                   <button

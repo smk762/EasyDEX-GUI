@@ -11,24 +11,11 @@ import {
   getDashboardUpdateState,
 } from '../../../actions/actionCreators';
 import translate from '../../../translate/translate';
-import { ImportKeyModalRender } from './importKeyModal.render';
+import ImportKeyModalRender from './importKeyModal.render';
+import { seedToWif } from 'agama-wallet-lib/src/keys';
+import btcNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const SEED_TRIM_TIMEOUT = 5000;
-
-// import gen komodo keys utils
-import '../../../util/crypto/gen/array.map.js';
-import '../../../util/crypto/gen/cryptojs.js';
-import '../../../util/crypto/gen/cryptojs.sha256.js';
-import '../../../util/crypto/gen/cryptojs.pbkdf2.js';
-import '../../../util/crypto/gen/cryptojs.hmac.js';
-import '../../../util/crypto/gen/cryptojs.aes.js';
-import '../../../util/crypto/gen/cryptojs.blockmodes.js';
-import '../../../util/crypto/gen/cryptojs.ripemd160.js';
-import '../../../util/crypto/gen/securerandom.js';
-import '../../../util/crypto/gen/ellipticcurve.js';
-import '../../../util/crypto/gen/biginteger.js';
-import '../../../util/crypto/gen/crypto-scrypt.js';
-import { Bitcoin } from '../../../util/crypto/gen/bitcoin.js';
 
 class ImportKeyModal extends React.Component {
   constructor() {
@@ -47,6 +34,8 @@ class ImportKeyModal extends React.Component {
       trimPassphraseTimer: null,
       seedExtraSpaces: false,
       multipleWif: '',
+      className: 'hide',
+      open: false,
     };
     this.generateKeysFromPassphrase = this.generateKeysFromPassphrase.bind(this);
     this.toggleImportWithRescan = this.toggleImportWithRescan.bind(this);
@@ -59,6 +48,24 @@ class ImportKeyModal extends React.Component {
     this.importFromPassphrase = this.importFromPassphrase.bind(this);
     this.importFromWif = this.importFromWif.bind(this);
     this.toggleImportMulti = this.toggleImportMulti.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const _display = nextProps.Dashboard.displayImportKeyModal;
+    
+    if (_display !== this.state.open) {
+      this.setState(Object.assign({}, this.state, {
+        className: _display ? 'show fade' : 'show out',
+      }));
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          open: _display,
+          className: _display ? 'show in' : 'hide',
+        }));
+      }, _display ? 50 : 300);
+    }
   }
 
   _copyCoinAddress(address) {
@@ -97,8 +104,9 @@ class ImportKeyModal extends React.Component {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+        const _ta = document.querySelector('#wifkeysPassphraseTextarea');
+        _ta.style.height = '1px';
+        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
       }
     }, 100);
   }
@@ -152,23 +160,24 @@ class ImportKeyModal extends React.Component {
   }
 
   importWifAddress(wif, rescan, multi) {
+    const _coin = this.props.ActiveCoin.coin;
     let _rescanInProgress = true;
 
     if (rescan) {
       setTimeout(() => {
         if (_rescanInProgress) {
           setTimeout(() => {
-            if (this.props.ActiveCoin.coin === 'KMD') {
+            if (_coin === 'KMD') {
               Store.dispatch(getDebugLog('komodo', 100));
             } else {
-              Store.dispatch(getDebugLog('komodo', 100, this.props.ActiveCoin.coin));
+              Store.dispatch(getDebugLog('komodo', 100, _coin));
             }
           }, 2000);
 
-          Store.dispatch(getDashboardUpdateState(null, this.props.ActiveCoin.coin, true));
+          Store.dispatch(getDashboardUpdateState(null, _coin, true));
           Store.dispatch(
             triggerToaster(
-              translate(multi ? 'INDEX.ADDRESSES_IMPORTED_RESCAN_IN_PROGRESS' : 'INDEX.ADDRESS_IMPORTED_RESCAN_IN_PROGRESS'),
+              translate('INDEX.' + (multi ? 'ADDRESSES_IMPORTED_RESCAN_IN_PROGRESS' : 'ADDRESS_IMPORTED_RESCAN_IN_PROGRESS')),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -200,7 +209,7 @@ class ImportKeyModal extends React.Component {
           !json.error) {
         Store.dispatch(
           triggerToaster(
-            rescan ? translate('INDEX.WALLET_RESCAN_FINISHED') : multi ? translate('INDEX.ADDRESSES_IMPORTED') : translate('INDEX.ADDRESS_IMPORTED'),
+            rescan ? translate('INDEX.WALLET_RESCAN_FINISHED') : (translate('INDEX.' + (multi ? 'ADDRESSES_IMPORTED' : 'ADDRESS_IMPORTED'))),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
             rescan ? false : true,
@@ -210,7 +219,7 @@ class ImportKeyModal extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -237,24 +246,17 @@ class ImportKeyModal extends React.Component {
   generateKeysFromPassphrase() {
     if (this.state.wifkeysPassphrase &&
         this.state.wifkeysPassphrase.length) {
-      const bytes = Crypto.SHA256(this.state.wifkeysPassphrase, { asBytes: true });
-      // byte flipping to make it compat with iguana core
-      bytes[0] &= 248;
-      bytes[31] &= 127;
-      bytes[31] |= 64;
-      const btcKey = new Bitcoin.ECKey(bytes).setCompressed(true);
-      const kmdAddress = btcKey.getBitcoinAddress();
-      const wifAddress = btcKey.getBitcoinWalletImportFormat();
+      const _keys = seedToWif(this.state.wifkeysPassphrase, btcNetworks.kmd, true);
 
       return {
-        address: kmdAddress,
-        wif: wifAddress,
+        address: _keys.pub,
+        wif: _keys.priv,
       };
     } else {
       Store.dispatch(
         triggerToaster(
           translate('INDEX.EMPTY_PASSPHRASE_FIELD'),
-          'Error',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -276,7 +278,18 @@ class ImportKeyModal extends React.Component {
   }
 
   closeModal() {
-    Store.dispatch(displayImportKeyModal(false));
+    this.setState(Object.assign({}, this.state, {
+      className: 'show out',
+    }));
+
+    setTimeout(() => {
+      this.setState(Object.assign({}, this.state, {
+        open: false,
+        className: 'hide',
+      }));
+
+      Store.dispatch(displayImportKeyModal(false));
+    }, 300);
   }
 
   render() {

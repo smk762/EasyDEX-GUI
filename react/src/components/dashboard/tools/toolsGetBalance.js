@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 
@@ -32,7 +32,7 @@ class ToolsGetBalance extends React.Component {
   getBalanceAlt() {
     const _coin = this.state.balanceCoin.split('|');
 
-    shepherdToolsBalance(_coin[0], this.state.balanceAddr)
+    apiToolsBalance(_coin[0], this.state.balanceAddr)
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -88,7 +88,9 @@ class ToolsGetBalance extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.COIN') }
+          </label>
           <Select
             name="balanceCoin"
             className="col-sm-3"
@@ -96,12 +98,17 @@ class ToolsGetBalance extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'balanceCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={ addCoinOptionsCrypto().concat(addCoinOptionsAC()) } />
+            options={
+              addCoinOptionsCrypto('skip')
+              .concat(addCoinOptionsAC('skip'))
+            } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.ADDR') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.ADDR') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3 blur"

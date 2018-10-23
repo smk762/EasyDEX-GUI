@@ -36,6 +36,8 @@ class CoinTile extends React.Component {
 
     if (allCoins) {
       modes.map((mode) => {
+        allCoins[mode].sort();
+
         allCoins[mode].map((coin) => {
           const _coinMode = getModeInfo(mode);
           const modecode = _coinMode.code;

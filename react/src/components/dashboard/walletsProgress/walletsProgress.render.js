@@ -45,16 +45,23 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
           style={{ width: syncPercentage }}>
           <span style={{ width: syncPercentage }}>
             { syncPercentage === '100.00%' ? '100%' : syncPercentage }&nbsp;
-            <span className={ this.props.ActiveCoin.progress.blocks || currentBlock ? '' : 'hide' }>|&nbsp;
-              { this.props.ActiveCoin.progress.blocks || currentBlock }&nbsp;
-              <span className={ this.props.ActiveCoin.progress.longestchain || maxHeight ? '' : 'hide'}>/&nbsp;
-              { this.props.ActiveCoin.progress.longestchain || maxHeight }
+            { (this.props.ActiveCoin.progress.blocks || currentBlock) &&
+              <span>|&nbsp;
+                { this.props.ActiveCoin.progress.blocks || currentBlock }&nbsp;
+                { (this.props.ActiveCoin.progress.longestchain || maxHeight) &&
+                  <span>/&nbsp;
+                  { this.props.ActiveCoin.progress.longestchain || maxHeight }
+                  </span>
+                }
+              &nbsp;
               </span>
-            </span>&nbsp;
-            <span className={ this.props.ActiveCoin.progress.connections ? '' : 'hide' }>|&nbsp;
-              { translate('INDEX.CONNECTIONS') }:&nbsp;
-              { this.props.ActiveCoin.progress.connections }
-            </span>
+            }
+            { this.props.ActiveCoin.progress.connections &&
+              <span>|&nbsp;
+                { translate('INDEX.CONNECTIONS') }:&nbsp;
+                { this.props.ActiveCoin.progress.connections }
+              </span>
+            }
           </span>
         </div>
       );
@@ -76,7 +83,7 @@ export const TranslationComponentsRender = function(translationID) {
   const translationComponents = translate(translationID).split('<br>');
 
   return translationComponents.map((translation, idx) =>
-    <span key={idx}>
+    <span key={ idx }>
       { translation }
       <br />
     </span>
@@ -102,7 +109,7 @@ export const ChainActivationNotificationRender = function() {
           this.props.ActiveCoin.coin === 'KMD' &&
           <div className="alert alert-warning alert-dismissible margin-bottom-50">
             <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P1') }</p>
-            <p>{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P2') }</p>
+            <p className="selectable">{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P2') }</p>
             <p className="padding-bottom-15">{ translate('DASHBOARD.WIN_SYNC_WORKAROUND_CTA_P3') }</p>
             <button
               type="button"

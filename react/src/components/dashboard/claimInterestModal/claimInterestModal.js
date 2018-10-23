@@ -9,16 +9,23 @@ import {
   copyString,
   sendToAddressPromise,
   triggerToaster,
-  shepherdElectrumListunspent,
-  shepherdElectrumSendPreflight,
-  shepherdElectrumSendPromise,
+  apiElectrumListunspent,
+  apiElectrumSendPreflight,
+  apiElectrumSendPromise,
   validateAddressPromise,
+  apiGetRemoteTimestamp,
 } from '../../../actions/actionCreators';
 import translate from '../../../translate/translate';
 import {
   ClaimInterestModalRender,
   _ClaimInterestTableRender,
 } from './claimInterestModal.render';
+import {
+  secondsToString,
+  checkTimestamp,
+} from 'agama-wallet-lib/src/time';
+
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
 
 // TODO: promises
 
@@ -38,6 +45,7 @@ class ClaimInterestModal extends React.Component {
       addressSelectorOpen: false,
       selectedAddress: null,
       loading: false,
+      className: 'hide',
     };
     this.claimInterestTableRender = this.claimInterestTableRender.bind(this);
     this.toggleZeroInterest = this.toggleZeroInterest.bind(this);
@@ -52,18 +60,40 @@ class ClaimInterestModal extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.ActiveCoin.mode === 'native') {
+    const _mode = this.props.ActiveCoin.mode;
+
+    if (_mode === 'native') {
       this.loadListUnspent();
+    }
+
+    if (_mode === 'spv') {
+      apiGetRemoteTimestamp()
+      .then((res) => {
+        if (res.msg === 'success') {
+          if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
+            Store.dispatch(
+              triggerToaster(
+                translate('SEND.CLOCK_OUT_OF_SYNC'),
+                translate('TOASTR.WALLET_NOTIFICATION'),
+                'warning',
+                false
+              )
+            );
+          }
+        }
+      });
     }
   }
 
   isFullySynced() {
-    if (this.props.ActiveCoin.progress &&
-        this.props.ActiveCoin.progress.longestchain &&
-        this.props.ActiveCoin.progress.blocks &&
-        this.props.ActiveCoin.progress.longestchain > 0 &&
-        this.props.ActiveCoin.progress.blocks > 0 &&
-        Number(this.props.ActiveCoin.progress.blocks) * 100 / Number(this.props.ActiveCoin.progress.longestchain) === 100) {
+    const _progress = this.props.ActiveCoin.progress;
+
+    if (_progress &&
+        _progress.longestchain &&
+        _progress.blocks &&
+        _progress.longestchain > 0 &&
+        _progress.blocks > 0 &&
+        Number(_progress.blocks) * 100 / Number(_progress.longestchain) === 100) {
       return true;
     }
   }
@@ -92,6 +122,8 @@ class ClaimInterestModal extends React.Component {
   }
 
   loadListUnspent() {
+    const _coin = this.props.ActiveCoin.coin;
+    const _mode = this.props.ActiveCoin.mode;
     let _transactionsList = [];
     let _totalInterest = 0;
     let _zeroInterestUtxo = false;
@@ -105,10 +137,10 @@ class ClaimInterestModal extends React.Component {
       });
     }, 1000);
 
-    if (this.props.ActiveCoin.mode === 'spv') {
-      shepherdElectrumListunspent(
-        this.props.ActiveCoin.coin,
-        this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+    if (_mode === 'spv') {
+      apiElectrumListunspent(
+        _coin,
+        this.props.Dashboard.electrumCoins[_coin].pub
       )
       .then((json) => {
         if (json !== 'error' &&
@@ -126,6 +158,10 @@ class ClaimInterestModal extends React.Component {
               locktime: json[i].locktime,
               amount: Number(json[i].amount.toFixed(8)),
               interest: Number(json[i].interest.toFixed(8)),
+              timeElapsedFromLocktime: json[i].timeElapsedFromLocktime,
+              timeElapsedFromLocktimeInSeconds: json[i].timeElapsedFromLocktimeInSeconds,
+              timeTill1MonthInterestStopsInSeconds: json[i].timeTill1MonthInterestStopsInSeconds,
+              interestRulesCheckPass: json[i].interestRulesCheckPass,
               txid: json[i].txid,
             });
             _totalInterest += Number(json[i].interest.toFixed(8));
@@ -148,14 +184,14 @@ class ClaimInterestModal extends React.Component {
         }
       });
     } else {
-      getListUnspent(this.props.ActiveCoin.coin)
+      getListUnspent(_coin)
       .then((json) => {
         if (json &&
             json.length) {
           let _addresses = {};
 
           for (let i = 0; i < json.length; i++) {
-            getRawTransaction(this.props.ActiveCoin.coin, json[i].txid)
+            getRawTransaction(_coin, json[i].txid)
             .then((_json) => {
               if (json[i].interest === 0) {
                 _zeroInterestUtxo = true;
@@ -195,11 +231,15 @@ class ClaimInterestModal extends React.Component {
   }
 
   confirmClaimInterest() {
-    shepherdElectrumSendPromise(
-      this.props.ActiveCoin.coin,
-      this.props.ActiveCoin.balance.balanceSats,
-      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-      this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+    const _coin = this.props.ActiveCoin.coin;
+    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+    const _balance = this.props.ActiveCoin.balance;
+
+    apiElectrumSendPromise(
+      _coin,
+      _balance.balanceSats,
+      _pub,
+      _pub
     )
     .then((res) => {
       if (res.msg === 'error') {
@@ -213,7 +253,7 @@ class ClaimInterestModal extends React.Component {
       } else {
         Store.dispatch(
           triggerToaster(
-            `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
+            `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${_pub}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
             false
@@ -225,18 +265,22 @@ class ClaimInterestModal extends React.Component {
   }
 
   claimInterest(address, amount) {
-    if (this.props.ActiveCoin.coin === 'KMD') {
+    const _coin = this.props.ActiveCoin.coin;
+    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+    const _balance = this.props.ActiveCoin.balance;
+
+    if (_coin === 'KMD') {
       if (this.props.ActiveCoin.mode === 'spv') {
         this.setState(Object.assign({}, this.state, {
           spvVerificationWarning: false,
           spvPreflightSendInProgress: true,
         }));
 
-        shepherdElectrumSendPreflight(
-          this.props.ActiveCoin.coin,
-          this.props.ActiveCoin.balance.balanceSats,
-          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        apiElectrumSendPreflight(
+          _coin,
+          _balance.balanceSats,
+          _pub,
+          _pub
         )
         .then((sendPreflight) => {
           if (sendPreflight &&
@@ -253,7 +297,7 @@ class ClaimInterestModal extends React.Component {
             Store.dispatch(
               triggerToaster(
                 sendPreflight.result,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );
@@ -264,7 +308,7 @@ class ClaimInterestModal extends React.Component {
         });
       } else {
         validateAddressPromise(
-          this.props.ActiveCoin.coin,
+          _coin,
           this.state.selectedAddress
         )
         .then((json) => {
@@ -285,9 +329,9 @@ class ClaimInterestModal extends React.Component {
             !json.result.isscript
           ) {
             sendToAddressPromise(
-              this.props.ActiveCoin.coin,
+              _coin,
               this.state.selectedAddress,
-              this.props.ActiveCoin.balance.transparent
+              _balance.transparent
             )
             .then((json) => {
               if (json.error &&
@@ -330,12 +374,14 @@ class ClaimInterestModal extends React.Component {
   }
 
   checkTransactionsListLength() {
-    if (this.state.transactionsList &&
-        this.state.transactionsList.length) {
+    const _txlist = this.state.transactionsList;
+
+    if (_txlist &&
+      _txlist.length) {
       return true;
     } else if (
-      !this.state.transactionsList ||
-      !this.state.transactionsList.length
+      !_txlist ||
+      !_txlist.length
     ) {
       return false;
     }
@@ -365,9 +411,9 @@ class ClaimInterestModal extends React.Component {
           key={ key }>
           <a onClick={ () => this.updateAddressSelection(key) }>
             <span className="text">{ key }</span>
-            <span
-              className="glyphicon glyphicon-ok check-mark pull-right"
-              style={{ display: this.state.selectedAddress === key ? 'inline-block' : 'none' }}></span>
+            { this.state.selectedAddress === key &&
+              <span className="glyphicon glyphicon-ok check-mark pull-right"></span>
+            }
           </a>
         </li>
       );
@@ -394,15 +440,42 @@ class ClaimInterestModal extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.Dashboard.displayClaimInterestModal !== this.state.open) {
+    const _display = props.Dashboard.displayClaimInterestModal;
+
+    if (_display !== this.state.open) {
       this.setState({
-        open: props.Dashboard.displayClaimInterestModal,
+        className: _display ? 'show fade' : 'show out',
       });
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          open: _display,
+          className: _display ? 'show in' : 'hide',
+        }));
+      }, _display ? 50 : 300);
     }
 
     if (!this.state.open &&
         props.Dashboard.displayClaimInterestModal) {
       this.loadListUnspent();
+
+      if (this.props.ActiveCoin.mode === 'spv') {
+        apiGetRemoteTimestamp()
+        .then((res) => {
+          if (res.msg === 'success') {
+            if (Math.abs(checkTimestamp(res.result)) > SPV_MAX_LOCAL_TIMESTAMP_DEVIATION) {
+              Store.dispatch(
+                triggerToaster(
+                  translate('SEND.CLOCK_OUT_OF_SYNC'),
+                  translate('TOASTR.WALLET_NOTIFICATION'),
+                  'warning',
+                  false
+                )
+              );
+            }
+          }
+        });
+      }
     }
   }
 

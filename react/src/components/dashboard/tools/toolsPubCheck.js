@@ -25,6 +25,19 @@ class ToolsPubCheck extends React.Component {
     });
   }
 
+  renderCoins() {
+    const _coins = this.state.pubResult.coin;
+    let _items = [];
+
+    for (let i = 0; i < _coins.length; i++) {
+      _items.push(
+        <div key={ `tools-pub-check-${i}` }>{ _coins[i] }</div>
+      );
+    }
+
+    return _items;
+  }
+
   render() {
     return (
       <div className="row margin-left-10">
@@ -34,7 +47,9 @@ class ToolsPubCheck extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left padding-top-10 padding-bottom-20">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.PUB_ADDR') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.PUB_ADDR') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3 blur"
@@ -57,16 +72,12 @@ class ToolsPubCheck extends React.Component {
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
           { this.state.pubResult.coin &&
             <div>
-              <div>{ translate('TOOLS.COINS') }: {
-                this.state.pubResult.coin.map((item) => {
-                  return(<div key={ `tools-pub-check-${item}` }>{ item }</div>);
-                })
-              }</div>
+              <div>{ translate('TOOLS.COINS') }: { this.renderCoins() }</div>
               <div className="margin-top-10">{ translate('TOOLS.VERSION') }: { this.state.pubResult.version }</div>
             </div>
           }
           { !this.state.pubResult.coin &&
-            <div>{ this.state.pubResult }</div>
+            <div className="selectable">{ this.state.pubResult }</div>
           }
           </div>
         }

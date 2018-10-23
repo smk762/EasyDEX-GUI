@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import {
   getDashboardUpdate,
-  shepherdElectrumBalance,
+  apiElectrumBalance,
 } from '../../../actions/actionCreators';
 import mainWindow from '../../../util/mainWindow';
 import Config from '../../../config';
@@ -11,6 +11,7 @@ import ReactTooltip from 'react-tooltip';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Store from '../../../store';
+import FiatSymbol from '../fiat/fiatSymbol';
 
 import WalletsBalanceRender from './walletsBalance.render';
 
@@ -26,9 +27,11 @@ class WalletsBalance extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (this.props.ActiveCoin.activeAddress) {
+    const _activeAddress = this.props.ActiveCoin.activeAddress;
+
+    if (_activeAddress) {
       this.setState(Object.assign({}, this.state, {
-        currentAddress: this.props.ActiveCoin.activeAddress,
+        currentAddress: _activeAddress,
       }));
     }
   }
@@ -48,6 +51,9 @@ class WalletsBalance extends React.Component {
   }
 
   refreshBalance() {
+    const _mode = this.props.ActiveCoin.mode;
+    const _coin = this.props.ActiveCoin.coin;
+
     this.setState({
       loading: true,
     });
@@ -57,13 +63,15 @@ class WalletsBalance extends React.Component {
       });
     }, 1000);
 
-    if (this.props.ActiveCoin.mode === 'native') {
-      Store.dispatch(getDashboardUpdate(this.props.ActiveCoin.coin));
-    } else if (this.props.ActiveCoin.mode === 'spv') {
+    if (_mode === 'native') {
+      Store.dispatch(getDashboardUpdate(_coin));
+    } else if (_mode === 'spv') {
+      const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+
       Store.dispatch(
-        shepherdElectrumBalance(
-          this.props.ActiveCoin.coin,
-          this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub
+        apiElectrumBalance(
+          _coin,
+          _pub
         )
       );
     }
@@ -71,41 +79,44 @@ class WalletsBalance extends React.Component {
 
   renderBalance(type, returnFiatPrice) {
     const _mode = this.props.ActiveCoin.mode;
+    const _propsBalance = this.props.ActiveCoin.balance;
     let _balance = 0;
 
-    if (this.props.ActiveCoin.balance === 'connection error or incomplete data') {
+    if (_propsBalance === 'connection error or incomplete data') {
       _balance = '-777';
-    }
+    } else {
+      if (_mode === 'native') {
+        if (_propsBalance &&
+          _propsBalance[type]) {
+          _balance = _propsBalance[type];
+        }
+      } else if (
+        _mode === 'spv' &&
+        _propsBalance
+      ) {
+        if (this.props.ActiveCoin.coin === 'KMD') {
+          if (type === 'total' &&
+              _propsBalance &&
+              _propsBalance.total) {
+            _balance = Number(_propsBalance.total) - Number(Math.abs(_propsBalance.unconfirmed));
+          }
 
-    if (_mode === 'native') {
-      if (this.props.ActiveCoin.balance &&
-          this.props.ActiveCoin.balance[type]) {
-        _balance = this.props.ActiveCoin.balance[type];
-      }
-    } else if (
-      _mode === 'spv' &&
-      this.props.ActiveCoin.balance.balance
-    ) {
-      if (this.props.ActiveCoin.coin === 'KMD') {
-        if (type === 'total' &&
-            this.props.ActiveCoin.balance &&
-            this.props.ActiveCoin.balance.total) {
-          _balance = Number(this.props.ActiveCoin.balance.total) - Number(Math.abs(this.props.ActiveCoin.balance.unconfirmed));
+          if (type === 'interest' &&
+              _propsBalance &&
+              _propsBalance.interest) {
+            _balance = _propsBalance.interest;
+          }
+
+          if (type === 'transparent' &&
+              _propsBalance &&
+              _propsBalance.balance) {
+            _balance = Number(_propsBalance.balance) - Number(Math.abs(_propsBalance.unconfirmed));
+          }
+        } else {
+          _balance = Number(_propsBalance.balance) - Number(Math.abs(_propsBalance.unconfirmed));
         }
 
-        if (type === 'interest' &&
-            this.props.ActiveCoin.balance &&
-            this.props.ActiveCoin.balance.interest) {
-          _balance = this.props.ActiveCoin.balance.interest;
-        }
-
-        if (type === 'transparent' &&
-            this.props.ActiveCoin.balance &&
-            this.props.ActiveCoin.balance.balance) {
-          _balance = Number(this.props.ActiveCoin.balance.balance) - Number(Math.abs(this.props.ActiveCoin.balance.unconfirmed));
-        }
-      } else {
-        _balance = Number(this.props.ActiveCoin.balance.balance) - Number(Math.abs(this.props.ActiveCoin.balance.unconfirmed));
+        _balance = _balance.toFixed(8);
       }
     }
 
@@ -113,22 +124,24 @@ class WalletsBalance extends React.Component {
         this.props.Dashboard.prices &&
         returnFiatPrice) {
       const _prices = this.props.Dashboard.prices;
+      const _defaultFiat = Config.defaultFiatCurrency.toUpperCase();
+      const _coin = this.props.ActiveCoin.coin;
       let _fiatPriceTotal = 0;
       let _fiatPricePerCoin = 0;
 
-      if (this.props.ActiveCoin.coin === 'KMD') {
+      if (_coin === 'KMD') {
         if (_prices.fiat &&
-            _prices.fiat.USD) {
-          _fiatPriceTotal = formatValue(_balance * _prices.fiat.USD);
-          _fiatPricePerCoin = _prices.fiat.USD;
+            _prices.fiat[_defaultFiat]) {
+          _fiatPriceTotal = formatValue(_balance * _prices.fiat[_defaultFiat]);
+          _fiatPricePerCoin = _prices.fiat[_defaultFiat];
         }
       } else {
         if (_prices.fiat &&
-            _prices.fiat.USD &&
-            _prices[`${this.props.ActiveCoin.coin}/KMD`] &&
-            _prices[`${this.props.ActiveCoin.coin}/KMD`].low) {
-          _fiatPriceTotal = _balance * _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
-          _fiatPricePerCoin = _prices.fiat.USD * _prices[`${this.props.ActiveCoin.coin}/KMD`].low;
+            _prices.fiat[_defaultFiat] &&
+            _prices[`${_coin}/KMD`] &&
+            _prices[`${_coin}/KMD`].low) {
+          _fiatPriceTotal = _balance * _prices.fiat[_defaultFiat] * _prices[`${_coin}/KMD`].low;
+          _fiatPricePerCoin = _prices.fiat[_defaultFiat] * _prices[`${_coin}/KMD`].low;
         }
       }
 
@@ -137,15 +150,18 @@ class WalletsBalance extends React.Component {
           <div className="text-right">{ _balance }</div>
           { _fiatPriceTotal > 0 &&
             _fiatPricePerCoin > 0 &&
-            <span>
-              <div
-                data-tip={ `${translate('INDEX.PRICE_PER_1')} ${this.props.ActiveCoin.coin} ~ $${formatValue(_fiatPricePerCoin)}` }
-                className="text-right">${ formatValue(_fiatPriceTotal) }</div>
-              <ReactTooltip
-                effect="solid"
-                className="text-left" />
-            </span>
+            <div
+              data-tip={ `${translate('INDEX.PRICE_PER_1')} ${_coin} ~ ${formatValue(_fiatPricePerCoin)} ${_defaultFiat}` }
+              data-html={ true }
+              data-for="balance1"
+              className="text-right">
+              <FiatSymbol symbol={ Config.defaultFiatCurrency } />{ formatValue(_fiatPriceTotal) }
+            </div>
           }
+          <ReactTooltip
+            id="balance1"
+            effect="solid"
+            className="text-left" />
         </div>
       );
     } else {

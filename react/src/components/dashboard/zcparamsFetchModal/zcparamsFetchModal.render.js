@@ -4,7 +4,7 @@ import translate from '../../../translate/translate';
 const ZcparamsFetchModalRender = function() {
   return (
     <div>
-      <div className={ 'modal modal-3d-sign zcparams-fetch-modal ' + (this.state.display ? 'show in' : 'fade hide') }>
+      <div className={ `modal modal-3d-sign zcparams-fetch-modal ${this.state.className}` }>
         <div
           onClick={ this.dismiss }
           className="modal-close-overlay"></div>
@@ -59,7 +59,7 @@ const ZcparamsFetchModalRender = function() {
           </div>
         </div>
       </div>
-      <div className={ 'modal-backdrop ' + (this.state.display ? 'show in' : 'fade hide') }></div>
+      <div className={ `modal-backdrop ${this.state.className}` }></div>
     </div>
   );
 };

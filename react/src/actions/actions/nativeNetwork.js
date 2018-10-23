@@ -4,7 +4,11 @@ import {
 } from '../storeType';
 import translate from '../../translate/translate';
 import { triggerToaster } from '../actionCreators';
-import Config from '../../config';
+import Config, {
+  token,
+  agamaPort,
+  rpc2cli,
+} from '../../config';
 import fetchType from '../../util/fetchType';
 
 export const getNativePeers = (coin) => {
@@ -13,20 +17,20 @@ export const getNativePeers = (coin) => {
       mode: null,
       chain: coin,
       cmd: 'getpeerinfo',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getNativePeers',
-          'Error',
+          translate('API.getNativePeers') + ' (code: getNativePeers)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );
@@ -45,20 +49,20 @@ export const getNativeNettotals = (coin) => {
       mode: null,
       chain: coin,
       cmd: 'getnettotals',
-      rpc2cli: Config.rpc2cli,
-      token: Config.token,
+      rpc2cli,
+      token,
     };
 
     fetch(
-      `http://127.0.0.1:${Config.agamaPort}/shepherd/cli`,
+      `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
     .catch((error) => {
       console.log(error);
       dispatch(
         triggerToaster(
-          'getNativeNettotals',
-          'Error',
+          translate('API.getNativeNettotals') + ' (code: getNativeNettotals)',
+          translate('TOASTR.ERROR'),
           'error'
         )
       );

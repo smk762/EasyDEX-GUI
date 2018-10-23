@@ -5,14 +5,14 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
-  shepherdToolsBalance,
-  shepherdToolsBuildUnsigned,
-  shepherdToolsPushTx,
-  shepherdToolsSeedToWif,
-  shepherdToolsWifToKP,
-  shepherdElectrumListunspent,
-  shepherdCliPromise,
-  shepherdElectrumSplitUtxoPromise,
+  apiToolsBalance,
+  apiToolsBuildUnsigned,
+  apiToolsPushTx,
+  apiToolsSeedToWif,
+  apiToolsWifToKP,
+  apiElectrumListunspent,
+  apiCliPromise,
+  apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import QRCode from 'qrcode.react';
@@ -38,11 +38,11 @@ class ToolsOfflineSigScan extends React.Component {
   }
 
   sendTx(rawTx2Push) {
-    let _txData = rawTx2Push.split(':');
+    const _txData = rawTx2Push.split(':');
 
     // console.warn(_txData);
 
-    shepherdToolsPushTx(_txData[0], _txData[1])
+    apiToolsPushTx(_txData[0], _txData[1])
     .then((res) => {
       // console.warn(res);
 
@@ -109,11 +109,15 @@ class ToolsOfflineSigScan extends React.Component {
                 <div className="margin-bottom-15">
                   { this.state.rawTx2Push.split(':')[0].toUpperCase() } { translate('TOOLS.TX_PUSHED') }!
                 </div>
-                <div>TxID { this.state.txPushResult }</div>
+                <div>
+                  TxID <span className="selectable">{ this.state.txPushResult }</span>
+                </div>
               </div>
             }
             { this.state.txPushResult.length !== 64 &&
-              <div>{ translate('TOOLS.ERROR') }: { this.state.txPushResult }</div>
+              <div>
+                { translate('TOOLS.ERROR') }: <span className="selectable">{ this.state.txPushResult }</span>
+              </div>
             }
           </div>
         }

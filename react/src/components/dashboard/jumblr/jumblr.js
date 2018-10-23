@@ -22,21 +22,8 @@ import {
 } from './jumblr.render';
 
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
-
-// import gen komodo keys utils
-import '../../../util/crypto/gen/array.map.js';
-import '../../../util/crypto/gen/cryptojs.js';
-import '../../../util/crypto/gen/cryptojs.sha256.js';
-import '../../../util/crypto/gen/cryptojs.pbkdf2.js';
-import '../../../util/crypto/gen/cryptojs.hmac.js';
-import '../../../util/crypto/gen/cryptojs.aes.js';
-import '../../../util/crypto/gen/cryptojs.blockmodes.js';
-import '../../../util/crypto/gen/cryptojs.ripemd160.js';
-import '../../../util/crypto/gen/securerandom.js';
-import '../../../util/crypto/gen/ellipticcurve.js';
-import '../../../util/crypto/gen/biginteger.js';
-import '../../../util/crypto/gen/crypto-scrypt.js';
-import { Bitcoin } from '../../../util/crypto/gen/bitcoin.js';
+import { seedToWif } from 'agama-wallet-lib/src/keys';
+import btcNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 // TODO: promises, move to backend crypto libs
 
@@ -51,7 +38,6 @@ class Jumblr extends React.Component {
       activeTab: 0,
       randomSeed: window.jumblrPasshrase,
       jumblrDepositAddress: null,
-      jumblrDepositAddressPBased: true,
       jumblrSecretAddressShow: true,
       jumblrSecretAddress: [],
       jumblrSecretAddressImport: [],
@@ -85,7 +71,7 @@ class Jumblr extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -113,7 +99,7 @@ class Jumblr extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );
@@ -134,26 +120,12 @@ class Jumblr extends React.Component {
   }
 
   generateKeys(passphrase) {
-    if (!passphrase) {
-      const key = new Bitcoin.ECKey(false).setCompressed(true);
-      const kmdAddress = key.getBitcoinAddress();
-      const wifAddress = key.getBitcoinWalletImportFormat();
+    const _keys = seedToWif(passphrase, btcNetworks.kmd, true);
 
-      return {
-        address: kmdAddress,
-        wif: wifAddress,
-      };
-    } else {
-      const bytes = Crypto.SHA256(passphrase, { asBytes: true });
-      const btcKey = new Bitcoin.ECKey(bytes).setCompressed(true);
-      const kmdAddress = btcKey.getBitcoinAddress();
-      const wifAddress = btcKey.getBitcoinWalletImportFormat();
-
-      return {
-        address: kmdAddress,
-        wif: wifAddress,
-      };
-    }
+    return {
+      address: _keys.pub,
+      wif: _keys.priv,
+    };
   }
 
   _JumblrRenderSecretAddressList(type) {
@@ -205,20 +177,14 @@ class Jumblr extends React.Component {
       );
     } else {
       for (let i = 0; i < this.state.secretAddressCount; i++) {
-        let _genKeys;
+        let _postfix;
 
-        if (this.state.jumblrDepositAddressPBased) {
-          let _postfix;
-
-          if (i < 9) {
-            _postfix = `00${i + 1}`;
-          } else if (i > 10 && i < 100) {
-            _postfix = `0${i + 1}`;
-          }
-          _genKeys = this.generateKeys(`${this.state.randomSeed} ${_postfix}`);
-        } else {
-          _genKeys = this.generateKeys();
+        if (i < 9) {
+          _postfix = `00${i + 1}`;
+        } else if (i > 10 && i < 100) {
+          _postfix = `0${i + 1}`;
         }
+        const _genKeys = this.generateKeys(`${this.state.randomSeed} ${_postfix}`);
 
         setJumblrAddress(
           this.props.ActiveCoin.coin,
@@ -231,7 +197,7 @@ class Jumblr extends React.Component {
             Store.dispatch(
               triggerToaster(
                 json.error.message,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );
@@ -248,7 +214,7 @@ class Jumblr extends React.Component {
             if (_apiSuccessCount === this.state.secretAddressCount - 1) {
               Store.dispatch(
                 triggerToaster(
-                  this.state.secretAddressCount > 1 ? translate('TOASTR.JUMBLR_SECRET_ADDRESSES_SET') : translate('TOASTR.JUMBLR_SECRET_ADDRESS_SET'),
+                  translate('TOASTR.' + (this.state.secretAddressCount > 1 ? 'JUMBLR_SECRET_ADDRESSES_SET' : 'JUMBLR_SECRET_ADDRESS_SET')),
                   'Jumblr',
                   'success'
                 )
@@ -330,22 +296,19 @@ class Jumblr extends React.Component {
     } else {
       if (this.checkPassphraseValid()) {
         for (let i = 0; i < this.state.secretAddressCountImport; i++) {
-          let _genKeys;
+          let _postfix;
 
-          if (this.state.jumblrDepositAddressPBased) {
-            let _postfix;
-
-            if (i < 9) {
-              _postfix = `00${i + 1}`;
-            } else if (i > 10 && i < 100) {
-              _postfix = `0${i + 1}`;
-            }
-            _genKeys = this.generateKeys(`${this.state.jumblrPassphraseImport} ${_postfix}`);
-          } else {
-            _genKeys = this.generateKeys();
+          if (i < 9) {
+            _postfix = `00${i + 1}`;
+          } else if (i > 10 && i < 100) {
+            _postfix = `0${i + 1}`;
           }
+          const _genKeys = this.generateKeys(`${this.state.jumblrPassphraseImport} ${_postfix}`);
 
-          importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
+          importPrivkey(
+            this.props.ActiveCoin.coin,
+            _genKeys.wif
+          )
           .then((json) => {
             if (!json.id &&
                 !json.result &&
@@ -358,7 +321,7 @@ class Jumblr extends React.Component {
               if (_apiSuccessCount === this.state.secretAddressCountImport - 1) {
                 Store.dispatch(
                   triggerToaster(
-                    this.state.secretAddressCountImport > 1 ? translate('TOASTR.JUMBLR_SECRET_ADDRESSES_IMPORTED') : translate('TOASTR.JUMBLR_SECRET_ADDRESS_IMPORTED'),
+                    translate('TOASTR.' + (this.state.secretAddressCountImport > 1 ? 'JUMBLR_SECRET_ADDRESSES_IMPORTED' : 'JUMBLR_SECRET_ADDRESS_IMPORTED')),
                     'Jumblr',
                     'success'
                   )
@@ -369,7 +332,7 @@ class Jumblr extends React.Component {
               Store.dispatch(
                 triggerToaster(
                   json.error.message,
-                  'Error',
+                  translate('TOASTR.ERROR'),
                   'error'
                 )
               );
@@ -399,15 +362,12 @@ class Jumblr extends React.Component {
   }
 
   generateJumblrDepositAddress() {
-    let _genKeys;
+    const _genKeys = this.generateKeys(this.state.randomSeed);;
 
-    if (this.state.jumblrDepositAddressPBased) {
-      _genKeys = this.generateKeys(this.state.randomSeed);
-    } else {
-      _genKeys = this.generateKeys();
-    }
-
-    importPrivkey(this.props.ActiveCoin.coin, _genKeys.wif)
+    importPrivkey(
+      this.props.ActiveCoin.coin,
+      _genKeys.wif
+    )
     .then((json) => {
       if (!json.id &&
           !json.result &&
@@ -423,7 +383,7 @@ class Jumblr extends React.Component {
             Store.dispatch(
               triggerToaster(
                 json.error.message,
-                'Error',
+                translate('TOASTR.ERROR'),
                 'error'
               )
             );
@@ -451,7 +411,7 @@ class Jumblr extends React.Component {
         Store.dispatch(
           triggerToaster(
             json.error.message,
-            'Error',
+            translate('TOASTR.ERROR'),
             'error'
           )
         );

@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
 import 'bluebird';
+import mainWindow from '../util/mainWindow';
 
 import translate from '../translate/translate';
 import {
@@ -57,6 +58,8 @@ export * from './actions/prices';
 export * from './actions/elections';
 export * from './actions/pin';
 export * from './actions/csv';
+export * from './actions/addressBook';
+export * from './actions/dice';
 
 export const changeActiveAddress = (address) => {
   return {
@@ -76,7 +79,7 @@ export const toggleDashboardTxInfoModal = (display, txIndex) => {
   return {
     type: DASHBOARD_ACTIVE_TXINFO_MODAL,
     showTransactionInfo: display,
-    showTransactionInfoTxIndex: txIndex,
+    showTransactionInfoTxIndex: !display ? null : txIndex,
   }
 }
 
@@ -193,6 +196,8 @@ export const dashboardChangeActiveCoinState = (coin, mode, skipCoinsArrayUpdate)
 }
 
 export const dashboardChangeActiveCoin = (coin, mode, skipCoinsArrayUpdate) => {
+  mainWindow.activeCoin = coin;
+
   return dispatch => {
     dispatch(dashboardChangeActiveCoinState(coin, mode, skipCoinsArrayUpdate));
   }
@@ -214,9 +219,16 @@ export const getNativeTxHistoryState = (json) => {
   if (json &&
       json.error) {
     json = null;
-  } else if (json && json.result && json.result.length) {
+  } else if (
+    json &&
+    json.result &&
+    json.result.length
+  ) {
     json = json.result;
-  } else if (!json || (!json.result || !json.result.length)) {
+  } else if (
+    !json ||
+    (!json.result || !json.result.length)
+  ) {
     json = 'no data';
   }
 
@@ -267,7 +279,7 @@ export const toggleClaimInterestModal = (display) => {
 export const getPinList = (pinList) => {
   return {
     type: GET_PIN_LIST,
-    pinList: pinList,
+    pinList,
   }
 }
 
