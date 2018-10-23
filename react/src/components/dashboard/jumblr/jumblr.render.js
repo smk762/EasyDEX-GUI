@@ -46,11 +46,6 @@ export const JumblrRender = function() {
 
           <div className="col-xs-12">
             <div className="alert alert-info alert-dismissible">
-              { /*<button
-                type="button"
-                className="close">
-                <span>×</span>
-              </button>*/ }
               <span className="jumblr-header">
                 <i className="icon fa-paw"></i> { translate('JUMBLR.ABOUT') }
               </span>
@@ -77,22 +72,22 @@ export const JumblrRender = function() {
                 htmlFor="mode-public"
                 className="no-margin"
                 onClick={ () => this.switchJumblrMode('public') }>
-                <span
-                  className="labelauty-unchecked-image"
-                  style={{ display: this.state.jumblrMode === 'public' ? 'none' : 'inline-block' }}></span>
-                <span
-                  className="labelauty-unchecked"
-                  style={{ display: this.state.jumblrMode === 'public' ? 'none' : 'inline-block' }}>
-                  { translate('JUMBLR.PUBLIC_NODE') }
-                </span>
-                <span
-                  className="labelauty-checked-image"
-                  style={{ display: this.state.jumblrMode === 'public' ? 'inline-block' : 'none' }}></span>
-                <span
-                  className="labelauty-checked"
-                  style={{ display: this.state.jumblrMode === 'public' ? 'inline-block' : 'none' }}>
-                  { translate('JUMBLR.PUBLIC_NODE') }
-                </span>
+                { this.state.jumblrMode !== 'public' &&
+                  <span className="labelauty-unchecked-image"></span>
+                }
+                { this.state.jumblrMode !== 'public' &&
+                  <span className="labelauty-unchecked">
+                    { translate('JUMBLR.PUBLIC_NODE') }
+                  </span>
+                }
+                { this.state.jumblrMode === 'public' &&
+                  <span className="labelauty-checked-image"></span>
+                }
+                { this.state.jumblrMode === 'public' &&
+                  <span className="labelauty-checked">
+                    { translate('JUMBLR.PUBLIC_NODE') }
+                  </span>
+                }
               </label>
             </div>
 
@@ -107,22 +102,22 @@ export const JumblrRender = function() {
                 htmlFor="mode-private"
                 className="no-margin"
                 onClick={ () => this.switchJumblrMode('private') }>
-                <span
-                  className="labelauty-unchecked-image"
-                  style={{ display: this.state.jumblrMode === 'private' ? 'none' : 'inline-block' }}></span>
-                <span
-                  className="labelauty-unchecked"
-                  style={{ display: this.state.jumblrMode === 'private' ? 'none' : 'inline-block' }}>
-                  { translate('JUMBLR.PRIVATE_NODE') }
-                </span>
-                <span
-                  className="labelauty-checked-image"
-                  style={{ display: this.state.jumblrMode === 'private' ? 'inline-block' : 'none' }}></span>
-                <span
-                  className="labelauty-checked"
-                  style={{ display: this.state.jumblrMode === 'private' ? 'inline-block' : 'none' }}>
-                  { translate('JUMBLR.PRIVATE_NODE') }
-                </span>
+                { this.state.jumblrMode !== 'private' &&
+                  <span className="labelauty-unchecked-image"></span>
+                }
+                { this.state.jumblrMode !== 'private' &&
+                  <span className="labelauty-unchecked">
+                    { translate('JUMBLR.PRIVATE_NODE') }
+                  </span>
+                }
+                { this.state.jumblrMode === 'private' &&
+                  <span className="labelauty-checked-image"></span>
+                }
+                { this.state.jumblrMode === 'private' &&
+                  <span className="labelauty-checked">
+                    { translate('JUMBLR.PRIVATE_NODE') }
+                  </span>
+                }
               </label>
             </div>
 
@@ -330,7 +325,8 @@ export const JumblrRender = function() {
                         <label className="switch">
                           <input
                             type="checkbox"
-                            checked={ this.state.jumblrSecretAddressShow } />
+                            checked={ this.state.jumblrSecretAddressShow }
+                            readOnly />
                           <div
                             className="slider"
                             onClick={ () => this.toggle('jumblrSecretAddressShow') }></div>
@@ -439,7 +435,8 @@ export const JumblrRender = function() {
                           <label className="switch">
                             <input
                               type="checkbox"
-                              checked={ this.state.jumblrSecretAddressShowImport } />
+                              checked={ this.state.jumblrSecretAddressShowImport }
+                              readOnly />
                             <div
                               className="slider"
                               onClick={ () => this.toggle('jumblrSecretAddressShowImport') }></div>

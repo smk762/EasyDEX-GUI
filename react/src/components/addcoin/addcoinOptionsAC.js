@@ -4,6 +4,8 @@ import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 import { sortObject } from 'agama-wallet-lib/src/utils';
 
+// TODO: detect if ac has electrums or not
+
 const _disabledAC = {
   spv: [
     'axo',
@@ -13,6 +15,7 @@ const _disabledAC = {
     'dsec',
     'mgnx',
     'pirate',
+    'koin',
   ],
   native: [
     'vrsc',
@@ -43,15 +46,17 @@ const addCoinOptionsAC = (activeCoins) => {
   _assetChains = coinsList;
 
   for (let i = 0; i < _assetChains.length; i++) {
+    const _coinlc = _assetChains[i].toLowerCase();
+    const _coinuc = _assetChains[i].toUpperCase();
     let availableModes;
 
-    if (_disabledAC.spv.indexOf(_assetChains[i].toLowerCase()) === -1) {
+    if (_disabledAC.spv.indexOf(_coinlc) === -1) {
       availableModes = 'spv|native';
     } else {
       availableModes = 'native'
     }
 
-    if (_disabledAC.native.indexOf(_assetChains[i].toLowerCase()) > -1) {
+    if (_disabledAC.native.indexOf(_coinlc) > -1) {
       availableModes = 'spv';
     }
 
@@ -59,17 +64,18 @@ const addCoinOptionsAC = (activeCoins) => {
       availableModes = 'spv';
     }
 
-    if (_disabledAC.all.indexOf(_assetChains[i].toLowerCase()) === -1 &&
+    if (_disabledAC.all.indexOf(_coinlc) === -1 &&
         (activeCoins === 'skip' || (activeCoins !== 'skip' &&
          activeCoins &&
          activeCoins.spv &&
          activeCoins.native &&
-         activeCoins.spv.indexOf(_assetChains[i].toUpperCase()) === -1 &&
-         activeCoins.native.indexOf(_assetChains[i].toUpperCase()) === -1))) {
+         activeCoins.spv.indexOf(_coinlc) === -1 &&
+         activeCoins.native.indexOf(_coinlc) === -1))) {
+      const _placeholder = translate(`ASSETCHAINS.${_coinuc}`);
       _items.push({
-        label: `${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`)}${translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`).indexOf('(') === -1 && translate(`ASSETCHAINS.${_assetChains[i].toUpperCase()}`) !== _assetChains[i].toUpperCase() ? ' (' + _assetChains[i].toUpperCase() + ')' : ''}`,
-        icon: _assetChains[i].toLowerCase(),
-        value: `${_assetChains[i].toUpperCase()}|${availableModes}`,
+        label: `${_placeholder}${_placeholder.indexOf('(') === -1 && _placeholder !== _coinuc ? ' (' + _coinuc + ')' : ''}`,
+        icon: _coinlc,
+        value: `${_coinuc}|${availableModes}`,
       });
     }
   }
@@ -84,10 +90,14 @@ const addCoinOptionsAC = (activeCoins) => {
 
     for (let key in _customAssetChains) {
       for (let i = 0; i < _customAssetChains[key].length; i++) {
+        const _customuc = _customAssetChains[key][i].toUpperCase();
+        const _customlc = _customAssetChains[key][i].toLowerCase();
+        const _placeholder = translate(`ASSETCHAINS.${_customuc}`);
+
         _items.push({
-          label: `${translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`)}${translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`).indexOf('(') === -1 && translate(`ASSETCHAINS.${_customAssetChains[key][i].toUpperCase()}`) !== _customAssetChains[key][i].toUpperCase() ? ' (' + _customAssetChains[key][i].toUpperCase() + ')' : ''}`,
-          icon: _customAssetChains[key][i].toLowerCase(),
-          value: `${_customAssetChains[key][i].toUpperCase()}|${key}`,
+          label: _placeholder + (_placeholder.indexOf('(') === -1 && _placeholder !== _customuc ? ' (' + _customuc + ')' : ''),
+          icon: _customlc,
+          value: `${_customuc}|${key}`,
         });
       }
     }

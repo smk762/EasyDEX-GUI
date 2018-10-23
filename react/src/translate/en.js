@@ -49,6 +49,7 @@ const LANG_EN = {
     KEYS_SEPARATED_BY_LINE: 'Keys, separated by a new line',
   },
   CLAIM_INTEREST: {
+    ACTUAL_LOCKTIME_SEC: 'Actual time passed since locktime ',
     MONTHLY_CLAIMING_TIP: 'To maximize your rewards claim them once a month.',
     NEED_TO_CLAIM: 'need to claim',
     TIME_SINCE_LOCKTIME: 'Time passed since locktime',
@@ -172,6 +173,7 @@ const LANG_EN = {
     'decryptKey': 'Unable to decrypt data',
     'authError': 'Unable to get auth data',
     'apiElectrumPushTx': 'Unable to push transaction',
+    'zmergeToAddressPromise': 'Unable to merge funds',
   },
   NN_ELECTIONS: {
     WRONG_ADDR_FORMAT: 'Wrong address format',
@@ -1001,6 +1003,10 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    USE_ZMERGETOADDRESS: 'Merge funds (z_mergetoaddress)',
+    ANY: 'Any address(es)',
+    ANY_TADDR: 'Any transparent address(es)',
+    ANY_ZADDR: 'Any z address(es)',
     ALL_OPID_CLEARED: 'All Z transaction(s) traces are cleared!',
     CLEAR_ALL: 'Clear all',
     CLEAR_ALL_DESC: 'For maximum privacy it\'s advised to clear all traces of your outgoing z transactions including runtime data.<br>If you want this action to take place automatically see Settings/App config section.',
@@ -1156,11 +1162,11 @@ const LANG_EN = {
     ZILLA: 'ChainZilla',
     DSEC: 'DevSec',
     VRSC: 'VerusCoin',
-	MGNX: 'MagnaX',
+  	MGNX: 'MagnaX',
     CALL: 'Capital',
     CCL: 'CoinCollect',
     PIRATE: 'Pirate',
-	KOIN: 'Koinon Coin',
+    KOIN: 'Koinon Coin',
     DION: 'DionPay',
   },
   CRYPTO: {

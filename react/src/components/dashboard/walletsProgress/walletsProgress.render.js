@@ -45,16 +45,23 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
           style={{ width: syncPercentage }}>
           <span style={{ width: syncPercentage }}>
             { syncPercentage === '100.00%' ? '100%' : syncPercentage }&nbsp;
-            <span className={ this.props.ActiveCoin.progress.blocks || currentBlock ? '' : 'hide' }>|&nbsp;
-              { this.props.ActiveCoin.progress.blocks || currentBlock }&nbsp;
-              <span className={ this.props.ActiveCoin.progress.longestchain || maxHeight ? '' : 'hide'}>/&nbsp;
-              { this.props.ActiveCoin.progress.longestchain || maxHeight }
+            { (this.props.ActiveCoin.progress.blocks || currentBlock) &&
+              <span>|&nbsp;
+                { this.props.ActiveCoin.progress.blocks || currentBlock }&nbsp;
+                { (this.props.ActiveCoin.progress.longestchain || maxHeight) &&
+                  <span>/&nbsp;
+                  { this.props.ActiveCoin.progress.longestchain || maxHeight }
+                  </span>
+                }
+              &nbsp;
               </span>
-            </span>&nbsp;
-            <span className={ this.props.ActiveCoin.progress.connections ? '' : 'hide' }>|&nbsp;
-              { translate('INDEX.CONNECTIONS') }:&nbsp;
-              { this.props.ActiveCoin.progress.connections }
-            </span>
+            }
+            { this.props.ActiveCoin.progress.connections &&
+              <span>|&nbsp;
+                { translate('INDEX.CONNECTIONS') }:&nbsp;
+                { this.props.ActiveCoin.progress.connections }
+              </span>
+            }
           </span>
         </div>
       );
@@ -76,7 +83,7 @@ export const TranslationComponentsRender = function(translationID) {
   const translationComponents = translate(translationID).split('<br>');
 
   return translationComponents.map((translation, idx) =>
-    <span key={idx}>
+    <span key={ idx }>
       { translation }
       <br />
     </span>

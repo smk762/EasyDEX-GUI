@@ -3,7 +3,7 @@ import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
 import mainWindow from '../../../util/mainWindow';
 
-export const ImportKeyModalRender = function() {
+const ImportKeyModalRender = function() {
   return (
     <span>
       <div className={ `modal modal-import-key modal-3d-sign ${this.state.className}` }>
@@ -183,7 +183,9 @@ export const ImportKeyModalRender = function() {
                 <div className={ !this.state.importMulti ? 'margin-top-20' : 'hide' }>
                   <label
                     htmlFor="wif"
-                    className="bold">{ translate('IMPORT_KEY.WIF_KEY') }</label>
+                    className="bold">
+                    { translate('IMPORT_KEY.WIF_KEY') }
+                  </label>
                   <div className="form-group form-material">
                     <input
                       autoComplete="off"
@@ -202,7 +204,9 @@ export const ImportKeyModalRender = function() {
                 <div className={ this.state.importMulti ? 'margin-top-20' : 'hide' }>
                   <label
                     htmlFor="multipleWif"
-                    className="bold">{ translate('IMPORT_KEY.KEYS_SEPARATED_BY_LINE') }</label>
+                    className="bold">
+                    { translate('IMPORT_KEY.KEYS_SEPARATED_BY_LINE') }
+                  </label>
                   <div className="form-group form-material">
                     <textarea
                       autoComplete="off"
@@ -219,7 +223,7 @@ export const ImportKeyModalRender = function() {
                   type="button"
                   className="btn btn-primary waves-effect waves-light margin-top-10"
                   onClick={ this.importFromWif }>
-                  { this.state.importWithRescan ? translate('IMPORT_KEY.IMPORT_AND_RESCAN') : translate('IMPORT_KEY.IMPORT') }
+                  { translate('IMPORT_KEY.' + (this.state.importWithRescan ? 'IMPORT_AND_RESCAN' : 'IMPORT')) }
                 </button>
               </div>
             </div>
@@ -230,3 +234,5 @@ export const ImportKeyModalRender = function() {
     </span>
   );
 };
+
+export default ImportKeyModalRender;

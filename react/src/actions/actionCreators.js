@@ -219,9 +219,16 @@ export const getNativeTxHistoryState = (json) => {
   if (json &&
       json.error) {
     json = null;
-  } else if (json && json.result && json.result.length) {
+  } else if (
+    json &&
+    json.result &&
+    json.result.length
+  ) {
     json = json.result;
-  } else if (!json || (!json.result || !json.result.length)) {
+  } else if (
+    !json ||
+    (!json.result || !json.result.length)
+  ) {
     json = 'no data';
   }
 

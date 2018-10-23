@@ -5,6 +5,8 @@ import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
 
 const NavbarRender = function() {
+  const _activeCoin = this.props.ActiveCoin;
+
   return (
     <nav className="site-navbar navbar navbar-default navbar-fixed-top navbar-mega">
       <div className="navbar-header">
@@ -46,17 +48,17 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> BarterDEX
               </a>
             </li>
-            { this.props.ActiveCoin &&
+            { _activeCoin &&
               (/*this._checkAC() || */
-              this.props.ActiveCoin.coin === 'KMD' &&
-              this.props.ActiveCoin.mode === 'native') &&
+              _activeCoin.coin === 'KMD' &&
+              _activeCoin.mode === 'native') &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('jumblr') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('jumblr') }>
                   <i className="site-menu-icon"></i> Jumblr
                 </a>
               </li>
             }
-            { this.props.ActiveCoin.mode !== 'spv' &&
+            { _activeCoin.mode !== 'spv' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
                   <i className="site-menu-icon"></i> { translate('IMPORT_KEY.IMPORT_KEY') }
@@ -84,8 +86,8 @@ const NavbarRender = function() {
             }
             { Config.experimentalFeatures &&
               Config.dev &&
-              this.props.ActiveCoin &&
-              this.props.ActiveCoin.mode === 'native' &&
+              _activeCoin &&
+              _activeCoin.mode === 'native' &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('dice') }>
                   <img

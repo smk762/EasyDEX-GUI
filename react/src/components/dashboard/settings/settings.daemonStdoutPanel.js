@@ -30,8 +30,9 @@ class DaemonStdoutPanel extends React.Component {
       });
 
       setTimeout(() => {
-        document.querySelector('#settingsCoindStdoutTextarea').style.height = '1px';
-        document.querySelector('#settingsCoindStdoutTextarea').style.height = `${(15 + document.querySelector('#settingsCoindStdoutTextarea').scrollHeight)}px`;
+        const _ta = document.querySelector('#settingsCoindStdoutTextarea');
+        _ta.style.height = '1px';
+        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
       }, 100);
     });
   }
@@ -54,7 +55,9 @@ class DaemonStdoutPanel extends React.Component {
       _items.push(
         <option
           key={ `coind-stdout-coins-${i}` }
-          value={ `${_nativeCoins[i]}` }>{ `${_nativeCoins[i]}` }</option>
+          value={ `${_nativeCoins[i]}` }>
+          { `${_nativeCoins[i]}` }
+        </option>
       );
     }
 

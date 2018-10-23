@@ -172,7 +172,7 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
         }
       } else if (key === 'genproclimit') {
         if (genproclimit > 0) {
-          herdData.ac_options.push(`-genproclimit=${genproclimit + 1}`);
+          herdData.ac_options.push(`-genproclimit=${genproclimit}`);
         } else {
           herdData.ac_options.push('-genproclimit=0');
         }

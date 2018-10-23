@@ -47,7 +47,10 @@ class ExportKeysPanel extends React.Component {
 
   exportWifKeys() {
     if (mainWindow.pinAccess) {
-      loginWithPin(this.state.wifkeysPassphrase, mainWindow.pinAccess)
+      loginWithPin(
+        this.state.wifkeysPassphrase,
+        mainWindow.pinAccess
+      )
       .then((res) => {
         if (res.msg === 'success') {
           this.setState({
@@ -166,10 +169,12 @@ class ExportKeysPanel extends React.Component {
 
   resizeLoginTextarea() {
     // auto-size textarea
+    const _ta = document.querySelector('#wifkeysPassphraseTextarea');
+
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+        _ta.style.height = '1px';
+        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
       }
     }, 100);
   }
@@ -192,7 +197,7 @@ class ExportKeysPanel extends React.Component {
           <div className="col-sm-12 margin-bottom-15">
             <div className="padding-bottom-20">{ this.renderLB('INDEX.ONLY_ACTIVE_WIF_KEYS') }</div>
             <div className="padding-bottom-20">
-              <i>{ this.renderLB( mainWindow.pinAccess ? 'SETTINGS.EXPORT_KEYS_NOTE_PIN' : 'SETTINGS.EXPORT_KEYS_NOTE') }</i>
+              <i>{ 'SETTINGS.' + (this.renderLB(mainWindow.pinAccess ? 'EXPORT_KEYS_NOTE_PIN' : 'EXPORT_KEYS_NOTE')) }</i>
             </div>
             <strong>
               <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
@@ -228,15 +233,20 @@ class ExportKeysPanel extends React.Component {
                 { !mainWindow.pinAccess &&
                   <label
                     className="floating-label"
-                    htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
+                    htmlFor="wifkeysPassphrase">
+                    { translate('INDEX.PASSPHRASE') } / WIF
+                  </label>
                 }
                 { mainWindow.pinAccess &&
                   <label
                     className="floating-label"
-                    htmlFor="wifkeysPassphrase">{ translate('SETTINGS.PW_PIN') }</label>
+                    htmlFor="wifkeysPassphrase">
+                    { translate('SETTINGS.PW_PIN') }
+                  </label>
                 }
                 { this.state.seedExtraSpaces &&
-                  <i className="icon fa-warning seed-extra-spaces-warning"
+                  <i
+                    className="icon fa-warning seed-extra-spaces-warning"
                     data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
                     data-html={ true }
                     data-for="exportKeys"></i>

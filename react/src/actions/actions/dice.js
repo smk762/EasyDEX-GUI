@@ -37,6 +37,30 @@ export const diceProcessErrors = (json) => {
 
 export const getDiceList = (coin) => {
   return dispatch => {
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/native/dice/list`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.getDiceList') + ' (code: getDiceList)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      diceProcessErrors(json);
+      dispatch(diceListState(json));
+    });
+  };
+}
+
+/*export const getDiceList = (coin) => {
+  return dispatch => {
     const payload = {
       mode: null,
       chain: coin,
@@ -65,7 +89,7 @@ export const getDiceList = (coin) => {
       dispatch(diceListState(json));
     });
   };
-}
+}*/
 
 const diceListState = (json) => {
   return {

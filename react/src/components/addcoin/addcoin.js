@@ -85,8 +85,9 @@ class AddCoin extends React.Component {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-        document.querySelector('#loginPassphrase').style.height = '1px';
-        document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
+        const _login = document.querySelector('#loginPassphrase');
+        _login.style.height = '1px';
+        _login.style.height = `${(15 + _login.scrollHeight)}px`;
       }
     }, 100);
   }
@@ -275,6 +276,7 @@ class AddCoin extends React.Component {
           checked: defaultMode === 'mining' ? true : false,
         },
         mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
+        genProcLimit: 1,
       };
 
       this.setState(Object.assign({}, this.state, {
@@ -313,6 +315,16 @@ class AddCoin extends React.Component {
     }));
   }
 
+  updateGenproclimitParam(e, index) {
+    let _coins = this.state.coins;
+
+    _coins[index].genProcLimit = e.target.value;
+
+    this.setState(Object.assign({}, this.state, {
+      coins: _coins,
+    }));
+  }
+
   handleKeydown(e) {
     if (e.key === 'Escape') {
       this.dismiss();
@@ -320,9 +332,10 @@ class AddCoin extends React.Component {
   }
 
   activateCoin() {
-    const coin = this.state.coins[0].selectedCoin.split('|')[0];
     const _coin = this.state.coins[0];
-
+    const coin = _coin.selectedCoin.split('|')[0];
+    const coinuc = coin.toUpperCase();
+    
     this.verifyZcashParamsExist(_coin.mode)
     .then((res) => {
       if (res) {
@@ -337,14 +350,14 @@ class AddCoin extends React.Component {
             coin,
             _coin.mode,
           ));
-        } else {
+        } else {          
           Store.dispatch(addCoin(
             coin,
             _coin.mode,
             { type: _coin.daemonParam },
             _coin.daemonParam === 'gen' &&
-            acConfig[coin.toUpperCase()] &&
-            acConfig[coin.toUpperCase()].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+            acConfig[coinuc] &&
+            acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
           ));
         }
 
@@ -393,8 +406,10 @@ class AddCoin extends React.Component {
   }
 
   activateAllCoins() {
-    const coin = this.state.coins[0].selectedCoin.split('|')[0];
-
+    let _coin = this.state.coins[0];
+    let coin = this.state.coins[0].selectedCoin.split('|')[0];
+    let coinuc = coin.toUpperCase();
+    
     Store.dispatch(
       addCoin(
         coin,
@@ -402,11 +417,44 @@ class AddCoin extends React.Component {
       )
     );
 
+    if (!_coin.daemonParam) {
+      Store.dispatch(addCoin(
+        coin,
+        _coin.mode,
+      ));
+    } else {          
+      Store.dispatch(addCoin(
+        coin,
+        _coin.mode,
+        { type: _coin.daemonParam },
+        _coin.daemonParam === 'gen' &&
+        acConfig[coinuc] &&
+        acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+      ));
+    }
+
     for (let i = 1; i < this.state.coins.length; i++) {
-      const _item = this.state.coins[i];
-      const itemCoin = _item.selectedCoin.split('|')[0];
+      let _coin = this.state.coins[i];
+      let coin = _coin.selectedCoin.split('|')[0];
+      let coinuc = coin.toUpperCase();  
 
       setTimeout(() => {
+        if (!_coin.daemonParam) {
+          Store.dispatch(addCoin(
+            coin,
+            _coin.mode,
+          ));
+        } else {          
+          Store.dispatch(addCoin(
+            coin,
+            _coin.mode,
+            { type: _coin.daemonParam },
+            _coin.daemonParam === 'gen' &&
+            acConfig[coinuc] &&
+            acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+          ));
+        }
+
         Store.dispatch(
           addCoin(
             itemCoin,
@@ -466,8 +514,8 @@ class AddCoin extends React.Component {
       _items.push(
         <option
           key={ `addcoin-genproclimit-${i}` }
-          value={ i }>
-          { translate('ADD_COIN.MINING_THREADS') }: { i + 1}
+          value={ i + 1 }>
+          { translate('ADD_COIN.MINING_THREADS') }: { i + 1 }
         </option>
       );
     }

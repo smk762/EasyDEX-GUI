@@ -75,13 +75,15 @@ class CoinTileItem extends React.Component {
   }
 
   handleClickOutside(e) {
+    const _srcElement = e ? e.srcElement : null;
+    
     if (e &&
-        e.srcElement &&
-        e.srcElement.offsetParent &&
-        e.srcElement.offsetParent.className.indexOf('dropdown') === -1 &&
-      (e.srcElement.offsetParent && e.srcElement.offsetParent.className.indexOf('dropdown') === -1)) {
+        _srcElement &&
+        _srcElement.offsetParent &&
+        _srcElement.offsetParent.className.indexOf('dropdown') === -1 &&
+      (_srcElement.offsetParent && _srcElement.offsetParent.className.indexOf('dropdown') === -1)) {
       this.setState({
-        toggledCoinMenu: e.srcElement.className.indexOf('coin-tile-context-menu-trigger') === -1 ? null : this.state.toggledCoinMenu,
+        toggledCoinMenu: _srcElement.className.indexOf('coin-tile-context-menu-trigger') === -1 ? null : this.state.toggledCoinMenu,
       });
     }
   }
@@ -97,6 +99,8 @@ class CoinTileItem extends React.Component {
   }
 
   renderCoinConError(item) {
+    const _coins = this.props.ActiveCoin.coins;    
+
     if (this.props.ActiveCoin.getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD &&
         (this.props.ActiveCoin.mode === 'native' &&
         this.props.ActiveCoin.coin === this.state.activeCoin &&
@@ -105,38 +109,43 @@ class CoinTileItem extends React.Component {
         this.state.activeCoinMode === 'native' &&
         this.props.ActiveCoin.mode === this.state.activeCoinMode &&
         this.state.propsUpdatedCounter > 1) ||
-        (this.props.ActiveCoin.coins && this.props.ActiveCoin.coins[item.coin]) && this.props.ActiveCoin.coins[item.coin].getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) {
+        (_coins && _coins[item.coin]) && _coins[item.coin].getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) {
       return true;
     }
   }
 
   renderStopAllCoinsButton() {
-    if (this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.native &&
-        this.props.Main.coins.native.length &&
-        this.props.Main.coins.native.length > 1) {
+    const _main = this.props.Main;
+
+    if (_main &&
+        _main.coins &&
+        _main.coins.native &&
+        _main.coins.native.length &&
+        _main.coins.native.length > 1) {
       return true;
     }
   }
 
   renderStopCoinButton() {
-    if (this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.native &&
-        this.props.Main.coins.native.length) {
+    const _main = this.props.Main;
+
+    if (_main &&
+        _main.coins &&
+        _main.coins.native &&
+        _main.coins.native.length) {
       return true;
     }
   }
 
   renderRemoveCoinButton() {
-    if (this.props.Main &&
-        this.props.Main.coins &&
-        ((this.props.Main.coins.native &&
-        this.props.Main.coins.native.length &&
+    const _main = this.props.Main;
+
+    if (_main &&
+        _main.coins &&
+        ((_main.coins.native &&
+          _main.coins.native.length &&
         !Config.native.stopNativeDaemonsOnQuit) ||
-        (this.props.Main.coins.spv &&
-        this.props.Main.coins.spv.length))) {
+        (_main.coins.spv && _main.coins.spv.length))) {
       return true;
     }
   }
@@ -284,15 +293,17 @@ class CoinTileItem extends React.Component {
   }
 
   dispatchCoinActions(coin, mode) {
-    if (this.props.Dashboard &&
-        this.props.Dashboard.activeSection === 'wallets') {
+    const _dashboard = this.props.Dashboard;
+    const _coin = this.props.ActiveCoin;
+    
+    if (_dashboard &&
+        _dashboard.activeSection === 'wallets') {
       if (mode === 'native') {
-        const _propsDashboard = this.props.ActiveCoin;
-        const syncPercentage = _propsDashboard && _propsDashboard.progress && (parseFloat(parseInt(_propsDashboard.progress.blocks, 10) * 100 / parseInt(_propsDashboard.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
+        const syncPercentage = _coin && _coin.progress && (parseFloat(parseInt(_coin.progress.blocks, 10) * 100 / parseInt(_coin.progress.longestchain, 10)).toFixed(2)).replace('NaN', 0);
 
         if ((syncPercentage < 100 &&
-            (!this.props.Dashboard.displayCoindDownModal || this.props.ActiveCoin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD)) ||
-            this.props.ActiveCoin.rescanInProgress) {
+            (!_dashboard.displayCoindDownModal || _coin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD)) ||
+            _coin.rescanInProgress) {
           if (coin === 'KMD') {
             Store.dispatch(getDebugLog('komodo', 50));
           } else {
@@ -300,43 +311,43 @@ class CoinTileItem extends React.Component {
           }
         }
 
-        if ((!this.props.Dashboard.displayCoindDownModal || this.props.ActiveCoin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) &&
-            _propsDashboard.progress &&
-            _propsDashboard.progress.blocks &&
-            _propsDashboard.progress.longestchain &&
+        if ((!_dashboard.displayCoindDownModal || _coin.getinfoFetchFailures < COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) &&
+            _coin.progress &&
+            _coin.progress.blocks &&
+            _coin.progress.longestchain &&
             syncPercentage) {
           Store.dispatch(
             getSyncInfoNative(
               coin,
               true,
-              this.props.Dashboard.skipFullDashboardUpdate,
-              this.props.ActiveCoin.rescanInProgress
+              _dashboard.skipFullDashboardUpdate,
+              _coin.rescanInProgress
             )
           );
 
-          if (!this.props.Dashboard.skipFullDashboardUpdate) {
-            Store.dispatch(getDashboardUpdate(coin, _propsDashboard));
+          if (!_dashboard.skipFullDashboardUpdate) {
+            Store.dispatch(getDashboardUpdate(coin, _coin));
           }
         } else {
           Store.dispatch(
             getSyncInfoNative(
               coin,
               null,
-              this.props.Dashboard.skipFullDashboardUpdate,
-              this.props.ActiveCoin.rescanInProgress
+              _dashboard.skipFullDashboardUpdate,
+              _coin.rescanInProgress
             )
           );
         }
       } else if (
         mode === 'spv' &&
-        this.props.Dashboard.electrumCoins &&
-        this.props.Dashboard.electrumCoins[coin] &&
-        this.props.Dashboard.electrumCoins[coin].pub
+        _dashboard.electrumCoins &&
+        _dashboard.electrumCoins[coin] &&
+        _dashboard.electrumCoins[coin].pub
       ) {
-        Store.dispatch(apiElectrumBalance(coin, this.props.Dashboard.electrumCoins[coin].pub));
+        Store.dispatch(apiElectrumBalance(coin, _dashboard.electrumCoins[coin].pub));
 
         if (this.props.ActiveCoin.activeSection === 'default') {
-          Store.dispatch(apiElectrumTransactions(coin, this.props.Dashboard.electrumCoins[coin].pub));
+          Store.dispatch(apiElectrumTransactions(coin, _dashboard.electrumCoins[coin].pub));
         }
       }
     }
@@ -388,8 +399,11 @@ class CoinTileItem extends React.Component {
         this.props.ActiveCoin.mode === 'spv' &&
         this.props.Dashboard &&
         this.props.Dashboard.activeSection === 'wallets') {
-      Store.dispatch(apiElectrumBalance(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
-      Store.dispatch(apiElectrumTransactions(this.props.ActiveCoin.coin, this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub));
+      const _coin = this.props.ActiveCoin.coin;
+      const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+      
+      Store.dispatch(apiElectrumBalance(_coin, _pub));
+      Store.dispatch(apiElectrumTransactions(_coin, _pub));
       Store.dispatch(electrumServerChanged(false));
       setTimeout(() => {
         Store.dispatch(electrumServerChanged(false));

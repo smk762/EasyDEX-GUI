@@ -78,14 +78,16 @@ class SweepKeysPanel extends React.Component {
 
   confirmSweep() {
     const _coin = this.state.coin.split('|')[0];
+    const _balance = this.state.sweepPreflight.balance;
     let _fees = mainWindow.spvFees;
-
-    if (Number(this.state.sweepPreflight.balance) - fromSats(_fees[this.props.ActiveCoin.coin]) >= 0) {
+    
+    if (Number(_balance) - fromSats(_fees[this.props.ActiveCoin.coin]) >= 0) {
       const _kp = seedToWif(
         this.state.wifkeysPassphrase,
         electrumJSNetworks[isKomodoCoin(_coin.toLowerCase()) ? 'kmd' : _coin.toLowerCase()],
         true
       );
+      const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
 
       this.setState({
         processingTx: true,
@@ -93,8 +95,8 @@ class SweepKeysPanel extends React.Component {
 
       apiElectrumSweep(
         _coin,
-        toSats(this.state.sweepPreflight.balance - 0.0001),
-        this.props.Dashboard.electrumCoins[_coin].pub,
+        toSats(_balance - 0.0001),
+        _pub,
         _kp.pub,
         true,
         _kp.priv,
@@ -103,7 +105,8 @@ class SweepKeysPanel extends React.Component {
         if (res.msg === 'success') {
           Store.dispatch(
             triggerToaster(
-              translate('SETTINGS.SWEEP_SUCCESS', `${this.state.sweepPreflight.balance - 0.0001} ${_coin}`) + ' ' + translate('SETTINGS.FROM_SM') + ' ' + _kp.pub + ' ' + translate('SEND.TO') + ' ' + this.props.Dashboard.electrumCoins[_coin].pub,
+              translate('SETTINGS.SWEEP_SUCCESS', `${_balance - 0.0001} ${_coin}`) +
+              ` ${translate('SETTINGS.FROM_SM')} ${_kp.pub} ${translate('SEND.TO')} ${_pub}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'success toastr-wide',
               false
@@ -142,10 +145,11 @@ class SweepKeysPanel extends React.Component {
 
   sweepKeysPreflight() {
     const _coin = this.state.coin.split('|')[0];
-
+    const _coinlc = _coin.toLowerCase();
+    
     const _kp = seedToWif(
       this.state.wifkeysPassphrase,
-      electrumJSNetworks[isKomodoCoin(_coin.toLowerCase()) ? 'kmd' : _coin.toLowerCase()],
+      electrumJSNetworks[isKomodoCoin(_coinlc) ? 'kmd' : _coinlc],
       true
     );
 
@@ -295,7 +299,8 @@ class SweepKeysPanel extends React.Component {
 
   renderCoinsList() {
     const _activeCoins = this.props.Dashboard.electrumCoins;
-    const allCoins = addCoinOptionsCrypto('skip').concat(addCoinOptionsAC('skip'));
+    const allCoins = addCoinOptionsCrypto('skip')
+                    .concat(addCoinOptionsAC('skip'));
     let _items = [];
 
     for (let i = 0; i < allCoins.length; i++) {
@@ -321,7 +326,9 @@ class SweepKeysPanel extends React.Component {
             <div className="form-group form-material floating padding-bottom-40">
               <label
                 className="control-label col-sm-1 no-padding-left padding-top-10"
-                htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+                htmlFor="kmdWalletSendTo">
+                { translate('TOOLS.COIN') }
+              </label>
               <Select
                 name="coin"
                 className="col-sm-3"
@@ -358,10 +365,13 @@ class SweepKeysPanel extends React.Component {
                 { !mainWindow.pinAccess &&
                   <label
                     className="floating-label"
-                    htmlFor="wifkeysPassphrase">{ translate('INDEX.PASSPHRASE') } / WIF</label>
+                    htmlFor="wifkeysPassphrase">
+                    { translate('INDEX.PASSPHRASE') } / WIF
+                  </label>
                 }
                 { this.state.seedExtraSpaces &&
-                  <i className="icon fa-warning seed-extra-spaces-warning"
+                  <i
+                    className="icon fa-warning seed-extra-spaces-warning"
                     data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
                     data-html={ true }
                     data-for="sweepKeys"></i>

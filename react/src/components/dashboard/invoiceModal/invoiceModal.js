@@ -108,10 +108,10 @@ class InvoiceModal extends React.Component {
 
         if (type === 'private' ||
             (type === 'public' &&
-            (this.props.ActiveCoin.coin === 'KMD' ||
+            (_coin === 'KMD' ||
              (mainWindow.chainParams &&
-              mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-              !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)))) {
+              mainWindow.chainParams[_coin] &&
+              !mainWindow.chainParams[_coin].ac_private)))) {
           items.push(
             AddressItemRender.call(this, address, type)
           );
@@ -128,7 +128,7 @@ class InvoiceModal extends React.Component {
           AddressItemRender.call(
             this,
             {
-              address: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+              address: this.props.Dashboard.electrumCoins[_coin].pub,
               amount: this.props.ActiveCoin.balance.balance,
             },
             'public'

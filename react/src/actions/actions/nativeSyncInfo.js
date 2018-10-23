@@ -36,10 +36,9 @@ export const getSyncInfoNativeKMD = (skipDebug, json, skipRemote) => {
     }
   } else {
     const coin = 'KMD';
-    // https://www.kmd.host/
     return dispatch => {
       return fetch(
-        'https://kmd.explorer.supernet.org/api/status?q=getInfo',
+        'https://kmdexplorer.io/insight-api-komodo/status?q=getInfo',
         fetchType.get
       )
       .catch((error) => {
@@ -301,7 +300,10 @@ export const getDebugLogProgress = (_json, coin) => {
             json.result.headers) {
           _json.result.longestchain = json.result.headers;
           _json.result.progress = json.result.blocks * 100 / json.result.headers;
-        } else if (json.result && json.result.indexOf('UpdateTip:') > -1) {
+        } else if (
+          json.result &&
+          json.result.indexOf('UpdateTip:') > -1
+        ) {
           const _debugProgress = json.result.split(' ');
           let _height = '';
           let _progress = '';

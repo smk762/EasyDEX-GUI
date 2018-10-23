@@ -1,5 +1,5 @@
 import translate from '../../translate/translate';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { electrumServers } from '../../util/mainWindow';
 import config from '../../config';
 import { cryptoCoins } from '../../util/coinHelper';
 import { sortObject } from 'agama-wallet-lib/src/utils';
@@ -49,15 +49,16 @@ const prepCoinsList = (filterActiveCoins) => {
   } else {
     for (let i = 0; i < coins.length; i++) {
       try {
-        if (mainWindow &&
-            mainWindow.electrumServers &&
-            mainWindow.electrumServers[coins[i].toLowerCase()] &&
+        const _coin = coins[i].toLowerCase();
+
+        if (electrumServers &&
+            electrumServers[_coin] &&
             (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
             _activeCoins &&
             _activeCoins.spv &&
             _activeCoins.native &&
-            _activeCoins.spv.indexOf(coins[i].toUpperCase()) === -1 &&
-            _activeCoins.native.indexOf(coins[i].toUpperCase()) === -1))) {
+            _activeCoins.spv.indexOf(_coin) === -1 &&
+            _activeCoins.native.indexOf(_coin) === -1))) {
           _items.push({
             label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
             icon: coins[i],
