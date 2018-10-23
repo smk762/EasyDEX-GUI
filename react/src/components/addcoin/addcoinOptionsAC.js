@@ -72,6 +72,7 @@ const addCoinOptionsAC = (activeCoins) => {
          activeCoins.spv.indexOf(_coinlc) === -1 &&
          activeCoins.native.indexOf(_coinlc) === -1))) {
       const _placeholder = translate(`ASSETCHAINS.${_coinuc}`);
+
       _items.push({
         label: `${_placeholder}${_placeholder.indexOf('(') === -1 && _placeholder !== _coinuc ? ' (' + _coinuc + ')' : ''}`,
         icon: _coinlc,
