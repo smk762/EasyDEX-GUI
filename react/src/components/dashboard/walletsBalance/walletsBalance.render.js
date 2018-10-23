@@ -42,10 +42,7 @@ const WalletsBalanceRender = function() {
                   <div className="padding-20 padding-top-10">
                     <div className="clearfix cursor-default">
                       <div className="pull-left padding-vertical-10">
-                        { _coin !== 'CHIPS' &&
-                          _mode !== 'spv' &&
-                          <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
-                        }
+                        <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
                         { _mode === 'spv' &&
                           Number(this.renderBalance('interest')) > 0 &&
                           <span className="padding-right-30">&nbsp;</span>
