@@ -127,6 +127,36 @@ export const apiElectrumAddCoin = (coin) => {
   }
 }
 
+export const addCoinEth = (coin, network) => {
+  return dispatch => {
+    const _urlParams = {
+      coin,
+      network,
+      token,
+    };
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/eth/coins/add${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.addCoinEth') + ' (code: addCoinEth)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(
+        addCoinResult(coin, '0')
+      );
+    });
+  }
+}
+
 export const addCoin = (coin, mode, startupParams, genproclimit) => {
   if (mode === 0 ||
       mode === '0') {
@@ -303,7 +333,7 @@ export const addCoinResult = (coin, mode) => {
   return dispatch => {
     dispatch(
       triggerToaster(
-        `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
+        coin === 'ETH' ? `${coin} added`: `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
         translate('TOASTR.COIN_NOTIFICATION'),
         'success'
       )
@@ -328,6 +358,26 @@ export const addCoinResult = (coin, mode) => {
       setTimeout(() => {
         dispatch(activeHandle());
         dispatch(apiElectrumCoins());
+        dispatch(getDexCoins());
+      }, 2000);
+    } else if (coin === 'ETH') {
+      dispatch(activeHandle());
+      dispatch(apiEthCoins());
+      dispatch(getDexCoins());
+
+      setTimeout(() => {
+        dispatch(activeHandle());
+        dispatch(apiEthereumCoins());
+        dispatch(getDexCoins());
+      }, 500);
+      setTimeout(() => {
+        dispatch(activeHandle());
+        dispatch(apiEthereumCoins());
+        dispatch(getDexCoins());
+      }, 1000);
+      setTimeout(() => {
+        dispatch(activeHandle());
+        dispatch(apiEthereumCoins());
         dispatch(getDexCoins());
       }, 2000);
     } else {

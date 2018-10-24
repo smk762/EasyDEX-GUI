@@ -336,46 +336,70 @@ class AddCoin extends React.Component {
     const coin = _coin.selectedCoin.split('|')[0];
     const coinuc = coin.toUpperCase();
     
-    this.verifyZcashParamsExist(_coin.mode)
-    .then((res) => {
-      if (res) {
-        const seed = this.state.loginPassphrase;
+    if (_coin.selectedCoin.indexOf('ETH') > -1) {
+      const _ethNet = _coin.selectedCoin.split('|');
+      console.warn('eth addcoin params', _ethNet);
 
-        if (seed) {
-          mainWindow.setPubkey(seed, coin.toLowerCase());
+      Store.dispatch(addCoinEth(
+        _ethNet[0],
+        _ethNet[1],
+      ));
+
+      this.removeCoin();
+      this.addNewItem();
+
+      Store.dispatch(toggleAddcoinModal(false, false));
+
+      setTimeout(() => {
+        this.setState({
+          loginPassphrase: '',
+          seedInputVisibility: false,
+          seedExtraSpaces: false,
+          trimPassphraseTimer: null,
+        });
+      }, 100);
+    } else {
+      this.verifyZcashParamsExist(_coin.mode)
+      .then((res) => {
+        if (res) {
+          const seed = this.state.loginPassphrase;
+
+          if (seed) {
+            mainWindow.setPubkey(seed, coin.toLowerCase());
+          }
+
+          if (!_coin.daemonParam) {
+            Store.dispatch(addCoin(
+              coin,
+              _coin.mode,
+            ));
+          } else {          
+            Store.dispatch(addCoin(
+              coin,
+              _coin.mode,
+              { type: _coin.daemonParam },
+              _coin.daemonParam === 'gen' &&
+              acConfig[coinuc] &&
+              acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+            ));
+          }
+
+          this.removeCoin();
+          this.addNewItem();
+
+          Store.dispatch(toggleAddcoinModal(false, false));
+
+          setTimeout(() => {
+            this.setState({
+              loginPassphrase: '',
+              seedInputVisibility: false,
+              seedExtraSpaces: false,
+              trimPassphraseTimer: null,
+            });
+          }, 100);
         }
-
-        if (!_coin.daemonParam) {
-          Store.dispatch(addCoin(
-            coin,
-            _coin.mode,
-          ));
-        } else {          
-          Store.dispatch(addCoin(
-            coin,
-            _coin.mode,
-            { type: _coin.daemonParam },
-            _coin.daemonParam === 'gen' &&
-            acConfig[coinuc] &&
-            acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
-          ));
-        }
-
-        this.removeCoin();
-        this.addNewItem();
-
-        Store.dispatch(toggleAddcoinModal(false, false));
-
-        setTimeout(() => {
-          this.setState({
-            loginPassphrase: '',
-            seedInputVisibility: false,
-            seedExtraSpaces: false,
-            trimPassphraseTimer: null,
-          });
-        }, 100);
-      }
-    });
+      });
+    }
   }
 
   dismiss() {

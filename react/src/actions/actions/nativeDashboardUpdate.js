@@ -136,7 +136,8 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
           json.result !== 'error' &&
           json.result &&
           json.result.z_gettotalbalance &&
-          json.result.z_gettotalbalance.result) {
+          json.result.z_gettotalbalance.result &&
+          JSON.stringify(json.result.z_gettotalbalance.result).indexOf('error') === -1) {
         json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
         json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
         json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);

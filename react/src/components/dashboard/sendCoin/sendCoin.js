@@ -226,7 +226,7 @@ class SendCoin extends React.Component {
       });
     } else {
       this.setState({
-        amount: Number(fromSats((_balance.balanceSats - Math.abs(_balance.unconfirmedSats) - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin]))).toFixed(8)),
+        amount: Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin]))).toFixed(8)),
       });
     }
   }
@@ -485,7 +485,7 @@ class SendCoin extends React.Component {
           (_addrType === 'public' && _coin !== 'KMD' && _notAcPrivate)) {
         return (
           <span>
-            { _mode === 'spv' ? `[ ${_balance.balance - Math.abs(_balance.unconfirmed)} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` : translate('INDEX.T_FUNDS') }
+            { _mode === 'spv' ? `[ ${_balance.balance + _balance.unconfirmed} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` : translate('INDEX.T_FUNDS') }
           </span>
         );
       } else {
@@ -804,7 +804,7 @@ class SendCoin extends React.Component {
       const _customFee = toSats(this.state.fee);
       const _amount = this.state.amount;
       const _amountSats = Math.floor(toSats(this.state.amount));
-      const _balanceSats = this.props.ActiveCoin.balance.balanceSats - Math.abs(this.props.ActiveCoin.balance.unconfirmedSats);
+      const _balanceSats = this.props.ActiveCoin.balance.balanceSats + this.props.ActiveCoin.balance.unconfirmedSats;
       let _fees = mainWindow.spvFees;
       _fees.BTC = 0;
 
@@ -1106,14 +1106,17 @@ class SendCoin extends React.Component {
       );
     }
 
-    for (let i = 0; i < _addressBook.length; i++) {
-      if (_mode === 'native' ||
-          (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
-        _items.push(
-          <li
-            key={ `send-address-book-item-${i}` }
-            onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
-        );
+    if (_addressBook &&
+        _addressBook.length) {
+      for (let i = 0; i < _addressBook.length; i++) {
+        if (_mode === 'native' ||
+            (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
+          _items.push(
+            <li
+              key={ `send-address-book-item-${i}` }
+              onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
+          );
+        }
       }
     }
 
