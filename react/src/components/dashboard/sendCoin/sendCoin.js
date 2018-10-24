@@ -1106,14 +1106,17 @@ class SendCoin extends React.Component {
       );
     }
 
-    for (let i = 0; i < _addressBook.length; i++) {
-      if (_mode === 'native' ||
-          (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
-        _items.push(
-          <li
-            key={ `send-address-book-item-${i}` }
-            onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
-        );
+    if (_addressBook &&
+        _addressBook.length) {
+      for (let i = 0; i < _addressBook.length; i++) {
+        if (_mode === 'native' ||
+            (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
+          _items.push(
+            <li
+              key={ `send-address-book-item-${i}` }
+              onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
+          );
+        }
       }
     }
 

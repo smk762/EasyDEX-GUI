@@ -222,7 +222,7 @@ export const _SendFormRender = function() {
               <span>
                 <strong>{ translate('INDEX.TOTAL') }:</strong>&nbsp;
                 { this.state.amount } + { this.state.fee } = { Number((Number(this.state.amount) + Number(this.state.fee)).toFixed(8)) }&nbsp;
-                { this.props.ActiveCoin.coin }
+                { _coin }
               </span>
             </div>
           }
@@ -243,7 +243,7 @@ export const _SendFormRender = function() {
                 !this.state.sendTo ||
                 !this.state.amount
               }>
-              { translate('INDEX.SEND') } { this.state.amount } { this.props.ActiveCoin.coin }
+              { translate('INDEX.SEND') } { this.state.amount } { _coin }
             </button>
           </div>
         </div>
@@ -412,7 +412,7 @@ export const SendRender = function() {
                   mode="scan"
                   setRecieverFromScan={ this.setRecieverFromScan } />
               </div>
-              <div className="padding-left-30 padding-top-20">
+              <div className="padding-left-30 padding-top-20 hide">
                 <span className="pointer">
                   <label className="switch">
                     <input
@@ -430,8 +430,8 @@ export const SendRender = function() {
                   </div>
                 </span>
               </div>
-              { this.enableZmergetoaddress &&
-                this.renderZmergeToAddress() }
+              { /*this.enableZmergetoaddress &&
+                this.renderZmergeToAddress()*/ }
               <div className="panel-body container-fluid">
               { this.SendFormRender() }
               </div>
