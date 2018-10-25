@@ -4,12 +4,13 @@ import translate from '../../../translate/translate';
 import Spinner from '../spinner/spinner';
 import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
+import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 
 const WalletsBalanceRender = function() {
-  const _notAcPrivate = mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
-  const _isAcPrivate = mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
   const _mode = this.props.ActiveCoin.mode;
   const _coin = this.props.ActiveCoin.coin;
+  const _notAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && !mainWindow.chainParams[_coin].ac_private;
+  const _isAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && mainWindow.chainParams[_coin].ac_private;
   const _balanceUnconf = this.props.ActiveCoin.balance && this.props.ActiveCoin.balance.unconfirmed ? this.props.ActiveCoin.balance.unconfirmed : 0;
 
   return (
@@ -42,7 +43,9 @@ const WalletsBalanceRender = function() {
                   <div className="padding-20 padding-top-10">
                     <div className="clearfix cursor-default">
                       <div className="pull-left padding-vertical-10">
-                        <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
+                        { ((isKomodoCoin(_coin) && _mode === 'native') || _coin === 'KMD') &&
+                          <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
+                        }
                         { _mode === 'spv' &&
                           Number(this.renderBalance('interest')) > 0 &&
                           <span className="padding-right-30">&nbsp;</span>
