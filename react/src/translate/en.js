@@ -1295,7 +1295,7 @@ const LANG_EN = {
     PPC: 'Peercoin',
     MZC: 'Mazacoin',
     SDC: 'ShadowCash',
-    ETH: 'Etherium Ropsten Testnet',
+    ETH: 'Ethereum Ropsten Testnet',
   },
   TOOLS: {
     TOOLS: 'Tools',

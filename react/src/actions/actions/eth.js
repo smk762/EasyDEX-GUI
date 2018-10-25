@@ -119,15 +119,16 @@ export const apiEthereumKeys = (seed) => {
   });
 }
 
-export const apiEthereumBalance = (coin, address) => {
+export const apiEthereumBalance = (coin, address, network = 'ropsten') => {
   return dispatch => {
     const _urlParams = {
       token,
       address,
       coin,
+      network,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/api/eth/getbalance${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/eth/balance${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -143,15 +144,6 @@ export const apiEthereumBalance = (coin, address) => {
     .then(response => response.json())
     .then(json => {
       if (mainWindow.activeCoin === coin) {
-        if (json) {
-          dispatch(
-            triggerToaster(
-              json.electrumres.message,
-              translate('TOASTR.ERROR'),
-              'error'
-            )
-          );
-        }
         dispatch(apiEthereumBalanceState(json));
       }
     });
@@ -165,15 +157,16 @@ export const apiEthereumBalanceState = (json) => {
   }
 }
 
-export const apiEthereumTransactions = (coin, address) => {
+export const apiEthereumTransactions = (coin, address, network = 'ropsten') => {
   return dispatch => {
     const _urlParams = {
       token,
       address,
       coin,
+      network,
     };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/api/eth/listtransactions${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/eth/transactions${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
