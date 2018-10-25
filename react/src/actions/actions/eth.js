@@ -11,29 +11,30 @@ import Config, {
 import {
   triggerToaster,
   sendToAddressState,
+  activeHandle,
 } from '../actionCreators';
 import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
 
-export const apiEthereumSetProvider = (coin, network) => {
-  return new Promise((resolve, reject) => {
-    const _urlParams = {
-      token,
-      coin,
-      address,
-      port,
-    };
-    fetch(
-      `http://127.0.0.1:${agamaPort}/api/eth/provider/set${urlParams(_urlParams)}`,
-      fetchType.get
+export const apiEthereumAuth = (seed) => {
+  return dispatch => {
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/eth/auth`,
+      fetchType(
+        JSON.stringify({
+          seed,
+          iguana: true,
+          token,
+        })
+      ).post
     )
     .catch((error) => {
       console.log(error);
-      Store.dispatch(
+      dispatch(
         triggerToaster(
-          translate('API.apiEthereumSetProvider') + ' (code: apiEthereumSetProvider)',
+          translate('API.apiEthereumAuth') + ' (code: apiEthereumAuth)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -41,9 +42,53 @@ export const apiEthereumSetProvider = (coin, network) => {
     })
     .then(response => response.json())
     .then(json => {
-      resolve(json);
+      if (json.msg !== 'error') {
+        dispatch(activeHandle());
+        dispatch(apiEthereumCoins());
+      } else {
+        dispatch(
+          triggerToaster(
+            translate('TOASTR.INCORRECT_ETH_PRIV'),
+            translate('TOASTR.ERROR'),
+            'error'
+          )
+        );
+      }
     });
-  });
+  }
+}
+
+export const apiEthereumCoins = () => {
+  return dispatch => {
+    const _urlParams = {
+      token,
+    };
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/eth/coins${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.apiEthereumCoins') + ' (code: apiEthereumCoins)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(apiEthereumCoinsState(json));
+    });
+  }
+}
+
+export const apiEthereumCoinsState = (json) => {
+  return {
+    type: DASHBOARD_ETHEREUM_COINS,
+    ethereumCoins: json.result,
+  }
 }
 
 export const apiEthereumKeys = (seed) => {
@@ -53,7 +98,6 @@ export const apiEthereumKeys = (seed) => {
       fetchType(
         JSON.stringify({
           seed,
-          active: true,
           token,
         })
       ).post
@@ -173,39 +217,6 @@ export const apiEthereumTransactionsState = (json) => {
   return {
     type: DASHBOARD_ETHEREUM_TRANSACTIONS,
     txhistory: json,
-  }
-}
-
-export const apiEthereumCoins = () => {
-  return dispatch => {
-    const _urlParams = {
-      token,
-    };
-    return fetch(
-      `http://127.0.0.1:${agamaPort}/api/eth/coins${urlParams(_urlParams)}`,
-      fetchType.get
-    )
-    .catch((error) => {
-      console.log(error);
-      dispatch(
-        triggerToaster(
-          translate('API.apiEthereumCoins') + ' (code: apiEthereumCoins)',
-          translate('TOASTR.ERROR'),
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(apiEthereumCoinsState(json));
-    });
-  }
-}
-
-export const apiEthereumCoinsState = (json) => {
-  return {
-    type: DASHBOARD_ETHEREUM_COINS,
-    electrumCoins: json.result,
   }
 }
 

@@ -4,6 +4,7 @@ import translate from '../../translate/translate';
 import Config from '../../config';
 import {
   addCoin,
+  addCoinEth,
   toggleAddcoinModal,
   triggerToaster,
   apiGetCoinList,

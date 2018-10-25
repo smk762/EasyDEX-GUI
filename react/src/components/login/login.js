@@ -4,6 +4,8 @@ import {
   toggleAddcoinModal,
   apiElectrumAuth,
   apiElectrumCoins,
+  apiEthereumAuth,
+  apiEthereumCoins,
   startInterval,
   getDexCoins,
   triggerToaster,
@@ -455,10 +457,13 @@ class Login extends React.Component {
 
       this.setState(this.defaultState);
 
+      // TODO: trigger based on ETH/electrum
       Store.dispatch(dashboardChangeSectionState('wallets'));
       Store.dispatch(toggleDashboardActiveSection('default'));
+      Store.dispatch(apiEthereumAuth(this.state.loginPassphrase));
       Store.dispatch(apiElectrumAuth(this.state.loginPassphrase));
       Store.dispatch(apiElectrumCoins());
+      Store.dispatch(apiEthereumCoins());
     } else {
       mainWindow.pinAccess = this.state.selectedPin;
 
@@ -477,6 +482,8 @@ class Login extends React.Component {
           Store.dispatch(toggleDashboardActiveSection('default'));
           Store.dispatch(apiElectrumAuth(res.result));
           Store.dispatch(apiElectrumCoins());
+          Store.dispatch(apiEthereumAuth(res.result));
+          Store.dispatch(apiEthereumCoins());
         }
       });
     }
