@@ -75,6 +75,10 @@ const prepCoinsList = (filterActiveCoins) => {
       _items.push({
         label: `${translate('CRYPTO.ETH')} (ETH)`,
         icon: 'ETH',
+        value: 'ETH',
+      }, {
+        label: `${translate('CRYPTO.ETH_ROPSTEN')} (TESTNET)`,
+        icon: 'ETH',
         value: 'ETH|ropsten',
       });
     }
