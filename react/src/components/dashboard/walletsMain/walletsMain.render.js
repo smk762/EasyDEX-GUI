@@ -33,9 +33,14 @@ const WalletsMainRender = function() {
                   className="kmd-mobile-icon"
                   src={ `assets/images/cryptologo/${_coin.toLowerCase()}.png` } />
               }
-              <span className={ `margin-left-20 easydex-section-image ${(_coin === 'KMD' || _coin === 'JUMBLR' || _coin === 'MESH' || _coin === 'MVP' ? 'hide' : '')}` }>
-                { translate((isKomodoCoin(_coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + _coin.toUpperCase()) }
-              </span>
+              { _coin !== 'KMD' &&
+                _coin !== 'JUMBLR' &&
+                _coin !== 'MESH' &&
+                _coin !== 'MVP' &&
+                <span className="margin-left-20 easydex-section-image">
+                  { translate((isKomodoCoin(_coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + _coin.toUpperCase()) }
+                </span>
+              }
             </li>
           </ol>
         </div>

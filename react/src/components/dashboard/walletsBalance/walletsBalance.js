@@ -4,6 +4,7 @@ import translate from '../../../translate/translate';
 import {
   getDashboardUpdate,
   apiElectrumBalance,
+  apiEthereumBalance,
 } from '../../../actions/actionCreators';
 import mainWindow from '../../../util/mainWindow';
 import Config from '../../../config';
@@ -74,6 +75,15 @@ class WalletsBalance extends React.Component {
           _pub
         )
       );
+    } else if (_mode === 'eth') {
+      const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
+
+      Store.dispatch(
+        apiEthereumBalance(
+          _coin,
+          _pub
+        )
+      );
     }
   }
 
@@ -117,6 +127,11 @@ class WalletsBalance extends React.Component {
         }
 
         _balance = _balance.toFixed(8);
+      } else if (
+        _mode === 'eth' &&
+        _propsBalance
+      ) {
+        _balance = Number(_propsBalance.balance).toFixed(8);        
       }
     }
 

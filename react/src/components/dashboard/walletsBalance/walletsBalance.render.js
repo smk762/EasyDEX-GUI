@@ -20,6 +20,7 @@ const WalletsBalanceRender = function() {
       { this.renderBalance('transparent') !== -777 &&
         <div className="col-xs-12 flex">
           { (_mode === 'spv' ||
+             _mode === 'eth' ||
              (_mode === 'native' && _notAcPrivate) ||
               (_mode === 'native' && _coin === 'KMD')) &&
             <div className={
