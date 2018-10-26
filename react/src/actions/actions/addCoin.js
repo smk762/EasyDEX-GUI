@@ -13,6 +13,7 @@ import {
   toggleAddcoinModal,
   getDexCoins,
   apiElectrumCoins,
+  apiEthereumCoins,
 } from '../actionCreators';
 import {
   startCurrencyAssetChain,
@@ -130,8 +131,7 @@ export const apiElectrumAddCoin = (coin) => {
 export const addCoinEth = (coin, network) => {
   return dispatch => {
     const _urlParams = {
-      coin,
-      network,
+      coin: network ? (coin + '_' + network).toUpperCase() : coin,
       token,
     };
     return fetch(
@@ -151,7 +151,7 @@ export const addCoinEth = (coin, network) => {
     .then(response => response.json())
     .then(json => {
       dispatch(
-        addCoinResult(coin, '0')
+        addCoinResult(network ? (coin + '_' + network).toUpperCase() : coin, '3')
       );
     });
   }
@@ -328,12 +328,13 @@ export const addCoinResult = (coin, mode) => {
     '-1': 'native',
     '1': 'staking',
     '2': 'mining',
+    '3': 'eth',
   };
 
   return dispatch => {
     dispatch(
       triggerToaster(
-        coin === 'ETH' ? `${coin} added`: `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
+        coin.toLowerCase().indexOf('eth') > -1 ? `${coin} added`: `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
         translate('TOASTR.COIN_NOTIFICATION'),
         'success'
       )
@@ -360,9 +361,9 @@ export const addCoinResult = (coin, mode) => {
         dispatch(apiElectrumCoins());
         dispatch(getDexCoins());
       }, 2000);
-    } else if (coin === 'ETH') {
+    } else if (coin.toLowerCase().indexOf('eth') > -1) {
       dispatch(activeHandle());
-      dispatch(apiEthCoins());
+      dispatch(apiEthereumCoins());
       dispatch(getDexCoins());
 
       setTimeout(() => {

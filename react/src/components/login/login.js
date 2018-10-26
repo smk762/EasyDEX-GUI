@@ -33,8 +33,6 @@ import mainWindow from '../../util/mainWindow';
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 
-const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
-const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
 const SEED_TRIM_TIMEOUT = 5000;
 
 class Login extends React.Component {

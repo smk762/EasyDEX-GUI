@@ -97,6 +97,7 @@
     "protractor": "^5.4.0",
     "react-test-renderer": "^15.4.2",
     "redux-devtools": "^3.4.1",
+    "readable-stream": "2.0.2",
     "sass-loader": "^5.0.1",
     "socket.io-client": "^2.1.1",
     "style-loader": "^0.13.0",

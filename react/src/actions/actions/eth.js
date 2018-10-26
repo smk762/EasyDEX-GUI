@@ -119,14 +119,20 @@ export const apiEthereumKeys = (seed) => {
   });
 }
 
-export const apiEthereumBalance = (coin, address, network = 'ropsten') => {
+export const apiEthereumBalance = (coin, address) => {
+  const network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
+  
   return dispatch => {
-    const _urlParams = {
+    let _urlParams = {
       token,
       address,
       coin,
-      network,
     };
+
+    if (network) {
+      _urlParams.network = network[1].toLowerCase();
+    }
+    
     return fetch(
       `http://127.0.0.1:${agamaPort}/api/eth/balance${urlParams(_urlParams)}`,
       fetchType.get
@@ -157,14 +163,21 @@ export const apiEthereumBalanceState = (json) => {
   }
 }
 
-export const apiEthereumTransactions = (coin, address, network = 'ropsten') => {
+export const apiEthereumTransactions = (coin, address) => {
+  console.warn('apiEthereumTransactions', coin);
+  const network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
+  
   return dispatch => {
-    const _urlParams = {
+    let _urlParams = {
       token,
       address,
       coin,
-      network,
     };
+
+    if (network) {
+      _urlParams.network = network[1].toLowerCase();
+    }
+
     return fetch(
       `http://127.0.0.1:${agamaPort}/api/eth/transactions${urlParams(_urlParams)}`,
       fetchType.get
