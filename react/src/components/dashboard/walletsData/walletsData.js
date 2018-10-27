@@ -483,6 +483,15 @@ class WalletsData extends React.Component {
             _pub
           )
         );
+      } else if (_mode === 'eth') {
+        const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
+                
+        Store.dispatch(
+          apiElectrumTransactions(
+            _coin,
+            _pub
+          )
+        );
       }
     }
   }
