@@ -16,7 +16,7 @@ export const getTxDetails = (coin, txid, type) => {
       chain: coin,
       cmd: 'gettransaction',
       params: [
-        txid
+        txid,
       ],
       rpc2cli,
       token,
@@ -29,7 +29,7 @@ export const getTxDetails = (coin, txid, type) => {
         cmd: 'getrawtransaction',
         params: [
           txid,
-          1
+          1,
         ],
         rpc2cli,
         token,

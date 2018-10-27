@@ -32,18 +32,20 @@ class LoginSettingsModal extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    const _display = props.Main.displayLoginSettingsModal;
+
     if (props.Main &&
-        props.Main.displayLoginSettingsModal !== this.state.open) {
+        _display !== this.state.open) {
       this.setState({
-        className: props.Main.displayLoginSettingsModal ? 'show fade' : 'show out',
+        className: _display ? 'show fade' : 'show out',
       });
 
       setTimeout(() => {
         this.setState(Object.assign({}, this.state, {
-          open: props.Main.displayLoginSettingsModal,
-          className: props.Main.displayLoginSettingsModal ? 'show in' : 'hide',
+          open: _display,
+          className: _display ? 'show in' : 'hide',
         }));
-      }, props.Main.displayLoginSettingsModal ? 50 : 300);
+      }, _display ? 50 : 300);
     }
   }
 

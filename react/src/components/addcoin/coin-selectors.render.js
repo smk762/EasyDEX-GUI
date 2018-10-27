@@ -302,7 +302,7 @@ const CoinSelectorsRender = function(item, coin, i) {
               <select
                 className="form-control form-material"
                 name="genProcLimit"
-                onChange={ (event) => this.updateDaemonParam(event, i) }
+                onChange={ (event) => this.updateGenproclimitParam(event, i) }
                 autoFocus>
                 { this.renderGenproclimitOptions() }
               </select>

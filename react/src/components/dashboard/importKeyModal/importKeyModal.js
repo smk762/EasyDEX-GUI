@@ -11,7 +11,7 @@ import {
   getDashboardUpdateState,
 } from '../../../actions/actionCreators';
 import translate from '../../../translate/translate';
-import { ImportKeyModalRender } from './importKeyModal.render';
+import ImportKeyModalRender from './importKeyModal.render';
 import { seedToWif } from 'agama-wallet-lib/src/keys';
 import btcNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
@@ -52,17 +52,19 @@ class ImportKeyModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.Dashboard.displayImportKeyModal !== this.state.open) {
+    const _display = nextProps.Dashboard.displayImportKeyModal;
+    
+    if (_display !== this.state.open) {
       this.setState(Object.assign({}, this.state, {
-        className: nextProps.Dashboard.displayImportKeyModal ? 'show fade' : 'show out',
+        className: _display ? 'show fade' : 'show out',
       }));
 
       setTimeout(() => {
         this.setState(Object.assign({}, this.state, {
-          open: nextProps.Dashboard.displayImportKeyModal,
-          className: nextProps.Dashboard.displayImportKeyModal ? 'show in' : 'hide',
+          open: _display,
+          className: _display ? 'show in' : 'hide',
         }));
-      }, nextProps.Dashboard.displayImportKeyModal ? 50 : 300);
+      }, _display ? 50 : 300);
     }
   }
 
@@ -102,8 +104,9 @@ class ImportKeyModal extends React.Component {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
+        const _ta = document.querySelector('#wifkeysPassphraseTextarea');
+        _ta.style.height = '1px';
+        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
       }
     }, 100);
   }
@@ -157,23 +160,24 @@ class ImportKeyModal extends React.Component {
   }
 
   importWifAddress(wif, rescan, multi) {
+    const _coin = this.props.ActiveCoin.coin;
     let _rescanInProgress = true;
 
     if (rescan) {
       setTimeout(() => {
         if (_rescanInProgress) {
           setTimeout(() => {
-            if (this.props.ActiveCoin.coin === 'KMD') {
+            if (_coin === 'KMD') {
               Store.dispatch(getDebugLog('komodo', 100));
             } else {
-              Store.dispatch(getDebugLog('komodo', 100, this.props.ActiveCoin.coin));
+              Store.dispatch(getDebugLog('komodo', 100, _coin));
             }
           }, 2000);
 
-          Store.dispatch(getDashboardUpdateState(null, this.props.ActiveCoin.coin, true));
+          Store.dispatch(getDashboardUpdateState(null, _coin, true));
           Store.dispatch(
             triggerToaster(
-              translate(multi ? 'INDEX.ADDRESSES_IMPORTED_RESCAN_IN_PROGRESS' : 'INDEX.ADDRESS_IMPORTED_RESCAN_IN_PROGRESS'),
+              translate('INDEX.' + (multi ? 'ADDRESSES_IMPORTED_RESCAN_IN_PROGRESS' : 'ADDRESS_IMPORTED_RESCAN_IN_PROGRESS')),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -205,7 +209,7 @@ class ImportKeyModal extends React.Component {
           !json.error) {
         Store.dispatch(
           triggerToaster(
-            rescan ? translate('INDEX.WALLET_RESCAN_FINISHED') : multi ? translate('INDEX.ADDRESSES_IMPORTED') : translate('INDEX.ADDRESS_IMPORTED'),
+            rescan ? translate('INDEX.WALLET_RESCAN_FINISHED') : (translate('INDEX.' + (multi ? 'ADDRESSES_IMPORTED' : 'ADDRESS_IMPORTED'))),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success',
             rescan ? false : true,

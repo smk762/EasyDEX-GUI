@@ -102,7 +102,9 @@ class ToolsSeedToWif extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.COIN') }
+          </label>
           <Select
             name="s2wCoin"
             className="col-sm-3"
@@ -118,7 +120,9 @@ class ToolsSeedToWif extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.SEED') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.SEED') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3 blur"
@@ -133,7 +137,8 @@ class ToolsSeedToWif extends React.Component {
           <label className="switch">
             <input
               type="checkbox"
-              checked={ this.state.s2wisIguana } />
+              checked={ this.state.s2wisIguana }
+              readOnly />
             <div
               className="slider"
               onClick={ this.toggleS2wIsIguana }></div>

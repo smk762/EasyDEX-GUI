@@ -23,29 +23,32 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
         id="receiveCoin1"
         effect="solid"
         className="text-left" />
-      <div className={ this.state.toggledAddressMenu && this.state.toggledAddressMenu === address ? 'receive-address-context-menu' : 'hide' }>
-        <ul>
-          <li onClick={ () => this._copyCoinAddress(address) }>
-            <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.' + (type === 'public' ? 'PUB_KEY' : 'Z_KEY'))}` }
-          </li>
-          { !address.canspend &&
-            this.props.mode !== 'spv' &&
-            <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
-              <i className="icon fa-key margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PRIV_KEY')}` }
+      { this.state.toggledAddressMenu &&
+        this.state.toggledAddressMenu === address &&
+        <div className="receive-address-context-menu">
+          <ul>
+            <li onClick={ () => this._copyCoinAddress(address) }>
+              <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.' + (type === 'public' ? 'PUB_KEY' : 'Z_KEY'))}` }
             </li>
-          }
-          { this.props.mode !== 'spv' &&
-            <li onClick={ () => this.validateCoinAddress(address, type !== 'public' ? true : null) }>
-              <i className="icon fa-check margin-right-5"></i> { translate('RECEIVE.VALIDATE_ADDRESS') }
+            { !address.canspend &&
+              this.props.mode !== 'spv' &&
+              <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
+                <i className="icon fa-key margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PRIV_KEY')}` }
+              </li>
+            }
+            { this.props.mode !== 'spv' &&
+              <li onClick={ () => this.validateCoinAddress(address, type !== 'public' ? true : null) }>
+                <i className="icon fa-check margin-right-5"></i> { translate('RECEIVE.VALIDATE_ADDRESS') }
+              </li>
+            }
+            <li className="receive-address-context-menu-get-qr">
+              <QRModal
+                content={ address }
+                cbOnClose={ this.toggleAddressMenu } />
             </li>
-          }
-          <li className="receive-address-context-menu-get-qr">
-            <QRModal
-              content={ address }
-              cbOnClose={ this.toggleAddressMenu } />
-          </li>
-        </ul>
-      </div>
+          </ul>
+        </div>
+      }
     </td>
   );
 };

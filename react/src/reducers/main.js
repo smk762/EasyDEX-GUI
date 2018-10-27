@@ -15,6 +15,7 @@ export const Main = (state = {
   blurSensitiveData: false,
   newUpdateAvailable: false,
   total: 0,
+  nativeStartParams: {},
 }, action) => {
   switch (action.type) {
     case GET_ACTIVE_COINS:
@@ -22,6 +23,7 @@ export const Main = (state = {
         ...state,
         coins: action.coins,
         total: action.total,
+        nativeStartParams: action.params,
       };
     case LOGIN:
       return {

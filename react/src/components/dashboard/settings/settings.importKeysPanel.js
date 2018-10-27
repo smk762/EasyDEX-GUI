@@ -49,7 +49,9 @@ class ImportKeysPanel extends React.Component {
                   onChange={ this.updateInput } />
                 <label
                   className="floating-label"
-                  htmlFor="importWifkey">{ translate('INDEX.INPUT_PRIV_KEY') }</label>
+                  htmlFor="importWifkey">
+                  { translate('INDEX.INPUT_PRIV_KEY') }
+                </label>
               </div>
               <div className="col-sm-12 col-xs-12 text-align-center">
                 <button

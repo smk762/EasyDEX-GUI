@@ -174,27 +174,28 @@ class NotaryElectionsModal extends React.Component {
               false
             )
           );
+          const _timestamp = Math.floor(Date.now() / 1000);
           let _transactions = this.state.transactions;
           _transactions.unshift({
             address: this.state.multiOutAddress1,
             amount: this.state.balance / _divisor,
             region: 'ne2k18-na',
-            timestamp: Math.floor(Date.now() / 1000),
+            timestamp: _timestamp,
           }, {
             address: this.state.multiOutAddress2,
             amount: this.state.balance / _divisor,
             region: 'ne2k18-eu',
-            timestamp: Math.floor(Date.now() / 1000),
+            timestamp: _timestamp,
           }, {
             address: this.state.multiOutAddress3,
             amount: this.state.balance / _divisor,
             region: 'ne2k18-ae',
-            timestamp: Math.floor(Date.now() / 1000),
+            timestamp: _timestamp,
           }, {
             address: this.state.multiOutAddress4,
             amount: this.state.balance / _divisor,
             region: 'ne2k18-sh',
-            timestamp: Math.floor(Date.now() / 1000),
+            timestamp: _timestamp,
           });
           this.setState({
             transactions: _transactions,
@@ -376,8 +377,9 @@ class NotaryElectionsModal extends React.Component {
     // auto-size textarea
     setTimeout(() => {
       if (this.state.seedInputVisibility) {
-        document.querySelector('#loginPassphrase').style.height = '1px';
-        document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
+        const _login = document.querySelector('#loginPassphrase');
+        _login.style.height = '1px';
+        _login.style.height = `${(15 + _login.scrollHeight)}px`;
       }
     }, 100);
   }
@@ -410,7 +412,10 @@ class NotaryElectionsModal extends React.Component {
   }
 
   loginSeed() {
-    apiElectionsLogin(this.state.loginPassphrase, this.state.coin)
+    apiElectionsLogin(
+      this.state.loginPassphrase,
+      this.state.coin
+    )
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -514,7 +519,7 @@ class NotaryElectionsModal extends React.Component {
       <table className="table table-hover dataTable table-striped">
         <thead>
           <tr>
-            <th>{ this.state.userType === 'voter' ? transform('NN_ELECTIONS.TO') : transform('NN_ELECTIONS.FROM') }</th>
+            <th>{ translate('NN_ELECTIONS.' + (this.state.userType === 'voter' ? 'TO' : 'FROM')) }</th>
             <th>{ translate('INDEX.AMOUNT') }</th>
             <th>{ translate('NN_ELECTIONS.TIME') }</th>
             <th>{ translate('NN_ELECTIONS.REGION') }</th>
@@ -525,7 +530,7 @@ class NotaryElectionsModal extends React.Component {
         </tbody>
         <tfoot>
           <tr>
-            <th>{ this.state.userType === 'voter' ? translate('INDEX.TO') : translate('INDEX.FROM') }</th>
+            <th>{ translate('INDEX.' + (this.state.userType === 'voter' ? 'TO' : 'FROM')) }</th>
             <th>{ translate('INDEX.AMOUNT') }</th>
             <th>{ translate('NN_ELECTIONS.TIME') }</th>
             <th>{ translate('NN_ELECTIONS.REGION') }</th>
@@ -582,7 +587,9 @@ class NotaryElectionsModal extends React.Component {
                     <div className="elections-login padding-bottom-15">
                       <label
                         className="floating-label"
-                        htmlFor="inputPassword">{  this.state.userType === 'voter' ? translate('INDEX.WALLET_SEED') : translate('INDEX.PUB_KEY') }</label>
+                        htmlFor="inputPassword">
+                        { translate('INDEX.' + (this.state.userType === 'voter' ? 'WALLET_SEED' : 'PUB_KEY')) }
+                      </label>
                       <input
                         type="password"
                         name="loginPassphrase"
@@ -779,7 +786,7 @@ class NotaryElectionsModal extends React.Component {
                   }
                   { this.displayTxHistoryRender() &&
                     <div>
-                      <div className={ `elections-history`  + (this.state.userType === 'voter' ? ' margin-top-20' : '') }>
+                      <div className={ 'elections-history'  + (this.state.userType === 'voter' ? ' margin-top-20' : '') }>
                       { translate('INDEX.HISTORY') }
                       </div>
                       { this.renderHistory() }

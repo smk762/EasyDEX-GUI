@@ -12,7 +12,11 @@ const testChains = [
 
 const CoinTileItemRender = function() {
   const { item } = this.props;
-
+  const _coinuc = item.coin.toUpperCase();
+  const _coinlc = item.coin.toLowerCase();
+  const _pubkey = mainWindow.getPubkeys()[_coinlc];
+  const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';
+  
   return (
     <div className="list-group-item col-xlg-6 col-lg-12 wallet-widgets-info pointer">
       <span className={ `badge up badge-${item.modecolor}` }>
@@ -46,9 +50,11 @@ const CoinTileItemRender = function() {
           className="text-left" />
       </button>
       { item.mode === 'native' &&
-        acConfig[item.coin.toUpperCase()] &&
-        acConfig[item.coin.toUpperCase()].ac_reward &&
-        !acConfig[item.coin.toUpperCase()].ac_stake &&
+        acConfig[_coinuc] &&
+        acConfig[_coinuc].ac_reward &&
+        !acConfig[_coinuc].ac_stake &&
+        _coindStartParamsString &&
+        (_coindStartParamsString.indexOf('-genproclimit=') > -1 && _coindStartParamsString.indexOf('-genproclimit=0') === -1) &&
         <i
           data-tip={ translate('INDEX.MINING_IS_ENABLED') }
           data-for="coinTile2"
@@ -59,9 +65,9 @@ const CoinTileItemRender = function() {
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[item.coin.toUpperCase()] &&
-        acConfig[item.coin.toUpperCase()]['ac_stake'] &&
-        (!mainWindow.getPubkeys()[item.coin.toLowerCase()] || !mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
+        acConfig[_coinuc] &&
+        acConfig[_coinuc].ac_stake &&
+        (!_pubkey || !_pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
           data-for="coinTile3"
@@ -72,9 +78,9 @@ const CoinTileItemRender = function() {
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[item.coin.toUpperCase()] &&
-        acConfig[item.coin.toUpperCase()].ac_stake &&
-        (mainWindow.getPubkeys()[item.coin.toLowerCase()] && mainWindow.getPubkeys()[item.coin.toLowerCase()].pub) &&
+        acConfig[_coinuc] &&
+        acConfig[_coinuc].ac_stake &&
+        (_pubkey && _pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
           data-for="coinTile4"

@@ -17,8 +17,10 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import devlog from '../../../util/devlog';
-import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
-import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import {
+  isKomodoCoin,
+  explorerList,
+} from 'agama-wallet-lib/src/coin-helpers';
 import { toSats } from 'agama-wallet-lib/src/utils';
 
 const { shell } = window.require('electron');
@@ -350,8 +352,6 @@ class ToolsSplitUTXO extends React.Component {
         [propName]: _val,
       };
 
-      console.warn(_val);
-
       if (_val.indexOf('|spv|native') > -1) {
         _newState.singleModeOnly = false;
         _newState.isNative = true;
@@ -433,7 +433,9 @@ class ToolsSplitUTXO extends React.Component {
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-50">
           <label
             className="control-label col-sm-1 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.COIN') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.COIN') }
+          </label>
           <Select
             name="utxoSplitCoin"
             className="col-sm-3"
@@ -451,7 +453,8 @@ class ToolsSplitUTXO extends React.Component {
             <label className="switch">
               <input
                 type="checkbox"
-                checked={ this.state.isNative } />
+                checked={ this.state.isNative }
+                readOnly />
               <div
                 className="slider"
                 onClick={ this.toggleIsNative }></div>
@@ -506,7 +509,8 @@ class ToolsSplitUTXO extends React.Component {
           <label className="switch">
             <input
               type="checkbox"
-              checked={ this.state.utxoSplitShowUtxoList } />
+              checked={ this.state.utxoSplitShowUtxoList }
+              readOnly />
             <div
               className="slider"
               onClick={ this.toggleSplitUtxoList }></div>
@@ -525,7 +529,9 @@ class ToolsSplitUTXO extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left margin-top-20 padding-bottom-20">
           <label
             className="control-label col-sm-2 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.UTXO_SIZES') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.UTXO_SIZES') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3"
@@ -539,7 +545,9 @@ class ToolsSplitUTXO extends React.Component {
         <div className="col-sm-12 form-group form-material no-padding-left padding-top-20 padding-bottom-20">
           <label
             className="control-label col-sm-2 no-padding-left"
-            htmlFor="kmdWalletSendTo">{ translate('TOOLS.NUMBER_OF_PAIRS') }</label>
+            htmlFor="kmdWalletSendTo">
+            { translate('TOOLS.NUMBER_OF_PAIRS') }
+          </label>
           <input
             type="text"
             className="form-control col-sm-3"

@@ -172,12 +172,15 @@ class ZcparamsFetchModal extends React.Component {
         <div className="padding-top-20 zcparams-progress">
           <h5>{ translate('SETTINGS.PROGRESS') }</h5>
           <div className="padding-bottom-15">{ items }</div>
-          <div className={ updateProgressBar.zcparams.proving > -1 && !this.state.done ? 'progress progress-sm' : 'hide' }>
-            <div
-              className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-              style={{ width: `${updateProgressBar.zcparams.proving}%` }}>
+          { updateProgressBar.zcparams.proving > -1 &&
+            !this.state.done &&
+            <div className="progress progress-sm">
+              <div
+                className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                style={{ width: `${updateProgressBar.zcparams.proving}%` }}>
+              </div>
             </div>
-          </div>
+          }
         </div>
       );
     } else {

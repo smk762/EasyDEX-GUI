@@ -48,6 +48,8 @@ import SweepKeysPanel from './settings.sweepKeysPanel';
 */
 
 export const SettingsRender = function() {
+  const _coins = this.props.Main.coins;
+
   return (
     <div
       id="section-iguana-wallet-settings"
@@ -59,18 +61,18 @@ export const SettingsRender = function() {
             uniqId={ 'SettingsAccordion' }
             singleOpen={ true }>
             { mainWindow.arch === 'x64' &&
-              this.props.Main.coins &&
-              this.props.Main.coins.native &&
-              Object.keys(this.props.Main.coins.native).length > 0 &&
+              _coins &&
+              _coins.native &&
+              Object.keys(_coins.native).length > 0 &&
               <PanelSection
                 title={ translate('INDEX.DEBUG_LOG') }
                 icon="icon fa-bug">
                 <DebugLogPanel />
               </PanelSection>
             }
-            { this.props.Main.coins &&
-              this.props.Main.coins.native &&
-              Object.keys(this.props.Main.coins.native).length > 0 &&
+            { _coins &&
+              _coins.native &&
+              Object.keys(_coins.native).length > 0 &&
               <PanelSection
                 title={ 'Komodod stdout' }
                 icon="icon fa-bug">
@@ -94,9 +96,9 @@ export const SettingsRender = function() {
               icon="icon fa-shield">
               <SeedEncryptPanel />
             </PanelSection>
-            { this.props.Main.coins &&
-              this.props.Main.coins.spv &&
-              Object.keys(this.props.Main.coins.spv).length &&
+            { _coins &&
+              _coins.spv &&
+              Object.keys(_coins.spv).length &&
               this.props.Main.isLoggedIn &&
               !mainWindow.isWatchOnly() &&
               <PanelSection
@@ -131,9 +133,9 @@ export const SettingsRender = function() {
                 <CoindClearDataDirPanel />
               </PanelSection>
             }
-            { this.props.Main.coins &&
-              this.props.Main.coins.spv &&
-              Object.keys(this.props.Main.coins.spv).length &&
+            { _coins &&
+              _coins.spv &&
+              Object.keys(_coins.spv).length &&
               this.displaySPVServerListTab() &&
               <PanelSection
                 title={ translate('SETTINGS.SPV_SERVERS') }
@@ -141,9 +143,9 @@ export const SettingsRender = function() {
                 <SPVServersPanel />
               </PanelSection>
             }
-            { this.props.Main.coins &&
-              this.props.Main.coins.native &&
-              Object.keys(this.props.Main.coins.native).length > 0 &&
+            { _coins &&
+              _coins.native &&
+              Object.keys(_coins.native).length > 0 &&
               <PanelSection
                 title="CLI"
                 icon="icon fa-code">

@@ -22,7 +22,7 @@ export const _ClaimInterestTableRender = function() {
             </button>
           </td>
           <td className="blur selectable">{ _transactionsList[i].address }</td>
-          <td className={ _transactionsList[i].amount >= 10 ? (!_transactionsList[i].interestRulesCheckPass ? 'red bold' : 'green bold') : '' }>
+          <td className={ _transactionsList[i].amount < 10 || !_transactionsList[i].interestRulesCheckPass ? 'red bold' : 'green bold' }>
           { _transactionsList[i].amount }
           </td>
           <td>{ _transactionsList[i].interest }</td>
@@ -45,7 +45,16 @@ export const _ClaimInterestTableRender = function() {
               className="text-left" />
           </td>
           { this.props.ActiveCoin.mode === 'spv' &&
-            <td className="time">{ secondsElapsedToString(_transactionsList[i].timeElapsedFromLocktimeInSeconds, true) }</td>
+            <td
+              data-tip={ translate('CLAIM_INTEREST.ACTUAL_LOCKTIME_SEC') + secondsElapsedToString(_transactionsList[i].timeElapsedFromLocktimeInSeconds, true) }
+              data-for="claimInterestLocktimeActual"
+              className="time">
+              { secondsElapsedToString(_transactionsList[i].timeElapsedFromLocktimeInSeconds - 777, true) }
+              <ReactTooltip
+                id="claimInterestLocktimeActual"
+                effect="solid"
+                className="text-left" />
+            </td>
           }
           { this.props.ActiveCoin.mode === 'spv' &&
             <td className="time">{ !_transactionsList[i].timeTill1MonthInterestStopsInSeconds ? translate('CLAIM_INTEREST.NEED_TO_CLAIM') : secondsElapsedToString(_transactionsList[i].timeTill1MonthInterestStopsInSeconds, true) }</td>
@@ -74,7 +83,7 @@ export const _ClaimInterestTableRender = function() {
           </p>
         }
         <p>
-          <strong>{ translate('CLAIM_INTEREST.CLAIM_INTEREST_FEE') }:</strong> 0.0001 KMD (10000 sats).
+          <strong>{ translate('CLAIM_INTEREST.CLAIM_INTEREST_FEE') }:</strong> { this.props.ActiveCoin.mode === 'native' ? '0.0001' : '0.0002' } KMD ({ this.props.ActiveCoin.mode === 'native' ? '10000' : '20000' }) sats.
         </p>
       </div>
       { this.state.totalInterest > 0 &&

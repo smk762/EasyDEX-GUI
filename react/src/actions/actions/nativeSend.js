@@ -87,7 +87,7 @@ export const sendNativeTx = (coin, _payload) => {
         if (json.indexOf('"code":-4') > -1) {
           dispatch(
             triggerToaster(
-              JSON.parse(json).error.message.indexOf('too large') > -1 ? translate('API.TX_TOO_LARGE') : translate('API.WALLETDAT_MISMATCH'),
+              translate('API.' + (JSON.parse(json).error.message.indexOf('too large') > -1 ? 'TX_TOO_LARGE' : 'WALLETDAT_MISMATCH')),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -181,7 +181,7 @@ export const sendToAddressPromise = (coin, address, amount) => {
         amount,
         'KMD interest claim request',
         'KMD interest claim request',
-        true
+        true,
       ],
     };
 
@@ -292,4 +292,43 @@ export const clearOPIDs = (coin) => {
       }
     });
   };
+}
+
+// transparentLimit and shieldedLimit set to 0 to use as many as can fit into 1 tx
+export const zmergeToAddressPromise = (coin, src, dest, fee = 0.0001, transparentLimit = 50, shieldedLimit = 10) => {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'z_mergetoaddress',
+      rpc2cli,
+      token,
+      params: [
+        src,
+        dest,
+        fee,
+        transparentLimit,
+        shieldedLimit,
+      ],
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.zmergeToAddressPromise') + ' (code: zmergeToAddressPromise)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
 }

@@ -137,12 +137,14 @@ class AppUpdatePanel extends React.Component {
           <hr />
           <h5>{ translate('SETTINGS.PROGRESS') }</h5>
           <div className="padding-bottom-15">{ items }</div>
-          <div className={ updateProgressBar.patch > -1 ? 'progress progress-sm' : 'hide' }>
-            <div
-              className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
-              style={{ width: `${updateProgressBar.patch}%` }}>
+          { updateProgressBar.patch > -1 &&
+            <div className="progress progress-sm">
+              <div
+                className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                style={{ width: `${updateProgressBar.patch}%` }}>
+              </div>
             </div>
-          </div>
+          }
         </div>
       );
     } else {

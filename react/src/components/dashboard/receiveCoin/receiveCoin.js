@@ -68,7 +68,11 @@ class ReceiveCoin extends React.Component {
   validateCoinAddress(address, isZaddr) {
     this.toggleAddressMenu(address);
 
-    validateAddress(this.props.coin, address, isZaddr)
+    validateAddress(
+      this.props.coin,
+      address,
+      isZaddr
+    )
     .then((json) => {
       let _items = [];
 
@@ -90,7 +94,12 @@ class ReceiveCoin extends React.Component {
 
   dumpPrivKey(address, isZaddr) {
     this.toggleAddressMenu(address);
-    dumpPrivKey(this.props.coin, address, isZaddr)
+
+    dumpPrivKey(
+      this.props.coin,
+      address,
+      isZaddr
+    )
     .then((json) => {
       if (json.length &&
           json.length > 10) {
@@ -100,18 +109,22 @@ class ReceiveCoin extends React.Component {
   }
 
   handleClickOutside(e) {
+    const _srcElement = e ? e.srcElement : null;
+
     if (e &&
-        e.srcElement &&
-        e.srcElement.offsetParent &&
-        e.srcElement.offsetParent.className.indexOf('dropdown') === -1 &&
-        (e.srcElement.offsetParent && e.srcElement.offsetParent.className.indexOf('dropdown') === -1)) {
+        _srcElement &&
+        _srcElement.offsetParent &&
+        _srcElement.offsetParent.className.indexOf('dropdown') === -1 &&
+        (_srcElement.offsetParent && _srcElement.offsetParent.className.indexOf('dropdown') === -1)) {
       this.setState({
         openDropMenu: false,
         toggledAddressMenu:
-          e.srcElement.className.indexOf('receive-address-context-menu-trigger') === -1 &&
-          e.srcElement.className.indexOf('fa-qrcode') === -1 &&
-          e.srcElement.className.indexOf('receive-address-context-menu-get-qr') === -1 &&
-          e.srcElement.className.indexOf('qrcode-modal') === -1 && e.srcElement.offsetParent.className.indexOf('modal') && e.srcElement.offsetParent.className.indexOf('close') ? null : this.state.toggledAddressMenu,
+          _srcElement.className.indexOf('receive-address-context-menu-trigger') === -1 &&
+          _srcElement.className.indexOf('fa-qrcode') === -1 &&
+          _srcElement.className.indexOf('receive-address-context-menu-get-qr') === -1 &&
+          _srcElement.className.indexOf('qrcode-modal') === -1 &&
+          _srcElement.offsetParent.className.indexOf('modal') &&
+          _srcElement.offsetParent.className.indexOf('close') ? null : this.state.toggledAddressMenu,
       });
     }
   }

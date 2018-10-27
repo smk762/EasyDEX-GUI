@@ -15,7 +15,7 @@ class Dice extends React.Component {
   constructor() {
     super();
     this.state = {
-      coin: 'KMD',
+      coin: 'COQUI',
     };
     this.diceListInterval = null;
   }

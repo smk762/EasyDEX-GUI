@@ -16,6 +16,8 @@ const renderKvContent = (content) => {
 }
 
 const WalletsTxInfoRender = function(txInfo) {
+  const isSpv = this.props.ActiveCoin.mode === 'spv';
+
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
       <div
@@ -84,19 +86,19 @@ const WalletsTxInfoRender = function(txInfo) {
                               <tr>
                                 <td>{ this.capitalizeFirstLetter(translate('TX_INFO.ADDRESS')) }</td>
                                 <td className="blur selectable word-break--all">
-                                  { this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.address : this.state.txDetails.details[0] && this.state.txDetails.details[0].address || txInfo.address }
+                                  { isSpv ? this.state.txDetails.address : this.state.txDetails.details[0] && this.state.txDetails.details[0].address || txInfo.address }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter(translate('TX_INFO.AMOUNT')) }</td>
                                 <td>
-                                  { this.props.ActiveCoin.mode === 'spv' ? Number(this.state.txDetails.amount) === 0 ? translate('DASHBOARD.UNKNOWN') : Number(this.state.txDetails.amount) : txInfo.amount }
+                                  { isSpv ? (Number(this.state.txDetails.amount) === 0 ? translate('DASHBOARD.UNKNOWN') : Number(this.state.txDetails.amount)) : txInfo.amount }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter(translate('TX_INFO.CATEGORY')) }</td>
                                 <td>
-                                  { this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.type : this.state.txDetails.details[0] && this.state.txDetails.details[0].category || txInfo.type }
+                                  { isSpv ? this.state.txDetails.type : this.state.txDetails.details[0] && this.state.txDetails.details[0].category || txInfo.type }
                                 </td>
                               </tr>
                               <tr>
@@ -115,9 +117,9 @@ const WalletsTxInfoRender = function(txInfo) {
                               }
                               { this.state.txDetails.blockhash &&
                                 <tr>
-                                  <td>{ this.props.ActiveCoin.mode === 'spv' ? this.capitalizeFirstLetter('blockheight') : this.capitalizeFirstLetter('blockhash') }</td>
+                                  <td>{ isSpv ? this.capitalizeFirstLetter('blockheight') : this.capitalizeFirstLetter('blockhash') }</td>
                                   <td className="selectable">
-                                    { this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.height : this.state.txDetails.blockhash }
+                                    { isSpv ? this.state.txDetails.height : this.state.txDetails.blockhash }
                                   </td>
                                 </tr>
                               }
@@ -146,13 +148,13 @@ const WalletsTxInfoRender = function(txInfo) {
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('time') }</td>
                                 <td>
-                                  { secondsToString(this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.blocktime : this.state.txDetails.time) }
+                                  { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.time) }
                                 </td>
                               </tr>
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('timereceived') }</td>
                                 <td>
-                                  { secondsToString(this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.blocktime : this.state.txDetails.timereceived) }
+                                  { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.timereceived) }
                                 </td>
                               </tr>
                             </tbody>
@@ -231,7 +233,7 @@ const WalletsTxInfoRender = function(txInfo) {
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('time') }</td>
                                 <td>
-                                  { secondsToString(this.props.ActiveCoin.mode === 'spv' ? this.state.txDetails.blocktime : this.state.txDetails.time) }
+                                  { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.time) }
                                 </td>
                               </tr>
                             </tbody>

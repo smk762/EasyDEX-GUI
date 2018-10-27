@@ -28,7 +28,7 @@ const fiatRates = (pricesJson) => {
 export const prices = () => {
   return dispatch => {
     return fetch(
-      `https://www.atomicexplorer.com/api/mm/prices`,
+      'https://www.atomicexplorer.com/api/mm/prices',
       fetchType.get
     )
     .catch((error) => {

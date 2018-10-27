@@ -283,12 +283,21 @@ export const apiElectrumKVTransactionsPromise = (coin, address) => {
 }
 
 export const apiElectrumTransactionsState = (json) => {
-  json = json.result;
+  if (json) {
+    json = json.result;
+  } else {
+    json = {
+      error: 'error',
+    };
+  }
 
   if (json &&
       json.error) {
     json = null;
-  } else if (!json || !json.length) {
+  } else if (
+    !json ||
+    !json.length
+  ) {
     json = 'no data';
   }
 
@@ -617,7 +626,7 @@ export const apiElectrumSweep = (coin, value, sendToAddress, changeAddress, push
 
     fetch(
       `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      fetchType(JSON.stringify(payload)).post : fetchType.get
+      fetchType(JSON.stringify(payload)).post,
     )
     .catch((error) => {
       console.log(error);

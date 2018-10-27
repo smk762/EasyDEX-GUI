@@ -54,7 +54,10 @@ export const apiStopCoind = (coin) => {
   return new Promise((resolve, reject) => {
     fetch(
       `http://127.0.0.1:${agamaPort}/api/coind/stop`,
-      fetchType(coin === 'KMD' ? JSON.stringify({ token }) : JSON.stringify({ chain: coin, token })).post
+      fetchType(coin === 'KMD' ? JSON.stringify({ token }) : JSON.stringify({
+        chain: coin,
+        token,
+      })).post
     )
     .catch((error) => {
       console.log(error);

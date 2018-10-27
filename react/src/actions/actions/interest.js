@@ -61,7 +61,7 @@ export const getRawTransaction = (coin, txid) => {
       cmd: 'getrawtransaction',
       params: [
         txid,
-        1
+        1,
       ],
       rpc2cli,
       token,
