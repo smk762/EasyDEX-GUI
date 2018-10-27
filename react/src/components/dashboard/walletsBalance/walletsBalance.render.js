@@ -51,7 +51,7 @@ const WalletsBalanceRender = function() {
                           Number(this.renderBalance('interest')) > 0 &&
                           <span className="padding-right-30">&nbsp;</span>
                         }
-                        { translate('INDEX.' + (_coin === 'CHIPS' || _mode === 'spv' ? 'BALANCE' : 'TRANSPARENT_BALANCE')) }
+                        { translate('INDEX.' + (_coin === 'CHIPS' || _mode === 'spv' || _mode === 'eth' ? 'BALANCE' : 'TRANSPARENT_BALANCE')) }
                         { _mode === 'spv' &&
                           Number(_balanceUnconf) < 0 &&
                           <i

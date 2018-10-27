@@ -66,10 +66,30 @@ class WalletsTxInfo extends React.Component {
           className: _activeCoin.showTransactionInfo ? 'show in' : 'hide',
         }));
       }, _activeCoin.showTransactionInfo ? 50 : 300);
+    } else if (
+      this.props.ActiveCoin.mode === 'eth' &&
+      _activeCoin &&
+      this.props.ActiveCoin.showTransactionInfoTxIndex !== _activeCoin.showTransactionInfoTxIndex
+    ) {
+      this.setState(Object.assign({}, this.state, {
+        txDetails: _activeCoin.showTransactionInfoTxIndex,
+        rawTxDetails: _activeCoin.showTransactionInfoTxIndex,
+        activeTab: 0,
+        className: _activeCoin.showTransactionInfo ? 'show fade' : 'show out',
+      }));
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          className: _activeCoin.showTransactionInfo ? 'show in' : 'hide',
+        }));
+      }, _activeCoin.showTransactionInfo ? 50 : 300);
     } else {
       if (_activeCoin &&
           _activeCoin.txhistory &&
-          _activeCoin.showTransactionInfoTxIndex > -1) {
+          _activeCoin.showTransactionInfoTxIndex &&
+          _activeCoin.showTransactionInfoTxIndex > -1 &&
+          _activeCoin.showTransactionInfoTxIndex !== false) {
+            console.warn('load tx', _activeCoin.showTransactionInfoTxIndex);
         const txInfo = _activeCoin.txhistory[_activeCoin.showTransactionInfoTxIndex];
 
         if (txInfo &&

@@ -6,18 +6,19 @@ import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const renderKvContent = (content) => {
   return content
-       .replace(/&/g, '&amp;')
-       .replace(/</g, '&lt;')
-       .replace(/>/g, '&gt;')
-       .replace(/"/g, '&quot;')
-       .replace(/'/g, '&#039;')
-       .replace('\n\n', '<br/><br/>')
-       .replace('\n', '<br/>');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace('\n\n', '<br/><br/>')
+    .replace('\n', '<br/>');
 }
 
 const WalletsTxInfoRender = function(txInfo) {
-  const isSpv = this.props.ActiveCoin.mode === 'spv';
-
+  const isSpv = this.props.ActiveCoin.mode === 'spv' || this.props.ActiveCoin.mode === 'eth';
+  const isEth = this.props.ActiveCoin.mode === 'eth';
+  
   return (
     <div onKeyDown={ (event) => this.handleKeydown(event) }>
       <div
@@ -65,11 +66,13 @@ const WalletsTxInfoRender = function(txInfo) {
                       <i className="icon md-plus-square"></i>Vjointsplits, Details
                     </a>
                   </li>
-                  <li className={ this.state.activeTab === 2 ? 'active' : '' }>
-                    <a onClick={ () => this.openTab(2) }>
-                      <i className="icon wb-briefcase"></i>Hex
-                    </a>
-                  </li>
+                  { !isEth &&
+                    <li className={ this.state.activeTab === 2 ? 'active' : '' }>
+                      <a onClick={ () => this.openTab(2) }>
+                        <i className="icon wb-briefcase"></i>Hex
+                      </a>
+                    </li>
+                  }
                   <li className={ this.state.activeTab === 3 ? 'active' : '' }>
                     <a onClick={ () => this.openTab(3) }>
                       <i className="icon wb-file"></i>Raw info
@@ -95,6 +98,14 @@ const WalletsTxInfoRender = function(txInfo) {
                                   { isSpv ? (Number(this.state.txDetails.amount) === 0 ? translate('DASHBOARD.UNKNOWN') : Number(this.state.txDetails.amount)) : txInfo.amount }
                                 </td>
                               </tr>
+                              { isEth &&
+                                <tr>
+                                  <td>{ this.capitalizeFirstLetter(translate('SEND.FEE')) }</td>
+                                  <td>
+                                    { this.state.txDetails.fee }
+                                  </td>
+                                </tr>
+                              }
                               <tr>
                                 <td>{ this.capitalizeFirstLetter(translate('TX_INFO.CATEGORY')) }</td>
                                 <td>
@@ -148,15 +159,17 @@ const WalletsTxInfoRender = function(txInfo) {
                               <tr>
                                 <td>{ this.capitalizeFirstLetter('time') }</td>
                                 <td>
-                                  { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.time) }
+                                  { secondsToString(isSpv ? this.state.txDetails.blocktime || this.state.txDetails.timestamp : this.state.txDetails.time) }
                                 </td>
                               </tr>
-                              <tr>
-                                <td>{ this.capitalizeFirstLetter('timereceived') }</td>
-                                <td>
-                                  { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.timereceived) }
-                                </td>
-                              </tr>
+                              { !isEth &&
+                                <tr>
+                                  <td>{ this.capitalizeFirstLetter('timereceived') }</td>
+                                  <td>
+                                    { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.timereceived) }
+                                  </td>
+                                </tr>
+                              }
                             </tbody>
                           </table>
                         </div>
