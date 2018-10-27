@@ -78,7 +78,10 @@ class AppSettingsPanel extends React.Component {
     let isError = false;
     let saveAfterPathCheck = false;
 
+    console.warn('app settings', this.state.appSettings);
+
     for (let key in _appSettings) {
+      console.warn('settings save', key);
       if (typeof _appSettings[key] !== 'object') {
         _appSettingsPristine[key] = _configSchema[key] && _configSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
 
@@ -118,7 +121,42 @@ class AppSettingsPanel extends React.Component {
         }
       } else {
         for (let keyChild in _appSettings[key]) {
-          _appSettingsPristine[key][keyChild] = _configSchema[key][keyChild].type === 'number' ? Number(_appSettings[key][keyChild]) : _appSettings[key][keyChild];
+          if (_configSchema[key][keyChild] &&
+              _configSchema[key][keyChild].type === 'folder' &&
+              _appSettings[key][keyChild] &&
+              _appSettings[key][keyChild].length) {
+            const _testLocation = mainWindow.testLocation;
+            saveAfterPathCheck = true;
+  
+            _testLocation(_appSettings[key][keyChild])
+            .then((res) => {
+              if (res === -1) {
+                isError = true;
+                Store.dispatch(
+                  triggerToaster(
+                    this.renderLB('TOASTR.KOMODO_DATADIR_INVALID'),
+                    translate('INDEX.SETTINGS'),
+                    'error',
+                    false
+                  )
+                );
+              } else if (res === false) {
+                isError = true;
+                Store.dispatch(
+                  triggerToaster(
+                    this.renderLB('TOASTR.KOMODO_DATADIR_NOT_DIR'),
+                    translate('INDEX.SETTINGS'),
+                    'error',
+                    false
+                  )
+                );
+              } else {
+                Store.dispatch(saveAppConfig(_appSettingsPristine));
+              }
+            });
+          } else {
+            _appSettingsPristine[key][keyChild] = _configSchema[key][keyChild].type === 'number' ? Number(_appSettings[key][keyChild]) : _appSettings[key][keyChild];
+          }
         }
       }
     }
@@ -401,7 +439,8 @@ class AppSettingsPanel extends React.Component {
     const _name = e.target.name;    
     let _appSettings = this.state.appSettings;
     let _appSettingsPrev = Object.assign({}, _appSettings);
-
+    console.warn(`update ${parentKey} ${childKey} ${_configSchema[parentKey][childKey].type}`);
+    
     if (!childKey &&
         _configSchema[parentKey].type === 'boolean') {
       _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
@@ -419,6 +458,12 @@ class AppSettingsPanel extends React.Component {
       } else {
         _appSettings[parentKey][childKey] = _val === '' ? _appSettingsPrev[parentKey][childKey] : _val.replace(/[^0-9]+/g, '');
       }
+    } else if (
+      childKey &&
+      parentKey &&
+      (_configSchema[parentKey][childKey].type === 'string' || _configSchema[parentKey][childKey].type === 'folder')
+    ) {
+      _appSettings[parentKey][childKey] = _val;
     } else {
       _appSettings[_name] = _val;
     }
