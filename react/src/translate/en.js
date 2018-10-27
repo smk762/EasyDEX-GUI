@@ -1137,6 +1137,7 @@ const LANG_EN = {
     MVP: 'MVP Lineup',
     MNZ: 'Monaize',
     PANGEA: 'PANGEA',
+    PGT: 'Pungo',
     REVS: 'REVS',
     MSHARK: 'MSHARK',
     MESH: 'SpaceMesh',
