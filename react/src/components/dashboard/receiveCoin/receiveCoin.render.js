@@ -32,11 +32,13 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
             </li>
             { !address.canspend &&
               this.props.mode !== 'spv' &&
+              this.props.mode !== 'eth' &&
               <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
                 <i className="icon fa-key margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PRIV_KEY')}` }
               </li>
             }
             { this.props.mode !== 'spv' &&
+              this.props.mode !== 'eth' &&
               <li onClick={ () => this.validateCoinAddress(address, type !== 'public' ? true : null) }>
                 <i className="icon fa-check margin-right-5"></i> { translate('RECEIVE.VALIDATE_ADDRESS') }
               </li>
@@ -70,6 +72,7 @@ export const AddressItemRender = function(address, type) {
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
+          this.props.mode !== 'eth' &&
           <i
             data-tip={ translate('RECEIVE.YOU_DONT_OWN_PRIV_KEYS') }
             data-for="receiveCoin3"
@@ -85,6 +88,7 @@ export const AddressItemRender = function(address, type) {
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
+          this.props.mode !== 'eth' &&
           <span
             data-for="receiveCoin4"
             data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
@@ -104,6 +108,7 @@ export const _ReceiveCoinTableRender = function() {
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-20 padding-bottom-15 push-left">
           { this.props.mode !== 'spv' &&
+            this.props.mode !== 'eth' &&
             <div>
               <label className="switch">
                 <input
@@ -127,6 +132,7 @@ export const _ReceiveCoinTableRender = function() {
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-20 padding-bottom-15 push-right">
           { this.props.mode !== 'spv' &&
+            this.props.mode !== 'eth' &&
             <div
               data-for="receiveCoin5"
               data-tip={ translate('RECEIVE.DISPLAY_ALL_ADDR') }>
@@ -194,6 +200,7 @@ export const ReceiveCoinRender = function() {
                     <div className="panel-actions">
                       <InvoiceModal />
                       { this.props.mode !== 'spv' &&
+                        this.props.mode !== 'eth' &&
                         <div
                           className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
                           onClick={ this.openDropMenu }>
