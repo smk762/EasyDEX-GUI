@@ -5,6 +5,7 @@ import {
   formatBytes,
   fromSats,
 } from 'agama-wallet-lib/src/utils';
+import fees from 'agama-wallet-lib/src/fees';
 
 const WalletsInfoRender = function() {
   const _coin = this.props.ActiveCoin.coin;
@@ -402,6 +403,63 @@ const WalletsInfoRender = function() {
                       { _balance.unconfirmed }
                     </td>
                   </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          { _coin === 'KMD' &&
+            _mode !== 'spv' &&
+            <div>
+              <button
+                type="button"
+                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
+                onClick={ () => this.openClaimInterestModal() }>
+                { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
+              </button>
+              <ClaimInterestModal />
+            </div>
+          }
+        </div>
+      </div>
+    );
+  } else if (_mode === 'eth') {
+    const _balance = this.props.ActiveCoin.balance;
+    const _server = this.props.Dashboard.ethereumCoins[_coin];
+
+    return (
+      <div>
+        <div className="col-xlg-6 col-md-6">
+          <div className="panel">
+            <div className="panel-heading">
+              <h3 className="panel-title">{ translate('INDEX.WALLET_INFO') }</h3>
+            </div>
+            <div className="table-responsive">
+              <table className="table table-striped">
+                <tbody>
+                  <tr>
+                    <td>{ translate('INDEX.GAS_LIMIT') }</td>
+                    <td className="selectable">
+                      { fees[_coin.toLowerCase()] }
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{ translate('INDEX.NETWORK') }</td>
+                    <td className="selectable">
+                      { _server.network }
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{ translate('INDEX.BALANCE') }</td>
+                    <td>
+                      { _balance.balance }
+                    </td>
+                  </tr>
+                  {/*<tr>
+                    <td>{ translate('INDEX.UNCONFIRMED_BALANCE') }</td>
+                    <td>
+                      { _balance.unconfirmed }
+                    </td>
+                  </tr>*/}
                 </tbody>
               </table>
             </div>

@@ -56,7 +56,8 @@ class WalletsNav extends React.Component {
   }
 
   toggleNativeWalletInfo() {
-    if (this.props.ActiveCoin.activeSection !== 'settings') {
+    if (this.props.ActiveCoin.activeSection !== 'settings' &&
+        this.props.ActiveCoin.mode === 'native') {
       Store.dispatch(getNativePeers(this.props.ActiveCoin.coin));
       Store.dispatch(getNativeNettotals(this.props.ActiveCoin.coin));
 

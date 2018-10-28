@@ -205,6 +205,8 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    GAS_LIMIT: 'Gas limit',
+    NETWORK: 'Network',
     Z_ADDR_ONLY: 'Z addresses only chain (ac_private=1).<br>Public addresses are not allowed.',
     TX_DETAILS: 'Transaction details',
     SELF_SM: 'self',
