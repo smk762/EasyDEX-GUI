@@ -164,7 +164,6 @@ export const apiEthereumBalanceState = (json) => {
 }
 
 export const apiEthereumTransactions = (coin, address) => {
-  console.warn('apiEthereumTransactions', coin);
   const network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
   
   return dispatch => {
@@ -224,6 +223,32 @@ export const apiEthereumTransactionsState = (json) => {
     type: DASHBOARD_ETHEREUM_TRANSACTIONS,
     txhistory: json,
   }
+}
+
+export const apiEthereumGasPrice = () => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+    };
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/eth/gasprice/${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.apiEthereumGasPrice') + ' (code: apiEthereumGasPrice)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
 }
 
 /*export const apiEthereumSend = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
