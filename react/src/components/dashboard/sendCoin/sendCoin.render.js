@@ -14,6 +14,16 @@ import {
 } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
+import { formatEther } from 'ethers/utils/units';
+import coinFees from 'agama-wallet-lib/src/fees';
+
+const _feeLookup = {
+  eth: [
+    'fast',
+    'average',
+    'slow',
+  ],
+};
 
 const kvCoins = {
   'KV': true,
@@ -561,6 +571,17 @@ export const SendRender = function() {
                     <strong className="color-warning">{ translate('SEND.WARNING') }:</strong>&nbsp;
                     { translate('SEND.WARNING_SPV_P1') }<br />
                     { translate('SEND.WARNING_SPV_P2') }
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  <div className="row">
+                    <div className="col-lg-12 padding-top-20">
+                      <span>
+                        <strong>{ translate('SEND.FEE') }:</strong>&nbsp;
+                        { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }&nbsp;
+                        { _coin }
+                      </span>
+                    </div>
                   </div>
                 }
                 <div className="widget-body-footer">
