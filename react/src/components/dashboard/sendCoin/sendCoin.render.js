@@ -629,15 +629,22 @@ export const SendRender = function() {
                           </td>
                         </tr>
                         { ((this.state.sendFrom && _mode === 'native') ||
-                          _mode === 'spv') &&
+                          _mode === 'spv' ||
+                          _mode === 'eth') &&
                           <tr>
                             <td className="padding-left-30">
                             { translate('INDEX.SEND_FROM') }
                             </td>
                             <td className="padding-left-30 selectable word-break--all">
-                              { _mode === 'spv' && this.props.Dashboard.electrumCoins[_coin].pub }
-                              { _mode === 'eth' && this.props.Dashboard.ethereum[_coin].pub }
-                              { _mode === 'native' && this.state.sendFrom }
+                              { _mode === 'spv' &&
+                                <span>{ this.props.Dashboard.electrumCoins[_coin].pub }</span>
+                              }
+                              { _mode === 'eth' &&
+                                <span>{ this.props.Dashboard.ethereumCoins[_coin].pub }</span>
+                              }
+                              { _mode === 'native' &&
+                                <span>{ this.state.sendFrom }</span>
+                              }
                             </td>
                           </tr>
                         }
@@ -661,7 +668,15 @@ export const SendRender = function() {
                           <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
                           <td className="padding-left-30">
                             <span className="selectable">
-                            { _mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }
+                            { _mode === 'spv' &&
+                              <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>
+                            }
+                            { _mode === 'native' &&
+                              <span>this.state.lastSendToResponse</span>
+                            }
+                            { _mode === 'eth' &&
+                              <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>                              
+                            }
                             </span>
                             { ((_mode === 'spv' &&
                               this.state.lastSendToResponse &&
@@ -688,6 +703,29 @@ export const SendRender = function() {
                                 </button>
                               </div>
                             }
+                            { _mode === 'eth' &&
+                              this.state.lastSendToResponse &&
+                              this.state.lastSendToResponse.txid &&
+                              <button
+                                className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                                onClick={ () => this.copyTXID(this.state.lastSendToResponse.txid) }>
+                                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                              </button>
+                            }
+                            { _mode === 'eth' &&
+                              this.state.lastSendToResponse &&
+                              this.state.lastSendToResponse.txid &&
+                              explorerList[_coin] &&
+                              <div className="margin-top-10">
+                                <button
+                                  type="button"
+                                  className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                                  onClick={ () => this.openExplorerWindow(this.state.lastSendToResponse.txid) }>
+                                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', _coin) }
+                                </button>
+                              </div>
+                            }
                           </td>
                         </tr>
                       </tbody>
@@ -699,6 +737,7 @@ export const SendRender = function() {
                   { this.state.lastSendToResponse &&
                     this.state.lastSendToResponse.msg &&
                     this.state.lastSendToResponse.msg === 'error' &&
+                    _mode !== 'eth' &&
                     <div className="padding-left-30 padding-top-10">
                       <div>
                         <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
@@ -729,6 +768,15 @@ export const SendRender = function() {
                           </ul>
                         </div>
                       }
+                    </div>
+                  }
+                  { this.state.lastSendToResponse &&
+                    this.state.lastSendToResponse.msg &&
+                    this.state.lastSendToResponse.msg === 'error' &&
+                    _mode !== 'eth' &&
+                    <div className="padding-left-30 padding-top-10">
+                      <div>Error cannot push ETH transaction.<br/>Debug info</div>
+                      <div>{ JSON.stringify(this.state.lastSendToResponse) }</div>
                     </div>
                   }
                 </div>

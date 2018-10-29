@@ -18,6 +18,7 @@ import {
   validateAddress,
   clearOPIDs,
   apiEthereumGasPrice,
+  apiEthereumSend,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -247,7 +248,7 @@ class SendCoin extends React.Component {
       });
     } else if (_mode === 'eth') {
       this.setState({
-        amount: Number((Number(_balance.balance) - formatEther(Number(this.state.ethFees[this.state.ethFeeType] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
+        amount: Number((Number(_balance.balance) - formatEther(Number(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
       });
     }
   }
@@ -857,6 +858,22 @@ class SendCoin extends React.Component {
           )
         );
       }
+    } else if (_mode === 'eth') {
+      // no op
+      const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
+      
+      if (_pub) {
+        // coin, dest, value, speed, push
+        Store.dispatch(
+          apiEthereumSend(
+            _coin,
+            this.state.sendTo,
+            this.state.amount,
+            _feeLookup.eth[this.state.ethFeeType],
+            true,
+          )
+        );
+      }
     }
   }
 
@@ -1229,6 +1246,7 @@ class SendCoin extends React.Component {
                 2: 'slow',
               }} />
             { this.state.ethFees &&
+              this.state.ethFees.average &&
               <div className="margin-top-10">
                 { translate('SEND.FEE') }: { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }
               </div>

@@ -251,14 +251,16 @@ export const apiEthereumGasPrice = () => {
   });
 }
 
-export const apiEthereumSend = (coin, dest, value, speed, push) => {
+export const apiEthereumSend = (coin, dest, amount, speed, push) => {
   const network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
   
   return dispatch => {
+    // const json = {"msg":"success","result":{"nonce":0,"gasPrice":{"_hex":"0x012a05f200"},"gasLimit":{"_hex":"0x5208"},"to":"0xe1a3157378E6bcAF3a5391D582F2e7175f94588C","value":{"_hex":"0x038d7ea4c68000"},"data":"0x","chainId":1,"v":37,"r":"0x61e2d5c59eca0fe085bea0ba8a1f3ce1285a70acc4f08766da85dda626446796","s":"0x4dc9707147d549f65c3f40a86d1764e40035bac08ce15bb4d851c56c3726fc18","from":"0xe1a3157378E6bcAF3a5391D582F2e7175f94588C","hash":"0xb40c11a96265a30a6871d966db24f60b2579e5af045559b7801b749a72557433","txid":"0xb40c11a96265a30a6871d966db24f60b2579e5af045559b7801b749a72557433"}};
+    // Store.dispatch(sendToAddressState(json.msg === 'error' ? json : json.result));
     let _urlParams = {
       token,
       coin,
-      value,
+      amount,
       dest,
       speed,
       push: false,
