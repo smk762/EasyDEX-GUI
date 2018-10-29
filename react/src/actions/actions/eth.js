@@ -251,37 +251,26 @@ export const apiEthereumGasPrice = () => {
   });
 }
 
-/*export const apiEthereumSend = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
-  value = Math.floor(value);
-
+export const apiEthereumSend = (coin, dest, value, speed, push) => {
+  const network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
+  
   return dispatch => {
-    const payload = {
+    let _urlParams = {
       token,
       coin,
       value,
-      customFee,
-      address: changeAddress,
-      change: changeAddress,
-      opreturn,
-      gui: true,
-      verify: true,
-      push: true,
+      dest,
+      speed,
+      push: false,
     };
-    const _urlParams = {
-      token,
-      coin,
-      value,
-      customFee,
-      address: sendToAddress,
-      change: changeAddress,
-      gui: true,
-      verify: true,
-      push: true,
-    };
+    
+    if (network) {
+      _urlParams.network = network[1].toLowerCase();
+    }
 
     return fetch(
-      isKv ? `http://127.0.0.1:${agamaPort}/api/eth/createrawtx` : `http://127.0.0.1:${agamaPort}/api/eth/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
+      `http://127.0.0.1:${agamaPort}/api/eth/createtx${urlParams(_urlParams)}`,
+      fetchType.get
     )
     .catch((error) => {
       console.log(error);
@@ -298,33 +287,4 @@ export const apiEthereumGasPrice = () => {
       dispatch(sendToAddressState(json.msg === 'error' ? json : json.result));
     });
   }
-}*/
-
-export const apiEthereumPushTx = (coin, rawtx) => {
-  return new Promise((resolve, reject) => {
-    fetch(
-      `http://127.0.0.1:${agamaPort}/api/eth/pushtx`,
-      fetchType(
-        JSON.stringify({
-          network: coin,
-          rawtx,
-          token,
-        })
-      ).post
-    )
-    .catch((error) => {
-      console.log(error);
-      Store.dispatch(
-        triggerToaster(
-          translate('API.apiEthereumPushTx') + ' (code: apiEthereumPushTx)',
-          translate('TOASTR.ERROR'),
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      resolve(json);
-    });
-  });
 }
