@@ -263,7 +263,7 @@ export const apiEthereumSend = (coin, dest, amount, speed, push) => {
       amount,
       dest,
       speed,
-      push: false,
+      push,
     };
     
     if (network) {
