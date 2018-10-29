@@ -263,3 +263,8 @@ span[disabled] {
   cursor: default;
   pointer-events: none;
 }
+
+button[disabled],
+button.disabled {
+  pointer-events: none;  
+}
