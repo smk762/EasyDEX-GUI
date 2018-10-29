@@ -290,33 +290,3 @@ export const apiEthereumSend = (coin, dest, amount, speed, push) => {
     });
   }
 }
-
-export const apiEthereumPriv = (seed) => {
-  return new Promise((resolve, reject) => {
-    const _urlParams = {
-      token,
-      seed,
-    };
-    `http://127.0.0.1:${agamaPort}/api/eth/priv`,
-    fetchType(
-      JSON.stringify({
-        seed,
-        token,
-      })
-    ).post
-    .catch((error) => {
-      console.log(error);
-      Store.dispatch(
-        triggerToaster(
-          translate('API.apiEthereumPriv') + ' (code: apiEthereumPriv)',
-          translate('TOASTR.ERROR'),
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => {
-      resolve(json);
-    });
-  });
-}

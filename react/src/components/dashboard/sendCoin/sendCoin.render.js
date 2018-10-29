@@ -575,12 +575,21 @@ export const SendRender = function() {
                 }
                 { _mode === 'eth' &&
                   <div className="row">
-                    <div className="col-lg-12 padding-top-20">
+                    <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
                       <span>
                         <strong>{ translate('SEND.FEE') }:</strong>&nbsp;
                         { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }&nbsp;
                         { _coin }
                       </span>
+                    </div>
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  <div className="row">
+                    <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                      <strong>{ translate('SEND.TOTAL_AMOUNT_DESC') }:</strong>&nbsp;
+                      { Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) > this.props.ActiveCoin.balance.balance ? Number(this.state.amount) - Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) : Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) }&nbsp;
+                      { _coin }
                     </div>
                   </div>
                 }

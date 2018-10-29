@@ -149,7 +149,8 @@ class CoinTileItem extends React.Component {
         ((_main.coins.native &&
           _main.coins.native.length &&
         !Config.native.stopNativeDaemonsOnQuit) ||
-        (_main.coins.spv && _main.coins.spv.length))) {
+        (_main.coins.spv && _main.coins.spv.length) ||
+        (_main.coins.eth && _main.coins.eth.length))) {
       return true;
     }
   }
