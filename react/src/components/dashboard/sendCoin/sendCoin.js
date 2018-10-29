@@ -924,10 +924,37 @@ class SendCoin extends React.Component {
       }
     }
 
+    if (_mode === 'eth') {
+      const _amount = this.state.amount;
+      const _balance = this.props.ActiveCoin.balance.balance;
+      const _fee = formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]);
+
+      if (Number(_amount) + Number(_fee) > _balance) {
+        Store.dispatch(
+          triggerToaster(
+            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance) - Number(_fee)).toFixed(8))} ${_coin}`,
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+        valid = false;
+      }
+    }
+
     if (!this.state.sendTo ||
         (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc')) {
-      const _validateAddress = mainWindow.addressVersionCheck(_coin, this.state.sendTo);
+      let _validateAddress;
       let _msg;
+
+      if (_mode === 'eth') {
+        try {
+          _validateAddress = getAddress(this.state.sendTo);
+        } catch (e) {
+          _validateAddress = 'Invalid pub address';
+        }
+      } else {
+        _validateAddress = mainWindow.addressVersionCheck(_coin, this.state.sendTo);
+      }
 
       if (_validateAddress === 'Invalid pub address') {
         _msg = _validateAddress;
