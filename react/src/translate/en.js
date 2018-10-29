@@ -1005,6 +1005,9 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    ETH_CONF_TIME_LESS_THAN_2_MIN: ' within 2 min',
+    ETH_CONF_TIME_LESS_THAN_5_MIN: ' within 5 min',
+    ETH_CONF_TIME_LESS_THAN_30_MIN: ' within 30 min',
     USE_ZMERGETOADDRESS: 'Merge funds (z_mergetoaddress)',
     ANY: 'Any address(es)',
     ANY_TADDR: 'Any transparent address(es)',
@@ -1029,6 +1032,7 @@ const LANG_EN = {
     CONF_TIME_WITHIN_3O_MIN: 'within 30 min',
     CONF_TIME_LESS_THAN_30_MIN: 'within less than 30 min',
     FETCHING_BTC_FEES: 'Fetching BTC fees',
+    FETCHING_ETH_FEES: 'Fetching ETH fees',
     CONF_TIME: 'Confirmation time',
     ADVANCED_SELECTION: 'Advanced selection',
     BTC_FEES_DESC_P1: 'Electrum based fee estimates may not be as accurate as bitcoinfees.earn.com.',

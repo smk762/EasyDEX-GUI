@@ -38,7 +38,7 @@ export const AddressListRender = function() {
     <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
       <button
         type="button"
-        className={ 'btn dropdown-toggle btn-info' + (_mode === 'spv' ? ' disabled' : '') }
+        className={ 'btn dropdown-toggle btn-info' + (_mode === 'spv' || _mode === 'eth' ? ' disabled' : '') }
         onClick={ this.openDropMenu }>
         <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() }&nbsp;</span>
         <span className="bs-caret">
@@ -48,6 +48,7 @@ export const AddressListRender = function() {
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
           { (_mode === 'spv' ||
+             _mode === 'eth' ||
             (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate)) &&
             (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.length !== 95)) &&
             <li
@@ -55,7 +56,15 @@ export const AddressListRender = function() {
               onClick={ () => this.updateAddressSelection(null, 'public', null) }>
               <a>
                 <span className="text">
-                  { _mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` : translate('INDEX.T_FUNDS') }
+                  { _mode === 'spv' &&
+                    <span>{ `[ ${this.props.ActiveCoin.balance.balance + (this.props.ActiveCoin.balance.unconfirmed || 0)} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` }</span>
+                  }
+                  { _mode === 'eth' &&
+                    <span>{ `[ ${this.props.ActiveCoin.balance.balance} ${_coin} ] ${this.props.Dashboard.ethereumCoins[_coin].pub}` }</span>
+                  }
+                  { _mode == 'native' &&
+                    <span>{ translate('INDEX.T_FUNDS') }</span>
+                  }
                 </span>
                 <span
                   className="glyphicon glyphicon-ok check-mark pull-right"
@@ -64,6 +73,7 @@ export const AddressListRender = function() {
             </li>
           }
           { (_mode === 'spv' ||
+             _mode === 'eth' ||
              ((_mode === 'native' && _coin === 'KMD') || (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate))) &&
             this.renderAddressByType('public')
           }
@@ -95,8 +105,8 @@ export const _SendFormRender = function() {
       { !this.state.kvSend &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
-            { _mode === 'spv' &&
-              this.renderAddressBookDropdown(true) < 1 &&
+            { ((_mode === 'spv' && this.renderAddressBookDropdown(true) < 1) ||
+                _mode === 'eth') &&
               <button
                 type="button"
                 className="btn btn-default btn-send-self"
@@ -135,12 +145,13 @@ export const _SendFormRender = function() {
               onChange={ this.updateInput }
               value={ this.state.sendTo }
               id="kmdWalletSendTo"
-              placeholder={ translate('SEND.' + (_mode === 'spv' ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
+              placeholder={ translate('SEND.' + (_mode === 'spv' || _mode === 'eth' ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>
           <div className="col-lg-12 form-group form-material">
             { (_mode === 'spv' ||
+               _mode === 'eth' ||
                (_mode === 'native' && this.state.sendFrom)) &&
               <button
                 type="button"
@@ -188,6 +199,7 @@ export const _SendFormRender = function() {
             </div>
           }
           { this.renderBTCFees() }
+          { this.renderETHFees() }
           { _mode === 'spv' &&
             Config.spv.allowCustomFees &&
             <div className="col-lg-12 form-group form-material">
@@ -602,7 +614,9 @@ export const SendRender = function() {
                             { translate('INDEX.SEND_FROM') }
                             </td>
                             <td className="padding-left-30 selectable word-break--all">
-                              { _mode === 'spv' ? this.props.Dashboard.electrumCoins[_coin].pub : this.state.sendFrom }
+                              { _mode === 'spv' && this.props.Dashboard.electrumCoins[_coin].pub }
+                              { _mode === 'eth' && this.props.Dashboard.ethereum[_coin].pub }
+                              { _mode === 'native' && this.state.sendFrom }
                             </td>
                           </tr>
                         }
