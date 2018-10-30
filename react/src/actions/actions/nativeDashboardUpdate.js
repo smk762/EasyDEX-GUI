@@ -137,8 +137,8 @@ export const getDashboardUpdateState = (json, coin, fakeResponse) => {
           json.result &&
           json.result.z_gettotalbalance &&
           json.result.z_gettotalbalance.result &&
-          hasOwnProperty(json.result.z_gettotalbalance.result.transparent) &&
-          hasOwnProperty(json.result.z_gettotalbalance.result.total)) {
+          json.result.z_gettotalbalance.result.hasOwnProperty('transparent') &&
+          json.result.z_gettotalbalance.result.hasOwnProperty('total')) {
         json.result.z_gettotalbalance.result.transparent = _tbalance.toFixed(8);
         json.result.z_gettotalbalance.result.total = Number(json.result.z_gettotalbalance.result.transparent) + Number(json.result.z_gettotalbalance.result.interest) + Number(json.result.z_gettotalbalance.result.private);
         json.result.z_gettotalbalance.result.total = json.result.z_gettotalbalance.result.total.toFixed(8);
