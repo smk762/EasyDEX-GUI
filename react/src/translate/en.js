@@ -1169,6 +1169,7 @@ const LANG_EN = {
     PIRATE: 'Pirate',
     KOIN: 'Koinon Coin',
     DION: 'DionPay',
+    PTX: 'PatentTX',
   },
   CRYPTO: {
     STRAT: 'Stratis',
