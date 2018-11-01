@@ -78,15 +78,12 @@ class AppSettingsPanel extends React.Component {
     let isError = false;
     let saveAfterPathCheck = false;
 
-    console.warn('app settings', this.state.appSettings);
-
     for (let key in _appSettings) {
-      console.warn('settings save', key);
       if (typeof _appSettings[key] !== 'object') {
         _appSettingsPristine[key] = _configSchema[key] && _configSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
 
         if (_configSchema[key] &&
-          _configSchema[key].type === 'folder' &&
+            _configSchema[key].type === 'folder' &&
             _appSettings[key] &&
             _appSettings[key].length) {
           const _testLocation = mainWindow.testLocation;
@@ -439,7 +436,6 @@ class AppSettingsPanel extends React.Component {
     const _name = e.target.name;    
     let _appSettings = this.state.appSettings;
     let _appSettingsPrev = Object.assign({}, _appSettings);
-    console.warn(`update ${parentKey} ${childKey} ${_configSchema[parentKey][childKey].type}`);
     
     if (!childKey &&
         _configSchema[parentKey].type === 'boolean') {
