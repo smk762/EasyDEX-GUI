@@ -339,7 +339,6 @@ class AddCoin extends React.Component {
     
     if (_coin.selectedCoin.indexOf('ETH') > -1) {
       const _ethNet = _coin.selectedCoin.split('|');
-      console.warn('eth addcoin params', _ethNet);
 
       Store.dispatch(addCoinEth(
         _ethNet[0],
