@@ -345,6 +345,12 @@ const WalletsInfoRender = function() {
                   <tr>
                     <td>{ translate('INDEX.LAUNCH_PARAMS') }</td>
                     <td className="selectable">
+                      <button
+                        className="btn btn-default btn-xs clipboard-edexaddr copy-native-params-btn"
+                        title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                        onClick={ this.copyParams }>
+                        <i className="icon wb-copy"></i> { `${translate('INDEX.COPY')} ${translate('INDEX.LAUNCH_PARAMS').toLowerCase()}` }
+                      </button>
                       { renderNativeCoinsParams() }
                     </td>
                   </tr>

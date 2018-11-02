@@ -205,6 +205,7 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    LAUNCH_PARAMS_COPIED: 'Launch params copied',
     LAUNCH_PARAMS: 'Launch params',
     PUBKEY: 'Pubkey',
     USE_PUBKEY: 'Use pubkey',
