@@ -680,6 +680,9 @@ const LANG_EN = {
     CURRENT_BLOCK_SM: 'current block',
   },
   TOASTR: {
+    INVALID_PUBKEY: 'Invalid pubkey',
+    YOUR_PUBKEY: 'Your pubkey ',
+    CORRESPONDS_TO_T_ADDR: ' corresponds to ',    
     INCORRECT_WIF: 'Incorrect WIF key format',
     ERROR: 'Error',
     FAILED_TO_VERIFY_ADDR: 'Failed to verify address',
@@ -877,6 +880,7 @@ const LANG_EN = {
     TO_SEND_FEEDBACK_P2: 'or send an email to support@komodoplatform.com',
   },
   SETTINGS: {
+    VALIDATE_PUBKEY: 'Validate pubkey',
     SWEEP_PROCESSING_TX: 'Processing transaction...',
     SWEEP_LOADING_BALANCE: 'Fetching balance...',
     FROM_SM: 'from',
