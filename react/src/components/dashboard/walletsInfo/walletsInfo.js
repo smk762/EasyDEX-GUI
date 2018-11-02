@@ -40,6 +40,7 @@ const mapStateToProps = (state) => {
   return {
     ActiveCoin: state.ActiveCoin,
     Dashboard: state.Dashboard,
+    coins: state.Main.coins,
   };
 };
 

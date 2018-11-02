@@ -205,6 +205,9 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    LAUNCH_PARAMS: 'Launch params',
+    PUBKEY: 'Pubkey',
+    USE_PUBKEY: 'Use pubkey',
     GAS_LIMIT: 'Gas limit',
     NETWORK: 'Network',
     Z_ADDR_ONLY: 'Z addresses only chain (ac_private=1).<br>Public addresses are not allowed.',

@@ -10,6 +10,19 @@ import fees from 'agama-wallet-lib/src/fees';
 const WalletsInfoRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
+  const nativeCoinsParams = this.props.coins.params;
+
+  const renderNativeCoinsParams = (coin) => {
+    let _items = [];
+    
+    for (let i = 0; i < nativeCoinsParams[_coin].length; i++) {
+      _items.push(
+        <div key={ `native-launch-params-${i}` }>{ nativeCoinsParams[_coin][i] }</div>
+      );
+    }
+
+    return _items;
+  };
 
   if (_mode === 'native') {
     const _progress = this.props.ActiveCoin.progress;
@@ -327,6 +340,12 @@ const WalletsInfoRender = function() {
                     <td>{ translate('INDEX.ERRORS') }</td>
                     <td className="selectable">
                       { _progress.errors }
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{ translate('INDEX.LAUNCH_PARAMS') }</td>
+                    <td className="selectable">
+                      { renderNativeCoinsParams() }
                     </td>
                   </tr>
                 </tbody>
