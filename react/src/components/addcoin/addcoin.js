@@ -235,6 +235,13 @@ class AddCoin extends React.Component {
           display: addCoinProps.display,
           className: addCoinProps.display ? 'show in' : 'hide',
         }));
+
+        if (!addCoinProps.display) {
+          setTimeout(() => {
+            this.removeCoin();
+            this.addNewItem();
+          }, 100);
+        }
       }, addCoinProps.display ? 50 : 300);
     }
   }
