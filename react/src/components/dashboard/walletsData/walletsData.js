@@ -595,7 +595,8 @@ class WalletsData extends React.Component {
           apiElectrumSetServer(
             _coin,
             _randomServer.ip,
-            _randomServer.port
+            _randomServer.port,
+            _randomServer.proto
           )
           .then((serverSetRes) => {
             Store.dispatch(
