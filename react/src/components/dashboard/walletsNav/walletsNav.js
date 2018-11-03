@@ -122,7 +122,6 @@ const mapStateToProps = (state) => {
       activeAddress: state.ActiveCoin.activeAddress,
     },
     Dashboard: state.Dashboard,
-    nativeOnly: Config.iguanaLessMode,
   };
 };
 
