@@ -43,6 +43,12 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
                 <i className="icon fa-check margin-right-5"></i> { translate('RECEIVE.VALIDATE_ADDRESS') }
               </li>
             }
+            { this.props.mode === 'spv' &&
+              this.props.electrumCoins[this.props.coin].pubHex &&
+              <li onClick={ () => this._copyCoinAddress(this.props.electrumCoins[this.props.coin].pubHex) }>
+                <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('INDEX.PUBKEY').toLowerCase()}` }
+              </li>
+            }
             <li className="receive-address-context-menu-get-qr">
               <QRModal
                 content={ address }
