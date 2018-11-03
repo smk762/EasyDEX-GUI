@@ -205,6 +205,7 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    PUBKEY_COPIED: 'Pubkey is copied',
     LAUNCH_PARAMS_COPIED: 'Launch params copied',
     LAUNCH_PARAMS: 'Launch params',
     PUBKEY: 'Pubkey',
@@ -684,6 +685,7 @@ const LANG_EN = {
     CURRENT_BLOCK_SM: 'current block',
   },
   TOASTR: {
+    UNABLE_TO_COPY_PUBKEY: 'Unable to copy pubkey',
     INVALID_PUBKEY: 'Invalid pubkey',
     YOUR_PUBKEY: 'Your pubkey ',
     CORRESPONDS_TO_T_ADDR: ' corresponds to ',    

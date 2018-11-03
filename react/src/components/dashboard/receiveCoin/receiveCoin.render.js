@@ -45,7 +45,13 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
             }
             { this.props.mode === 'spv' &&
               this.props.electrumCoins[this.props.coin].pubHex &&
-              <li onClick={ () => this._copyCoinAddress(this.props.electrumCoins[this.props.coin].pubHex) }>
+              <li onClick={ () => this.copyPubkeySpv(this.props.electrumCoins[this.props.coin].pubHex) }>
+                <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('INDEX.PUBKEY').toLowerCase()}` }
+              </li>
+            }
+            { this.props.mode === 'native' &&
+              type === 'public' &&
+              <li onClick={ () => this.copyPubkeyNative(address) }>
                 <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('INDEX.PUBKEY').toLowerCase()}` }
               </li>
             }
