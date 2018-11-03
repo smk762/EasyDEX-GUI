@@ -15,6 +15,8 @@ import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
 import mainWindow from '../../util/mainWindow';
 import { acConfig } from '../addcoin/payload';
+import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
+import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
@@ -25,7 +27,6 @@ class AddCoin extends React.Component {
   constructor() {
     super();
     this.state = {
-      nativeOnly: Config.iguanaLessMode,
       coins: [],
       defaultCoinState: {
         selectedCoin: null,
@@ -58,6 +59,7 @@ class AddCoin extends React.Component {
       seedInputVisibility: false,
       seedExtraSpaces: false,
       trimPassphraseTimer: null,
+      usePubkey: false,
     };
     this.existingCoins = null;
     this.defaultState = JSON.parse(JSON.stringify(this.state));
@@ -72,6 +74,13 @@ class AddCoin extends React.Component {
     this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
+    this.toggleUsePubkey = this.toggleUsePubkey.bind(this);
+  }
+
+  toggleUsePubkey() {
+    this.setState({
+      usePubkey: !this.state.usePubkey,
+    });
   }
 
   toggleSeedInputVisibility() {
@@ -369,10 +378,21 @@ class AddCoin extends React.Component {
           }
 
           if (!_coin.daemonParam) {
-            Store.dispatch(addCoin(
-              coin,
-              _coin.mode,
-            ));
+            if (this.state.usePubkey &&
+                pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd)) {
+              Store.dispatch(addCoin(
+                coin,
+                _coin.mode,
+                null,
+                null,
+                Config.pubkey,
+              ));
+            } else {
+              Store.dispatch(addCoin(
+                coin,
+                _coin.mode,
+              ));
+            }
           } else {          
             Store.dispatch(addCoin(
               coin,
@@ -381,6 +401,7 @@ class AddCoin extends React.Component {
               _coin.daemonParam === 'gen' &&
               acConfig[coinuc] &&
               acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+              this.state.usePubkey && pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd) ? Config.pubkey : null,
             ));
           }
 

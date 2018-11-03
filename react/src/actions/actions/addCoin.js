@@ -157,7 +157,7 @@ export const addCoinEth = (coin, network) => {
   }
 }
 
-export const addCoin = (coin, mode, startupParams, genproclimit) => {
+export const addCoin = (coin, mode, startupParams, genproclimit, pubkey) => {
   if (mode === 0 ||
       mode === '0') {
     return dispatch => {
@@ -165,7 +165,7 @@ export const addCoin = (coin, mode, startupParams, genproclimit) => {
     }
   } else {
     return dispatch => {
-      dispatch(apiGetConfig(coin, mode, startupParams, genproclimit));
+      dispatch(apiGetConfig(coin, mode, startupParams, genproclimit, pubkey));
     }
   }
 }
@@ -181,7 +181,7 @@ const handleErrors = (response) => {
   }
 }
 
-export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
+export const apiHerd = (coin, mode, path, startupParams, genproclimit, pubkey) => {
   let acData;
   let herdData = {
     ac_name: coin,
@@ -241,6 +241,10 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
         '-addnode=78.47.196.146',
       ],
     };
+  }
+
+  if (pubkey) {
+    herdData.ac_options.push(`-pubkey=${pubkey}`);
   }
 
   if (startupParams) {
@@ -436,7 +440,7 @@ export const _apiGetConfig = (coin, mode, startupParams) => {
   }
 }
 
-export const apiGetConfig = (coin, mode, startupParams, genproclimit) => {
+export const apiGetConfig = (coin, mode, startupParams, genproclimit, pubkey) => {
   if (coin === 'KMD' &&
       mode === '-1') {
     return dispatch => {
@@ -466,7 +470,8 @@ export const apiGetConfig = (coin, mode, startupParams, genproclimit) => {
             coin,
             mode,
             json,
-            startupParams
+            startupParams,
+            pubkey
           )
         )
       );
@@ -500,7 +505,8 @@ export const apiGetConfig = (coin, mode, startupParams, genproclimit) => {
             mode,
             json,
             startupParams,
-            genproclimit
+            genproclimit,
+            pubkey
           )
         )
       );
