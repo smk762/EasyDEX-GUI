@@ -129,6 +129,12 @@ export const apiElectrumAddCoin = (coin) => {
 }
 
 export const addCoinEth = (coin, network) => {
+  if (network &&
+      network.toLowerCase() !== 'ropsten') {
+    coin = network;
+    network = null;
+  }
+
   return dispatch => {
     const _urlParams = {
       coin: network ? (coin + '_' + network).toUpperCase() : coin,

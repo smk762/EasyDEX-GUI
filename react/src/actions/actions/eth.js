@@ -17,6 +17,7 @@ import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 export const apiEthereumAuth = (seed) => {
   return dispatch => {
@@ -120,7 +121,15 @@ export const apiEthereumKeys = (seed) => {
 }
 
 export const apiEthereumBalance = (coin, address) => {
-  const network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
+  const _coin = coin;
+  let network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
+  let symbol;
+
+  if (erc20ContractId[coin.toUpperCase()]) {
+    network = null;
+    symbol = coin;
+    coin = 'ETH';
+  }
   
   return dispatch => {
     let _urlParams = {
@@ -133,6 +142,10 @@ export const apiEthereumBalance = (coin, address) => {
       _urlParams.network = network[1].toLowerCase();
     }
     
+    if (symbol) {
+      _urlParams.symbol = symbol;
+    }
+
     return fetch(
       `http://127.0.0.1:${agamaPort}/api/eth/balance${urlParams(_urlParams)}`,
       fetchType.get
@@ -149,7 +162,7 @@ export const apiEthereumBalance = (coin, address) => {
     })
     .then(response => response.json())
     .then(json => {
-      if (mainWindow.activeCoin === coin) {
+      if (mainWindow.activeCoin === _coin) {
         dispatch(apiEthereumBalanceState(json));
       }
     });
@@ -163,15 +176,27 @@ export const apiEthereumBalanceState = (json) => {
   }
 }
 
-export const apiEthereumTransactions = (coin, address) => {
-  const network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
-  
+export const apiEthereumTransactions = (coin, address) => {  
+  const _coin = coin;
+  let network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
+  let symbol;
+
+  if (erc20ContractId[coin.toUpperCase()]) {
+    network = null;
+    symbol = coin;
+    coin = 'ETH';
+  }
+
   return dispatch => {
     let _urlParams = {
       token,
       address,
       coin,
     };
+  
+    if (symbol) {
+      _urlParams.symbol = symbol;
+    }
 
     if (network) {
       _urlParams.network = network[1].toLowerCase();
@@ -193,7 +218,7 @@ export const apiEthereumTransactions = (coin, address) => {
     })
     .then(response => response.json())
     .then(json => {
-      if (mainWindow.activeCoin === coin) {
+      if (mainWindow.activeCoin === _coin) {
         dispatch(apiEthereumTransactionsState(json));
       }
     });
