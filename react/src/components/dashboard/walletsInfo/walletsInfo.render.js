@@ -15,10 +15,13 @@ const WalletsInfoRender = function() {
   const renderNativeCoinsParams = (coin) => {
     let _items = [];
     
-    for (let i = 0; i < nativeCoinsParams[_coin].length; i++) {
-      _items.push(
-        <div key={ `native-launch-params-${i}` }>{ nativeCoinsParams[_coin][i] }</div>
-      );
+    if (nativeCoinsParams &&
+        nativeCoinsParams[_coin]) {
+      for (let i = 0; i < nativeCoinsParams[_coin].length; i++) {
+        _items.push(
+          <div key={ `native-launch-params-${i}` }>{ nativeCoinsParams[_coin][i] }</div>
+        );
+      }
     }
 
     return _items;
