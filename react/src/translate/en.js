@@ -1313,8 +1313,12 @@ const LANG_EN = {
     PPC: 'Peercoin',
     MZC: 'Mazacoin',
     SDC: 'ShadowCash',
+    // eth
     ETH: 'Ethereum',
     ETH_ROPSTEN: 'Ethereum Ropsten Testnet',
+    OMG: 'OmiseGO',
+    ZRX: '0x',
+    SNT: 'Status',
   },
   TOOLS: {
     TOOLS: 'Tools',
