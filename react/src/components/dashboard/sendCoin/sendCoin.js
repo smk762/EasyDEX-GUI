@@ -19,6 +19,7 @@ import {
   clearOPIDs,
   apiEthereumGasPrice,
   apiEthereumSend,
+  apiEthereumSendERC20Preflight,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -47,6 +48,7 @@ import {
 import { formatEther } from 'ethers/utils/units';
 import { getAddress } from 'ethers/utils/address';
 import coinFees from 'agama-wallet-lib/src/fees';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
@@ -112,6 +114,8 @@ class SendCoin extends React.Component {
       // eth
       ethFees: {},
       ethFeeType: 1,
+      ethPreflightSendInProgress: false,
+      ethPreflightRes: null,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -247,9 +251,15 @@ class SendCoin extends React.Component {
         amount: Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
       });
     } else if (_mode === 'eth') {
-      this.setState({
-        amount: Number((Number(_balance.balance) - formatEther(Number(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
-      });
+      if (erc20ContractId[this.props.ActiveCoin.coin]) {
+        this.setState({
+          amount: Number(_balance.balance),
+        });
+      } else {
+        this.setState({
+          amount: Number((Number(_balance.balance) - formatEther(Number(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
+        });
+      }
     }
   }
 
@@ -271,7 +281,13 @@ class SendCoin extends React.Component {
 
   openExplorerWindow(txid) {
     const _coin = this.props.ActiveCoin.coin;
-    const url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;
+    let url;
+
+    if (erc20ContractId[this.props.ActiveCoin.coin]) {
+      url = `${explorerList.ETH}${txid}`;
+    } else {
+      url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;      
+    }
     return shell.openExternal(url);
   }
 
@@ -733,6 +749,7 @@ class SendCoin extends React.Component {
           currentStep: 0,
           spvVerificationWarning: false,
           spvPreflightSendInProgress: false,
+          ethPreflightSendInProgress: false,
           pin: '',
           noUtxo: false,
         });
@@ -765,8 +782,11 @@ class SendCoin extends React.Component {
 
         this.setState(Object.assign({}, this.state, {
           spvPreflightSendInProgress: _mode === 'spv' ? true : false,
+          ethPreflightSendInProgress: _mode === 'eth' ? true : false,
           currentStep: step,
           kvHex,
+          spvPreflightRes: null,
+          ethPreflightRes: null,
         }));
 
         // spv pre tx push request
@@ -799,6 +819,37 @@ class SendCoin extends React.Component {
               this.setState(Object.assign({}, this.state, {
                 spvPreflightSendInProgress: false,
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
+              }));
+            }
+          });
+        } else if (
+          _mode === 'eth' &&
+          erc20ContractId[this.props.ActiveCoin.coin]
+        ) { // spv pre tx push request          
+          apiEthereumSendERC20Preflight(
+            this.props.ActiveCoin.coin,
+            this.state.sendTo,
+            this.state.amount,
+            _feeLookup.eth[this.state.ethFeeType],
+          )
+          .then((sendPreflight) => {            
+            if (sendPreflight &&
+                sendPreflight.msg === 'success') {
+              this.setState(Object.assign({}, this.state, {
+                ethPreflightSendInProgress: false,
+                ethPreflightRes: {
+                  fee: Number(sendPreflight.result.fee).toFixed(8),
+                  balanceAferFee: Number(sendPreflight.result.balanceAferFee).toFixed(8),
+                  notEnoughBalance: sendPreflight.result.notEnoughBalance,
+                  maxBalance: {
+                    balance: Number(sendPreflight.result.maxBalance.balance).toFixed(8),
+                  },
+                },
+              }));
+            } else {
+              this.setState(Object.assign({}, this.state, {
+                ethPreflightSendInProgress: false,
+                ethPreflightRes: sendPreflight,
               }));
             }
           });
@@ -863,16 +914,29 @@ class SendCoin extends React.Component {
       const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
       
       if (_pub) {
-        // coin, dest, value, speed, push
-        Store.dispatch(
-          apiEthereumSend(
-            _coin,
-            this.state.sendTo,
-            this.state.amount,
-            _feeLookup.eth[this.state.ethFeeType],
-            true,
-          )
-        );
+        if (erc20ContractId[_coin]) {
+          // coin, dest, value, speed, push
+          Store.dispatch(
+            apiEthereumSend(
+              _coin,
+              this.state.sendTo,
+              this.state.amount,
+              _feeLookup.eth[this.state.ethFeeType],
+              true,
+            )
+          );
+        } else {
+          // coin, dest, value, speed, push
+          Store.dispatch(
+            apiEthereumSend(
+              _coin,
+              this.state.sendTo,
+              this.state.amount,
+              _feeLookup.eth[this.state.ethFeeType],
+              true,
+            )
+          );
+        }
       }
     }
   }
@@ -944,17 +1008,31 @@ class SendCoin extends React.Component {
     if (_mode === 'eth') {
       const _amount = this.state.amount;
       const _balance = this.props.ActiveCoin.balance.balance;
-      const _fee = formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]);
 
-      if (Number(_amount) + Number(_fee) > _balance) {
-        Store.dispatch(
-          triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance) - Number(_fee)).toFixed(8))} ${_coin}`,
-            translate('TOASTR.WALLET_NOTIFICATION'),
-            'error'
-          )
-        );
-        valid = false;
+      if (erc20ContractId[_coin]) {
+        if (Number(_amount) > _balance) {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(_balance).toFixed(8)} ${_coin}`,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
+          valid = false;
+        }
+      } else {
+        const _fee = formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]);
+
+        if (Number(_amount) + Number(_fee) > _balance) {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance) - Number(_fee)).toFixed(8))} ${_coin}`,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
+          valid = false;
+        }
       }
     }
 
@@ -1247,6 +1325,7 @@ class SendCoin extends React.Component {
               }} />
             { this.state.ethFees &&
               this.state.ethFees.average &&
+              !erc20ContractId[_coin] &&
               <div className="margin-top-10">
                 { translate('SEND.FEE') }: { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }
               </div>

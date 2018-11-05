@@ -9,6 +9,7 @@ import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const { shell } = window.require('electron');
 
@@ -146,7 +147,13 @@ class WalletsTxInfo extends React.Component {
 
   openExplorerWindow(txid) {
     const _coin = this.props.ActiveCoin.coin;
-    const url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;
+    let url;
+
+    if (erc20ContractId[this.props.ActiveCoin.coin]) {
+      url = `${explorerList.ETH}${txid}`;
+    } else {
+      url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;      
+    }
     return shell.openExternal(url);
   }
 

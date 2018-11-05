@@ -3,6 +3,7 @@ import translate from '../../../translate/translate';
 import Config from '../../../config';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const renderKvContent = (content) => {
   return content
@@ -267,12 +268,12 @@ const WalletsTxInfoRender = function(txInfo) {
             </div>
             <div className="modal-footer">
               { this.state.txDetails &&
-                explorerList[this.props.ActiveCoin.coin] &&
+                (explorerList[this.props.ActiveCoin.coin] || erc20ContractId[this.props.ActiveCoin.coin]) &&
                 <button
                   type="button"
                   className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
                   onClick={ () => this.openExplorerWindow(this.state.txDetails.txid) }>
-                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', this.props.ActiveCoin.coin) }
+                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', isEth ? 'Etherscan' : this.props.ActiveCoin.coin) }
                 </button>
               }
             </div>

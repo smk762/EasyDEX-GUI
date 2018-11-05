@@ -6,6 +6,7 @@ import {
   fromSats,
 } from 'agama-wallet-lib/src/utils';
 import fees from 'agama-wallet-lib/src/fees';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const WalletsInfoRender = function() {
   const _coin = this.props.ActiveCoin.coin;
@@ -464,12 +465,14 @@ const WalletsInfoRender = function() {
             <div className="table-responsive">
               <table className="table table-striped">
                 <tbody>
-                  <tr>
-                    <td>{ translate('INDEX.GAS_LIMIT') }</td>
-                    <td className="selectable">
-                      { fees[_coin.toLowerCase()] }
-                    </td>
-                  </tr>
+                  { !erc20ContractId[_coin] &&
+                    <tr>
+                      <td>{ translate('INDEX.GAS_LIMIT') }</td>
+                      <td className="selectable">
+                        { fees[_coin.toLowerCase()] }
+                      </td>
+                    </tr>
+                  }
                   <tr>
                     <td>{ translate('INDEX.NETWORK') }</td>
                     <td className="selectable">

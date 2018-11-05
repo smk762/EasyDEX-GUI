@@ -16,6 +16,7 @@ import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
 import { formatEther } from 'ethers/utils/units';
 import coinFees from 'agama-wallet-lib/src/fees';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const _feeLookup = {
   eth: [
@@ -563,7 +564,7 @@ export const SendRender = function() {
                 { this.state.noUtxo &&
                   <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
                 }
-                { this.state.spvPreflightSendInProgress &&
+                { (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress)) &&
                   <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
                 }
                 { this.state.spvVerificationWarning &&
@@ -574,17 +575,62 @@ export const SendRender = function() {
                   </div>
                 }
                 { _mode === 'eth' &&
+                  erc20ContractId[_coin] &&
+                  this.state.ethPreflightRes &&
+                  this.state.ethPreflightRes.msg &&
+                  this.state.ethPreflightRes.msg === 'error' &&
+                  <div className="padding-top-10">
+                    <div>Error cannot verify ERC20 transaction.</div>
+                    <div className="padding-top-10 padding-bottom-10">Debug info</div>
+                    <div className="word-break--all">{ JSON.stringify(this.state.ethPreflightRes.result) }</div>
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  ((erc20ContractId[_coin] && this.state.ethPreflightRes && !this.state.ethPreflightRes.msg) || !erc20ContractId[_coin]) &&
                   <div className="row">
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
                       <span>
                         <strong>{ translate('SEND.FEE') }:</strong>&nbsp;
-                        { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }&nbsp;
-                        { _coin }
+                        { !erc20ContractId[_coin] &&
+                          <span>
+                          { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }&nbsp;
+                          </span>
+                        }
+                        { erc20ContractId[_coin] &&
+                          <span>
+                          { this.state.ethPreflightRes.fee } ETH
+                          </span>
+                        }
                       </span>
                     </div>
                   </div>
                 }
                 { _mode === 'eth' &&
+                  erc20ContractId[_coin] &&
+                  this.state.ethPreflightRes &&
+                  !this.state.ethPreflightRes.msg &&
+                  <div>
+                    { this.state.ethPreflightRes.notEnoughBalance &&
+                      <div className="row">
+                        <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                        Not enough ETH to send the transaction
+                        </div>
+                      </div>
+                    }
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                      <strong>Current balance</strong>: { this.state.ethPreflightRes.maxBalance.balance } ETH
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                      <strong>Balace after the fee</strong>: { this.state.ethPreflightRes.balanceAferFee } ETH
+                      </div>
+                    </div>
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  !erc20ContractId[_coin] &&
                   <div className="row">
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
                       <strong>{ translate('SEND.TOTAL_AMOUNT_DESC') }:</strong>&nbsp;
@@ -601,6 +647,12 @@ export const SendRender = function() {
                     <button
                       type="button"
                       className="btn btn-primary"
+                      disabled={
+                        _mode === 'eth' &&
+                        erc20ContractId[_coin] &&
+                        this.state.ethPreflightRes &&
+                        ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))
+                      }
                       onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>
                       { translate('INDEX.CONFIRM') }
                     </button>
@@ -725,13 +777,13 @@ export const SendRender = function() {
                             { _mode === 'eth' &&
                               this.state.lastSendToResponse &&
                               this.state.lastSendToResponse.txid &&
-                              explorerList[_coin] &&
+                              (explorerList[_coin] || erc20ContractId[_coin]) &&
                               <div className="margin-top-10">
                                 <button
                                   type="button"
                                   className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
                                   onClick={ () => this.openExplorerWindow(this.state.lastSendToResponse.txid) }>
-                                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', _coin) }
+                                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', 'Etherscan') }
                                 </button>
                               </div>
                             }
@@ -782,9 +834,10 @@ export const SendRender = function() {
                   { this.state.lastSendToResponse &&
                     this.state.lastSendToResponse.msg &&
                     this.state.lastSendToResponse.msg === 'error' &&
-                    _mode !== 'eth' &&
+                    _mode === 'eth' &&
                     <div className="padding-left-30 padding-top-10">
-                      <div>Error cannot push ETH transaction.<br/>Debug info</div>
+                      <div>Error cannot push ETH transaction.</div>
+                      <div className="padding-top-10 padding-bottom-10">Debug info</div>
                       <div>{ JSON.stringify(this.state.lastSendToResponse) }</div>
                     </div>
                   }

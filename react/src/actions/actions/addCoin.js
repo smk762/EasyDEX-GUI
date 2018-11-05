@@ -129,8 +129,11 @@ export const apiElectrumAddCoin = (coin) => {
 }
 
 export const addCoinEth = (coin, network) => {
+  let _coin = coin;
+
   if (network &&
       network.toLowerCase() !== 'ropsten') {
+    _coin = (coin + '_' + network).toUpperCase();
     coin = network;
     network = null;
   }
@@ -157,7 +160,7 @@ export const addCoinEth = (coin, network) => {
     .then(response => response.json())
     .then(json => {
       dispatch(
-        addCoinResult(network ? (coin + '_' + network).toUpperCase() : coin, '3')
+        addCoinResult(network ? (coin + '_' + network).toUpperCase() : _coin === 'ETH' ? 'ETH' : _coin, '3')
       );
     });
   }
@@ -342,9 +345,24 @@ export const addCoinResult = (coin, mode) => {
   };
 
   return dispatch => {
+    let _ethAddCoinToaster = `${coin} added`;
+    
+    if (coin.toLowerCase().indexOf('eth') > -1) {
+      if (coin.indexOf('_') > -1 &&
+          coin.toLowerCase().indexOf('ropsten') === -1) {
+        const _comp = coin.split('_');
+
+        _ethAddCoinToaster = `${_comp[1]} token added`;
+      } else {
+        _ethAddCoinToaster = `${coin} added`;
+      }
+    }
+
+    console.warn('addCoinResult', coin);
+
     dispatch(
       triggerToaster(
-        coin.toLowerCase().indexOf('eth') > -1 ? `${coin} added`: `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
+        coin.toLowerCase().indexOf('eth') > -1 ? _ethAddCoinToaster: `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
         translate('TOASTR.COIN_NOTIFICATION'),
         'success'
       )

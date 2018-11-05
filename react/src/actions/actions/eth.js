@@ -290,13 +290,18 @@ export const apiEthereumSend = (coin, dest, amount, speed, push) => {
       speed,
       push,
     };
-    
-    if (network) {
-      _urlParams.network = network[1].toLowerCase();
+
+    if (erc20ContractId[coin]) {
+      delete _urlParams.coin;
+      _urlParams.symbol = coin;
+    } else {
+      if (network) {
+        _urlParams.network = network[1].toLowerCase();
+      }
     }
 
     return fetch(
-      `http://127.0.0.1:${agamaPort}/api/eth/createtx${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/eth/createtx${erc20ContractId[coin] ? '/erc20' : ''}${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -314,4 +319,38 @@ export const apiEthereumSend = (coin, dest, amount, speed, push) => {
       dispatch(sendToAddressState(json.msg === 'error' ? json : json.result));
     });
   }
+}
+
+export const apiEthereumSendERC20Preflight = (symbol, dest, amount, speed) => {
+  return new Promise((resolve, reject) => {
+    //const json = {"msg":"success","result":{"gasLimit":"37042","gasPrice":8400000000,"feeWei":311152800000000,"fee":"0.0003111528","maxBalance":{"balance":"0.1784354316","balanceWei":"178435431600000000"},"balanceAfterFeeWei":178124278800000000,"balanceAferFee":"0.1781242788","notEnoughBalance":false}};
+    //resolve(json);
+    
+    const _urlParams = {
+      token,
+      symbol,
+      amount,
+      dest,
+      speed,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/eth/createtx/erc20${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.apiEthereumSend') + ' (code: apiEthereumSend)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
 }
