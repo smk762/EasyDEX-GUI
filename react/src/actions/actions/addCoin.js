@@ -358,8 +358,6 @@ export const addCoinResult = (coin, mode) => {
       }
     }
 
-    console.warn('addCoinResult', coin);
-
     dispatch(
       triggerToaster(
         coin.toLowerCase().indexOf('eth') > -1 ? _ethAddCoinToaster: `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,

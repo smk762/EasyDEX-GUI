@@ -775,21 +775,21 @@ class Login extends React.Component {
 
     setTimeout(() => {
       Store.dispatch(activeHandle());
-      if (type === 'native') {
+      if (type !== 'native') {
         Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 500);
     setTimeout(() => {
       Store.dispatch(activeHandle());
-      if (type === 'native') {
+      if (type !== 'native') {
         Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 1000);
     setTimeout(() => {
       Store.dispatch(activeHandle());
-      if (type === 'native') {
+      if (type !== 'native') {
         Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
