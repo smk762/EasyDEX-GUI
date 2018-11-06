@@ -462,27 +462,29 @@ class AddCoin extends React.Component {
     let coin = this.state.coins[0].selectedCoin.split('|')[0];
     let coinuc = coin.toUpperCase();
     
-    Store.dispatch(
-      addCoin(
-        coin,
-        this.state.coins[0].mode,
-      )
-    );
+    if (_coin.selectedCoin.indexOf('ETH') > -1) {
+      const _ethNet = _coin.selectedCoin.split('|');
 
-    if (!_coin.daemonParam) {
-      Store.dispatch(addCoin(
-        coin,
-        _coin.mode,
+      Store.dispatch(addCoinEth(
+        _ethNet[0],
+        _ethNet[1],
       ));
-    } else {          
-      Store.dispatch(addCoin(
-        coin,
-        _coin.mode,
-        { type: _coin.daemonParam },
-        _coin.daemonParam === 'gen' &&
-        acConfig[coinuc] &&
-        acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
-      ));
+    } else {
+      if (!_coin.daemonParam) {
+        Store.dispatch(addCoin(
+          coin,
+          _coin.mode,
+        ));
+      } else {          
+        Store.dispatch(addCoin(
+          coin,
+          _coin.mode,
+          { type: _coin.daemonParam },
+          _coin.daemonParam === 'gen' &&
+          acConfig[coinuc] &&
+          acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+        ));
+      }
     }
 
     for (let i = 1; i < this.state.coins.length; i++) {
@@ -492,10 +494,19 @@ class AddCoin extends React.Component {
 
       setTimeout(() => {
         if (!_coin.daemonParam) {
-          Store.dispatch(addCoin(
-            coin,
-            _coin.mode,
-          ));
+          if (_coin.selectedCoin.indexOf('ETH') > -1) {
+            const _ethNet = _coin.selectedCoin.split('|');
+      
+            Store.dispatch(addCoinEth(
+              _ethNet[0],
+              _ethNet[1],
+            ));
+          } else {
+            Store.dispatch(addCoin(
+              coin,
+              _coin.mode,
+            ));
+          }
         } else {          
           Store.dispatch(addCoin(
             coin,
@@ -506,13 +517,6 @@ class AddCoin extends React.Component {
             acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
           ));
         }
-
-        Store.dispatch(
-          addCoin(
-            itemCoin,
-            _item.mode,
-          )
-        );
 
         if (i === this.state.coins.length - 1) {
           let _coins = [];
