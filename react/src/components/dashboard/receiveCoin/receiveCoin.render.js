@@ -78,7 +78,7 @@ export const AddressItemRender = function(address, type) {
           id="receiveCoin2"
           effect="solid"
           className="text-left" />
-        <span className="selectable">
+        <span className="selectable blur">
           { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
         </span>
         { !address.canspend &&
