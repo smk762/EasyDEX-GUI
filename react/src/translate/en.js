@@ -1015,6 +1015,8 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    INCLUDE_NON_STANDARD_FEE: 'Include fee',
+    INCLUDE_NON_STANDARD_FEE_DEFAULT: 'default (0.0001)',  
     SHIELD_COINBASE: 'Shield coinbase',
     COINBASE_SHIELD_SUCCESS: 'Coinbase shield is in progress. Check OPID section for status after a few minutes.',
     COINBASE_SHIELD_ERROR: 'Unable to shield coinbase.',

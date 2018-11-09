@@ -16,7 +16,6 @@ import Store from '../../store';
 import fetchType from '../../util/fetchType';
 
 export const sendNativeTx = (coin, _payload) => {
-  console.warn('sendNativeTx', _payload);
   let payload;
   let _apiMethod;
 
@@ -58,11 +57,11 @@ export const sendNativeTx = (coin, _payload) => {
             amount: _payload.amount
           }],
           1,
-          _payload.fee || 0.0001,
+          _payload.ztxFee || 0.0001,
         ],
     };
 
-    /*fetch(
+    fetch(
       `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
@@ -127,7 +126,7 @@ export const sendNativeTx = (coin, _payload) => {
           )
         );
       }
-    });*/
+    });
   }
 }
 

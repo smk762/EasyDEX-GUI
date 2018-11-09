@@ -259,6 +259,30 @@ export const _SendFormRender = function() {
               </button>
             </div>
           }
+          { _mode === 'native' &&
+            (this.state.addressType === 'private' ||
+             (this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc') ||
+             (this.state.sendFrom && this.state.sendFrom.substring(0, 2) === 'zc')) &&
+            <div className="row">
+              <div className="col-lg-12 form-group form-material">
+                <button
+                  type="button"
+                  className="btn btn-default btn-send-zfee-dropdown margin-left-15"
+                  onClick={ this.toggleZtxDropdown }>
+                  { translate('SEND.INCLUDE_NON_STANDARD_FEE')} { this.state.ztxFee === 0.0001 ? translate('SEND.INCLUDE_NON_STANDARD_FEE_DEFAULT') : this.state.ztxFee } <i className="icon fa-angle-down"></i>
+                </button>
+              </div>
+              <div className="col-lg-12 form-group form-material">
+                { this.state.ztxSelectorOpen &&
+                  <div className="coin-tile-context-menu coin-tile-context-menu--zfee">
+                    <ul>
+                      { this.renderZtxDropdown() }
+                    </ul>
+                  </div>
+                }
+              </div>
+            </div>
+          }
           { _mode === 'spv' &&
             Config.spv.allowCustomFees &&
             this.state.amount > 0 &&
@@ -447,6 +471,7 @@ export const SendRender = function() {
                   </h3>
                 }
                 { Config.native.zshieldcoinbase &&
+                  this.props.ActiveCoin.mode === 'native' &&
                   this.props.ActiveCoin.addresses.private &&
                   this.props.ActiveCoin.addresses.private.length > 0 &&
                   <div className="padding-left-30 padding-top-20">

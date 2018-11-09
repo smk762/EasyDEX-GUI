@@ -55,6 +55,7 @@ import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
 const FEE_EXCEEDS_DEFAULT_THRESHOLD = 5; // N fold increase
+const DEFAULT_ZTX_FEE = 0.0001;
 
 // TODO: - render z address trim
 
@@ -120,6 +121,9 @@ class SendCoin extends React.Component {
       ethPreflightRes: null,
       // z_shieldcoinbase
       zshieldcoinbaseToggled: false,
+      // ztx fee
+      ztxSelectorOpen: false,
+      ztxFee: DEFAULT_ZTX_FEE,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -151,7 +155,34 @@ class SendCoin extends React.Component {
     this.fetchETHFees = this.fetchETHFees.bind(this);
     this._shieldCoinbase = this._shieldCoinbase.bind(this);
     this.zshieldcoinbaseToggle = this.zshieldcoinbaseToggle.bind(this);
+    this.toggleZtxDropdown = this.toggleZtxDropdown.bind(this);
+    this.setZtxFee = this.setZtxFee.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  setZtxFee(val) {
+    let _amount = '';
+    
+    if (isPositiveNumber(this.state.amount) &&
+        isPositiveNumber(this.state.sendFromAmount)) {
+      if (this.state.amount + val > this.state.sendFromAmount) {
+        _amount = Number(Number(this.state.amount - val).toFixed(8)); 
+      } else {
+        _amount = this.state.amount;
+      }
+    }
+
+    this.setState({
+      ztxFee: val,
+      ztxSelectorOpen: false,
+      amount: _amount,
+    });
+  }
+
+  toggleZtxDropdown() {
+    this.setState({
+      ztxSelectorOpen: !this.state.ztxSelectorOpen,
+    });
   }
 
   zshieldcoinbaseToggle() {
@@ -288,8 +319,10 @@ class SendCoin extends React.Component {
     
     if (_mode === 'native' &&
         this.state.sendFrom) {
+      const isZtx = this.state.addressType === 'private' || (this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc') || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) === 'zc');
+      
       this.setState({
-        amount: Number(this.state.sendFromAmount) - 0.0001,
+        amount: Number(Number(Number(this.state.sendFromAmount) - (isZtx ? this.state.ztxFee : 0.0001)).toFixed(8)),
       });
     } else if (_mode === 'spv') {
       this.setState({
@@ -1420,6 +1453,36 @@ class SendCoin extends React.Component {
     } else {
       return _items;
     }
+  }
+
+  renderZtxDropdown() {
+    const _options = [{
+      title: 'default',
+      val: DEFAULT_ZTX_FEE,
+    }, {
+      title: `x2 (${DEFAULT_ZTX_FEE * 2})`,
+      val: DEFAULT_ZTX_FEE * 2,
+    }, {
+      title: `x5 (${DEFAULT_ZTX_FEE * 5})`,
+      val: DEFAULT_ZTX_FEE * 5,
+    }, {
+      title: `x10 (${DEFAULT_ZTX_FEE * 10})`,
+      val: DEFAULT_ZTX_FEE * 10,
+    }, {
+      title: `x100 (${DEFAULT_ZTX_FEE * 100})`,
+      val: DEFAULT_ZTX_FEE * 100,
+    }];
+    let _items = [];
+
+    for (let i = 0; i < _options.length; i++) {
+      _items.push(
+        <li
+          key={ `send-ztx-fee-${i}` }
+          onClick={ () => this.setZtxFee(_options[i].val) }>{ _options[i].title }</li>
+      );
+    }
+
+    return _items;
   }
 
   renderZmergeToAddress() {
