@@ -1015,6 +1015,9 @@ const LANG_EN = {
     DOWNLOAD: 'Download',
   },
   SEND: {
+    SHIELD_COINBASE: 'Shield coinbase',
+    COINBASE_SHIELD_SUCCESS: 'Coinbase shield is in progress. Check OPID section for status after a few minutes.',
+    COINBASE_SHIELD_ERROR: 'Unable to shield coinbase.',
     ETH_CONF_TIME_LESS_THAN_2_MIN: ' within 2 min',
     ETH_CONF_TIME_LESS_THAN_5_MIN: ' within 5 min',
     ETH_CONF_TIME_LESS_THAN_30_MIN: ' within 30 min',

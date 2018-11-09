@@ -16,6 +16,7 @@ import Store from '../../store';
 import fetchType from '../../util/fetchType';
 
 export const sendNativeTx = (coin, _payload) => {
+  console.warn('sendNativeTx', _payload);
   let payload;
   let _apiMethod;
 
@@ -41,12 +42,12 @@ export const sendNativeTx = (coin, _payload) => {
             _payload.amount,
             '',
             '',
-            true
+            true,
           ]
           :
           [
             _payload.sendTo,
-            _payload.amount
+            _payload.amount,
           ]
         )
         :
@@ -55,11 +56,13 @@ export const sendNativeTx = (coin, _payload) => {
           [{
             address: _payload.sendTo,
             amount: _payload.amount
-          }]
-        ]
+          }],
+          1,
+          _payload.fee || 0.0001,
+        ],
     };
 
-    fetch(
+    /*fetch(
       `http://127.0.0.1:${agamaPort}/api/cli`,
       fetchType(JSON.stringify({ payload })).post
     )
@@ -124,7 +127,7 @@ export const sendNativeTx = (coin, _payload) => {
           )
         );
       }
-    });
+    });*/
   }
 }
 
@@ -321,6 +324,43 @@ export const zmergeToAddressPromise = (coin, src, dest, fee = 0.0001, transparen
       Store.dispatch(
         triggerToaster(
           translate('API.zmergeToAddressPromise') + ' (code: zmergeToAddressPromise)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export const shieldCoinbase = (coin, src, dest, fee = 0.0001, limit = 50) => {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'z_shieldcoinbase',
+      rpc2cli,
+      token,
+      params: [
+        src || '*',
+        dest,
+        fee,
+        limit,
+      ],
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.shieldCoinbase') + ' (code: shieldCoinbase)',
           translate('TOASTR.ERROR'),
           'error'
         )

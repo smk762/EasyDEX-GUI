@@ -20,6 +20,7 @@ import {
   apiEthereumGasPrice,
   apiEthereumSend,
   apiEthereumSendERC20Preflight,
+  shieldCoinbase,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -28,6 +29,7 @@ import {
   SendFormRender,
   _SendFormRender,
   ZmergeToAddressRender,
+  AddressListRenderShieldCoinbase,
 } from './sendCoin.render';
 import mainWindow from '../../../util/mainWindow';
 import Slider, { Range } from 'rc-slider';
@@ -116,6 +118,8 @@ class SendCoin extends React.Component {
       ethFeeType: 1,
       ethPreflightSendInProgress: false,
       ethPreflightRes: null,
+      // z_shieldcoinbase
+      zshieldcoinbaseToggled: false,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -145,7 +149,48 @@ class SendCoin extends React.Component {
     this.toggleZmergetoaddress = this.toggleZmergetoaddress.bind(this);
     this.toggleZmtaAdvanced = this.toggleZmtaAdvanced.bind(this);
     this.fetchETHFees = this.fetchETHFees.bind(this);
+    this._shieldCoinbase = this._shieldCoinbase.bind(this);
+    this.zshieldcoinbaseToggle = this.zshieldcoinbaseToggle.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  zshieldcoinbaseToggle() {
+    this.setState({
+      zshieldcoinbaseToggled: !this.state.zshieldcoinbaseToggled,
+      sendFrom: null,
+    });
+  }
+
+  _shieldCoinbase() {
+    shieldCoinbase(
+      this.props.ActiveCoin.coin,
+      '*',
+      this.state.sendFrom
+    )
+    .then((json) => {
+      if (json.error &&
+          json.error.code) {
+        Store.dispatch(
+          triggerToaster(
+            json.error.message,
+            translate('TOASTR.ERROR'),
+            'error'
+          )
+        );
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            [
+              translate('SEND.COINBASE_SHIELD_SUCCESS'),
+              'Transaction OPID: ' + json.result,
+            ],
+            translate('TOASTR.ERROR'),
+            'success',
+            false
+          )
+        );
+      }
+    });
   }
 
   toggleZmergetoaddress() {
@@ -452,7 +497,7 @@ class SendCoin extends React.Component {
     }
   }
 
-  renderAddressByType(type) {
+  renderAddressByType(type, toggleType) {
     const _coinAddresses = this.props.ActiveCoin.addresses;
     const _coin = this.props.ActiveCoin.coin;
     let _items = [];
@@ -472,8 +517,9 @@ class SendCoin extends React.Component {
           });
         }        
 
-        if (address.amount > 0 &&
-            (type !== 'public' || (address.canspend && type === 'public'))) {
+        if ((address.amount > 0 &&
+            (type !== 'public' || (address.canspend && type === 'public'))) ||
+            toggleType === 'shieldCoinbase') {
           _items.push(
             <li
               className="selected"
@@ -484,9 +530,9 @@ class SendCoin extends React.Component {
                   [ { address.amount } { _coin } ]&nbsp;&nbsp;
                   { type === 'public' ? address.address : address.address.substring(0, 34) + '...' }
                 </span>
-                <span
-                  className="glyphicon glyphicon-ok check-mark pull-right"
-                  style={{ display: this.state.sendFrom === address.address ? 'inline-block' : 'none' }}></span>
+                { this.state.sendFrom === address.address &&
+                  <span className="glyphicon glyphicon-ok check-mark pull-right"></span>
+                }
               </a>
             </li>
           );
@@ -559,6 +605,10 @@ class SendCoin extends React.Component {
 
   renderAddressList() {
     return AddressListRender.call(this);
+  }
+
+  renderShielCoinbaseAddressList() {
+    return AddressListRenderShieldCoinbase.call(this);
   }
 
   renderOPIDLabel(opid) {

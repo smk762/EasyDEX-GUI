@@ -95,6 +95,27 @@ export const AddressListRender = function() {
   );
 };
 
+export const AddressListRenderShieldCoinbase = function() {
+  return (
+    <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
+      <button
+        type="button"
+        className="btn dropdown-toggle btn-info"
+        onClick={ this.openDropMenu }>
+        <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() }&nbsp;</span>
+        <span className="bs-caret">
+          <span className="caret"></span>
+        </span>
+      </button>
+      <div className="dropdown-menu open">
+        <ul className="dropdown-menu inner">
+          { this.renderAddressByType('private', 'shieldCoinbase') }
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 export const _SendFormRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
@@ -104,6 +125,7 @@ export const _SendFormRender = function() {
     <div className="extcoin-send-form">
       { (this.state.renderAddressDropdown ||
         (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate)) &&
+        !this.state.zshieldcoinbaseToggled &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             <label className="control-label padding-bottom-10">
@@ -114,6 +136,7 @@ export const _SendFormRender = function() {
         </div>
       }
       { !this.state.kvSend &&
+        !this.state.zshieldcoinbaseToggled &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             { ((_mode === 'spv' && this.renderAddressBookDropdown(true) < 1) ||
@@ -349,6 +372,25 @@ export const _SendFormRender = function() {
           </div>
         </div>
       }
+      { this.state.zshieldcoinbaseToggled &&
+        <div className="row">
+          <div className="col-xlg-12 form-group form-material">
+            <label className="control-label padding-bottom-10">
+              { translate('INDEX.SEND_TO') }
+            </label>
+            { this.renderShielCoinbaseAddressList() }
+          </div>
+          <div className="col-lg-12">
+            <button
+              type="button"
+              className="btn btn-primary waves-effect waves-light pull-right"
+              onClick={ this._shieldCoinbase }
+              disabled={ !this.state.sendFrom }>
+              { translate('INDEX.CONFIRM') }
+            </button>
+          </div>
+        </div>
+      }
     </div>
   );
 }
@@ -394,9 +436,28 @@ export const SendRender = function() {
           <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
             <div className="panel">
               <div className="panel-heading">
-                <h3 className="panel-title">
-                  { translate('INDEX.SEND') } { _coin }
-                </h3>
+                { !this.state.zshieldcoinbaseToggled &&
+                  <h3 className="panel-title">
+                    { translate('INDEX.SEND') } { _coin }
+                  </h3>
+                }
+                { this.state.zshieldcoinbaseToggled &&
+                  <h3 className="panel-title">
+                    { translate('SEND.SHIELD_COINBASE') } { _coin }
+                  </h3>
+                }
+                { Config.native.zshieldcoinbase &&
+                  this.props.ActiveCoin.addresses.private &&
+                  this.props.ActiveCoin.addresses.private.length > 0 &&
+                  <div className="padding-left-30 padding-top-20">
+                    <button
+                      type="button"
+                      className="btn btn-default"
+                      onClick={ this.zshieldcoinbaseToggle }>
+                      { this.state.zshieldcoinbaseToggled ? translate('INDEX.BACK') : translate('SEND.SHIELD_COINBASE') }
+                    </button>
+                  </div>
+                }
                 { ((_mode === 'spv' && Config.experimentalFeatures && kvCoins[_coin]) ||
                   (_mode === 'spv' && Config.coinControl)) &&
                   <div className="kv-select-block">
