@@ -76,7 +76,8 @@ class Dashboard extends React.Component {
        _main.coins &&
        _main.coins.native &&
        _main.coins.native.length &&
-       !_main.coins.spv.length) ||
+       !_main.coins.spv.length &&
+       !_main.coins.eth.length) ||
       (_main &&
        _main.coins &&
        _main.coins.spv &&
@@ -87,6 +88,12 @@ class Dashboard extends React.Component {
        _main.coins.native &&
        _main.coins.native.length &&
        !_main.coins.spv.length &&
+       !_main.coins.eth.length &&
+       _main.isLoggedIn) ||
+      (_main &&
+       _main.coins &&
+       _main.coins.eth &&
+       _main.coins.eth.length &&
        _main.isLoggedIn);
   }
 

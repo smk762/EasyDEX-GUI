@@ -135,6 +135,7 @@ class ToolsSplitUTXO extends React.Component {
   }
 
   splitUtxo() {
+    const _coin = this.state.utxoSplitCoin.split('|');
     let largestUTXO = { amount: 0 };
 
     for (let i = 0; i < this.state.utxoSplitList.length; i++) {
@@ -174,7 +175,7 @@ class ToolsSplitUTXO extends React.Component {
 
     const payload = {
       wif,
-      network: 'komodo',
+      network: _coin[0],
       targets: _targets,
       utxo: [largestUTXO],
       changeAddress: address,

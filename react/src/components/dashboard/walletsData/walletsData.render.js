@@ -194,7 +194,7 @@ export const TxAmountRender = function(tx) {
         <span
           data-for="txHistory3"
           data-tip={ tx.amount }>
-          { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (formatValue(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
+          { this.props.ActiveCoin.mode === 'eth' ? formatValue(tx.amount) : Math.abs(tx.interest) !== Math.abs(tx.amount) ? formatValue(tx.amount) || translate('DASHBOARD.UNKNOWN') : '' }
           { tx.interest &&
             <span
               className="tx-interest"
@@ -229,7 +229,7 @@ export const TxAmountRender = function(tx) {
 
   return (
     <span>
-      { Math.abs(tx.interest) !== Math.abs(tx.amount) ? (Number(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
+      { this.props.ActiveCoin.mode === 'eth' ? formatValue(tx.amount) : Math.abs(tx.interest) !== Math.abs(tx.amount) ? (Number(tx.amount) || translate('DASHBOARD.UNKNOWN')) : '' }
       { tx.interest &&
         <span
           className="tx-interest"

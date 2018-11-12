@@ -11,6 +11,13 @@ import {
 } from '../../../util/coinHelper';
 import translate from '../../../translate/translate';
 
+const _skipCoins = [
+  'KMD',
+  'JUMBLR',
+  'MESH',
+  'MVP',
+];
+
 const WalletsMainRender = function() {
   const _coin = this.props.ActiveCoin.coin;
 
@@ -21,7 +28,7 @@ const WalletsMainRender = function() {
           id="easydex-header-div"
           className="background-color-white"
           style={ this.getCoinStyle('transparent') }>
-          <ol className={ 'coin-logo breadcrumb' + (_coin === 'KMD' || _coin === 'JUMBLR' || _coin === 'MESH' || _coin === 'MVP' ? ' coin-logo-wide' : '') + ' native-coin-logo' }>
+          <ol className={ 'coin-logo breadcrumb' + (_skipCoins.indexOf(_coin) > -1 ? ' coin-logo-wide' : '') + ' native-coin-logo' }>
             <li className="header-easydex-section">
               { this.getCoinStyle('title') &&
                 <img
@@ -33,14 +40,16 @@ const WalletsMainRender = function() {
                   className="kmd-mobile-icon"
                   src={ `assets/images/cryptologo/${_coin.toLowerCase()}.png` } />
               }
-              <span className={ `margin-left-20 easydex-section-image ${(_coin === 'KMD' || _coin === 'JUMBLR' || _coin === 'MESH' || _coin === 'MVP' ? 'hide' : '')}` }>
-                { translate((isKomodoCoin(_coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + _coin.toUpperCase()) }
-              </span>
+              { _skipCoins.indexOf(_coin) === -1 &&
+                <span className="margin-left-20 easydex-section-image">
+                  { translate((isKomodoCoin(_coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + _coin.toUpperCase()) }
+                </span>
+              }
             </li>
           </ol>
         </div>
         <div className="page-content page-content-native">
-          { this.props.ActiveCoin.mode !== 'spv' &&
+          { this.props.ActiveCoin.mode === 'native' &&
             <WalletsProgress />
           }
           <div className="row">

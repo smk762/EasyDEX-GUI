@@ -17,6 +17,7 @@ import {
   apiElectrumTransactionsCSV,
   apiNativeTransactionsCSV,
   triggerToaster,
+  apiEthereumTransactions,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -322,7 +323,8 @@ class WalletsData extends React.Component {
 
     columns.push(_col);
 
-    if (this.props.ActiveCoin.mode === 'spv') {
+    if (this.props.ActiveCoin.mode === 'spv' ||
+        this.props.ActiveCoin.mode === 'eth') {
       _col = {
         id: 'tx-detail',
         Header: translate('INDEX.TX_DETAIL'),
@@ -483,6 +485,15 @@ class WalletsData extends React.Component {
             _pub
           )
         );
+      } else if (_mode === 'eth') {
+        const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
+                
+        Store.dispatch(
+          apiEthereumTransactions(
+            _coin,
+            _pub
+          )
+        );
       }
     }
   }
@@ -584,7 +595,8 @@ class WalletsData extends React.Component {
           apiElectrumSetServer(
             _coin,
             _randomServer.ip,
-            _randomServer.port
+            _randomServer.port,
+            _randomServer.proto
           )
           .then((serverSetRes) => {
             Store.dispatch(

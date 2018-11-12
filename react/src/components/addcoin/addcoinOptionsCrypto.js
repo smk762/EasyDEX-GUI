@@ -3,6 +3,7 @@ import mainWindow, { electrumServers } from '../../util/mainWindow';
 import config from '../../config';
 import { cryptoCoins } from '../../util/coinHelper';
 import { sortObject } from 'agama-wallet-lib/src/utils';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 let _prepCoinsList;
 let coins = cryptoCoins;
@@ -71,13 +72,25 @@ const prepCoinsList = (filterActiveCoins) => {
       }
     }
 
-    /*if (config.experimentalFeatures) {
+    if (config.experimentalFeatures) {
       _items.push({
         label: `${translate('CRYPTO.ETH')} (ETH)`,
         icon: 'ETH',
+        value: 'ETH',
+      }, {
+        label: `${translate('CRYPTO.ETH_ROPSTEN')} (TESTNET)`,
+        icon: 'ETH',
         value: 'ETH|ropsten',
       });
-    }*/
+
+      for (let key in erc20ContractId) {
+        _items.push({
+          label: `${translate('CRYPTO.' + key)} (${key})`,
+          icon: key,
+          value: `ETH|${key}`,
+        });
+      }
+    }
   }
 
   _prepCoinsList = _items;

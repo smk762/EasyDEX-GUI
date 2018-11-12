@@ -47,6 +47,7 @@ class ClaimInterestModal extends React.Component {
       loading: false,
       className: 'hide',
     };
+    this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.claimInterestTableRender = this.claimInterestTableRender.bind(this);
     this.toggleZeroInterest = this.toggleZeroInterest.bind(this);
     this.loadListUnspent = this.loadListUnspent.bind(this);
@@ -453,6 +454,12 @@ class ClaimInterestModal extends React.Component {
           open: _display,
           className: _display ? 'show in' : 'hide',
         }));
+
+        if (!_display) {
+          setTimeout(() => {
+            this.setState(this.defaultState);
+          }, 100);
+        }
       }, _display ? 50 : 300);
     }
 
@@ -481,17 +488,7 @@ class ClaimInterestModal extends React.Component {
   }
 
   closeModal() {
-    this.setState({
-      isLoading: true,
-      transactionsList: [],
-      showZeroInterest: true,
-      totalInterest: 0,
-      spvPreflightSendInProgress: false,
-      spvVerificationWarning: false,
-      addressses: {},
-      addressSelectorOpen: false,
-      selectedAddress: null,
-    });
+    this.setState(this.defaultState);
     Store.dispatch(toggleClaimInterestModal(false));
   }
 

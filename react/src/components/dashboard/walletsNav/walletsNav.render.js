@@ -7,12 +7,13 @@ const WalletsNavWithWalletRender = function() {
   const pubKeys = mainWindow.getPubkeys();
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
-  const _electrumCoin = this.props.Dashboard.electrumCoins[_coin];
-
+  const _electrumCoin = this.props.Dashboard.electrumCoins ? this.props.Dashboard.electrumCoins[_coin] : null;
+  const _ethereumCoin = this.props.Dashboard.ethereumCoins ? this.props.Dashboard.ethereumCoins[_coin] : null;
+  
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (_mode === 'spv' || (pubKeys[_coin.toLowerCase()] && pubKeys[_coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (_mode === 'spv' || _mode === 'eth' || (pubKeys[_coin.toLowerCase()] && pubKeys[_coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
         id="header-dashboard">
         { this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'spv' &&
@@ -27,6 +28,23 @@ const WalletsNavWithWalletRender = function() {
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
               onClick={ () => this.copyMyAddress(_electrumCoin.pub) }>
+              <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+            </button>
+          </div>
+        }
+        { this.props.ActiveCoin &&
+          this.props.ActiveCoin.mode === 'eth' &&
+          <div>
+            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
+            <span className="blur selectable">{
+              this.props &&
+              this.props.Dashboard &&
+              _ethereumCoin &&
+              _ethereumCoin.pub ? _ethereumCoin.pub : '-'
+            }</span>
+            <button
+              className="btn btn-default btn-xs clipboard-edexaddr"
+              onClick={ () => this.copyMyAddress(_ethereumCoin.pub) }>
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
             </button>
           </div>
@@ -59,7 +77,7 @@ const WalletsNavWithWalletRender = function() {
               <i className="icon md-view-dashboard"></i> <span className="placeholder">{ translate('INDEX.TRANSACTIONS') }</span>
             </button>
             { this.props.ActiveCoin &&
-              (_mode === 'native' || (_mode === 'spv' && !mainWindow.isWatchOnly())) &&
+              (_mode === 'native' || _mode === 'eth' || (_mode === 'spv' && !mainWindow.isWatchOnly())) &&
               <button
                 type="button"
                 className="btn btn-primary waves-effect waves-light"

@@ -14,6 +14,17 @@ import {
 } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
+import { formatEther } from 'ethers/utils/units';
+import coinFees from 'agama-wallet-lib/src/fees';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
+
+const _feeLookup = {
+  eth: [
+    'fast',
+    'average',
+    'slow',
+  ],
+};
 
 const kvCoins = {
   'KV': true,
@@ -38,7 +49,7 @@ export const AddressListRender = function() {
     <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
       <button
         type="button"
-        className={ 'btn dropdown-toggle btn-info' + (_mode === 'spv' ? ' disabled' : '') }
+        className={ 'btn dropdown-toggle btn-info' + (_mode === 'spv' || _mode === 'eth' ? ' disabled' : '') }
         onClick={ this.openDropMenu }>
         <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() }&nbsp;</span>
         <span className="bs-caret">
@@ -48,6 +59,7 @@ export const AddressListRender = function() {
       <div className="dropdown-menu open">
         <ul className="dropdown-menu inner">
           { (_mode === 'spv' ||
+             _mode === 'eth' ||
             (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate)) &&
             (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.length !== 95)) &&
             <li
@@ -55,7 +67,15 @@ export const AddressListRender = function() {
               onClick={ () => this.updateAddressSelection(null, 'public', null) }>
               <a>
                 <span className="text">
-                  { _mode === 'spv' ? `[ ${this.props.ActiveCoin.balance.balance - Math.abs(this.props.ActiveCoin.balance.unconfirmed)} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` : translate('INDEX.T_FUNDS') }
+                  { _mode === 'spv' &&
+                    <span>{ `[ ${this.props.ActiveCoin.balance.balance + (this.props.ActiveCoin.balance.unconfirmed || 0)} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` }</span>
+                  }
+                  { _mode === 'eth' &&
+                    <span>{ `[ ${this.props.ActiveCoin.balance.balance} ${_coin} ] ${this.props.Dashboard.ethereumCoins[_coin].pub}` }</span>
+                  }
+                  { _mode == 'native' &&
+                    <span>{ translate('INDEX.T_FUNDS') }</span>
+                  }
                 </span>
                 <span
                   className="glyphicon glyphicon-ok check-mark pull-right"
@@ -64,10 +84,32 @@ export const AddressListRender = function() {
             </li>
           }
           { (_mode === 'spv' ||
+             _mode === 'eth' ||
              ((_mode === 'native' && _coin === 'KMD') || (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate))) &&
             this.renderAddressByType('public')
           }
           { this.renderAddressByType('private') }
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export const AddressListRenderShieldCoinbase = function() {
+  return (
+    <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
+      <button
+        type="button"
+        className="btn dropdown-toggle btn-info"
+        onClick={ this.openDropMenu }>
+        <span className="filter-option pull-left">{ this.renderSelectorCurrentLabel() }&nbsp;</span>
+        <span className="bs-caret">
+          <span className="caret"></span>
+        </span>
+      </button>
+      <div className="dropdown-menu open">
+        <ul className="dropdown-menu inner">
+          { this.renderAddressByType('private', 'shieldCoinbase') }
         </ul>
       </div>
     </div>
@@ -83,6 +125,7 @@ export const _SendFormRender = function() {
     <div className="extcoin-send-form">
       { (this.state.renderAddressDropdown ||
         (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate)) &&
+        !this.state.zshieldcoinbaseToggled &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             <label className="control-label padding-bottom-10">
@@ -93,10 +136,11 @@ export const _SendFormRender = function() {
         </div>
       }
       { !this.state.kvSend &&
+        !this.state.zshieldcoinbaseToggled &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
-            { _mode === 'spv' &&
-              this.renderAddressBookDropdown(true) < 1 &&
+            { ((_mode === 'spv' && this.renderAddressBookDropdown(true) < 1) ||
+                _mode === 'eth') &&
               <button
                 type="button"
                 className="btn btn-default btn-send-self"
@@ -135,12 +179,13 @@ export const _SendFormRender = function() {
               onChange={ this.updateInput }
               value={ this.state.sendTo }
               id="kmdWalletSendTo"
-              placeholder={ translate('SEND.' + (_mode === 'spv' ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
+              placeholder={ translate('SEND.' + (_mode === 'spv' || _mode === 'eth' ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>
           <div className="col-lg-12 form-group form-material">
             { (_mode === 'spv' ||
+               _mode === 'eth' ||
                (_mode === 'native' && this.state.sendFrom)) &&
               <button
                 type="button"
@@ -188,6 +233,7 @@ export const _SendFormRender = function() {
             </div>
           }
           { this.renderBTCFees() }
+          { this.renderETHFees() }
           { _mode === 'spv' &&
             Config.spv.allowCustomFees &&
             <div className="col-lg-12 form-group form-material">
@@ -211,6 +257,30 @@ export const _SendFormRender = function() {
                 onClick={ this.setDefaultFee }>
                 { translate('INDEX.DEFAULT') }
               </button>
+            </div>
+          }
+          { _mode === 'native' &&
+            (this.state.addressType === 'private' ||
+             (this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc') ||
+             (this.state.sendFrom && this.state.sendFrom.substring(0, 2) === 'zc')) &&
+            <div className="row">
+              <div className="col-lg-12 form-group form-material">
+                <button
+                  type="button"
+                  className="btn btn-default btn-send-zfee-dropdown margin-left-15"
+                  onClick={ this.toggleZtxDropdown }>
+                  { translate('SEND.INCLUDE_NON_STANDARD_FEE')} { this.state.ztxFee === 0.0001 ? translate('SEND.INCLUDE_NON_STANDARD_FEE_DEFAULT') : this.state.ztxFee } <i className="icon fa-angle-down"></i>
+                </button>
+              </div>
+              <div className="col-lg-12 form-group form-material">
+                { this.state.ztxSelectorOpen &&
+                  <div className="coin-tile-context-menu coin-tile-context-menu--zfee">
+                    <ul>
+                      { this.renderZtxDropdown() }
+                    </ul>
+                  </div>
+                }
+              </div>
             </div>
           }
           { _mode === 'spv' &&
@@ -326,6 +396,25 @@ export const _SendFormRender = function() {
           </div>
         </div>
       }
+      { this.state.zshieldcoinbaseToggled &&
+        <div className="row">
+          <div className="col-xlg-12 form-group form-material">
+            <label className="control-label padding-bottom-10">
+              { translate('INDEX.SEND_TO') }
+            </label>
+            { this.renderShielCoinbaseAddressList() }
+          </div>
+          <div className="col-lg-12">
+            <button
+              type="button"
+              className="btn btn-primary waves-effect waves-light pull-right"
+              onClick={ this._shieldCoinbase }
+              disabled={ !this.state.sendFrom }>
+              { translate('INDEX.CONFIRM') }
+            </button>
+          </div>
+        </div>
+      }
     </div>
   );
 }
@@ -371,9 +460,29 @@ export const SendRender = function() {
           <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
             <div className="panel">
               <div className="panel-heading">
-                <h3 className="panel-title">
-                  { translate('INDEX.SEND') } { _coin }
-                </h3>
+                { !this.state.zshieldcoinbaseToggled &&
+                  <h3 className="panel-title">
+                    { translate('INDEX.SEND') } { _coin }
+                  </h3>
+                }
+                { this.state.zshieldcoinbaseToggled &&
+                  <h3 className="panel-title">
+                    { translate('SEND.SHIELD_COINBASE') } { _coin }
+                  </h3>
+                }
+                { Config.native.zshieldcoinbase &&
+                  this.props.ActiveCoin.mode === 'native' &&
+                  this.props.ActiveCoin.addresses.private &&
+                  this.props.ActiveCoin.addresses.private.length > 0 &&
+                  <div className="padding-left-30 padding-top-20">
+                    <button
+                      type="button"
+                      className="btn btn-default"
+                      onClick={ this.zshieldcoinbaseToggle }>
+                      { this.state.zshieldcoinbaseToggled ? translate('INDEX.BACK') : translate('SEND.SHIELD_COINBASE') }
+                    </button>
+                  </div>
+                }
                 { ((_mode === 'spv' && Config.experimentalFeatures && kvCoins[_coin]) ||
                   (_mode === 'spv' && Config.coinControl)) &&
                   <div className="kv-select-block">
@@ -541,7 +650,7 @@ export const SendRender = function() {
                 { this.state.noUtxo &&
                   <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
                 }
-                { this.state.spvPreflightSendInProgress &&
+                { (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress)) &&
                   <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
                 }
                 { this.state.spvVerificationWarning &&
@@ -549,6 +658,71 @@ export const SendRender = function() {
                     <strong className="color-warning">{ translate('SEND.WARNING') }:</strong>&nbsp;
                     { translate('SEND.WARNING_SPV_P1') }<br />
                     { translate('SEND.WARNING_SPV_P2') }
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  erc20ContractId[_coin] &&
+                  this.state.ethPreflightRes &&
+                  this.state.ethPreflightRes.msg &&
+                  this.state.ethPreflightRes.msg === 'error' &&
+                  <div className="padding-top-10">
+                    <div>Error cannot verify ERC20 transaction.</div>
+                    <div className="padding-top-10 padding-bottom-10">Debug info</div>
+                    <div className="word-break--all">{ JSON.stringify(this.state.ethPreflightRes.result) }</div>
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  ((erc20ContractId[_coin] && this.state.ethPreflightRes && !this.state.ethPreflightRes.msg) || !erc20ContractId[_coin]) &&
+                  <div className="row">
+                    <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                      <span>
+                        <strong>{ translate('SEND.FEE') }:</strong>&nbsp;
+                        { !erc20ContractId[_coin] &&
+                          <span>
+                          { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }&nbsp;
+                          </span>
+                        }
+                        { erc20ContractId[_coin] &&
+                          <span>
+                          { this.state.ethPreflightRes.fee } ETH
+                          </span>
+                        }
+                      </span>
+                    </div>
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  erc20ContractId[_coin] &&
+                  this.state.ethPreflightRes &&
+                  !this.state.ethPreflightRes.msg &&
+                  <div>
+                    { this.state.ethPreflightRes.notEnoughBalance &&
+                      <div className="row">
+                        <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                        Not enough ETH to send the transaction
+                        </div>
+                      </div>
+                    }
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                      <strong>Current balance</strong>: { this.state.ethPreflightRes.maxBalance.balance } ETH
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                      <strong>Balace after the fee</strong>: { this.state.ethPreflightRes.balanceAferFee } ETH
+                      </div>
+                    </div>
+                  </div>
+                }
+                { _mode === 'eth' &&
+                  !erc20ContractId[_coin] &&
+                  <div className="row">
+                    <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                      <strong>{ translate('SEND.TOTAL_AMOUNT_DESC') }:</strong>&nbsp;
+                      { Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) > this.props.ActiveCoin.balance.balance ? Number(this.state.amount) - Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) : Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) }&nbsp;
+                      { _coin }
+                    </div>
                   </div>
                 }
                 <div className="widget-body-footer">
@@ -559,6 +733,12 @@ export const SendRender = function() {
                     <button
                       type="button"
                       className="btn btn-primary"
+                      disabled={
+                        _mode === 'eth' &&
+                        erc20ContractId[_coin] &&
+                        this.state.ethPreflightRes &&
+                        ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))
+                      }
                       onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>
                       { translate('INDEX.CONFIRM') }
                     </button>
@@ -596,13 +776,22 @@ export const SendRender = function() {
                           </td>
                         </tr>
                         { ((this.state.sendFrom && _mode === 'native') ||
-                          _mode === 'spv') &&
+                          _mode === 'spv' ||
+                          _mode === 'eth') &&
                           <tr>
                             <td className="padding-left-30">
                             { translate('INDEX.SEND_FROM') }
                             </td>
                             <td className="padding-left-30 selectable word-break--all">
-                              { _mode === 'spv' ? this.props.Dashboard.electrumCoins[_coin].pub : this.state.sendFrom }
+                              { _mode === 'spv' &&
+                                <span>{ this.props.Dashboard.electrumCoins[_coin].pub }</span>
+                              }
+                              { _mode === 'eth' &&
+                                <span>{ this.props.Dashboard.ethereumCoins[_coin].pub }</span>
+                              }
+                              { _mode === 'native' &&
+                                <span>{ this.state.sendFrom }</span>
+                              }
                             </td>
                           </tr>
                         }
@@ -626,7 +815,15 @@ export const SendRender = function() {
                           <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
                           <td className="padding-left-30">
                             <span className="selectable">
-                            { _mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse }
+                            { _mode === 'spv' &&
+                              <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>
+                            }
+                            { _mode === 'native' &&
+                              <span>this.state.lastSendToResponse</span>
+                            }
+                            { _mode === 'eth' &&
+                              <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>                              
+                            }
                             </span>
                             { ((_mode === 'spv' &&
                               this.state.lastSendToResponse &&
@@ -653,6 +850,29 @@ export const SendRender = function() {
                                 </button>
                               </div>
                             }
+                            { _mode === 'eth' &&
+                              this.state.lastSendToResponse &&
+                              this.state.lastSendToResponse.txid &&
+                              <button
+                                className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                                onClick={ () => this.copyTXID(this.state.lastSendToResponse.txid) }>
+                                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                              </button>
+                            }
+                            { _mode === 'eth' &&
+                              this.state.lastSendToResponse &&
+                              this.state.lastSendToResponse.txid &&
+                              (explorerList[_coin] || erc20ContractId[_coin]) &&
+                              <div className="margin-top-10">
+                                <button
+                                  type="button"
+                                  className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                                  onClick={ () => this.openExplorerWindow(this.state.lastSendToResponse.txid) }>
+                                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', 'Etherscan') }
+                                </button>
+                              </div>
+                            }
                           </td>
                         </tr>
                       </tbody>
@@ -664,6 +884,7 @@ export const SendRender = function() {
                   { this.state.lastSendToResponse &&
                     this.state.lastSendToResponse.msg &&
                     this.state.lastSendToResponse.msg === 'error' &&
+                    _mode !== 'eth' &&
                     <div className="padding-left-30 padding-top-10">
                       <div>
                         <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
@@ -694,6 +915,16 @@ export const SendRender = function() {
                           </ul>
                         </div>
                       }
+                    </div>
+                  }
+                  { this.state.lastSendToResponse &&
+                    this.state.lastSendToResponse.msg &&
+                    this.state.lastSendToResponse.msg === 'error' &&
+                    _mode === 'eth' &&
+                    <div className="padding-left-30 padding-top-10">
+                      <div>Error cannot push ETH transaction.</div>
+                      <div className="padding-top-10 padding-bottom-10">Debug info</div>
+                      <div>{ JSON.stringify(this.state.lastSendToResponse) }</div>
                     </div>
                   }
                 </div>

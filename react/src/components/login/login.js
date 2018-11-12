@@ -4,6 +4,8 @@ import {
   toggleAddcoinModal,
   apiElectrumAuth,
   apiElectrumCoins,
+  apiEthereumAuth,
+  apiEthereumCoins,
   startInterval,
   getDexCoins,
   triggerToaster,
@@ -31,8 +33,6 @@ import mainWindow from '../../util/mainWindow';
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 
-const IGUNA_ACTIVE_HANDLE_TIMEOUT = 3000;
-const IGUNA_ACTIVE_COINS_TIMEOUT = 10000;
 const SEED_TRIM_TIMEOUT = 5000;
 
 class Login extends React.Component {
@@ -455,10 +455,13 @@ class Login extends React.Component {
 
       this.setState(this.defaultState);
 
+      // TODO: trigger based on ETH/electrum
       Store.dispatch(dashboardChangeSectionState('wallets'));
       Store.dispatch(toggleDashboardActiveSection('default'));
+      Store.dispatch(apiEthereumAuth(this.state.loginPassphrase));
       Store.dispatch(apiElectrumAuth(this.state.loginPassphrase));
       Store.dispatch(apiElectrumCoins());
+      Store.dispatch(apiEthereumCoins());
     } else {
       mainWindow.pinAccess = this.state.selectedPin;
 
@@ -477,6 +480,8 @@ class Login extends React.Component {
           Store.dispatch(toggleDashboardActiveSection('default'));
           Store.dispatch(apiElectrumAuth(res.result));
           Store.dispatch(apiElectrumCoins());
+          Store.dispatch(apiEthereumAuth(res.result));
+          Store.dispatch(apiEthereumCoins());
         }
       });
     }
@@ -770,21 +775,21 @@ class Login extends React.Component {
 
     setTimeout(() => {
       Store.dispatch(activeHandle());
-      if (type === 'native') {
+      if (type !== 'native') {
         Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 500);
     setTimeout(() => {
       Store.dispatch(activeHandle());
-      if (type === 'native') {
+      if (type !== 'native') {
         Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());
     }, 1000);
     setTimeout(() => {
       Store.dispatch(activeHandle());
-      if (type === 'native') {
+      if (type !== 'native') {
         Store.dispatch(apiElectrumCoins());
       }
       Store.dispatch(getDexCoins());

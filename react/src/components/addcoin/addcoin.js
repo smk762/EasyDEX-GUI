@@ -4,6 +4,7 @@ import translate from '../../translate/translate';
 import Config from '../../config';
 import {
   addCoin,
+  addCoinEth,
   toggleAddcoinModal,
   triggerToaster,
   apiGetCoinList,
@@ -14,6 +15,8 @@ import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
 import mainWindow from '../../util/mainWindow';
 import { acConfig } from '../addcoin/payload';
+import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
+import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
@@ -24,7 +27,6 @@ class AddCoin extends React.Component {
   constructor() {
     super();
     this.state = {
-      nativeOnly: Config.iguanaLessMode,
       coins: [],
       defaultCoinState: {
         selectedCoin: null,
@@ -57,6 +59,7 @@ class AddCoin extends React.Component {
       seedInputVisibility: false,
       seedExtraSpaces: false,
       trimPassphraseTimer: null,
+      usePubkey: false,
     };
     this.existingCoins = null;
     this.defaultState = JSON.parse(JSON.stringify(this.state));
@@ -71,6 +74,13 @@ class AddCoin extends React.Component {
     this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
+    this.toggleUsePubkey = this.toggleUsePubkey.bind(this);
+  }
+
+  toggleUsePubkey() {
+    this.setState({
+      usePubkey: !this.state.usePubkey,
+    });
   }
 
   toggleSeedInputVisibility() {
@@ -225,6 +235,13 @@ class AddCoin extends React.Component {
           display: addCoinProps.display,
           className: addCoinProps.display ? 'show in' : 'hide',
         }));
+
+        if (!addCoinProps.display) {
+          setTimeout(() => {
+            this.removeCoin();
+            this.addNewItem();
+          }, 100);
+        }
       }, addCoinProps.display ? 50 : 300);
     }
   }
@@ -338,7 +355,6 @@ class AddCoin extends React.Component {
     
     if (_coin.selectedCoin.indexOf('ETH') > -1) {
       const _ethNet = _coin.selectedCoin.split('|');
-      console.warn('eth addcoin params', _ethNet);
 
       Store.dispatch(addCoinEth(
         _ethNet[0],
@@ -369,10 +385,21 @@ class AddCoin extends React.Component {
           }
 
           if (!_coin.daemonParam) {
-            Store.dispatch(addCoin(
-              coin,
-              _coin.mode,
-            ));
+            if (this.state.usePubkey &&
+                pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd)) {
+              Store.dispatch(addCoin(
+                coin,
+                _coin.mode,
+                null,
+                null,
+                Config.pubkey,
+              ));
+            } else {
+              Store.dispatch(addCoin(
+                coin,
+                _coin.mode,
+              ));
+            }
           } else {          
             Store.dispatch(addCoin(
               coin,
@@ -381,6 +408,7 @@ class AddCoin extends React.Component {
               _coin.daemonParam === 'gen' &&
               acConfig[coinuc] &&
               acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+              this.state.usePubkey && pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd) ? Config.pubkey : null,
             ));
           }
 
@@ -434,27 +462,29 @@ class AddCoin extends React.Component {
     let coin = this.state.coins[0].selectedCoin.split('|')[0];
     let coinuc = coin.toUpperCase();
     
-    Store.dispatch(
-      addCoin(
-        coin,
-        this.state.coins[0].mode,
-      )
-    );
+    if (_coin.selectedCoin.indexOf('ETH') > -1) {
+      const _ethNet = _coin.selectedCoin.split('|');
 
-    if (!_coin.daemonParam) {
-      Store.dispatch(addCoin(
-        coin,
-        _coin.mode,
+      Store.dispatch(addCoinEth(
+        _ethNet[0],
+        _ethNet[1],
       ));
-    } else {          
-      Store.dispatch(addCoin(
-        coin,
-        _coin.mode,
-        { type: _coin.daemonParam },
-        _coin.daemonParam === 'gen' &&
-        acConfig[coinuc] &&
-        acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
-      ));
+    } else {
+      if (!_coin.daemonParam) {
+        Store.dispatch(addCoin(
+          coin,
+          _coin.mode,
+        ));
+      } else {          
+        Store.dispatch(addCoin(
+          coin,
+          _coin.mode,
+          { type: _coin.daemonParam },
+          _coin.daemonParam === 'gen' &&
+          acConfig[coinuc] &&
+          acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+        ));
+      }
     }
 
     for (let i = 1; i < this.state.coins.length; i++) {
@@ -464,10 +494,19 @@ class AddCoin extends React.Component {
 
       setTimeout(() => {
         if (!_coin.daemonParam) {
-          Store.dispatch(addCoin(
-            coin,
-            _coin.mode,
-          ));
+          if (_coin.selectedCoin.indexOf('ETH') > -1) {
+            const _ethNet = _coin.selectedCoin.split('|');
+      
+            Store.dispatch(addCoinEth(
+              _ethNet[0],
+              _ethNet[1],
+            ));
+          } else {
+            Store.dispatch(addCoin(
+              coin,
+              _coin.mode,
+            ));
+          }
         } else {          
           Store.dispatch(addCoin(
             coin,
@@ -478,13 +517,6 @@ class AddCoin extends React.Component {
             acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
           ));
         }
-
-        Store.dispatch(
-          addCoin(
-            itemCoin,
-            _item.mode,
-          )
-        );
 
         if (i === this.state.coins.length - 1) {
           let _coins = [];

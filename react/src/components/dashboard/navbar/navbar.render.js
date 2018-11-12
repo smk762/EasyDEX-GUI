@@ -58,7 +58,7 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
-            { _activeCoin.mode !== 'spv' &&
+            { _activeCoin.mode === 'native' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
                   <i className="site-menu-icon"></i> { translate('IMPORT_KEY.IMPORT_KEY') }
@@ -108,9 +108,9 @@ const NavbarRender = function() {
             }
           </ul>
           <ReactTooltip
-              id="importKey1"
-              effect="solid"
-              className="text-left" />
+            id="importKey1"
+            effect="solid"
+            className="text-left" />
           <ul className="nav navbar-toolbar navbar-right navbar-toolbar-right">
             <li>
               <a

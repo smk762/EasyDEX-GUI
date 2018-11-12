@@ -15,6 +15,8 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
+import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
+import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 class AppSettingsPanel extends React.Component {
   constructor() {
@@ -31,6 +33,29 @@ class AppSettingsPanel extends React.Component {
     this.updateInput = this.updateInput.bind(this);
   }
 
+  validatePubkey(pubkey) {
+    const address = pubkeyToAddress(pubkey, bitcoinjsNetworks.kmd);
+
+    if (address) {
+      Store.dispatch(
+        triggerToaster(
+          translate('TOASTR.YOUR_PUBKEY') + pubkey + translate('TOASTR.CORRESPONDS_TO_T_ADDR') + address,
+          translate('INDEX.SETTINGS'),
+          'success toastr-wide',
+          false
+        )
+      );
+    } else {
+      Store.dispatch(
+        triggerToaster(
+          translate('TOASTR.INVALID_PUBKEY'),
+          translate('INDEX.SETTINGS'),
+          'error'
+        )
+      );
+    }
+  }
+
   _apiElectrumKvServersList() {
     apiElectrumKvServersList()
     .then((res) => {
@@ -38,7 +63,7 @@ class AppSettingsPanel extends React.Component {
         triggerToaster(
           translate('SETTINGS.' (res.msg === 'success' ? 'DOWNLOAD_KV_ELECTRUMS_DONE' : 'DOWNLOAD_KV_ELECTRUMS_ERR')),
           translate('INDEX.SETTINGS'),
-          'error'
+          res.msg === 'success' ? 'success' : 'error',
         )
       );
     });
@@ -83,7 +108,7 @@ class AppSettingsPanel extends React.Component {
         _appSettingsPristine[key] = _configSchema[key] && _configSchema[key].type === 'number' ? Number(_appSettings[key]) : _appSettings[key];
 
         if (_configSchema[key] &&
-          _configSchema[key].type === 'folder' &&
+            _configSchema[key].type === 'folder' &&
             _appSettings[key] &&
             _appSettings[key].length) {
           const _testLocation = mainWindow.testLocation;
@@ -118,7 +143,42 @@ class AppSettingsPanel extends React.Component {
         }
       } else {
         for (let keyChild in _appSettings[key]) {
-          _appSettingsPristine[key][keyChild] = _configSchema[key][keyChild].type === 'number' ? Number(_appSettings[key][keyChild]) : _appSettings[key][keyChild];
+          if (_configSchema[key][keyChild] &&
+              _configSchema[key][keyChild].type === 'folder' &&
+              _appSettings[key][keyChild] &&
+              _appSettings[key][keyChild].length) {
+            const _testLocation = mainWindow.testLocation;
+            saveAfterPathCheck = true;
+  
+            _testLocation(_appSettings[key][keyChild])
+            .then((res) => {
+              if (res === -1) {
+                isError = true;
+                Store.dispatch(
+                  triggerToaster(
+                    this.renderLB('TOASTR.KOMODO_DATADIR_INVALID'),
+                    translate('INDEX.SETTINGS'),
+                    'error',
+                    false
+                  )
+                );
+              } else if (res === false) {
+                isError = true;
+                Store.dispatch(
+                  triggerToaster(
+                    this.renderLB('TOASTR.KOMODO_DATADIR_NOT_DIR'),
+                    translate('INDEX.SETTINGS'),
+                    'error',
+                    false
+                  )
+                );
+              } else {
+                Store.dispatch(saveAppConfig(_appSettingsPristine));
+              }
+            });
+          } else {
+            _appSettingsPristine[key][keyChild] = _configSchema[key][keyChild].type === 'number' ? Number(_appSettings[key][keyChild]) : _appSettings[key][keyChild];
+          }
         }
       }
     }
@@ -220,7 +280,7 @@ class AppSettingsPanel extends React.Component {
                       type="text"
                       name={ `${key}__${_key}` }
                       value={ _appConfig[key][_key] }
-                      className={ _configSchema[key][_key].type === 'folder' ? 'full-width': '' }
+                      className="full-width"
                       onChange={ (event) => this.updateInputSettings(event, key, _key) } />
                   }
                   { _configSchema[key][_key].type === 'boolean' &&
@@ -252,12 +312,13 @@ class AppSettingsPanel extends React.Component {
               items.push(
                 <tr key={ `app-settings-${key}-${_key}-size` }>
                   <td
-                    colSpan="2"
                     className="padding-15 padding-left-30">
                     { translate('SETTINGS.CURRENT_CACHE_SIZE') }: <strong>{ _appInfo.cacheSize }</strong>
+                  </td>
+                  <td className="padding-15">
                     <button
                       type="button"
-                      className="btn btn-info waves-effect waves-light margin-left-30"
+                      className="btn btn-info waves-effect waves-light"
                       onClick={ this._resetSPVCache }>
                       { translate('SETTINGS.CLEAR_CACHE') }
                     </button>
@@ -319,8 +380,19 @@ class AppSettingsPanel extends React.Component {
                     type="text"
                     name={ `${key}` }
                     value={ _appConfig[key] }
-                    className={ _configSchema[key].type === 'folder' ? 'full-width': '' }
+                    className="full-width"
                     onChange={ (event) => this.updateInputSettings(event, key) } />
+                }
+                { (_configSchema[key].type === 'string' ||
+                  _configSchema[key].type === 'folder') &&
+                  key === 'pubkey' &&
+                  _appConfig[key].length > 0 &&
+                  <button
+                    type="button"
+                    className="btn btn-info waves-effect waves-light margin-top-15"
+                    onClick={ () => this.validatePubkey(_appConfig[key]) } >
+                    { translate('SETTINGS.VALIDATE_PUBKEY') }
+                  </button>
                 }
                 { _configSchema[key].type === 'boolean' &&
                   <span className="pointer toggle">
@@ -401,7 +473,7 @@ class AppSettingsPanel extends React.Component {
     const _name = e.target.name;    
     let _appSettings = this.state.appSettings;
     let _appSettingsPrev = Object.assign({}, _appSettings);
-
+    
     if (!childKey &&
         _configSchema[parentKey].type === 'boolean') {
       _appSettings[parentKey] = typeof _appSettings[parentKey] !== undefined ? !_appSettings[parentKey] : !this.state.appSettings[parentKey];
@@ -419,6 +491,12 @@ class AppSettingsPanel extends React.Component {
       } else {
         _appSettings[parentKey][childKey] = _val === '' ? _appSettingsPrev[parentKey][childKey] : _val.replace(/[^0-9]+/g, '');
       }
+    } else if (
+      childKey &&
+      parentKey &&
+      (_configSchema[parentKey][childKey].type === 'string' || _configSchema[parentKey][childKey].type === 'folder')
+    ) {
+      _appSettings[parentKey][childKey] = _val;
     } else {
       _appSettings[_name] = _val;
     }

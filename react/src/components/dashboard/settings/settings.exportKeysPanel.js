@@ -197,7 +197,7 @@ class ExportKeysPanel extends React.Component {
           <div className="col-sm-12 margin-bottom-15">
             <div className="padding-bottom-20">{ this.renderLB('INDEX.ONLY_ACTIVE_WIF_KEYS') }</div>
             <div className="padding-bottom-20">
-              <i>{ 'SETTINGS.' + (this.renderLB(mainWindow.pinAccess ? 'EXPORT_KEYS_NOTE_PIN' : 'EXPORT_KEYS_NOTE')) }</i>
+              <i>{ (this.renderLB('SETTINGS.' + (mainWindow.pinAccess ? 'EXPORT_KEYS_NOTE_PIN' : 'EXPORT_KEYS_NOTE'))) }</i>
             </div>
             <strong>
               <i>{ translate('INDEX.PLEASE_KEEP_KEYS_SAFE') }</i>
