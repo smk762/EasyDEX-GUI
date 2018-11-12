@@ -1192,6 +1192,7 @@ const LANG_EN = {
     KOIN: 'Koinon Coin',
     DION: 'DionPay',
     PTX: 'PatentTX',
+    ZEX: 'Zaddex'
   },
   CRYPTO: {
     STRAT: 'Stratis',
