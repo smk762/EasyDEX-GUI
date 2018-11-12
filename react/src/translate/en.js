@@ -1143,6 +1143,7 @@ const LANG_EN = {
     MVP: 'MVP Lineup',
     MNZ: 'Monaize',
     PANGEA: 'PANGEA',
+    PGT: 'Pungo',
     REVS: 'REVS',
     MSHARK: 'MSHARK',
     MESH: 'SpaceMesh',
@@ -1168,6 +1169,8 @@ const LANG_EN = {
     PIRATE: 'Pirate',
     KOIN: 'Koinon Coin',
     DION: 'DionPay',
+    PTX: 'PatentTX',
+    ZEX: 'Zaddex'
   },
   CRYPTO: {
     STRAT: 'Stratis',
