@@ -4,7 +4,7 @@
   "description": "Agama Wallet GUI",
   "main": "src/index.js",
   "scripts": {
-    "start": "./node_modules/webpack-dashboard/bin/webpack-dashboard.js -t 'AgamaGUI' -- ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --colors --no-info",
+    "start": "./node_modules/webpack-dashboard/bin/webpack-dashboard.js -t 'AgamaGUI' -- ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --colors --no-info --mode=development",
     "build": "rm -rf ./build && mkdir build && mkdir build/assets && cp -R src/assets build/ && NODE_ENV=\"production\" ./node_modules/.bin/webpack",
     "build_win": "rmdir /s /q build && mkdir build && mkdir build/assets && xcopy src/assets build/ /s /e && NODE_ENV=\"production\" ./node_modules/.bin/webpack",
     "build-only": "./node_modules/.bin/webpack --config ./webpack.prod.config.js",
@@ -98,7 +98,7 @@
     "react-test-renderer": "^15.4.2",
     "readable-stream": "2.0.2",
     "redux-devtools": "^3.4.1",
-    "sass-loader": "^5.0.1",
+    "sass-loader": "^7.1.0",
     "socket.io-client": "^2.1.1",
     "style-loader": "^0.13.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
@@ -106,6 +106,6 @@
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
     "webpack-dashboard": "^2.0.0",
-    "webpack-dev-server": "^2.2.1"
+    "webpack-dev-server": "^3.1.10"
   }
 }
