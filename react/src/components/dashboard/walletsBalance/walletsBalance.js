@@ -4,6 +4,7 @@ import translate from '../../../translate/translate';
 import {
   getDashboardUpdate,
   apiElectrumBalance,
+  apiEthereumBalance,
 } from '../../../actions/actionCreators';
 import mainWindow from '../../../util/mainWindow';
 import Config from '../../../config';
@@ -74,6 +75,15 @@ class WalletsBalance extends React.Component {
           _pub
         )
       );
+    } else if (_mode === 'eth') {
+      const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
+
+      Store.dispatch(
+        apiEthereumBalance(
+          _coin,
+          _pub
+        )
+      );
     }
   }
 
@@ -98,7 +108,7 @@ class WalletsBalance extends React.Component {
           if (type === 'total' &&
               _propsBalance &&
               _propsBalance.total) {
-            _balance = Number(_propsBalance.total) - Number(Math.abs(_propsBalance.unconfirmed));
+            _balance = Number(_propsBalance.total) + Number(_propsBalance.unconfirmed);
           }
 
           if (type === 'interest' &&
@@ -110,13 +120,18 @@ class WalletsBalance extends React.Component {
           if (type === 'transparent' &&
               _propsBalance &&
               _propsBalance.balance) {
-            _balance = Number(_propsBalance.balance) - Number(Math.abs(_propsBalance.unconfirmed));
+            _balance = Number(_propsBalance.balance) + Number(_propsBalance.unconfirmed);
           }
         } else {
-          _balance = Number(_propsBalance.balance) - Number(Math.abs(_propsBalance.unconfirmed));
+          _balance = Number(_propsBalance.balance) + Number(_propsBalance.unconfirmed);
         }
 
         _balance = _balance.toFixed(8);
+      } else if (
+        _mode === 'eth' &&
+        _propsBalance
+      ) {
+        _balance = Number(_propsBalance.balance).toFixed(8);        
       }
     }
 

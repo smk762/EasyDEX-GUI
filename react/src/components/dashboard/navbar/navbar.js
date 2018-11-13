@@ -53,8 +53,8 @@ class Navbar extends React.Component {
     if (_main &&
         _main.isLoggedIn &&
         _main.coins &&
-        _main.coins.spv &&
-        _main.coins.spv.length) {
+        (_main.coins.spv && _main.coins.spv.length) ||
+        (_main.coins.eth && _main.coins.eth.length)) {
       return true;
     }
   }
@@ -73,6 +73,7 @@ class Navbar extends React.Component {
     .then((res) => {
       const _coins = this.props.Main.coins;
       const _spvCoins = _coins.spv;
+      const _ethCoins = _coins.eth;
 
       mainWindow.pinAccess = false;
 
@@ -83,6 +84,9 @@ class Navbar extends React.Component {
       setTimeout(() => {
         for (let i = 0; i < _spvCoins.length; i++) {
           Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
+        }
+        for (let i = 0; i < _ethCoins.length; i++) {
+          Store.dispatch(dashboardRemoveCoin(_ethCoins[i]));
         }
         if (!_coins.native.length) {
           Store.dispatch(dashboardChangeActiveCoin(null, null, true));

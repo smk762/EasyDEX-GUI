@@ -33,7 +33,7 @@ body {
 }
 
 .selectable {
-  user-select: auto;
+  user-select: text;
   cursor: inherit;
 }
 
@@ -262,4 +262,9 @@ span[disabled] {
   opacity: 0.5;
   cursor: default;
   pointer-events: none;
+}
+
+button[disabled],
+button.disabled {
+  pointer-events: none;  
 }

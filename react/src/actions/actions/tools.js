@@ -249,10 +249,10 @@ export const apiToolsSeedToWif = (seed, network, iguana) => {
 }
 
 // remote bitcore api
-export const apiToolsMultiAddressBalance = (addressList, fallback) => {
+export const apiToolsMultiAddressBalance = (addressList, fallback, explorerEndPoint) => {
   return new Promise((resolve, reject) => {
     fetch(
-      fallback ? 'https://kmdexplorer.io/insight-api-komodo/addrs/utxo' : 'https://www.kmdexplorer.ru/insight-api-komodo/addrs/utxo',
+      explorerEndPoint ? explorerEndPoint + '/insight-api-komodo/addrs/utxo' : fallback ? 'https://kmdexplorer.io/insight-api-komodo/addrs/utxo' : 'https://www.kmdexplorer.ru/insight-api-komodo/addrs/utxo',
       fetchType(
         JSON.stringify({
           addrs: addressList,
@@ -261,12 +261,14 @@ export const apiToolsMultiAddressBalance = (addressList, fallback) => {
     )
     .catch((error) => {
       console.log(error);
-      console.warn(`apiToolsMultiAddressBalance has failed, ${fallback ? ' use fallback' : ' all routes have failed'}`);
+      if (!explorerEndPoint) {
+        console.warn(`apiToolsMultiAddressBalance has failed, ${fallback ? ' use fallback' : ' all routes have failed'}`);
 
-      resolve({
-        msg: 'error',
-        code: fallback ? -1554 : -777,
-      });
+        resolve({
+          msg: 'error',
+          code: fallback ? -1554 : -777,
+        });
+      }
     })
     .then((response) => {
       const _response = response.text().then((text) => { return text; });
@@ -294,6 +296,23 @@ export const apiToolsMultiAddressBalance = (addressList, fallback) => {
           result: json.indexOf('<html>') === -1 ? json : 'error parsing response',
         });
       }
+    });
+  });
+}
+
+// src: atomicexplorer.com
+export const apiToolsMultiAddressBalanceCoins = (address) => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      'https://www.atomicexplorer.com/api/explorer/search?term=' + address,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
     });
   });
 }

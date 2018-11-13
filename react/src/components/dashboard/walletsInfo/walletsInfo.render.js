@@ -5,10 +5,28 @@ import {
   formatBytes,
   fromSats,
 } from 'agama-wallet-lib/src/utils';
+import fees from 'agama-wallet-lib/src/fees';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const WalletsInfoRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
+  const nativeCoinsParams = this.props.coins.params;
+
+  const renderNativeCoinsParams = (coin) => {
+    let _items = [];
+    
+    if (nativeCoinsParams &&
+        nativeCoinsParams[_coin]) {
+      for (let i = 0; i < nativeCoinsParams[_coin].length; i++) {
+        _items.push(
+          <div key={ `native-launch-params-${i}` }>{ nativeCoinsParams[_coin][i] }</div>
+        );
+      }
+    }
+
+    return _items;
+  };
 
   if (_mode === 'native') {
     const _progress = this.props.ActiveCoin.progress;
@@ -328,6 +346,18 @@ const WalletsInfoRender = function() {
                       { _progress.errors }
                     </td>
                   </tr>
+                  <tr>
+                    <td>{ translate('INDEX.LAUNCH_PARAMS') }</td>
+                    <td className="selectable">
+                      <button
+                        className="btn btn-default btn-xs clipboard-edexaddr copy-native-params-btn"
+                        title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                        onClick={ this.copyParams }>
+                        <i className="icon wb-copy"></i> { `${translate('INDEX.COPY')} ${translate('INDEX.LAUNCH_PARAMS').toLowerCase()}` }
+                      </button>
+                      { renderNativeCoinsParams() }
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -402,6 +432,65 @@ const WalletsInfoRender = function() {
                       { _balance.unconfirmed }
                     </td>
                   </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          { _coin === 'KMD' &&
+            _mode !== 'spv' &&
+            <div>
+              <button
+                type="button"
+                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
+                onClick={ () => this.openClaimInterestModal() }>
+                { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
+              </button>
+              <ClaimInterestModal />
+            </div>
+          }
+        </div>
+      </div>
+    );
+  } else if (_mode === 'eth') {
+    const _balance = this.props.ActiveCoin.balance;
+    const _server = this.props.Dashboard.ethereumCoins[_coin];
+
+    return (
+      <div>
+        <div className="col-xlg-6 col-md-6">
+          <div className="panel">
+            <div className="panel-heading">
+              <h3 className="panel-title">{ translate('INDEX.WALLET_INFO') }</h3>
+            </div>
+            <div className="table-responsive">
+              <table className="table table-striped">
+                <tbody>
+                  { !erc20ContractId[_coin] &&
+                    <tr>
+                      <td>{ translate('INDEX.GAS_LIMIT') }</td>
+                      <td className="selectable">
+                        { fees[_coin.toLowerCase()] }
+                      </td>
+                    </tr>
+                  }
+                  <tr>
+                    <td>{ translate('INDEX.NETWORK') }</td>
+                    <td className="selectable">
+                      { _server.network }
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{ translate('INDEX.BALANCE') }</td>
+                    <td>
+                      { _balance.balance }
+                    </td>
+                  </tr>
+                  {/*<tr>
+                    <td>{ translate('INDEX.UNCONFIRMED_BALANCE') }</td>
+                    <td>
+                      { _balance.unconfirmed }
+                    </td>
+                  </tr>*/}
                 </tbody>
               </table>
             </div>

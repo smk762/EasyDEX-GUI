@@ -6,13 +6,14 @@ import {
   apiToolsMultiAddressBalance,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import kmdexplorer from './kmdexplorer';
 
 class ToolsGetBalanceMulti extends React.Component {
   constructor() {
     super();
     this.state = {
       balanceAddr: '',
-      balanceCoin: 'KMD|spv',
+      balanceCoin: 'KMD',
       balanceResult: null,
     };
     this.updateInput = this.updateInput.bind(this);
@@ -24,26 +25,59 @@ class ToolsGetBalanceMulti extends React.Component {
     // const _coin = this.state.balanceCoin.split('|');
     const _addr = this.state.balanceAddr.split('\n');
 
-    if (_addr &&
-        _addr.length) {
-      apiToolsMultiAddressBalance(_addr.join(','))
-      .then((res) => {
-        if (res.msg === 'success') {
-          if (!res.result.length) {
-            Store.dispatch(
-              triggerToaster(
-                translate('TOOLS.ALL_BALANCES_ARE_EMPTY'),
-                translate('TOOLS.GET_BALANCE') + ' multi',
-                'warning'
-              )
-            );
-          }
+    if (this.state.balanceCoin === 'KMD') {
+      if (_addr &&
+          _addr.length) {
+        apiToolsMultiAddressBalance(_addr.join(','))
+        .then((res) => {
+          if (res.msg === 'success') {
+            if (!res.result.length) {
+              Store.dispatch(
+                triggerToaster(
+                  translate('TOOLS.ALL_BALANCES_ARE_EMPTY'),
+                  translate('TOOLS.GET_BALANCE') + ' multi',
+                  'warning'
+                )
+              );
+            }
 
-          this.setState({
-            balanceResult: res.result,
-          });
-        } else {
-          apiToolsMultiAddressBalance(_addr.join(','), true)
+            this.setState({
+              balanceResult: res.result,
+            });
+          } else {
+            apiToolsMultiAddressBalance(_addr.join(','), true)
+            .then((res) => {
+              if (res.msg === 'success') {
+                if (!res.result.length) {
+                  Store.dispatch(
+                    triggerToaster(
+                      translate('TOOLS.ALL_BALANCES_ARE_EMPTY'),
+                      translate('TOOLS.GET_BALANCE') + ' multi',
+                      'warning'
+                    )
+                  );
+                }
+
+                this.setState({
+                  balanceResult: res.result,
+                });
+              } else {
+                Store.dispatch(
+                  triggerToaster(
+                    res.result + (res.code ? ` code: ${res.code}` : ''),
+                    translate('TOOLS.ERR_GET_BALANCE') + ' multi',
+                    'error'
+                  )
+                );
+              }
+            });
+          }
+        });
+      }
+    } else {
+      if (_addr &&
+        _addr.length) {
+          apiToolsMultiAddressBalance(_addr.join(','), null, kmdexplorer[this.state.balanceCoin])
           .then((res) => {
             if (res.msg === 'success') {
               if (!res.result.length) {
@@ -69,8 +103,7 @@ class ToolsGetBalanceMulti extends React.Component {
               );
             }
           });
-        }
-      });
+      }
     }
   }
 
@@ -93,6 +126,7 @@ class ToolsGetBalanceMulti extends React.Component {
         e.value.indexOf('|')) {
       this.setState({
         [propName]: e.value,
+        balanceResult: null,
       });
     }
   }
@@ -122,13 +156,13 @@ class ToolsGetBalanceMulti extends React.Component {
         _items.push(
           <tr key={ `tools-balances-multi-${key}` }>
             <td className="blur selectable">{ key }</td>
-            <td>{ balances[key] } KMD</td>
+            <td>{ balances[key] } { this.state.balanceCoin }</td>
           </tr>
         );
       }
 
       return (
-        <table className="table table-hover dataTable table-striped tools-balance-multi-table">
+        <table className="table table-hover dataTable table-striped tools-balance-multi-table margin-bottom-40">
           <thead>
             <tr>
               <th>{ translate('INDEX.ADDRESS') }</th>
@@ -149,12 +183,32 @@ class ToolsGetBalanceMulti extends React.Component {
     }
   }
 
+  getOptions() {
+    let _items = [{
+      label: 'Komodo (KMD)',
+      icon: 'KMD',
+      value: 'KMD',
+    }];
+
+    for (let key in kmdexplorer) {
+      _items.push({
+        label: `${translate('ASSETCHAINS.' + key)} (${key})`,
+        icon: key,
+        value: key,
+      });
+    }
+
+    return _items;
+  }
+
   render() {
     return (
       <div className="row margin-left-10">
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
           <h4>{ translate('TOOLS.GET_BALANCE') } multi</h4>
-          <div className="margin-top-20">{ translate('TOOLS.GET_BALANCE_MULTI_KMD') }</div>
+          { this.state.balanceCoin === 'KMD' &&
+            <div className="margin-top-20">{ translate('TOOLS.GET_BALANCE_MULTI_KMD') }</div>
+          }
           <div className="margin-top-15">{ translate('TOOLS.REMOTE_CALL_EXPLORER_ACKNOWLEDGEMENT') }</div>
         </div>
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
@@ -170,11 +224,7 @@ class ToolsGetBalanceMulti extends React.Component {
             onChange={ (event) => this.updateSelectedCoin(event, 'balanceCoin') }
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
-            options={[{
-              label: 'Komodo (KMD)',
-              icon: 'KMD',
-              value: `KMD|spv`,
-            }]} />
+            options={ this.getOptions() } />
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
@@ -190,7 +240,7 @@ class ToolsGetBalanceMulti extends React.Component {
             name="balanceAddr"
             onChange={ this.updateInput }
             value={ this.state.balanceAddr }
-            placeholder={ translate('TOOLS.ADDRESS_MULTI') }></textarea>
+            placeholder={ translate('TOOLS.ADDRESS_MULTI', this.state.balanceCoin) }></textarea>
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
           <button

@@ -60,6 +60,7 @@ export * from './actions/pin';
 export * from './actions/csv';
 export * from './actions/addressBook';
 export * from './actions/dice';
+export * from './actions/eth';
 
 export const changeActiveAddress = (address) => {
   return {

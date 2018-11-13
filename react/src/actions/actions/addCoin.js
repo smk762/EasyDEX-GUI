@@ -13,6 +13,7 @@ import {
   toggleAddcoinModal,
   getDexCoins,
   apiElectrumCoins,
+  apiEthereumCoins,
 } from '../actionCreators';
 import {
   startCurrencyAssetChain,
@@ -127,7 +128,45 @@ export const apiElectrumAddCoin = (coin) => {
   }
 }
 
-export const addCoin = (coin, mode, startupParams, genproclimit) => {
+export const addCoinEth = (coin, network) => {
+  let _coin = coin;
+
+  if (network &&
+      network.toLowerCase() !== 'ropsten') {
+    _coin = (coin + '_' + network).toUpperCase();
+    coin = network;
+    network = null;
+  }
+
+  return dispatch => {
+    const _urlParams = {
+      coin: network ? (coin + '_' + network).toUpperCase() : coin,
+      token,
+    };
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/eth/coins/add${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.addCoinEth') + ' (code: addCoinEth)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(
+        addCoinResult(network ? (coin + '_' + network).toUpperCase() : _coin === 'ETH' ? 'ETH' : _coin, '3')
+      );
+    });
+  }
+}
+
+export const addCoin = (coin, mode, startupParams, genproclimit, pubkey) => {
   if (mode === 0 ||
       mode === '0') {
     return dispatch => {
@@ -135,7 +174,7 @@ export const addCoin = (coin, mode, startupParams, genproclimit) => {
     }
   } else {
     return dispatch => {
-      dispatch(apiGetConfig(coin, mode, startupParams, genproclimit));
+      dispatch(apiGetConfig(coin, mode, startupParams, genproclimit, pubkey));
     }
   }
 }
@@ -151,7 +190,7 @@ const handleErrors = (response) => {
   }
 }
 
-export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
+export const apiHerd = (coin, mode, path, startupParams, genproclimit, pubkey) => {
   let acData;
   let herdData = {
     ac_name: coin,
@@ -211,6 +250,10 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit) => {
         '-addnode=78.47.196.146',
       ],
     };
+  }
+
+  if (pubkey) {
+    herdData.ac_options.push(`-pubkey=${pubkey}`);
   }
 
   if (startupParams) {
@@ -298,12 +341,26 @@ export const addCoinResult = (coin, mode) => {
     '-1': 'native',
     '1': 'staking',
     '2': 'mining',
+    '3': 'eth',
   };
 
   return dispatch => {
+    let _ethAddCoinToaster = `${coin} added`;
+    
+    if (coin.toLowerCase().indexOf('eth') > -1) {
+      if (coin.indexOf('_') > -1 &&
+          coin.toLowerCase().indexOf('ropsten') === -1) {
+        const _comp = coin.split('_');
+
+        _ethAddCoinToaster = `${_comp[1]} token added`;
+      } else {
+        _ethAddCoinToaster = `${coin} added`;
+      }
+    }
+
     dispatch(
       triggerToaster(
-        `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
+        coin.toLowerCase().indexOf('eth') > -1 ? _ethAddCoinToaster: `${coin} ${translate('TOASTR.STARTED_IN')} ${modeToValue[mode].toUpperCase()} ${translate('TOASTR.MODE')}`,
         translate('TOASTR.COIN_NOTIFICATION'),
         'success'
       )
@@ -328,6 +385,26 @@ export const addCoinResult = (coin, mode) => {
       setTimeout(() => {
         dispatch(activeHandle());
         dispatch(apiElectrumCoins());
+        dispatch(getDexCoins());
+      }, 2000);
+    } else if (coin.toLowerCase().indexOf('eth') > -1) {
+      dispatch(activeHandle());
+      dispatch(apiEthereumCoins());
+      dispatch(getDexCoins());
+
+      setTimeout(() => {
+        dispatch(activeHandle());
+        dispatch(apiEthereumCoins());
+        dispatch(getDexCoins());
+      }, 500);
+      setTimeout(() => {
+        dispatch(activeHandle());
+        dispatch(apiEthereumCoins());
+        dispatch(getDexCoins());
+      }, 1000);
+      setTimeout(() => {
+        dispatch(activeHandle());
+        dispatch(apiEthereumCoins());
         dispatch(getDexCoins());
       }, 2000);
     } else {
@@ -385,7 +462,7 @@ export const _apiGetConfig = (coin, mode, startupParams) => {
   }
 }
 
-export const apiGetConfig = (coin, mode, startupParams, genproclimit) => {
+export const apiGetConfig = (coin, mode, startupParams, genproclimit, pubkey) => {
   if (coin === 'KMD' &&
       mode === '-1') {
     return dispatch => {
@@ -415,7 +492,8 @@ export const apiGetConfig = (coin, mode, startupParams, genproclimit) => {
             coin,
             mode,
             json,
-            startupParams
+            startupParams,
+            pubkey
           )
         )
       );
@@ -449,7 +527,8 @@ export const apiGetConfig = (coin, mode, startupParams, genproclimit) => {
             mode,
             json,
             startupParams,
-            genproclimit
+            genproclimit,
+            pubkey
           )
         )
       );

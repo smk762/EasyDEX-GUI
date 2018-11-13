@@ -37,6 +37,7 @@ class ReceiveCoin extends React.Component {
     this.toggleAddressMenu = this.toggleAddressMenu.bind(this);
     this.toggleIsMine = this.toggleIsMine.bind(this);
     this.validateCoinAddress = this.validateCoinAddress.bind(this);
+    this.copyPubkeyNative = this.copyPubkeyNative.bind(this);
   }
 
   toggleAddressMenu(address) {
@@ -63,6 +64,29 @@ class ReceiveCoin extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  copyPubkeyNative(address) {
+    this.toggleAddressMenu(address);
+
+    validateAddress(
+      this.props.coin,
+      address
+    )
+    .then((json) => {
+      if (json &&
+          json.pubkey) {
+        Store.dispatch(copyString(json.pubkey, translate('INDEX.PUBKEY_COPIED')));
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            translate('TOASTR.UNABLE_TO_COPY_PUBKEY'),
+            translate('TOASTR.COIN_NOTIFICATION'),
+            'error',
+          )
+        );
+      }
+    });
   }
 
   validateCoinAddress(address, isZaddr) {
@@ -133,6 +157,11 @@ class ReceiveCoin extends React.Component {
     this.setState(Object.assign({}, this.state, {
       openDropMenu: !this.state.openDropMenu,
     }));
+  }
+
+  copyPubkeySpv(pubkey) {
+    this.toggleAddressMenu(address);
+    Store.dispatch(copyString(pubkey, translate('INDEX.PUBKEY_COPIED')));
   }
 
   _copyCoinAddress(address) {
@@ -241,6 +270,25 @@ class ReceiveCoin extends React.Component {
         );
 
         return items;
+      } else if (
+        this.props.ethereumCoins &&
+        this.props.mode === 'eth' &&
+        type === 'public'
+      ) {
+        let items = [];
+
+        items.push(
+          AddressItemRender.call(
+            this,
+            {
+              address: this.props.ethereumCoins[this.props.coin].pub,
+              amount: this.props.balance.balance
+            },
+            'public'
+          )
+        );
+
+        return items;
       } else {
         return null;
       }
@@ -268,6 +316,7 @@ const mapStateToProps = (state, props) => {
     activeAddress: state.ActiveCoin.activeAddress,
     addresses: state.ActiveCoin.addresses,
     electrumCoins: state.Dashboard.electrumCoins,
+    ethereumCoins: state.Dashboard.ethereumCoins,
   };
 
   if (props &&

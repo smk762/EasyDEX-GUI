@@ -7,6 +7,9 @@ import mainWindow from '../../util/mainWindow';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
 import { acConfig } from '../addcoin/payload';
+import config from '../../config';
+import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
+import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const CoinSelectorsRender = function(item, coin, i) {
   const _modesEnum = [
@@ -32,6 +35,15 @@ const CoinSelectorsRender = function(item, coin, i) {
       if (mode) {
         _availModes[mode] = true;
       }
+    }
+  }
+
+  let pubkeyAddress;
+  if (config.pubkey) {
+    pubkeyAddress = pubkeyToAddress(config.pubkey, bitcoinjsNetworks.kmd);
+
+    if (!pubkeyAddress) {
+      pubkeyAddress = translate('TOASTR.INVALID_PUBKEY');
     }
   }
 
@@ -77,7 +89,10 @@ const CoinSelectorsRender = function(item, coin, i) {
             type="button"
             className="btn btn-primary"
             onClick={ () => this.activateCoin(i) }
-            disabled={ item.mode === -2 }>
+            disabled={
+              item.mode === -2 &&
+              (item.selectedCoin ? item.selectedCoin.indexOf('ETH') === -1 : false)
+            }>
             { translate('INDEX.ACTIVATE_COIN') }
           </button>
         </div>
@@ -308,6 +323,41 @@ const CoinSelectorsRender = function(item, coin, i) {
               </select>
             </div>
           </div>
+        </div>
+      }
+      { !this.hasMoreThanOneCoin() &&
+        config &&
+        config.pubkey &&
+        item.mode === '-1' &&
+        <div className="col-sm-12 no-padding">
+          <div className="col-sm-12 padding-bottom-10">
+            <div className="toggle-box padding-bottom-10">
+              <span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={ this.state.usePubkey }
+                    readOnly />
+                  <div
+                    className="slider"
+                    onClick={ this.toggleUsePubkey }></div>
+                </label>
+                <div
+                  className="toggle-label margin-right-15 pointer"
+                  onClick={ this.toggleUsePubkey }>
+                  { translate('INDEX.USE_PUBKEY') }
+                </div>
+              </span>
+            </div>
+          </div>
+          { this.state.usePubkey &&
+            <div className="col-sm-12 padding-bottom-35">
+              <div className="padding-bottom-15">
+                <strong>{ translate('INDEX.PUBKEY') }:</strong> { config.pubkey }
+              </div>
+              <strong>{ translate('INDEX.ADDRESS') }:</strong> { pubkeyAddress }
+            </div>
+          }
         </div>
       }
     </div>
