@@ -47,8 +47,7 @@ const plugins = [
     filename: 'index.html',
   }),
   new MiniCssExtractPlugin({
-    filename: '[name].css',
-    chunkFilename: '[id].css'
+    filename: 'style.css',
   }),
 ];
 
@@ -163,22 +162,13 @@ module.exports = {
     },
   },
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
-          chunks: 'all'
-        }
-      }
-    },
     minimizer: [
       new UglifyJSPlugin({
         sourceMap: true,
         uglifyOptions: {
           compress: {
             warnings: false,
-            //screw_ie8: true,
+            ie8: false,
             conditionals: true,
             unused: true,
             comparisons: true,
