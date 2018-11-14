@@ -232,37 +232,39 @@ class ClaimInterestModal extends React.Component {
   }
 
   confirmClaimInterest() {
-    const _coin = this.props.ActiveCoin.coin;
-    const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
-    const _balance = this.props.ActiveCoin.balance;
+    if (this.props.ActiveCoin.mode === 'spv') {
+      const _coin = this.props.ActiveCoin.coin;
+      const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
+      const _balance = this.props.ActiveCoin.balance;
 
-    apiElectrumSendPromise(
-      _coin,
-      _balance.balanceSats,
-      _pub,
-      _pub
-    )
-    .then((res) => {
-      if (res.msg === 'error') {
-        Store.dispatch(
-          triggerToaster(
-            res.result,
-            translate('TOASTR.ERROR'),
-            'error'
-          )
-        );
-      } else {
-        Store.dispatch(
-          triggerToaster(
-            `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${_pub}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
-            translate('TOASTR.WALLET_NOTIFICATION'),
-            'success',
-            false
-          )
-        );
-        this.closeModal();
-      }
-    });
+      apiElectrumSendPromise(
+        _coin,
+        _balance.balanceSats,
+        _pub,
+        _pub
+      )
+      .then((res) => {
+        if (res.msg === 'error') {
+          Store.dispatch(
+            triggerToaster(
+              res.result,
+              translate('TOASTR.ERROR'),
+              'error'
+            )
+          );
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P1')} ${_pub}. ${translate('TOASTR.CLAIM_INTEREST_BALANCE_SENT_P2')}`,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'success',
+              false
+            )
+          );
+          this.closeModal();
+        }
+      });
+    }
   }
 
   claimInterest(address, amount) {
