@@ -153,7 +153,7 @@ export const _ClaimInterestTableRender = function() {
           { (!this.isFullySynced() || !navigator.onLine) &&
             this.props.ActiveCoin &&
             this.props.ActiveCoin.mode === 'native' &&
-            <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning">
+            <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning no-padding-left">
               <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
             </div>
           }
