@@ -685,6 +685,7 @@ const LANG_EN = {
     CURRENT_BLOCK_SM: 'current block',
   },
   TOASTR: {
+    COIND_STOP_IN_PROGRESS: 'Please wait while @template@ is shut down. It may take a few seconds.',
     UNABLE_TO_COPY_PUBKEY: 'Unable to copy pubkey',
     INVALID_PUBKEY: 'Invalid pubkey',
     YOUR_PUBKEY: 'Your pubkey ',
