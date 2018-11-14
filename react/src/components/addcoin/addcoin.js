@@ -152,6 +152,7 @@ class AddCoin extends React.Component {
                 )
               );
               Store.dispatch(toggleZcparamsFetchModal(true));
+              Store.dispatch(toggleZcparamsFetchModal(true));
               resolve(false);
             } else {
               resolve(true);
@@ -352,7 +353,7 @@ class AddCoin extends React.Component {
     const _coin = this.state.coins[0];
     const coin = _coin.selectedCoin.split('|')[0];
     const coinuc = coin.toUpperCase();
-    
+
     if (_coin.selectedCoin.indexOf('ETH') > -1) {
       const _ethNet = _coin.selectedCoin.split('|');
 
@@ -400,7 +401,7 @@ class AddCoin extends React.Component {
                 _coin.mode,
               ));
             }
-          } else {          
+          } else {
             Store.dispatch(addCoin(
               coin,
               _coin.mode,
@@ -461,7 +462,7 @@ class AddCoin extends React.Component {
     let _coin = this.state.coins[0];
     let coin = this.state.coins[0].selectedCoin.split('|')[0];
     let coinuc = coin.toUpperCase();
-    
+
     if (_coin.selectedCoin.indexOf('ETH') > -1) {
       const _ethNet = _coin.selectedCoin.split('|');
 
@@ -475,7 +476,7 @@ class AddCoin extends React.Component {
           coin,
           _coin.mode,
         ));
-      } else {          
+      } else {
         Store.dispatch(addCoin(
           coin,
           _coin.mode,
@@ -490,13 +491,13 @@ class AddCoin extends React.Component {
     for (let i = 1; i < this.state.coins.length; i++) {
       let _coin = this.state.coins[i];
       let coin = _coin.selectedCoin.split('|')[0];
-      let coinuc = coin.toUpperCase();  
+      let coinuc = coin.toUpperCase();
 
       setTimeout(() => {
         if (!_coin.daemonParam) {
           if (_coin.selectedCoin.indexOf('ETH') > -1) {
             const _ethNet = _coin.selectedCoin.split('|');
-      
+
             Store.dispatch(addCoinEth(
               _ethNet[0],
               _ethNet[1],
@@ -507,7 +508,7 @@ class AddCoin extends React.Component {
               _coin.mode,
             ));
           }
-        } else {          
+        } else {
           Store.dispatch(addCoin(
             coin,
             _coin.mode,
