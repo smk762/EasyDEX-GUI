@@ -1498,6 +1498,7 @@ const LANG_EN = {
     CALLG: 'Capital GAS',
   },
   TOOLS: {
+    NO_UTXO: 'No UTXO found',
     THIS_REQUEST_MIGHT_TAKE_AROUND_1M: 'This action might take about 1 min to complete.',
     ENTER_T_ADDRESS: 'Enter a valid KMD transparent address',
     SEARCHING: 'Searching',
