@@ -33,7 +33,7 @@ import {
   WalletsDataRender,
 } from  './walletsData.render';
 import { secondsToString } from 'agama-wallet-lib/src/time';
-import getRandomElectrumServer from '../../../util/serverRandom';
+import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
 import mainWindow from '../../../util/mainWindow';
 
@@ -581,6 +581,9 @@ class WalletsData extends React.Component {
         _spvServers,
         _server.join(':')
       );
+
+      console.warn(_spvServers);
+      console.warn(_randomServer);
 
       apiElectrumCheckServerConnection(
         _randomServer.ip,
