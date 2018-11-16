@@ -99,7 +99,7 @@ class AppSettingsPanel extends React.Component {
   _saveAppConfig() {
     const _appSettings = this.state.appSettings;
     const _configSchema = this.state.appConfigSchema;
-    let _appSettingsPristine = Object.assign({}, this.props.Settings.appSettings);
+    let _appSettingsPristine = Object.assign({}, this.state.appSettings || this.props.Settings.appSettings);
     let isError = false;
     let saveAfterPathCheck = false;
 
