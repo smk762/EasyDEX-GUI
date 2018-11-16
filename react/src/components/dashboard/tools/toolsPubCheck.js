@@ -15,7 +15,7 @@ class ToolsPubCheck extends React.Component {
 
   pubCheck() {
     this.setState({
-      pubResult: mainWindow.getCoinByPub(this.state.pub),
+      pubResult: mainWindow.getAddressVersion(this.state.pub),
     });
   }
 
@@ -26,7 +26,7 @@ class ToolsPubCheck extends React.Component {
   }
 
   renderCoins() {
-    const _coins = this.state.pubResult.coin;
+    const _coins = this.state.pubResult.coins;
     let _items = [];
 
     for (let i = 0; i < _coins.length; i++) {
@@ -70,13 +70,14 @@ class ToolsPubCheck extends React.Component {
         </div>
         { this.state.pubResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-          { this.state.pubResult.coin &&
+          { this.state.pubResult &&
+            this.state.pubResult.coins &&
             <div>
               <div>{ translate('TOOLS.COINS') }: { this.renderCoins() }</div>
               <div className="margin-top-10">{ translate('TOOLS.VERSION') }: { this.state.pubResult.version }</div>
             </div>
           }
-          { !this.state.pubResult.coin &&
+          { !this.state.pubResult.coin || (this.state.pubResult.coin && !this.state.pubResult.coins) &&
             <div className="selectable">{ this.state.pubResult }</div>
           }
           </div>

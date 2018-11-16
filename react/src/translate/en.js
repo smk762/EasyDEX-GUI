@@ -685,6 +685,7 @@ const LANG_EN = {
     CURRENT_BLOCK_SM: 'current block',
   },
   TOASTR: {
+    COIND_STOP_IN_PROGRESS: 'Please wait while @template@ is shut down. It may take a few seconds.',
     UNABLE_TO_COPY_PUBKEY: 'Unable to copy pubkey',
     INVALID_PUBKEY: 'Invalid pubkey',
     YOUR_PUBKEY: 'Your pubkey ',
@@ -1497,6 +1498,7 @@ const LANG_EN = {
     CALLG: 'Capital GAS',
   },
   TOOLS: {
+    NO_UTXO: 'No UTXO found',
     THIS_REQUEST_MIGHT_TAKE_AROUND_1M: 'This action might take about 1 min to complete.',
     ENTER_T_ADDRESS: 'Enter a valid KMD transparent address',
     SEARCHING: 'Searching',

@@ -8,6 +8,7 @@ import {
   toggleDashboardTxInfoModal,
   changeActiveAddress,
   getDashboardUpdate,
+  apiElectrumBalance,
   apiElectrumKVTransactionsPromise,
   apiElectrumTransactions,
   toggleClaimInterestModal,
@@ -33,9 +34,10 @@ import {
   WalletsDataRender,
 } from  './walletsData.render';
 import { secondsToString } from 'agama-wallet-lib/src/time';
-import getRandomElectrumServer from '../../../util/serverRandom';
+import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
 import mainWindow from '../../../util/mainWindow';
+import { setTimeout } from 'timers';
 
 /*import io from 'socket.io-client';
 
@@ -607,6 +609,17 @@ class WalletsData extends React.Component {
               )
             );
             Store.dispatch(electrumServerChanged(true));
+
+            setTimeout(() => {
+              this.refreshTxHistory();
+              
+              Store.dispatch(
+                apiElectrumBalance(
+                  _coin,
+                  _electrumCoin.pub
+                )
+              );
+            }, 1000);
           });
         } else {
           Store.dispatch(
