@@ -12,6 +12,7 @@ import ToolsPubCheck from './toolsPubCheck';
 import ToolsStringToQr from './toolsStringToQr';
 import ToolsMergeUTXO from './toolsMergeUtxo';
 import ToolsSplitUTXO from './toolsSplitUtxo';
+import ToolsGetBalanceMultiCoins from './toolsGetBalanceMultiCoins';
 
 class Tools extends React.Component {
   constructor() {
@@ -90,6 +91,12 @@ class Tools extends React.Component {
                 <button
                   type="button"
                   className="btn btn-default"
+                  onClick={ () => this.setActiveSection('balance-multi-coins') }>
+                  { translate('TOOLS.CROSS_ASSETS_BALANCE') }
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
                   onClick={ () => this.setActiveSection('utxo') }>
                   UTXO *
                 </button>
@@ -140,6 +147,9 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'balance-multi' &&
                 <ToolsGetBalanceMulti />
+              }
+              { this.state.activeSection === 'balance-multi-coins' &&
+                <ToolsGetBalanceMultiCoins />
               }
             </div>
           </div>

@@ -9,6 +9,7 @@ import Store from '../../../store';
 import WalletsTxInfoRender from './walletsTxInfo.render';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const { shell } = window.require('electron');
 
@@ -66,10 +67,30 @@ class WalletsTxInfo extends React.Component {
           className: _activeCoin.showTransactionInfo ? 'show in' : 'hide',
         }));
       }, _activeCoin.showTransactionInfo ? 50 : 300);
+    } else if (
+      this.props.ActiveCoin.mode === 'eth' &&
+      _activeCoin &&
+      this.props.ActiveCoin.showTransactionInfoTxIndex !== _activeCoin.showTransactionInfoTxIndex
+    ) {
+      this.setState(Object.assign({}, this.state, {
+        txDetails: _activeCoin.showTransactionInfoTxIndex,
+        rawTxDetails: _activeCoin.showTransactionInfoTxIndex,
+        activeTab: 0,
+        className: _activeCoin.showTransactionInfo ? 'show fade' : 'show out',
+      }));
+
+      setTimeout(() => {
+        this.setState(Object.assign({}, this.state, {
+          className: _activeCoin.showTransactionInfo ? 'show in' : 'hide',
+        }));
+      }, _activeCoin.showTransactionInfo ? 50 : 300);
     } else {
       if (_activeCoin &&
           _activeCoin.txhistory &&
-          _activeCoin.showTransactionInfoTxIndex > -1) {
+          _activeCoin.showTransactionInfoTxIndex &&
+          _activeCoin.showTransactionInfoTxIndex > -1 &&
+          _activeCoin.showTransactionInfoTxIndex !== false) {
+            console.warn('load tx', _activeCoin.showTransactionInfoTxIndex);
         const txInfo = _activeCoin.txhistory[_activeCoin.showTransactionInfoTxIndex];
 
         if (txInfo &&
@@ -126,7 +147,13 @@ class WalletsTxInfo extends React.Component {
 
   openExplorerWindow(txid) {
     const _coin = this.props.ActiveCoin.coin;
-    const url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;
+    let url;
+
+    if (erc20ContractId[this.props.ActiveCoin.coin]) {
+      url = `${explorerList.ETH}${txid}`;
+    } else {
+      url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;      
+    }
     return shell.openExternal(url);
   }
 

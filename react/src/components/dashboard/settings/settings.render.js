@@ -97,8 +97,8 @@ export const SettingsRender = function() {
               <SeedEncryptPanel />
             </PanelSection>
             { _coins &&
-              _coins.spv &&
-              Object.keys(_coins.spv).length &&
+              ((_coins.spv && Object.keys(_coins.spv).length) ||
+              (_coins.eth && Object.keys(_coins.eth).length)) &&
               this.props.Main.isLoggedIn &&
               !mainWindow.isWatchOnly() &&
               <PanelSection
@@ -115,6 +115,8 @@ export const SettingsRender = function() {
               </PanelSection>
             }
             { Config.experimentalFeatures &&
+              _coins.spv &&
+              Object.keys(_coins.spv).length &&
               <PanelSection
                 title={ translate('SETTINGS.SWEEP_KEY') }
                 icon="icon md-key">

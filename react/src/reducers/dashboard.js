@@ -6,6 +6,7 @@ import {
   DASHBOARD_SYNC_ONLY_UPDATE,
   DISPLAY_IMPORT_KEY_MODAL,
   DASHBOARD_ELECTRUM_COINS,
+  DASHBOARD_ETHEREUM_COINS,
   ELECTRUM_SERVER_CHANGED,
   DISPLAY_ZCASH_PARAMS_FETCH,
   PRICES,
@@ -22,12 +23,18 @@ export const Dashboard = (state = {
   eletrumServerChanged: false,
   displayZcparamsModal: false,
   prices: null,
+  ethereumCoins: {},
 }, action) => {
   switch (action.type) {
     case DASHBOARD_ELECTRUM_COINS:
       return {
         ...state,
         electrumCoins: action.electrumCoins,
+      };
+    case DASHBOARD_ETHEREUM_COINS:
+      return {
+        ...state,
+        ethereumCoins: action.ethereumCoins,
       };
     case DASHBOARD_SECTION_CHANGE:
       return {

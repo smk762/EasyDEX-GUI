@@ -32,13 +32,27 @@ export const AddressActionsNonBasiliskModeRender = function(address, type) {
             </li>
             { !address.canspend &&
               this.props.mode !== 'spv' &&
+              this.props.mode !== 'eth' &&
               <li onClick={ () => this.dumpPrivKey(address, type !== 'public' ? true : null) }>
                 <i className="icon fa-key margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('RECEIVE.PRIV_KEY')}` }
               </li>
             }
             { this.props.mode !== 'spv' &&
+              this.props.mode !== 'eth' &&
               <li onClick={ () => this.validateCoinAddress(address, type !== 'public' ? true : null) }>
                 <i className="icon fa-check margin-right-5"></i> { translate('RECEIVE.VALIDATE_ADDRESS') }
+              </li>
+            }
+            { this.props.mode === 'spv' &&
+              this.props.electrumCoins[this.props.coin].pubHex &&
+              <li onClick={ () => this.copyPubkeySpv(this.props.electrumCoins[this.props.coin].pubHex) }>
+                <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('INDEX.PUBKEY').toLowerCase()}` }
+              </li>
+            }
+            { this.props.mode === 'native' &&
+              type === 'public' &&
+              <li onClick={ () => this.copyPubkeyNative(address) }>
+                <i className="icon wb-copy margin-right-5"></i> { `${translate('INDEX.COPY')} ${translate('INDEX.PUBKEY').toLowerCase()}` }
               </li>
             }
             <li className="receive-address-context-menu-get-qr">
@@ -64,12 +78,13 @@ export const AddressItemRender = function(address, type) {
           id="receiveCoin2"
           effect="solid"
           className="text-left" />
-        <span className="selectable">
+        <span className="selectable blur">
           { type === 'public' ? address.address : `${address.address.substring(0, 34)}...` }
         </span>
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
+          this.props.mode !== 'eth' &&
           <i
             data-tip={ translate('RECEIVE.YOU_DONT_OWN_PRIV_KEYS') }
             data-for="receiveCoin3"
@@ -85,6 +100,7 @@ export const AddressItemRender = function(address, type) {
         { !address.canspend &&
           type === 'public' &&
           this.props.mode !== 'spv' &&
+          this.props.mode !== 'eth' &&
           <span
             data-for="receiveCoin4"
             data-tip={ translate('RECEIVE.AVAIL_AMOUNT_TO_SPEND_0') }> (0)</span>
@@ -104,6 +120,7 @@ export const _ReceiveCoinTableRender = function() {
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-20 padding-bottom-15 push-left">
           { this.props.mode !== 'spv' &&
+            this.props.mode !== 'eth' &&
             <div>
               <label className="switch">
                 <input
@@ -127,6 +144,7 @@ export const _ReceiveCoinTableRender = function() {
       { this.checkTotalBalance() !== 0 &&
         <div className="text-left padding-top-20 padding-bottom-15 push-right">
           { this.props.mode !== 'spv' &&
+            this.props.mode !== 'eth' &&
             <div
               data-for="receiveCoin5"
               data-tip={ translate('RECEIVE.DISPLAY_ALL_ADDR') }>
@@ -194,6 +212,7 @@ export const ReceiveCoinRender = function() {
                     <div className="panel-actions">
                       <InvoiceModal />
                       { this.props.mode !== 'spv' &&
+                        this.props.mode !== 'eth' &&
                         <div
                           className={ 'dropdown' + (this.state.openDropMenu ? ' open' : '') }
                           onClick={ this.openDropMenu }>

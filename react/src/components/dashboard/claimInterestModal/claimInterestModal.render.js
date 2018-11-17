@@ -22,7 +22,7 @@ export const _ClaimInterestTableRender = function() {
             </button>
           </td>
           <td className="blur selectable">{ _transactionsList[i].address }</td>
-          <td className={ _transactionsList[i].amount < 10 || !_transactionsList[i].interestRulesCheckPass ? 'red bold' : 'green bold' }>
+          <td className={ _transactionsList[i].amount < 10 || (this.props.ActiveCoin.mode === 'spv' && !_transactionsList[i].interestRulesCheckPass) ? 'red bold' : 'green bold' }>
           { _transactionsList[i].amount }
           </td>
           <td>{ _transactionsList[i].interest }</td>
@@ -153,7 +153,7 @@ export const _ClaimInterestTableRender = function() {
           { (!this.isFullySynced() || !navigator.onLine) &&
             this.props.ActiveCoin &&
             this.props.ActiveCoin.mode === 'native' &&
-            <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning">
+            <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning no-padding-left">
               <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
             </div>
           }

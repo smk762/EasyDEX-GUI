@@ -72,35 +72,42 @@ class ToolsGetUtxos extends React.Component {
       }
     }
 
-    return (
-      <table className="table table-hover dataTable table-striped">
-        <thead>
-          <tr>
-            <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.CONFS') }</th>
-            <th>{ translate('TOOLS.VOUT') }</th>
-            { _coin[0] === 'KMD' &&
-              <th>Locktime</th>
-            }
-            <th>TxID</th>
-          </tr>
-        </thead>
-        <tbody>
-        { _items }
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>{ translate('TOOLS.AMOUNT') }</th>
-            <th>{ translate('TOOLS.CONFS') }</th>
-            <th>{ translate('TOOLS.VOUT') }</th>
-            { _coin[0] === 'KMD' &&
-              <th>Locktime</th>
-            }
-            <th>TxID</th>
-          </tr>
-        </tfoot>
-      </table>
-    );
+    if (_utxos.length &&
+        _utxos !== 'connection error or incomplete data') {
+      return (
+        <table className="table table-hover dataTable table-striped">
+          <thead>
+            <tr>
+              <th>{ translate('TOOLS.AMOUNT') }</th>
+              <th>{ translate('TOOLS.CONFS') }</th>
+              <th>{ translate('TOOLS.VOUT') }</th>
+              { _coin[0] === 'KMD' &&
+                <th>Locktime</th>
+              }
+              <th>TxID</th>
+            </tr>
+          </thead>
+          <tbody>
+          { _items }
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>{ translate('TOOLS.AMOUNT') }</th>
+              <th>{ translate('TOOLS.CONFS') }</th>
+              <th>{ translate('TOOLS.VOUT') }</th>
+              { _coin[0] === 'KMD' &&
+                <th>Locktime</th>
+              }
+              <th>TxID</th>
+            </tr>
+          </tfoot>
+        </table>
+      );
+    } else {
+      return (
+        <div>{ translate('TOOLS.NO_UTXO') }</div>
+      );
+    }
   }
 
   renderCoinOption(option) {

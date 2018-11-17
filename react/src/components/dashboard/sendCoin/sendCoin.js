@@ -17,6 +17,10 @@ import {
   addCoin,
   validateAddress,
   clearOPIDs,
+  apiEthereumGasPrice,
+  apiEthereumSend,
+  apiEthereumSendERC20Preflight,
+  shieldCoinbase,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -25,6 +29,7 @@ import {
   SendFormRender,
   _SendFormRender,
   ZmergeToAddressRender,
+  AddressListRenderShieldCoinbase,
 } from './sendCoin.render';
 import mainWindow from '../../../util/mainWindow';
 import Slider, { Range } from 'rc-slider';
@@ -42,19 +47,31 @@ import {
   fromSats,
   toSats,
 } from 'agama-wallet-lib/src/utils';
+import { formatEther } from 'ethers/utils/units';
+import { getAddress } from 'ethers/utils/address';
+import coinFees from 'agama-wallet-lib/src/fees';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
 const FEE_EXCEEDS_DEFAULT_THRESHOLD = 5; // N fold increase
+const DEFAULT_ZTX_FEE = 0.0001;
 
 // TODO: - render z address trim
 
-const _feeLookup = [
-  'fastestFee',
-  'halfHourFee',
-  'hourFee',
-  'advanced',
-];
+const _feeLookup = {
+  btc: [
+    'fastestFee',
+    'halfHourFee',
+    'hourFee',
+    'advanced',
+  ],
+  eth: [
+    'fast',
+    'average',
+    'slow',
+  ],
+};
 
 class SendCoin extends React.Component {
   constructor(props) {
@@ -97,6 +114,16 @@ class SendCoin extends React.Component {
       zmtaFee: 0.0001,
       zmtaTlimit: 50,
       zmtaZlimit: 10,
+      // eth
+      ethFees: {},
+      ethFeeType: 1,
+      ethPreflightSendInProgress: false,
+      ethPreflightRes: null,
+      // z_shieldcoinbase
+      zshieldcoinbaseToggled: false,
+      // ztx fee
+      ztxSelectorOpen: false,
+      ztxFee: DEFAULT_ZTX_FEE,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -115,6 +142,7 @@ class SendCoin extends React.Component {
     this.fetchBTCFees = this.fetchBTCFees.bind(this);
     this.onSliderChange = this.onSliderChange.bind(this);
     this.onSliderChangeTime = this.onSliderChangeTime.bind(this);
+    this.onSliderChangeTimeEth = this.onSliderChangeTimeEth.bind(this);
     this.toggleKvSend = this.toggleKvSend.bind(this);
     this.toggleAddressBookDropdown = this.toggleAddressBookDropdown.bind(this);
     this.verifyPin = this.verifyPin.bind(this);
@@ -124,7 +152,76 @@ class SendCoin extends React.Component {
     this._checkCurrentTimestamp = this._checkCurrentTimestamp.bind(this);
     this.toggleZmergetoaddress = this.toggleZmergetoaddress.bind(this);
     this.toggleZmtaAdvanced = this.toggleZmtaAdvanced.bind(this);
+    this.fetchETHFees = this.fetchETHFees.bind(this);
+    this._shieldCoinbase = this._shieldCoinbase.bind(this);
+    this.zshieldcoinbaseToggle = this.zshieldcoinbaseToggle.bind(this);
+    this.toggleZtxDropdown = this.toggleZtxDropdown.bind(this);
+    this.setZtxFee = this.setZtxFee.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  setZtxFee(val) {
+    let _amount = '';
+    
+    if (isPositiveNumber(this.state.amount) &&
+        isPositiveNumber(this.state.sendFromAmount)) {
+      if (this.state.amount + val > this.state.sendFromAmount) {
+        _amount = Number(Number(this.state.amount - val).toFixed(8)); 
+      } else {
+        _amount = this.state.amount;
+      }
+    }
+
+    this.setState({
+      ztxFee: val,
+      ztxSelectorOpen: false,
+      amount: _amount,
+    });
+  }
+
+  toggleZtxDropdown() {
+    this.setState({
+      ztxSelectorOpen: !this.state.ztxSelectorOpen,
+    });
+  }
+
+  zshieldcoinbaseToggle() {
+    this.setState({
+      zshieldcoinbaseToggled: !this.state.zshieldcoinbaseToggled,
+      sendFrom: null,
+    });
+  }
+
+  _shieldCoinbase() {
+    shieldCoinbase(
+      this.props.ActiveCoin.coin,
+      '*',
+      this.state.sendFrom
+    )
+    .then((json) => {
+      if (json.error &&
+          json.error.code) {
+        Store.dispatch(
+          triggerToaster(
+            json.error.message,
+            translate('TOASTR.ERROR'),
+            'error'
+          )
+        );
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            [
+              translate('SEND.COINBASE_SHIELD_SUCCESS'),
+              'Transaction OPID: ' + json.result,
+            ],
+            translate('TOASTR.ERROR'),
+            'success',
+            false
+          )
+        );
+      }
+    });
   }
 
   toggleZmergetoaddress() {
@@ -216,25 +313,44 @@ class SendCoin extends React.Component {
     const _amount = this.state.amount;
     const _amountSats = toSats(this.state.amount);
     const _balance = this.props.ActiveCoin.balance;
-    let _fees = mainWindow.spvFees;
+    const _mode = this.props.ActiveCoin.mode;
+    let _fees = mainWindow.spvFees; // TODO: use lib
     _fees.BTC = 0;
-
-    if (this.props.ActiveCoin.mode === 'native' &&
+    
+    if (_mode === 'native' &&
         this.state.sendFrom) {
+      const isZtx = this.state.addressType === 'private' || (this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc') || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) === 'zc');
+      
       this.setState({
-        amount: Number(this.state.sendFromAmount) - 0.0001,
+        amount: Number(Number(Number(this.state.sendFromAmount) - (isZtx ? this.state.ztxFee : 0.0001)).toFixed(8)),
       });
-    } else {
+    } else if (_mode === 'spv') {
       this.setState({
-        amount: Number(fromSats((_balance.balanceSats - Math.abs(_balance.unconfirmedSats) - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin]))).toFixed(8)),
+        amount: Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
       });
+    } else if (_mode === 'eth') {
+      if (erc20ContractId[this.props.ActiveCoin.coin]) {
+        this.setState({
+          amount: Number(_balance.balance),
+        });
+      } else {
+        this.setState({
+          amount: Number((Number(_balance.balance) - formatEther(Number(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
+        });
+      }
     }
   }
 
   setSendToSelf() {
-    this.setState({
-      sendTo: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
-    });
+    if (this.props.ActiveCoin.mode === 'spv') {
+      this.setState({
+        sendTo: this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].pub,
+      });
+    } else if (this.props.ActiveCoin.mode === 'eth') {
+      this.setState({
+        sendTo: this.props.Dashboard.ethereumCoins[this.props.ActiveCoin.coin].pub,
+      });
+    }
   }
 
   copyTXID(txid) {
@@ -243,7 +359,13 @@ class SendCoin extends React.Component {
 
   openExplorerWindow(txid) {
     const _coin = this.props.ActiveCoin.coin;
-    const url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;
+    let url;
+
+    if (erc20ContractId[this.props.ActiveCoin.coin]) {
+      url = `${explorerList.ETH}${txid}`;
+    } else {
+      url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;      
+    }
     return shell.openExternal(url);
   }
 
@@ -286,6 +408,7 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.activeSection !== props.ActiveCoin.activeSection &&
         this.props.ActiveCoin.activeSection !== 'send') {
       this.fetchBTCFees();
+      this.fetchETHFees();
 
       if (_mode === 'spv' &&
           _coin === 'KMD') {
@@ -407,8 +530,9 @@ class SendCoin extends React.Component {
     }
   }
 
-  renderAddressByType(type) {
+  renderAddressByType(type, toggleType) {
     const _coinAddresses = this.props.ActiveCoin.addresses;
+    const _coin = this.props.ActiveCoin.coin;
     let _items = [];
 
     if (_coinAddresses &&
@@ -417,8 +541,8 @@ class SendCoin extends React.Component {
       _coinAddresses[type].map((address) => {
         if (type === 'private' &&
             mainWindow.chainParams &&
-            mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-            mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private &&
+            mainWindow.chainParams[_coin] &&
+            mainWindow.chainParams[_coin].ac_private &&
             !this.state.sendFrom) {
           this.setState({
             sendFrom: address.address,
@@ -426,8 +550,9 @@ class SendCoin extends React.Component {
           });
         }        
 
-        if (address.amount > 0 &&
-            (type !== 'public' || (address.canspend && type === 'public'))) {
+        if ((address.amount > 0 &&
+            (type !== 'public' || (address.canspend && type === 'public'))) ||
+            toggleType === 'shieldCoinbase') {
           _items.push(
             <li
               className="selected"
@@ -435,12 +560,12 @@ class SendCoin extends React.Component {
               <a onClick={ () => this.updateAddressSelection(address.address, type, address.amount) }>
                 <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
                 <span className="text">
-                  [ { address.amount } { this.props.ActiveCoin.coin } ]&nbsp;&nbsp;
+                  [ { address.amount } { _coin } ]&nbsp;&nbsp;
                   { type === 'public' ? address.address : address.address.substring(0, 34) + '...' }
                 </span>
-                <span
-                  className="glyphicon glyphicon-ok check-mark pull-right"
-                  style={{ display: this.state.sendFrom === address.address ? 'inline-block' : 'none' }}></span>
+                { this.state.sendFrom === address.address &&
+                  <span className="glyphicon glyphicon-ok check-mark pull-right"></span>
+                }
               </a>
             </li>
           );
@@ -481,13 +606,28 @@ class SendCoin extends React.Component {
       const _notAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && !mainWindow.chainParams[_coin].ac_private;
 
       if (_mode === 'spv' ||
+          _mode === 'eth' ||
           _addrType === 'private' ||
           (_addrType === 'public' && _coin !== 'KMD' && _notAcPrivate)) {
-        return (
-          <span>
-            { _mode === 'spv' ? `[ ${_balance.balance - Math.abs(_balance.unconfirmed)} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` : translate('INDEX.T_FUNDS') }
-          </span>
-        );
+        if (_mode === 'spv') {
+          return (
+            <span>
+              { `[ ${_balance.balance + _balance.unconfirmed} ${_coin} ] ${this.props.Dashboard.electrumCoins[_coin].pub}` }
+            </span>
+          );
+        } else if (_mode === 'eth') {
+          return (
+            <span>
+              { `[ ${_balance.balance} ${_coin} ] ${this.props.Dashboard.ethereumCoins[_coin].pub}` }
+            </span>
+          );
+        } else if (_mode === 'native') {
+          return(
+            <span>
+              { translate('INDEX.T_FUNDS') }
+            </span>
+          );
+        }
       } else {
         return (
           <span>{ translate('SEND.SELECT_ADDRESS') }</span>
@@ -498,6 +638,10 @@ class SendCoin extends React.Component {
 
   renderAddressList() {
     return AddressListRender.call(this);
+  }
+
+  renderShielCoinbaseAddressList() {
+    return AddressListRenderShieldCoinbase.call(this);
   }
 
   renderOPIDLabel(opid) {
@@ -622,7 +766,7 @@ class SendCoin extends React.Component {
           // TODO: check, approx fiat value
           this.setState({
             btcFees: res.result,
-            btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup[this.state.btcFeesTimeBasedStep]],
+            btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup.btc[this.state.btcFeesTimeBasedStep]],
           });
         } else {
           apiGetLocalBTCFees()
@@ -631,7 +775,7 @@ class SendCoin extends React.Component {
               // TODO: check, approx fiat value
               this.setState({
                 btcFees: res.result,
-                btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup[this.state.btcFeesTimeBasedStep]],
+                btcFeesSize: this.state.btcFeesType === 'advanced' ? res.result.electrum[this.state.btcFeesAdvancedStep] : res.result.recommended[_feeLookup.btc[this.state.btcFeesTimeBasedStep]],
               });
             } else {
               Store.dispatch(
@@ -648,6 +792,28 @@ class SendCoin extends React.Component {
     }
   }
 
+  fetchETHFees() {
+    if (this.props.ActiveCoin.mode === 'eth') {
+      apiEthereumGasPrice()
+      .then((res) => {
+        if (res.msg === 'success') {
+          // TODO: check, approx fiat value
+          this.setState({
+            ethFees: res.result,
+          });
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              'Unable to get ETH gas price',
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
+        }
+      });
+    }
+  }
+
   changeSendCoinStep(step, back) {
     const _mode = this.props.ActiveCoin.mode;
     const _coin = this.props.ActiveCoin.coin;
@@ -659,12 +825,14 @@ class SendCoin extends React.Component {
 
     if (step === 0) {
       this.fetchBTCFees();
-
+      this.fetchETHFees();
+      
       if (back) {
         this.setState({
           currentStep: 0,
           spvVerificationWarning: false,
           spvPreflightSendInProgress: false,
+          ethPreflightSendInProgress: false,
           pin: '',
           noUtxo: false,
         });
@@ -697,8 +865,11 @@ class SendCoin extends React.Component {
 
         this.setState(Object.assign({}, this.state, {
           spvPreflightSendInProgress: _mode === 'spv' ? true : false,
+          ethPreflightSendInProgress: _mode === 'eth' ? true : false,
           currentStep: step,
           kvHex,
+          spvPreflightRes: null,
+          ethPreflightRes: null,
         }));
 
         // spv pre tx push request
@@ -731,6 +902,37 @@ class SendCoin extends React.Component {
               this.setState(Object.assign({}, this.state, {
                 spvPreflightSendInProgress: false,
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
+              }));
+            }
+          });
+        } else if (
+          _mode === 'eth' &&
+          erc20ContractId[this.props.ActiveCoin.coin]
+        ) { // spv pre tx push request          
+          apiEthereumSendERC20Preflight(
+            this.props.ActiveCoin.coin,
+            this.state.sendTo,
+            this.state.amount,
+            _feeLookup.eth[this.state.ethFeeType],
+          )
+          .then((sendPreflight) => {            
+            if (sendPreflight &&
+                sendPreflight.msg === 'success') {
+              this.setState(Object.assign({}, this.state, {
+                ethPreflightSendInProgress: false,
+                ethPreflightRes: {
+                  fee: Number(sendPreflight.result.fee).toFixed(8),
+                  balanceAferFee: Number(sendPreflight.result.balanceAferFee).toFixed(8),
+                  notEnoughBalance: sendPreflight.result.notEnoughBalance,
+                  maxBalance: {
+                    balance: Number(sendPreflight.result.maxBalance.balance).toFixed(8),
+                  },
+                },
+              }));
+            } else {
+              this.setState(Object.assign({}, this.state, {
+                ethPreflightSendInProgress: false,
+                ethPreflightRes: sendPreflight,
               }));
             }
           });
@@ -790,6 +992,35 @@ class SendCoin extends React.Component {
           )
         );
       }
+    } else if (_mode === 'eth') {
+      // no op
+      const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
+      
+      if (_pub) {
+        if (erc20ContractId[_coin]) {
+          // coin, dest, value, speed, push
+          Store.dispatch(
+            apiEthereumSend(
+              _coin,
+              this.state.sendTo,
+              this.state.amount,
+              _feeLookup.eth[this.state.ethFeeType],
+              true,
+            )
+          );
+        } else {
+          // coin, dest, value, speed, push
+          Store.dispatch(
+            apiEthereumSend(
+              _coin,
+              this.state.sendTo,
+              this.state.amount,
+              _feeLookup.eth[this.state.ethFeeType],
+              true,
+            )
+          );
+        }
+      }
     }
   }
 
@@ -804,7 +1035,7 @@ class SendCoin extends React.Component {
       const _customFee = toSats(this.state.fee);
       const _amount = this.state.amount;
       const _amountSats = Math.floor(toSats(this.state.amount));
-      const _balanceSats = this.props.ActiveCoin.balance.balanceSats - Math.abs(this.props.ActiveCoin.balance.unconfirmedSats);
+      const _balanceSats = this.props.ActiveCoin.balance.balanceSats + this.props.ActiveCoin.balance.unconfirmedSats;
       let _fees = mainWindow.spvFees;
       _fees.BTC = 0;
 
@@ -857,10 +1088,51 @@ class SendCoin extends React.Component {
       }
     }
 
+    if (_mode === 'eth') {
+      const _amount = this.state.amount;
+      const _balance = this.props.ActiveCoin.balance.balance;
+
+      if (erc20ContractId[_coin]) {
+        if (Number(_amount) > _balance) {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(_balance).toFixed(8)} ${_coin}`,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
+          valid = false;
+        }
+      } else {
+        const _fee = formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]);
+
+        if (Number(_amount) + Number(_fee) > _balance) {
+          Store.dispatch(
+            triggerToaster(
+              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance) - Number(_fee)).toFixed(8))} ${_coin}`,
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'error'
+            )
+          );
+          valid = false;
+        }
+      }
+    }
+
     if (!this.state.sendTo ||
         (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc')) {
-      const _validateAddress = mainWindow.addressVersionCheck(_coin, this.state.sendTo);
+      let _validateAddress;
       let _msg;
+
+      if (_mode === 'eth') {
+        try {
+          _validateAddress = getAddress(this.state.sendTo);
+        } catch (e) {
+          _validateAddress = 'Invalid pub address';
+        }
+      } else {
+        _validateAddress = mainWindow.addressVersionCheck(_coin, this.state.sendTo);
+      }
 
       if (_validateAddress === 'Invalid pub address') {
         _msg = _validateAddress;
@@ -995,9 +1267,15 @@ class SendCoin extends React.Component {
 
   onSliderChangeTime(value) {
     this.setState({
-      btcFeesSize: _feeLookup[value] === 'advanced' ? this.state.btcFees.electrum[this.state.btcFeesAdvancedStep] : this.state.btcFees.recommended[_feeLookup[value]],
-      btcFeesType: _feeLookup[value] === 'advanced' ? 'advanced' : null,
+      btcFeesSize: _feeLookup.btc[value] === 'advanced' ? this.state.btcFees.electrum[this.state.btcFeesAdvancedStep] : this.state.btcFees.recommended[_feeLookup[value]],
+      btcFeesType: _feeLookup.btc[value] === 'advanced' ? 'advanced' : null,
       btcFeesTimeBasedStep: value,
+    });
+  }
+
+  onSliderChangeTimeEth(value) {
+    this.setState({
+      ethFeeType: value,
     });
   }
 
@@ -1091,6 +1369,56 @@ class SendCoin extends React.Component {
     }
   }
 
+  renderETHFees() {
+    const _coin = this.props.ActiveCoin.coin;
+    const _mode = this.props.ActiveCoin.mode;
+
+    if (_mode === 'eth' &&
+        !this.state.ethFees) {
+      return (
+        <div className="col-lg-6 form-group form-material">{ translate('SEND.FETCHING_ETH_FEES') }...</div>
+      );
+    } else if (
+      _mode === 'eth' &&
+      this.state.ethFees
+    ) {
+      const _confTime = [
+        translate('SEND.ETH_CONF_TIME_LESS_THAN_2_MIN'),
+        translate('SEND.ETH_CONF_TIME_LESS_THAN_5_MIN'),
+        translate('SEND.ETH_CONF_TIME_LESS_THAN_30_MIN'),
+      ];
+
+      return (
+        <div className="col-lg-12 form-group form-material">
+          <div>
+            <div>
+              { translate('SEND.CONF_TIME') } <strong>{ _confTime[this.state.ethFeeType] }</strong>
+            </div>
+            <Slider
+              className="send-slider-time-based margin-top-15 margin-bottom-70"
+              onChange={ this.onSliderChangeTimeEth }
+              defaultValue={ this.state.ethFeeType }
+              min={ 0 }
+              max={ 2 }
+              dots={ true }
+              marks={{
+                0: 'fast',
+                1: 'average',
+                2: 'slow',
+              }} />
+            { this.state.ethFees &&
+              this.state.ethFees.average &&
+              !erc20ContractId[_coin] &&
+              <div className="margin-top-10">
+                { translate('SEND.FEE') }: { formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]) }
+              </div>
+            }
+          </div>
+        </div>
+      );
+    }
+  }
+
   renderAddressBookDropdown(countAddressesSpv) {
     const _mode = this.props.ActiveCoin.mode;
     const _coin = this.props.ActiveCoin.coin;
@@ -1106,14 +1434,17 @@ class SendCoin extends React.Component {
       );
     }
 
-    for (let i = 0; i < _addressBook.length; i++) {
-      if (_mode === 'native' ||
-          (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
-        _items.push(
-          <li
-            key={ `send-address-book-item-${i}` }
-            onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
-        );
+    if (_addressBook &&
+        _addressBook.length) {
+      for (let i = 0; i < _addressBook.length; i++) {
+        if (_mode === 'native' ||
+            (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
+          _items.push(
+            <li
+              key={ `send-address-book-item-${i}` }
+              onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
+          );
+        }
       }
     }
 
@@ -1122,6 +1453,36 @@ class SendCoin extends React.Component {
     } else {
       return _items;
     }
+  }
+
+  renderZtxDropdown() {
+    const _options = [{
+      title: 'default',
+      val: DEFAULT_ZTX_FEE,
+    }, {
+      title: `x2 (${DEFAULT_ZTX_FEE * 2})`,
+      val: DEFAULT_ZTX_FEE * 2,
+    }, {
+      title: `x5 (${DEFAULT_ZTX_FEE * 5})`,
+      val: DEFAULT_ZTX_FEE * 5,
+    }, {
+      title: `x10 (${DEFAULT_ZTX_FEE * 10})`,
+      val: DEFAULT_ZTX_FEE * 10,
+    }, {
+      title: `x100 (${DEFAULT_ZTX_FEE * 100})`,
+      val: DEFAULT_ZTX_FEE * 100,
+    }];
+    let _items = [];
+
+    for (let i = 0; i < _options.length; i++) {
+      _items.push(
+        <li
+          key={ `send-ztx-fee-${i}` }
+          onClick={ () => this.setZtxFee(_options[i].val) }>{ _options[i].title }</li>
+      );
+    }
+
+    return _items;
   }
 
   renderZmergeToAddress() {
