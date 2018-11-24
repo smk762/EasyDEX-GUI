@@ -97,6 +97,7 @@ class InvoiceModal extends React.Component {
   renderAddressList(type) {
     const _addresses = this.props.ActiveCoin.addresses;
     const _coin = this.props.ActiveCoin.coin;
+    const _mode = this.props.ActiveCoin.mode;
 
     if (_addresses &&
         _addresses[type] &&
@@ -121,7 +122,8 @@ class InvoiceModal extends React.Component {
       return items;
     } else {
       if (this.props.Dashboard.electrumCoins &&
-          type === 'public') {
+          type === 'public' &&
+          _mode === 'spv') {
         let items = [];
 
         items.push(
@@ -129,6 +131,24 @@ class InvoiceModal extends React.Component {
             this,
             {
               address: this.props.Dashboard.electrumCoins[_coin].pub,
+              amount: this.props.ActiveCoin.balance.balance,
+            },
+            'public'
+          )
+        );
+
+        return items;
+      } else if (
+        this.props.Dashboard.ethereumCoins &&
+        type === 'public' &&
+        _mode === 'eth') {
+        let items = [];
+
+        items.push(
+          AddressItemRender.call(
+            this,
+            {
+              address: this.props.Dashboard.ethereumCoins[_coin].pub,
               amount: this.props.ActiveCoin.balance.balance,
             },
             'public'

@@ -8,6 +8,7 @@ import {
   toggleDashboardTxInfoModal,
   changeActiveAddress,
   getDashboardUpdate,
+  apiElectrumBalance,
   apiElectrumKVTransactionsPromise,
   apiElectrumTransactions,
   toggleClaimInterestModal,
@@ -17,6 +18,7 @@ import {
   apiElectrumTransactionsCSV,
   apiNativeTransactionsCSV,
   triggerToaster,
+  apiEthereumTransactions,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -32,9 +34,10 @@ import {
   WalletsDataRender,
 } from  './walletsData.render';
 import { secondsToString } from 'agama-wallet-lib/src/time';
-import getRandomElectrumServer from '../../../util/serverRandom';
+import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
 import mainWindow from '../../../util/mainWindow';
+import { setTimeout } from 'timers';
 
 /*import io from 'socket.io-client';
 
@@ -322,7 +325,8 @@ class WalletsData extends React.Component {
 
     columns.push(_col);
 
-    if (this.props.ActiveCoin.mode === 'spv') {
+    if (this.props.ActiveCoin.mode === 'spv' ||
+        this.props.ActiveCoin.mode === 'eth') {
       _col = {
         id: 'tx-detail',
         Header: translate('INDEX.TX_DETAIL'),
@@ -483,6 +487,15 @@ class WalletsData extends React.Component {
             _pub
           )
         );
+      } else if (_mode === 'eth') {
+        const _pub = this.props.Dashboard.ethereumCoins[_coin].pub;
+                
+        Store.dispatch(
+          apiEthereumTransactions(
+            _coin,
+            _pub
+          )
+        );
       }
     }
   }
@@ -584,7 +597,8 @@ class WalletsData extends React.Component {
           apiElectrumSetServer(
             _coin,
             _randomServer.ip,
-            _randomServer.port
+            _randomServer.port,
+            _randomServer.proto
           )
           .then((serverSetRes) => {
             Store.dispatch(
@@ -595,6 +609,17 @@ class WalletsData extends React.Component {
               )
             );
             Store.dispatch(electrumServerChanged(true));
+
+            setTimeout(() => {
+              this.refreshTxHistory();
+              
+              Store.dispatch(
+                apiElectrumBalance(
+                  _coin,
+                  _electrumCoin.pub
+                )
+              );
+            }, 1000);
           });
         } else {
           Store.dispatch(

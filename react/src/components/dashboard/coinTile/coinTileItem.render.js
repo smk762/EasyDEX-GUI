@@ -3,6 +3,7 @@ import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
 import { acConfig } from '../../addcoin/payload';
 import mainWindow from '../../../util/mainWindow';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const testChains = [
   'BEER',
@@ -19,8 +20,8 @@ const CoinTileItemRender = function() {
   
   return (
     <div className="list-group-item col-xlg-6 col-lg-12 wallet-widgets-info pointer">
-      <span className={ `badge up badge-${item.modecolor}` }>
-        { item.modecode }
+      <span className={ `badge up badge-${!erc20ContractId[item.coin] ? item.modecolor : 'success'}` }>
+        { erc20ContractId[item.coin] ? 'ERC20' : item.modecode }
       </span>
       <div className={ 'widget widget-shadow' + (this.props.ActiveCoin.coin === item.coin ? ' active' : '') }>
         <div

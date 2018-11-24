@@ -17,7 +17,6 @@ class DebugLogPanel extends React.Component {
       appRuntimeLog: [],
       debugLinesCount: 10,
       debugTarget: 'none',
-      nativeOnly: Config.iguanaLessMode,
       toggleAppRuntimeLog: false,
       pristine: true,
     };

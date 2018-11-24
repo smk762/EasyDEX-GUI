@@ -21,6 +21,8 @@ import {
   DASHBOARD_ACTIVE_COIN_NET_PEERS,
   DASHBOARD_ACTIVE_COIN_NET_TOTALS,
   KV_HISTORY,
+  DASHBOARD_ETHEREUM_BALANCE,
+  DASHBOARD_ETHEREUM_TRANSACTIONS,
 } from '../actions/storeType';
 
 // TODO: refactor current coin props copy on change
@@ -309,6 +311,16 @@ export const ActiveCoin = (state = {
           peers: state.net.peers,
           totals: action.totals,
         },
+      };
+    case DASHBOARD_ETHEREUM_BALANCE:
+      return {
+        ...state,
+        balance: action.balance,
+      };
+    case DASHBOARD_ETHEREUM_TRANSACTIONS:
+      return {
+        ...state,
+        txhistory: action.txhistory,
       };
     default:
       return state;

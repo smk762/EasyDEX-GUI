@@ -19,6 +19,9 @@ import {
   apiElectrumTransactions,
   apiElectrumCoins,
   electrumServerChanged,
+  apiEthereumBalance,
+  apiEthereumTransactions,
+  apiEthereumCoins,
   apiStopCoind,
   getDexCoins,
   activeHandle,
@@ -35,9 +38,11 @@ import translate from '../../../translate/translate';
 import CoinTileItemRender from './coinTileItem.render';
 
 const SPV_DASHBOARD_UPDATE_TIMEOUT = 60000;
+const ETH_DASHBOARD_UPDATE_TIMEOUT = 60000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE_RCP2CLI = 40000;
 const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.native.failedRPCAttemptsThreshold || 10;
+const COIND_STOP_MAX_RETRIES = 15;
 
 class CoinTileItem extends React.Component {
   constructor() {
@@ -47,6 +52,7 @@ class CoinTileItem extends React.Component {
       activeCoinMode: null,
       propsUpdatedCounter: 0,
       toggledCoinMenu: null,
+      coindStopRetries: 0,
     };
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
     this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
@@ -145,7 +151,8 @@ class CoinTileItem extends React.Component {
         ((_main.coins.native &&
           _main.coins.native.length &&
         !Config.native.stopNativeDaemonsOnQuit) ||
-        (_main.coins.spv && _main.coins.spv.length))) {
+        (_main.coins.spv && _main.coins.spv.length) ||
+        (_main.coins.eth && _main.coins.eth.length))) {
       return true;
     }
   }
@@ -154,6 +161,7 @@ class CoinTileItem extends React.Component {
     const modes = [
       'native',
       'spv',
+      'eth',
     ];
     const allCoins = this.props.Main.coins;
     let _coinSelected = false;
@@ -226,13 +234,34 @@ class CoinTileItem extends React.Component {
     apiStopCoind(coin)
     .then((res) => {
       if (res.msg === 'error') {
-        Store.dispatch(
-          triggerToaster(
-            translate('TOASTR.COIN_UNABLE_TO_STOP', coin),
-            translate('TOASTR.ERROR'),
-            'error'
-          )
-        );
+        if (!this.state.coindStopRetries) {
+          Store.dispatch(
+            triggerToaster(
+              translate('TOASTR.COIND_STOP_IN_PROGRESS', coin),
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'warning'
+            )
+          );
+        }
+        if (this.state.coindStopRetries < COIND_STOP_MAX_RETRIES &&
+            this.props.Main.coins.native.indexOf(coin) > -1) {
+          setTimeout(() => {
+            this.setState({
+              coindStopRetries: Number(this.state.coindStopRetries) + 1,
+            });
+            setTimeout(() => {
+              this.stopCoind(coin);
+            }, 10);
+          }, 1500);
+        } else {
+          Store.dispatch(
+            triggerToaster(
+              translate('TOASTR.COIN_UNABLE_TO_STOP', coin),
+              translate('TOASTR.ERROR'),
+              'error'
+            )
+          );
+        }
       } else {
         Store.dispatch(
           triggerToaster(
@@ -244,6 +273,9 @@ class CoinTileItem extends React.Component {
 
         this.autoSetActiveCoin(coin);
         setTimeout(() => {
+          this.setState({
+            coindStopRetries: 0,
+          });
           Store.dispatch(getDexCoins());
           Store.dispatch(activeHandle());
         }, 500);
@@ -349,6 +381,17 @@ class CoinTileItem extends React.Component {
         if (this.props.ActiveCoin.activeSection === 'default') {
           Store.dispatch(apiElectrumTransactions(coin, _dashboard.electrumCoins[coin].pub));
         }
+      } else if (
+        mode === 'eth' &&
+        _dashboard.ethereumCoins &&
+        _dashboard.ethereumCoins[coin] &&
+        _dashboard.ethereumCoins[coin].pub
+      ) {
+        Store.dispatch(apiEthereumBalance(coin, _dashboard.ethereumCoins[coin].pub));
+
+        if (this.props.ActiveCoin.activeSection === 'default') {
+          Store.dispatch(apiEthereumTransactions(coin, _dashboard.ethereumCoins[coin].pub));
+        }
       }
     }
   }
@@ -361,7 +404,8 @@ class CoinTileItem extends React.Component {
       }, 100);
 
       if (mode === 'native' ||
-          mode === 'spv') { // faster coin data load if fully synced
+          mode === 'spv' ||
+          mode === 'eth') { // faster coin data load if fully synced
         setTimeout(() => {
           this.dispatchCoinActions(coin, mode);
         }, 1000);
@@ -386,6 +430,12 @@ class CoinTileItem extends React.Component {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
         }, SPV_DASHBOARD_UPDATE_TIMEOUT);
+
+        Store.dispatch(startInterval('sync', _iguanaActiveHandle));
+      } else if (mode === 'eth') {
+        const _iguanaActiveHandle = setInterval(() => {
+          this.dispatchCoinActions(coin, mode);
+        }, ETH_DASHBOARD_UPDATE_TIMEOUT);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
       }

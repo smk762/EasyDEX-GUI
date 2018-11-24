@@ -5,6 +5,7 @@ import {
   getDexCoins,
   activeHandle,
   apiElectrumCoins,
+  apiEthereumCoins,
   loadAddressBook,
 } from '../../actions/actionCreators';
 import mainWindow from '../../util/mainWindow';
@@ -43,6 +44,7 @@ class Main extends React.Component {
     Store.dispatch(getDexCoins());
     Store.dispatch(activeHandle());
     Store.dispatch(apiElectrumCoins());
+    Store.dispatch(apiEthereumCoins());
   }
 
   render() {
