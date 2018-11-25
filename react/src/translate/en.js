@@ -1269,6 +1269,7 @@ const LANG_EN = {
     XMY: 'Myriad',
     GRS: 'Groestlcoin',
     HODLC: 'Hodl coin',
+    SUQA: 'SUQA',
     BTX: 'Bitcore',
     QTUM: 'Qtum',
     BTCZ: 'BitcoinZ',
