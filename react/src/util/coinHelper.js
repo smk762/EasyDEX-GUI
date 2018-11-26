@@ -419,5 +419,6 @@ export const cryptoCoins = [
   'SLM',
   'AXE',
   'PPC',
-  'SDC'
+  'SDC',
+  'SUQA',
 ];
