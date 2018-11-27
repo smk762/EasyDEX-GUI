@@ -115,11 +115,11 @@ class Tools extends React.Component {
                 <div className="margin-top-10 margin-left-20">{ translate('TOOLS.SPV_NATIVE') }</div>
               </div>
               <hr />
-              { this.state.activeSection === 'offlinesig-create' &&
-                <ToolsOfflineSigCreate />
+              { /*this.state.activeSection === 'offlinesig-create' &&
+                <ToolsOfflineSigCreate />*/
               }
-              { this.state.activeSection === 'offlinesig-scan' &&
-                <ToolsOfflineSigScan />
+              { /*this.state.activeSection === 'offlinesig-scan' &&
+                <ToolsOfflineSigScan />*/
               }
               { this.state.activeSection === 'string2qr' &&
                 <ToolsStringToQr />
