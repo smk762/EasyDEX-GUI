@@ -819,7 +819,7 @@ export const SendRender = function() {
                               <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>
                             }
                             { _mode === 'native' &&
-                              <span>this.state.lastSendToResponse</span>
+                              <span>{ this.state.lastSendToResponse }</span>
                             }
                             { _mode === 'eth' &&
                               <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>                              
