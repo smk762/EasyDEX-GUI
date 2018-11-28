@@ -685,7 +685,7 @@ const LANG_EN = {
     CURRENT_BLOCK_SM: 'current block',
   },
   TOASTR: {
-    COIND_STOP_IN_PROGRESS: 'Please wait while @template@ is shut down. It may take a few seconds.',
+    COIND_STOP_IN_PROGRESS: 'Please wait while @template@ is shutting down. It may take a few seconds.',
     UNABLE_TO_COPY_PUBKEY: 'Unable to copy pubkey',
     INVALID_PUBKEY: 'Invalid pubkey',
     YOUR_PUBKEY: 'Your pubkey ',
@@ -1007,7 +1007,7 @@ const LANG_EN = {
   },
   ZCPARAMS_FETCH: {
     DOWNLOADING_ZCASH_KEYS: 'Downloading Zcash keys',
-    BOTH_KEYS_VERIFIED: 'Both Zcash param keys are downloaded and verified!',
+    BOTH_KEYS_VERIFIED: 'All Zcash param keys are downloaded and verified!',
     CLOSE_THE_MODAL: 'Close the modal and try to add a coin again.',
     ZCPARAMS_VERIFICATION_ERROR_P1: 'Zcash param',
     ZCPARAMS_VERIFICATION_ERROR_P2: 'verification error!',
@@ -1192,7 +1192,7 @@ const LANG_EN = {
     KOIN: 'Koinon Coin',
     DION: 'DionPay',
     PTX: 'PatentTX',
-    ZEX: 'Zaddex'
+    ZEX: 'Zaddex',
   },
   CRYPTO: {
     STRAT: 'Stratis',
@@ -1321,6 +1321,7 @@ const LANG_EN = {
     PPC: 'Peercoin',
     MZC: 'Mazacoin',
     SDC: 'ShadowCash',
+    BZC: 'Bitzec',
     // eth
     ETH: 'Ethereum',
     ETH_ROPSTEN: 'Ethereum Ropsten Testnet',
