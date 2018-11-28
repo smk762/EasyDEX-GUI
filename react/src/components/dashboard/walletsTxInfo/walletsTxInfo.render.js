@@ -99,11 +99,11 @@ const WalletsTxInfoRender = function(txInfo) {
                                   { isSpv ? (Number(this.state.txDetails.amount) === 0 ? translate('DASHBOARD.UNKNOWN') : Number(this.state.txDetails.amount)) : txInfo.amount }
                                 </td>
                               </tr>
-                              { isEth &&
+                              { (isEth || (isSpv && this.state.txDetails.amount !== this.state.txDetails.fee)) &&
                                 <tr>
                                   <td>{ this.capitalizeFirstLetter(translate('SEND.FEE')) }</td>
                                   <td>
-                                    { this.state.txDetails.fee }
+                                    { Number(this.state.txDetails.fee) }
                                   </td>
                                 </tr>
                               }
