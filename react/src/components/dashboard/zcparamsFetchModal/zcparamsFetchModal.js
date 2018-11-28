@@ -32,7 +32,7 @@ class ZcparamsFetchModal extends React.Component {
       open: false,
       updateLog: [],
       zcparamsSources: {},
-      dlOption: 'veruscoin.io',
+      dlOption: 'agama.komodoplatform.com',
       done: false,
       className: 'hide',
     };
