@@ -421,4 +421,5 @@ export const cryptoCoins = [
   'PPC',
   'SDC',
   'SUQA',
+  'BZC',
 ];
