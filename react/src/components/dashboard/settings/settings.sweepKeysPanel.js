@@ -299,7 +299,7 @@ class SweepKeysPanel extends React.Component {
 
   renderCoinsList() {
     const _activeCoins = this.props.Dashboard.electrumCoins;
-    const allCoins = addCoinOptionsCrypto('skip')
+    const allCoins = addCoinOptionsCrypto('skip', true)
                     .concat(addCoinOptionsAC('skip'));
     let _items = [];
 

@@ -159,7 +159,7 @@ class ToolsGetUtxos extends React.Component {
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
             options={
-              addCoinOptionsCrypto('skip')
+              addCoinOptionsCrypto('skip', true)
               .concat(addCoinOptionsAC('skip'))
             } />
         </div>
