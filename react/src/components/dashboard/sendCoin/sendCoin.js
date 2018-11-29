@@ -457,9 +457,28 @@ class SendCoin extends React.Component {
         }
       }
     } catch (e) {
-      this.setState({
-        sendTo: receiver,
-      });
+      if (receiver.indexOf(':') > -1 &&
+          receiver.indexOf('?amount=') > -1) {
+        const _address = receiver.split(':')[1].split('?amount=')[0];
+        const _amount = receiver.split('?amount=')[1];
+
+        this.setState({
+          sendTo: _address,
+          amount: _amount,
+        });
+      } else if (receiver.indexOf(':') > -1) {
+        const _address = receiver.split(':')[1];
+        
+        this.setState({
+          sendTo: _address,
+        });
+      } else {
+        const _address = receiver;
+
+        this.setState({
+          sendTo: _address,
+        });
+      }
     }
 
     document.getElementById('kmdWalletSendTo').focus();
