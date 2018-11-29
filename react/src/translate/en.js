@@ -569,7 +569,6 @@ const LANG_EN = {
                  'Please use the current version of Jumblr only with small amounts if you are participating in testing this feature.',
     NEED_NATIVE: 'Need Native Mode Komodo',
     TO_USE_JUMBLR: 'To use Jumblr feature, you need to activate Komodo in Native Mode.',
-    IF_YOU_ALREADY_RUNNING: 'If you are already running Komodo in either Basilisk Mode or Full Mode, close the wallet and restart again to start Komodo In Native Mode.',
     THIS_SCREEN_DOESNT_REFRESH: 'This screen does not auto refresh. ' +
                                   'You will need to hit the Refresh button on the top right corner of the screen to get latest Jumblr data.',
     FEW_SECURITY_NOTES: 'Few Security Notes for your Privacy and Anonymity of funds',
@@ -581,7 +580,6 @@ const LANG_EN = {
     ACCESS_JUMBLR_FUNDS: 'How to Access your Jumblr Funds',
     ADDRESS_ACCESSIBLE_EASILY: 'Your Jumbler Addresses are accessible easily. For example you logged into your wallet with seed',
     TO_ACCESS: 'To access your Jumbler address funds Logout.',
-    START_KMD: 'Start Komodo in either Full Mode or Basilisk Mode.',
     WORD_JUMBLR: 'Then add word \'jumblr \' before your seed.',
     SMALL_LETTERS: '"jumblr" is all in small letters.',
     WHITE_SPACE: 'There is a white space after "jumblr ".',
