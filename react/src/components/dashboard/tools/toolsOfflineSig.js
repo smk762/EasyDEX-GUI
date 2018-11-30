@@ -21,6 +21,7 @@ import { transaction } from 'agama-wallet-lib/src/transaction-builder';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 import { seedToWif } from 'agama-wallet-lib/src/keys';
+import { fromSats } from 'agama-wallet-lib/src/utils';
 
 class ToolsOfflineSig extends React.Component {
   constructor() {
@@ -173,7 +174,7 @@ class ToolsOfflineSig extends React.Component {
                       <strong>Amount</strong>
                     </td>
                     <td>
-                      { this.state.parsedDataToSign.value }
+                      { fromSats(this.state.parsedDataToSign.value) }
                     </td>
                   </tr>
                   <tr>
@@ -181,7 +182,7 @@ class ToolsOfflineSig extends React.Component {
                       <strong>Fee</strong>
                     </td>
                     <td>
-                      { this.state.parsedDataToSign.fee }
+                      { fromSats(this.state.parsedDataToSign.fee) }
                     </td>
                   </tr>
                   <tr>
@@ -189,7 +190,7 @@ class ToolsOfflineSig extends React.Component {
                       <strong>Change</strong>
                     </td>
                     <td>
-                      { this.state.parsedDataToSign.change } to { this.state.parsedDataToSign.changeAddress }
+                      { fromSats(this.state.parsedDataToSign.change) } to { this.state.parsedDataToSign.changeAddress }
                     </td>
                   </tr>
                 </tbody>
