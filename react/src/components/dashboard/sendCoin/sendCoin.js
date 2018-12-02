@@ -46,6 +46,7 @@ import {
   isPositiveNumber,
   fromSats,
   toSats,
+  parseBitcoinURL,
 } from 'agama-wallet-lib/src/utils';
 import { formatEther } from 'ethers/utils/units';
 import { getAddress } from 'ethers/utils/address';
@@ -428,43 +429,36 @@ class SendCoin extends React.Component {
   setRecieverFromScan(receiver) {
     try {
       const recObj = JSON.parse(receiver);
+      let _newState;
 
       if (recObj &&
           typeof recObj === 'object') {
         if (recObj.amount) {
-          this.setState({
-            amount: recObj.amount,
-          });
+          _newState.amount = recObj.amount;
         }
         if (recObj.address) {
-          this.setState({
-            sendTo: recObj.address,
-          });
+          _newState.sendTo = recObj.address;
         }
+
+        this.setState(_newState);
       }
     } catch (e) {
-      if (receiver.indexOf(':') > -1 &&
-          receiver.indexOf('?amount=') > -1) {
-        const _address = receiver.split(':')[1].split('?amount=')[0];
-        const _amount = receiver.split('?amount=')[1];
+      let _newState;
 
-        this.setState({
-          sendTo: _address,
-          amount: _amount,
-        });
-      } else if (receiver.indexOf(':') > -1) {
-        const _address = receiver.split(':')[1];
+      if (receiver.indexOf(':') > -1) {
+        const _parsedBitcoinURL = parseBitcoinURL(receiver);
         
-        this.setState({
-          sendTo: _address,
-        });
+        if (_parsedBitcoinURL.amount) {
+          _newState.amount = _parsedBitcoinURL.amount;
+        }
+        if (_parsedBitcoinURL.address) {
+          _newState.sendTo = _parsedBitcoinURL.address;
+        }
       } else {
-        const _address = receiver;
-
-        this.setState({
-          sendTo: _address,
-        });
+        _newState.sendTo = receiver;
       }
+
+      this.setState(_newState);
     }
 
     document.getElementById('kmdWalletSendTo').focus();
