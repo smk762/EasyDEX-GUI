@@ -431,29 +431,15 @@ class SendCoin extends React.Component {
 
       if (recObj &&
           typeof recObj === 'object') {
-        if (recObj.coin === this.props.ActiveCoin.coin) {
-          if (recObj.amount) {
-            this.setState({
-              amount: recObj.amount,
-            });
-          }
-          if (recObj.address) {
-            this.setState({
-              sendTo: recObj.address,
-            });
-          }
-        } else {
-          Store.dispatch(
-            triggerToaster(
-              translate('SEND.QR_COIN_MISMATCH_MESSAGE_IMPORT_COIN') +
-              recObj.coin +
-              translate('SEND.QR_COIN_MISMATCH_MESSAGE_ACTIVE_COIN') +
-              this.props.ActiveCoin.coin +
-              translate('SEND.QR_COIN_MISMATCH_MESSAGE_END'),
-              translate('SEND.QR_COIN_MISMATCH_TITLE'),
-              'warning'
-            )
-          );
+        if (recObj.amount) {
+          this.setState({
+            amount: recObj.amount,
+          });
+        }
+        if (recObj.address) {
+          this.setState({
+            sendTo: recObj.address,
+          });
         }
       }
     } catch (e) {
