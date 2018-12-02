@@ -13,6 +13,8 @@ import ToolsStringToQr from './toolsStringToQr';
 import ToolsMergeUTXO from './toolsMergeUtxo';
 import ToolsSplitUTXO from './toolsSplitUtxo';
 import ToolsGetBalanceMultiCoins from './toolsGetBalanceMultiCoins';
+import ToolsTxPush from './toolsTxPush';
+import ToolsOfflineSig from './toolsOfflineSig';
 
 class Tools extends React.Component {
   constructor() {
@@ -49,9 +51,21 @@ class Tools extends React.Component {
                 <button
                   type="button"
                   className="btn btn-default"
+                  onClick={ () => this.setActiveSection('offlinesig-sign') }>
+                  Sign transaction
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('offlinesig-push') }>
+                  Push transaction *
+                </button>
+                {/*<button
+                  type="button"
+                  className="btn btn-default"
                   onClick={ () => this.setActiveSection('offlinesig-scan') }>
                   { translate('TOOLS.OFFLINE_SIG_SCAN') }
-                </button>
+                </button>*/}
                 <button
                   type="button"
                   className="btn btn-default"
@@ -150,6 +164,12 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'balance-multi-coins' &&
                 <ToolsGetBalanceMultiCoins />
+              }
+              { this.state.activeSection === 'offlinesig-push' &&
+                <ToolsTxPush />
+              }
+              { this.state.activeSection === 'offlinesig-sign' &&
+                <ToolsOfflineSig />
               }
             </div>
           </div>

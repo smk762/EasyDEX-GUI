@@ -8,6 +8,7 @@ import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 let _prepCoinsList;
 let coins = cryptoCoins;
 let _activeCoins;
+let _disableETH;
 
 // disable non kmd coins
 if (!config.experimentalFeatures) {
@@ -72,7 +73,8 @@ const prepCoinsList = (filterActiveCoins) => {
       }
     }
 
-    if (config.experimentalFeatures) {
+    if (config.experimentalFeatures &&
+        !_disableETH) {
       _items.push({
         label: `${translate('CRYPTO.ETH')} (ETH)`,
         icon: 'ETH',
@@ -98,8 +100,9 @@ const prepCoinsList = (filterActiveCoins) => {
   return _items;
 };
 
-const addCoinOptionsCrypto = (activeCoins) => {
+const addCoinOptionsCrypto = (activeCoins, disableETH) => {
   _activeCoins = activeCoins;
+  _disableETH = disableETH;
 
   if (_prepCoinsList) {
     return prepCoinsList();

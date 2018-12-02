@@ -22,6 +22,7 @@ class ExportKeysPanel extends React.Component {
       trimPassphraseTimer: null,
       wifkeysPassphrase: '',
       keys: null,
+      seed: null,
       seedExtraSpaces: false,
       decryptedPassphrase: null,
     };
@@ -77,7 +78,8 @@ class ExportKeysPanel extends React.Component {
         );
       } else {
         this.setState(Object.assign({}, this.state, {
-          keys: keys.result,
+          keys: keys.result.keys,
+          seed: keys.result.seed,
           wifkeysPassphrase: '',
         }));
 
@@ -267,14 +269,14 @@ class ExportKeysPanel extends React.Component {
             </div>
           </div>
         </div>
-        { this.state.decryptedPassphrase &&
+        { this.state.seed &&
           <div className="row">
             <div className="col-sm-12 padding-top-15 margin-left-10">
-              <strong>{ translate('TOOLS.SEED') }:</strong> <span className="selectable">{ this.state.decryptedPassphrase }</span>
+              <strong>{ translate('TOOLS.SEED') } / WIF:</strong> <span className="selectable">{ this.state.seed }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                onClick={ () => this._copyString(this.state.decryptedPassphrase, translate('SETTINGS.SEED_IS_COPIED')) }>
+                onClick={ () => this._copyString(this.state.seed, translate('SETTINGS.SEED_IS_COPIED')) }>
                 <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
               </button>
             </div>

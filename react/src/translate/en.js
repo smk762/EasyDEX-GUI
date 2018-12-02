@@ -450,7 +450,7 @@ const LANG_EN = {
                           'You can use these WIF keys to import to another coin wallets.',
     PLEASE_KEEP_KEYS_SAFE: 'Please keep these keys extra safe and secure.',
     PASSPHRASE: 'Seed',
-    GET_WIF_KEYS: 'Get WIF Keys',
+    GET_WIF_KEYS: 'Get Private Keys',
     IMPORT_KEYS: 'Import Keys',
     IMPORT_KEYS_DESC_P1: 'This section allows you to import KMD/Assetchain private key of all iguana supported coins.',
     IMPORT_KEYS_DESC_P2: 'It is not mandatory to have that coin active in the wallet for which you are executing import private key process.',
@@ -569,7 +569,6 @@ const LANG_EN = {
                  'Please use the current version of Jumblr only with small amounts if you are participating in testing this feature.',
     NEED_NATIVE: 'Need Native Mode Komodo',
     TO_USE_JUMBLR: 'To use Jumblr feature, you need to activate Komodo in Native Mode.',
-    IF_YOU_ALREADY_RUNNING: 'If you are already running Komodo in either Basilisk Mode or Full Mode, close the wallet and restart again to start Komodo In Native Mode.',
     THIS_SCREEN_DOESNT_REFRESH: 'This screen does not auto refresh. ' +
                                   'You will need to hit the Refresh button on the top right corner of the screen to get latest Jumblr data.',
     FEW_SECURITY_NOTES: 'Few Security Notes for your Privacy and Anonymity of funds',
@@ -581,7 +580,6 @@ const LANG_EN = {
     ACCESS_JUMBLR_FUNDS: 'How to Access your Jumblr Funds',
     ADDRESS_ACCESSIBLE_EASILY: 'Your Jumbler Addresses are accessible easily. For example you logged into your wallet with seed',
     TO_ACCESS: 'To access your Jumbler address funds Logout.',
-    START_KMD: 'Start Komodo in either Full Mode or Basilisk Mode.',
     WORD_JUMBLR: 'Then add word \'jumblr \' before your seed.',
     SMALL_LETTERS: '"jumblr" is all in small letters.',
     WHITE_SPACE: 'There is a white space after "jumblr ".',
@@ -685,7 +683,7 @@ const LANG_EN = {
     CURRENT_BLOCK_SM: 'current block',
   },
   TOASTR: {
-    COIND_STOP_IN_PROGRESS: 'Please wait while @template@ is shut down. It may take a few seconds.',
+    COIND_STOP_IN_PROGRESS: 'Please wait while @template@ is shutting down. It may take a few seconds.',
     UNABLE_TO_COPY_PUBKEY: 'Unable to copy pubkey',
     INVALID_PUBKEY: 'Invalid pubkey',
     YOUR_PUBKEY: 'Your pubkey ',
@@ -800,6 +798,12 @@ const LANG_EN = {
     ZCASH_PARAMS_MISSING_VERIFYING_KEY: '- missing verifying key',
     ZCASH_PARAMS_MISSING_PROVING_KEY_SIZE: '- proving key size is incorrect',
     ZCASH_PARAMS_MISSING_VERIFYING_KEY_SIZE: '- verifying key size is incorrect',
+    ZCASH_PARAMS_MISSING_SPEND_PARAMS: '- missing spend params',
+    ZCASH_PARAMS_MISSING_OUTPUT_PARAMS: '- missing output params',
+    ZCASH_PARAMS_MISSING_GROTH16_PARAMS: '- missing groth16 params',
+    ZCASH_PARAMS_MISSING_SPEND_PARAMS_SIZE: '- spend params size is incorrect',
+    ZCASH_PARAMS_MISSING_OUTPUT_PARAMS_SIZE: '- output params size is incorrect',
+    ZCASH_PARAMS_MISSING_GROTH16_PARAMS_SIZE: '- groth16 params size is incorrect',
   },
   LOGIN: {
     QMENU_REMOVE_SPV: 'Remove all SPV coins',
@@ -926,7 +930,7 @@ const LANG_EN = {
     THIS_SECTION_ALLOWS_YOU_TO_MANAGE_ADDRESS_BOOK: 'This section allows you to manage an address book',
     CREATE_NEW_ENTRY: 'Create new entry',
     ENCRYPT_SEED: 'Encrypt seed',
-    SEED_IS_COPIED: 'Seed is copied to clipboard',
+    SEED_IS_COPIED: 'Seed / WIF is copied to clipboard',
     GET_SEED_AND_WIF: 'Get seed and WIF keys',
     PW_PIN: 'Password / pin',
     OR_WIF_FORMAT: 'or WIF key format',
@@ -1007,7 +1011,7 @@ const LANG_EN = {
   },
   ZCPARAMS_FETCH: {
     DOWNLOADING_ZCASH_KEYS: 'Downloading Zcash keys',
-    BOTH_KEYS_VERIFIED: 'Both Zcash param keys are downloaded and verified!',
+    BOTH_KEYS_VERIFIED: 'All Zcash param keys are downloaded and verified!',
     CLOSE_THE_MODAL: 'Close the modal and try to add a coin again.',
     ZCPARAMS_VERIFICATION_ERROR_P1: 'Zcash param',
     ZCPARAMS_VERIFICATION_ERROR_P2: 'verification error!',
@@ -1192,7 +1196,7 @@ const LANG_EN = {
     KOIN: 'Koinon Coin',
     DION: 'DionPay',
     PTX: 'PatentTX',
-    ZEX: 'Zaddex'
+    ZEX: 'Zaddex',
   },
   CRYPTO: {
     STRAT: 'Stratis',
@@ -1321,6 +1325,7 @@ const LANG_EN = {
     PPC: 'Peercoin',
     MZC: 'Mazacoin',
     SDC: 'ShadowCash',
+    BZC: 'Bitzec',
     // eth
     ETH: 'Ethereum',
     ETH_ROPSTEN: 'Ethereum Ropsten Testnet',
