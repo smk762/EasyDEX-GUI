@@ -4,12 +4,10 @@ import Config from '../../config';
 import translate from '../../translate/translate';
 import fetchType from '../../util/fetchType';
 
-// TODO: dev display errors
-
-const fiatRates = (pricesJson) => {
+export const prices = (coins, currency) => {
   return dispatch => {
     return fetch(
-      'https://www.atomicexplorer.com/api/rates/kmd?currency=all',
+      `https://www.atomicexplorer.com/api/mm/prices/v2?currency=${currency}&coins=${typeof coins === 'object' ? coins.join(',') : coins}`,
       fetchType.get
     )
     .catch((error) => {
@@ -17,26 +15,7 @@ const fiatRates = (pricesJson) => {
     })
     .then(response => response.json())
     .then(json => {
-      let _coins = pricesJson.result;
-      _coins.fiat = json.result;
-
-      dispatch(pricesState(_coins));
-    });
-  }
-}
-
-export const prices = () => {
-  return dispatch => {
-    return fetch(
-      'https://www.atomicexplorer.com/api/mm/prices',
-      fetchType.get
-    )
-    .catch((error) => {
-      console.log(error);
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(fiatRates(json));
+      dispatch(json && json.msg === 'success' ? pricesState(json.result) : pricesState('error'));
     });
   }
 }

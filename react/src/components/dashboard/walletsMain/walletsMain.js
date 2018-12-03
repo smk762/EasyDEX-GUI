@@ -4,7 +4,6 @@ import WalletsMainRender from './walletsMain.render';
 import translate from '../../../translate/translate';
 import {
   triggerToaster,
-  prices,
   newUpdateAvailable,
 } from '../../../actions/actionCreators';
 import { getCoinTitle } from '../../../util/coinHelper';
@@ -14,23 +13,17 @@ import mainWindow from '../../../util/mainWindow';
 import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
-const PRICES_UPDATE_INTERVAL = 120000; // every 2m
 const NEW_UPDATE_CHECK_INTERVAL = 14400; // every 4h
 
 class WalletsMain extends React.Component {
   constructor() {
     super();
     this.getCoinStyle = this.getCoinStyle.bind(this);
-    this.pricesInterval = null;
     socket.on('service', msg => this.updateSocketsData(msg));
   }
 
   componentWillUnmount() {
     mainWindow.activeCoin = null;
-
-    if (this.pricesInterval) {
-      clearInterval(this.pricesInterval);
-    }
   }
 
   componentWillMount() {
@@ -40,13 +33,6 @@ class WalletsMain extends React.Component {
       setInterval(() => {
         Store.dispatch(newUpdateAvailable());
       }, NEW_UPDATE_CHECK_INTERVAL);
-    }
-
-    if (Config.fiatRates) {
-      Store.dispatch(prices());
-      this.pricesInterval = setInterval(() => {
-        Store.dispatch(prices());
-      }, PRICES_UPDATE_INTERVAL);
     }
 
     if (mainWindow.createSeed.triggered &&

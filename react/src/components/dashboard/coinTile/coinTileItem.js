@@ -29,6 +29,7 @@ import {
   apiRemoveCoin,
   toggleCoindDownModal,
   dashboardRemoveCoin,
+  prices,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -43,6 +44,7 @@ const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE = 15000;
 const ACTIVE_HANDLE_TIMEOUT_COIND_NATIVE_RCP2CLI = 40000;
 const COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD = mainWindow.appConfig.native.failedRPCAttemptsThreshold || 10;
 const COIND_STOP_MAX_RETRIES = 15;
+const PRICES_UPDATE_INTERVAL = 120000; // every 2m
 
 class CoinTileItem extends React.Component {
   constructor() {
@@ -420,6 +422,15 @@ class CoinTileItem extends React.Component {
         );
       }
 
+      if (this.props.Interval.interval.prices) {
+        Store.dispatch(
+          stopInterval(
+            'prices',
+            this.props.Interval.interval
+          )
+        );
+      }
+
       if (mode === 'native') {
         const _iguanaActiveHandle = setInterval(() => {
           this.dispatchCoinActions(coin, mode);
@@ -438,6 +449,16 @@ class CoinTileItem extends React.Component {
         }, ETH_DASHBOARD_UPDATE_TIMEOUT);
 
         Store.dispatch(startInterval('sync', _iguanaActiveHandle));
+      }
+
+      if (Config.fiatRates) {  
+        Store.dispatch(prices(coin, Config.defaultFiatCurrency));
+        
+        const _pricesInterval = this.pricesInterval = setInterval(() => {
+          Store.dispatch(prices(coin, Config.defaultFiatCurrency));
+        }, PRICES_UPDATE_INTERVAL);
+
+        Store.dispatch(startInterval('prices', _pricesInterval));
       }
     }
   }
