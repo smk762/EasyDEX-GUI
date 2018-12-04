@@ -429,7 +429,7 @@ class SendCoin extends React.Component {
   setRecieverFromScan(receiver) {
     try {
       const recObj = JSON.parse(receiver);
-      let _newState;
+      let _newState = {};
 
       if (recObj &&
           typeof recObj === 'object') {
@@ -443,7 +443,7 @@ class SendCoin extends React.Component {
         this.setState(_newState);
       }
     } catch (e) {
-      let _newState;
+      let _newState = {};
 
       if (receiver.indexOf(':') > -1) {
         const _parsedBitcoinURL = parseBitcoinURL(receiver);

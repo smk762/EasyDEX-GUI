@@ -107,7 +107,7 @@ class CoinTileItem extends React.Component {
   }
 
   renderCoinConError(item) {
-    const _coins = this.props.ActiveCoin.coins;    
+    const _coins = this.props.ActiveCoin.coins;
 
     if (this.props.ActiveCoin.getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD &&
         (this.props.ActiveCoin.mode === 'native' &&
@@ -453,7 +453,7 @@ class CoinTileItem extends React.Component {
 
       if (Config.fiatRates) {  
         Store.dispatch(prices(coin, Config.defaultFiatCurrency));
-        
+
         const _pricesInterval = this.pricesInterval = setInterval(() => {
           Store.dispatch(prices(coin, Config.defaultFiatCurrency));
         }, PRICES_UPDATE_INTERVAL);
