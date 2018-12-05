@@ -74,7 +74,7 @@ const WalletsBalanceRender = function() {
             </div>
           }
 
-          <div className={ ((_mode === 'native' && Number(this.renderBalance('private'))) > 0 || _isAcPrivate) ? 'col-lg-3 col-xs-12' : 'hide' }>
+          <div className={ ((_mode === 'native' && Number(this.renderBalance('private'))) > 0 || _isAcPrivate) ? (_isAcPrivate ? 'col-lg-12 col-xs-12' : 'col-lg-3 col-xs-12') : 'hide' }>
             <div className="widget widget-shadow">
               <div className="padding-20 padding-top-10">
                 <div className="clearfix cursor-default">

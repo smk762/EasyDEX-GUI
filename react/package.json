@@ -15,7 +15,8 @@
     "webdriver-update": "webdriver-manager update",
     "webdriver-start": "webdriver-manager start",
     "e2e": "protractor",
-    "e2e-live": "protractor --elementExplorer"
+    "e2e-live": "protractor --elementExplorer",
+    "update-agamalib": "rm -rf node_modules/agama-wallet-lib/ && npm install"
   },
   "repository": "https://github.com/KomodoPlatform/EasyDEX-GUI",
   "homepage": "http://komodoplatform.com",
@@ -31,6 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "agama-wallet-lib": "git://github.com/pbca26/agama-wallet-lib#dev",
+    "bitgo-utxo-lib": "git://github.com/pbca26/bitgo-utxo-lib",
     "babel-core": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.24.1",

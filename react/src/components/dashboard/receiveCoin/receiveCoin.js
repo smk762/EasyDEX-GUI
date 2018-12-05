@@ -67,7 +67,7 @@ class ReceiveCoin extends React.Component {
   }
 
   copyPubkeyNative(address) {
-    this.toggleAddressMenu(address);
+    this.toggleAddressMenu(null);
 
     validateAddress(
       this.props.coin,
@@ -160,7 +160,7 @@ class ReceiveCoin extends React.Component {
   }
 
   copyPubkeySpv(pubkey) {
-    this.toggleAddressMenu(address);
+    this.toggleAddressMenu(null);
     Store.dispatch(copyString(pubkey, translate('INDEX.PUBKEY_COPIED')));
   }
 

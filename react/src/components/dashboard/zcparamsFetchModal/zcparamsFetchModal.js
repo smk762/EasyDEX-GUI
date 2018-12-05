@@ -8,6 +8,7 @@ import Store from '../../../store';
 import Config from '../../../config';
 import translate from '../../../translate/translate';
 import mainWindow from '../../../util/mainWindow';
+import zcashParamsCheckErrors from '../../../util/zcashParams';
 import io from 'socket.io-client';
 
 import ZcparamsFetchModalRender from './zcparamsFetchModal.render';
@@ -18,6 +19,9 @@ let updateProgressBar = {
   zcparams: {
     proving: -1,
     verifying: -1,
+    output: -1,
+    spend: -1,
+    groth16: -1,
   },
 };
 
@@ -42,6 +46,9 @@ class ZcparamsFetchModal extends React.Component {
     updateProgressBar.zcparams = {
       proving: 0,
       verifying: 0,
+      output: 0,
+      spend: 0,
+      groth16: 0,
     };
     _updateLog.push(`${ translate('ZCPARAMS_FETCH.DOWNLOADING_ZCASH_KEYS') }...`);
     this.setState(Object.assign({}, this.state, {
@@ -119,7 +126,7 @@ class ZcparamsFetchModal extends React.Component {
         } else if (_msg.status === 'done') {
           let _updateLog = this.state.updateLog;
 
-          if (_msg.file === 'proving') {
+          if (_msg.file === 'all') {
             _updateLog = [];
             _updateLog.push(translate('ZCPARAMS_FETCH.BOTH_KEYS_VERIFIED'));
             _updateLog.push(translate('ZCPARAMS_FETCH.CLOSE_THE_MODAL'));
@@ -130,7 +137,7 @@ class ZcparamsFetchModal extends React.Component {
 
             mainWindow.zcashParamsExistPromise()
             .then((res) => {
-              const _errors = mainWindow.zcashParamsCheckErrors(res);
+              const _errors = zcashParamsCheckErrors(res);
               mainWindow.zcashParamsExist = res;
             });
           } else {
@@ -150,6 +157,9 @@ class ZcparamsFetchModal extends React.Component {
           updateProgressBar.zcparams = {
             proving: -1,
             verifying: -1,
+            output: -1,
+            spend: -1,
+            groth16: -1,
           };
         }
       }
@@ -172,12 +182,53 @@ class ZcparamsFetchModal extends React.Component {
         <div className="padding-top-20 zcparams-progress">
           <h5>{ translate('SETTINGS.PROGRESS') }</h5>
           <div className="padding-bottom-15">{ items }</div>
+          { updateProgressBar.zcparams.verifying > -1 &&
+            !this.state.done &&
+            <div className="progress progress-sm">
+              <div
+                className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                style={{ width: `${updateProgressBar.zcparams.verifying}%` }}>
+                verifying key
+              </div>
+            </div>
+          }
           { updateProgressBar.zcparams.proving > -1 &&
             !this.state.done &&
             <div className="progress progress-sm">
               <div
                 className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
                 style={{ width: `${updateProgressBar.zcparams.proving}%` }}>
+                proving key
+              </div>
+            </div>
+          }
+          { updateProgressBar.zcparams.spend > -1 &&
+            !this.state.done &&
+            <div className="progress progress-sm">
+              <div
+                className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                style={{ width: `${updateProgressBar.zcparams.spend}%` }}>
+                spend params
+              </div>
+            </div>
+          }
+          { updateProgressBar.zcparams.output > -1 &&
+            !this.state.done &&
+            <div className="progress progress-sm">
+              <div
+                className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                style={{ width: `${updateProgressBar.zcparams.output}%` }}>
+                output params
+              </div>
+            </div>
+          }
+          { updateProgressBar.zcparams.groth16 > -1 &&
+            !this.state.done &&
+            <div className="progress progress-sm">
+              <div
+                className="progress-bar progress-bar-striped active progress-bar-indicating progress-bar-success font-size-80-percent"
+                style={{ width: `${updateProgressBar.zcparams.groth16}%` }}>
+                groth16 params
               </div>
             </div>
           }

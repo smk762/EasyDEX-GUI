@@ -819,7 +819,7 @@ export const SendRender = function() {
                               <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>
                             }
                             { _mode === 'native' &&
-                              <span>this.state.lastSendToResponse</span>
+                              <span>{ this.state.lastSendToResponse }</span>
                             }
                             { _mode === 'eth' &&
                               <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>                              
@@ -896,16 +896,23 @@ export const SendRender = function() {
                         </div>
                       }
                       { this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') === -1 &&
-                        <div>{ this.state.lastSendToResponse.result }</div>
+                        <div>
+                          <div>{ this.state.lastSendToResponse.result }</div>
+                          { typeof this.state.lastSendToResponse.raw.txid === 'object' &&
+                            <div className="padding-top-10 word-break--all">
+                              <strong className="text-capitalize">Debug info</strong>: { JSON.stringify(this.state.lastSendToResponse.raw.txid) }
+                            </div>
+                          }
+                        </div>
                       }
                       { _mode === 'spv' &&
                         this.state.lastSendToResponse.raw &&
                         this.state.lastSendToResponse.raw.txid &&
-                        <div>{ this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') }</div>
+                        <div>{ typeof this.state.lastSendToResponse.raw.txid !== 'object' ? this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') : '' }</div>
                       }
                       { this.state.lastSendToResponse.raw &&
                         this.state.lastSendToResponse.raw.txid &&
-                        this.state.lastSendToResponse.raw.txid.indexOf('bad-txns-inputs-spent') > -1 &&
+                        JSON.stringify(this.state.lastSendToResponse.raw.txid).indexOf('bad-txns-inputs-spent') > -1 &&
                         <div className="margin-top-10">
                           { translate('SEND.BAD_TXN_SPENT_ERR1') }
                           <ul>

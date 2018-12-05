@@ -71,10 +71,9 @@ class ToolsOfflineSigCreate extends React.Component {
       this.state.sendFrom
     )
     .then((res) => {
-      // console.warn(res);
-
       if (res.msg === 'success') {
-        let tx2qr = 'agtx:';
+        const tx2qr = JSON.stringify(res.result);
+       /* let tx2qr = 'agtx:';
         res = res.result;
 
         tx2qr += (res.network === 'komodo' ? 'KMD' : res.network) + ':' + res.outputAddress + ':' + res.changeAddress + ':' + res.value + ':' + res.change + ':u:';
@@ -86,11 +85,11 @@ class ToolsOfflineSigCreate extends React.Component {
         // console.warn(tx2qr);
         // console.warn('txqr length', tx2qr.length);
 
-        // max 350 chars
+        // max 350 chars*/
 
         this.setState({
           tx2qr,
-          utxo: res.utxoSet,
+          utxo: res.result.utxoSet,
         });
       } else {
         Store.dispatch(
@@ -159,7 +158,7 @@ class ToolsOfflineSigCreate extends React.Component {
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
             options={
-              addCoinOptionsCrypto('skip')
+              addCoinOptionsCrypto('skip', true)
               .concat(addCoinOptionsAC('skip'))
             } />
         </div>
@@ -237,7 +236,7 @@ class ToolsOfflineSigCreate extends React.Component {
         { this.state.tx2qr &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
             <label className="control-label col-sm-1 no-padding-left">
-            { translate('TOOLS.QR_PAYLOAD') }
+            Unsigned transaction
             </label>
             <textarea
               rows="5"
@@ -258,7 +257,7 @@ class ToolsOfflineSigCreate extends React.Component {
             }
           </div>
         }
-        { this.state.tx2qr &&
+        { /*this.state.tx2qr &&
           this.state.utxo.length < 4 &&
           <div className="offlinesig-qr">
             <div className="margin-top-50 margin-bottom-70 center">
@@ -274,7 +273,7 @@ class ToolsOfflineSigCreate extends React.Component {
                 { translate('TOOLS.CLOSE') }
               </button>
             </div>
-          </div>
+          </div>*/
         }
       </div>
     );

@@ -46,6 +46,7 @@ import {
   isPositiveNumber,
   fromSats,
   toSats,
+  parseBitcoinURL,
 } from 'agama-wallet-lib/src/utils';
 import { formatEther } from 'ethers/utils/units';
 import { getAddress } from 'ethers/utils/address';
@@ -428,38 +429,36 @@ class SendCoin extends React.Component {
   setRecieverFromScan(receiver) {
     try {
       const recObj = JSON.parse(receiver);
+      let _newState = {};
 
       if (recObj &&
           typeof recObj === 'object') {
-        if (recObj.coin === this.props.ActiveCoin.coin) {
-          if (recObj.amount) {
-            this.setState({
-              amount: recObj.amount,
-            });
-          }
-          if (recObj.address) {
-            this.setState({
-              sendTo: recObj.address,
-            });
-          }
-        } else {
-          Store.dispatch(
-            triggerToaster(
-              translate('SEND.QR_COIN_MISMATCH_MESSAGE_IMPORT_COIN') +
-              recObj.coin +
-              translate('SEND.QR_COIN_MISMATCH_MESSAGE_ACTIVE_COIN') +
-              this.props.ActiveCoin.coin +
-              translate('SEND.QR_COIN_MISMATCH_MESSAGE_END'),
-              translate('SEND.QR_COIN_MISMATCH_TITLE'),
-              'warning'
-            )
-          );
+        if (recObj.amount) {
+          _newState.amount = recObj.amount;
         }
+        if (recObj.address) {
+          _newState.sendTo = recObj.address;
+        }
+
+        this.setState(_newState);
       }
     } catch (e) {
-      this.setState({
-        sendTo: receiver,
-      });
+      let _newState = {};
+
+      if (receiver.indexOf(':') > -1) {
+        const _parsedBitcoinURL = parseBitcoinURL(receiver);
+        
+        if (_parsedBitcoinURL.amount) {
+          _newState.amount = _parsedBitcoinURL.amount;
+        }
+        if (_parsedBitcoinURL.address) {
+          _newState.sendTo = _parsedBitcoinURL.address;
+        }
+      } else {
+        _newState.sendTo = receiver;
+      }
+
+      this.setState(_newState);
     }
 
     document.getElementById('kmdWalletSendTo').focus();

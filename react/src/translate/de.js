@@ -800,8 +800,7 @@ const LANG_DE = {
     'MSHARK': 'MSHARK (MSHARK)',
     'MESH': 'SpaceMesh (MESH)',
     'SUPERNET': 'SUPERNET (SUPERNET)',
-    'WLC': 'WIRELESS (WIRELESS)',
-    'CALL': 'Capital (CALL)'
+    'WLC': 'WIRELESS (WIRELESS)'
   },
   'DEX': {
     'GEN_NEW_PASSPHRASE': 'Neue Passphrase erstellen',
