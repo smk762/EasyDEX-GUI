@@ -54,7 +54,7 @@ import coinFees from 'agama-wallet-lib/src/fees';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const { shell } = window.require('electron');
-const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
 const FEE_EXCEEDS_DEFAULT_THRESHOLD = 5; // N fold increase
 const DEFAULT_ZTX_FEE = 0.0001;
 
