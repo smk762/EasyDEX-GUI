@@ -1197,6 +1197,7 @@ const LANG_EN = {
     DION: 'DionPay',
     PTX: 'PatentTX',
     ZEX: 'Zaddex',
+    SPLTEST: 'Sapling Test Chain',
   },
   CRYPTO: {
     STRAT: 'Stratis',
