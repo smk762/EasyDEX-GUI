@@ -19,6 +19,7 @@ const _disabledAC = {
   ],
   native: [
     'vrsc',
+    'spltest',
   ],
   all: [
     'mvp',
