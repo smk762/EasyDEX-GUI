@@ -25,7 +25,7 @@ import {
   checkTimestamp,
 } from 'agama-wallet-lib/src/time';
 
-const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
 
 // TODO: promises
 
