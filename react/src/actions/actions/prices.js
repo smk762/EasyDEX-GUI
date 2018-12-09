@@ -7,7 +7,7 @@ import fetchType from '../../util/fetchType';
 export const prices = (coins, currency) => {
   return dispatch => {
     return fetch(
-      `https://www.atomicexplorer.com/api/mm/prices/v2?currency=${currency}&coins=${typeof coins === 'object' ? coins.join(',') : coins}`,
+      `https://www.atomicexplorer.com/api/mm/prices/v2?currency=${currency}&coins=${typeof coins === 'object' ? coins.join(',') : coins}&pricechange=true`,
       fetchType.get
     )
     .catch((error) => {
