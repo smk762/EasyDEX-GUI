@@ -137,12 +137,28 @@ class WalletsBalance extends React.Component {
 
     if (mainWindow.appConfig.fiatRates &&
         this.props.Dashboard.prices &&
+        this.props.Dashboard.prices[this.props.ActiveCoin.coin] &&
         returnFiatPrice) {
       const _prices = this.props.Dashboard.prices;
       const _defaultFiat = Config.defaultFiatCurrency.toUpperCase();
       const _coin = this.props.ActiveCoin.coin;
-      const _fiatPriceTotal = _balance * _prices[_coin];
-      const _fiatPricePerCoin = _prices[_coin];
+      const _fiatPriceTotal = _balance * _prices[_coin][_defaultFiat];
+      const _fiatPricePerCoin = _prices[_coin][_defaultFiat];
+      let _priceChangeColor = 'green';
+
+      if (_prices[_coin].priceChange &&
+          _prices[_coin].priceChange.data &&
+          _prices[_coin].priceChange.data.hasOwnProperty('percent_change_1h') &&
+          _prices[_coin].priceChange.data.percent_change_1h < 0) {
+        _priceChangeColor = 'red';
+      }
+
+      if (_prices[_coin].priceChange &&
+          _prices[_coin].priceChange.data &&
+          _prices[_coin].priceChange.data.hasOwnProperty('percent_change_24h') &&
+          _prices[_coin].priceChange.data.percent_change_24h < 0) {
+        _priceChangeColor = 'red';
+      }      
 
       return (
         <div>
@@ -150,15 +166,33 @@ class WalletsBalance extends React.Component {
           { _fiatPriceTotal > 0 &&
             _fiatPricePerCoin > 0 &&
             <div
-              data-tip={ `${translate('INDEX.PRICE_PER_1')} ${_coin} ~ ${formatValue(_fiatPricePerCoin)} ${_defaultFiat}` }
+              data-tip={
+                `${translate('INDEX.PRICE_PER_1')} ${_coin} ~ ${formatValue(_fiatPricePerCoin)} ${_defaultFiat}` +
+                (_prices[_coin].priceChange &&
+                 _prices[_coin].priceChange.data ?
+                 `<br/>${translate('INDEX.PRICE_SRC')}: ${_prices[_coin].priceChange.src}` +
+                 (_prices[_coin].priceChange.data.hasOwnProperty('percent_change_1h') ? `<br/>${translate('INDEX.1H_CHANGE')}: ${_prices[_coin].priceChange.data.percent_change_1h > 0 ? '+' : ''}${_prices[_coin].priceChange.data.percent_change_1h}%` : '') +
+                 (_prices[_coin].priceChange.data.hasOwnProperty('percent_change_24h') ? `<br/>${translate('INDEX.24H_CHANGE')}: ${_prices[_coin].priceChange.data.percent_change_24h > 0 ? '+' : ''}${_prices[_coin].priceChange.data.percent_change_24h}%` : '') +
+                 (_prices[_coin].priceChange.data.hasOwnProperty('percent_change_7d') ? `<br/>${translate('INDEX.7D_CHANGE')}: ${_prices[_coin].priceChange.data.percent_change_7d > 0 ? '+' : ''}${_prices[_coin].priceChange.data.percent_change_7d}%` : '')
+                 : ''
+                )
+              }
               data-html={ true }
               data-for="balance1"
               className="text-right">
               <FiatSymbol symbol={ Config.defaultFiatCurrency } />{ formatValue(_fiatPriceTotal) }
+              { _prices[_coin].priceChange &&
+                _prices[_coin].priceChange.data &&
+                <i className={ `icon fa-arrow-up icon-price-change ${_priceChangeColor}` }></i>
+              }
             </div>
           }
           <ReactTooltip
             id="balance1"
+            effect="solid"
+            className="text-left" />
+          <ReactTooltip
+            id="priceChange"
             effect="solid"
             className="text-left" />
         </div>
