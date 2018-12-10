@@ -183,7 +183,7 @@ class WalletsBalance extends React.Component {
               <FiatSymbol symbol={ Config.defaultFiatCurrency } />{ formatValue(_fiatPriceTotal) }
               { _prices[_coin].priceChange &&
                 _prices[_coin].priceChange.data &&
-                <i className={ `icon fa-arrow-up icon-price-change ${_priceChangeColor}` }></i>
+                <i className={ `icon fa-arrow-${_priceChangeColor === 'red' ? 'down' : 'up'} icon-price-change ${_priceChangeColor}` }></i>
               }
             </div>
           }
