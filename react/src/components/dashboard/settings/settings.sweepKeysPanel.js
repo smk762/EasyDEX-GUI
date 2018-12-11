@@ -26,7 +26,7 @@ import {
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const { shell } = window.require('electron');
-const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
 
 class SweepKeysPanel extends React.Component {
   constructor() {

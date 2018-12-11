@@ -205,6 +205,10 @@ const LANG_EN = {
     HISTORY: 'History',
   },
   INDEX: {
+    PRICE_SRC: 'Source',
+    '1H_CHANGE': '1h change',
+    '24H_CHANGE': '24h change',
+    '7D_CHANGE': '7d change',
     PUBKEY_COPIED: 'Pubkey is copied',
     LAUNCH_PARAMS_COPIED: 'Launch params copied',
     LAUNCH_PARAMS: 'Launch params',
@@ -1197,6 +1201,7 @@ const LANG_EN = {
     DION: 'DionPay',
     PTX: 'PatentTX',
     ZEX: 'Zaddex',
+    SPLTEST: 'Sapling Test Chain',
   },
   CRYPTO: {
     STRAT: 'Stratis',

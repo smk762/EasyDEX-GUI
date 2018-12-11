@@ -64,7 +64,6 @@ class CliPanel extends React.Component {
     let _items = [];
 
     if (_cliResponse) {
-      const _random = Math.random(0, 9) * 10;
       let _cliResponseParsed;
       let responseType;
 
@@ -78,6 +77,7 @@ class CliPanel extends React.Component {
         responseType = 'array';
 
         for (let i = 0; i < _cliResponseParsed.length; i++) {
+          const _random = Math.random(0, 9) * 1000;
           _items.push(
             <div key={ `cli-response-${_random}` }>
             { JSON.stringify(_cliResponseParsed[i], null, '\t') }
@@ -88,6 +88,7 @@ class CliPanel extends React.Component {
 
       if (Object.prototype.toString.call(_cliResponseParsed) === '[object]' ||
           typeof _cliResponseParsed === 'object') {
+        const _random = Math.random(0, 9) * 1000;
         responseType = 'object';
 
         _items.push(
@@ -100,6 +101,7 @@ class CliPanel extends React.Component {
       if (Object.prototype.toString.call(_cliResponseParsed) === 'number' ||
           typeof _cliResponseParsed === 'boolean' ||
           _cliResponseParsed === 'wrong cli string format') {
+        const _random = Math.random(0, 9) * 1000;
         responseType = 'number';
 
         _items.push(
@@ -116,6 +118,7 @@ class CliPanel extends React.Component {
         _cliResponseParsed = _cliResponseParsed.split('\n');
 
         for (let i = 0; i < _cliResponseParsed.length; i++) {
+          const _random = Math.random(0, 9) * 1000;
           _items.push(
             <div key={ `cli-response-${_random}` }>
             {  _cliResponseParsed[i] }

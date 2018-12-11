@@ -201,17 +201,6 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { _coin === 'KMD' &&
-            this.displayClaimInterestUI() &&
-            <div>
-              <button
-                type="button"
-                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>
-                <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
-              </button>
-            </div>
-          }
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">{ translate('WALLETS_INFO.NETWORK_TOTALS') }</h3>
@@ -436,18 +425,6 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { _coin === 'KMD' &&
-            _mode !== 'spv' &&
-            <div>
-              <button
-                type="button"
-                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>
-                { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
-              </button>
-              <ClaimInterestModal />
-            </div>
-          }
         </div>
       </div>
     );
@@ -495,18 +472,6 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { _coin === 'KMD' &&
-            _mode !== 'spv' &&
-            <div>
-              <button
-                type="button"
-                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>
-                { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
-              </button>
-              <ClaimInterestModal />
-            </div>
-          }
         </div>
       </div>
     );

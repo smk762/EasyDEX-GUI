@@ -15,7 +15,8 @@
     "webdriver-update": "webdriver-manager update",
     "webdriver-start": "webdriver-manager start",
     "e2e": "protractor",
-    "e2e-live": "protractor --elementExplorer"
+    "e2e-live": "protractor --elementExplorer",
+    "update-agamalib": "rm -rf node_modules/agama-wallet-lib/ && npm install"
   },
   "repository": "https://github.com/KomodoPlatform/EasyDEX-GUI",
   "homepage": "http://komodoplatform.com",
@@ -52,7 +53,7 @@
     "react-router-redux": "^4.0.4",
     "react-select": "^1.1.0",
     "react-table": "^6.8.6",
-    "react-tooltip": "^3.4.0",
+    "react-tooltip": "^3.9.0",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
     "redux": "^3.6.0",
