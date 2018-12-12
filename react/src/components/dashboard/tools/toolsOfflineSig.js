@@ -20,7 +20,7 @@ import QRModal from '../qrModal/qrModal';
 import { transaction } from 'agama-wallet-lib/src/transaction-builder';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
-import { seedToWif } from 'agama-wallet-lib/src/keys';
+import { stringToWif } from 'agama-wallet-lib/src/keys';
 import { fromSats } from 'agama-wallet-lib/src/utils';
 
 class ToolsOfflineSig extends React.Component {
@@ -43,7 +43,7 @@ class ToolsOfflineSig extends React.Component {
     const _coin = this.state.selectedCoin.split('|')[0].toLowerCase();
     const _network = networks[_coin] || networks[isKomodoCoin(_coin) ? 'kmd' : _coin];
     let _data = JSON.parse(this.state.rawData);
-    _data.from = seedToWif(this.state.seed, _network, true).pub;
+    _data.from = stringToWif(this.state.seed, _network, true).pub;
 
     if (!sign) {
       this.setState({
@@ -55,7 +55,7 @@ class ToolsOfflineSig extends React.Component {
       const _signedTx = transaction(
         _data.outputAddress,
         _data.changeAddress,
-        seedToWif(this.state.seed, _network, true).priv,
+        stringToWif(this.state.seed, _network, true).priv,
         _network,
         _data.utxoSet,
         _data.change,
