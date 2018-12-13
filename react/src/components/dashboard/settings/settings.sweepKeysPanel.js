@@ -16,7 +16,7 @@ import mainWindow from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
 const SEED_TRIM_TIMEOUT = 5000;
-import { seedToWif } from 'agama-wallet-lib/src/keys';
+import { stringToWif } from 'agama-wallet-lib/src/keys';
 import electrumJSNetworks from 'agama-wallet-lib/build/bitcoinjs-networks';
 import { isKomodoCoin } from 'agama-wallet-lib/build/coin-helpers';
 import {
@@ -82,7 +82,7 @@ class SweepKeysPanel extends React.Component {
     let _fees = mainWindow.spvFees;
     
     if (Number(_balance) - fromSats(_fees[this.props.ActiveCoin.coin]) >= 0) {
-      const _kp = seedToWif(
+      const _kp = stringToWif(
         this.state.wifkeysPassphrase,
         electrumJSNetworks[isKomodoCoin(_coin.toLowerCase()) ? 'kmd' : _coin.toLowerCase()],
         true
@@ -147,7 +147,7 @@ class SweepKeysPanel extends React.Component {
     const _coin = this.state.coin.split('|')[0];
     const _coinlc = _coin.toLowerCase();
     
-    const _kp = seedToWif(
+    const _kp = stringToWif(
       this.state.wifkeysPassphrase,
       electrumJSNetworks[isKomodoCoin(_coinlc) ? 'kmd' : _coinlc],
       true
