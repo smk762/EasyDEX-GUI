@@ -81,13 +81,7 @@ class ToolsTxPush extends React.Component {
 
   openExplorerWindow(txid) {
     const _coin = this.state.selectedCoin.split('|')[0].toUpperCase();
-    let url;
-
-    /*if (erc20ContractId[this.props.ActiveCoin.coin]) {
-      url = `${explorerList.ETH}${txid}`;
-    } else {*/
-      url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;      
-    //}
+    const url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;      
     return shell.openExternal(url);
   }
 
