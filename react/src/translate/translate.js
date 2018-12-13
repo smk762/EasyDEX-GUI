@@ -8,7 +8,7 @@ const _lang = {
 };
 
 const translate = (langID, interpolateStr) => {
-  let defaultLang = Config.lang || 'EN';
+  let defaultLang = Config.lang.toUpperCase() || 'EN';
 
   if (langID &&
       langID.indexOf('.') > -1) {
@@ -16,6 +16,7 @@ const translate = (langID, interpolateStr) => {
 
     if (_lang &&
         langIDComponents &&
+        _lang[defaultLang][langIDComponents[0]] &&
         _lang[defaultLang][langIDComponents[0]][langIDComponents[1]]) {
       if (interpolateStr) {
         return _lang[defaultLang][langIDComponents[0]][langIDComponents[1]].replace('@template@', interpolateStr);

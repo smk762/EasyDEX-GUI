@@ -61,7 +61,7 @@ class AppSettingsPanel extends React.Component {
     .then((res) => {
       Store.dispatch(
         triggerToaster(
-          translate('SETTINGS.' (res.msg === 'success' ? 'DOWNLOAD_KV_ELECTRUMS_DONE' : 'DOWNLOAD_KV_ELECTRUMS_ERR')),
+          translate('SETTINGS.' + (res.msg === 'success' ? 'DOWNLOAD_KV_ELECTRUMS_DONE' : 'DOWNLOAD_KV_ELECTRUMS_ERR')),
           translate('INDEX.SETTINGS'),
           res.msg === 'success' ? 'success' : 'error',
         )
