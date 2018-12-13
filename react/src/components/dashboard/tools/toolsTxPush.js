@@ -155,7 +155,8 @@ class ToolsTxPush extends React.Component {
             }
             { this.state.txPushResult.length !== 64 &&
               <div>
-                { translate('TOOLS.ERROR') }: <span className="selectable">{ this.state.txPushResult }</span>
+                <strong>{ translate('TOOLS.ERROR') }:</strong>
+                <div className="selectable word-break--all">{ JSON.stringify(this.state.txPushResult) }</div>
               </div>
             }
           </div>
