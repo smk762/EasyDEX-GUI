@@ -15,7 +15,6 @@ import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
-const SEED_TRIM_TIMEOUT = 5000;
 import { stringToWif } from 'agama-wallet-lib/src/keys';
 import electrumJSNetworks from 'agama-wallet-lib/build/bitcoinjs-networks';
 import { isKomodoCoin } from 'agama-wallet-lib/build/coin-helpers';
@@ -27,6 +26,7 @@ import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
+const SEED_TRIM_TIMEOUT = 5000;
 
 class SweepKeysPanel extends React.Component {
   constructor() {
