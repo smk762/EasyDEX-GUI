@@ -317,14 +317,19 @@ class SendCoin extends React.Component {
     const _mode = this.props.ActiveCoin.mode;
     let _fees = mainWindow.spvFees; // TODO: use lib
     _fees.BTC = 0;
-    
-    if (_mode === 'native' &&
-        this.state.sendFrom) {
+
+    if (_mode === 'native') {
       const isZtx = this.state.addressType === 'private' || (this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc') || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) === 'zc');
       
-      this.setState({
-        amount: Number(Number(Number(this.state.sendFromAmount) - (isZtx ? this.state.ztxFee : 0.0001)).toFixed(8)),
-      });
+      if (this.state.sendFrom) {
+        this.setState({
+          amount: Number(Number(Number(this.state.sendFromAmount) - (isZtx ? this.state.ztxFee : 0.0001)).toFixed(8)),
+        });
+      } else {
+        this.setState({
+          amount: Number(Number(Number(_balance.transparent) - 0.0001).toFixed(8)),
+        });
+      }
     } else if (_mode === 'spv') {
       this.setState({
         amount: Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
@@ -559,7 +564,7 @@ class SendCoin extends React.Component {
               <a onClick={ () => this.updateAddressSelection(address.address, type, address.amount) }>
                 <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
                 <span className="text">
-                  [ { address.amount } { _coin } ]&nbsp;&nbsp;
+                  [ { Number(Number(address.amount).toFixed(8)) } { _coin } ]&nbsp;&nbsp;
                   { type === 'public' ? address.address : address.address.substring(0, 34) + '...' }
                 </span>
                 { this.state.sendFrom === address.address &&
@@ -596,7 +601,7 @@ class SendCoin extends React.Component {
         <span>
           <i className={ 'icon fa-eye' + this.state.addressType === 'public' ? '' : '-slash' }></i>
           <span className="text">
-            [ { this.state.sendFromAmount } { _coin } ]  
+            [ { Number(Number(this.state.sendFromAmount).toFixed(8)) } { _coin } ]  
             { _addrType === 'public' ? this.state.sendFrom : this.state.sendFrom.substring(0, 34) + '...' }
           </span>
         </span>
