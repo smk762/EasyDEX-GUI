@@ -111,6 +111,7 @@ class AddressBookPanel extends React.Component {
     // allow zc addresses
     if (_coin === 'KMD' &&
         _address.substring(0, 2) === 'zc' &&
+        _address.substring(0, 2) === 'zs' &&
         _address.length === 95) {
       _validationMsg = null;
     }
