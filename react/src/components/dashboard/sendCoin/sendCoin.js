@@ -263,7 +263,7 @@ class SendCoin extends React.Component {
     this.setState({
       sendTo: pub,
       addressBookSelectorOpen: false,
-      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && pub.substring(0, 2) === 'zc' && pub.length === 95 ? true : this.state.renderAddressDropdown,      
+      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && (pub.substring(0, 2) === 'zc' || pub.substring(0, 2) === 'zs') && pub.length === 95 ? true : this.state.renderAddressDropdown,      
     });
   }
 
@@ -319,7 +319,7 @@ class SendCoin extends React.Component {
     _fees.BTC = 0;
 
     if (_mode === 'native') {
-      const isZtx = this.state.addressType === 'private' || (this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc') || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) === 'zc');
+      const isZtx = this.state.addressType === 'private' || (this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs')) || (this.state.sendFrom && (this.state.sendFrom.substring(0, 2) === 'zc' || this.state.sendFrom.substring(0, 2) === 'zs'));
       
       if (this.state.sendFrom) {
         this.setState({
@@ -517,7 +517,7 @@ class SendCoin extends React.Component {
       };
 
       if ( this.props.ActiveCoin.mode === 'native') {
-        updatedState.renderAddressDropdown = this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown;
+        updatedState.renderAddressDropdown = this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown;
       }
     } else {
       updatedState = {
@@ -755,7 +755,7 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       setTimeout(() => {
         this.setState({
-          renderAddressDropdown: this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown,
+          renderAddressDropdown: this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown,
         });
       }, 100);
     }
@@ -1124,7 +1124,7 @@ class SendCoin extends React.Component {
     }
 
     if (!this.state.sendTo ||
-        (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc')) {
+        (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs')) {
       let _validateAddress;
       let _msg;
 
@@ -1198,7 +1198,7 @@ class SendCoin extends React.Component {
       }
 
       if (this.state.sendTo.length > 34 &&
-          this.state.sendTo.substring(0, 2) === 'zc' &&
+          (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') &&
           !this.state.sendFrom) {
         Store.dispatch(
           triggerToaster(
@@ -1215,7 +1215,7 @@ class SendCoin extends React.Component {
     if ((_mode === 'native' &&
         isAcPrivate) ||
         (this.state.sendTo &&
-        this.state.sendTo.substring(0, 2) === 'zc' &&
+        (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') &&
         this.state.sendTo.length > 64)) {
       validateAddress(
         _coin,
@@ -1442,7 +1442,7 @@ class SendCoin extends React.Component {
         _addressBook.length) {
       for (let i = 0; i < _addressBook.length; i++) {
         if (_mode === 'native' ||
-            (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.length === 64)) {
+            (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.substring(0, 2) !== 'zs' && _addressBook[i].pub.length === 64)) {
           _items.push(
             <li
               key={ `send-address-book-item-${i}` }

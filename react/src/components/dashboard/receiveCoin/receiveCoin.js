@@ -228,7 +228,8 @@ class ReceiveCoin extends React.Component {
 
           if (!this.state.toggleIsMine &&
               !address.canspend &&
-              address.address.substring(0, 2) !== 'zc') {
+              address.address.substring(0, 2) !== 'zc' &&
+              address.address.substring(0, 2) !== 'zs') {
             items.pop();
           }
         } else {
@@ -244,8 +245,9 @@ class ReceiveCoin extends React.Component {
           }
 
           if (!this.state.toggleIsMine &&
-            !address.canspend &&
-            address.address.substring(0, 2) !== 'zc') {
+              !address.canspend &&
+              address.address.substring(0, 2) !== 'zc' &&
+              address.address.substring(0, 2) !== 'zs') {
             items.pop();
           }
         }
