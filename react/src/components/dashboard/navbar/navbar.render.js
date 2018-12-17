@@ -98,6 +98,13 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
+            { Config.experimentalFeatures &&
+              <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
+                <a onClick={ () => this.dashboardChangeSection('exchanges') }>
+                  <i className="site-menu-icon"></i> Exchanges
+                </a>
+              </li>
+            }
             { !navigator.onLine &&
               <li
                 className="nav-top-menu offline"

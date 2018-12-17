@@ -9,6 +9,7 @@ import {
   DASHBOARD_ETHEREUM_COINS,
   ELECTRUM_SERVER_CHANGED,
   DISPLAY_ZCASH_PARAMS_FETCH,
+  EXCHANGES_CACHE,
   PRICES,
 } from '../actions/storeType';
 
@@ -24,6 +25,9 @@ export const Dashboard = (state = {
   displayZcparamsModal: false,
   prices: null,
   ethereumCoins: {},
+  exchanges: {
+    coinswitch: {},
+  },
 }, action) => {
   switch (action.type) {
     case DASHBOARD_ELECTRUM_COINS:
@@ -80,6 +84,13 @@ export const Dashboard = (state = {
       return {
         ...state,
         prices: action.prices,
+      };
+    case EXCHANGES_CACHE:
+      return {
+        ...state,
+        exchanges: {
+          [action.provider]: action.cache,
+        },
       };
     default:
       return state;
