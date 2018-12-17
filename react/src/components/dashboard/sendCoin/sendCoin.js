@@ -331,8 +331,10 @@ class SendCoin extends React.Component {
         });
       }
     } else if (_mode === 'spv') {
+      const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8));
+
       this.setState({
-        amount: Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
+        amount: _amount ? _amount : this.state.amount,
       });
     } else if (_mode === 'eth') {
       if (erc20ContractId[this.props.ActiveCoin.coin]) {
