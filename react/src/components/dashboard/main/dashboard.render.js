@@ -20,6 +20,7 @@ import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 import Dice from '../dice/dice';
+import Exchanges from '../exchanges/exchanges';
 
 const DashboardRender = function() {
   return (
@@ -45,8 +46,10 @@ const DashboardRender = function() {
             <Dice />
           </div>
         }
-        { this.isSectionActive('edex') &&
-          <EDEX />
+        { this.isSectionActive('exchanges') &&
+          <div>
+            <Exchanges />
+          </div>
         }
         { this.isSectionActive('jumblr') &&
           <Jumblr  />

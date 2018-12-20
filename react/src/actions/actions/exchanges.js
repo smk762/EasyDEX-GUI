@@ -1,0 +1,39 @@
+import { triggerToaster } from '../actionCreators';
+import { EXCHANGES_CACHE } from '../storeType';
+import
+Config,
+{ agamaPort } from '../../config';
+import Store from '../../store';
+import fetchType from '../../util/fetchType';
+import translate from '../../translate/translate';
+
+export const getExchangesCache = (provider) => {
+  return dispatch => {
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/exchanges/cache`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.getExchangesCache'),
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(exchangesState(json, provider));
+    });
+  };
+}
+
+const exchangesState = (json) => {
+  return {
+    type: EXCHANGES_CACHE,
+    cache: json,
+    provider: provider,
+  }
+};
