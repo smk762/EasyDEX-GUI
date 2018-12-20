@@ -1,16 +1,22 @@
 import { triggerToaster } from '../actionCreators';
 import { EXCHANGES_CACHE } from '../storeType';
-import
-Config,
-{ agamaPort } from '../../config';
+import Config, {
+  token,
+  agamaPort,
+} from '../../config';
 import Store from '../../store';
 import fetchType from '../../util/fetchType';
 import translate from '../../translate/translate';
+import urlParams from '../../util/url';
 
 export const getExchangesCache = (provider) => {
   return dispatch => {
+    const _urlParams = {
+      token,
+      provider,
+    };
     return fetch(
-      `http://127.0.0.1:${agamaPort}/api/exchanges/cache`,
+      `http://127.0.0.1:${agamaPort}/api/exchanges/cache${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
@@ -30,7 +36,7 @@ export const getExchangesCache = (provider) => {
   };
 }
 
-const exchangesState = (json) => {
+const exchangesState = (json, provider) => {
   return {
     type: EXCHANGES_CACHE,
     cache: json,

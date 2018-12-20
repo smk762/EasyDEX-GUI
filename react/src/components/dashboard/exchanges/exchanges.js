@@ -12,7 +12,8 @@ const { shell } = window.require('electron');
 const EXCHANGES_CACHE_UPDATE_INTERVAL = 60; // sec
 const providers = [
   'coinswitch',
-]
+  'changelly',
+];
 
 class Exchanges extends React.Component {
   constructor() {
@@ -21,6 +22,12 @@ class Exchanges extends React.Component {
       provider: providers[0],
     };
     this.exchangesCacheInterval = null;
+  }
+
+  toggleExchangeProvider(provider) {
+    this.setState({
+      provider,
+    });
   }
 
   componentWillMount() {

@@ -1,0 +1,9 @@
+.exchanges-selector-main {
+  img {
+    border-bottom: dashed 1px #fff;
+
+    &.active {
+      border-bottom: dashed 1px #000;
+    }
+  }
+}
