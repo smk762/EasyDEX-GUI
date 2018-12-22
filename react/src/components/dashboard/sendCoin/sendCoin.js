@@ -334,7 +334,7 @@ class SendCoin extends React.Component {
       const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8));
 
       this.setState({
-        amount: _amount ? _amount : this.state.amount,
+        amount: Number(_amount) > 0 ? _amount : this.state.amount,
       });
     } else if (_mode === 'eth') {
       if (erc20ContractId[this.props.ActiveCoin.coin]) {
