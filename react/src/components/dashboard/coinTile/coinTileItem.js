@@ -248,8 +248,7 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-        console.warn(`${coin} ${this.state.coindStopRetries[coin]} vs ${COIND_STOP_MAX_RETRIES}`);
-        console.warn(this.props.Main.coins.native);
+        
         if (this.state.coindStopRetries[coin] < COIND_STOP_MAX_RETRIES &&
             this.props.Main.coins.native.indexOf(coin) > -1) {
           setTimeout(() => {
