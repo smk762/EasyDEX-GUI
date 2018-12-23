@@ -87,7 +87,7 @@ const prepCoinsList = (filterActiveCoins) => {
 
       for (let key in erc20ContractId) {
         _items.push({
-          label: `${translate('CRYPTO.' + key)} (${key})`,
+          label: `${translate('CRYPTO.' + key)} (${key} ERC20)`,
           icon: key,
           value: `ETH|${key}`,
         });
