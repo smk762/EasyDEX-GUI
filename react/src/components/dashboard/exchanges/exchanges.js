@@ -6,7 +6,9 @@ import {
 import Store from '../../../store';
 import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
-import ExchangesRender from './exchanges.render';
+import ExchangesRender, {
+  RenderExchangeHistory,
+} from './exchanges.render';
 const { shell } = window.require('electron');
 
 const EXCHANGES_CACHE_UPDATE_INTERVAL = 60; // sec
@@ -44,6 +46,10 @@ class Exchanges extends React.Component {
 
   render() {
     return ExchangesRender.call(this);
+  }
+
+  _RenderExchangeHistory() {
+    return RenderExchangeHistory.call(this);
   }
 }
 
