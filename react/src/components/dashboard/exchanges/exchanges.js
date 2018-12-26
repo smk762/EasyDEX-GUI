@@ -30,6 +30,7 @@ class Exchanges extends React.Component {
     this.setState({
       provider,
     });
+    Store.dispatch(getExchangesCache(provider));
   }
 
   componentWillMount() {
