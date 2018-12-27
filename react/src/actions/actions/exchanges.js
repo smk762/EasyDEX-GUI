@@ -31,7 +31,7 @@ export const getExchangesCache = (provider) => {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(exchangesState(json, provider));
+      dispatch(exchangesState(json && json.result ? json.result : json, provider));
     });
   };
 }
@@ -43,3 +43,30 @@ const exchangesState = (json, provider) => {
     provider: provider,
   }
 };
+
+/*export const exchangesGetOrder = (provider) => {
+  return dispatch => {
+    const _urlParams = {
+      token,
+      provider,
+    };
+    return fetch(
+      `http://127.0.0.1:${agamaPort}/api/exchanges/order${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.getExchangesCache'),
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(exchangesState(json && json.result ? json.result : json, provider));
+    });
+  };
+}*/

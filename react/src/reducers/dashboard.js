@@ -10,6 +10,7 @@ import {
   ELECTRUM_SERVER_CHANGED,
   DISPLAY_ZCASH_PARAMS_FETCH,
   EXCHANGES_CACHE,
+  DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
   PRICES,
 } from '../actions/storeType';
 
@@ -28,6 +29,7 @@ export const Dashboard = (state = {
   exchanges: {
     coinswitch: {},
   },
+  showExchangesOrderInfoId: null,
 }, action) => {
   switch (action.type) {
     case DASHBOARD_ELECTRUM_COINS:
@@ -91,6 +93,11 @@ export const Dashboard = (state = {
         exchanges: {
           [action.provider]: action.cache,
         },
+      };
+    case DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL:
+      return {
+        ...state,
+        showExchangesOrderInfoId: action.showExchangesOrderInfoId,
       };
     default:
       return state;

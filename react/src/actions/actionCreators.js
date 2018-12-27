@@ -33,6 +33,7 @@ import {
   DASHBOARD_REMOVE_COIN,
   DISPLAY_NOTARY_ELECTIONS_MODAL,
   BLUR_SENSITIVE_DATA,
+  DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -331,5 +332,12 @@ export const toggleBlurSensitiveData = (display) => {
   return {
     type: BLUR_SENSITIVE_DATA,
     blurSensitiveData: display,
+  }
+}
+
+export const toggleExchangesOrderInfoModal = (orderId) => {
+  return {
+    type: DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
+    showExchangesOrderInfoId: orderId,
   }
 }

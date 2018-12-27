@@ -7,6 +7,7 @@ import {
   formatValue,
 } from 'agama-wallet-lib/src/utils';
 import { secondsToString } from 'agama-wallet-lib/src/time';
+import ExchangesOrderInfoModal from '../exchangesOrderInfoModal/exchangesOrderInfoModal';
 
 export const RenderExchangeHistory = function() {
   const _cache = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges[this.state.provider];
@@ -23,18 +24,27 @@ export const RenderExchangeHistory = function() {
             <img
               className="margin-right-10"
               height="25px"
-              src={ `assets/images/cryptologo/${_cache[key].depositCoin}.png`} />
+              src={ `assets/images/cryptologo/${_cache[key].depositCoin}.png` } />
             { formatValue(_cache[key].expectedDepositCoinAmount) } { _cache[key].depositCoin.toUpperCase() }
           </td>
           <td>
             <img
               className="margin-right-10"
               height="25px"
-              src={ `assets/images/cryptologo/${_cache[key].destinationCoin}.png`} />
+              src={ `assets/images/cryptologo/${_cache[key].destinationCoin}.png` } />
             { formatValue(_cache[key].expectedDestinationCoinAmount) } { _cache[key].destinationCoin.toUpperCase() }
           </td>
           <td>
             { _cache[key].status }
+          </td>
+          <td></td>
+          <td>
+          <button
+            type="button"
+            className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
+            onClick={ () => this._toggleExchangesOrderInfoModal(key) }>
+            <i className="icon fa-search"></i>
+          </button>
           </td>
         </tr>
       );
@@ -97,6 +107,7 @@ const ExchangesRender = function() {
                 { this._RenderExchangeHistory() }
                 </div>
               </div>
+              <ExchangesOrderInfoModal provider={ this.state.provider } />
             </div>
           </div>
         </div>

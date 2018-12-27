@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   getExchangesCache,
+  toggleExchangesOrderInfoModal,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -24,6 +25,11 @@ class Exchanges extends React.Component {
       provider: providers[0],
     };
     this.exchangesCacheInterval = null;
+    this._toggleExchangesOrderInfoModal = this._toggleExchangesOrderInfoModal.bind(this);
+  }
+
+  _toggleExchangesOrderInfoModal(orderId) {
+    Store.dispatch(toggleExchangesOrderInfoModal(orderId));
   }
 
   toggleExchangeProvider(provider) {
