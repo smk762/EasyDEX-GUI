@@ -58,23 +58,18 @@ export const SettingsRender = function() {
         <div className="col-sm-12">
           <h4 className="font-size-14 text-uppercase">{ translate('INDEX.WALLET_SETTINGS') }</h4>
           <Panel
-            uniqId={ 'SettingsAccordion' }
+            uniqId="SettingsAccordion"
             singleOpen={ true }>
-            { mainWindow.arch === 'x64' &&
-              _coins &&
-              _coins.native &&
-              Object.keys(_coins.native).length > 0 &&
-              <PanelSection
-                title={ translate('INDEX.DEBUG_LOG') }
-                icon="icon fa-bug">
-                <DebugLogPanel />
-              </PanelSection>
-            }
+            <PanelSection
+              title={ translate('INDEX.DEBUG_LOG') }
+              icon="icon fa-bug">
+              <DebugLogPanel />
+            </PanelSection>
             { _coins &&
               _coins.native &&
               Object.keys(_coins.native).length > 0 &&
               <PanelSection
-                title={ 'Komodod stdout' }
+                title="Komodod stdout"
                 icon="icon fa-bug">
                 <DaemonStdoutPanel />
               </PanelSection>

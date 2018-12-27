@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import Config from '../../../config';
 import { coindList } from '../../../util/coinHelper';
-import { getDebugLog } from '../../../actions/actionCreators';
+import {
+  getDebugLog,
+  getRuntimeLog,
+} from '../../../actions/actionCreators';
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
 import { secondsToString } from 'agama-wallet-lib/src/time';
@@ -19,6 +22,7 @@ class DebugLogPanel extends React.Component {
       debugTarget: 'none',
       toggleAppRuntimeLog: false,
       pristine: true,
+      runtimeInProgress: false,
     };
     this.readDebugLog = this.readDebugLog.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -26,6 +30,7 @@ class DebugLogPanel extends React.Component {
     this.toggleAppRuntimeLog = this.toggleAppRuntimeLog.bind(this);
     this.renderAppRuntimeLog = this.renderAppRuntimeLog.bind(this);
     this.checkInputVals = this.checkInputVals.bind(this);
+    this.getDebugLogDump = this.getDebugLogDump.bind(this);
   }
 
   /*componentWillMount() {
@@ -38,6 +43,24 @@ class DebugLogPanel extends React.Component {
       this.getAppRuntimeLog();
     }
   }*/
+
+  getDebugLogDump() {
+    this.setState({
+      runtimeInProgress: true,
+    });
+
+    getRuntimeLog()
+    .then((res) => {
+      this.setState({
+        runtimeInProgress: false,
+      });
+
+      const a = document.getElementById('debugLogDumpLink');
+      
+      a.href = 'data:text/plain;charset=UTF-8,' + res;
+      a.download = 'agama-debug.log';
+    });
+  }
 
   readDebugLog() {
     let _target = this.state.debugTarget;
@@ -109,7 +132,9 @@ class DebugLogPanel extends React.Component {
         return _debugLogDataRows.map((_row) =>
           <div
             key={ `settings-debuglog-${Math.random(0, 9) * 10}` }
-            className="padding-bottom-5">{ _row }</div>
+            className="padding-bottom-5">
+            { _row }
+          </div>
         );
       } else {
         return (
@@ -135,7 +160,7 @@ class DebugLogPanel extends React.Component {
 
     _items.push(
       <option
-        key={ `coind-walletdat-coins-none` }
+        key="coind-walletdat-coins-none"
         value="none">
         { translate('SETTINGS.PICK_A_COIN') }
       </option>
@@ -175,6 +200,17 @@ class DebugLogPanel extends React.Component {
     return (
       <div className="row">
         <div className="col-sm-12">
+          <div className="padding-bottom-15">
+            <strong>Note:</strong> log dump is going to contain your lite mode pub address(es).<br/>Think twice before sharing it with anybody.
+          </div>
+          <a id="debugLogDumpLink">
+            <button
+              type="button"
+              className="btn btn-info waves-effect waves-light"
+              onClick={ this.getDebugLogDump }>
+              { this.state.runtimeInProgress ? 'Please wait...' : 'Get debug log dump' }
+            </button>
+          </a>
           { _coins &&
             _coins.native &&
             Object.keys(_coins.native).length > 0 &&
