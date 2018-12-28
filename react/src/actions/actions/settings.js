@@ -385,3 +385,28 @@ export const resetSPVCache = () => {
     });
   }
 }
+
+export const getRuntimeLog = () => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+      stringify: true,
+    };
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/log/runtime/dump${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.getRuntimeLog'),
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => resolve(json.result));
+  });
+}
