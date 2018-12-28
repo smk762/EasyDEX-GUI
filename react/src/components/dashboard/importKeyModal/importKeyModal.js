@@ -237,10 +237,12 @@ class ImportKeyModal extends React.Component {
     });
 
     // reset input vals
-    this.refs.multipleWif.value = '';
-    this.refs.wif.value = '';
-    this.refs.wifkeysPassphrase.value = '';
-    this.refs.wifkeysPassphraseTextarea.value = '';
+    try {
+      this.refs.multipleWif.value = '';
+      this.refs.wif.value = '';
+      this.refs.wifkeysPassphrase.value = '';
+      this.refs.wifkeysPassphraseTextarea.value = '';
+    } catch (e) {}
   }
 
   generateKeysFromPassphrase() {

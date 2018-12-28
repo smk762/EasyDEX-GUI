@@ -9,6 +9,7 @@ import Config from '../../../config';
 import mainWindow from '../../../util/mainWindow';
 import ExchangesRender, {
   RenderExchangeHistory,
+  RenderNewOrderForm,
 } from './exchanges.render';
 const { shell } = window.require('electron');
 
@@ -23,9 +24,43 @@ class Exchanges extends React.Component {
     super();
     this.state = {
       provider: providers[0],
+      newExchangeOrder: false,
+      newExchangeOrderDetails: {
+        step: 0,
+        orderStep: 0,
+        depositStep: 0,
+        orderId: null,
+        amount: 0,
+        coinSrc: null,
+        coinDest: null,
+        rate: null,
+        minAmount: null,
+      },
     };
+    this.defailtExchangeOrderState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
     this.exchangesCacheInterval = null;
     this._toggleExchangesOrderInfoModal = this._toggleExchangesOrderInfoModal.bind(this);
+    this.toggleCreateOrder = this.toggleCreateOrder.bind(this);
+  }
+
+  getActiveCoins() {
+    const _activeCoins = this.props.Main.coins.spv;
+    let _items = [];
+
+    if (_activeCoins &&
+        _activeCoins.length) {
+      for (let i = 0; _activeCoins.length; i++) {
+
+      }
+    }
+
+    return _items;
+  }
+
+  toggleCreateOrder() {
+    this.setState({
+      newExchangeOrder: !this.state.newExchangeOrder,
+    });
   }
 
   _toggleExchangesOrderInfoModal(orderId) {
@@ -57,6 +92,10 @@ class Exchanges extends React.Component {
 
   _RenderExchangeHistory() {
     return RenderExchangeHistory.call(this);
+  }
+
+  _RenderNewOrderForm() {
+    return RenderNewOrderForm.call(this);
   }
 }
 

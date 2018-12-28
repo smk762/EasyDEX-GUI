@@ -1,0 +1,16 @@
+.tx-details-modal {
+  min-height: 560px;
+
+  .panel {
+    box-shadow: none;
+  }
+  .panel-body {
+    padding: 0;
+  }
+  .modal-body {
+    padding: 20px 20px 0 20px;
+  }
+  .modal-footer {
+    padding: 0 20px 20px;
+  }
+}
