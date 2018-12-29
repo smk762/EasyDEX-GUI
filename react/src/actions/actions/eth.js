@@ -354,3 +354,48 @@ export const apiEthereumSendERC20Preflight = (symbol, dest, amount, speed) => {
     });
   });
 }
+
+export const apiEthereumBalancePromise = (coin, address) => {
+  return new Promise((resolve, reject) => {
+    const _coin = coin;
+    let network = coin.toLowerCase().indexOf('eth_') > -1 ? coin.split('_') : null;
+    let symbol;
+
+    if (erc20ContractId[coin.toUpperCase()]) {
+      network = null;
+      symbol = coin;
+      coin = 'ETH';
+    }
+    
+    let _urlParams = {
+      token,
+      address,
+      coin,
+    };
+
+    if (network) {
+      _urlParams.network = network[1].toLowerCase();
+    }
+    
+    if (symbol) {
+      _urlParams.symbol = symbol;
+    }
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/eth/balance${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.apiEthereumBalance') + ' (code: apiEthereumBalancePromise)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => resolve(json));
+  });
+}

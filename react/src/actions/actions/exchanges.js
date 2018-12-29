@@ -23,7 +23,7 @@ export const getExchangesCache = (provider) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getExchangesCache'),
+          translate('API.getExchangesCache') + ' (code: getExchangesCache)',
           translate('TOASTR.ERROR'),
           'error'
         )
