@@ -44,13 +44,13 @@ const prepCoinsList = (options) => {
         _items.push({
           label: `${translate('CRYPTO.' + _activeCoins.spv[i])} (${_activeCoins.spv[i]})`,
           icon: _activeCoins.spv[i],
-          value: `${_activeCoins.spv[i]}|spv}`,
+          value: `${_activeCoins.spv[i]}|spv`,
         });
       }
     }
 
     if (config.experimentalFeatures) {
-      if (_activeCoins.eth.indexOf('eth') === -1) {
+      if (_activeCoins.eth.indexOf('eth') > -1) {
         _items.push({
           label: `${translate('CRYPTO.ETH')} (ETH)`,
           icon: 'ETH',
@@ -61,11 +61,14 @@ const prepCoinsList = (options) => {
       if (_activeCoins.eth &&
           _activeCoins.eth.length) {
         for (let i = 0; i < _activeCoins.eth.length; i++) {
-          _items.push({
-            label: `${translate('CRYPTO.' + _activeCoins.eth)} (${_activeCoins.eth})`,
-            icon: _activeCoins.eth,
-            value: `ETH|${_activeCoins.eth}`,
-          });
+          if (_activeCoins.eth[i] !== 'eth' ||
+              _activeCoins.eth[i] !== 'eth_ropsten') {
+            _items.push({
+              label: `${translate('CRYPTO.' + _activeCoins.eth[i])} (${_activeCoins.eth[i]})`,
+              icon: _activeCoins.eth[i],
+              value: `ETH|${_activeCoins.eth[i]}`,
+            });
+          }
         }
       }
     }
