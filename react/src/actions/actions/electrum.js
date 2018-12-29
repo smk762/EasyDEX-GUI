@@ -673,3 +673,31 @@ export const apiElectrumPushTx = (coin, rawtx) => {
     });
   });
 }
+
+export const apiElectrumBalancePromise = (coin, address) => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+      address,
+      coin,
+    };
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/getbalance${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.apiElectrumBalancePromise') + ' (code: apiElectrumBalancePromise)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
