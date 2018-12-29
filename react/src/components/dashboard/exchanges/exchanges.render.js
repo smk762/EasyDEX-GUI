@@ -9,11 +9,14 @@ import {
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import ExchangesOrderInfoModal from '../exchangesOrderInfoModal/exchangesOrderInfoModal';
 import Select from 'react-select';
+import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 
-export const RenderNewOrderForm = function() {
+export const RenderNewOrderForm = function() {  
   return (
     <section className="exchanges-new-order-form">
       { this.state.newExchangeOrderDetails.step === 0 &&
+        this.props.Main.coins &&
+        this.props.Main.coins.spv.length > 1 &&
         <div className="step1">
           <h3 className="padding-left-15">Order details</h3>
           <div className="col-sm-12 padding-top-10 coin-send-form">
@@ -42,36 +45,81 @@ export const RenderNewOrderForm = function() {
                 </div>
               </div>
             </div>
-            { this.state.newExchangeOrderDetails.orderStep === 1 &&
+            { this.state.newExchangeOrderDetails.orderStep === 0 &&
               <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
                 <div className="panel">
                   <div className="panel-body">
                     <div className="row">
                       <div className="col-lg-12 form-group form-material">
+                        <a
+                          className="pointer exchange-order-clear"
+                          onClick={ this.clearOrder }>Clear</a>
+                        <label
+                          className="control-label select"
+                          htmlFor="newExchangeOrderDetailsCoinSrc">
+                          Source
+                        </label>
                         <Select
+                          id="newExchangeOrderDetailsCoinSrc"
                           name="newExchangeOrderDetails-coinSrc"
-                          value={ this.sate.newExchangeOrderDetails.coinSrc }
-                          onChange={ (event) => this.updateSelectedCoin(event, 'coinSrc') }
+                          value={ this.state.newExchangeOrderDetails.coinSrc }
+                          onChange={ (event) => this.updateSelectedCoin(event, 'src') }
                           optionRenderer={ this.renderCoinOption }
                           valueRenderer={ this.renderCoinOption }
-                          options={ this.getActiveCoins() } />
+                          options={ addCoinOptionsCrypto(this.coinsSrcList || this.props.Main.coins, null, true) } />
+                      </div>
+                      <div className="col-lg-12 form-group form-material">
+                        <label
+                          className="control-label select"
+                          htmlFor="newExchangeOrderDetailsCoinDest">
+                          Destination
+                        </label>
+                        <Select
+                          id="newExchangeOrderDetailsCoinDest"
+                          name="newExchangeOrderDetails-coinDest"
+                          value={ this.state.newExchangeOrderDetails.coinDest }
+                          onChange={ (event) => this.updateSelectedCoin(event, 'dest') }
+                          optionRenderer={ this.renderCoinOption }
+                          valueRenderer={ this.renderCoinOption }
+                          options={ addCoinOptionsCrypto(this.coinsDestList || this.props.Main.coins, null, true) } />
                       </div>
                       <div className="col-lg-12 form-group form-material">
                         <button
                           type="button"
                           className="btn btn-default btn-send-self"
+                          disabled={
+                            Number(this.state.newExchangeOrderDetails.currentBalance) === 0 ||
+                            this.state.newExchangeOrderDetails.currentBalance === 'none' ||
+                            this.state.newExchangeOrderDetails.currentBalance === 'loading'
+                          }
                           onClick={ this.setSendAmountAll }>
                           { translate('SEND.ALL') }
                         </button>
                         <label
                           className="control-label"
                           htmlFor="kmdWalletAmount">
-                          { translate('INDEX.AMOUNT') }
+                          <span>{ translate('INDEX.AMOUNT') }</span>
+                          { this.state.newExchangeOrderDetails.currentBalance !== 'none' &&
+                            this.state.newExchangeOrderDetails.currentBalance !== 'loading' &&
+                            <span className="padding-left-5">
+                              <strong>[ { this.state.newExchangeOrderDetails.currentBalance } ]</strong>
+                            </span>
+                          }
+                          { this.state.newExchangeOrderDetails.currentBalance === 'loading' &&
+                            <span className="padding-left-5">
+                              <strong>[...]</strong>
+                            </span>
+                          }
                         </label>
                         <input
                           type="text"
                           className="form-control"
                           name="newExchangeOrderDetails-amount"
+                          disabled={
+                            Number(this.state.newExchangeOrderDetails.currentBalance) === 0 ||
+                            this.state.newExchangeOrderDetails.currentBalance === 'none' ||
+                            this.state.newExchangeOrderDetails.currentBalance === 'loading'
+                          }
                           value={ this.state.newExchangeOrderDetails.amount !== 0 ? this.state.newExchangeOrderDetails.amount : '' }
                           onChange={ this.updateInput }
                           id="kmdWalletAmount"
@@ -117,9 +165,15 @@ export const RenderNewOrderForm = function() {
         </div>
       }
       { this.state.newExchangeOrderDetails.step === 1 &&
+        this.props.Main.coins &&
+        this.props.Main.coins.spv.length > 1 &&
         <div className="step2">
           Deposit
         </div>
+      }
+      { this.props.Main.coins &&
+        this.props.Main.coins.spv.length < 2 &&
+        <div>Please activate Lite mode coins that you wish to exchange</div>
       }
     </section>
   );

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import {
   getExchangesCache,
   toggleExchangesOrderInfoModal,
+  apiElectrumBalancePromise,
+  apiEthereumBalancePromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -11,6 +13,7 @@ import ExchangesRender, {
   RenderExchangeHistory,
   RenderNewOrderForm,
 } from './exchanges.render';
+import { setTimeout } from 'timers';
 const { shell } = window.require('electron');
 
 const EXCHANGES_CACHE_UPDATE_INTERVAL = 60; // sec
@@ -26,6 +29,7 @@ class Exchanges extends React.Component {
       provider: providers[0],
       newExchangeOrder: false,
       newExchangeOrderDetails: {
+        currentBalance: 'none',
         step: 0,
         orderStep: 0,
         depositStep: 0,
@@ -37,24 +41,85 @@ class Exchanges extends React.Component {
         minAmount: null,
       },
     };
-    this.defailtExchangeOrderState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+    this.coinsSrcList = null;
+    this.coinsDestList = null;
+    this.defaultExchangeOrderState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
     this.exchangesCacheInterval = null;
     this._toggleExchangesOrderInfoModal = this._toggleExchangesOrderInfoModal.bind(this);
     this.toggleCreateOrder = this.toggleCreateOrder.bind(this);
+    this.updateInput = this.updateInput.bind(this);
+    this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
+    this.clearOrder = this.clearOrder.bind(this);
   }
 
-  getActiveCoins() {
-    const _activeCoins = this.props.Main.coins.spv;
-    let _items = [];
+  clearOrder() {
+    this.setState({
+      newExchangeOrderDetails: this.defaultExchangeOrderState,
+    });
+    this.coinsSrcList = null;
+    this.coinsDestList = null;
+  }
 
-    if (_activeCoins &&
-        _activeCoins.length) {
-      for (let i = 0; _activeCoins.length; i++) {
+  updateSelectedCoin(e, type) {
+    if (e &&
+        e.value) {
+      const _coin = e.value.split('|');
+      let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+      _newState[type === 'src' ? 'coinSrc' : 'coinDest'] = e.value;
 
+      if (type === 'src') {
+        _newState.amount = '';
+        _newState.currentBalance = '...';
+
+        if (_coin[1] === 'spv') {
+          apiElectrumBalancePromise(
+            _coin[0],
+            this.props.Dashboard.electrumCoins[_coin[0]].pub
+          )
+          .then((res) => {
+            let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+            _newState.currentBalance = res.msg === 'success' ? res.result.balance : 'none';
+
+            this.setState({
+              newExchangeOrderDetails: _newState,
+            });
+          });
+        } else if (_coin[1] === 'eth') {
+          apiEthereumBalancePromise(
+            _coin[0],
+            this.props.Dashboard.ethereumCoins[_coin[0]].pub
+          )
+          .then((res) => {
+            let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+            _newState.currentBalance = res.msg === 'success' ? res.result.balance : 'none';
+
+            this.setState({
+              newExchangeOrderDetails: _newState,
+            });
+          });
+        }
+      }
+  
+      this.setState({
+        newExchangeOrderDetails: _newState,
+      });
+
+      if (type === 'src') {
+        let _coins = JSON.parse(JSON.stringify(this.props.Main.coins));
+        _coins[_coin[1]].splice(_coins[_coin[1]].indexOf(_coin[0].toUpperCase()), 1);
+        this.coinsDestList = _coins;
+      } else {
+        let _coins = JSON.parse(JSON.stringify(this.props.Main.coins));
+        _coins[_coin[1]].splice(_coins[_coin[1]].indexOf(_coin[0].toUpperCase()), 1);
+        this.coinsSrcList = _coins;
       }
     }
+  }
 
-    return _items;
+  updateInput(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   }
 
   toggleCreateOrder() {
@@ -84,6 +149,19 @@ class Exchanges extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.exchangesCacheInterval);
+  }
+
+  renderCoinOption(option) {
+    return (
+      <div>
+        <img
+          src={ `assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
+          alt={ option.label }
+          width="30px"
+          height="30px" />
+          <span className="margin-left-10">{ option.label }</span>
+      </div>
+    );
   }
 
   render() {

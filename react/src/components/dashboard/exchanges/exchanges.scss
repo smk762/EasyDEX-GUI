@@ -22,4 +22,20 @@
   .panel {
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
   }
+  .coin-send-form {
+    overflow: visible;
+  }
+  .form-material {
+    .control-label {
+      &.select {
+        top: -7px;
+      }
+    }
+  }
+  .exchange-order-clear {
+    color: #757575;
+    position: absolute;
+    right: 20px;
+    margin-top: -5px;
+  }
 }
