@@ -46,6 +46,7 @@ const coins = {
     PTX: 'PatentTX',
     ZEX: 'Zaddex',
     SPLTEST: 'Sapling Test Chain',
+    LUMBER: 'Lumberscout',
   },
   CRYPTO: {
     STRAT: 'Stratis',
