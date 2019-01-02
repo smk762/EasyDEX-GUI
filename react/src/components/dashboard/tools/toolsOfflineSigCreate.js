@@ -4,7 +4,7 @@ import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
-  triggerToaster,
+  copyString,
   apiToolsBalance,
   apiToolsBuildUnsigned,
   apiToolsPushTx,
@@ -18,6 +18,8 @@ import Store from '../../../store';
 import QRCode from 'qrcode.react';
 import QRModal from '../qrModal/qrModal';
 import { toSats } from 'agama-wallet-lib/src/utils';
+
+// TODO: btc handling, address/amount validation
 
 class ToolsOfflineSigCreate extends React.Component {
   constructor() {
@@ -37,13 +39,28 @@ class ToolsOfflineSigCreate extends React.Component {
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.getBalance = this.getBalance.bind(this);
     this.getUnsignedTx = this.getUnsignedTx.bind(this);
+    this.setSendAmountAll = this.setSendAmountAll.bind(this);
     this.closeQr = this.closeQr.bind(this);
+    this.copyTx = this.copyTx.bind(this);
+  }
+
+  copyTx() {
+    Store.dispatch(copyString(this.state.tx2qr, 'Unsigned transaction is copied to clipboard'));
+  }
+
+  setSendAmountAll() {
+    this.setState({
+      amount: this.state.balance.balance,
+    });
   }
 
   getBalance() {
     const _coin = this.state.selectedCoin.split('|');
 
-    apiToolsBalance(_coin[0], this.state.sendFrom)
+    apiToolsBalance(
+      _coin[0],
+      this.state.sendFrom
+    )
     .then((res) => {
       if (res.msg === 'success') {
         this.setState({
@@ -72,23 +89,10 @@ class ToolsOfflineSigCreate extends React.Component {
     )
     .then((res) => {
       if (res.msg === 'success') {
-        const tx2qr = JSON.stringify(res.result);
-       /* let tx2qr = 'agtx:';
-        res = res.result;
-
-        tx2qr += (res.network === 'komodo' ? 'KMD' : res.network) + ':' + res.outputAddress + ':' + res.changeAddress + ':' + res.value + ':' + res.change + ':u:';
-
-        for (let i = 0; i < res.utxoSet.length; i++) {
-          tx2qr += res.utxoSet[i].txid + ':' + res.utxoSet[i].value + ':' + res.utxoSet[i].vout + (i === res.utxoSet.length -1 ? '' : '-');
-        }
-
-        // console.warn(tx2qr);
-        // console.warn('txqr length', tx2qr.length);
-
-        // max 350 chars*/
+        res.result.coin = _coin[0].toLowerCase();
 
         this.setState({
-          tx2qr,
+          tx2qr: JSON.stringify(res.result),
           utxo: res.result.utxoSet,
         });
       } else {
@@ -224,56 +228,51 @@ class ToolsOfflineSigCreate extends React.Component {
             id="kmdWalletAmount"
             placeholder="0.000"
             autoComplete="off" />
+          { this.state.balance &&
+            this.state.balance.balance > 0 &&
+            <button
+              type="button"
+              className="btn btn-default btn-send-self-offlinesig"
+              onClick={ this.setSendAmountAll }>
+              { translate('SEND.ALL') }
+            </button>
+          }
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
           <button
             type="button"
             className="btn btn-primary col-sm-2"
-            onClick={ this.getUnsignedTx }>
-            { translate('TOOLS.GEN_UNSIG_TX_QR') }
+            onClick={ this.getUnsignedTx }
+            disabled={
+              !this.state.balance ||
+              !this.state.sendFrom ||
+              !this.state.sendTo ||
+              !this.state.selectedCoin
+            }>
+            Generate unsigned transaction
           </button>
         </div>
         { this.state.tx2qr &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
-            <label className="control-label col-sm-1 no-padding-left">
+            <label className="control-label col-sm-3 no-padding-left">
             Unsigned transaction
             </label>
+          </div>
+        }
+        { this.state.tx2qr &&
+          <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
             <textarea
               rows="5"
               cols="20"
               className="col-sm-7"
               value={ this.state.tx2qr }></textarea>
+            <button
+              className="btn btn-default btn-xs clipboard-edexaddr margin-left-20"
+              title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+              onClick={ this.copyTx }>
+              <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+            </button>
           </div>
-        }
-        { this.state.tx2qr &&
-          <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
-            <label className="control-label col-sm-2 no-padding-left">
-            { translate('TOOLS.UTXO_COUNT') }: { this.state.utxo.length }
-            </label>
-            { this.state.utxo.length > 3 &&
-              <div className="col-red margin-left-20 margin-top-5">
-              { translate('TOOLS.UTXO_COUNT_TO_MERGE') }
-              </div>
-            }
-          </div>
-        }
-        { /*this.state.tx2qr &&
-          this.state.utxo.length < 4 &&
-          <div className="offlinesig-qr">
-            <div className="margin-top-50 margin-bottom-70 center">
-              <div>
-                <QRCode
-                  value={ this.state.tx2qr }
-                  size={ 560 } />
-              </div>
-              <button
-                type="button"
-                className="btn btn-primary col-sm-2"
-                onClick={ this.closeQr }>
-                { translate('TOOLS.CLOSE') }
-              </button>
-            </div>
-          </div>*/
         }
       </div>
     );
