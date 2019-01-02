@@ -264,7 +264,7 @@ export const TxHistoryListRender = function() {
   if (_activeCoin &&
       _activeCoin.txhistory &&
       !this.state.searchTerm) {
-    _data = _activeCoin.txhistory;
+    _data = this.props.ActiveCoin.txhistory || _activeCoin;
   }
 
   _data = _data || this.state.filteredItemsList;

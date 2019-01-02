@@ -37,7 +37,6 @@ import { secondsToString } from 'agama-wallet-lib/src/time';
 import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
 import mainWindow from '../../../util/mainWindow';
-import { setTimeout } from 'timers';
 
 /*import io from 'socket.io-client';
 
@@ -507,7 +506,7 @@ class WalletsData extends React.Component {
   _setTxHistory(oldTxHistory) {
     const _txhistory = this.state.kvView ? this.state.kvHistory : (oldTxHistory ? oldTxHistory : this.props.ActiveCoin.txhistory);
     let _stateChange = {};
-
+        
     // TODO: figure out why changing ActiveCoin props doesn't trigger comp update
     if (_txhistory &&
         _txhistory !== 'loading' &&
@@ -552,8 +551,8 @@ class WalletsData extends React.Component {
         this.spvAutoReconnect();
       }
     }
-
-    this.setState(Object.assign({}, _stateChange));
+    
+    this.setState(_stateChange);
   }
 
   componentWillReceiveProps(props) {
