@@ -30,7 +30,7 @@ const CoinTileItemRender = function() {
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"
-              src={ `assets/images/cryptologo/${item.coinlogo.toLowerCase()}.png` }
+              src={ `assets/images/cryptologo/${item.mode === 'spv' ? 'btc' : 'eth'}/${item.coinlogo.toLowerCase()}.png` }
               alt={ item.coinname }/>
           </a>
           <div className="coin-name">
