@@ -64,7 +64,7 @@ const prepCoinsList = (filterActiveCoins) => {
             _activeCoins.native.indexOf(_coinuc) === -1))) {
           _items.push({
             label: `${translate('CRYPTO.' + coins[i])} (${coins[i]})`,
-            icon: coins[i],
+            icon: `btc/${coins[i]}`,
             value: `${coins[i]}|${coins[i] === 'KMD' ? availableKMDModes : 'spv'}`,
           });
         }
@@ -77,18 +77,18 @@ const prepCoinsList = (filterActiveCoins) => {
         !_disableETH) {
       _items.push({
         label: `${translate('CRYPTO.ETH')} (ETH)`,
-        icon: 'ETH',
+        icon: 'eth/ETH',
         value: 'ETH',
       }, {
         label: `${translate('CRYPTO.ETH_ROPSTEN')} (TESTNET)`,
-        icon: 'ETH',
+        icon: 'eth/ETH',
         value: 'ETH|ropsten',
       });
 
       for (let key in erc20ContractId) {
         _items.push({
           label: `${translate('CRYPTO.' + key)} (${key} ERC20)`,
-          icon: key,
+          icon: `eth/${key}`,
           value: `ETH|${key}`,
         });
       }
