@@ -1,6 +1,6 @@
 {
   "name": "AgamaGUI",
-  "version": "0.2.44",
+  "version": "0.3.3",
   "description": "Agama Wallet GUI",
   "main": "src/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "update-agamalib": "rm -rf node_modules/agama-wallet-lib/ && npm install"
   },
   "repository": "https://github.com/KomodoPlatform/EasyDEX-GUI",
-  "homepage": "http://komodoplatform.com",
+  "homepage": "https://komodoplatform.com",
   "keywords": [
     "agama",
     "SuperNET",
@@ -28,7 +28,11 @@
     "wallet",
     "spv"
   ],
-  "author": "SuperNET Team",
+  "author": {
+    "name": "Komodo Platform Team",
+    "email": "info@komodoplatform.com",
+    "url": "https://komodoplatform.com"
+  },
   "license": "MIT",
   "dependencies": {
     "agama-wallet-lib": "git://github.com/pbca26/agama-wallet-lib#dev",
