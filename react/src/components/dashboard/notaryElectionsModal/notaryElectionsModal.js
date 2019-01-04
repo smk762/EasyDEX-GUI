@@ -648,25 +648,25 @@ class NotaryElectionsModal extends React.Component {
                           <label className="notary-elections-node-title">NA</label>
                           <img
                             onClick={ () => this.setRegion('na') }
-                            src="assets/images/cryptologo/kmd.png" />
+                            src="assets/images/cryptologo/btc/kmd.png" />
                         </div>
                         <div className={ 'elections-map-node elections-map-node--sh' + (this.state.region === 'sh' ? ' active' : '') }>
                           <label className="notary-elections-node-title">SH</label>
                           <img
                             onClick={ () => this.setRegion('sh') }
-                            src="assets/images/cryptologo/kmd.png" />
+                            src="assets/images/cryptologo/btc/kmd.png" />
                         </div>
                         <div className={ 'elections-map-node elections-map-node--ae' + (this.state.region === 'ae' ? ' active' : '') }>
                           <label className="notary-elections-node-title">AE</label>
                           <img
                             onClick={ () => this.setRegion('ae') }
-                            src="assets/images/cryptologo/kmd.png" />
+                            src="assets/images/cryptologo/btc/kmd.png" />
                         </div>
                         <div className={ 'elections-map-node elections-map-node--eu' + (this.state.region === 'eu' ? ' active' : '') }>
                           <label className="notary-elections-node-title">EU</label>
                           <img
                             onClick={ () => this.setRegion('eu') }
-                            src="assets/images/cryptologo/kmd.png" />
+                            src="assets/images/cryptologo/btc/kmd.png" />
                         </div>
                       </div>
                     </div>

@@ -146,7 +146,7 @@ export const JumblrRender = function() {
                   <span className="coin">{ this.props.ActiveCoin.coin }</span>
                   <img
                     className="image"
-                    src={ `assets/images/cryptologo/${this.props.ActiveCoin.coin.toLowerCase()}.png` }
+                    src={ `assets/images/cryptologo/btc/${this.props.ActiveCoin.coin.toLowerCase()}.png` }
                     alt={ this.props.ActiveCoin.coin } />
                 </div>
                 <ul className="nav nav-tabs">
