@@ -90,6 +90,7 @@ class ToolsOfflineSigCreate extends React.Component {
     .then((res) => {
       if (res.msg === 'success') {
         res.result.coin = _coin[0].toLowerCase();
+        res.result.from = this.state.sendFrom;
 
         this.setState({
           tx2qr: JSON.stringify(res.result),
