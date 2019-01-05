@@ -93,7 +93,7 @@ class Exchanges extends React.Component {
   }
 
   orderVerifyStep() {
-    // TODO: move to backend
+    // TODO: move to backend, account for tx fee, amount validation
     console.warn('state', this.state);
 
     const srcCoinSym = this.state.newExchangeOrderDetails.coinSrc.split('|')[0].toLowerCase();

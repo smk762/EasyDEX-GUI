@@ -149,22 +149,69 @@ export const RenderNewOrderForm = function() {
                   <div className="panel-body">
                     <div className="row">
                       <div className="col-xs-12">
-                        <strong>Source</strong>
+                        <strong>You pay</strong>
                       </div>
-                      <div className="col-lg-12 col-sm-12 col-xs-12"></div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                        { this.state.newExchangeOrderDetails.amount } { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }
+                        <span className="padding-left-30">
+                          { this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.prices[this.state.newExchangeOrderDetails.coinSrc.split('|')[0]][Config.defaultFiatCurrency.toUpperCase()] } { Config.defaultFiatCurrency.toUpperCase() }
+                        </span>
+                      </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Destination</strong>
+                        <strong>You receive</strong>
                       </div>
-                      <div className="col-lg-12 col-sm-12 col-xs-12"></div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                        { this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] }
+                        <span className="padding-left-30">
+                          { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate * this.state.newExchangeOrderDetails.prices[this.state.newExchangeOrderDetails.coinDest.split('|')[0]][Config.defaultFiatCurrency.toUpperCase()]).toFixed(8) } { Config.defaultFiatCurrency.toUpperCase() }
+                        </span>
+                      </div>
                     </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>Exchange rate</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                      { this.state.newExchangeOrderDetails.exchangeRate.rate } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] } for 1 { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }
+                      </div>
+                    </div>
+                    { this.state.newExchangeOrderDetails.amount > this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin &&
+                      <div className="row padding-top-20">
+                        <div className="col-xs-12">
+                          <strong>Error</strong>
+                        </div>
+                        <div className="col-lg-12 col-sm-12 col-xs-12">
+                          { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } amount exceeds max allowed value { this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin }
+                        </div>
+                        { this.state.newExchangeOrderDetails.amount < this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin &&
+                          <div className="col-lg-12 col-sm-12 col-xs-12">
+                            { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } amount is too low, min deposit amount is { this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin }
+                          </div>
+                        }
+                      </div>
+                    }
+                    { this.state.newExchangeOrderDetails.amount < this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin &&
+                      <div className="row padding-top-20">
+                        <div className="col-xs-12">
+                          <strong>Error</strong>
+                        </div>
+                        <div className="col-lg-12 col-sm-12 col-xs-12">
+                          { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } amount is too low, min deposit amount is { this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin }
+                        </div>
+                      </div>
+                    }
                     <div className="widget-body-footer">
                       <a className="btn btn-default waves-effect waves-light">Back</a>
                       <div className="widget-actions pull-right">
                         <button
                           type="button"
-                          className="btn btn-primary">
+                          className="btn btn-primary"
+                          disabled={
+                            this.state.newExchangeOrderDetails.amount < this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin ||
+                            this.state.newExchangeOrderDetails.amount > this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin
+                          }>
                           Confirm
                         </button>
                       </div>
