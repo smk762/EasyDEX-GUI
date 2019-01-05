@@ -44,29 +44,53 @@ const exchangesState = (json, provider) => {
   }
 };
 
-/*export const exchangesGetOrder = (provider) => {
-  return dispatch => {
+export const exchangesGetCoins = (provider) => {
+  return new Promise((resolve, reject) => {
     const _urlParams = {
       token,
-      provider,
     };
-    return fetch(
-      `http://127.0.0.1:${agamaPort}/api/exchanges/order${urlParams(_urlParams)}`,
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/exchanges/${provider}/coins${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.getExchangesCache'),
+          translate('API.exchangesGetCoins'),
           translate('TOASTR.ERROR'),
           'error'
         )
       );
     })
     .then(response => response.json())
-    .then(json => {
-      dispatch(exchangesState(json && json.result ? json.result : json, provider));
-    });
-  };
-}*/
+    .then(json => resolve(json && json.result ? json.result : json));
+  });
+}
+
+export const exchangesGetRate = (provider, src, dest) => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+      combined: true, // changelly
+      src,
+      dest,
+    };
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/exchanges/${provider}/rate${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.exchangesGetRate'),
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => resolve(json && json.result ? json.result : json));
+  });
+}
