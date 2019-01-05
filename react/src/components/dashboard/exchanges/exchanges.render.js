@@ -203,7 +203,9 @@ export const RenderNewOrderForm = function() {
                       </div>
                     }
                     <div className="widget-body-footer">
-                      <a className="btn btn-default waves-effect waves-light">Back</a>
+                      <a
+                        onClick={ this.back }
+                        className="btn btn-default waves-effect waves-light">Back</a>
                       <div className="widget-actions pull-right">
                         <button
                           type="button"

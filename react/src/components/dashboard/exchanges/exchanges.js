@@ -79,6 +79,17 @@ class Exchanges extends React.Component {
     this.setSendAmountAll = this.setSendAmountAll.bind(this);
     this.orderVerifyStep = this.orderVerifyStep.bind(this);
     this.loadTestData = this.loadTestData.bind(this);
+    this.back = this.back.bind(this);
+  }
+
+  back() {
+    let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+    _newState.orderStep--;
+
+    this.setState({
+      processing: false,
+      newExchangeOrderDetails: _newState,
+    });
   }
 
   loadTestData() {
