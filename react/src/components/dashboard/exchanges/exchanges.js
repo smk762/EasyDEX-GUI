@@ -2,9 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   getExchangesCache,
+  exchangesGetRate,
   toggleExchangesOrderInfoModal,
   apiElectrumBalancePromise,
   apiEthereumBalancePromise,
+
+  pricesPromise,
+  apiGetRemoteBTCFees,
+  apiGetLocalBTCFees,
+  apiElectrumSendPreflight,
+  apiEthereumGasPrice,
+  apiEthereumSend,
+  apiEthereumSendERC20Preflight,  
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -13,9 +22,22 @@ import ExchangesRender, {
   RenderExchangeHistory,
   RenderNewOrderForm,
 } from './exchanges.render';
-import { setTimeout } from 'timers';
-const { shell } = window.require('electron');
+import {
+  explorerList,
+  isKomodoCoin,
+} from 'agama-wallet-lib/src/coin-helpers';
+import {
+  isPositiveNumber,
+  fromSats,
+  toSats,
+  parseBitcoinURL,
+} from 'agama-wallet-lib/src/utils';
+import { formatEther } from 'ethers/utils/units';
+import { getAddress } from 'ethers/utils/address';
+import coinFees from 'agama-wallet-lib/src/fees';
+import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
+const { shell } = window.require('electron');
 const EXCHANGES_CACHE_UPDATE_INTERVAL = 60; // sec
 const providers = [
   'coinswitch',
@@ -28,6 +50,7 @@ class Exchanges extends React.Component {
     this.state = {
       provider: providers[0],
       newExchangeOrder: false,
+      processing: false,
       newExchangeOrderDetails: {
         currentBalance: 'none',
         step: 0,
@@ -39,6 +62,9 @@ class Exchanges extends React.Component {
         coinDest: null,
         rate: null,
         minAmount: null,
+        exchangeRate: null,
+        fiatPrices: null,
+        exchangeOrder: null,
       },
     };
     this.coinsSrcList = null;
@@ -50,6 +76,81 @@ class Exchanges extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.clearOrder = this.clearOrder.bind(this);
+    this.setSendAmountAll = this.setSendAmountAll.bind(this);
+    this.orderVerifyStep = this.orderVerifyStep.bind(this);
+    this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  loadTestData() {
+    let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+    _newState.coinSrc = 'KMD|spv';
+    _newState.coinDest = 'GAME|spv';
+    _newState.amount = 10;
+
+    this.setState({
+      newExchangeOrderDetails: _newState,
+    });
+  }
+
+  orderVerifyStep() {
+    // TODO: move to backend
+    console.warn('state', this.state);
+
+    const srcCoinSym = this.state.newExchangeOrderDetails.coinSrc.split('|')[0].toLowerCase();
+    const destCoinSym = this.state.newExchangeOrderDetails.coinDest.split('|')[0].toLowerCase();
+
+    if (this.state.newExchangeOrderDetails.orderStep === 0) {
+      this.setState({
+        processing: true,
+      });
+
+      exchangesGetRate(
+        this.state.provider,
+        srcCoinSym,
+        destCoinSym
+      )
+      .then((exchangeRate) => {
+        console.warn('rate', exchangeRate);
+
+        if (this.state.provider === 'coinswitch') {
+          if (exchangeRate.msg === 'success' &&
+              exchangeRate.result.data) {
+            let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+            _newState.exchangeRate = exchangeRate.result.data;
+
+            this.setState({
+              newExchangeOrderDetails: _newState,
+            });
+
+            pricesPromise(
+              [srcCoinSym, destCoinSym],
+              Config.defaultFiatCurrency
+            )
+            .then((prices) => {
+              let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+              _newState.prices = prices;
+              _newState.orderStep = 1;
+
+              this.setState({
+                processing: false,
+                newExchangeOrderDetails: _newState,
+              });
+
+              console.warn('prices', prices);
+            });
+          }
+        }
+      });
+    }
+  }
+
+  setSendAmountAll() {
+    let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+    _newState.amount = this.state.newExchangeOrderDetails.currentBalance;
+
+    this.setState({
+      newExchangeOrderDetails: _newState,
+    });
   }
 
   clearOrder() {
@@ -104,21 +205,25 @@ class Exchanges extends React.Component {
         newExchangeOrderDetails: _newState,
       });
 
+      let _coins = JSON.parse(JSON.stringify(this.props.Main.coins));
+      _coins[_coin[1]].splice(_coins[_coin[1]].indexOf(_coin[0].toUpperCase()), 1);
+  
       if (type === 'src') {
-        let _coins = JSON.parse(JSON.stringify(this.props.Main.coins));
-        _coins[_coin[1]].splice(_coins[_coin[1]].indexOf(_coin[0].toUpperCase()), 1);
         this.coinsDestList = _coins;
       } else {
-        let _coins = JSON.parse(JSON.stringify(this.props.Main.coins));
-        _coins[_coin[1]].splice(_coins[_coin[1]].indexOf(_coin[0].toUpperCase()), 1);
         this.coinsSrcList = _coins;
       }
     }
   }
 
   updateInput(e) {
+    let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
+    _newState[e.target.name.split('-')[1]] = e.target.value;
+
+    console.warn(_newState);
+
     this.setState({
-      [e.target.name]: e.target.value,
+      newExchangeOrderDetails: _newState,
     });
   }
 

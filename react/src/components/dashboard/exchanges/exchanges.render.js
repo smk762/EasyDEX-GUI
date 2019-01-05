@@ -50,6 +50,12 @@ export const RenderNewOrderForm = function() {
                 <div className="panel">
                   <div className="panel-body">
                     <div className="row">
+                      <button
+                        type="button"
+                        className="btn btn-primary waves-effect waves-light pull-right"
+                        onClick={ this.loadTestData }>
+                        Load test data
+                      </button>
                       <div className="col-lg-12 form-group form-material">
                         <a
                           className="pointer exchange-order-clear"
@@ -126,6 +132,12 @@ export const RenderNewOrderForm = function() {
                           placeholder="0.000"
                           autoComplete="off" />
                       </div>
+                      <button
+                        type="button"
+                        className="btn btn-primary waves-effect waves-light pull-right"
+                        onClick={ this.orderVerifyStep }>
+                        { this.state.processing ? 'Please wait...' : 'Next' }
+                      </button>
                     </div>
                   </div>
                 </div>

@@ -70,7 +70,8 @@ export const exchangesGetCoins = (provider) => {
 
 export const exchangesGetRate = (provider, src, dest) => {
   return new Promise((resolve, reject) => {
-    const _urlParams = {
+    resolve({"msg":"success","result":{"success":true,"code":"OK","data":{"rate":8.64656004,"minerFee":0,"limitMinDepositCoin":24.775061,"limitMaxDepositCoin":4408.575,"limitMinDestinationCoin":214.219054,"limitMaxDestinationCoin":38119.013},"msg":""}});
+    /*const _urlParams = {
       token,
       combined: true, // changelly
       src,
@@ -91,6 +92,6 @@ export const exchangesGetRate = (provider, src, dest) => {
       );
     })
     .then(response => response.json())
-    .then(json => resolve(json && json.result ? json.result : json));
+    .then(json => resolve(json && json.result ? json.result : json));*/
   });
 }
