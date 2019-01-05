@@ -26,3 +26,17 @@ const pricesState = (json) => {
     prices: json,
   }
 }
+
+export const pricesPromise = (coins, currency) => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `https://www.atomicexplorer.com/api/mm/prices/v2?currency=${currency}&coins=${typeof coins === 'object' ? coins.join(',') : coins}&pricechange=true`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(response => response.json())
+    .then(json => resolve(json && json.msg === 'success' ? json.result : 'error'));
+  });
+}
