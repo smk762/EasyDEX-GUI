@@ -65,8 +65,9 @@ class ToolsMultisigAddress extends React.Component {
           networks[_coin[0].toLowerCase()] || networks.kmd
         );
 
-        const _agama = JSON.stringify(_msigAddress);
-        _msigAddress.agama = _agama;
+        let _agama = JSON.stringify(JSON.parse(_msigAddress));
+        _agama.nOfN = this.state.nOfN;
+        _msigAddress.agama = JSON.stringify(_agama);
 
         this.setState({
           msigData: _msigAddress,
@@ -165,7 +166,7 @@ class ToolsMultisigAddress extends React.Component {
             cols="20"
             name="pubHex"
             className="col-sm-7 no-padding-left"
-            placeholder={ `Provide ${this.state.nOfN.split('-')[1]} pub keys (hex). Place each key hex is on a new line.` }
+            placeholder={ `Provide ${this.state.nOfN.split('-')[1]} pub keys (hex). Place each key hex on a new line.` }
             onChange={ this.updateInput }
             value={ this.state.pubHex }></textarea>
         </div>
