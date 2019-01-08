@@ -66,7 +66,7 @@ class ToolsMultisigAddress extends React.Component {
         );
 
         const _agama = {
-          reedeemScript: _msigAddress.redeemScript,
+          redeemScript: _msigAddress.redeemScript,
           scriptPubKey: _msigAddress.scriptPubKey,
           nOfN: this.state.nOfN,
         };
