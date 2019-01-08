@@ -65,8 +65,11 @@ class ToolsMultisigAddress extends React.Component {
           networks[_coin[0].toLowerCase()] || networks.kmd
         );
 
-        let _agama = JSON.stringify(JSON.parse(_msigAddress));
-        _agama.nOfN = this.state.nOfN;
+        const _agama = {
+          reedeemScript: _msigAddress.redeemScript,
+          scriptPubKey: _msigAddress.scriptPubKey,
+          nOfN: this.state.nOfN,
+        };
         _msigAddress.agama = JSON.stringify(_agama);
 
         this.setState({

@@ -35,7 +35,7 @@ import {
 } from 'agama-wallet-lib/src/utils';
 import mainWindow from '../../../util/mainWindow';
 
-// TODO: btc handling, address/amount validation
+// TODO: btc handling
 
 class ToolsOfflineSigCreate extends React.Component {
   constructor() {
@@ -304,7 +304,8 @@ class ToolsOfflineSigCreate extends React.Component {
           <button
             type="button"
             className="btn btn-info col-sm-2"
-            onClick={ this.getBalance }>
+            onClick={ this.getBalance }
+            disabled={ !this.state.sendFrom }>
             { translate('TOOLS.GET_BALANCE') }
           </button>
           { this.state.balance &&
