@@ -25,13 +25,12 @@ class ToolsMultisigAddressStorage extends React.Component {
   constructor() {
     super();
     this.state = {
-      encryptKey: '123',
-      encryptKeyConfirm: '123',
+      encryptKey: '',
+      encryptKeyConfirm: '',
       isCustomPinFilename: false,
       customPinFilename: null,
       seed: null,
       msigData: null,
-      saveIntoStorage: false,
     };
     this.updateInput = this.updateInput.bind(this);
     this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
