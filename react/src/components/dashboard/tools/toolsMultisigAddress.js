@@ -66,12 +66,14 @@ class ToolsMultisigAddress extends React.Component {
           networks[_coin[0].toLowerCase()] || networks.kmd
         );
 
+        const _messageSecret = mainWindow.sha256(_pubKeys.join('-') + _msigAddress.redeemScript).toString('hex');
+        const _messageCID = _messageSecret.substring(_messageSecret.length / 2, Math.floor(_messageSecret.length / 4)) + _messageSecret.substring(0, Math.floor(_messageSecret.length / 4));
         const _agama = {
           redeemScript: _msigAddress.redeemScript,
           scriptPubKey: _msigAddress.scriptPubKey,
           nOfN: this.state.nOfN,
           messageSecret: mainWindow.sha256(_pubKeys.join('-') + _msigAddress.redeemScript).toString('hex'),
-          messageCID: mainWindow.randomBytes(),
+          messageCID: _messageCID,
         };
         _msigAddress.agama = JSON.stringify(_agama);
 
