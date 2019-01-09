@@ -16,6 +16,7 @@ import {
   copyString,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import mainWindow from '../../../util/mainWindow';
 
 import { msigAddress } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
@@ -69,6 +70,8 @@ class ToolsMultisigAddress extends React.Component {
           redeemScript: _msigAddress.redeemScript,
           scriptPubKey: _msigAddress.scriptPubKey,
           nOfN: this.state.nOfN,
+          messageSecret: mainWindow.sha256(_pubKeys.join('-') + _msigAddress.redeemScript).toString('hex'),
+          messageCID: mainWindow.randomBytes(),
         };
         _msigAddress.agama = JSON.stringify(_agama);
 
@@ -168,7 +171,7 @@ class ToolsMultisigAddress extends React.Component {
             rows="5"
             cols="20"
             name="pubHex"
-            className="col-sm-7 no-padding-left"
+            className="col-sm-7 padding-top-10 padding-bottom-10"
             placeholder={ `Provide ${this.state.nOfN.split('-')[1]} pub keys (hex). Place each key hex on a new line.` }
             onChange={ this.updateInput }
             value={ this.state.pubHex }></textarea>
@@ -184,6 +187,9 @@ class ToolsMultisigAddress extends React.Component {
             onClick={ this.generateMsigAddress }>
             Generate multi signature address
           </button>
+        </div>
+        <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
+          <h4>Warning! Pub keys section is order dependent. Different order will produce different redeem script, script pub key and pub address.</h4>
         </div>
         { this.state.msigData &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
