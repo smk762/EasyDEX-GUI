@@ -50,7 +50,7 @@ class ToolsMultisigTx extends React.Component {
       sendFrom: '',
       sendTo: '',
       amount: 0,
-      selectedCoin: 'KMD|spv',
+      selectedCoin: null,
       balance: null,
       utxo: null,
       txPushResult: null,
@@ -62,6 +62,7 @@ class ToolsMultisigTx extends React.Component {
       creator: true,
       seed: '',
     };
+    this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.getBalance = this.getBalance.bind(this);
@@ -91,6 +92,9 @@ class ToolsMultisigTx extends React.Component {
       // console.warn(res);
 
       this.setState({
+        agamaMultisigIncompleteTx: null,
+        agamaMultisigIncompleteTxParsed: null,
+        agamaMultisigTxOut: null,
         txPushResult: res.result,
       });
     });
@@ -130,11 +134,15 @@ class ToolsMultisigTx extends React.Component {
   }
 
   componentWillMount() {
-    if (mainWindow.multisig) {
-      this.setState({
-        agamaMultisigData: JSON.stringify(mainWindow.multisig),
-      });
-    }
+    this.setState(this.defaultState);
+
+    setTimeout(() => {
+      if (mainWindow.multisig) {
+        this.setState({
+          agamaMultisigData: JSON.stringify(mainWindow.multisig),
+        });
+      }
+    }, 100);
   }
 
   copyTxData() {
@@ -780,6 +788,7 @@ class ToolsMultisigTx extends React.Component {
           </div>
         }
         { this.state.agamaMultisigTxOut &&
+          !this.state.txPushResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
             <div>
               <strong>Multi signature transaction data</strong>
