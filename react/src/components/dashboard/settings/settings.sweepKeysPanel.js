@@ -304,8 +304,8 @@ class SweepKeysPanel extends React.Component {
     let _items = [];
 
     for (let i = 0; i < allCoins.length; i++) {
-      if (_activeCoins[allCoins[i].icon.toUpperCase()] &&
-          allCoins[i].icon.toUpperCase() !== 'BTC') {
+      if (_activeCoins[allCoins[i].icon.split('/')[1].toUpperCase()] &&
+          allCoins[i].icon.split('/')[1].toUpperCase() !== 'BTC') {
         _items.push(allCoins[i]);
       }
     }
