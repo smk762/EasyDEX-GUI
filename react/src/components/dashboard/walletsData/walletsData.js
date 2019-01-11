@@ -880,6 +880,7 @@ const mapStateToProps = (state) => {
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
       progress: state.ActiveCoin.progress,
     },
+    AddressBook: state.Settings.addressBook,
     Main: state.Main,
     Dashboard: state.Dashboard,
   };

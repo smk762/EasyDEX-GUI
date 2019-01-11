@@ -77,12 +77,26 @@ export const AddressRender = function(address) {
     );
   }
 
+  if (this.props.AddressBook &&
+      this.props.AddressBook.obj &&
+      this.props.AddressBook.obj[address]) {
+    address = this.props.AddressBook.obj[address].title;
+  }
+
   return (
     <span className="blur">{ address }</span>
   );
 };
 
 export const AddressItemRender = function(address, type, amount, coin) {
+  let _address = address;
+  
+  if (this.props.AddressBook &&
+      this.props.AddressBook.obj &&
+      this.props.AddressBook.obj[address]) {
+    _address = this.props.AddressBook.obj[address].title;
+  }
+
   return (
     <li
       key={ address }
@@ -90,7 +104,7 @@ export const AddressItemRender = function(address, type, amount, coin) {
       <a onClick={ () => this.updateAddressSelection(address) }>
         <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
         <span className="text">
-          [ { amount } { coin } ]  <span className="selectable">{ address }</span>
+          [ { amount } { coin } ]  <span className="selectable">{ _address }</span>
         </span>
         <span className="glyphicon glyphicon-ok check-mark"></span>
       </a>
