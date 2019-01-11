@@ -33,7 +33,7 @@ import {
   toSats,
   parseBitcoinURL,
 } from 'agama-wallet-lib/src/utils';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 // TODO: btc handling
 
@@ -71,7 +71,7 @@ class ToolsOfflineSigCreate extends React.Component {
       const _amount = this.state.amount;
       const _amountSats = Math.floor(toSats(this.state.amount));
       const _balanceSats = this.state.balance.balanceSats + this.state.balance.unconfirmedSats;
-      let _fees = mainWindow.spvFees;
+      let _fees = staticVar.spvFees;
       _fees.BTC = 0;
 
       if (Number(_amountSats) + (_customFee || _fees[_coin]) > _balanceSats) {
@@ -164,7 +164,7 @@ class ToolsOfflineSigCreate extends React.Component {
     const _coin = this.state.selectedCoin.split('|')[0];
 
     this.setState({
-      amount: this.state.balance.balance - fromSats(mainWindow.spvFees[_coin]),
+      amount: this.state.balance.balance - fromSats(staticVar.spvFees[_coin]),
     });
   }
 

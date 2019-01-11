@@ -16,7 +16,7 @@ import {
   copyString,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 import { msigAddress } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';

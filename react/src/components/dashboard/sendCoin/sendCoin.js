@@ -31,7 +31,7 @@ import {
   ZmergeToAddressRender,
   AddressListRenderShieldCoinbase,
 } from './sendCoin.render';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import Slider, { Range } from 'rc-slider';
 import ReactTooltip from 'react-tooltip';
 import {
@@ -306,7 +306,7 @@ class SendCoin extends React.Component {
 
   setDefaultFee() {
     this.setState({
-      fee: fromSats(mainWindow.spvFees[this.props.ActiveCoin.coin]),
+      fee: fromSats(staticVar.spvFees[this.props.ActiveCoin.coin]),
     });
   }
 
@@ -315,7 +315,7 @@ class SendCoin extends React.Component {
     const _amountSats = toSats(this.state.amount);
     const _balance = this.props.ActiveCoin.balance;
     const _mode = this.props.ActiveCoin.mode;
-    let _fees = mainWindow.spvFees; // TODO: use lib
+    let _fees = staticVar.spvFees; // TODO: use lib
     _fees.BTC = 0;
 
     if (_mode === 'native') {
@@ -428,7 +428,7 @@ class SendCoin extends React.Component {
         !this.state.fee &&
         _coin !== 'BTC') {
       this.setState({
-        fee: fromSats(mainWindow.spvFees[_coin]),
+        fee: fromSats(staticVar.spvFees[_coin]),
       });
     }
   }
@@ -549,9 +549,9 @@ class SendCoin extends React.Component {
         _coinAddresses[type].length) {
       _coinAddresses[type].map((address) => {
         if (type === 'private' &&
-            mainWindow.chainParams &&
-            mainWindow.chainParams[_coin] &&
-            mainWindow.chainParams[_coin].ac_private &&
+            staticVar.chainParams &&
+            staticVar.chainParams[_coin] &&
+            staticVar.chainParams[_coin].ac_private &&
             !this.state.sendFrom) {
           this.setState({
             sendFrom: address.address,
@@ -612,7 +612,7 @@ class SendCoin extends React.Component {
         </span>
       );
     } else {
-      const _notAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && !mainWindow.chainParams[_coin].ac_private;
+      const _notAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
 
       if (_mode === 'spv' ||
           _mode === 'eth' ||
@@ -859,7 +859,7 @@ class SendCoin extends React.Component {
         let kvHex;
 
         if (this.state.kvSend) {
-          const kvEncode = mainWindow.kvEncode({
+          const kvEncode = staticVar.kvEncode({
             tag: this.state.kvSendTag,
             content: {
               title: this.state.kvSendTitle,
@@ -1037,7 +1037,7 @@ class SendCoin extends React.Component {
   validateSendFormData() {
     const _coin = this.props.ActiveCoin.coin;
     const _mode = this.props.ActiveCoin.mode;
-    const isAcPrivate = _mode === 'native' && _coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[_coin] && mainWindow.chainParams[_coin].ac_private ? true : false;
+    const isAcPrivate = _mode === 'native' && _coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_private ? true : false;
     let valid = true;
 
     if (_mode === 'spv') {
@@ -1045,7 +1045,7 @@ class SendCoin extends React.Component {
       const _amount = this.state.amount;
       const _amountSats = Math.floor(toSats(this.state.amount));
       const _balanceSats = this.props.ActiveCoin.balance.balanceSats + this.props.ActiveCoin.balance.unconfirmedSats;
-      let _fees = mainWindow.spvFees;
+      let _fees = staticVar.spvFees;
       _fees.BTC = 0;
 
       if (Number(_amountSats) + (_customFee || _fees[_coin]) > _balanceSats) {

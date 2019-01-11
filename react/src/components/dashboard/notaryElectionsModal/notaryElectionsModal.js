@@ -13,7 +13,7 @@ import {
   apiElectionsTransactions,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import Spinner from '../spinner/spinner';
 import ReactTooltip from 'react-tooltip';
 

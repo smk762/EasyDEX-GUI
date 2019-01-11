@@ -13,7 +13,7 @@ import {
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import { acConfig } from '../addcoin/payload';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';

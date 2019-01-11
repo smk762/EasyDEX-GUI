@@ -2,7 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
 import { acConfig } from '../../addcoin/payload';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const testChains = [
@@ -118,9 +118,9 @@ const CoinTileItemRender = function() {
           </ul>
         </div>
       }
-      { mainWindow.chainParams &&
-        mainWindow.chainParams[item.coin] &&
-        mainWindow.chainParams[item.coin].ac_private &&
+      { staticVar.chainParams &&
+        staticVar.chainParams[item.coin] &&
+        staticVar.chainParams[item.coin].ac_private &&
         <i
           data-tip={ translate('INDEX.Z_ADDR_ONLY') }
           data-html={ true }

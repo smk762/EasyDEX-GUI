@@ -8,7 +8,7 @@ import {
   apiEthereumCoins,
   loadAddressBook,
 } from '../../actions/actionCreators';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import Config from '../../config';
 
 class Main extends React.Component {
@@ -48,9 +48,13 @@ class Main extends React.Component {
   }
 
   render() {
-    return (
-      <WalletMain />
-    );
+    if (staticVar) {
+      return (
+        <WalletMain />
+      );
+    } else {
+      return null;
+    }
   }
 }
 

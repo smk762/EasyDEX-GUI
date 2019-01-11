@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 const WalletsNavWithWalletRender = function() {
   const pubKeys = mainWindow.getPubkeys();

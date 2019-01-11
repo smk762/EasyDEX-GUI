@@ -18,7 +18,7 @@ import {
 import Store from '../../../store';
 import Config from '../../../config';
 import { checkAC } from '../../addcoin/payload';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import NavbarRender from './navbar.render';
 const { shell } = window.require('electron');
 
@@ -116,7 +116,7 @@ class Navbar extends React.Component {
       isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
     });
 
-    if (mainWindow.argv.indexOf('dexonly') > -1) {
+    if (staticVar.argv.indexOf('dexonly') > -1) {
       Store.dispatch(dashboardChangeSection(mainWindow.activeSection));
     }
   }

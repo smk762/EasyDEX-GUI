@@ -3,7 +3,7 @@ import translate from '../../translate/translate';
 import addCoinOptionsCrypto from '../addcoin/addcoinOptionsCrypto';
 import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 // import addCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
 import { acConfig } from '../addcoin/payload';
@@ -132,7 +132,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </label>
           </div>
         }
-        { mainWindow.arch === 'x64' &&
+        { staticVar.arch === 'x64' &&
           _availModes.native &&
           <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
             <input
@@ -166,7 +166,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </label>
           </div>
         }
-        { mainWindow.arch === 'x64' &&
+        { staticVar.arch === 'x64' &&
           _availModes.staking &&
           <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
             <input
@@ -200,7 +200,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </label>
           </div>
         }
-        { mainWindow.arch === 'x64' &&
+        { staticVar.arch === 'x64' &&
           _availModes.mining &&
           <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
             <input

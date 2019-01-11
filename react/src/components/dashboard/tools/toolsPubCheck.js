@@ -1,6 +1,6 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 class ToolsPubCheck extends React.Component {
   constructor() {
