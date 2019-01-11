@@ -6,7 +6,6 @@ import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
-import { acConfig } from '../addcoin/payload';
 import config from '../../config';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
@@ -309,8 +308,8 @@ const CoinSelectorsRender = function(item, coin, i) {
         </div>
       }
       { item.daemonParam === 'gen' &&
-        acConfig[_coinName] &&
-        acConfig[_coinName].genproclimit &&
+        staticVar.chainParams[_coinName] &&
+        staticVar.chainParams[_coinName].genproclimit &&
         <div className="col-sm-12 no-padding">
           <div className="col-sm-5 padding-bottom-30">
             <div className="toggle-box padding-bottom-10">

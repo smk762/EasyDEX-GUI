@@ -1,7 +1,6 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
-import { acConfig } from '../../addcoin/payload';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
@@ -51,9 +50,9 @@ const CoinTileItemRender = function() {
           className="text-left" />
       </button>
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_reward &&
-        !acConfig[_coinuc].ac_stake &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_reward &&
+        !staticVar.chainParams[_coinuc].ac_stake &&
         _coindStartParamsString &&
         (_coindStartParamsString.indexOf('-genproclimit=') > -1 && _coindStartParamsString.indexOf('-genproclimit=0') === -1) &&
         <i
@@ -66,8 +65,8 @@ const CoinTileItemRender = function() {
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_stake &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_stake &&
         (!_pubkey || !_pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
@@ -79,8 +78,8 @@ const CoinTileItemRender = function() {
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_stake &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_stake &&
         (_pubkey && _pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_ENABLED') }

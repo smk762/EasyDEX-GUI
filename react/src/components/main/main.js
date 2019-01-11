@@ -11,6 +11,8 @@ import {
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import Config from '../../config';
 
+// TODO: add loader comp wrapper to preload vars from ipc
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
