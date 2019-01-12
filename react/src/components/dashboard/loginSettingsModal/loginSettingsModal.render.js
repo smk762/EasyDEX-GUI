@@ -2,6 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import About from '../about/about';
 import Settings from '../settings/settings';
+import Tools from '../tools/tools';
 
 export const LoginSettingsModalRender = function() {
   return (
@@ -23,15 +24,20 @@ export const LoginSettingsModalRender = function() {
                 <span>×</span>
               </button>
               <h4 className="modal-title white">
-                { translate(this.props.section === 'about' ? 'ABOUT.ABOUT_AGAMA' : 'INDEX.SETTINGS') }
+                { this.props.section === 'about' && translate('ABOUT.ABOUT_AGAMA') }
+                { this.props.section === 'settings' && translate('INDEX.SETTINGS') }
+                { this.props.section === 'tools' && translate('TOOLS.TOOLS') }
               </h4>
             </div>
-            <div className="modal-body modal-body-container">
+            <div className="modal-body modal-body-container bg-white">
               { this.props.section === 'settings' &&
                 <Settings disableWalletSpecificUI="true" />
               }
               { this.props.section === 'about' &&
                 <About />
+              }
+              { this.props.section === 'tools' &&
+                <Tools />
               }
             </div>
           </div>
