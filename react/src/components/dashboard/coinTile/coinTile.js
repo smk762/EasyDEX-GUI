@@ -47,7 +47,7 @@ class CoinTile extends React.Component {
 
           const _coinTitle = getCoinTitle(coin.toUpperCase());
           const coinlogo = coin.toUpperCase();
-          const coinname = translate((isKomodoCoin(coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + coin.toUpperCase());
+          const coinname = translate(((mode === 'spv' || mode === 'native') && isKomodoCoin(coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + coin.toUpperCase());
 
           items.push({
             coinlogo,
