@@ -34,7 +34,7 @@ import {
   parseBitcoinURL,
 } from 'agama-wallet-lib/src/utils';
 import transactionBuilder from 'agama-wallet-lib/src/transaction-builder';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { stringToWif } from 'agama-wallet-lib/src/keys';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';
@@ -171,7 +171,7 @@ class ToolsMultisigTx extends React.Component {
       const _amount = this.state.amount;
       const _amountSats = Math.floor(toSats(this.state.amount));
       const _balanceSats = this.state.balance.balanceSats + this.state.balance.unconfirmedSats;
-      let _fees = mainWindow.spvFees;
+      let _fees = staticVar.spvFees;
       _fees.BTC = 0;
 
       if (Number(_amountSats) + (_customFee || _fees[_coin]) > _balanceSats) {
@@ -264,7 +264,7 @@ class ToolsMultisigTx extends React.Component {
     const _coin = this.state.selectedCoin.split('|')[0];
 
     this.setState({
-      amount: this.state.balance.balance - fromSats(mainWindow.spvFees[_coin]),
+      amount: this.state.balance.balance - fromSats(staticVar.spvFees[_coin]),
     });
   }
 
@@ -342,7 +342,7 @@ class ToolsMultisigTx extends React.Component {
           _data = transactionBuilder.data(
             networks[_coin[0].toLowerCase()] || networks.kmd,
             toSats(this.state.amount),
-            mainWindow.spvFees[_coin[0].toUpperCase()],
+            staticVar.spvFees[_coin[0].toUpperCase()],
             this.state.sendTo,
             this.state.sendFrom,
             utxos.result
@@ -603,7 +603,10 @@ class ToolsMultisigTx extends React.Component {
             value={ this.state.seed }
             id="kmdWalletSendTo"
             placeholder={ translate('TOOLS.ENTER_A_SEED') + ' or WIF' }
-            disabled={ mainWindow.multisig && mainWindow.multisig.signKey }
+            disabled={
+              mainWindow.multisig &&
+              mainWindow.multisig.signKey
+            }
             autoComplete="off"
             required />
         </div>

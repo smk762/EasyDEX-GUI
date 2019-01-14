@@ -14,7 +14,7 @@ import {
   apiElectrumKvServersList,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
@@ -74,7 +74,7 @@ class AppSettingsPanel extends React.Component {
   }
 
   componentWillMount() {
-    const _appConfigSchema = mainWindow.appConfigSchema;
+    const _appConfigSchema = staticVar.appConfigSchema;
     const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, mainWindow.appConfig);
 
     this.setState(Object.assign({}, this.state, {

@@ -1,3 +1,4 @@
+import mainWindow, { staticVar } from './util/mainWindow'; // trigger ipc before app amount
 import React from 'react';
 import { render } from 'react-dom';
 import {

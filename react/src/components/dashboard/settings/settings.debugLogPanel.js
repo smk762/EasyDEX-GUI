@@ -8,7 +8,7 @@ import {
   getRuntimeLog,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 
 // TODO: figure out a way to show app debug, url?
@@ -51,14 +51,14 @@ class DebugLogPanel extends React.Component {
 
     getRuntimeLog()
     .then((res) => {
+      const a = document.getElementById('debugLogDumpLink');
+      
+      a.download = 'agama-debug.log';
+      a.href = 'data:text/plain;charset=UTF-8,' + res;
+
       this.setState({
         runtimeInProgress: false,
       });
-
-      const a = document.getElementById('debugLogDumpLink');
-      
-      a.href = 'data:text/plain;charset=UTF-8,' + res;
-      a.download = 'agama-debug.log';
     });
   }
 

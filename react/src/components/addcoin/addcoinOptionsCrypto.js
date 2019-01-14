@@ -1,5 +1,5 @@
 import translate from '../../translate/translate';
-import mainWindow, { electrumServers } from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import config from '../../config';
 import { cryptoCoins } from '../../util/coinHelper';
 import { sortObject } from 'agama-wallet-lib/src/utils';
@@ -35,7 +35,7 @@ for (let key in _coins) {
 coins = coinsList;
 
 const prepCoinsList = (filterActiveCoins) => {
-  const availableKMDModes = mainWindow.arch === 'x64' ? 'spv|native' : 'spv';
+  const availableKMDModes = staticVar.arch === 'x64' ? 'spv|native' : 'spv';
   let _items = [];
 
   if (filterActiveCoins) {
@@ -54,8 +54,8 @@ const prepCoinsList = (filterActiveCoins) => {
         const _coinlc = coins[i].toLowerCase();
         const _coinuc = coins[i].toUpperCase();
         
-        if (electrumServers &&
-            electrumServers[_coinlc] &&
+        if (staticVar.electrumServers &&
+            staticVar.electrumServers[_coinlc] &&
             (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
             _activeCoins &&
             _activeCoins.spv &&

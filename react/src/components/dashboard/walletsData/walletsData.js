@@ -36,7 +36,7 @@ import {
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 /*import io from 'socket.io-client';
 
@@ -233,7 +233,7 @@ class WalletsData extends React.Component {
   }
 
   generateItemsListColumns(itemsCount) {
-    const _isAcPrivate = this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
+    const _isAcPrivate = this.props.ActiveCoin.mode === 'native' && staticVar.chainParams && staticVar.chainParams[this.props.ActiveCoin.coin] && staticVar.chainParams[this.props.ActiveCoin.coin].ac_private;
     let columns = [];
     let _col;
 
@@ -679,7 +679,7 @@ class WalletsData extends React.Component {
       this.state.itemsList &&
       this.state.itemsList.length
     ) {
-      const _isAcPrivate = this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
+      const _isAcPrivate = this.props.ActiveCoin.coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[this.props.ActiveCoin.coin] && !staticVar.chainParams[this.props.ActiveCoin.coin].ac_private;
       
       return (
         <DoubleScrollbar>

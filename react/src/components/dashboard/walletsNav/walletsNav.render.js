@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 const WalletsNavWithWalletRender = function() {
   const pubKeys = mainWindow.getPubkeys();
@@ -19,15 +19,17 @@ const WalletsNavWithWalletRender = function() {
           this.props.ActiveCoin.mode === 'spv' &&
           <div>
             <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
-            <span className="blur selectable">{
-              (mainWindow.multisig &&
-              mainWindow.multisig.addresses &&
-              mainWindow.multisig.addresses[_coin.toUpperCase()]) || 
-              (this.props &&
-              this.props.Dashboard &&
-              _electrumCoin &&
-              _electrumCoin.pub ? _electrumCoin.pub : '-')
-            }</span>
+            <span className="blur selectable">
+              {
+                (mainWindow.multisig &&
+                mainWindow.multisig.addresses &&
+                mainWindow.multisig.addresses[_coin.toUpperCase()]) || 
+                (this.props &&
+                this.props.Dashboard &&
+                _electrumCoin &&
+                _electrumCoin.pub ? _electrumCoin.pub : '-')
+              }
+            </span>
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
               onClick={ () => this.copyMyAddress(_electrumCoin.pub) }>
@@ -72,13 +74,15 @@ const WalletsNavWithWalletRender = function() {
             <button
               type="button"
               className="btn btn-info waves-effect waves-light"
-              onClick={ this.toggleNativeWalletInfo }>
+              onClick={ this.toggleNativeWalletInfo }
+              disabled={ this.props.ActiveCoin.activeSection === 'settings' }>
               <i className="icon fa-info"></i>
             </button>
             <button
               type="button"
               className="btn btn-dark waves-effect waves-light"
-              onClick={ this.toggleNativeWalletTransactions }>
+              onClick={ this.toggleNativeWalletTransactions }
+              disabled={ this.props.ActiveCoin.activeSection === 'default' }>
               <i className="icon md-view-dashboard"></i> <span className="placeholder">{ translate('INDEX.TRANSACTIONS') }</span>
             </button>
             { this.props.ActiveCoin &&
@@ -87,14 +91,18 @@ const WalletsNavWithWalletRender = function() {
                 type="button"
                 className="btn btn-primary waves-effect waves-light"
                 onClick={ () => this.toggleSendCoinForm(!this.props.ActiveCoin.send) }
-                disabled={ this.checkTotalBalance() <= 0 }>
+                disabled={
+                  this.checkTotalBalance() <= 0 ||
+                  this.props.ActiveCoin.activeSection === 'send'
+                }>
                 <i className="icon fa-send"></i> <span className="placeholder">{ translate('INDEX.SEND') }</span>
               </button>
             }
             <button
               type="button"
               className="btn btn-success waves-effect waves-light"
-              onClick={ () => this.toggleReceiveCoinForm(!this.props.ActiveCoin.receive) }>
+              onClick={ () => this.toggleReceiveCoinForm(!this.props.ActiveCoin.receive) }
+              disabled={ this.props.ActiveCoin.activeSection === 'receive' }>
               <i className="icon fa-inbox"></i> <span className="placeholder">{ translate('INDEX.RECEIVE') }</span>
             </button>
             { (_mode === 'spv' && mainWindow.isWatchOnly()) &&

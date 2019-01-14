@@ -8,8 +8,10 @@ import {
   apiEthereumCoins,
   loadAddressBook,
 } from '../../actions/actionCreators';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import Config from '../../config';
+
+// TODO: add loader comp wrapper to preload vars from ipc
 
 class Main extends React.Component {
   constructor(props) {
@@ -48,9 +50,13 @@ class Main extends React.Component {
   }
 
   render() {
-    return (
-      <WalletMain />
-    );
+    if (staticVar) {
+      return (
+        <WalletMain />
+      );
+    } else {
+      return null;
+    }
   }
 }
 
