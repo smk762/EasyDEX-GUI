@@ -15,6 +15,9 @@ import ToolsSplitUTXO from './toolsSplitUtxo';
 import ToolsGetBalanceMultiCoins from './toolsGetBalanceMultiCoins';
 import ToolsTxPush from './toolsTxPush';
 import ToolsOfflineSig from './toolsOfflineSig';
+import ToolsMultisigAddress from './toolsMultisigAddress';
+import ToolsMultisigAddressStorage from './toolsMultisigAddressStorage';
+import ToolsMultisigTx from './toolsMultisigTx';
 
 class Tools extends React.Component {
   constructor() {
@@ -126,6 +129,24 @@ class Tools extends React.Component {
                   onClick={ () => this.setActiveSection('utxo-merge') }>
                   { translate('TOOLS.MERGE') } UTXO **
                 </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('multisig-address') }>
+                  Generate multisig address
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('multisig-address-storage') }>
+                  Multisig address storage
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('multisig-tx') }>
+                  Multi signature transaction
+                </button>
                 <div className="margin-top-10 margin-left-20">{ translate('TOOLS.SPV_NATIVE') }</div>
               </div>
               <hr />
@@ -170,6 +191,15 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'offlinesig-sign' &&
                 <ToolsOfflineSig />
+              }
+              { this.state.activeSection === 'multisig-address' &&
+                <ToolsMultisigAddress />
+              }
+              { this.state.activeSection === 'multisig-address-storage' &&
+                <ToolsMultisigAddressStorage />
+              }
+              { this.state.activeSection === 'multisig-tx' &&
+                <ToolsMultisigTx />
               }
             </div>
           </div>

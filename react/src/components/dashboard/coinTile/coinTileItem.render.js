@@ -20,8 +20,8 @@ const CoinTileItemRender = function() {
   
   return (
     <div className="list-group-item col-xlg-6 col-lg-12 wallet-widgets-info pointer">
-      <span className={ `badge up badge-${!erc20ContractId[item.coin] ? item.modecolor : 'success'}` }>
-        { erc20ContractId[item.coin] ? 'ERC20' : item.modecode }
+      <span className={ `badge up badge-${item.mode === 'eth' && erc20ContractId[item.coin] ? 'success' : item.modecolor}` }>
+        { item.mode === 'eth' && erc20ContractId[item.coin] ? 'ERC20' : item.modecode }
       </span>
       <div className={ 'widget widget-shadow' + (this.props.ActiveCoin.coin === item.coin ? ' active' : '') }>
         <div
@@ -30,7 +30,7 @@ const CoinTileItemRender = function() {
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"
-              src={ `assets/images/cryptologo/${item.coinlogo.toLowerCase()}.png` }
+              src={ `assets/images/cryptologo/${item.mode === 'spv' ? 'btc' : 'eth'}/${item.coinlogo.toLowerCase()}.png` }
               alt={ item.coinname }/>
           </a>
           <div className="coin-name">

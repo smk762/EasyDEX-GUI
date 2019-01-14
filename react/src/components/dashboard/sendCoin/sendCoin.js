@@ -478,6 +478,7 @@ class SendCoin extends React.Component {
     if (e &&
         _srcElement &&
         _srcElement.className &&
+        typeof _srcElement.className === 'string' &&
         _srcElement.className !== 'btn dropdown-toggle btn-info' &&
         (_srcElement.offsetParent && _srcElement.offsetParent.className !== 'btn dropdown-toggle btn-info') &&
         (e.path && e.path[4] && e.path[4].className.indexOf('showkmdwalletaddrs') === -1)) {
@@ -486,6 +487,8 @@ class SendCoin extends React.Component {
 
     if (e &&
         _srcElement &&
+        _srcElement.className &&
+        typeof _srcElement.className === 'string' &&
         _srcElement.className !== 'fa fa-angle-down' &&
         _srcElement.className.indexOf('btn-send-address-book-dropdown') === -1) {
       _state.addressBookSelectorOpen = false;

@@ -32,6 +32,8 @@ import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
 import md5 from 'agama-wallet-lib/src/crypto/md5';
+import { msigPubAddress } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const SEED_TRIM_TIMEOUT = 5000;
 
@@ -118,6 +120,7 @@ class Login extends React.Component {
       const _spvCoins = this.props.Main.coins.spv;
 
       mainWindow.pinAccess = false;
+      mainWindow.multisig = null;
 
       if (!this.props.Main.coins.native.length) {
         Store.dispatch(dashboardChangeActiveCoin(
@@ -428,6 +431,7 @@ class Login extends React.Component {
       const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
 
       mainWindow.pinAccess = false;
+      mainWindow.multisig = null;
 
       if (!stringEntropy) {
         Store.dispatch(
@@ -468,6 +472,39 @@ class Login extends React.Component {
       loginWithPin(this.state.decryptKey, this.state.selectedPin)
       .then((res) => {
         if (res.msg === 'success') {
+          if (res.result.indexOf('msig:') > -1) {
+            const _data = res.result.split('msig:');
+
+            try {
+              mainWindow.multisig = JSON.parse(_data[1]);
+              
+              const _coins = this.props.Main.coins.spv;
+
+              if (_coins.length) {
+                let _addressSet = false;
+                mainWindow.multisig.addresses = {};
+
+                if (_coins.indexOf('KMD') > -1) {
+                  res.result = msigPubAddress(mainWindow.multisig.scriptPubKey, networks.kmd);
+                  _addressSet = true;
+                }
+
+                for (let i = 0; i < _coins.length; i++) {
+                  mainWindow.multisig.addresses[_coins[i]] = msigPubAddress(mainWindow.multisig.scriptPubKey, networks[_coins[i].toLowerCase()] || networks.kmd);
+                  
+                  if (!_addressSet &&
+                      i === 0) {
+                    res.result = mainWindow.multisig.addresses[_coins[i]];
+                    _addressSet = true;
+                  }
+                }
+
+                res.result = msigPubAddress(mainWindow.multisig.scriptPubKey, networks.kmd);
+              }
+            } catch (e) {
+              console.warn('unable to parse multisig data from pin');
+            }
+          }
           // reset login input vals
           this.refs.loginPassphrase.value = '';
           this.refs.loginPassphraseTextarea.value = '';
@@ -831,7 +868,7 @@ class Login extends React.Component {
         _items.push(
           <span key={ `addcoin-shortcut-icons-${i}` }>
             <img
-              src={ `assets/images/cryptologo/${_comps[i].toLowerCase()}.png` }
+              src={ `assets/images/cryptologo/btc/${_comps[i].toLowerCase()}.png` }
               alt={ _comps[i].toUpperCase() }
               width="30px"
               height="30px" />
@@ -847,7 +884,7 @@ class Login extends React.Component {
       return (
         <div>
           <img
-            src={ `assets/images/cryptologo/${option.value.toLowerCase()}.png` }
+            src={ `assets/images/cryptologo/btc/${option.value.toLowerCase()}.png` }
             alt={ option.value.toUpperCase() }
             width="30px"
             height="30px" />

@@ -45,6 +45,11 @@ const LoginRender = function() {
                       <i className="icon fa-users"></i> { translate('ABOUT.ABOUT_AGAMA') }
                     </a>
                   </li>
+                  <li>
+                    <a onClick={ () => this.toggleLoginSettingsDropdownSection('tools') }>
+                      <i className="icon fa-wrench"></i> { translate('TOOLS.TOOLS') }
+                    </a>
+                  </li>
                   { this.renderResetSPVCoinsOption() &&
                     <li>
                       <a onClick={ this.resetSPVCoins }>

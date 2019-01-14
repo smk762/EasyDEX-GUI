@@ -76,7 +76,7 @@ const addCoinOptionsAC = (activeCoins) => {
 
       _items.push({
         label: `${_placeholder}${_placeholder.indexOf('(') === -1 && _placeholder !== _coinuc ? ' (' + _coinuc + ')' : ''}`,
-        icon: _coinlc,
+        icon: `btc/${_coinlc}`,
         value: `${_coinuc}|${availableModes}`,
       });
     }
@@ -98,7 +98,7 @@ const addCoinOptionsAC = (activeCoins) => {
 
         _items.push({
           label: _placeholder + (_placeholder.indexOf('(') === -1 && _placeholder !== _customuc ? ' (' + _customuc + ')' : ''),
-          icon: _customlc,
+          icon: `btc/${_customlc}`,
           value: `${_customuc}|${key}`,
         });
       }

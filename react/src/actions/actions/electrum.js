@@ -171,6 +171,12 @@ export const apiElectrumKeys = (seed) => {
 }
 
 export const apiElectrumBalance = (coin, address) => {
+  if (mainWindow.multisig &&
+      mainWindow.multisig.addresses &&
+      mainWindow.multisig.addresses[coin.toUpperCase()]) {
+    address = mainWindow.multisig.addresses[coin.toUpperCase()];
+  }
+
   return dispatch => {
     const _urlParams = {
       token,
@@ -219,6 +225,12 @@ export const apiElectrumBalanceState = (json) => {
 }
 
 export const apiElectrumTransactions = (coin, address) => {
+  if (mainWindow.multisig &&
+      mainWindow.multisig.addresses &&
+      mainWindow.multisig.addresses[coin.toUpperCase()]) {
+    address = mainWindow.multisig.addresses[coin.toUpperCase()];
+  }
+
   return dispatch => {
     const _urlParams = {
       token,

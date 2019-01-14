@@ -20,10 +20,13 @@ const WalletsNavWithWalletRender = function() {
           <div>
             <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
             <span className="blur selectable">{
-              this.props &&
+              (mainWindow.multisig &&
+              mainWindow.multisig.addresses &&
+              mainWindow.multisig.addresses[_coin.toUpperCase()]) || 
+              (this.props &&
               this.props.Dashboard &&
               _electrumCoin &&
-              _electrumCoin.pub ? _electrumCoin.pub : '-'
+              _electrumCoin.pub ? _electrumCoin.pub : '-')
             }</span>
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
@@ -54,7 +57,9 @@ const WalletsNavWithWalletRender = function() {
           pubKeys[_coin.toLowerCase()] &&
           <div>
             <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
-            { pubKeys[_coin.toLowerCase()].pub }
+            { mainWindow.multisig &&
+              mainWindow.multisig.addresses &&
+              mainWindow.multisig.addresses[_coin.toUpperCase()] || pubKeys[_coin.toLowerCase()].pub }
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
               onClick={ () => this.copyMyAddress(pubKeys[_coin.toLowerCase()].pub) }>

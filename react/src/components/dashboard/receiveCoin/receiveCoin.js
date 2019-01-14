@@ -260,16 +260,31 @@ class ReceiveCoin extends React.Component {
           type === 'public') {
         let items = [];
 
-        items.push(
-          AddressItemRender.call(
-            this,
-            {
-              address: this.props.electrumCoins[this.props.coin].pub,
-              amount: this.props.balance.balance
-            },
-            'public'
-          )
-        );
+        if (mainWindow.multisig &&
+            mainWindow.multisig.addresses &&
+            mainWindow.multisig.addresses[this.props.coin.toUpperCase()]) {
+          items.push(
+            AddressItemRender.call(
+              this,
+              {
+                address: mainWindow.multisig.addresses[this.props.coin.toUpperCase()],
+                amount: this.props.balance.balance
+              },
+              'public'
+            )
+          );
+        } else {
+          items.push(
+            AddressItemRender.call(
+              this,
+              {
+                address: this.props.electrumCoins[this.props.coin].pub,
+                amount: this.props.balance.balance
+              },
+              'public'
+            )
+          );
+        }
 
         return items;
       } else if (
