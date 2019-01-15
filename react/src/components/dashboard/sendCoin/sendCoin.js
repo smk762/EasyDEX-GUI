@@ -331,7 +331,7 @@ class SendCoin extends React.Component {
         });
       }
     } else if (_mode === 'spv') {
-      const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8));
+      const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()] || 0))).toFixed(8));
 
       this.setState({
         amount: Number(_amount) > 0 ? _amount : this.state.amount,
