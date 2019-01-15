@@ -19,7 +19,7 @@ import {
 import Store from '../../../store';
 import ReactTooltip from 'react-tooltip';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 class ToolsMultisigAddressStorage extends React.Component {
   constructor() {

@@ -3,14 +3,14 @@ import ReactTooltip from 'react-tooltip';
 import translate from '../../../translate/translate';
 import Spinner from '../spinner/spinner';
 import Config from '../../../config';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 
 const WalletsBalanceRender = function() {
   const _mode = this.props.ActiveCoin.mode;
   const _coin = this.props.ActiveCoin.coin;
-  const _notAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && !mainWindow.chainParams[_coin].ac_private;
-  const _isAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && mainWindow.chainParams[_coin].ac_private;
+  const _notAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
+  const _isAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_private;
   const _balanceUnconf = this.props.ActiveCoin.balance && this.props.ActiveCoin.balance.unconfirmed ? this.props.ActiveCoin.balance.unconfirmed : 0;
 
   return (

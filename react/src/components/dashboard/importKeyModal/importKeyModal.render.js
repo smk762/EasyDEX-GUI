@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 const ImportKeyModalRender = function() {
   return (
@@ -26,9 +26,9 @@ const ImportKeyModalRender = function() {
             </div>
             <div className="modal-body">
               { (this.props.ActiveCoin.coin === 'KMD' ||
-                (mainWindow.chainParams &&
-                 mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-                 !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+                (staticVar.chainParams &&
+                  staticVar.chainParams[this.props.ActiveCoin.coin] &&
+                 !staticVar.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
                 <div>
                   <div className="padding-bottom-40">
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P1') }&nbsp;

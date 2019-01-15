@@ -1,5 +1,5 @@
 import translate from '../../translate/translate';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 import { sortObject } from 'agama-wallet-lib/src/utils';
@@ -61,7 +61,7 @@ const addCoinOptionsAC = (activeCoins) => {
       availableModes = 'spv';
     }
 
-    if (mainWindow.arch !== 'x64') {
+    if (staticVar.arch !== 'x64') {
       availableModes = 'spv';
     }
 

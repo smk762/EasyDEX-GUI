@@ -7,7 +7,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import kmdexplorer from './kmdexplorer';
 
 const { shell } = window.require('electron');

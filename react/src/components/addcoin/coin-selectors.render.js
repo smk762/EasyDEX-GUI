@@ -3,10 +3,9 @@ import translate from '../../translate/translate';
 import addCoinOptionsCrypto from '../addcoin/addcoinOptionsCrypto';
 import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 // import addCoinOptionsACFiat from '../addcoin/addcoinOptionsACFiat';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
-import { acConfig } from '../addcoin/payload';
 import config from '../../config';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
@@ -132,7 +131,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </label>
           </div>
         }
-        { mainWindow.arch === 'x64' &&
+        { staticVar.arch === 'x64' &&
           _availModes.native &&
           <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
             <input
@@ -166,7 +165,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </label>
           </div>
         }
-        { mainWindow.arch === 'x64' &&
+        { staticVar.arch === 'x64' &&
           _availModes.staking &&
           <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
             <input
@@ -200,7 +199,7 @@ const CoinSelectorsRender = function(item, coin, i) {
             </label>
           </div>
         }
-        { mainWindow.arch === 'x64' &&
+        { staticVar.arch === 'x64' &&
           _availModes.mining &&
           <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
             <input
@@ -309,8 +308,8 @@ const CoinSelectorsRender = function(item, coin, i) {
         </div>
       }
       { item.daemonParam === 'gen' &&
-        acConfig[_coinName] &&
-        acConfig[_coinName].genproclimit &&
+        staticVar.chainParams[_coinName] &&
+        staticVar.chainParams[_coinName].genproclimit &&
         <div className="col-sm-12 no-padding">
           <div className="col-sm-5 padding-bottom-30">
             <div className="toggle-box padding-bottom-10">

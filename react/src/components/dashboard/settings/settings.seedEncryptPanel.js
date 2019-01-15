@@ -9,7 +9,7 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 
 const SEED_TRIM_TIMEOUT = 5000;

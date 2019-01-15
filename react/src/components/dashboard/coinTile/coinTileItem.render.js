@@ -1,8 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
-import { acConfig } from '../../addcoin/payload';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const testChains = [
@@ -30,7 +29,7 @@ const CoinTileItemRender = function() {
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"
-              src={ `assets/images/cryptologo/${item.mode === 'spv' ? 'btc' : 'eth'}/${item.coinlogo.toLowerCase()}.png` }
+              src={ `assets/images/cryptologo/${item.mode === 'spv' || item.mode === 'native' ? 'btc' : 'eth'}/${item.coinlogo.toLowerCase()}.png` }
               alt={ item.coinname }/>
           </a>
           <div className="coin-name">
@@ -51,9 +50,9 @@ const CoinTileItemRender = function() {
           className="text-left" />
       </button>
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_reward &&
-        !acConfig[_coinuc].ac_stake &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_reward &&
+        !staticVar.chainParams[_coinuc].ac_stake &&
         _coindStartParamsString &&
         (_coindStartParamsString.indexOf('-genproclimit=') > -1 && _coindStartParamsString.indexOf('-genproclimit=0') === -1) &&
         <i
@@ -66,8 +65,8 @@ const CoinTileItemRender = function() {
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_stake &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_stake &&
         (!_pubkey || !_pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
@@ -79,8 +78,8 @@ const CoinTileItemRender = function() {
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_stake &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_stake &&
         (_pubkey && _pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
@@ -118,9 +117,9 @@ const CoinTileItemRender = function() {
           </ul>
         </div>
       }
-      { mainWindow.chainParams &&
-        mainWindow.chainParams[item.coin] &&
-        mainWindow.chainParams[item.coin].ac_private &&
+      { staticVar.chainParams &&
+        staticVar.chainParams[item.coin] &&
+        staticVar.chainParams[item.coin].ac_private &&
         <i
           data-tip={ translate('INDEX.Z_ADDR_ONLY') }
           data-html={ true }

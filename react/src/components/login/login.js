@@ -29,7 +29,7 @@ import zcashParamsCheckErrors from '../../util/zcashParams';
 import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import translate from '../../translate/translate';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';

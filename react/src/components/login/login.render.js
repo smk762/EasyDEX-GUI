@@ -5,7 +5,7 @@ import ZcparamsFetchModal from '../dashboard/zcparamsFetchModal/zcparamsFetchMod
 import QRModal from '../dashboard/qrModal/qrModal';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 
 const LoginRender = function() {
   return (
@@ -205,7 +205,7 @@ const LoginRender = function() {
                   </span>
                 </button>
                 <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
-                { mainWindow.arch === 'x64' &&
+                { staticVar.arch === 'x64' &&
                   <div className="addcoin-shortcut">
                     <div>
                       <i className="icon fa-cube margin-right-5"></i>

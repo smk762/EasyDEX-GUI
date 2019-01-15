@@ -1,6 +1,6 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import PanelSection from './settings.panelBody';
 import Panel from './settings.panel';
 import Config from '../../../config';
@@ -74,7 +74,7 @@ export const SettingsRender = function() {
                 <DaemonStdoutPanel />
               </PanelSection>
             }
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <PanelSection
                 title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
                 icon="icon fa-wrench">
@@ -102,7 +102,7 @@ export const SettingsRender = function() {
                 <ExportKeysPanel />
               </PanelSection>
             }
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <PanelSection
                 title={ `Wallet.dat ${translate('SETTINGS.KEYS_SM')}` }
                 icon="icon md-key">
@@ -123,7 +123,7 @@ export const SettingsRender = function() {
               icon="icon fa-usb">
               <Bip39KeysPanel />
             </PanelSection>
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <PanelSection
                 title={ translate('SETTINGS.CLEAR_NATIVE_DATADIR') }
                 icon="icon fa-trash">

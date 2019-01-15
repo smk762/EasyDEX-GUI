@@ -6,7 +6,7 @@ import TablePaginationRenderer from '../pagination/pagination';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { tableSorting } from '../pagination/utils';
 
 const kvCoins = {
@@ -22,9 +22,9 @@ export const TxConfsRender = function(confs) {
     );
   } else if (
     this.props.ActiveCoin.mode === 'native' &&
-    mainWindow.chainParams &&
-    mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-    mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) {
+    staticVar.chainParams &&
+    staticVar.chainParams[this.props.ActiveCoin.coin] &&
+    staticVar.chainParams[this.props.ActiveCoin.coin].ac_private) {
     return (
       <span>{ translate('DASHBOARD.NA') }</span>
     );

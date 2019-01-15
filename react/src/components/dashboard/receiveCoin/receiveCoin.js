@@ -16,7 +16,7 @@ import {
   _ReceiveCoinTableRender,
 } from './receiveCoin.render';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 // TODO: implement balance/interest sorting
 
@@ -236,9 +236,9 @@ class ReceiveCoin extends React.Component {
           if (type === 'private' ||
               (type === 'public' &&
                (this.props.coin === 'KMD' ||
-                (mainWindow.chainParams &&
-                 mainWindow.chainParams[this.props.coin] &&
-                 !mainWindow.chainParams[this.props.coin].ac_private)))) {
+                (staticVar.chainParams &&
+                 staticVar.chainParams[this.props.coin] &&
+                 !staticVar.chainParams[this.props.coin].ac_private)))) {
             items.push(
               AddressItemRender.call(this, address, type)
             );

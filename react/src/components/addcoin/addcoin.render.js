@@ -1,6 +1,6 @@
 import React from 'react';
 import translate from '../../translate/translate';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 
 const AddCoinRender = function() {
   return (
@@ -59,7 +59,7 @@ const AddCoinRender = function() {
                   </button>
                 </div>
               }
-              { mainWindow.arch === 'x64' &&
+              { staticVar.arch === 'x64' &&
                 <div className="col-sm-12">
                   <p>
                     <strong>{ translate('INDEX.SPV_MODE') }:</strong> { translate('ADD_COIN.LITE_MODE_DESC') }.

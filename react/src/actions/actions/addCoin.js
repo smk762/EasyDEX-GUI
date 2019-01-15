@@ -6,7 +6,7 @@ import Config, {
 } from '../../config';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 
 import {
   triggerToaster,
@@ -20,7 +20,6 @@ import {
   startAssetChain,
   startCrypto,
   checkAC,
-  acConfig,
 } from '../../components/addcoin/payload';
 
 export const iguanaActiveHandleState = (json) => {
@@ -200,8 +199,8 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit, pubkey) =
     ],
   };
 
-  if (acConfig[coin]) {
-    for (let key in acConfig[coin]) {
+  if (staticVar.chainParams[coin]) {
+    for (let key in staticVar.chainParams[coin]) {
       if (key === 'pubkey') {
         const pubKeys = mainWindow.getPubkeys();
 
@@ -217,18 +216,18 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit, pubkey) =
         }
       } else if (
         key === 'addnode' &&
-        typeof acConfig[coin][key] === 'object') {
-        for (let i = 0; i < acConfig[coin][key].length; i++) {
-          herdData.ac_options.push(`-addnode=${acConfig[coin][key][i]}`);
+        typeof staticVar.chainParams[coin][key] === 'object') {
+        for (let i = 0; i < staticVar.chainParams[coin][key].length; i++) {
+          herdData.ac_options.push(`-addnode=${staticVar.chainParams[coin][key][i]}`);
         }
       } else {
-        herdData.ac_options.push(`-${key}=${acConfig[coin][key]}`);
+        herdData.ac_options.push(`-${key}=${staticVar.chainParams[coin][key]}`);
       }
     }
   }
 
-  if (!acConfig[coin] ||
-      (acConfig[coin] && !acConfig[coin].addnode)) {
+  if (!staticVar.chainParams[coin] ||
+      (staticVar.chainParams[coin] && !staticVar.chainParams[coin].addnode)) {
     herdData.ac_options.push('-addnode=78.47.196.146');
   }
 
