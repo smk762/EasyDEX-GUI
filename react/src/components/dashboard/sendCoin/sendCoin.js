@@ -494,6 +494,15 @@ class SendCoin extends React.Component {
       _state.addressBookSelectorOpen = false;
     }
 
+    if (e &&
+        _srcElement &&
+        _srcElement.className &&
+        typeof _srcElement.className === 'string' &&
+        _srcElement.className !== 'fa fa-angle-down' &&
+        _srcElement.className.indexOf('btn-send-zfee-dropdown') === -1) {
+      _state.ztxSelectorOpen = false;
+    }
+
     this.setState(_state);
   }
 
