@@ -98,4 +98,14 @@
 .coin-tile-context-menu--zfee {
   left: -32px !important;
   top: -18px !important;
+  width: 115px;
+
+  ul {
+    max-height: 100px;
+    overflow-y: auto;
+  }
+}
+
+.dropdown-toggle .bs-caret {
+  display: inline;
 }

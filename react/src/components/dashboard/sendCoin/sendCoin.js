@@ -331,7 +331,7 @@ class SendCoin extends React.Component {
         });
       }
     } else if (_mode === 'spv') {
-      const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8));
+      const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()] || 0))).toFixed(8));
 
       this.setState({
         amount: Number(_amount) > 0 ? _amount : this.state.amount,
@@ -492,6 +492,15 @@ class SendCoin extends React.Component {
         _srcElement.className !== 'fa fa-angle-down' &&
         _srcElement.className.indexOf('btn-send-address-book-dropdown') === -1) {
       _state.addressBookSelectorOpen = false;
+    }
+
+    if (e &&
+        _srcElement &&
+        _srcElement.className &&
+        typeof _srcElement.className === 'string' &&
+        _srcElement.className !== 'fa fa-angle-down' &&
+        _srcElement.className.indexOf('btn-send-zfee-dropdown') === -1) {
+      _state.ztxSelectorOpen = false;
     }
 
     this.setState(_state);
