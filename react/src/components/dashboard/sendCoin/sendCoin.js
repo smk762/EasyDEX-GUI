@@ -54,6 +54,7 @@ import coinFees from 'agama-wallet-lib/src/fees';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import kv from 'agama-wallet-lib/src/kv';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
@@ -873,7 +874,7 @@ class SendCoin extends React.Component {
         let kvHex;
 
         if (this.state.kvSend) {
-          const kvEncode = staticVar.kvEncode({
+          const kvEncode = kv.encode({
             tag: this.state.kvSendTag,
             content: {
               title: this.state.kvSendTitle,
