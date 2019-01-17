@@ -323,14 +323,17 @@ class SendCoin extends React.Component {
     if (_mode === 'native') {
       const isZtx = this.state.addressType === 'private' || (this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs')) || (this.state.sendFrom && (this.state.sendFrom.substring(0, 2) === 'zc' || this.state.sendFrom.substring(0, 2) === 'zs'));
       
-      if (this.state.sendFrom) {
+      if (this.state.sendFrom &&
+          Number(this.state.sendFromAmount) > 0) {
         this.setState({
           amount: Number(Number(Number(this.state.sendFromAmount) - (isZtx ? this.state.ztxFee : 0.0001)).toFixed(8)),
         });
       } else {
-        this.setState({
-          amount: Number(Number(Number(_balance.transparent) - 0.0001).toFixed(8)),
-        });
+        if (Number(_balance.transparent) > 0) {
+          this.setState({
+            amount: Number(Number(Number(_balance.transparent) - 0.0001).toFixed(8)),
+          });
+        }
       }
     } else if (_mode === 'spv') {
       const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()] || 0))).toFixed(8));
