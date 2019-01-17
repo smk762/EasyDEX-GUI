@@ -1208,7 +1208,7 @@ class SendCoin extends React.Component {
           Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || _balance.transparent)} ${_coin}`,
+            Number(this.state.sendFromAmount || _balance.transparent) > 0 ? `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || _balance.transparent)} ${_coin}` : translate('SEND.INSUFFICIENT_FUNDS'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
