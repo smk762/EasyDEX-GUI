@@ -4,7 +4,6 @@ import translate from '../../../translate/translate';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 const WalletsNavWithWalletRender = function() {
-  const pubKeys = mainWindow.getPubkeys();
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
   const _electrumCoin = this.props.Dashboard.electrumCoins ? this.props.Dashboard.electrumCoins[_coin] : null;
@@ -13,7 +12,7 @@ const WalletsNavWithWalletRender = function() {
   return (
     <div>
       <div
-        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (_mode === 'spv' || _mode === 'eth' || (pubKeys[_coin.toLowerCase()] && pubKeys[_coin.toLowerCase()].pub) ? 'page-header--spv' : 'page-header--native') }
+        className={ 'page-header page-header-bordered header-easydex padding-bottom-40 margin-bottom-30 ' + (_mode === 'spv' || _mode === 'eth' ? 'page-header--spv' : 'page-header--native') }
         id="header-dashboard">
         { this.props.ActiveCoin &&
           this.props.ActiveCoin.mode === 'spv' &&
@@ -50,21 +49,6 @@ const WalletsNavWithWalletRender = function() {
             <button
               className="btn btn-default btn-xs clipboard-edexaddr"
               onClick={ () => this.copyMyAddress(_ethereumCoin.pub) }>
-              <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
-            </button>
-          </div>
-        }
-        { this.props.ActiveCoin &&
-          _coin &&
-          pubKeys[_coin.toLowerCase()] &&
-          <div>
-            <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
-            { mainWindow.multisig &&
-              mainWindow.multisig.addresses &&
-              mainWindow.multisig.addresses[_coin.toUpperCase()] || pubKeys[_coin.toLowerCase()].pub }
-            <button
-              className="btn btn-default btn-xs clipboard-edexaddr"
-              onClick={ () => this.copyMyAddress(pubKeys[_coin.toLowerCase()].pub) }>
               <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
             </button>
           </div>

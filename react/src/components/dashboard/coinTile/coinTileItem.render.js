@@ -14,7 +14,6 @@ const CoinTileItemRender = function() {
   const { item } = this.props;
   const _coinuc = item.coin.toUpperCase();
   const _coinlc = item.coin.toLowerCase();
-  const _pubkey = mainWindow.getPubkeys()[_coinlc];
   const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';
   
   return (
@@ -60,14 +59,13 @@ const CoinTileItemRender = function() {
           data-for="coinTile2"
           className="icon fa-gavel custom-ac-icon"></i>
       }
-      <ReactTooltip
+      {/*<ReactTooltip
         id="coinTile2"
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
         staticVar.chainParams[_coinuc] &&
         staticVar.chainParams[_coinuc].ac_stake &&
-        (!_pubkey || !_pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
           data-for="coinTile3"
@@ -80,12 +78,11 @@ const CoinTileItemRender = function() {
       { item.mode === 'native' &&
         staticVar.chainParams[_coinuc] &&
         staticVar.chainParams[_coinuc].ac_stake &&
-        (_pubkey && _pubkey.pub) &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
           data-for="coinTile4"
           className="icon staking custom-ac-icon">S</i>
-      }
+      }*/}
       <ReactTooltip
         id="coinTile4"
         effect="solid"
