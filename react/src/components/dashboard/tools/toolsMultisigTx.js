@@ -38,6 +38,7 @@ import mainWindow, { staticVar } from '../../../util/mainWindow';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { stringToWif } from 'agama-wallet-lib/src/keys';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
 
 const { shell } = window.require('electron');
 
@@ -214,7 +215,7 @@ class ToolsMultisigTx extends React.Component {
       let _validateAddress;
       let _msg;
   
-      _validateAddress = mainWindow.addressVersionCheck(_coin, this.state[type]);
+      _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, this.state[type]);
   
       if (_validateAddress === 'Invalid pub address' ||
           !_validateAddress) {

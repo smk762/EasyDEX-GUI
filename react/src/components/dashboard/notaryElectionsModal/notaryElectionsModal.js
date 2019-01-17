@@ -22,6 +22,8 @@ import {
   isPositiveNumber,
   toSats,
 } from 'agama-wallet-lib/src/utils';
+import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const SEED_TRIM_TIMEOUT = 5000;
 const ELECTIONS_SYNC_UPDATE_INTERVAL = 120000; // every 2 min
@@ -128,7 +130,7 @@ class NotaryElectionsModal extends React.Component {
     let _addressValidateMsg = [];
 
     for (let i = 0; i < 4; i++) {
-      const _validateAddress = mainWindow.addressVersionCheck(this.state.coin, this.state[`multiOutAddress${i + 1}`]);
+      const _validateAddress = pubkeyToAddress(networks.kmd, this.state[`multiOutAddress${i + 1}`]);
 
       if (!_validateAddress ||
           _validateAddress === 'Invalid pub address') {
@@ -215,7 +217,7 @@ class NotaryElectionsModal extends React.Component {
   }
 
   send() {
-    const _validateAddress = mainWindow.addressVersionCheck(this.state.coin, this.state.address);
+    const _validateAddress = pubkeyToAddress(networks.kmd, this.state.address);
 
     if (!_validateAddress ||
         _validateAddress === 'Invalid pub address') {

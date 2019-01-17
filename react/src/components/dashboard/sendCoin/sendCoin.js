@@ -52,6 +52,8 @@ import { formatEther } from 'ethers/utils/units';
 import { getAddress } from 'ethers/utils/address';
 import coinFees from 'agama-wallet-lib/src/fees';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
@@ -1149,7 +1151,7 @@ class SendCoin extends React.Component {
           _validateAddress = 'Invalid pub address';
         }
       } else {
-        _validateAddress = mainWindow.addressVersionCheck(_coin, this.state.sendTo);
+        _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, this.state.sendTo);
       }
 
       if (_validateAddress === 'Invalid pub address') {

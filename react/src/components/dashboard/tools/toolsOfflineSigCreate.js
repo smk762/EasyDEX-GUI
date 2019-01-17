@@ -34,6 +34,8 @@ import {
   parseBitcoinURL,
 } from 'agama-wallet-lib/src/utils';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 // TODO: btc handling
 
@@ -114,7 +116,7 @@ class ToolsOfflineSigCreate extends React.Component {
       let _validateAddress;
       let _msg;
   
-      _validateAddress = mainWindow.addressVersionCheck(_coin, this.state[type]);
+      _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, this.state[type]);
   
       if (_validateAddress === 'Invalid pub address' ||
           !_validateAddress) {
