@@ -54,7 +54,7 @@ class CoinTileItem extends React.Component {
       activeCoinMode: null,
       propsUpdatedCounter: 0,
       toggledCoinMenu: null,
-      coindStopRetries: 0,
+      coindStopRetries: {},
     };
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
     this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
@@ -228,15 +228,18 @@ class CoinTileItem extends React.Component {
     });
   }
 
-  stopCoind(coin) {
+  stopCoind(coin, i, _coins) {
     this.setState({
       toggledCoinMenu: null,
+      coindStopRetries: {
+        [coin]: this.state.coindStopRetries[coin] ? this.state.coindStopRetries[coin] : 0,
+      },
     });
 
     apiStopCoind(coin)
     .then((res) => {
       if (res.msg === 'error') {
-        if (!this.state.coindStopRetries) {
+        if (!this.state.coindStopRetries[coin]) {
           Store.dispatch(
             triggerToaster(
               translate('TOASTR.COIND_STOP_IN_PROGRESS', coin),
@@ -245,11 +248,14 @@ class CoinTileItem extends React.Component {
             )
           );
         }
-        if (this.state.coindStopRetries < COIND_STOP_MAX_RETRIES &&
+        
+        if (this.state.coindStopRetries[coin] < COIND_STOP_MAX_RETRIES &&
             this.props.Main.coins.native.indexOf(coin) > -1) {
           setTimeout(() => {
             this.setState({
-              coindStopRetries: Number(this.state.coindStopRetries) + 1,
+              coindStopRetries: {
+                [coin]: Number(this.state.coindStopRetries) + 1,
+              },
             });
             setTimeout(() => {
               this.stopCoind(coin);
@@ -273,11 +279,25 @@ class CoinTileItem extends React.Component {
           )
         );
 
+        if (!_coins) {
+          this.autoSetActiveCoin(coin);
+          setTimeout(() => {
+            this.setState({
+              coindStopRetries: {
+                [coin]: 0,
+              },
+            });
+            Store.dispatch(getDexCoins());
+            Store.dispatch(activeHandle());
+          }, 500);
+        }
+      }
+
+      if (i && 
+          _coins &&
+          i === _coins.length - 1) {
         this.autoSetActiveCoin(coin);
         setTimeout(() => {
-          this.setState({
-            coindStopRetries: 0,
-          });
           Store.dispatch(getDexCoins());
           Store.dispatch(activeHandle());
         }, 500);
@@ -295,34 +315,9 @@ class CoinTileItem extends React.Component {
     for (let i = 0; i < _coins.length; i++) {
       const coin = _coins[i];
 
-      apiStopCoind(coin)
-      .then((res) => {
-        if (res.msg === 'error') {
-          Store.dispatch(
-            triggerToaster(
-              translate('TOASTR.COIN_UNABLE_TO_STOP', coin),
-              translate('TOASTR.ERROR'),
-              'error'
-            )
-          );
-        } else {
-          Store.dispatch(
-            triggerToaster(
-              `${coin} ${translate('TOASTR.COIN_IS_STOPPED')}`,
-              translate('TOASTR.COIN_NOTIFICATION'),
-              'success'
-            )
-          );
-        }
-
-        if (i === _coins.length - 1) {
-          this.autoSetActiveCoin(coin);
-          setTimeout(() => {
-            Store.dispatch(getDexCoins());
-            Store.dispatch(activeHandle());
-          }, 500);
-        }
-      });
+      setTimeout(() => {
+        this.stopCoind(coin, i, _coins);
+      }, i === 0 ? 0 : i * 2000);
     }
   }
 

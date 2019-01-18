@@ -36,8 +36,7 @@ import {
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
-import mainWindow from '../../../util/mainWindow';
-import { setTimeout } from 'timers';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 /*import io from 'socket.io-client';
 
@@ -234,7 +233,7 @@ class WalletsData extends React.Component {
   }
 
   generateItemsListColumns(itemsCount) {
-    const _isAcPrivate = this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
+    const _isAcPrivate = this.props.ActiveCoin.mode === 'native' && staticVar.chainParams && staticVar.chainParams[this.props.ActiveCoin.coin] && staticVar.chainParams[this.props.ActiveCoin.coin].ac_private;
     let columns = [];
     let _col;
 
@@ -507,7 +506,7 @@ class WalletsData extends React.Component {
   _setTxHistory(oldTxHistory) {
     const _txhistory = this.state.kvView ? this.state.kvHistory : (oldTxHistory ? oldTxHistory : this.props.ActiveCoin.txhistory);
     let _stateChange = {};
-
+        
     // TODO: figure out why changing ActiveCoin props doesn't trigger comp update
     if (_txhistory &&
         _txhistory !== 'loading' &&
@@ -552,8 +551,8 @@ class WalletsData extends React.Component {
         this.spvAutoReconnect();
       }
     }
-
-    this.setState(Object.assign({}, _stateChange));
+    
+    this.setState(_stateChange);
   }
 
   componentWillReceiveProps(props) {
@@ -680,7 +679,7 @@ class WalletsData extends React.Component {
       this.state.itemsList &&
       this.state.itemsList.length
     ) {
-      const _isAcPrivate = this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
+      const _isAcPrivate = this.props.ActiveCoin.coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[this.props.ActiveCoin.coin] && !staticVar.chainParams[this.props.ActiveCoin.coin].ac_private;
       
       return (
         <DoubleScrollbar>
@@ -881,6 +880,7 @@ const mapStateToProps = (state) => {
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
       progress: state.ActiveCoin.progress,
     },
+    AddressBook: state.Settings.addressBook,
     Main: state.Main,
     Dashboard: state.Dashboard,
   };

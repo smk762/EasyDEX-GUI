@@ -7,7 +7,7 @@ import {
 import Store from '../../../store';
 import Config from '../../../config';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import zcashParamsCheckErrors from '../../../util/zcashParams';
 import io from 'socket.io-client';
 
@@ -82,7 +82,7 @@ class ZcparamsFetchModal extends React.Component {
     socket.on('zcparams', msg => this.updateSocketsData(msg));
 
     this.setState(Object.assign({}, this.state, {
-      zcparamsSources: mainWindow.zcashParamsDownloadLinks,
+      zcparamsSources: staticVar.zcashParamsDownloadLinks,
     }));
   }
 

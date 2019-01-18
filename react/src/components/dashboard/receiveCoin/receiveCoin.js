@@ -16,7 +16,7 @@ import {
   _ReceiveCoinTableRender,
 } from './receiveCoin.render';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 // TODO: implement balance/interest sorting
 
@@ -236,9 +236,9 @@ class ReceiveCoin extends React.Component {
           if (type === 'private' ||
               (type === 'public' &&
                (this.props.coin === 'KMD' ||
-                (mainWindow.chainParams &&
-                 mainWindow.chainParams[this.props.coin] &&
-                 !mainWindow.chainParams[this.props.coin].ac_private)))) {
+                (staticVar.chainParams &&
+                 staticVar.chainParams[this.props.coin] &&
+                 !staticVar.chainParams[this.props.coin].ac_private)))) {
             items.push(
               AddressItemRender.call(this, address, type)
             );
@@ -260,16 +260,31 @@ class ReceiveCoin extends React.Component {
           type === 'public') {
         let items = [];
 
-        items.push(
-          AddressItemRender.call(
-            this,
-            {
-              address: this.props.electrumCoins[this.props.coin].pub,
-              amount: this.props.balance.balance
-            },
-            'public'
-          )
-        );
+        if (mainWindow.multisig &&
+            mainWindow.multisig.addresses &&
+            mainWindow.multisig.addresses[this.props.coin.toUpperCase()]) {
+          items.push(
+            AddressItemRender.call(
+              this,
+              {
+                address: mainWindow.multisig.addresses[this.props.coin.toUpperCase()],
+                amount: this.props.balance.balance
+              },
+              'public'
+            )
+          );
+        } else {
+          items.push(
+            AddressItemRender.call(
+              this,
+              {
+                address: this.props.electrumCoins[this.props.coin].pub,
+                amount: this.props.balance.balance
+              },
+              'public'
+            )
+          );
+        }
 
         return items;
       } else if (

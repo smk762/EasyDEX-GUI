@@ -193,7 +193,7 @@ class ImportKeyModal extends React.Component {
       wif,
       rescan,
       // https://github.com/zcash/zcash/blob/master/src/chainparams.cpp#L152
-      wif[0] === 'S' && wif[1] === 'K'
+      (wif[0] === 'S' && wif[1] === 'K') || wif.indexOf('secret-extended-key-main') > -1
     )
     .then((json) => {
       _rescanInProgress = false;

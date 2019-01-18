@@ -38,11 +38,11 @@ const WalletsMainRender = function() {
               { _coin === 'KMD' &&
                 <img
                   className="kmd-mobile-icon"
-                  src={ `assets/images/cryptologo/${_coin.toLowerCase()}.png` } />
+                  src={ `assets/images/cryptologo/btc/${_coin.toLowerCase()}.png` } />
               }
               { _skipCoins.indexOf(_coin) === -1 &&
                 <span className="margin-left-20 easydex-section-image">
-                  { translate((isKomodoCoin(_coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + _coin.toUpperCase()) }
+                  { translate(((this.props.ActiveCoin.mode === 'spv' || this.props.ActiveCoin.mode === 'native') && isKomodoCoin(_coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + _coin.toUpperCase()) }
                 </span>
               }
             </li>

@@ -13,8 +13,7 @@ import {
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
-import mainWindow from '../../util/mainWindow';
-import { acConfig } from '../addcoin/payload';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
@@ -379,12 +378,6 @@ class AddCoin extends React.Component {
       this.verifyZcashParamsExist(_coin.mode)
       .then((res) => {
         if (res) {
-          const seed = this.state.loginPassphrase;
-
-          if (seed) {
-            mainWindow.setPubkey(seed, coin.toLowerCase());
-          }
-
           if (!_coin.daemonParam) {
             if (this.state.usePubkey &&
                 pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd)) {
@@ -407,8 +400,8 @@ class AddCoin extends React.Component {
               _coin.mode,
               { type: _coin.daemonParam },
               _coin.daemonParam === 'gen' &&
-              acConfig[coinuc] &&
-              acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+              staticVar.chainParams[coinuc] &&
+              staticVar.chainParams[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
               this.state.usePubkey && pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd) ? Config.pubkey : null,
             ));
           }
@@ -482,8 +475,8 @@ class AddCoin extends React.Component {
           _coin.mode,
           { type: _coin.daemonParam },
           _coin.daemonParam === 'gen' &&
-          acConfig[coinuc] &&
-          acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+          staticVar.chainParams[coinuc] &&
+          staticVar.chainParams[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
         ));
       }
     }
@@ -514,8 +507,8 @@ class AddCoin extends React.Component {
             _coin.mode,
             { type: _coin.daemonParam },
             _coin.daemonParam === 'gen' &&
-            acConfig[coinuc] &&
-            acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
+            staticVar.chainParams[coinuc] &&
+            staticVar.chainParams[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
           ));
         }
 

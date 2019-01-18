@@ -1,6 +1,6 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
 
@@ -42,7 +42,7 @@ const NavbarRender = function() {
             </li>
             <li className={
               (this.isSectionActive('dex') ? 'active nav-top-menu' : 'nav-top-menu') +
-              (mainWindow.argv.indexOf('dexonly') > -1 ? '' : ' hide')
+              (staticVar.argv.indexOf('dexonly') > -1 ? '' : ' hide')
             }>
               <a onClick={ () => this.dashboardChangeSection('dex') }>
                 <i className="site-menu-icon"></i> BarterDEX

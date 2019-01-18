@@ -1,6 +1,6 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import PanelSection from './settings.panelBody';
 import Panel from './settings.panel';
 import Config from '../../../config';
@@ -58,28 +58,23 @@ export const SettingsRender = function() {
         <div className="col-sm-12">
           <h4 className="font-size-14 text-uppercase">{ translate('INDEX.WALLET_SETTINGS') }</h4>
           <Panel
-            uniqId={ 'SettingsAccordion' }
+            uniqId="SettingsAccordion"
             singleOpen={ true }>
-            { mainWindow.arch === 'x64' &&
-              _coins &&
-              _coins.native &&
-              Object.keys(_coins.native).length > 0 &&
-              <PanelSection
-                title={ translate('INDEX.DEBUG_LOG') }
-                icon="icon fa-bug">
-                <DebugLogPanel />
-              </PanelSection>
-            }
+            <PanelSection
+              title={ translate('INDEX.DEBUG_LOG') }
+              icon="icon fa-bug">
+              <DebugLogPanel />
+            </PanelSection>
             { _coins &&
               _coins.native &&
               Object.keys(_coins.native).length > 0 &&
               <PanelSection
-                title={ 'Komodod stdout' }
+                title="Komodod stdout"
                 icon="icon fa-bug">
                 <DaemonStdoutPanel />
               </PanelSection>
             }
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <PanelSection
                 title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
                 icon="icon fa-wrench">
@@ -107,7 +102,7 @@ export const SettingsRender = function() {
                 <ExportKeysPanel />
               </PanelSection>
             }
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <PanelSection
                 title={ `Wallet.dat ${translate('SETTINGS.KEYS_SM')}` }
                 icon="icon md-key">
@@ -128,7 +123,7 @@ export const SettingsRender = function() {
               icon="icon fa-usb">
               <Bip39KeysPanel />
             </PanelSection>
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <PanelSection
                 title={ translate('SETTINGS.CLEAR_NATIVE_DATADIR') }
                 icon="icon fa-trash">

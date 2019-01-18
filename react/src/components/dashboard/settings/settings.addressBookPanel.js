@@ -7,9 +7,11 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow, { electrumServers } from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { cryptoCoins } from '../../../util/coinHelper';
 import Config from '../../../config';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 let _prepCoinsList;
 let coins = cryptoCoins;
@@ -21,8 +23,8 @@ const prepCoinsList = () => {
     if (Config.experimentalFeatures ||
         (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
       try {
-        if (electrumServers &&
-            electrumServers[coins[i].toLowerCase()] &&
+        if (staticVar.electrumServers &&
+            staticVar.electrumServerselectrumServers[coins[i].toLowerCase()] &&
             coins[i] !== 'CHIPS') {
           _coins.push(coins[i]);
         }
@@ -100,7 +102,7 @@ class AddressBookPanel extends React.Component {
     };
 
     let _validationMsg;
-    const _validateAddress = mainWindow.addressVersionCheck(_coin, _address);
+    const _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, _address);
 
     if (_validateAddress === 'Invalid pub address') {
       _validationMsg = _validateAddress;

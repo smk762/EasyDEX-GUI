@@ -13,7 +13,7 @@ import {
   isKomodoCoin,
 } from 'agama-wallet-lib/src/coin-helpers';
 import Config from '../../../config';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { formatEther } from 'ethers/utils/units';
 import coinFees from 'agama-wallet-lib/src/fees';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
@@ -43,7 +43,7 @@ export const ZmergeToAddressRender = function() {
 export const AddressListRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
-  const _notAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && !mainWindow.chainParams[_coin].ac_private;
+  const _notAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
 
   return (
     <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
@@ -119,7 +119,7 @@ export const AddressListRenderShieldCoinbase = function() {
 export const _SendFormRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
-  const _isAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && mainWindow.chainParams[_coin].ac_private;
+  const _isAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_private;
 
   return (
     <div className="extcoin-send-form">

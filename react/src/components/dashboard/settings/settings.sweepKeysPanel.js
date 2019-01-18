@@ -12,7 +12,7 @@ import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
 import { stringToWif } from 'agama-wallet-lib/src/keys';
@@ -79,7 +79,7 @@ class SweepKeysPanel extends React.Component {
   confirmSweep() {
     const _coin = this.state.coin.split('|')[0];
     const _balance = this.state.sweepPreflight.balance;
-    let _fees = mainWindow.spvFees;
+    let _fees = staticVar.spvFees;
     
     if (Number(_balance) - fromSats(_fees[this.props.ActiveCoin.coin]) >= 0) {
       const _kp = stringToWif(
@@ -304,8 +304,8 @@ class SweepKeysPanel extends React.Component {
     let _items = [];
 
     for (let i = 0; i < allCoins.length; i++) {
-      if (_activeCoins[allCoins[i].icon.toUpperCase()] &&
-          allCoins[i].icon.toUpperCase() !== 'BTC') {
+      if (_activeCoins[allCoins[i].icon.split('/')[1].toUpperCase()] &&
+          allCoins[i].icon.split('/')[1].toUpperCase() !== 'BTC') {
         _items.push(allCoins[i]);
       }
     }

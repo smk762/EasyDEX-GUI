@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import { connect } from 'react-redux';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 class AppInfoPanel extends React.Component {
   constructor() {
@@ -52,10 +52,10 @@ class AppInfoPanel extends React.Component {
               <br />
               { translate('SETTINGS.MEM') }: <span className="selectable">{ _appInfo.sysInfo.totalmem_readable }</span>
             </p>
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <h5>{ translate('SETTINGS.LOCATIONS') }</h5>
             }
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <p>
                 { translate('SETTINGS.CACHE') }: <span className="selectable">{ _appInfo.dirs.cacheLocation }</span>
                 <br />
@@ -68,10 +68,10 @@ class AppInfoPanel extends React.Component {
                 Komodo wallet.dat: <span className="selectable">{ _appInfo.dirs.komodoDir }</span>
               </p>
             }
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <h5>{ translate('SETTINGS.DAEMON_PORTS') }</h5>
             }
-            { mainWindow.arch === 'x64' &&
+            { staticVar.arch === 'x64' &&
               <p className="selectable">{ _items }</p>
             }
           </div>

@@ -31,7 +31,7 @@ import {
   ZmergeToAddressRender,
   AddressListRenderShieldCoinbase,
 } from './sendCoin.render';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import Slider, { Range } from 'rc-slider';
 import ReactTooltip from 'react-tooltip';
 import {
@@ -52,6 +52,9 @@ import { formatEther } from 'ethers/utils/units';
 import { getAddress } from 'ethers/utils/address';
 import coinFees from 'agama-wallet-lib/src/fees';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import kv from 'agama-wallet-lib/src/kv';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
@@ -306,7 +309,7 @@ class SendCoin extends React.Component {
 
   setDefaultFee() {
     this.setState({
-      fee: fromSats(mainWindow.spvFees[this.props.ActiveCoin.coin]),
+      fee: fromSats(staticVar.spvFees[this.props.ActiveCoin.coin]),
     });
   }
 
@@ -315,24 +318,29 @@ class SendCoin extends React.Component {
     const _amountSats = toSats(this.state.amount);
     const _balance = this.props.ActiveCoin.balance;
     const _mode = this.props.ActiveCoin.mode;
-    let _fees = mainWindow.spvFees; // TODO: use lib
+    let _fees = staticVar.spvFees; // TODO: use lib
     _fees.BTC = 0;
 
     if (_mode === 'native') {
       const isZtx = this.state.addressType === 'private' || (this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs')) || (this.state.sendFrom && (this.state.sendFrom.substring(0, 2) === 'zc' || this.state.sendFrom.substring(0, 2) === 'zs'));
       
-      if (this.state.sendFrom) {
+      if (this.state.sendFrom &&
+          Number(this.state.sendFromAmount) > 0) {
         this.setState({
           amount: Number(Number(Number(this.state.sendFromAmount) - (isZtx ? this.state.ztxFee : 0.0001)).toFixed(8)),
         });
       } else {
-        this.setState({
-          amount: Number(Number(Number(_balance.transparent) - 0.0001).toFixed(8)),
-        });
+        if (Number(_balance.transparent) > 0) {
+          this.setState({
+            amount: Number(Number(Number(_balance.transparent) - 0.0001).toFixed(8)),
+          });
+        }
       }
     } else if (_mode === 'spv') {
+      const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()] || 0))).toFixed(8));
+
       this.setState({
-        amount: Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)),
+        amount: Number(_amount) > 0 ? _amount : this.state.amount,
       });
     } else if (_mode === 'eth') {
       if (erc20ContractId[this.props.ActiveCoin.coin]) {
@@ -426,7 +434,7 @@ class SendCoin extends React.Component {
         !this.state.fee &&
         _coin !== 'BTC') {
       this.setState({
-        fee: fromSats(mainWindow.spvFees[_coin]),
+        fee: fromSats(staticVar.spvFees[_coin]),
       });
     }
   }
@@ -476,6 +484,7 @@ class SendCoin extends React.Component {
     if (e &&
         _srcElement &&
         _srcElement.className &&
+        typeof _srcElement.className === 'string' &&
         _srcElement.className !== 'btn dropdown-toggle btn-info' &&
         (_srcElement.offsetParent && _srcElement.offsetParent.className !== 'btn dropdown-toggle btn-info') &&
         (e.path && e.path[4] && e.path[4].className.indexOf('showkmdwalletaddrs') === -1)) {
@@ -484,9 +493,20 @@ class SendCoin extends React.Component {
 
     if (e &&
         _srcElement &&
+        _srcElement.className &&
+        typeof _srcElement.className === 'string' &&
         _srcElement.className !== 'fa fa-angle-down' &&
         _srcElement.className.indexOf('btn-send-address-book-dropdown') === -1) {
       _state.addressBookSelectorOpen = false;
+    }
+
+    if (e &&
+        _srcElement &&
+        _srcElement.className &&
+        typeof _srcElement.className === 'string' &&
+        _srcElement.className !== 'fa fa-angle-down' &&
+        _srcElement.className.indexOf('btn-send-zfee-dropdown') === -1) {
+      _state.ztxSelectorOpen = false;
     }
 
     this.setState(_state);
@@ -544,9 +564,9 @@ class SendCoin extends React.Component {
         _coinAddresses[type].length) {
       _coinAddresses[type].map((address) => {
         if (type === 'private' &&
-            mainWindow.chainParams &&
-            mainWindow.chainParams[_coin] &&
-            mainWindow.chainParams[_coin].ac_private &&
+            staticVar.chainParams &&
+            staticVar.chainParams[_coin] &&
+            staticVar.chainParams[_coin].ac_private &&
             !this.state.sendFrom) {
           this.setState({
             sendFrom: address.address,
@@ -607,7 +627,7 @@ class SendCoin extends React.Component {
         </span>
       );
     } else {
-      const _notAcPrivate = mainWindow.chainParams && mainWindow.chainParams[_coin] && !mainWindow.chainParams[_coin].ac_private;
+      const _notAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
 
       if (_mode === 'spv' ||
           _mode === 'eth' ||
@@ -854,7 +874,7 @@ class SendCoin extends React.Component {
         let kvHex;
 
         if (this.state.kvSend) {
-          const kvEncode = mainWindow.kvEncode({
+          const kvEncode = kv.encode({
             tag: this.state.kvSendTag,
             content: {
               title: this.state.kvSendTitle,
@@ -1032,7 +1052,7 @@ class SendCoin extends React.Component {
   validateSendFormData() {
     const _coin = this.props.ActiveCoin.coin;
     const _mode = this.props.ActiveCoin.mode;
-    const isAcPrivate = _mode === 'native' && _coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[_coin] && mainWindow.chainParams[_coin].ac_private ? true : false;
+    const isAcPrivate = _mode === 'native' && _coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_private ? true : false;
     let valid = true;
 
     if (_mode === 'spv') {
@@ -1040,7 +1060,7 @@ class SendCoin extends React.Component {
       const _amount = this.state.amount;
       const _amountSats = Math.floor(toSats(this.state.amount));
       const _balanceSats = this.props.ActiveCoin.balance.balanceSats + this.props.ActiveCoin.balance.unconfirmedSats;
-      let _fees = mainWindow.spvFees;
+      let _fees = staticVar.spvFees;
       _fees.BTC = 0;
 
       if (Number(_amountSats) + (_customFee || _fees[_coin]) > _balanceSats) {
@@ -1135,7 +1155,7 @@ class SendCoin extends React.Component {
           _validateAddress = 'Invalid pub address';
         }
       } else {
-        _validateAddress = mainWindow.addressVersionCheck(_coin, this.state.sendTo);
+        _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, this.state.sendTo);
       }
 
       if (_validateAddress === 'Invalid pub address') {
@@ -1189,7 +1209,7 @@ class SendCoin extends React.Component {
           Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || _balance.transparent)} ${_coin}`,
+            Number(this.state.sendFromAmount || _balance.transparent) > 0 ? `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || _balance.transparent)} ${_coin}` : translate('SEND.INSUFFICIENT_FUNDS'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )

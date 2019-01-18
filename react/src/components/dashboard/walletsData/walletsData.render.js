@@ -6,7 +6,7 @@ import TablePaginationRenderer from '../pagination/pagination';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { tableSorting } from '../pagination/utils';
 
 const kvCoins = {
@@ -22,9 +22,9 @@ export const TxConfsRender = function(confs) {
     );
   } else if (
     this.props.ActiveCoin.mode === 'native' &&
-    mainWindow.chainParams &&
-    mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-    mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) {
+    staticVar.chainParams &&
+    staticVar.chainParams[this.props.ActiveCoin.coin] &&
+    staticVar.chainParams[this.props.ActiveCoin.coin].ac_private) {
     return (
       <span>{ translate('DASHBOARD.NA') }</span>
     );
@@ -77,12 +77,26 @@ export const AddressRender = function(address) {
     );
   }
 
+  if (this.props.AddressBook &&
+      this.props.AddressBook.obj &&
+      this.props.AddressBook.obj[address]) {
+    address = this.props.AddressBook.obj[address].title;
+  }
+
   return (
     <span className="blur">{ address }</span>
   );
 };
 
 export const AddressItemRender = function(address, type, amount, coin) {
+  let _address = address;
+  
+  if (this.props.AddressBook &&
+      this.props.AddressBook.obj &&
+      this.props.AddressBook.obj[address]) {
+    _address = this.props.AddressBook.obj[address].title;
+  }
+
   return (
     <li
       key={ address }
@@ -90,7 +104,7 @@ export const AddressItemRender = function(address, type, amount, coin) {
       <a onClick={ () => this.updateAddressSelection(address) }>
         <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
         <span className="text">
-          [ { amount } { coin } ]  <span className="selectable">{ address }</span>
+          [ { amount } { coin } ]  <span className="selectable">{ _address }</span>
         </span>
         <span className="glyphicon glyphicon-ok check-mark"></span>
       </a>
@@ -264,7 +278,7 @@ export const TxHistoryListRender = function() {
   if (_activeCoin &&
       _activeCoin.txhistory &&
       !this.state.searchTerm) {
-    _data = _activeCoin.txhistory;
+    _data = this.props.ActiveCoin.txhistory || _activeCoin;
   }
 
   _data = _data || this.state.filteredItemsList;
