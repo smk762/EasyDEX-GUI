@@ -739,14 +739,21 @@ class SendCoin extends React.Component {
   renderOPIDList() {
     if (this.props.ActiveCoin.opids &&
         this.props.ActiveCoin.opids.length) {
-      return this.props.ActiveCoin.opids.map((opid) =>
-        <tr key={ opid.id }>
-          <td>{ this.renderOPIDLabel(opid) }</td>
-          <td className="selectable">{ opid.id }</td>
-          <td className="selectable">{ secondsToString(opid.creation_time) }</td>
-          <td>{ this.renderOPIDResult(opid) }</td>
-        </tr>
-      );
+      const _opids = this.props.ActiveCoin.opids;
+      let _items = [];
+
+      for (let i = 0; i < _opids.length; i++) {
+        _items.push(
+          <tr key={ _opids[i].id }>
+            <td>{ this.renderOPIDLabel(_opids[i]) }</td>
+            <td className="selectable">{ _opids[i].id }</td>
+            <td className="selectable">{ secondsToString(_opids[i].creation_time) }</td>
+            <td>{ this.renderOPIDResult(_opids[i]) }</td>
+          </tr>
+        );
+      }
+
+      return _items;
     } else {
       return null;
     }
