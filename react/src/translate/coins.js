@@ -47,6 +47,7 @@ const coins = {
     ZEX: 'Zaddex',
     SPLTEST: 'Sapling Test Chain',
     LUMBER: 'Lumberscout',
+    KSB: 'KomodoSecureBond',
   },
   CRYPTO: {
     STRAT: 'Stratis',
