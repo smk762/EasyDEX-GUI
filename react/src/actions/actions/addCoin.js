@@ -201,14 +201,7 @@ export const apiHerd = (coin, mode, path, startupParams, genproclimit, pubkey) =
 
   if (staticVar.chainParams[coin]) {
     for (let key in staticVar.chainParams[coin]) {
-      if (key === 'pubkey') {
-        const pubKeys = mainWindow.getPubkeys();
-
-        if (pubKeys &&
-            pubKeys[coin.toLowerCase()]) {
-          herdData.ac_options.push(`-pubkey=${pubKeys[coin.toLowerCase()].pubHex}`);
-        }
-      } else if (key === 'genproclimit') {
+      if (key === 'genproclimit') {
         if (genproclimit > 0) {
           herdData.ac_options.push(`-genproclimit=${genproclimit}`);
         } else {

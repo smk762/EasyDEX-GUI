@@ -52,6 +52,9 @@ import { formatEther } from 'ethers/utils/units';
 import { getAddress } from 'ethers/utils/address';
 import coinFees from 'agama-wallet-lib/src/fees';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import kv from 'agama-wallet-lib/src/kv';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
@@ -321,14 +324,17 @@ class SendCoin extends React.Component {
     if (_mode === 'native') {
       const isZtx = this.state.addressType === 'private' || (this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs')) || (this.state.sendFrom && (this.state.sendFrom.substring(0, 2) === 'zc' || this.state.sendFrom.substring(0, 2) === 'zs'));
       
-      if (this.state.sendFrom) {
+      if (this.state.sendFrom &&
+          Number(this.state.sendFromAmount) > 0) {
         this.setState({
           amount: Number(Number(Number(this.state.sendFromAmount) - (isZtx ? this.state.ztxFee : 0.0001)).toFixed(8)),
         });
       } else {
-        this.setState({
-          amount: Number(Number(Number(_balance.transparent) - 0.0001).toFixed(8)),
-        });
+        if (Number(_balance.transparent) > 0) {
+          this.setState({
+            amount: Number(Number(Number(_balance.transparent) - 0.0001).toFixed(8)),
+          });
+        }
       }
     } else if (_mode === 'spv') {
       const _amount = Number(fromSats((_balance.balanceSats + _balance.unconfirmedSats - (toSats(this.state.fee) || _fees[this.props.ActiveCoin.coin.toLowerCase()] || 0))).toFixed(8));
@@ -733,14 +739,21 @@ class SendCoin extends React.Component {
   renderOPIDList() {
     if (this.props.ActiveCoin.opids &&
         this.props.ActiveCoin.opids.length) {
-      return this.props.ActiveCoin.opids.map((opid) =>
-        <tr key={ opid.id }>
-          <td>{ this.renderOPIDLabel(opid) }</td>
-          <td className="selectable">{ opid.id }</td>
-          <td className="selectable">{ secondsToString(opid.creation_time) }</td>
-          <td>{ this.renderOPIDResult(opid) }</td>
-        </tr>
-      );
+      const _opids = this.props.ActiveCoin.opids;
+      let _items = [];
+
+      for (let i = 0; i < _opids.length; i++) {
+        _items.push(
+          <tr key={ _opids[i].id }>
+            <td>{ this.renderOPIDLabel(_opids[i]) }</td>
+            <td className="selectable">{ _opids[i].id }</td>
+            <td className="selectable">{ secondsToString(_opids[i].creation_time) }</td>
+            <td>{ this.renderOPIDResult(_opids[i]) }</td>
+          </tr>
+        );
+      }
+
+      return _items;
     } else {
       return null;
     }
@@ -868,7 +881,7 @@ class SendCoin extends React.Component {
         let kvHex;
 
         if (this.state.kvSend) {
-          const kvEncode = staticVar.kvEncode({
+          const kvEncode = kv.encode({
             tag: this.state.kvSendTag,
             content: {
               title: this.state.kvSendTitle,
@@ -1149,7 +1162,7 @@ class SendCoin extends React.Component {
           _validateAddress = 'Invalid pub address';
         }
       } else {
-        _validateAddress = mainWindow.addressVersionCheck(_coin, this.state.sendTo);
+        _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, this.state.sendTo);
       }
 
       if (_validateAddress === 'Invalid pub address') {
@@ -1203,7 +1216,7 @@ class SendCoin extends React.Component {
           Number(Number(this.state.amount) + 0.0001) > Number(this.state.sendFromAmount))) {
         Store.dispatch(
           triggerToaster(
-            `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || _balance.transparent)} ${_coin}`,
+            Number(this.state.sendFromAmount || _balance.transparent) > 0 ? `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(this.state.sendFromAmount || _balance.transparent)} ${_coin}` : translate('SEND.INSUFFICIENT_FUNDS'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )

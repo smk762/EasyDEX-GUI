@@ -378,12 +378,6 @@ class AddCoin extends React.Component {
       this.verifyZcashParamsExist(_coin.mode)
       .then((res) => {
         if (res) {
-          const seed = this.state.loginPassphrase;
-
-          if (seed) {
-            mainWindow.setPubkey(seed, coin.toLowerCase());
-          }
-
           if (!_coin.daemonParam) {
             if (this.state.usePubkey &&
                 pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd)) {

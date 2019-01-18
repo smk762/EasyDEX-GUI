@@ -9,6 +9,8 @@ import Store from '../../../store';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 import kmdexplorer from './kmdexplorer';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const { shell } = window.require('electron');
 
@@ -31,7 +33,7 @@ class ToolsGetBalanceMultiCoins extends React.Component {
   }
 
   getBalance() {
-    const _validateAddress = mainWindow.addressVersionCheck('KMD', this.state.address);
+    const _validateAddress = addressVersionCheck(networks.kmd, this.state.address);
     let _msg;
 
     if (_validateAddress === 'Invalid pub address') {
