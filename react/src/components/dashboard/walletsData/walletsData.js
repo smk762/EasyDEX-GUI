@@ -571,7 +571,8 @@ class WalletsData extends React.Component {
     const _coin = this.props.ActiveCoin.coin;
     const _electrumCoin = this.props.Dashboard.electrumCoins[_coin];
 
-    if (_electrumCoin.serverList !== 'none') {
+    if (_electrumCoin.serverList !== 'none' &&
+        _electrumCoin.serverList.length > 1) {
       const _spvServers = _electrumCoin.serverList;
       const _server = [
         _electrumCoin.server.ip,
