@@ -1,7 +1,7 @@
 import React from 'react';
 import changeLogData from './changeLogData';
 
-class changeLogItems extends React.Component {
+class ChangeLogItems extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -16,12 +16,16 @@ class changeLogItems extends React.Component {
   
       for (let j = 0; j < changeLogData[i].changes.length; j++) {
         _itemsChanges.push(
-          <li>{ changeLogData[i].changes[j] }</li>
+          <li key={ `change-log-items-${i}-${j}` }>
+          { changeLogData[i].changes[j] }
+          </li>
         );
       }
   
       _items.push(
-        <div className="item">
+        <div
+          key={ `change-log-items-${i}` }
+          className="item padding-bottom-15">
           <h4>v{ changeLogData[i].version }</h4>
           <ul>{ _itemsChanges }</ul>
         </div>
@@ -38,4 +42,4 @@ class changeLogItems extends React.Component {
   }
 }
 
-export default changeLogItems;
+export default ChangeLogItems;
