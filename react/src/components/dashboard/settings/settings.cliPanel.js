@@ -31,16 +31,16 @@ class CliPanel extends React.Component {
     if (allCoins) {
       allCoins.sort();
 
-      allCoins.map((coin) => {
+      for (let i = 0; i < allCoins.length; i++) {
         items.push(
           <option
-            value={ coin }
-            key={ coin }>
-            { coin }
+            value={ allCoins[i] }
+            key={ allCoins[i] }>
+            { allCoins[i] }
           </option>
         );
-      });
-
+      }
+      
       return items;
     } else {
       return null;

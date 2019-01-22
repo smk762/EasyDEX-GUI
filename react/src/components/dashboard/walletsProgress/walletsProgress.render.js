@@ -81,13 +81,18 @@ export const LoadingBlocksRender = function() {
 
 export const TranslationComponentsRender = function(translationID) {
   const translationComponents = translate(translationID).split('<br>');
+  let _items = [];
 
-  return translationComponents.map((translation, idx) =>
-    <span key={ idx }>
-      { translation }
-      <br />
-    </span>
-  );
+  for (let i = 0; i < translationComponents.length; i++) {
+    _items.push(
+      <span key={ `wallets-progress-translate-${Math.random(0, 9) * 10}` }>
+        { translationComponents[i] }
+        <br />
+      </span>
+    );
+  }
+
+  return _items;
 };
 
 export const ChainActivationNotificationRender = function() {
