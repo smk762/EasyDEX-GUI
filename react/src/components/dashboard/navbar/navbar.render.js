@@ -85,7 +85,7 @@ const NavbarRender = function() {
               </li>
             }
             { Config.experimentalFeatures &&
-              Config.dev &&
+              (Config.dev || staticVar.argv.indexOf('devmode') > -1) &&
               _activeCoin &&
               _activeCoin.mode === 'native' &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
