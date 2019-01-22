@@ -458,10 +458,8 @@ const LoginRender = function() {
                 { !this.isCustomWalletSeed() &&
                   <div className="seed-encrypt-block">
                     <div className="form-group form-material floating text-left">
-                      <div className="toggle-box vertical-padding-20">
-                        <span
-                          className="pointer"
-                          disabled>
+                      <div className="toggle-box">
+                        <span className="pointer hide">
                           <label className="switch">
                             <input
                               type="checkbox"
@@ -478,7 +476,7 @@ const LoginRender = function() {
                           </div>
                         </span>
                         <i
-                          className="icon fa-question-circle login-help"
+                          className="icon fa-question-circle login-help first"
                           data-tip={ 
                             translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P1') +
                             '<br />' +

@@ -183,6 +183,11 @@ option.login-option {
     .login-help {
       top: -10px;
       left: 25px;
+
+      &.first {
+        top: 28px;
+        left: 131px;
+      }
     }
   }
   .seed-extra-spaces-warning {
