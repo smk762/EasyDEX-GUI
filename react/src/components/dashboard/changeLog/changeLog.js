@@ -1,7 +1,7 @@
 import React from 'react';
 import changeLogData from './changeLogData';
 
-class ChangeLogItems extends React.Component {
+class ChangeLog extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -37,9 +37,12 @@ class ChangeLogItems extends React.Component {
 
   render() {
     return (
-      <div>{ this.renderItems() }</div>
+      <section className="change-log">
+        <h3>Change log</h3>
+        { this.renderItems() }
+      </section>
     );
   }
 }
 
-export default ChangeLogItems;
+export default ChangeLog;

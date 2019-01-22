@@ -166,6 +166,13 @@ const NavbarRender = function() {
                     </a>
                   </li>
                 }
+                { !this.isSectionActive('changelog') &&
+                  <li>
+                    <a onClick={ () => this.dashboardChangeSection('changelog') }>
+                      <i className="icon fa-list"></i> Change log
+                    </a>
+                  </li>
+                }
                 <li>
                   <a onClick={ this._toggleBlurSensitiveData }>
                     <i className={ 'nbps icon fa-eye' + (!this.props.Main.blurSensitiveData ? '-slash' : '') }></i>
