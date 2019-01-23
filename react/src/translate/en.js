@@ -221,7 +221,7 @@ const LANG_EN = {
     SELF_SM: 'self',
     DEFAULT: 'Default',
     NEW_VERSION: 'New version',
-    GENERATING_CSV: 'Generating CSV',
+    GENERATING_CSV: 'Generating CSV...',
     TX_HISTORY_EXPORT: 'Transaction history export',
     CSV_EXPORT_ERR: 'CSV export error',
     CSV_EXPORT_SAVED: 'CSV export is saved at',

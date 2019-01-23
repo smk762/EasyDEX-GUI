@@ -20,6 +20,7 @@ import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 import Dice from '../dice/dice';
+import ChangeLog from '../changeLog/changeLog';
 
 const DashboardRender = function() {
   return (
@@ -54,6 +55,9 @@ const DashboardRender = function() {
         }
         { this.isSectionActive('about') &&
           <About />
+        }
+        { this.isSectionActive('changelog') &&
+          <ChangeLog />
         }
         { this.isSectionActive('support') &&
           <Support />

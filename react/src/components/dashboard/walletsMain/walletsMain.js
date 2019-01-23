@@ -9,7 +9,7 @@ import {
 import { getCoinTitle } from '../../../util/coinHelper';
 import Config from '../../../config';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
@@ -27,7 +27,8 @@ class WalletsMain extends React.Component {
   }
 
   componentWillMount() {
-    if (!Config.dev) {
+    if (!Config.dev ||
+        staticVar.argv.indexOf('devmode') > -1) {
       Store.dispatch(newUpdateAvailable());
 
       setInterval(() => {

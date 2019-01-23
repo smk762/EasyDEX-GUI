@@ -14,44 +14,33 @@ class CliPanel extends React.Component {
     };
   }
 
-  renderActiveCoinsList(mode) {
-    const modes = [
-      'native',
-      'full',
-    ];
+  componentWillMount(props) {
+    const allCoins = this.props.Main.coins && this.props.Main.coins.native;
 
-    const allCoins = this.props.Main.coins;
+    if (allCoins) {
+      this.setState({
+        cliCoin: allCoins[0],
+      });
+    }
+  }
+
+  renderActiveCoinsList() {
+    const allCoins = this.props.Main.coins && this.props.Main.coins.native;
     let items = [];
 
     if (allCoins) {
-      if (mode === 'all') {
-        modes.map((mode) => {
-          allCoins[mode].sort();
+      allCoins.sort();
 
-          allCoins[mode].map((coin) => {
-            items.push(
-              <option
-                value={ coin }
-                key={ coin }>
-                { coin } ({ mode })
-              </option>
-            );
-          });
-        });
-      } else {
-        allCoins[mode].sort();
-
-        allCoins[mode].map((coin) => {
-          items.push(
-            <option
-              value={ coin }
-              key={ coin }>
-              { coin } ({ mode })
-            </option>
-          );
-        });
+      for (let i = 0; i < allCoins.length; i++) {
+        items.push(
+          <option
+            value={ allCoins[i] }
+            key={ allCoins[i] }>
+            { allCoins[i] }
+          </option>
+        );
       }
-
+      
       return items;
     } else {
       return null;
@@ -99,6 +88,7 @@ class CliPanel extends React.Component {
       }
 
       if (Object.prototype.toString.call(_cliResponseParsed) === 'number' ||
+          typeof _cliResponseParsed === 'number' ||
           typeof _cliResponseParsed === 'boolean' ||
           _cliResponseParsed === 'wrong cli string format') {
         const _random = Math.random(0, 9) * 1000;
@@ -114,6 +104,7 @@ class CliPanel extends React.Component {
       if (responseType !== 'number' &&
           responseType !== 'array' &&
           responseType !== 'object' &&
+          _cliResponseParsed &&
           _cliResponseParsed.indexOf('\n') > -1) {
         _cliResponseParsed = _cliResponseParsed.split('\n');
 
@@ -162,18 +153,17 @@ class CliPanel extends React.Component {
         <div className="col-sm-12">
         <p>{ translate('INDEX.CLI_SELECT_A_COIN') }</p>
         <form
-          className="execute-cli-cmd-form"
+          className="execute-cli-cmd-form padding-top-10"
           method="post"
           action="javascript:"
           autoComplete="off">
-          <div className="form-group form-material floating">
+          <div className="form-group form-material floating padding-bottom-15">
             <select
               className="form-control form-material"
               name="cliCoin"
               id="settingsCliOptions"
               onChange={ this.updateInput }>
-              <option>{ translate('INDEX.CLI_NATIVE_COIN') }</option>
-              { this.renderActiveCoinsList('native') }
+              { this.renderActiveCoinsList() }
             </select>
             <label
               className="floating-label"

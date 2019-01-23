@@ -45,11 +45,7 @@ const WalletsBalanceRender = function() {
                     <div className="clearfix cursor-default">
                       <div className="pull-left padding-vertical-10">
                         { ((isKomodoCoin(_coin) && _mode === 'native') || _coin === 'KMD') &&
-                          <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-5"></i>
-                        }
-                        { _mode === 'spv' &&
-                          Number(this.renderBalance('interest')) > 0 &&
-                          <span className="padding-right-30">&nbsp;</span>
+                          <i className="icon fa-eye font-size-24 vertical-align-bottom margin-right-10"></i>
                         }
                         { translate('INDEX.' + (_coin === 'CHIPS' || _mode === 'spv' || _mode === 'eth' ? 'BALANCE' : 'TRANSPARENT_BALANCE')) }
                         { _mode === 'spv' &&
@@ -79,7 +75,7 @@ const WalletsBalanceRender = function() {
               <div className="padding-20 padding-top-10">
                 <div className="clearfix cursor-default">
                   <div className="pull-left padding-vertical-10">
-                    <i className="icon fa-eye-slash font-size-24 vertical-align-bottom margin-right-5"></i>
+                    <i className="icon fa-eye-slash font-size-24 vertical-align-bottom margin-right-10"></i>
                     { translate('INDEX.Z_BALANCE') }
                   </div>
                   <span
@@ -105,7 +101,7 @@ const WalletsBalanceRender = function() {
                   <div className="padding-20 padding-top-10">
                     <div className="clearfix cursor-default">
                       <div className="pull-left padding-vertical-10">
-                        <i className="icon fa-money font-size-24 vertical-align-bottom margin-right-5"></i>
+                        <i className="icon fa-money font-size-24 vertical-align-bottom margin-right-10"></i>
                         { translate('INDEX.INTEREST_EARNED') }
                       </div>
                       <span
@@ -136,7 +132,7 @@ const WalletsBalanceRender = function() {
                   <div className="padding-20 padding-top-10">
                     <div className="clearfix cursor-default">
                       <div className="pull-left padding-vertical-10">
-                        <i className="icon fa-bullseye font-size-24 vertical-align-bottom margin-right-5"></i>
+                        <i className="icon fa-bullseye font-size-24 vertical-align-bottom margin-right-10"></i>
                         { translate('INDEX.TOTAL_BALANCE') }
                       </div>
                       <span

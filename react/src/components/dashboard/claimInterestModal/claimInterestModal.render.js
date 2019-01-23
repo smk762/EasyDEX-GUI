@@ -83,7 +83,7 @@ export const _ClaimInterestTableRender = function() {
           </p>
         }
         <p>
-          <strong>{ translate('CLAIM_INTEREST.CLAIM_INTEREST_FEE') }:</strong> { this.props.ActiveCoin.mode === 'native' ? '0.0001' : '0.0002' } KMD ({ this.props.ActiveCoin.mode === 'native' ? '10000' : '20000' }) sats.
+          <strong>{ translate('CLAIM_INTEREST.CLAIM_INTEREST_FEE') }:</strong> { this.props.ActiveCoin.mode === 'native' ? '0.0001' : '0.0002' } KMD ({ this.props.ActiveCoin.mode === 'native' ? '10000' : '20000' } sats).
         </p>
       </div>
       { this.state.totalInterest > 0 &&
@@ -150,9 +150,9 @@ export const _ClaimInterestTableRender = function() {
               { this.addressDropdownRender() }
             </div>
           }
-          { (!this.isFullySynced() || !navigator.onLine) &&
-            this.props.ActiveCoin &&
+          { this.props.ActiveCoin &&
             this.props.ActiveCoin.mode === 'native' &&
+            (!this.isFullySynced() || !navigator.onLine) &&
             <div className="col-lg-12 padding-top-5 padding-bottom-35 send-coin-sync-warning no-padding-left">
               <i className="icon fa-warning color-warning margin-right-5"></i> <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
             </div>

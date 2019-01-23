@@ -95,6 +95,7 @@ class SendCoin extends React.Component {
       coin: null,
       spvVerificationWarning: false,
       spvPreflightSendInProgress: false,
+      spvDpowVerificationWarning: 'n/a',
       btcFees: {},
       btcFeesType: 'halfHourFee',
       btcFeesAdvancedStep: 9,
@@ -266,7 +267,7 @@ class SendCoin extends React.Component {
     this.setState({
       sendTo: pub,
       addressBookSelectorOpen: false,
-      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && (pub.substring(0, 2) === 'zc' || pub.substring(0, 2) === 'zs') && pub.length === 95 ? true : this.state.renderAddressDropdown,      
+      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && (pub.substring(0, 2) === 'zc' || pub.substring(0, 2) === 'zs') && (pub.length === 95 || pub.length === 78) ? true : this.state.renderAddressDropdown,      
     });
   }
 
@@ -537,7 +538,7 @@ class SendCoin extends React.Component {
       };
 
       if ( this.props.ActiveCoin.mode === 'native') {
-        updatedState.renderAddressDropdown = this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown;
+        updatedState.renderAddressDropdown = this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && (this.state.sendTo.length === 95 || this.state.sendTo.length === 78) ? true : this.state.renderAddressDropdown;
       }
     } else {
       updatedState = {
@@ -782,7 +783,7 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       setTimeout(() => {
         this.setState({
-          renderAddressDropdown: this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && this.state.sendTo.length === 95 ? true : this.state.renderAddressDropdown,
+          renderAddressDropdown: this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && (this.state.sendTo.length === 95 || this.state.sendTo.length === 78) ? true : this.state.renderAddressDropdown,
         });
       }, 100);
     }
@@ -862,6 +863,7 @@ class SendCoin extends React.Component {
         this.setState({
           currentStep: 0,
           spvVerificationWarning: false,
+          spvDpowVerificationWarning: 'n/a',
           spvPreflightSendInProgress: false,
           ethPreflightSendInProgress: false,
           pin: '',
@@ -920,6 +922,7 @@ class SendCoin extends React.Component {
                 sendPreflight.msg === 'success') {
               this.setState(Object.assign({}, this.state, {
                 spvVerificationWarning: !sendPreflight.result.utxoVerified,
+                spvDpowVerificationWarning: sendPreflight.result.dpowSecured,
                 spvPreflightSendInProgress: false,
                 spvPreflightRes: {
                   fee: sendPreflight.result.fee,
@@ -932,6 +935,7 @@ class SendCoin extends React.Component {
             } else {
               this.setState(Object.assign({}, this.state, {
                 spvPreflightSendInProgress: false,
+                spvDpowVerificationWarning: 'n/a',
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
               }));
             }

@@ -171,6 +171,24 @@ const WalletsTxInfoRender = function(txInfo) {
                                   </td>
                                 </tr>
                               }
+                              { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && this.state.txDetails.dpowSecured) ||
+                                (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations >=2)) &&
+                                <tr>
+                                  <td>dPoW secured</td>
+                                  <td>
+                                    Yes
+                                  </td>
+                                </tr>
+                              }
+                              { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && !this.state.txDetails.dpowSecured) ||
+                                (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations < 2)) &&
+                                <tr>
+                                  <td>dPoW secured</td>
+                                  <td>
+                                    No
+                                  </td>
+                                </tr>
+                              }
                             </tbody>
                           </table>
                         </div>
