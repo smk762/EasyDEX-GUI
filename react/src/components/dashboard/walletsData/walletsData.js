@@ -273,7 +273,16 @@ class WalletsData extends React.Component {
       footerClassName: 'hidden-xs hidden-sm',
       className: 'hidden-xs hidden-sm',
       Cell: row => TxConfsRender.call(this, row.value),
-      accessor: (tx) => tx.confirmations,
+      accessor: (tx) => tx,
+      sortMethod: (a, b) => {
+        if (a.confirmations > b.confirmations) {
+          return 1;
+        }
+        if (a.confirmations < b.confirmations) {
+          return -1;
+        }
+        return 0;
+      },
       maxWidth: '180',
     },
     {
