@@ -95,6 +95,7 @@ class SendCoin extends React.Component {
       coin: null,
       spvVerificationWarning: false,
       spvPreflightSendInProgress: false,
+      spvDpowVerificationWarning: 'n/a',
       btcFees: {},
       btcFeesType: 'halfHourFee',
       btcFeesAdvancedStep: 9,
@@ -862,6 +863,7 @@ class SendCoin extends React.Component {
         this.setState({
           currentStep: 0,
           spvVerificationWarning: false,
+          spvDpowVerificationWarning: 'n/a',
           spvPreflightSendInProgress: false,
           ethPreflightSendInProgress: false,
           pin: '',
@@ -920,6 +922,7 @@ class SendCoin extends React.Component {
                 sendPreflight.msg === 'success') {
               this.setState(Object.assign({}, this.state, {
                 spvVerificationWarning: !sendPreflight.result.utxoVerified,
+                spvDpowVerificationWarning: sendPreflight.result.dpowSecured,
                 spvPreflightSendInProgress: false,
                 spvPreflightRes: {
                   fee: sendPreflight.result.fee,
@@ -932,6 +935,7 @@ class SendCoin extends React.Component {
             } else {
               this.setState(Object.assign({}, this.state, {
                 spvPreflightSendInProgress: false,
+                spvDpowVerificationWarning: 'n/a',
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
               }));
             }
