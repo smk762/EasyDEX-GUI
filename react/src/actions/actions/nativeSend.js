@@ -125,6 +125,7 @@ export const sendNativeTx = (coin, _payload) => {
             'success'
           )
         );
+        Store.dispatch(getDashboardUpdate(coin));
       }
     });
   }
@@ -204,6 +205,7 @@ export const sendToAddressPromise = (coin, address, amount) => {
     .then(response => response.json())
     .then(json => {
       resolve(json);
+      Store.dispatch(getDashboardUpdate(coin));
     });
   });
 }
@@ -331,6 +333,7 @@ export const zmergeToAddressPromise = (coin, src, dest, fee = 0.0001, transparen
     .then(response => response.json())
     .then(json => {
       resolve(json);
+      Store.dispatch(getDashboardUpdate(coin));
     });
   });
 }
@@ -368,6 +371,7 @@ export const shieldCoinbase = (coin, src, dest, fee = 0.0001, limit = 50) => {
     .then(response => response.json())
     .then(json => {
       resolve(json);
+      Store.dispatch(getDashboardUpdate(coin));
     });
   });
 }
