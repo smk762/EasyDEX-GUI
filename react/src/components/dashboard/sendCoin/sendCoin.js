@@ -1274,8 +1274,7 @@ class SendCoin extends React.Component {
     }
 
     // validate z address, ac_private mandatory
-    if ((_mode === 'native' &&
-        isAcPrivate) ||
+    if ((_mode === 'native' && isAcPrivate) ||
         (this.state.sendTo &&
         (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') &&
         this.state.sendTo.length > 64)) {
