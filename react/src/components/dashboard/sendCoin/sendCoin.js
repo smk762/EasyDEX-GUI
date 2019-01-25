@@ -1069,7 +1069,7 @@ class SendCoin extends React.Component {
     // temp
     if (_mode === 'native') {
       if (_coin === 'KMD') { // reject t -> z
-        if ((!this.state.sendFrom || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs' && this.state.sendTo.length <= 78)) &&
+        if ((!this.state.sendFrom || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) !== 'zc' && this.state.sendFrom.substring(0, 2) !== 'zs' && this.state.sendFrom.length <= 78)) &&
             this.state.sendTo &&
             ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78))) {
           Store.dispatch(
