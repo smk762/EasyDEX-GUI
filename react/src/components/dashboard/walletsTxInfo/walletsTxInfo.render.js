@@ -119,6 +119,15 @@ const WalletsTxInfoRender = function(txInfo) {
                                   { this.state.txDetails.confirmations }
                                 </td>
                               </tr>
+                              { this.state.txDetails.hasOwnProperty('rawconfirmations') &&
+                                this.state.txDetails.confirmations !== this.state.txDetails.rawconfirmations &&
+                                <tr>
+                                  <td>Raw confirmations</td>
+                                  <td>
+                                    { this.state.txDetails.rawconfirmations }
+                                  </td>
+                                </tr>
+                              }
                               { this.state.txDetails.blockindex &&
                                 <tr>
                                   <td>{ this.capitalizeFirstLetter('blockindex') }</td>

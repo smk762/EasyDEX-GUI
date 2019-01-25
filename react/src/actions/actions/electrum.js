@@ -16,6 +16,7 @@ import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
+import { setTimeout } from 'timers';
 
 // TODO: dev display errors
 
@@ -398,6 +399,14 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFe
     .then(response => response.json())
     .then(json => {
       dispatch(sendToAddressState(json.msg === 'error' ? json : json.result));
+
+      if (json.msg === 'success') {
+        Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+
+        setTimeout(() => {
+          Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+        }, 2000);
+      }
     });
   }
 }
@@ -434,6 +443,14 @@ export const apiElectrumSendPromise = (coin, value, sendToAddress, changeAddress
     .then(response => response.json())
     .then(json => {
       resolve(json);
+
+      if (json.msg === 'success') {
+        Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+
+        setTimeout(() => {
+          Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+        }, 2000);
+      }
     });
   });
 }
@@ -653,6 +670,14 @@ export const apiElectrumSweep = (coin, value, sendToAddress, changeAddress, push
     .then(response => response.json())
     .then(json => {
       resolve(json);
+
+      if (json.msg === 'success') {
+        Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+
+        setTimeout(() => {
+          Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+        }, 2000);
+      }
     });
   });
 }

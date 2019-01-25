@@ -1066,6 +1066,37 @@ class SendCoin extends React.Component {
     const isAcPrivate = _mode === 'native' && _coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_private ? true : false;
     let valid = true;
 
+    // temp
+    if (_mode === 'native') {
+      if (_coin === 'KMD') { // reject t -> z
+        if ((!this.state.sendFrom || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) !== 'zc' && this.state.sendFrom.substring(0, 2) !== 'zs' && this.state.sendFrom.length <= 78)) &&
+            this.state.sendTo &&
+            ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78))) {
+          Store.dispatch(
+            triggerToaster(
+              'Private transaction are being disabled on 15th February 2019 on KMD chain permanently and will become a public chain where only transparent transactions are possible. Please don\'t send them to private address which can lead to KMD being locked after the deadline 15th February 2019.',
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'warning toastr-wide'
+            )
+          );
+          valid = false;
+        }
+      } else {
+        if (this.state.sendTo &&
+            this.state.sendTo.substring(0, 2) === 'zc' &&
+            this.state.sendTo.length === 95) {
+          Store.dispatch(
+            triggerToaster(
+              'Sprout transactions are being disabled on 15th February 2019. If you keep your funds in a zc address, it will be locked there. Please use Sapling zs address.',
+              translate('TOASTR.WALLET_NOTIFICATION'),
+              'warning toastr-wide'
+            )
+          );
+          valid = false;
+        }
+      }
+    }
+
     if (_mode === 'spv') {
       const _customFee = toSats(this.state.fee);
       const _amount = this.state.amount;
@@ -1243,8 +1274,7 @@ class SendCoin extends React.Component {
     }
 
     // validate z address, ac_private mandatory
-    if ((_mode === 'native' &&
-        isAcPrivate) ||
+    if ((_mode === 'native' && isAcPrivate) ||
         (this.state.sendTo &&
         (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') &&
         this.state.sendTo.length > 64)) {

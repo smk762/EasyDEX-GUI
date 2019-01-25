@@ -19,7 +19,23 @@ export const TxConfsRender = function(tx) {
   if (Number(tx.confirmations) > -1) {
     return (
       <span>
-        <span>{ tx.confirmations }</span>
+        { tx.hasOwnProperty('rawconfirmations') &&
+          tx.confirmations !== tx.rawconfirmations &&
+          <span>
+            <span
+              data-tip={ `Raw confirmations: ${tx.rawconfirmations}` }
+              data-for="txHistoryDpowRawConf">
+              { tx.confirmations }
+            </span>
+            <ReactTooltip
+              id="txHistoryDpowRawConf"
+              effect="solid"
+              className="text-left" />
+          </span>
+        }
+        { (!tx.hasOwnProperty('rawconfirmations') || (tx.hasOwnProperty('rawconfirmations') && tx.confirmations === tx.rawconfirmations)) &&
+          <span>{ tx.confirmations }</span>
+        }
         { ((this.props.ActiveCoin.mode === 'spv' && tx.hasOwnProperty('dpowSecured') && tx.dpowSecured) ||
            (this.props.ActiveCoin.mode === 'native' && tx.hasOwnProperty('rawconfirmations') && tx.confirmations >=2)) &&
           <span>
