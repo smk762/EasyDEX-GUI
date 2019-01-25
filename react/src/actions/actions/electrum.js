@@ -398,6 +398,10 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFe
     .then(response => response.json())
     .then(json => {
       dispatch(sendToAddressState(json.msg === 'error' ? json : json.result));
+
+      if (json.msg === 'success') {
+        Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+      }
     });
   }
 }
