@@ -1265,7 +1265,7 @@ const LANG_EN = {
   },
   LANG: {
     EN: 'English',
-    DE: 'Deutch',
+    DE: 'Deutsch',
   },
   FIAT_CURRENCIES: {
     AUD: 'Australian Dollar (AUD)',
