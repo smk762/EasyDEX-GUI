@@ -437,6 +437,14 @@ class SendCoin extends React.Component {
         fee: fromSats(staticVar.spvFees[_coin]),
       });
     }
+
+    if (this.props.initState) {
+      this.setState({
+        amount: Number(this.props.initState.exchangeOrder.expectedDepositCoinAmount * 1.0005).toFixed(8),
+        sendTo: this.props.initState.exchangeOrder.exchangeAddress.address,
+      });
+      console.warn('send coin', this.props.initState);
+    }
   }
 
   setRecieverFromScan(receiver) {
@@ -860,10 +868,21 @@ class SendCoin extends React.Component {
           pin: '',
           noUtxo: false,
         });
+        if (this.props.cb) {
+          setTimeout(() => {
+            this.props.cb(this.state);
+          }, 100);
+        }
       } else {
         Store.dispatch(clearLastSendToResponseState());
 
         this.setState(this.defaultState);
+
+        if (this.props.cb) {
+          setTimeout(() => {
+            this.props.cb(this.state);
+          }, 100);
+        }
       }
     }
 
@@ -896,6 +915,11 @@ class SendCoin extends React.Component {
           ethPreflightRes: null,
         }));
 
+        if (this.props.cb) {
+          setTimeout(() => {
+            this.props.cb(this.state);
+          }, 100);
+        }
         // spv pre tx push request
         if (_mode === 'spv') {
           apiElectrumSendPreflight(
@@ -922,11 +946,21 @@ class SendCoin extends React.Component {
                   totalInterest: sendPreflight.result.totalInterest,
                 },
               }));
+              if (this.props.cb) {
+                setTimeout(() => {
+                  this.props.cb(this.state);
+                }, 100);
+              }
             } else {
               this.setState(Object.assign({}, this.state, {
                 spvPreflightSendInProgress: false,
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
               }));
+              if (this.props.cb) {
+                setTimeout(() => {
+                    this.props.cb(this.state);
+                }, 100);
+              }
             }
           });
         } else if (
@@ -953,11 +987,21 @@ class SendCoin extends React.Component {
                   },
                 },
               }));
+              if (this.props.cb) {
+                  setTimeout(() => {
+                    this.props.cb(this.state);
+                }, 100);
+              }
             } else {
               this.setState(Object.assign({}, this.state, {
                 ethPreflightSendInProgress: false,
                 ethPreflightRes: sendPreflight,
               }));
+              if (this.props.cb) {
+                setTimeout(() => {
+                  this.props.cb(this.state);
+                }, 100);
+              }
             }
           });
         }
@@ -968,6 +1012,11 @@ class SendCoin extends React.Component {
       this.setState(Object.assign({}, this.state, {
         currentStep: step,
       }));
+      if (this.props.cb) {
+        setTimeout(() => {
+          this.props.cb(this.state);
+        }, 100);
+      }
       this.handleSubmit();
     }
   }
@@ -1540,11 +1589,19 @@ const mapStateToProps = (state, props) => {
     AddressBook: state.Settings.addressBook,
   };
 
-  if (props &&
-      props.activeSection &&
-      props.renderFormOnly) {
-    _mappedProps.ActiveCoin.activeSection = props.activeSection;
-    _mappedProps.renderFormOnly = props.renderFormOnly;
+  if (props) {
+    if (props.activeSection) {
+      _mappedProps.ActiveCoin.activeSection = props.activeSection;
+    }
+    if (props.renderFormOnly) {
+      _mappedProps.ActiveCoin.renderFormOnly = props.renderFormOnly;
+    }
+    if (props.initState) {
+      _mappedProps.ActiveCoin.initState = props.initState;
+    }
+    if (props.cb) {
+      _mappedProps.ActiveCoin.cb = props.cb;
+    }
   }
 
   return _mappedProps;

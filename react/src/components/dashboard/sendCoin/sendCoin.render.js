@@ -141,6 +141,7 @@ export const _SendFormRender = function() {
           <div className="col-xlg-12 form-group form-material">
             { ((_mode === 'spv' && this.renderAddressBookDropdown(true) < 1) ||
                 _mode === 'eth') &&
+                !this.props.initState &&
               <button
                 type="button"
                 className="btn btn-default btn-send-self"
@@ -178,18 +179,21 @@ export const _SendFormRender = function() {
               name="sendTo"
               onChange={ this.updateInput }
               value={ this.state.sendTo }
+              disabled={ this.props.initState }
               id="kmdWalletSendTo"
               placeholder={ translate('SEND.' + (_mode === 'spv' || _mode === 'eth' ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>
           <div className="col-lg-12 form-group form-material">
-            <button
-              type="button"
-              className="btn btn-default btn-send-self"
-              onClick={ this.setSendAmountAll }>
-              { translate('SEND.ALL') }
-            </button>
+            { !this.props.initState &&
+              <button
+                type="button"
+                className="btn btn-default btn-send-self"
+                onClick={ this.setSendAmountAll }>
+                { translate('SEND.ALL') }
+              </button>
+            }
             <label
               className="control-label"
               htmlFor="kmdWalletAmount">
@@ -201,6 +205,7 @@ export const _SendFormRender = function() {
               name="amount"
               value={ this.state.amount !== 0 ? this.state.amount : '' }
               onChange={ this.updateInput }
+              disabled={ this.props.initState }
               id="kmdWalletAmount"
               placeholder="0.000"
               autoComplete="off" />
@@ -513,9 +518,11 @@ export const SendRender = function() {
                 }
               </div>
               <div className="qr-modal-send-block">
-                <QRModal
-                  mode="scan"
-                  setRecieverFromScan={ this.setRecieverFromScan } />
+                { !this.props.initState &&
+                  <QRModal
+                    mode="scan"
+                    setRecieverFromScan={ this.setRecieverFromScan } />
+                }
               </div>
               <div className="padding-left-30 padding-top-20 hide">
                 <span className="pointer">
@@ -931,16 +938,18 @@ export const SendRender = function() {
                     </div>
                   }
                 </div>
-                <div className="widget-body-footer">
-                  <div className="widget-actions margin-bottom-15 margin-right-15">
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={ () => this.changeSendCoinStep(0) }>
-                      { translate('INDEX.MAKE_ANOTHER_TX') }
-                    </button>
+                { !this.props.initState &&
+                  <div className="widget-body-footer">
+                    <div className="widget-actions margin-bottom-15 margin-right-15">
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={ () => this.changeSendCoinStep(0) }>
+                        { translate('INDEX.MAKE_ANOTHER_TX') }
+                      </button>
+                    </div>
                   </div>
-                </div>
+                }
               </div>
             </div>
           </div>
