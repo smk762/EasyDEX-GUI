@@ -64,14 +64,16 @@ const ExchangesOrderInfoModalRender = function() {
                                   { secondsToString(_cache[_key].createdAt / 1000) }
                                 </td>
                               </tr>
-                              <tr>
-                                <td>
-                                  Valid until
-                                </td>
-                                <td>
-                                  { secondsToString(_cache[_key].validTill / 1000) }
-                                </td>
-                              </tr>
+                              { _cache[_key].validTill &&
+                                <tr>
+                                  <td>
+                                    Valid until
+                                  </td>
+                                  <td>
+                                    { secondsToString(_cache[_key].validTill / 1000) }
+                                  </td>
+                                </tr>
+                              }
                               <tr>
                                 <td>
                                   Source
@@ -80,7 +82,7 @@ const ExchangesOrderInfoModalRender = function() {
                                   <img
                                     className="margin-right-10"
                                     height="25px"
-                                    src={ `assets/images/cryptologo/${_cache[_key].depositCoin}.png` } />
+                                    src={ `assets/images/cryptologo/btc/${_cache[_key].depositCoin}.png` } />
                                   { formatValue(_cache[_key].expectedDepositCoinAmount) } { _cache[_key].depositCoin.toUpperCase() }
                                 </td>
                               </tr>
@@ -92,7 +94,7 @@ const ExchangesOrderInfoModalRender = function() {
                                   <img
                                     className="margin-right-10"
                                     height="25px"
-                                    src={ `assets/images/cryptologo/${_cache[_key].destinationCoin}.png`} />
+                                    src={ `assets/images/cryptologo/btc/${_cache[_key].destinationCoin}.png`} />
                                   { formatValue(_cache[_key].expectedDestinationCoinAmount) } { _cache[_key].destinationCoin.toUpperCase() }
                                 </td>
                               </tr>
@@ -148,7 +150,7 @@ const ExchangesOrderInfoModalRender = function() {
                           </table>
                         </div>
                       }
-                      { this.state.activeTab === 1 &&
+                      { /*this.state.activeTab === 1 &&
                         <div className="tab-pane active">
                           <table className="table table-striped">
                             <tbody>
@@ -159,7 +161,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                             </tbody>
                           </table>
-                        </div>
+                        </div>*/
                       }
                     </div>
                   </div>
