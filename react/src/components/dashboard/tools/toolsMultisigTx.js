@@ -37,7 +37,7 @@ import transactionBuilder from 'agama-wallet-lib/src/transaction-builder';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { stringToWif } from 'agama-wallet-lib/src/keys';
-import { msigPubAddress } from 'agama-wallet-lib/src/keys';
+import { multisig } from 'agama-wallet-lib/src/keys';
 import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
 
 const { shell } = window.require('electron');
@@ -290,7 +290,7 @@ class ToolsMultisigTx extends React.Component {
         } else {
           const _seed = _multisigData.signKey ? _multisigData.signKey : this.state.seed;
 
-          _sendFrom = msigPubAddress(
+          _sendFrom = multisig.redeemScriptToPubAddress(
             _multisigData.scriptPubKey,
             networks[_coin.toLowerCase()] || networks.kmd
           );
@@ -420,7 +420,7 @@ class ToolsMultisigTx extends React.Component {
             change: _data.change,
             value: _data.value,
             fee: _data.fee,
-            from: msigPubAddress(
+            from: multisig.redeemScriptToPubAddress(
               _multisigData.scriptPubKey,
               networks[_coin[0].toLowerCase()] || networks.kmd
             ),
