@@ -4,10 +4,14 @@ import translate from '../../../translate/translate';
 import {
   toggleExchangesOrderInfoModal,
   getTxDetails,
+  apiElectrumTransaction,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import ExchangesOrderInfoModalRender from './exchangesOrderInfoModal.render';
 import Config from '../../../config';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+
+const { shell } = window.require('electron');
 
 class ExchangesOrderInfoModal extends React.Component {
   constructor() {
@@ -15,13 +19,51 @@ class ExchangesOrderInfoModal extends React.Component {
     this.state = {
       activeTab: 0,
       className: 'hide',
+      deposit: null,
+      depositFetching: false,
     };
     this._toggleExchangesOrderInfoModal = this._toggleExchangesOrderInfoModal.bind(this);
+    this.getTransactionElectrum = this.getTransactionElectrum.bind(this);
+  }
+
+  openExplorerWindow(txid) {
+    const _cache = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges[this.props.provider];
+    const _orderId = this.props.Dashboard.showExchangesOrderInfoId;
+    const _coin = _cache[_orderId].depositCoin.toUpperCase();
+    const url = explorerList[_coin].split('/').length - 1 > 2 ? `${explorerList[_coin]}${txid}` : `${explorerList[_coin]}/tx/${txid}`;      
+
+    return shell.openExternal(url);
+  }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  getTransactionElectrum() {
+    const _cache = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges[this.props.provider];
+    const _orderId = this.props.Dashboard.showExchangesOrderInfoId;
+
+    this.setState({
+      depositFetching: true,
+    });
+
+    apiElectrumTransaction(
+      _cache[_orderId].depositCoin.toUpperCase(),
+      this.props.Dashboard.electrumCoins[_cache[_orderId].depositCoin.toUpperCase()].pub,
+      _cache[_orderId].inputTransactionHash
+    )
+    .then((transactionDetails) => {
+      this.setState({
+        depositFetching: false,
+        deposit: transactionDetails[0],
+      });
+    });
   }
 
   _toggleExchangesOrderInfoModal() {
     this.setState(Object.assign({}, this.state, {
       className: 'show out',
+      deposit: null,
     }));
 
     setTimeout(() => {
@@ -54,6 +96,11 @@ class ExchangesOrderInfoModal extends React.Component {
     this.setState(Object.assign({}, this.state, {
       activeTab: tab,
     }));
+
+    if (tab === 1 &&
+        !this.state.deposit) {
+      this.getTransactionElectrum();
+    }
   }
 
   handleKeydown(e) {

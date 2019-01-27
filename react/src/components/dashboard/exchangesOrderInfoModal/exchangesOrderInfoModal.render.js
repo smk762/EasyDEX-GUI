@@ -6,9 +6,18 @@ import {
   formatValue,
 } from 'agama-wallet-lib/src/utils';
 
+const statusLookup = {
+  coinswitch: {
+    timeout: 'expired',
+    no_deposit: 'awaiting deposit',
+  },
+};
+
 const ExchangesOrderInfoModalRender = function() {
   const _cache = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges[this.props.provider];
   const _key = this.props.Dashboard.showExchangesOrderInfoId;
+  const isSpv = true;
+  const isEth = false;
 
   if (_cache &&
       _key) {
@@ -44,11 +53,13 @@ const ExchangesOrderInfoModalRender = function() {
                         <i className="icon md-balance-wallet"></i>Order Info
                       </a>
                     </li>
-                    <li className={ this.state.activeTab === 1 ? 'active' : '' }>
-                      <a onClick={ () => this.openTab(1) }>
-                        <i className="icon wb-file"></i>Deposit Info
-                      </a>
-                    </li>
+                    { _cache[_key].inputTransactionHash &&
+                      <li className={ this.state.activeTab === 1 ? 'active' : '' }>
+                        <a onClick={ () => this.openTab(1) }>
+                          <i className="icon wb-file"></i>Deposit Info
+                        </a>
+                      </li>
+                    }
                   </ul>
                   <div className="panel-body">
                     <div className="tab-content">
@@ -100,7 +111,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Source address
+                                  Deposit address
                                 </td>
                                 <td className="blur selectable word-break--all">
                                   { _cache[_key].exchangeAddress.address }
@@ -116,7 +127,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Source transaction hash
+                                  Deposit transaction hash
                                 </td>
                                 <td className="blur selectable word-break--all">
                                   { _cache[_key].inputTransactionHash }
@@ -143,25 +154,120 @@ const ExchangesOrderInfoModalRender = function() {
                                   Status
                                 </td>
                                 <td>
-                                  { _cache[_key].status }
+                                  { _cache[_key].outputTransactionHash ? 'complete' : statusLookup.coinswitch[_cache[_key].status] ? statusLookup.coinswitch[_cache[_key].status] : _cache[_key].status }
                                 </td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
                       }
-                      { /*this.state.activeTab === 1 &&
+                      { this.state.activeTab === 1 &&
                         <div className="tab-pane active">
-                          <table className="table table-striped">
-                            <tbody>
-                              <tr>
-                                <td>From</td>
-                                <td className="selectable">
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>*/
+                          { this.state.depositFetching &&
+                            <div className="padding-top-20">Fetching transaction data...</div>
+                          }
+                          { !this.state.depositFetching &&
+                            this.state.deposit &&
+                            <div>
+                              <table className="table table-striped">
+                                <tbody>
+                                  <tr>
+                                    <td>From</td>
+                                    <td className="blur selectable word-break--all">
+                                      { this.props.Dashboard.electrumCoins[_cache[_key].depositCoin.toUpperCase()].pub }
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>To</td>
+                                    <td className="blur selectable word-break--all">
+                                      { isSpv ? this.state.deposit.address : this.state.deposit.details[0] && this.state.deposit.details[0].address || txInfo.address }
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>{ this.capitalizeFirstLetter(translate('TX_INFO.AMOUNT')) }</td>
+                                    <td>
+                                      { isSpv ? (Number(this.state.deposit.amount) === 0 ? translate('DASHBOARD.UNKNOWN') : Number(this.state.deposit.amount)) : txInfo.amount }
+                                    </td>
+                                  </tr>
+                                  { (isEth || (isSpv && this.state.deposit.amount !== this.state.deposit.fee)) &&
+                                    <tr>
+                                      <td>{ this.capitalizeFirstLetter(translate('SEND.FEE')) }</td>
+                                      <td>
+                                        { Number(this.state.deposit.fee) }
+                                      </td>
+                                    </tr>
+                                  }
+                                  <tr>
+                                    <td>{ this.capitalizeFirstLetter(translate('TX_INFO.CONFIRMATIONS')) }</td>
+                                    <td>
+                                      { this.state.deposit.confirmations }
+                                    </td>
+                                  </tr>
+                                  { this.state.deposit.blockindex &&
+                                    <tr>
+                                      <td>{ this.capitalizeFirstLetter('blockindex') }</td>
+                                      <td className="selectable">
+                                        { this.state.deposit.blockindex }
+                                      </td>
+                                    </tr>
+                                  }
+                                  { this.state.deposit.blockhash &&
+                                    <tr>
+                                      <td>{ isSpv ? this.capitalizeFirstLetter('blockheight') : this.capitalizeFirstLetter('blockhash') }</td>
+                                      <td className="selectable">
+                                        { isSpv ? this.state.deposit.height : this.state.deposit.blockhash }
+                                      </td>
+                                    </tr>
+                                  }
+                                  { (this.state.deposit.blocktime || this.state.deposit.timestamp) &&
+                                    <tr>
+                                      <td>{ this.capitalizeFirstLetter('blocktime') }</td>
+                                      <td>
+                                        { secondsToString(this.state.deposit.blocktime || this.state.deposit.timestamp) }
+                                      </td>
+                                    </tr>
+                                  }
+                                  <tr>
+                                    <td>{ this.capitalizeFirstLetter('txid') }</td>
+                                    <td className="blur selectable">
+                                      { this.state.deposit.txid }
+                                    </td>
+                                  </tr>
+                                  { this.state.deposit.walletconflicts &&
+                                    <tr>
+                                      <td>{ this.capitalizeFirstLetter('walletconflicts') }</td>
+                                      <td>
+                                        { this.state.deposit.walletconflicts.length }
+                                      </td>
+                                    </tr>
+                                  }
+                                  <tr>
+                                    <td>{ this.capitalizeFirstLetter('time') }</td>
+                                    <td>
+                                      { secondsToString(isSpv ? this.state.deposit.blocktime || this.state.deposit.timestamp : this.state.deposit.time) }
+                                    </td>
+                                  </tr>
+                                  { !isEth &&
+                                    <tr>
+                                      <td>{ this.capitalizeFirstLetter('timereceived') }</td>
+                                      <td>
+                                        { secondsToString(isSpv ? this.state.deposit.blocktime : this.state.deposit.timereceived) }
+                                      </td>
+                                    </tr>
+                                  }
+                                </tbody>
+                              </table>
+                              <div className="padding-top-15">
+                                <button
+                                  type="button"
+                                  className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                                  onClick={ () => this.openExplorerWindow(_cache[_key].inputTransactionHash) }>
+                                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', isEth ? 'Etherscan' : _cache[_key].depositCoin.toUpperCase()) }
+                                </button>
+                              </div>
+                            </div>
+                          }
+                        </div>
                       }
                     </div>
                   </div>
