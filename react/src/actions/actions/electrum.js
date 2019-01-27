@@ -262,6 +262,38 @@ export const apiElectrumTransactions = (coin, address) => {
   }
 }
 
+export const apiElectrumTransaction = (coin, address, txid) => {
+  return new Promise((resolve, reject) => {
+    let _urlParams = {
+      token,
+      address,
+      coin,
+      full: true,
+      maxlength: 20,
+      txid,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.apiElectrumTransaction') + ' (code: apiElectrumTransaction)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json.msg === 'success' ? json.result : 'error');
+    });
+  });
+}
+
 export const apiElectrumKVTransactionsPromise = (coin, address) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
