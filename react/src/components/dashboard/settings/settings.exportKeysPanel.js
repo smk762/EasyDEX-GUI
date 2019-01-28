@@ -183,13 +183,18 @@ class ExportKeysPanel extends React.Component {
 
   renderLB(_translationID) {
     const _translationComponents = translate(_translationID).split('<br>');
-
-    return _translationComponents.map((_translation) =>
-      <span key={ `settings-label-${Math.random(0, 9) * 10}` }>
-        { _translation }
-        <br />
-      </span>
-    );
+    let _items = [];
+  
+    for (let i = 0; i < _translationComponents.length; i++) {
+      _items.push(
+        <span key={ `jumblr-label-${Math.random(0, 9) * 10}` }>
+          { _translationComponents[i] }
+          <br />
+        </span>
+      );
+    }
+  
+    return _items;
   }
 
   render() {

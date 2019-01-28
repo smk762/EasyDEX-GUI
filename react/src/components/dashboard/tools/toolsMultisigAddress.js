@@ -18,7 +18,7 @@ import {
 import Store from '../../../store';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 
-import { msigAddress } from 'agama-wallet-lib/src/keys';
+import { multisig } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 class ToolsMultisigAddress extends React.Component {
@@ -60,7 +60,7 @@ class ToolsMultisigAddress extends React.Component {
       );
     } else {
       try {
-        let _msigAddress = msigAddress(
+        let _msigAddress = multisig.generate(
           Number(_requiredSigs[0]),
           _pubKeys,
           networks[_coin[0].toLowerCase()] || networks.kmd

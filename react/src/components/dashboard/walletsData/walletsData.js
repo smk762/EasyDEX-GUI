@@ -216,7 +216,7 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.coin === 'KMD' &&
         _balance) {
       if (_balance.interest &&
-        _balance.interest > 0) {
+          _balance.interest > 0) {
         return this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 : 777;
       } else if (
         (_balance.transparent && _balance.transparent >= 10) ||
@@ -272,7 +272,16 @@ class WalletsData extends React.Component {
       footerClassName: 'hidden-xs hidden-sm',
       className: 'hidden-xs hidden-sm',
       Cell: row => TxConfsRender.call(this, row.value),
-      accessor: (tx) => tx.confirmations,
+      accessor: (tx) => tx,
+      sortMethod: (a, b) => {
+        if (a.confirmations > b.confirmations) {
+          return 1;
+        }
+        if (a.confirmations < b.confirmations) {
+          return -1;
+        }
+        return 0;
+      },
       maxWidth: '180',
     },
     {
@@ -570,7 +579,8 @@ class WalletsData extends React.Component {
     const _coin = this.props.ActiveCoin.coin;
     const _electrumCoin = this.props.Dashboard.electrumCoins[_coin];
 
-    if (_electrumCoin.serverList !== 'none') {
+    if (_electrumCoin.serverList !== 'none' &&
+        _electrumCoin.serverList.length > 1) {
       const _spvServers = _electrumCoin.serverList;
       const _server = [
         _electrumCoin.server.ip,
@@ -647,6 +657,8 @@ class WalletsData extends React.Component {
   }
 
   renderTxHistoryList() {
+    const _coin = this.props.ActiveCoin.coin;
+
     if (this.state.itemsList === 'loading') {
       if (this.isFullySynced()) {
         return (
@@ -667,7 +679,7 @@ class WalletsData extends React.Component {
           <div className="color-warning">
             { translate('DASHBOARD.SPV_CONN_ERROR') }
           </div>
-          <div className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
+          <div className={ this.props.Dashboard.electrumCoins[_coin].serverList !== 'none' ? '' : 'hide' }>
             <div className="color-warning padding-bottom-20">{ translate('DASHBOARD.SPV_AUTO_SWITCH') }...</div>
             <strong>{ translate('DASHBOARD.HOW_TO_SWITCH_MANUALLY') }:</strong>
             <div className="padding-top-10">{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }</div>
@@ -678,19 +690,19 @@ class WalletsData extends React.Component {
       this.state.itemsList &&
       this.state.itemsList.length
     ) {
-      const _isAcPrivate = this.props.ActiveCoin.coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[this.props.ActiveCoin.coin] && !staticVar.chainParams[this.props.ActiveCoin.coin].ac_private;
+      const _isAcPrivate = _coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
       
       return (
         <DoubleScrollbar>
           { TxHistoryListRender.call(this) }
           { !this.state.kvView &&
             (this.props.ActiveCoin.mode === 'spv' ||
-             (this.props.ActiveCoin.mode === 'native' && (this.props.ActiveCoin.coin === 'KMD' || _isAcPrivate))) &&
+             (this.props.ActiveCoin.mode === 'native' && (_coin === 'KMD' || _isAcPrivate))) &&
             <div className="margin-left-5 margin-top-30">
               <span
                 className="pointer"
                 onClick={ this.exportToCSV }>
-                <i className="icon fa-file-excel-o margin-right-10"></i>{ translate('INDEX.' + (this.state.generatingCSV ? 'GENERATING_CSV' + '...' : 'EXPORT_TO_CSV')) }
+                <i className="icon fa-file-excel-o margin-right-10"></i>{ translate('INDEX.' + (this.state.generatingCSV ? 'GENERATING_CSV' : 'EXPORT_TO_CSV')) }
               </span>
             </div>
           }

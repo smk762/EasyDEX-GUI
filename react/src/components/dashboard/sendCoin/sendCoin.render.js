@@ -663,6 +663,19 @@ export const SendRender = function() {
                     { translate('SEND.WARNING_SPV_P2') }
                   </div>
                 }
+                { !this.state.spvDpowVerificationWarning &&
+                  <div className="padding-top-20 fs-15">
+                    <strong>Notice:</strong>&nbsp;
+                    One ore more of your UTXO(s) are not dPoW secured.
+                  </div>
+                }
+                { this.state.spvDpowVerificationWarning &&
+                  this.state.spvDpowVerificationWarning === true &&
+                  <div className="padding-top-20 fs-15">
+                    <i className="icon fa-shield col-green"></i>&nbsp;
+                    Your funds are dPoW secured.
+                  </div>
+                }
                 { _mode === 'eth' &&
                   erc20ContractId[_coin] &&
                   this.state.ethPreflightRes &&

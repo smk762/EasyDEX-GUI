@@ -119,6 +119,15 @@ const WalletsTxInfoRender = function(txInfo) {
                                   { this.state.txDetails.confirmations }
                                 </td>
                               </tr>
+                              { this.state.txDetails.hasOwnProperty('rawconfirmations') &&
+                                this.state.txDetails.confirmations !== this.state.txDetails.rawconfirmations &&
+                                <tr>
+                                  <td>Raw confirmations</td>
+                                  <td>
+                                    { this.state.txDetails.rawconfirmations }
+                                  </td>
+                                </tr>
+                              }
                               { this.state.txDetails.blockindex &&
                                 <tr>
                                   <td>{ this.capitalizeFirstLetter('blockindex') }</td>
@@ -168,6 +177,24 @@ const WalletsTxInfoRender = function(txInfo) {
                                   <td>{ this.capitalizeFirstLetter('timereceived') }</td>
                                   <td>
                                     { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.timereceived) }
+                                  </td>
+                                </tr>
+                              }
+                              { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && this.state.txDetails.dpowSecured) ||
+                                (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations >=2)) &&
+                                <tr>
+                                  <td>dPoW secured</td>
+                                  <td>
+                                    Yes
+                                  </td>
+                                </tr>
+                              }
+                              { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && !this.state.txDetails.dpowSecured) ||
+                                (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations < 2)) &&
+                                <tr>
+                                  <td>dPoW secured</td>
+                                  <td>
+                                    No
                                   </td>
                                 </tr>
                               }

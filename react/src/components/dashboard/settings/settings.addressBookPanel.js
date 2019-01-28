@@ -12,6 +12,7 @@ import { cryptoCoins } from '../../../util/coinHelper';
 import Config from '../../../config';
 import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import { getAddress } from 'ethers/utils/address';
 
 let _prepCoinsList;
 let coins = cryptoCoins;
@@ -24,14 +25,18 @@ const prepCoinsList = () => {
         (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
       try {
         if (staticVar.electrumServers &&
-            staticVar.electrumServerselectrumServers[coins[i].toLowerCase()] &&
+            staticVar.electrumServers[coins[i].toLowerCase()] &&
             coins[i] !== 'CHIPS') {
           _coins.push(coins[i]);
         }
       } catch (e) {
-        console.warn('electron remote error' + e);
+        console.warn('electron remote error address book' + e);
       }
     }
+  }
+
+  if (Config.experimentalFeatures) {
+    _coins.push('ETH');
   }
 
   _prepCoinsList = _coins;
@@ -102,7 +107,17 @@ class AddressBookPanel extends React.Component {
     };
 
     let _validationMsg;
-    const _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, _address);
+    let _validateAddress;
+
+    if (_coin.toLowerCase() === 'eth') {
+      try {
+        _validateAddress = getAddress(_address);
+      } catch (e) {
+        _validateAddress = 'Invalid pub address';
+      }
+    } else {
+      _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, _address);
+    }
 
     if (_validateAddress === 'Invalid pub address') {
       _validationMsg = _validateAddress;
@@ -114,7 +129,7 @@ class AddressBookPanel extends React.Component {
     if (_coin === 'KMD' &&
         _address.substring(0, 2) === 'zc' &&
         _address.substring(0, 2) === 'zs' &&
-        _address.length === 95) {
+        (_address.length === 95 || _address.length === 78)) {
       _validationMsg = null;
     }
 
@@ -215,7 +230,9 @@ class AddressBookPanel extends React.Component {
         <option
           key={ `coind-stdout-coins-${i}` }
           value={ `${_coins[i]}` }>
-          { translate('CRYPTO.' + _coins[i]) + (_coins[i].toLowerCase() === 'kmd' ? ' (Chips/Asset chains)' : '') }
+          { translate('CRYPTO.' + _coins[i]) }
+          { _coins[i].toLowerCase() === 'kmd' && ' (Chips/Asset chains)' }
+          { _coins[i].toLowerCase() === 'eth' && ' (ERC20)' }
         </option>
       );
     }
@@ -243,7 +260,9 @@ class AddressBookPanel extends React.Component {
             </td>
             <td className="seletable word-break--all">{ key }</td>
             <td>
-            { translate('CRYPTO.' + _addressBookItems[key].coin) + (_addressBookItems[key].coin.toLowerCase() === 'kmd' ? ' (Chips/Asset chains)' : '') }
+            { translate('CRYPTO.' + _addressBookItems[key].coin) }
+            { _addressBookItems[key].coin.toLowerCase() === 'kmd' && ' (Chips/Asset chains)' }
+            { _addressBookItems[key].coin.toLowerCase() === 'eth' && ' (ERC20)' }
             </td>
             <td className="seletable">{ _addressBookItems[key].title }</td>
           </tr>

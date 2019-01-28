@@ -36,46 +36,46 @@ class CoinTile extends React.Component {
     let items = [];
 
     if (allCoins) {
-      modes.map((mode) => {
-        allCoins[mode].sort();
-
-        allCoins[mode].map((coin) => {
-          const _coinMode = getModeInfo(mode);
+      for (let i = 0; i < modes.length; i++) {
+        allCoins[modes[i]].sort();
+        
+        for (let j = 0; j < allCoins[modes[i]].length; j++) {
+          const _coinMode = getModeInfo(modes[i]);
           const modecode = _coinMode.code;
           const modetip = _coinMode.tip;
           const modecolor = _coinMode.color;
 
-          const _coinTitle = getCoinTitle(coin.toUpperCase());
-          const coinlogo = coin.toUpperCase();
-          const coinname = translate(((mode === 'spv' || mode === 'native') && isKomodoCoin(coin) ? 'ASSETCHAINS.' : 'CRYPTO.') + coin.toUpperCase());
-
-          items.push({
+          const _coinTitle = getCoinTitle(allCoins[modes[i]][j].toUpperCase());
+          const coinlogo = allCoins[modes[i]][j].toUpperCase();
+          const coinname = translate(((modes[i] === 'spv' || modes[i] === 'native') && isKomodoCoin(allCoins[modes[i]][j]) ? 'ASSETCHAINS.' : 'CRYPTO.') + allCoins[modes[i]][j].toUpperCase());
+          const data = {
             coinlogo,
             coinname,
-            coin,
-            mode,
+            coin: allCoins[modes[i]][j],
+            mode: modes[i],
             modecolor,
             modetip,
             modecode,
-          });
-        });
-      });
+          };
+
+          items.push(
+            <CoinTileItem
+              key={ `coin-tile-${modes[i]}-${allCoins[modes[i]][j]}` }
+              i={ i }
+              item={ data } />
+          );
+        }
+      }
     }
 
-    return (
-      items.map((item, i) =>
-        <CoinTileItem
-          key={ i }
-          i={ i }
-          item={ item } />
-      )
-    );
+    return items;
   }
 
   render() {
     return CoinTileRender.call(this);
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     allCoins: state.Main.coins,

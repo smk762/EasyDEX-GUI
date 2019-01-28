@@ -85,7 +85,7 @@ const NavbarRender = function() {
               </li>
             }
             { Config.experimentalFeatures &&
-              Config.dev &&
+              (Config.dev || staticVar.argv.indexOf('devmode') > -1) &&
               _activeCoin &&
               _activeCoin.mode === 'native' &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
@@ -170,6 +170,13 @@ const NavbarRender = function() {
                   <li>
                     <a onClick={ () => this.dashboardChangeSection('support') }>
                       <i className="icon fa-life-ring"></i> { translate('SETTINGS.SUPPORT') }
+                    </a>
+                  </li>
+                }
+                { !this.isSectionActive('changelog') &&
+                  <li>
+                    <a onClick={ () => this.dashboardChangeSection('changelog') }>
+                      <i className="icon fa-list"></i> Change log
                     </a>
                   </li>
                 }

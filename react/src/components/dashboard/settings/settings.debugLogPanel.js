@@ -125,17 +125,22 @@ class DebugLogPanel extends React.Component {
     if (_debugLog &&
         !this.state.pristine) {
       const _debugLogDataRows = _debugLog.split('\n');
+      let _items = [];
 
       if (_debugLogDataRows &&
           _debugLogDataRows.length &&
           _debugLog.indexOf('ENOENT') === -1) {
-        return _debugLogDataRows.map((_row) =>
-          <div
-            key={ `settings-debuglog-${Math.random(0, 9) * 10}` }
-            className="padding-bottom-5">
-            { _row }
-          </div>
-        );
+        for (let i = 0; i < _debugLogDataRows.length; i++) {
+          _items.push(
+            <div
+              key={ `settings-debuglog-${Math.random(0, 9) * 10}` }
+              className="padding-bottom-5">
+              { _debugLogDataRows[i] }
+            </div>
+          );
+        }
+        
+        return _items;
       } else {
         return (
           <span>{ translate('INDEX.EMPTY_DEBUG_LOG') }</span>
@@ -201,7 +206,7 @@ class DebugLogPanel extends React.Component {
       <div className="row">
         <div className="col-sm-12">
           <div className="padding-bottom-15">
-            <strong>Note:</strong> log dump is going to contain your lite mode pub address(es).<br/>Think twice before sharing it with anybody.
+            <strong>Privacy warning:</strong> log dump is going to contain your lite mode pub address(es).<br/>Think twice before sharing it with anybody.
           </div>
           <a id="debugLogDumpLink">
             <button
