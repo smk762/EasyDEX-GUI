@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import { sortByDate } from 'agama-wallet-lib/src/utils';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import {

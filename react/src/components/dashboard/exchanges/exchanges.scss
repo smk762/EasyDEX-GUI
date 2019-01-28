@@ -39,3 +39,18 @@
     margin-top: -5px;
   }
 }
+
+.col-warning {
+  color: #fb8c00;
+}
+
+.buy-fixed-dest-coin-toggle {
+  .toggle-label {
+    top: -6px;
+  }
+  &.disabled {
+    opacity: 0.5;
+    cursor: default !important;
+    pointer-events: none;
+  }
+}

@@ -5,11 +5,20 @@ import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
 import {
   formatValue,
+  sort,
 } from 'agama-wallet-lib/src/utils';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import ExchangesOrderInfoModal from '../exchangesOrderInfoModal/exchangesOrderInfoModal';
 import Select from 'react-select';
 import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
+import SendCoin from '../sendCoin/sendCoin';
+
+const statusLookup = {
+  coinswitch: {
+    timeout: 'expired',
+    no_deposit: 'awaiting deposit',
+  },
+};
 
 export const RenderNewOrderForm = function() {  
   return (
@@ -52,7 +61,7 @@ export const RenderNewOrderForm = function() {
                     <div className="row">
                       <button
                         type="button"
-                        className="btn btn-primary waves-effect waves-light pull-right"
+                        className="btn btn-primary waves-effect waves-light pull-right hide"
                         onClick={ this.loadTestData }>
                         Load test data
                       </button>
@@ -89,29 +98,51 @@ export const RenderNewOrderForm = function() {
                           valueRenderer={ this.renderCoinOption }
                           options={ addCoinOptionsCrypto(this.coinsDestList || this.props.Main.coins, null, true) } />
                       </div>
+                      <div className="col-lg-12 form-material text-right">
+                        <span className={ 'pointer buy-fixed-dest-coin-toggle' + (this.state.newExchangeOrderDetails.coinSrc ? '' : ' disabled') }>
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              checked={ this.state.buyFixedDestCoin }
+                              readOnly />
+                            <div
+                              className="slider"
+                              onClick={ () => this.toggleBuyFixedDestCoin() }></div>
+                          </label>
+                          <div
+                            className="toggle-label"
+                            onClick={ () => this.toggleBuyFixedDestCoin() }>
+                            Amount in { this.state.newExchangeOrderDetails.coinSrc ? this.state.newExchangeOrderDetails.coinSrc.split('|')[0] : '...' }
+                          </div>
+                        </span>
+                      </div>
                       <div className="col-lg-12 form-group form-material">
-                        <button
-                          type="button"
-                          className="btn btn-default btn-send-self"
-                          disabled={
-                            Number(this.state.newExchangeOrderDetails.currentBalance) === 0 ||
-                            this.state.newExchangeOrderDetails.currentBalance === 'none' ||
-                            this.state.newExchangeOrderDetails.currentBalance === 'loading'
-                          }
-                          onClick={ this.setSendAmountAll }>
-                          { translate('SEND.ALL') }
-                        </button>
+                        { this.state.buyFixedDestCoin &&
+                          <button
+                            type="button"
+                            className="btn btn-default btn-send-self"
+                            disabled={
+                              Number(this.state.newExchangeOrderDetails.currentBalance) === 0 ||
+                              this.state.newExchangeOrderDetails.currentBalance === 'none' ||
+                              this.state.newExchangeOrderDetails.currentBalance === 'loading'
+                            }
+                            onClick={ this.setSendAmountAll }>
+                            { translate('SEND.ALL') }
+                          </button>
+                        }
                         <label
                           className="control-label"
                           htmlFor="kmdWalletAmount">
-                          <span>{ translate('INDEX.AMOUNT') }</span>
+                          <span>{ translate('INDEX.AMOUNT') }{ this.state.newExchangeOrderDetails.coinSrc && this.state.newExchangeOrderDetails.coinDest ? ' in ' + (this.state.buyFixedDestCoin ? this.state.newExchangeOrderDetails.coinSrc.split('|')[0] : this.state.newExchangeOrderDetails.coinDest.split('|')[0]) : '' }</span>
                           { this.state.newExchangeOrderDetails.currentBalance !== 'none' &&
                             this.state.newExchangeOrderDetails.currentBalance !== 'loading' &&
+                            this.state.buyFixedDestCoin &&
                             <span className="padding-left-5">
-                              <strong>[ { this.state.newExchangeOrderDetails.currentBalance } ]</strong>
+                              <strong>[ { this.state.newExchangeOrderDetails.currentBalance } { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }]</strong>
                             </span>
                           }
                           { this.state.newExchangeOrderDetails.currentBalance === 'loading' &&
+                            this.state.buyFixedDestCoin &&
                             <span className="padding-left-5">
                               <strong>[...]</strong>
                             </span>
@@ -135,7 +166,13 @@ export const RenderNewOrderForm = function() {
                       <button
                         type="button"
                         className="btn btn-primary waves-effect waves-light pull-right"
-                        onClick={ this.orderVerifyStep }>
+                        onClick={ this.nextStep }
+                        disabled={
+                          this.state.processing ||
+                          !this.state.newExchangeOrderDetails.coinSrc ||
+                          !this.state.newExchangeOrderDetails.coinDest ||
+                          !this.state.newExchangeOrderDetails.amount
+                        }>
                         { this.state.processing ? 'Please wait...' : 'Next' }
                       </button>
                     </div>
@@ -154,7 +191,7 @@ export const RenderNewOrderForm = function() {
                       <div className="col-lg-12 col-sm-12 col-xs-12">
                         { this.state.newExchangeOrderDetails.amount } { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }
                         <span className="padding-left-30">
-                          { this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.prices[this.state.newExchangeOrderDetails.coinSrc.split('|')[0]][Config.defaultFiatCurrency.toUpperCase()] } { Config.defaultFiatCurrency.toUpperCase() }
+                          { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.prices[this.state.newExchangeOrderDetails.coinSrc.split('|')[0]][Config.defaultFiatCurrency.toUpperCase()]).toFixed(8) } { Config.defaultFiatCurrency.toUpperCase() }
                         </span>
                       </div>
                     </div>
@@ -163,7 +200,7 @@ export const RenderNewOrderForm = function() {
                         <strong>You receive</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                        { this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] }
+                        { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate).toFixed(8) } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] }
                         <span className="padding-left-30">
                           { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate * this.state.newExchangeOrderDetails.prices[this.state.newExchangeOrderDetails.coinDest.split('|')[0]][Config.defaultFiatCurrency.toUpperCase()]).toFixed(8) } { Config.defaultFiatCurrency.toUpperCase() }
                         </span>
@@ -204,7 +241,7 @@ export const RenderNewOrderForm = function() {
                     }
                     <div className="widget-body-footer">
                       <a
-                        onClick={ this.back }
+                        onClick={ this.prevStep }
                         className="btn btn-default waves-effect waves-light">Back</a>
                       <div className="widget-actions pull-right">
                         <button
@@ -212,9 +249,100 @@ export const RenderNewOrderForm = function() {
                           className="btn btn-primary"
                           disabled={
                             this.state.newExchangeOrderDetails.amount < this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin ||
-                            this.state.newExchangeOrderDetails.amount > this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin
-                          }>
-                          Confirm
+                            this.state.newExchangeOrderDetails.amount > this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin ||
+                            this.state.processing
+                          }
+                          onClick={ this.nextStep }>
+                          { this.state.processing ? 'Please wait...' : 'Confirm' }
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+            { this.state.newExchangeOrderDetails.orderStep === 2 &&
+              <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
+                <div className="panel">
+                  <div className="panel-body">
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>Date</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                      { secondsToString(this.state.newExchangeOrderDetails.exchangeOrder.createdAt / 1000) }
+                      </div>
+                    </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>Valid until</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                      { secondsToString(this.state.newExchangeOrderDetails.exchangeOrder.validTill / 1000) }
+                      </div>
+                    </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>You pay</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                      { Number(this.state.newExchangeOrderDetails.exchangeOrder.expectedDepositCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase() }
+                      </div>
+                    </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>You receive</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                      { Number(this.state.newExchangeOrderDetails.exchangeOrder.expectedDestinationCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase() }
+                      </div>
+                    </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>Exchange rate</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                      { Number((1 / this.state.newExchangeOrderDetails.exchangeOrder.expectedDepositCoinAmount) * this.state.newExchangeOrderDetails.exchangeOrder.expectedDestinationCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase() } for 1 { this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase() }
+                      </div>
+                    </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>Deposit address</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                        <span
+                          onClick={ () => this.openExplorerWindow(this.state.newExchangeOrderDetails.exchangeOrder.exchangeAddress.address, 'pub', this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase()) }
+                          className="pointer">{ this.state.newExchangeOrderDetails.exchangeOrder.exchangeAddress.address }</span>
+                      </div>
+                    </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>Receive address</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                        <span
+                          onClick={ () => this.openExplorerWindow(this.state.newExchangeOrderDetails.exchangeOrder.destinationAddress.address, 'pub', this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase()) }
+                          className="pointer">{ this.state.newExchangeOrderDetails.exchangeOrder.destinationAddress.address }</span>
+                      </div>
+                    </div>
+                    <div className="row padding-top-20">
+                      <div className="col-xs-12">
+                        <strong>Order ID</strong>
+                      </div>
+                      <div className="col-lg-12 col-sm-12 col-xs-12">
+                      { this.state.newExchangeOrderDetails.exchangeOrder.orderId }
+                      </div>
+                    </div>
+                    <div className="widget-body-footer">
+                      <a
+                        onClick={ this.clearOrder }
+                        className="btn btn-default waves-effect waves-light">Back to orders</a>
+                      <div className="widget-actions pull-right">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={ this.nextStep }>
+                          Proceed to deposit
                         </button>
                       </div>
                     </div>
@@ -229,51 +357,80 @@ export const RenderNewOrderForm = function() {
         this.props.Main.coins &&
         this.props.Main.coins.spv.length > 1 &&
         <div className="step2">
-          Deposit
+          <SendCoin
+            initState={ this.state.newExchangeOrderDetails }
+            cb={ this.sendCoinCB }
+            activeSection="send" />
         </div>
       }
       { this.props.Main.coins &&
         this.props.Main.coins.spv.length < 2 &&
         <div>Please activate Lite mode coins that you wish to exchange</div>
       }
+      <div className="text-center padding-bottom-30">
+        <a
+          onClick={ this.toggleCreateOrder }
+          className="pointer">Back to orders list</a>
+        <div className="hide" onClick={ this.testDepositResponse }>test deposit</div>
+      </div>
     </section>
   );
 };
 
 export const RenderExchangeHistory = function() {
   const _cache = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges[this.state.provider];
+  let _cacheFlat = [];
   let _items = [];
 
   for (let key in _cache) {
+    if (key !== 'deposits') {
+      _cacheFlat.push(_cache[key]);
+    }
+  }
+
+  _cacheFlat = sort(_cacheFlat, 'createdAt', true);
+
+  for (let i = 0; i < _cacheFlat.length; i++) {
     if (this.state.provider === 'coinswitch') {
       _items.push(
-        <tr key={ `${this.state.provider}-${key}` }>
+        <tr key={ `${this.state.provider}-${i}` }>
           <td>
-            { secondsToString(_cache[key].createdAt / 1000) }
+            { secondsToString(_cacheFlat[i].createdAt / 1000) }
           </td>
           <td>
             <img
               className="margin-right-10"
               height="25px"
-              src={ `assets/images/cryptologo/${_cache[key].depositCoin}.png` } />
-            { formatValue(_cache[key].expectedDepositCoinAmount) } { _cache[key].depositCoin.toUpperCase() }
+              src={ `assets/images/cryptologo/btc/${_cacheFlat[i].depositCoin}.png` } />
+            { formatValue(_cacheFlat[i].expectedDepositCoinAmount) } { _cacheFlat[i].depositCoin.toUpperCase() }
           </td>
           <td>
             <img
               className="margin-right-10"
               height="25px"
-              src={ `assets/images/cryptologo/${_cache[key].destinationCoin}.png` } />
-            { formatValue(_cache[key].expectedDestinationCoinAmount) } { _cache[key].destinationCoin.toUpperCase() }
+              src={ `assets/images/cryptologo/btc/${_cacheFlat[i].destinationCoin}.png` } />
+            { formatValue(_cacheFlat[i].expectedDestinationCoinAmount) } { _cacheFlat[i].destinationCoin.toUpperCase() }
+          </td>
+          <td className={ _cacheFlat[i].status === 'confirming' || _cacheFlat[i].status === 'exchanging' || (_cacheFlat[i].status === 'sending' && !_cacheFlat[i].outputTransactionHash) ? 'col-warning' : '' }>
+            { _cacheFlat[i].outputTransactionHash ? 'complete' : statusLookup.coinswitch[_cacheFlat[i].status] ? statusLookup.coinswitch[_cacheFlat[i].status] : _cacheFlat[i].status }
           </td>
           <td>
-            { _cache[key].status }
+            { this.findDeposits(_cacheFlat[i].orderId).length > 0 || (this.state.provider === 'coinswitch' && _cacheFlat[i].inputTransactionHash && _cache.deposits && _cache.deposits[`${_cacheFlat[i].depositCoin.toLowerCase()}-${_cacheFlat[i].inputTransactionHash}`]) ? 'Yes' : 'No' }
+            { ((this.state.provider === 'coinswitch' && this.findDeposits(_cacheFlat[i].orderId).length === 0 && _cacheFlat[i].status === 'no_deposit')/* ||
+              (this.state.provider === 'coinswitch' && _cacheFlat[i].status === 'no_deposit' && _cacheFlat[i].inputTransactionHash && _cache.deposits && !_cache.deposits[`${_cacheFlat[i].depositCoin.toLowerCase()}-${_cacheFlat[i].inputTransactionHash}`])*/) &&
+              <button
+                type="button"
+                className="btn btn-xs white btn-success waves-effect waves-lightm margin-left-10"
+                onClick={ () => this.makeDeposit(_cacheFlat[i].orderId) }>
+                Send
+              </button>
+            }
           </td>
-          <td></td>
           <td>
             <button
               type="button"
               className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
-              onClick={ () => this._toggleExchangesOrderInfoModal(key) }>
+              onClick={ () => this._toggleExchangesOrderInfoModal(_cacheFlat[i].orderId) }>
               <i className="icon fa-search"></i>
             </button>
           </td>
@@ -332,11 +489,11 @@ const ExchangesRender = function() {
                   className={ `pointer${this.state.provider === 'coinswitch' ? ' active' : ''}` }
                   height="30px"
                   src="assets/images/exchanges/coinswitch.png" />
-                <img
+                {/*<img
                   onClick={ () => this.toggleExchangeProvider('changelly') }
                   className={ `pointer${this.state.provider === 'changelly' ? ' active' : ''} margin-left-70` }
                   height="50px"
-                  src="assets/images/exchanges/changelly.png" />
+                src="assets/images/exchanges/changelly.png" />*/}
               </div>
               { !this.state.newExchangeOrder &&
                 <div className="margin-top-40 exchanges-history">

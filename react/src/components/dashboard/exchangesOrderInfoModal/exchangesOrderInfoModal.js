@@ -49,7 +49,7 @@ class ExchangesOrderInfoModal extends React.Component {
 
     apiElectrumTransaction(
       _cache[_orderId].depositCoin.toUpperCase(),
-      this.props.Dashboard.electrumCoins[_cache[_orderId].depositCoin.toUpperCase()].pub,
+      _cache[_orderId].exchangeAddress.address,
       _cache[_orderId].inputTransactionHash
     )
     .then((transactionDetails) => {

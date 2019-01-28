@@ -5,7 +5,6 @@ import CoinTile from '../coinTile/coinTile';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
-import SendCoin from '../sendCoin/sendCoin';
 import WalletsData from '../walletsData/walletsData';
 import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';

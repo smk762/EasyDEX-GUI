@@ -174,7 +174,7 @@ const ExchangesOrderInfoModalRender = function() {
                                   <tr>
                                     <td>From</td>
                                     <td className="blur selectable word-break--all">
-                                      { this.props.Dashboard.electrumCoins[_cache[_key].depositCoin.toUpperCase()].pub }
+                                      { this.state.deposit.inputAddresses ? this.state.deposit.inputAddresses[0] : 'N/A' }
                                     </td>
                                   </tr>
                                   <tr>
