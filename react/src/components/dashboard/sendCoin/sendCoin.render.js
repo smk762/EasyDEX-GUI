@@ -312,7 +312,9 @@ export const _SendFormRender = function() {
               onClick={ this.props.renderFormOnly ? this.handleSubmit : () => this.changeSendCoinStep(1) }
               disabled={
                 !this.state.sendTo ||
-                !this.state.amount
+                !this.state.amount ||
+                (_coin === 'BTC' && !Number(this.state.btcFeesSize)) ||
+                (_mode === 'eth' && !this.state.ethFees)
               }>
               { translate('INDEX.SEND') } { this.state.amount } { _coin }
             </button>
