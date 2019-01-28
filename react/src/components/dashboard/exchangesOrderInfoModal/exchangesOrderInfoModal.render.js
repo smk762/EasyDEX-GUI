@@ -159,6 +159,14 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                             </tbody>
                           </table>
+                          <div className="padding-top-15">
+                            <button
+                              type="button"
+                              className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                              onClick={ () => this.openOrderWindow(_cache[_key].orderId) }>
+                              <i className="icon fa-external-link"></i> Open on Coinswitch.co
+                            </button>
+                          </div>
                         </div>
                       }
                       { this.state.activeTab === 1 &&

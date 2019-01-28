@@ -35,6 +35,16 @@ class ExchangesOrderInfoModal extends React.Component {
     return shell.openExternal(url);
   }
 
+  openOrderWindow(orderId) {
+    let url;
+
+    if (this.props.provider === 'coinswitch') {
+      url = `https://coinswitch.co/app/exchange/transaction/${orderId}`;
+    }
+
+    return shell.openExternal(url);
+  }
+
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
