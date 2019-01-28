@@ -1332,7 +1332,7 @@ class SendCoin extends React.Component {
 
   onSliderChangeTime(value) {
     this.setState({
-      btcFeesSize: _feeLookup.btc[value] === 'advanced' ? this.state.btcFees.electrum[this.state.btcFeesAdvancedStep] : this.state.btcFees.recommended[_feeLookup[value]],
+      btcFeesSize: _feeLookup.btc[value] === 'advanced' ? this.state.btcFees.electrum[this.state.btcFeesAdvancedStep] : this.state.btcFees.recommended[_feeLookup.btc[value]],
       btcFeesType: _feeLookup.btc[value] === 'advanced' ? 'advanced' : null,
       btcFeesTimeBasedStep: value,
     });
