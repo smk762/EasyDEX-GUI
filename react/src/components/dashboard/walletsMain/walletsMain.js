@@ -13,7 +13,7 @@ import mainWindow, { staticVar } from '../../../util/mainWindow';
 import io from 'socket.io-client';
 
 const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);
-const NEW_UPDATE_CHECK_INTERVAL = 14400; // every 4h
+const NEW_UPDATE_CHECK_INTERVAL = 14400 * 1000; // every 4h
 
 class WalletsMain extends React.Component {
   constructor() {
