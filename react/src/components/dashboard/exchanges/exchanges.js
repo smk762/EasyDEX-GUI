@@ -489,7 +489,7 @@ class Exchanges extends React.Component {
     return (
       <div>
         <img
-          src={ `assets/images/cryptologo/btc/${option.icon.toLowerCase()}.png` }
+          src={ `assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
           alt={ option.label }
           width="30px"
           height="30px" />
