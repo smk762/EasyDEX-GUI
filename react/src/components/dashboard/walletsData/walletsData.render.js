@@ -8,6 +8,7 @@ import Config from '../../../config';
 import Spinner from '../spinner/spinner';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { tableSorting } from '../pagination/utils';
+import dpowCoins from 'agama-wallet-lib/src/electrum-servers-dpow';
 
 const kvCoins = {
   'KV': true,
@@ -19,7 +20,8 @@ export const TxConfsRender = function(tx) {
   if (Number(tx.confirmations) > -1) {
     return (
       <span>
-        { tx.hasOwnProperty('rawconfirmations') &&
+        { dpowCoins.indexOf(this.props.ActiveCoin.coin) > -1 &&
+          tx.hasOwnProperty('rawconfirmations') &&
           tx.confirmations !== tx.rawconfirmations &&
           <span>
             <span
@@ -33,10 +35,11 @@ export const TxConfsRender = function(tx) {
               className="text-left" />
           </span>
         }
-        { (!tx.hasOwnProperty('rawconfirmations') || (tx.hasOwnProperty('rawconfirmations') && tx.confirmations === tx.rawconfirmations)) &&
+        { (dpowCoins.indexOf(this.props.ActiveCoin.coin) === -1 || !tx.hasOwnProperty('rawconfirmations') || (tx.hasOwnProperty('rawconfirmations') && tx.confirmations === tx.rawconfirmations)) &&
           <span>{ tx.confirmations }</span>
         }
-        { ((this.props.ActiveCoin.mode === 'spv' && tx.hasOwnProperty('dpowSecured') && tx.dpowSecured) ||
+        { dpowCoins.indexOf(this.props.ActiveCoin.coin) > -1 &&
+          ((this.props.ActiveCoin.mode === 'spv' && tx.hasOwnProperty('dpowSecured') && tx.dpowSecured) ||
            (this.props.ActiveCoin.mode === 'native' && tx.hasOwnProperty('rawconfirmations') && tx.confirmations >=2)) &&
           <span>
             <i
