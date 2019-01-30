@@ -53,7 +53,7 @@ const ExchangesOrderInfoModalRender = function() {
                         <i className="icon md-balance-wallet"></i>Order Info
                       </a>
                     </li>
-                    { _cache[_key].inputTransactionHash &&
+                    { (_cache[_key].inputTransactionHash || this.findDeposits(_cache[_key].orderId).length > 0) &&
                       <li className={ this.state.activeTab === 1 ? 'active' : '' }>
                         <a onClick={ () => this.openTab(1) }>
                           <i className="icon wb-file"></i>Deposit Info
@@ -130,7 +130,7 @@ const ExchangesOrderInfoModalRender = function() {
                                   Deposit transaction hash
                                 </td>
                                 <td className="blur selectable word-break--all">
-                                  { _cache[_key].inputTransactionHash }
+                                  { _cache[_key].inputTransactionHash || this.findDeposits(_cache[_key].orderId)[0] }
                                 </td>
                               </tr>
                               <tr>
@@ -269,7 +269,7 @@ const ExchangesOrderInfoModalRender = function() {
                                 <button
                                   type="button"
                                   className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
-                                  onClick={ () => this.openExplorerWindow(_cache[_key].inputTransactionHash) }>
+                                  onClick={ () => this.openExplorerWindow(_cache[_key].inputTransactionHash || this.findDeposits(_cache[_key].orderId)[0]) }>
                                   <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', isEth ? 'Etherscan' : _cache[_key].depositCoin.toUpperCase()) }
                                 </button>
                               </div>

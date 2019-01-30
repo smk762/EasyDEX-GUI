@@ -24,6 +24,23 @@ class ExchangesOrderInfoModal extends React.Component {
     };
     this._toggleExchangesOrderInfoModal = this._toggleExchangesOrderInfoModal.bind(this);
     this.getTransactionElectrum = this.getTransactionElectrum.bind(this);
+    this.findDeposits = this.findDeposits.bind(this);
+  }
+
+  findDeposits(orderId) {
+    const _cache = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges[this.props.provider];
+    let _items = [];
+
+    if (_cache &&
+        _cache.deposits) {
+      for (let key in _cache.deposits) {
+        if (_cache.deposits[key] === orderId) {
+          _items.push(key.split('-')[1]);
+        }
+      }
+    }
+
+    return _items;
   }
 
   openExplorerWindow(txid) {
@@ -60,7 +77,7 @@ class ExchangesOrderInfoModal extends React.Component {
     apiElectrumTransaction(
       _cache[_orderId].depositCoin.toUpperCase(),
       _cache[_orderId].exchangeAddress.address,
-      _cache[_orderId].inputTransactionHash
+      _cache[_orderId].inputTransactionHash || this.findDeposits(_orderId)[0]
     )
     .then((transactionDetails) => {
       this.setState({
