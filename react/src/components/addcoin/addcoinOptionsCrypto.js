@@ -59,7 +59,8 @@ const prepCoinsList = (options) => {
         });
       }
 
-      if (_activeCoins.eth &&
+      if (!_disableETH &&
+          _activeCoins.eth &&
           _activeCoins.eth.length) {
         for (let i = 0; i < _activeCoins.eth.length; i++) {
           if (_activeCoins.eth[i] !== 'eth' ||

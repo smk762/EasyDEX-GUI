@@ -81,7 +81,7 @@ export const RenderNewOrderForm = function() {
                           onChange={ (event) => this.updateSelectedCoin(event, 'src') }
                           optionRenderer={ this.renderCoinOption }
                           valueRenderer={ this.renderCoinOption }
-                          options={ addCoinOptionsCrypto(this.coinsSrcList || this.props.Main.coins, null, true) } />
+                          options={ addCoinOptionsCrypto(this.coinsSrcList || this.props.Main.coins, true, true) } />
                       </div>
                       <div className="col-lg-12 form-group form-material">
                         <label
@@ -96,7 +96,7 @@ export const RenderNewOrderForm = function() {
                           onChange={ (event) => this.updateSelectedCoin(event, 'dest') }
                           optionRenderer={ this.renderCoinOption }
                           valueRenderer={ this.renderCoinOption }
-                          options={ addCoinOptionsCrypto(this.coinsDestList || this.props.Main.coins, null, true) } />
+                          options={ addCoinOptionsCrypto(this.coinsDestList || this.props.Main.coins, true, true) } />
                       </div>
                       <div className="col-lg-12 form-material text-right">
                         <span className={ 'pointer buy-fixed-dest-coin-toggle' + (this.state.newExchangeOrderDetails.coinSrc ? '' : ' disabled') }>
