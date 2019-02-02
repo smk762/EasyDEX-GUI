@@ -45,14 +45,14 @@ export const apiNativeTransactionsCSV = (coin) => {
       rpc2cli,
     };
     fetch(
-      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions/csv${urlParams(_urlParams)}`,
+      `http://127.0.0.1:${agamaPort}/api/native/listtransactions/csv${urlParams(_urlParams)}`,
       fetchType.get
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.apiElectrumTransactionsCSV') + ' (code: apiElectrumTransactionsCSV)',
+          translate('API.apiNativeTransactionsCSV') + ' (code: apiNativeTransactionsCSV)',
           translate('TOASTR.ERROR'),
           'error'
         )
