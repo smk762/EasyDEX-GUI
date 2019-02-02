@@ -90,25 +90,10 @@ class ImportKeyModal extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    if (e.target.name === 'wifkeysPassphrase') {
-      this.resizeLoginTextarea();
-    }
-
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+      [ e.target.name]: newValue,
     });
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        const _ta = document.querySelector('#wifkeysPassphraseTextarea');
-        _ta.style.height = '1px';
-        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   toggleSeedInputVisibility() {
@@ -231,7 +216,6 @@ class ImportKeyModal extends React.Component {
       passphraseWif: null,
       passphraseAddress: null,
       wifkeysPassphrase: null,
-      wifkeysPassphraseTextarea: null,
       importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
       multipleWif: '',
     });
@@ -240,8 +224,7 @@ class ImportKeyModal extends React.Component {
     try {
       this.refs.multipleWif.value = '';
       this.refs.wif.value = '';
-      this.refs.wifkeysPassphrase.value = '';
-      this.refs.wifkeysPassphraseTextarea.value = '';
+      this.refs.wifkeysPassphrase.value = '';  
     } catch (e) {}
   }
 

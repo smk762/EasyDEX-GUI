@@ -72,7 +72,6 @@ class AddCoin extends React.Component {
     this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
     this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
-    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.toggleUsePubkey = this.toggleUsePubkey.bind(this);
   }
 
@@ -86,19 +85,6 @@ class AddCoin extends React.Component {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
     });
-
-    this.resizeLoginTextarea();
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        const _login = document.querySelector('#loginPassphrase');
-        _login.style.height = '1px';
-        _login.style.height = `${(15 + _login.scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   updateLoginPassPhraseInput(e) {
@@ -119,11 +105,9 @@ class AddCoin extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    this.resizeLoginTextarea();
-
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
   }
 
