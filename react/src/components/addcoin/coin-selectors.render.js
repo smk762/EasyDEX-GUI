@@ -96,147 +96,149 @@ const CoinSelectorsRender = function(item, coin, i) {
           </button>
         </div>
       }
-      <div className="col-sm-11 text-center add-coin-modes">
-        { _availModes.spv &&
-          <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
-            <input
-              type="radio"
-              className="to-labelauty labelauty"
-              name={ `mode-${i}` }
-              id={ `addcoin_mdl_basilisk_mode_login-${i}` }
-              disabled={ item.spvMode.disabled }
-              checked={ item.spvMode.checked }
-              readOnly />
-            <label
-              htmlFor={ `addcoin_mdl_basilisk_mode_login-${i}` }
-              onClick={ () => this.updateSelectedMode('0', i) }
-              style={{ pointerEvents: item.spvMode.disabled ? 'none' : 'all' }}>
-              { !item.spvMode.checked &&
-                <span className="labelauty-unchecked-image"></span>
-              }
-              { !item.spvMode.checked &&
-                <span
-                  className="labelauty-unchecked">
-                  { translate('INDEX.SPV_MODE') }
-                </span>
-              }
-              { item.spvMode.checked &&
-                <span className="labelauty-checked-image"></span>
-              }
-              { item.spvMode.checked &&
-                <span className="labelauty-checked">
-                  { translate('INDEX.SPV_MODE') }
-                </span>
-              }
-            </label>
-          </div>
-        }
-        { staticVar.arch === 'x64' &&
-          _availModes.native &&
-          <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
-            <input
-              type="radio"
-              className="to-labelauty labelauty"
-              name={ `mode-${i}` }
-              id={ `addcoin_mdl_native_mode_login-${i}` }
-              disabled={ item.nativeMode.disabled }
-              checked={ item.nativeMode.checked }
-              readOnly />
-            <label
-              htmlFor={ `addcoin_mdl_native_mode_login-${i}` }
-              onClick={ () => this.updateSelectedMode('-1', i) }
-              style={{ pointerEvents: item.nativeMode.disabled ? 'none' : 'all' }}>
-              { !item.nativeMode.checked &&
-                <span className="labelauty-unchecked-image"></span>
-              }
-              { !item.nativeMode.checked &&
-                <span className="labelauty-unchecked">
-                  { translate('INDEX.NATIVE_MODE') }
-                </span>
-              }
-              { item.nativeMode.checked &&
-                <span className="labelauty-checked-image"></span>
-              }
-              { item.nativeMode.checked &&
-                <span className="labelauty-checked">
-                  { translate('INDEX.NATIVE_MODE') }
-                </span>
-              }
-            </label>
-          </div>
-        }
-        { staticVar.arch === 'x64' &&
-          _availModes.staking &&
-          <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
-            <input
-              type="radio"
-              className="to-labelauty labelauty"
-              name={ `mode-${i}` }
-              id={ `addcoin_mdl_staking_mode_login-${i}` }
-              disabled={ item.stakingMode.disabled }
-              checked={ item.stakingMode.checked }
-              readOnly />
-            <label
-              htmlFor={ `addcoin_mdl_staking_mode_login-${i}` }
-              onClick={ () => this.updateSelectedMode('1', i) }
-              style={{ pointerEvents: item.stakingMode.disabled ? 'none' : 'all' }}>
-              { !item.stakingMode.checked &&
-                <span className="labelauty-unchecked-image"></span>
-              }
-              { !item.stakingMode.checked &&
-                <span className="labelauty-unchecked">
-                  { translate('INDEX.STAKING_MODE') }
-                </span>
-              }
-              { item.stakingMode.checked &&
-                <span className="labelauty-checked-image"></span>
-              }
-              { item.stakingMode.checked &&
-                <span className="labelauty-checked">
-                  { translate('INDEX.STAKING_MODE') }
-                </span>
-              }
-            </label>
-          </div>
-        }
-        { staticVar.arch === 'x64' &&
-          _availModes.mining &&
-          <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
-            <input
-              type="radio"
-              className="to-labelauty labelauty"
-              name={ `mode-${i}` }
-              id={ `addcoin_mdl_mining_mode_login-${i}` }
-              disabled={ item.miningMode.disabled }
-              checked={ item.miningMode.checked }
-              readOnly />
-            <label
-              htmlFor={ `addcoin_mdl_mining_mode_login-${i}` }
-              onClick={ () => this.updateSelectedMode('2', i) }
-              style={{ pointerEvents: item.miningMode.disabled ? 'none' : 'all' }}>
-              { !item.miningMode.checked &&
-                <span className="labelauty-unchecked-image"></span>
-              }
-              { !item.miningMode.checked &&
-                <span className="labelauty-unchecked">
-                  { translate('INDEX.MINING_MODE') }
-                </span>
-              }
-              { item.miningMode.checked &&
-                <span className="labelauty-checked-image"></span>
-              }
-              { item.miningMode.checked &&
-                <span className="labelauty-checked">
-                  { translate('INDEX.MINING_MODE') }
-                </span>
-              }
-            </label>
-          </div>
-        }
-      </div>
+      { item.selectedCoin &&
+        <div className="col-sm-11 text-center add-coin-modes">
+          { _availModes.spv &&
+            <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
+              <input
+                type="radio"
+                className="to-labelauty labelauty"
+                name={ `mode-${i}` }
+                id={ `addcoin_mdl_basilisk_mode_login-${i}` }
+                disabled={ item.spvMode.disabled }
+                checked={ item.spvMode.checked }
+                readOnly />
+              <label
+                htmlFor={ `addcoin_mdl_basilisk_mode_login-${i}` }
+                onClick={ () => this.updateSelectedMode('0', i) }
+                style={{ pointerEvents: item.spvMode.disabled ? 'none' : 'all' }}>
+                { !item.spvMode.checked &&
+                  <span className="labelauty-unchecked-image"></span>
+                }
+                { !item.spvMode.checked &&
+                  <span
+                    className="labelauty-unchecked">
+                    { translate('INDEX.SPV_MODE') }
+                  </span>
+                }
+                { item.spvMode.checked &&
+                  <span className="labelauty-checked-image"></span>
+                }
+                { item.spvMode.checked &&
+                  <span className="labelauty-checked">
+                    { translate('INDEX.SPV_MODE') }
+                  </span>
+                }
+              </label>
+            </div>
+          }
+          { staticVar.arch === 'x64' &&
+            _availModes.native &&
+            <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
+              <input
+                type="radio"
+                className="to-labelauty labelauty"
+                name={ `mode-${i}` }
+                id={ `addcoin_mdl_native_mode_login-${i}` }
+                disabled={ item.nativeMode.disabled }
+                checked={ item.nativeMode.checked }
+                readOnly />
+              <label
+                htmlFor={ `addcoin_mdl_native_mode_login-${i}` }
+                onClick={ () => this.updateSelectedMode('-1', i) }
+                style={{ pointerEvents: item.nativeMode.disabled ? 'none' : 'all' }}>
+                { !item.nativeMode.checked &&
+                  <span className="labelauty-unchecked-image"></span>
+                }
+                { !item.nativeMode.checked &&
+                  <span className="labelauty-unchecked">
+                    { translate('INDEX.NATIVE_MODE') }
+                  </span>
+                }
+                { item.nativeMode.checked &&
+                  <span className="labelauty-checked-image"></span>
+                }
+                { item.nativeMode.checked &&
+                  <span className="labelauty-checked">
+                    { translate('INDEX.NATIVE_MODE') }
+                  </span>
+                }
+              </label>
+            </div>
+          }
+          { staticVar.arch === 'x64' &&
+            _availModes.staking &&
+            <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
+              <input
+                type="radio"
+                className="to-labelauty labelauty"
+                name={ `mode-${i}` }
+                id={ `addcoin_mdl_staking_mode_login-${i}` }
+                disabled={ item.stakingMode.disabled }
+                checked={ item.stakingMode.checked }
+                readOnly />
+              <label
+                htmlFor={ `addcoin_mdl_staking_mode_login-${i}` }
+                onClick={ () => this.updateSelectedMode('1', i) }
+                style={{ pointerEvents: item.stakingMode.disabled ? 'none' : 'all' }}>
+                { !item.stakingMode.checked &&
+                  <span className="labelauty-unchecked-image"></span>
+                }
+                { !item.stakingMode.checked &&
+                  <span className="labelauty-unchecked">
+                    { translate('INDEX.STAKING_MODE') }
+                  </span>
+                }
+                { item.stakingMode.checked &&
+                  <span className="labelauty-checked-image"></span>
+                }
+                { item.stakingMode.checked &&
+                  <span className="labelauty-checked">
+                    { translate('INDEX.STAKING_MODE') }
+                  </span>
+                }
+              </label>
+            </div>
+          }
+          { staticVar.arch === 'x64' &&
+            _availModes.mining &&
+            <div className="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6 padding-left-none">
+              <input
+                type="radio"
+                className="to-labelauty labelauty"
+                name={ `mode-${i}` }
+                id={ `addcoin_mdl_mining_mode_login-${i}` }
+                disabled={ item.miningMode.disabled }
+                checked={ item.miningMode.checked }
+                readOnly />
+              <label
+                htmlFor={ `addcoin_mdl_mining_mode_login-${i}` }
+                onClick={ () => this.updateSelectedMode('2', i) }
+                style={{ pointerEvents: item.miningMode.disabled ? 'none' : 'all' }}>
+                { !item.miningMode.checked &&
+                  <span className="labelauty-unchecked-image"></span>
+                }
+                { !item.miningMode.checked &&
+                  <span className="labelauty-unchecked">
+                    { translate('INDEX.MINING_MODE') }
+                  </span>
+                }
+                { item.miningMode.checked &&
+                  <span className="labelauty-checked-image"></span>
+                }
+                { item.miningMode.checked &&
+                  <span className="labelauty-checked">
+                    { translate('INDEX.MINING_MODE') }
+                  </span>
+                }
+              </label>
+            </div>
+          }
+        </div>
+      }
       { this.hasMoreThanOneCoin() &&
         i !== 0 &&
-        <div className="col-sm-1">
+        <div className={ item.selectedCoin ? 'col-sm-1' : 'col-sm-2 text-right' }>
           <button
             type="button"
             className="btn btn-primary"
