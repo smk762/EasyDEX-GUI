@@ -23,7 +23,7 @@ export const copyString = (string, message) => {
     dispatch(
       triggerToaster(
         message,
-        translate('TOASTR.COIN_NOTIFICATION'),
+        translate('TOASTR.WALLET_NOTIFICATION'),
         _result ? 'success' : 'error'
       )
     );

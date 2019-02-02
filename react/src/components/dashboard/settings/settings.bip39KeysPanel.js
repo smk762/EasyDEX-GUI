@@ -35,7 +35,6 @@ class Bip39KeysPanel extends React.Component {
         props.Dashboard.activeSection !== 'settings') {
       // reset input vals
       this.refs.passphrase.value = '';
-      this.refs.passphraseTextarea.value = '';
 
       this.setState(Object.assign({}, this.state, {
         passphrase: '',
@@ -72,25 +71,10 @@ class Bip39KeysPanel extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    if (e.target.name === 'passphrase') {
-      this.resizeLoginTextarea();
-    }
-
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'passphraseTextarea' ? 'passphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    const _ta = document.querySelector('#passphraseTextarea');
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        _ta.style.height = '1px';
-        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   _copyCoinAddress(address) {
@@ -133,14 +117,9 @@ class Bip39KeysPanel extends React.Component {
                     id="passphrase"
                     onChange={ this.updateInput }
                     value={ this.state.passphrase } />
-                  <textarea
-                    className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
-                    autoComplete="off"
-                    id="passphraseTextarea"
-                    ref="passphraseTextarea"
-                    name="passphraseTextarea"
-                    onChange={ this.updateInput }
-                    value={ this.state.passphrase }></textarea>
+                  <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                    { this.state.passphrase || '' }
+                  </div>
                   <i
                     className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                     onClick={ this.toggleSeedInputVisibility }></i>
