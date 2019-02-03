@@ -501,6 +501,9 @@ const ExchangesRender = function() {
               { !this.state.newExchangeOrder &&
                 <div className="margin-top-40 exchanges-history">
                   <h4>My exchange history</h4>
+                  <i
+                    className={ 'icon fa-refresh exchanges-refresh-btn' + (this.state.exchangeCacheUpdateProgress ? ' rotate' : '') }
+                    onClick={ this.updateCache }></i>
                   <div
                     className="btn-exchange-tos-modal"
                     onClick={ this._toggleExchangesTOSModal }>

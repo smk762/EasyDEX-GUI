@@ -75,3 +75,14 @@
   border-bottom: dashed 1px;
   cursor: pointer;
 }
+
+.exchanges-refresh-btn {
+  position: absolute;
+  cursor: pointer;
+  margin-top: -35px;
+  margin-left: 172px;
+
+  &.rotate {
+    animation: rotate 2s linear infinite;
+  }
+}

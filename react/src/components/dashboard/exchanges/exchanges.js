@@ -21,6 +21,7 @@ import {
   apiEthereumSend,
   apiEthereumSendERC20Preflight,
   toggleExchangesTOSModal,
+  toggleExchangesSupportedCoinsModal,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -47,12 +48,13 @@ import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const { shell } = window.require('electron');
 const EXCHANGES_CACHE_UPDATE_INTERVAL = 60; // sec
+
 const providers = [
   'coinswitch',
   'changelly',
 ];
 
-// TODO: add disclaimer, modify agama-wallet-lib to include explorer paths for pub addr and txid, coinswitch reverse order buy target amount of coins
+// TODO: modify agama-wallet-lib to include explorer paths for pub addr and txid
 //       coinswitch check for identical orders with no_deposit flag
 
 class Exchanges extends React.Component {
@@ -64,6 +66,7 @@ class Exchanges extends React.Component {
       processing: false,
       buyFixedDestCoin: false,
       syncHistoryProgressing: false,
+      exchangeCacheUpdateProgress: false,
       newExchangeOrderDetails: {
         currentBalance: 'none',
         step: 0,
@@ -103,10 +106,30 @@ class Exchanges extends React.Component {
     this.toggleBuyFixedDestCoin = this.toggleBuyFixedDestCoin.bind(this);
     this.syncHistory = this.syncHistory.bind(this);
     this._toggleExchangesTOSModal = this._toggleExchangesTOSModal.bind(this);
+    this._toggleExchangesSupportedCoinsModal = this._toggleExchangesSupportedCoinsModal.bind(this);
+    this.updateCache = this.updateCache.bind(this);
+  }
+
+  updateCache() {
+    Store.dispatch(getExchangesCache(this.state.provider));
+
+    this.setState({
+      exchangeCacheUpdateProgress: true,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        exchangeCacheUpdateProgress: false,
+      });
+    }, 1000);
   }
 
   _toggleExchangesTOSModal() {
     Store.dispatch(toggleExchangesTOSModal(true));
+  }
+
+  _toggleExchangesSupportedCoinsModal() {
+    Store.dispatch(toggleExchangesSupportedCoinsModal(true));
   }
 
   syncHistory() {
@@ -525,6 +548,7 @@ class Exchanges extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.exchangesCacheInterval);
+    clearInterval(this.coinswitchCoinsInterval);
   }
 
   renderCoinOption(option) {
