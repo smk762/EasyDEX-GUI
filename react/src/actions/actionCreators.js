@@ -34,6 +34,7 @@ import {
   DISPLAY_NOTARY_ELECTIONS_MODAL,
   BLUR_SENSITIVE_DATA,
   DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
+  DASHBOARD_EXCHANGES_TOS_MODAL,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -339,5 +340,12 @@ export const toggleExchangesOrderInfoModal = (orderId) => {
   return {
     type: DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
     showExchangesOrderInfoId: orderId,
+  }
+}
+
+export const toggleExchangesTOSModal = (display) => {
+  return {
+    type: DASHBOARD_EXCHANGES_TOS_MODAL,
+    display,
   }
 }

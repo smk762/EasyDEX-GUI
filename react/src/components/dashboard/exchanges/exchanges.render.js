@@ -12,6 +12,7 @@ import ExchangesOrderInfoModal from '../exchangesOrderInfoModal/exchangesOrderIn
 import Select from 'react-select';
 import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import SendCoin from '../sendCoin/sendCoin';
+import ExchangesTOSModal from '../exchangesTOSModal/exchangesTOSModal';
 
 const statusLookup = {
   coinswitch: {
@@ -501,6 +502,11 @@ const ExchangesRender = function() {
                 <div className="margin-top-40 exchanges-history">
                   <h4>My exchange history</h4>
                   <div
+                    className="btn-exchange-tos-modal"
+                    onClick={ this._toggleExchangesTOSModal }>
+                    Terms of service
+                  </div>
+                  <div
                     className={ 'btn-exchange-sync' + (this.state.syncHistoryProgressing ? ' rotate' : '') }
                     onClick={ this.syncHistory }>
                     <i className="icon fa-refresh margin-right-5"></i> Sync history
@@ -523,6 +529,7 @@ const ExchangesRender = function() {
                   { this._RenderNewOrderForm() }
                 </div>
               }
+              <ExchangesTOSModal />
             </div>
           </div>
         </div>

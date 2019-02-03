@@ -19,7 +19,8 @@ import {
   apiElectrumSendPreflight,
   apiEthereumGasPrice,
   apiEthereumSend,
-  apiEthereumSendERC20Preflight,  
+  apiEthereumSendERC20Preflight,
+  toggleExchangesTOSModal,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -101,6 +102,11 @@ class Exchanges extends React.Component {
     this.makeDeposit = this.makeDeposit.bind(this);
     this.toggleBuyFixedDestCoin = this.toggleBuyFixedDestCoin.bind(this);
     this.syncHistory = this.syncHistory.bind(this);
+    this._toggleExchangesTOSModal = this._toggleExchangesTOSModal.bind(this);
+  }
+
+  _toggleExchangesTOSModal() {
+    Store.dispatch(toggleExchangesTOSModal(true));
   }
 
   syncHistory() {
