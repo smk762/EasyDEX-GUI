@@ -421,6 +421,7 @@ export const RenderExchangeHistory = function() {
               <button
                 type="button"
                 className="btn btn-xs white btn-success waves-effect waves-lightm margin-left-10"
+                disabled={ this.state.syncHistoryProgressing }
                 onClick={ () => this.makeDeposit(_cacheFlat[i].orderId) }>
                 Send
               </button>
@@ -430,6 +431,7 @@ export const RenderExchangeHistory = function() {
             <button
               type="button"
               className="btn btn-xs white btn-info waves-effect waves-light btn-kmdtxid"
+              disabled={ this.state.syncHistoryProgressing }
               onClick={ () => this._toggleExchangesOrderInfoModal(_cacheFlat[i].orderId) }>
               <i className="icon fa-search"></i>
             </button>
@@ -498,9 +500,15 @@ const ExchangesRender = function() {
               { !this.state.newExchangeOrder &&
                 <div className="margin-top-40 exchanges-history">
                   <h4>My exchange history</h4>
+                  <div
+                    className={ 'btn-exchange-sync' + (this.state.syncHistoryProgressing ? ' rotate' : '') }
+                    onClick={ this.syncHistory }>
+                    <i className="icon fa-refresh margin-right-5"></i> Sync history
+                  </div>
                   <button
                     type="button"
                     className="btn btn-xs white btn-info waves-effect waves-light btn-exchange-new"
+                    disabled={ this.state.syncHistoryProgressing }
                     onClick={ this.toggleCreateOrder }>
                     + New exchange order
                   </button>

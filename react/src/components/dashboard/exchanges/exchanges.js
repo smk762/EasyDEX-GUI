@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import {
   getExchangesCache,
   exchangesGetRate,
+  exchangesHistorySync,  
   toggleExchangesOrderInfoModal,
   apiElectrumBalancePromise,
   apiEthereumBalancePromise,
-
   apiElectrumBalance,
   dashboardChangeActiveCoin,
   triggerToaster,
@@ -62,6 +62,7 @@ class Exchanges extends React.Component {
       newExchangeOrder: false,
       processing: false,
       buyFixedDestCoin: false,
+      syncHistoryProgressing: false,
       newExchangeOrderDetails: {
         currentBalance: 'none',
         step: 0,
@@ -99,6 +100,41 @@ class Exchanges extends React.Component {
     this.sendCoinCB = this.sendCoinCB.bind(this);
     this.makeDeposit = this.makeDeposit.bind(this);
     this.toggleBuyFixedDestCoin = this.toggleBuyFixedDestCoin.bind(this);
+    this.syncHistory = this.syncHistory.bind(this);
+  }
+
+  syncHistory() {
+    this.setState({
+      syncHistoryProgressing: true,
+    });
+
+    exchangesHistorySync(this.state.provider)
+    .then((res) => {
+      if (res) {
+        this.setState({
+          syncHistoryProgressing: false,
+        });
+        Store.dispatch(getExchangesCache(this.state.provider));
+        Store.dispatch(
+          triggerToaster(
+            'Coinswitch orders history is synchronized',
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'success'
+          )
+        );
+      } else {
+        this.setState({
+          syncHistoryProgressing: false,
+        });
+        Store.dispatch(
+          triggerToaster(
+            'Failed to synchronize Coinswitch orders history',
+            translate('TOASTR.WALLET_NOTIFICATION'),
+            'error'
+          )
+        );
+      }
+    });
   }
 
   toggleBuyFixedDestCoin() {

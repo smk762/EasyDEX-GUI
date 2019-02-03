@@ -54,3 +54,17 @@
     pointer-events: none;
   }
 }
+
+.btn-exchange-sync {
+  position: absolute;
+  border-bottom: dashed 1px;
+  right: 20px;
+  margin-top: -85px;
+  cursor: pointer;
+
+  &.rotate {
+    i {
+      animation: rotate 2s linear infinite;
+    }
+  }
+}

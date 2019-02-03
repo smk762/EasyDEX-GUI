@@ -70,7 +70,6 @@ export const exchangesGetCoins = (provider) => {
 
 export const exchangesGetRate = (provider, src, dest) => {
   return new Promise((resolve, reject) => {
-    //resolve({"success":true,"code":"OK","data":{"rate":8.64656004,"minerFee":0,"limitMinDepositCoin":24.775061,"limitMaxDepositCoin":4408.575,"limitMinDestinationCoin":214.219054,"limitMaxDestinationCoin":38119.013},"msg":""});
     const _urlParams = {
       token,
       combined: true, // changelly
@@ -98,7 +97,6 @@ export const exchangesGetRate = (provider, src, dest) => {
 
 export const exchangesPlaceOrder = (provider, src, dest, srcAmount, destAmount, destPub, refundPub) => {
   return new Promise((resolve, reject) => {
-    //resolve({"orderId":"5a3c3bc4-7005-45c6-a106-4580aeb52f53","exchangeAddress":{"address":"QjibDEZiKV33xiNR7prhMAU4VanXGvZUN5","tag":null},"destinationAddress":{"address":"GNA1Hwa4vf3Y9LHZoMAYmGEngN2rmMTCU3","tag":null},"createdAt":1544871347246,"status":"timeout","inputTransactionHash":null,"outputTransactionHash":null,"depositCoin":"qtum","destinationCoin":"game","depositCoinAmount":null,"destinationCoinAmount":0,"validTill":1544914547246,"userReferenceId":null,"expectedDepositCoinAmount":9.60589756391216,"expectedDestinationCoinAmount":237});
     const _urlParams = {
       token,
       src,
@@ -156,4 +154,31 @@ export const updateExchangesCacheDeposit = (provider, coin, txid, orderId) => {
       Store.dispatch(getExchangesCache(provider));
     });
   };
+}
+
+export const exchangesHistorySync = (provider) => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+      save: true,
+    };
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/exchanges/${provider}/history/sync${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.exchangesHistorySync') + ' (code: exchangesHistorySync)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json && json.msg === 'success' ? true : false);
+    });
+  });
 }

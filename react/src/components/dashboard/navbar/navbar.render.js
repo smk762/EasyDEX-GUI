@@ -99,6 +99,7 @@ const NavbarRender = function() {
               </li>
             }
             { Config.experimentalFeatures &&
+              (Config.dev || staticVar.argv.indexOf('exchanges') > -1) &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('exchanges') }>
                   <i className="site-menu-icon"></i> Exchanges
