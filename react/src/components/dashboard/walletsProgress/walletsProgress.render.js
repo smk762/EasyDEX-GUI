@@ -3,7 +3,7 @@ import translate from '../../../translate/translate';
 
 export const VerifyingBlocksRender = function() {
   return (
-    <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">
+    <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
       <span className="full-width">{ translate('INDEX.VERIFYING_BLOCKS') }...</span>
     </div>
   );
@@ -11,7 +11,7 @@ export const VerifyingBlocksRender = function() {
 
 export const SyncErrorBlocksRender = function() {
   return (
-    <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">
+    <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
       <span className="full-width">{ translate('INDEX.SYNC_ERR_BLOCKS') }</span>
     </div>
   );
@@ -20,7 +20,7 @@ export const SyncErrorBlocksRender = function() {
 export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHeight) {
   if (this.props.ActiveCoin.rescanInProgress) {
     return (
-      <div className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent full-width">
+      <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
         <span className="full-width">{ translate('INDEX.PLEASE_WAIT_UNTIL_RESCAN_FINISHED') }</span>
       </div>
     );
@@ -28,7 +28,7 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
     if (syncPercentage === 'Infinity%') {
       return (
         <div
-          className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
+          className="progress-bar progress-bar-info progress-bar-striped active"
           style={{ width: syncPercentage }}>
           <span style={{ width: syncPercentage }}>
             { translate('INDEX.BLOCKS') }:&nbsp;
@@ -41,7 +41,7 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
     } else {
       return (
         <div
-          className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
+          className="progress-bar progress-bar-info progress-bar-striped active"
           style={{ width: syncPercentage }}>
           <span style={{ width: syncPercentage }}>
             { syncPercentage === '100.00%' ? '100%' : syncPercentage }&nbsp;
@@ -71,7 +71,7 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
 
 export const LoadingBlocksRender = function() {
   return (
-    <div className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent full-width">
+    <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
       <span className="full-width">
       { translate(this.props.ActiveCoin.rescanInProgress ? 'INDEX.PLEASE_WAIT_UNTIL_RESCAN_FINISHED' : 'INDEX.LOADING_BLOCKS') }
       </span>

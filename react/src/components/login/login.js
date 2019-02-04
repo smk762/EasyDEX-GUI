@@ -22,6 +22,7 @@ import {
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
+  copyString,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
@@ -80,7 +81,6 @@ class Login extends React.Component {
     this.toggleSeedBackupModal = this.toggleSeedBackupModal.bind(this);
     this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
-    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
@@ -251,8 +251,6 @@ class Login extends React.Component {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
     });
-
-    this.resizeLoginTextarea();
   }
 
   generateNewSeed(bits) {
@@ -371,16 +369,6 @@ class Login extends React.Component {
     Store.dispatch(toggleAddcoinModal(true, false));
   }
 
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        document.querySelector('#loginPassphrase').style.height = '1px';
-        document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
-      }
-    }, 100);
-  }
-
   updateLoginPassPhraseInput(e) {
     const newValue = e.target.value;
 
@@ -399,12 +387,10 @@ class Login extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    this.resizeLoginTextarea();
-
     this.setState({
       seedExtraSpaces: false,
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
       loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
     });
   }
@@ -455,7 +441,6 @@ class Login extends React.Component {
 
       // reset login input vals
       this.refs.loginPassphrase.value = '';
-      this.refs.loginPassphraseTextarea.value = '';
 
       this.setState(this.defaultState);
 
@@ -507,7 +492,6 @@ class Login extends React.Component {
           }
           // reset login input vals
           this.refs.loginPassphrase.value = '';
-          this.refs.loginPassphraseTextarea.value = '';
           this.refs.decryptKey.value = '';
           this.refs.selectedPin.value = '';
 
@@ -750,22 +734,7 @@ class Login extends React.Component {
   }
 
   copyPassPhraseToClipboard() {
-    const passPhrase = this.state.randomSeed;
-    const textField = document.createElement('textarea');
-
-    textField.innerText = passPhrase;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand('copy');
-    textField.remove();
-
-    Store.dispatch(
-      triggerToaster(
-        translate('LOGIN.SEED_SUCCESSFULLY_COPIED'),
-        translate('LOGIN.SEED_COPIED'),
-        'success'
-      )
-    );
+    Store.dispatch(copyString(this.state.randomSeed, translate('LOGIN.SEED_SUCCESSFULLY_COPIED')));
   }
 
   updateSelectedShortcut(e, type) {

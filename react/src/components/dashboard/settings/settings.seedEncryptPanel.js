@@ -210,7 +210,6 @@ class SeedEncryptPanel extends React.Component {
 
       // reset input vals
       this.refs.wifkeysPassphrase.value = '';
-      this.refs.wifkeysPassphraseTextarea.value = '';
       this.refs.encryptKey.value = '';
       this.refs.encryptKeyConfirm.value = '';
     }
@@ -285,24 +284,10 @@ class SeedEncryptPanel extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    if (e.target.name === 'wifkeysPassphrase') {
-      this.resizeLoginTextarea();
-    }
-
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   renderPinsList() {
@@ -488,14 +473,9 @@ class SeedEncryptPanel extends React.Component {
                     id="wifkeysPassphrase"
                     onChange={ this.updateInput }
                     value={ this.state.wifkeysPassphrase } />
-                  <textarea
-                    className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
-                    autoComplete="off"
-                    id="wifkeysPassphraseTextarea"
-                    ref="wifkeysPassphraseTextarea"
-                    name="wifkeysPassphraseTextarea"
-                    onChange={ this.updateInput }
-                    value={ this.state.wifkeysPassphrase }></textarea>
+                  <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                    { this.state.wifkeysPassphrase || '' }
+                  </div>
                   <i
                     className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                     onClick={ this.toggleSeedInputVisibility }></i>

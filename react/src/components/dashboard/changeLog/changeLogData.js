@@ -1,12 +1,18 @@
 const changeLogData = [{
-  version: '0.3.4',
+  version: '0.3.3',
   changes: [
-    'Latest Komodo binary 0.3.3b',
+    'Latest Komodo binary 0.3.3b from beta branch',
+    'Display dPoW Confirmations in Lite Mode',
+    'Display rawconfirmations when hovering on confirmations numbers for Native and Lite mode',
+    'Display dPoW Confirmation badge for Native and Lite mode',
+    'Lite mode tx confirmation display now faster than earlier version',
+    'Import Sapling privkey fix using Import Key button, earlier version had error while importing sapling key',
     'Shortcut start button fix for Pirate (ARRR)',
     'PGT icon, badge color fix',
     'Fix for tx history post lock/logout bug',
     'Minor improvements in tools offline tx sign',
     'Tools multisig address generation, tx create/co-sign',
+    'Added new coin LUMBER',
   ],
 }, {
   version: '0.3.2',

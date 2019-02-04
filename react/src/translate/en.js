@@ -1060,7 +1060,7 @@ const LANG_EN = {
     CONF_TIME: 'Confirmation time',
     ADVANCED_SELECTION: 'Advanced selection',
     BTC_FEES_DESC_P1: 'Electrum based fee estimates may not be as accurate as bitcoinfees.earn.com.',
-    BTC_FEES_DESC_P1: 'It is advised to use fast/average/slow options if you want your transaction to be confirmed within 60 min time frame.',
+    BTC_FEES_DESC_P2: 'It is advised to use fast/average/slow options if you want your transaction to be confirmed within 60 min time frame.',
     BTC_FEES_DESC_P3: 'Estimates are based on bitcoinfees.earn.com data.',
     BTC_FEES_DESC_P4: 'Around 90% probability for a transaction to be confirmed within desired time frame.',
     VALIDATION_IS_NOT_VALID_ADDR_P1: 'is not a valid',
@@ -1265,7 +1265,7 @@ const LANG_EN = {
   },
   LANG: {
     EN: 'English',
-    DE: 'Deutch',
+    DE: 'Deutsch',
   },
   FIAT_CURRENCIES: {
     AUD: 'Australian Dollar (AUD)',

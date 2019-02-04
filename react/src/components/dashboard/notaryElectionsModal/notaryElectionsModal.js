@@ -56,7 +56,6 @@ class NotaryElectionsModal extends React.Component {
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.closeModal = this.closeModal.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
-    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
     this.setUserType = this.setUserType.bind(this);
     this.setVoteType = this.setVoteType.bind(this);
@@ -371,19 +370,6 @@ class NotaryElectionsModal extends React.Component {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
     });
-
-    this.resizeLoginTextarea();
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        const _login = document.querySelector('#loginPassphrase');
-        _login.style.height = '1px';
-        _login.style.height = `${(15 + _login.scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   updateLoginPassPhraseInput(e) {
@@ -405,11 +391,9 @@ class NotaryElectionsModal extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    this.resizeLoginTextarea();
-
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
   }
 
@@ -443,7 +427,6 @@ class NotaryElectionsModal extends React.Component {
 
     // reset login input vals
     this.refs.loginPassphrase.value = '';
-    this.refs.loginPassphraseTextarea.value = '';
   }
 
   logout() {
@@ -601,15 +584,9 @@ class NotaryElectionsModal extends React.Component {
                         onKeyDown={ (event) => this.handleKeydown(event) }
                         autoComplete="off"
                         value={ this.state.loginPassphrase || '' } />
-                      <textarea
-                        className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                        id="loginPassphrase"
-                        ref="loginPassphraseTextarea"
-                        name="loginPassphraseTextarea"
-                        autoComplete="off"
-                        onChange={ this.updateLoginPassPhraseInput }
-                        onKeyDown={ (event) => this.handleKeydown(event) }
-                        value={ this.state.loginPassphrase || '' }></textarea>
+                      <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                        { this.state.loginPassphrase || '' }
+                      </div>
                       <i
                         className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                         onClick={ this.toggleSeedInputVisibility }></i>

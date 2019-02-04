@@ -121,15 +121,9 @@ const LoginRender = function() {
                 onKeyDown={ (event) => this.handleKeydown(event) }
                 autoComplete="off"
                 value={ this.state.loginPassphrase || '' } />
-              <textarea
-                className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                id="loginPassphrase"
-                ref="loginPassphraseTextarea"
-                name="loginPassphraseTextarea"
-                autoComplete="off"
-                onChange={ this.updateLoginPassPhraseInput }
-                onKeyDown={ (event) => this.handleKeydown(event) }
-                value={ this.state.loginPassphrase || '' }></textarea>
+              <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                { this.state.loginPassphrase || '' }
+              </div>
               <i
                 className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                 onClick={ this.toggleSeedInputVisibility }></i>

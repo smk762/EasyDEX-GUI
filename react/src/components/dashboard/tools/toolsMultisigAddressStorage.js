@@ -18,7 +18,7 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import ReactTooltip from 'react-tooltip';
-import { msigPubAddress } from 'agama-wallet-lib/src/keys';
+import { multisig } from 'agama-wallet-lib/src/keys';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 class ToolsMultisigAddressStorage extends React.Component {
@@ -127,7 +127,7 @@ class ToolsMultisigAddressStorage extends React.Component {
                 );
               }
             } else {
-              const pinFilename = msigPubAddress(_multisigData.scriptPubKey);
+              const pinFilename = multisig.redeemScriptToPubAddress(_multisigData.scriptPubKey);
 
               encryptPassphrase(
                 `msig:${JSON.stringify(_multisigData)}`,

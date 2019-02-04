@@ -59,14 +59,9 @@ const ImportKeyModalRender = function() {
                           ref="wifkeysPassphrase"
                           onChange={ this.updateInput }
                           value={ this.state.wifkeysPassphrase } />
-                        <textarea
-                          autoComplete="off"
-                          className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                          id="wifkeysPassphraseTextarea"
-                          name="wifkeysPassphraseTextarea"
-                          ref="wifkeysPassphraseTextarea"
-                          onChange={ this.updateInput }
-                          value={ this.state.wifkeysPassphrase }></textarea>
+                        <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                          { this.state.wifkeysPassphrase || '' }
+                        </div>
                         <i
                           className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                           onClick={ this.toggleSeedInputVisibility }></i>
