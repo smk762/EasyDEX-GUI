@@ -13,6 +13,7 @@ import Select from 'react-select';
 import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import SendCoin from '../sendCoin/sendCoin';
 import ExchangesTOSModal from '../exchangesTOSModal/exchangesTOSModal';
+import ExchangesSupportedCoinsModal from '../exchangesSupportedCoinsModal/exchangesSupportedCoinsModal';
 
 const statusLookup = {
   coinswitch: {
@@ -29,6 +30,10 @@ export const RenderNewOrderForm = function() {
         this.props.Main.coins.spv.length > 1 &&
         <div className="step1">
           <h3 className="padding-left-15">Order details</h3>
+          <a
+            className="pointer supported-coins-btn"
+            onClick={ this._toggleExchangesSupportedCoinsModal }>Supported coins</a>
+          <ExchangesSupportedCoinsModal />
           <div className="col-sm-12 padding-top-10 coin-send-form">
             <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
               <div className="steps row margin-top-10">

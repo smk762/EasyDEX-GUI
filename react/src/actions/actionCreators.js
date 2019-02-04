@@ -35,6 +35,7 @@ import {
   BLUR_SENSITIVE_DATA,
   DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
   DASHBOARD_EXCHANGES_TOS_MODAL,
+  DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -349,3 +350,10 @@ export const toggleExchangesTOSModal = (display) => {
     display,
   }
 }
+
+export const toggleExchangesSupportedCoinsModal = (display) => {
+  return {
+    type: DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
+    display,
+  }
+};
