@@ -33,6 +33,9 @@ import {
   DASHBOARD_REMOVE_COIN,
   DISPLAY_NOTARY_ELECTIONS_MODAL,
   BLUR_SENSITIVE_DATA,
+  DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
+  DASHBOARD_EXCHANGES_TOS_MODAL,
+  DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -61,6 +64,7 @@ export * from './actions/csv';
 export * from './actions/addressBook';
 export * from './actions/dice';
 export * from './actions/eth';
+export * from './actions/exchanges';
 
 export const changeActiveAddress = (address) => {
   return {
@@ -332,3 +336,24 @@ export const toggleBlurSensitiveData = (display) => {
     blurSensitiveData: display,
   }
 }
+
+export const toggleExchangesOrderInfoModal = (orderId) => {
+  return {
+    type: DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
+    showExchangesOrderInfoId: orderId,
+  }
+}
+
+export const toggleExchangesTOSModal = (display) => {
+  return {
+    type: DASHBOARD_EXCHANGES_TOS_MODAL,
+    display,
+  }
+}
+
+export const toggleExchangesSupportedCoinsModal = (display) => {
+  return {
+    type: DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
+    display,
+  }
+};

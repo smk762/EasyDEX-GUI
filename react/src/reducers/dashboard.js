@@ -9,6 +9,11 @@ import {
   DASHBOARD_ETHEREUM_COINS,
   ELECTRUM_SERVER_CHANGED,
   DISPLAY_ZCASH_PARAMS_FETCH,
+  EXCHANGES_CACHE,
+  DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
+  DASHBOARD_EXCHANGES_TOS_MODAL,
+  DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
+  EXCHANGES_COINSWITCH_COINS,
   PRICES,
 } from '../actions/storeType';
 
@@ -24,7 +29,15 @@ export const Dashboard = (state = {
   displayZcparamsModal: false,
   prices: null,
   ethereumCoins: {},
+  exchanges: {
+    coinswitch: {},
+  },
+  showExchangesOrderInfoId: null,
+  displayExchangesTOSModal: false,
+  displayExchangesSupportedCoinsModal: false,
 }, action) => {
+  let exchanges = JSON.parse(JSON.stringify(state.exchanges));
+  
   switch (action.type) {
     case DASHBOARD_ELECTRUM_COINS:
       return {
@@ -80,6 +93,35 @@ export const Dashboard = (state = {
       return {
         ...state,
         prices: action.prices,
+      };
+    case EXCHANGES_CACHE:
+      exchanges[action.provider] = action.cache;
+      
+      return {
+        ...state,
+        exchanges,
+      };
+    case DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL:
+      return {
+        ...state,
+        showExchangesOrderInfoId: action.showExchangesOrderInfoId,
+      };
+    case DASHBOARD_EXCHANGES_TOS_MODAL:
+      return {
+        ...state,
+        displayExchangesTOSModal: action.display,
+      };
+    case DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL:
+      return {
+        ...state,
+        displayExchangesSupportedCoinsModal: action.display,
+      };
+    case EXCHANGES_COINSWITCH_COINS:
+      exchanges.coinswitchCoins = action.coins;
+      
+      return {
+        ...state,
+        exchanges,
       };
     default:
       return state;
