@@ -501,7 +501,7 @@ class Exchanges extends React.Component {
 
       let _coins = JSON.parse(JSON.stringify(this.props.Main.coins));
       _coins[_coin[1]].splice(_coins[_coin[1]].indexOf(_coin[0].toUpperCase()), 1);
-  
+      
       if (type === 'src') {
         this.coinsDestList = _coins;
       } else {
@@ -520,7 +520,29 @@ class Exchanges extends React.Component {
   }
 
   toggleCreateOrder() {
-    const _coinsList = JSON.parse(JSON.stringify(this.props.Main.coins));
+    let _coinsList = JSON.parse(JSON.stringify(this.props.Main.coins));
+
+    if (this.state.provider === 'coinswitch') {
+      const coinswitchCoins = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges.coinswitchCoins;
+
+      if (coinswitchCoins &&
+          typeof coinswitchCoins === 'object' &&
+          coinswitchCoins.length &&
+          coinswitchCoins[0].symbol) {
+        let coinswitchCoinsFlat = [];
+
+        for (let i = 0; i < coinswitchCoins.length; i++) {
+          coinswitchCoinsFlat.push(coinswitchCoins[i].symbol.toUpperCase());
+        }
+
+        for (let i = 0; i < _coinsList.spv.length; i++) {
+          if (coinswitchCoinsFlat.indexOf(_coinsList.spv[i]) === -1) {
+            _coinsList.spv.splice(i, 1);
+          }
+        }
+      }
+    }
+
     this.coinsSrcList = _coinsList;
     this.coinsDestList = _coinsList;
 
