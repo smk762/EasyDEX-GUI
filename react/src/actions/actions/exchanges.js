@@ -1,5 +1,8 @@
 import { triggerToaster } from '../actionCreators';
-import { EXCHANGES_CACHE } from '../storeType';
+import {
+  EXCHANGES_CACHE,
+  EXCHANGES_COINSWITCH_COINS,
+} from '../storeType';
 import Config, {
   token,
   agamaPort,
@@ -182,3 +185,36 @@ export const exchangesHistorySync = (provider) => {
     });
   });
 }
+
+export const getExchangesCoinswitchCoins = () => {
+  return dispatch => {
+    const _urlParams = {
+      token,
+    };
+    return fetch(
+      'https://www.atomicexplorer.com/api/exchanges/coinswitch/coins/cached',
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.getExchangesCoinswitchCoins') + ' (code: getExchangesCoinswitchCoins)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(getExchangesCoinswitchCoinsState(json && json.result ? json.result : json));
+    });
+  };
+}
+
+const getExchangesCoinswitchCoinsState = (json) => {
+  return {
+    type: EXCHANGES_COINSWITCH_COINS,
+    coins: json,
+  }
+};

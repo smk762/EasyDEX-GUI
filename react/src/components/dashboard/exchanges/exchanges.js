@@ -22,6 +22,7 @@ import {
   apiEthereumSendERC20Preflight,
   toggleExchangesTOSModal,
   toggleExchangesSupportedCoinsModal,
+  getExchangesCoinswitchCoins,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import Config from '../../../config';
@@ -48,6 +49,7 @@ import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const { shell } = window.require('electron');
 const EXCHANGES_CACHE_UPDATE_INTERVAL = 60; // sec
+const EXCHANGES_COINSWITCH_COINS_UPDATE_INTERVAL = 120; // sec
 
 const providers = [
   'coinswitch',
@@ -92,6 +94,7 @@ class Exchanges extends React.Component {
     this.coinsDestList = null;
     this.defaultExchangeOrderState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
     this.exchangesCacheInterval = null;
+    this.coinswitchCoinsInterval = null;
     this._toggleExchangesOrderInfoModal = this._toggleExchangesOrderInfoModal.bind(this);
     this.toggleCreateOrder = this.toggleCreateOrder.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -540,10 +543,15 @@ class Exchanges extends React.Component {
 
   componentWillMount() {
     Store.dispatch(getExchangesCache(this.state.provider));
+    Store.dispatch(getExchangesCoinswitchCoins());
 
     this.exchangesCacheInterval = setInterval(() => {
       Store.dispatch(getExchangesCache(this.state.provider));
     }, EXCHANGES_CACHE_UPDATE_INTERVAL * 1000);
+
+    this.coinswitchCoinsInterval = setInterval(() => {
+      Store.dispatch(getExchangesCoinswitchCoins());
+    }, EXCHANGES_COINSWITCH_COINS_UPDATE_INTERVAL * 1000);
   }
 
   componentWillUnmount() {
