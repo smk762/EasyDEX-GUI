@@ -110,7 +110,7 @@ class ToolsGetBalanceMultiCoins extends React.Component {
                   className="pointer">
                   <img
                     alt={ balances[i].coin.toLowerCase() }
-                    src={ `assets/images/cryptologo/${balances[i].coin.toLowerCase()}.png` } />
+                    src={ `assets/images/cryptologo/btc/${balances[i].coin.toLowerCase()}.png` } />
                   { balances[i].coin }
                 </a>
               </td>

@@ -105,7 +105,7 @@ class ToolsTxPush extends React.Component {
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
             options={
-              addCoinOptionsCrypto('skip', true)
+              addCoinOptionsCrypto('skip', true, false)
               .concat(addCoinOptionsAC('skip'))
             } />
         </div>
