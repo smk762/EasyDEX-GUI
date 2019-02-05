@@ -151,14 +151,14 @@ class ToolsGetBalanceMultiCoins extends React.Component {
   getOptions() {
     let _items = [{
       label: 'Komodo (KMD)',
-      icon: 'KMD',
+      icon: 'btc/KMD',
       value: 'KMD',
     }];
 
     for (let key in kmdexplorer) {
       _items.push({
         label: `${translate('ASSETCHAINS.' + key)} (${key})`,
-        icon: key,
+        icon: `btc/${key}`,
         value: key,
       });
     }
@@ -199,7 +199,7 @@ class ToolsGetBalanceMultiCoins extends React.Component {
           </button>
         </div>
         { this.state.reqInProgress &&
-          <div className="text-center">{ translate('TOOLS.SEARCHING') }...</div>
+          <div className="text-left">{ translate('TOOLS.SEARCHING') }...</div>
         }
         { !this.state.reqInProgress && this.renderBalances() }
       </div>
