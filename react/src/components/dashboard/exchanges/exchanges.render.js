@@ -228,11 +228,6 @@ export const RenderNewOrderForm = function() {
                         <div className="col-lg-12 col-sm-12 col-xs-12">
                           { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } amount exceeds max allowed value { this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin }
                         </div>
-                        { this.state.newExchangeOrderDetails.amount < this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin &&
-                          <div className="col-lg-12 col-sm-12 col-xs-12">
-                            { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } amount is too low, min deposit amount is { this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin }
-                          </div>
-                        }
                       </div>
                     }
                     { this.state.newExchangeOrderDetails.amount < this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin &&
