@@ -1166,7 +1166,7 @@ const LANG_EN = {
     BALANCE_UNCONF: 'Balance unconf',
     NOTHING_IS_FOUND: 'Nothing is found',
     GET_ASSET_CHAINS_BALANCE: 'Get asset chains balance',
-    CROSS_ASSETS_BALANCE: 'Cross assets balace',
+    CROSS_ASSETS_BALANCE: 'Cross assets balance',
     TOOLS: 'Tools',
     OFFLINE_SIG_CREATE: 'Offline signing create',
     OFFLINE_SIG_SCAN: 'Offline signing scan',
