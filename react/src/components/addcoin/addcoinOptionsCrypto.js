@@ -34,18 +34,44 @@ for (let key in _coins) {
 
 coins = coinsList;
 
-const prepCoinsList = (filterActiveCoins) => {
+const prepCoinsList = (options) => {
   const availableKMDModes = staticVar.arch === 'x64' ? 'spv|native' : 'spv';
   let _items = [];
+  
+  if (options.filterNonActive) {
+    if (_activeCoins.spv &&
+        _activeCoins.spv.length) {
+      for (let i = 0; i < _activeCoins.spv.length; i++) {
+        _items.push({
+          label: `${translate('CRYPTO.' + _activeCoins.spv[i])} (${_activeCoins.spv[i]})`,
+          icon: `btc/${_activeCoins.spv[i]}`,
+          value: `${_activeCoins.spv[i]}|spv`,
+        });
+      }
+    }
 
-  if (filterActiveCoins) {
-    for (let i = 0; i < _prepCoinsList.length; i++) {
-      if (_activeCoins === 'skip' || (_activeCoins !== 'skip' &&
-          _activeCoins &&
-          _activeCoins.spv &&
-          _activeCoins.spv.indexOf(_prepCoinsList[i].icon.toUpperCase()) === -1 &&
-          _activeCoins.native.indexOf(_prepCoinsList[i].icon.toUpperCase()) === -1)) {
-        _items.push(_prepCoinsList[i]);
+    if (config.experimentalFeatures) {
+      if (_activeCoins.eth.indexOf('eth') > -1) {
+        _items.push({
+          label: `${translate('CRYPTO.ETH')} (ETH)`,
+          icon: 'eth/ETH',
+          value: 'ETH',
+        });
+      }
+
+      if (!_disableETH &&
+          _activeCoins.eth &&
+          _activeCoins.eth.length) {
+        for (let i = 0; i < _activeCoins.eth.length; i++) {
+          if (_activeCoins.eth[i] !== 'eth' ||
+              _activeCoins.eth[i] !== 'eth_ropsten') {
+            _items.push({
+              label: `${translate('CRYPTO.' + _activeCoins.eth[i])} (${_activeCoins.eth[i]})`,
+              icon: `eth/${_activeCoins.eth[i]}`,
+              value: `ETH|${_activeCoins.eth[i]}`,
+            });
+          }
+        }
       }
     }
   } else {
@@ -69,7 +95,7 @@ const prepCoinsList = (filterActiveCoins) => {
           });
         }
       } catch (e) {
-        console.warn('electron remote error' + e);
+        console.warn('electron remote error addcoin' + e);
       }
     }
 
@@ -100,15 +126,14 @@ const prepCoinsList = (filterActiveCoins) => {
   return _items;
 };
 
-const addCoinOptionsCrypto = (activeCoins, disableETH) => {
+const addCoinOptionsCrypto = (activeCoins, disableETH, filterNonActive) => {
   _activeCoins = activeCoins;
   _disableETH = disableETH;
 
-  if (_prepCoinsList) {
-    return prepCoinsList();
-  } else {
-    return prepCoinsList();
-  }
+  return prepCoinsList({
+    filterActiveCoins: false,
+    filterNonActive,
+  });
 }
 
 export default addCoinOptionsCrypto;

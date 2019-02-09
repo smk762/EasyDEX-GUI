@@ -5,7 +5,6 @@ import CoinTile from '../coinTile/coinTile';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
-import SendCoin from '../sendCoin/sendCoin';
 import WalletsData from '../walletsData/walletsData';
 import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
@@ -20,6 +19,7 @@ import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
 import Dice from '../dice/dice';
+import Exchanges from '../exchanges/exchanges';
 import ChangeLog from '../changeLog/changeLog';
 
 const DashboardRender = function() {
@@ -44,8 +44,10 @@ const DashboardRender = function() {
             <Dice />
           </div>
         }
-        { this.isSectionActive('edex') &&
-          <EDEX />
+        { this.isSectionActive('exchanges') &&
+          <div>
+            <Exchanges />
+          </div>
         }
         { this.isSectionActive('jumblr') &&
           <Jumblr  />
