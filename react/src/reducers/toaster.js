@@ -2,6 +2,7 @@ import {
   ADD_TOASTER_MESSAGE,
   REMOVE_TOASTER_MESSAGE,
 } from '../actions/storeType';
+import config from '../config';
 import notify from 'electron-native-notify';
 
 const arrayToString = (arr) => {
@@ -19,7 +20,7 @@ export const toaster = (state = {
 
   switch (action.type) {
     case ADD_TOASTER_MESSAGE:
-      if(notify.isSupported()) {
+      if(config.notifications && notify.isSupported()) {
 	notify(action.title, action.message.join ? action.message.join('\n') : action.message);
         return state;
       }
