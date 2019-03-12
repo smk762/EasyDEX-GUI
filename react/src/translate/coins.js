@@ -10,6 +10,7 @@ const coins = {
     EQL: 'Equaliser',
     CRYPTO: 'CRYPTO',
     HODL: 'HODL',
+    ILN: 'ILN',
     DEX: 'DEX',
     JUMBLR: 'JUMBLR',
     KV: 'KV',
