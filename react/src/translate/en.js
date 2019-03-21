@@ -1301,9 +1301,6 @@ const LANG_EN = {
     TRY: 'Turkish Lira (TRY)',
     USD: 'US Dollar (USD)',
   },
-  DICE: {
-    DICE: 'Dice',
-  },
 };
 
 export default Object.assign(LANG_EN, coins);

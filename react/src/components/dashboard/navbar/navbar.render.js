@@ -85,20 +85,6 @@ const NavbarRender = function() {
               </li>
             }
             { Config.experimentalFeatures &&
-              (Config.dev || staticVar.argv.indexOf('devmode') > -1) &&
-              _activeCoin &&
-              _activeCoin.mode === 'native' &&
-              <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
-                <a onClick={ () => this.dashboardChangeSection('dice') }>
-                  <img
-                    src="assets/images/dice.png"
-                    width="50"
-                    title={ translate('DICE.DICE') } />
-                  { translate('DICE.DICE') }
-                </a>
-              </li>
-            }
-            { Config.experimentalFeatures &&
               (Config.dev || staticVar.argv.indexOf('exchanges') > -1) &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('exchanges') }>
