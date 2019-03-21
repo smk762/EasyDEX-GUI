@@ -247,10 +247,6 @@ const LoginRender = function() {
                           label: 'pirate',
                         },
                         {
-                          value: 'mnz',
-                          label: 'mnz',
-                        },
-                        {
                           value: 'btch',
                           label: 'btch',
                         },
@@ -311,10 +307,6 @@ const LoginRender = function() {
                       {
                         value: 'btch',
                         label: 'btch',
-                      },
-                      {
-                        value: 'mnz',
-                        label: 'mnz',
                       },
                       {
                         value: 'revs',
