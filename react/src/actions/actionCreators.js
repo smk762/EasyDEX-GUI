@@ -54,7 +54,6 @@ export * from './actions/interest';
 export * from './actions/nativeDashboardUpdate';
 export * from './actions/getTxDetails';
 export * from './actions/electrum';
-export * from './actions/mm';
 export * from './actions/nativeNetwork';
 export * from './actions/tools';
 export * from './actions/prices';

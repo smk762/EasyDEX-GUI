@@ -39,9 +39,6 @@ class About extends React.Component {
           <div className="padding-top-20">{ translate('ABOUT.AGAMA_DAPPS') }</div>
           <ul>
             <li>
-              <span className="font-weight-600">Jumblr</span>: { translate('ABOUT.JUMBLR_DESC') }
-            </li>
-            <li>
               <span className="font-weight-600">BarterDEX</span>: { translate('ABOUT.BARTER_DEX_DESC_ALT') }
             </li>
           </ul>

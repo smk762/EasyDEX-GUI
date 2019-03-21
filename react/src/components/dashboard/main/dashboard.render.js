@@ -6,7 +6,6 @@ import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
 import WalletsData from '../walletsData/walletsData';
-import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
@@ -42,9 +41,6 @@ const DashboardRender = function() {
           <div>
             <Exchanges />
           </div>
-        }
-        { this.isSectionActive('jumblr') &&
-          <Jumblr  />
         }
         { this.isSectionActive('settings') &&
           <Settings disableWalletSpecificUI={ false } />

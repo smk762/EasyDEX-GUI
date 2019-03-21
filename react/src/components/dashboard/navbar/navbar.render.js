@@ -40,24 +40,6 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
             </li>
-            <li className={
-              (this.isSectionActive('dex') ? 'active nav-top-menu' : 'nav-top-menu') +
-              (staticVar.argv.indexOf('dexonly') > -1 ? '' : ' hide')
-            }>
-              <a onClick={ () => this.dashboardChangeSection('dex') }>
-                <i className="site-menu-icon"></i> BarterDEX
-              </a>
-            </li>
-            { _activeCoin &&
-              (/*this._checkAC() || */
-              _activeCoin.coin === 'KMD' &&
-              _activeCoin.mode === 'native') &&
-              <li className={ 'nav-top-menu' + (this.isSectionActive('jumblr') ? ' active' : '') }>
-                <a onClick={ () => this.dashboardChangeSection('jumblr') }>
-                  <i className="site-menu-icon"></i> Jumblr
-                </a>
-              </li>
-            }
             { _activeCoin.mode === 'native' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
