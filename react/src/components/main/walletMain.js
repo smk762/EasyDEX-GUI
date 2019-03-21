@@ -4,7 +4,6 @@ import Toaster from '../toaster/toaster';
 import AddCoin from '../addcoin/addcoin';
 import Login from '../login/login';
 import Dashboard from '../dashboard/main/dashboard';
-import DexMain from '../dex/dexMain';
 import NotaryElectionsModal from '../dashboard/notaryElectionsModal/notaryElectionsModal';
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import Store from '../../store';
@@ -56,29 +55,18 @@ class WalletMain extends React.Component {
   }
 
   render() {
-    if (staticVar.argv.indexOf('dexonly') > -1) { // deprecated
-      return (
-        <div className="full-height">
-          <input
-            type="text"
-            id="js-copytextarea" />
-          <DexMain />
-        </div>
-      );
-    } else {
-      return (
-        <div className="full-height">
-          <input
-            type="text"
-            id="js-copytextarea" />
-          <Dashboard />
-          <AddCoin />
-          <Login />
-          <NotaryElectionsModal />
-          <Toaster { ...this.props.toaster } />
-        </div>
-      );
-    }
+    return (
+      <div className="full-height">
+        <input
+          type="text"
+          id="js-copytextarea" />
+        <Dashboard />
+        <AddCoin />
+        <Login />
+        <NotaryElectionsModal />
+        <Toaster { ...this.props.toaster } />
+      </div>
+    );
   }
 }
 
