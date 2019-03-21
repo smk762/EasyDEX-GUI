@@ -1,4 +1,21 @@
 const changeLogData = [{
+  version: '0.3.5',
+  changes: [
+    'Removed MNZ asset chain',
+    'Added KSB, OUR, ILN asset chains',
+    'Removed ERC20 tokens: AION, BTM, CMT, EOS, ICX, NAS, NET, NULS, TUSD, VEN',
+    'Added ERC20 tokens: JST, DEC8, TRET, TILE, OVAL, KEA, CLF',
+    'ERC20 contract ID changed: SUB, QBUIT, MLN',
+    'Native notifications settings option (thanks to sawlysawly)',
+    'Jumbler section removed (deprecated)',
+  ],
+}, {
+  version: '0.3.4',
+  changes: [
+    'Source code optimization',
+    'Minor improvements and fixes',
+  ],
+}, {
   version: '0.3.3',
   changes: [
     'Latest Komodo binary 0.3.3b from beta branch',
