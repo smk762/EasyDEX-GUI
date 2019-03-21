@@ -16,7 +16,6 @@ const coins = {
     KV: 'KV',
     MGW: 'MultiGateway',
     MVP: 'MVP Lineup',
-    MNZ: 'Monaize',
     PANGEA: 'PANGEA',
     PGT: 'Pungo',
     REVS: 'REVS',
@@ -352,8 +351,6 @@ const coins = {
     FYN: 'FundYourselfNow',
     EOS: 'EOS',
     ZIL: 'Zilliqa',
-    OCALL: 'Old Capital',
-    CALLG: 'Capital GAS',
   },
 };
 
