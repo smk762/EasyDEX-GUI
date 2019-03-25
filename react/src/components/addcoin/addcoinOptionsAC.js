@@ -14,8 +14,9 @@ const _disabledAC = {
     'ceal',
     'dsec',
     'pirate',
-    'koin',
     'zex',
+    'rick',
+    'morty',
   ],
   native: [
     'vrsc',
