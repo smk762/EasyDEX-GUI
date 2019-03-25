@@ -49,6 +49,8 @@ const coins = {
     LUMBER: 'Lumberscout',
     KSB: 'KSB',
     OUR: 'ØUR',
+    RICK: 'Rick',
+    MORTY: 'Morty',
   },
   CRYPTO: {
     STRAT: 'Stratis',
