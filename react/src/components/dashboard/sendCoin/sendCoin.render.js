@@ -88,7 +88,7 @@ export const AddressListRender = function() {
              ((_mode === 'native' && _coin === 'KMD') || (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate))) &&
             this.renderAddressByType('public')
           }
-          { this.renderAddressByType('private') }
+          { _coin !== 'KMD' && this.renderAddressByType('private') }
         </ul>
       </div>
     </div>
@@ -181,7 +181,7 @@ export const _SendFormRender = function() {
               value={ this.state.sendTo }
               disabled={ this.props.initState }
               id="kmdWalletSendTo"
-              placeholder={ translate('SEND.' + (_mode === 'spv' || _mode === 'eth' ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
+              placeholder={ translate('SEND.' + (_mode === 'spv' || _mode === 'eth' || (_mode === 'native' && _coin === 'KMD') ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>
@@ -303,6 +303,13 @@ export const _SendFormRender = function() {
             <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
               <i className="icon fa-warning color-warning margin-right-5"></i>&nbsp;
               <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
+            </div>
+          }
+          { _mode === 'native' &&
+            _coin === 'KMD' &&
+            <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
+              <i className="icon fa-warning color-warning margin-right-5"></i>&nbsp;
+              <span className="desc">{ translate('SEND.KMD_Z_ADDRESSES_DEPRECATED') }</span>
             </div>
           }
           <div className="col-lg-12">

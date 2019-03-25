@@ -47,6 +47,7 @@ const LANG_EN = {
     IMPORT_MULTI_KEYS: 'Import multiple keys',
     IMPORT_MULTI_KEYS_DESC: 'Use this toggle if you want to import several keys at once',
     KEYS_SEPARATED_BY_LINE: 'Keys, separated by a new line',
+    KMD_Z_KEY_DEPRECATED: 'KMD Z keys are not supported at the moment',
   },
   CLAIM_INTEREST: {
     ACTUAL_LOCKTIME_SEC: 'Actual time passed since locktime ',
@@ -1120,6 +1121,9 @@ const LANG_EN = {
     QR_COIN_MISMATCH_TITLE: 'Coin Mismatch',
     SEND_NATIVE_SYNC_WARNING: 'Your wallet is not fully synced! Please wait until it reached 100% to avoid possible transaction send implications.',
     WARNING_FEE_EXCEEDS_DEFAULT_THRESHOLD: 'Provided fee exceeds default fee @template@ times!',
+    KMD_Z_ADDRESSES_DEPRECATED: 'KMD Z addresses are not supported at the moment',
+    KMD_Z_ADDRESSES_DEPRECATED_NOTICE: 'Private transaction are being disabled as of 15th February 2019 on KMD chain permanently.',
+    SPROUT_DEPRECATION_NOTICE: 'Sprout transactions are being disabled on 15th February 2019. If you keep your funds in a zc address, it will be locked there. Please use Sapling zs address.',
   },
   FIAT_CURRENCIES: {
     AUD: 'Australian Dollar',

@@ -1118,14 +1118,14 @@ class SendCoin extends React.Component {
     // temp
     if (_mode === 'native') {
       if (_coin === 'KMD') { // reject t -> z
-        if ((!this.state.sendFrom || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) !== 'zc' && this.state.sendFrom.substring(0, 2) !== 'zs' && this.state.sendFrom.length <= 78)) &&
-            this.state.sendTo &&
-            ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78))) {
+        if ((this.state.sendFrom && ((this.state.sendFrom.substring(0, 2) === 'zc' && this.state.sendFrom.length === 95) || (this.state.sendFrom.substring(0, 2) === 'zs' && this.state.sendFrom.length === 78))) ||
+            (this.state.sendTo && ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78)))) {
           Store.dispatch(
             triggerToaster(
-              'Private transaction are being disabled on 15th February 2019 on KMD chain permanently and will become a public chain where only transparent transactions are possible. Please don\'t send them to private address which can lead to KMD being locked after the deadline 15th February 2019.',
+              translate('SEND.KMD_Z_ADDRESSES_DEPRECATED_NOTICE'),
               translate('TOASTR.WALLET_NOTIFICATION'),
-              'warning toastr-wide'
+              'warning toastr-wide',
+              false
             )
           );
           valid = false;
@@ -1136,9 +1136,10 @@ class SendCoin extends React.Component {
             this.state.sendTo.length === 95) {
           Store.dispatch(
             triggerToaster(
-              'Sprout transactions are being disabled on 15th February 2019. If you keep your funds in a zc address, it will be locked there. Please use Sapling zs address.',
+              translate('SEND.SPROUT_DEPRECATION_NOTICE'),
               translate('TOASTR.WALLET_NOTIFICATION'),
-              'warning toastr-wide'
+              'warning toastr-wide',
+              false
             )
           );
           valid = false;
@@ -1551,8 +1552,8 @@ class SendCoin extends React.Component {
     if (_addressBook &&
         _addressBook.length) {
       for (let i = 0; i < _addressBook.length; i++) {
-        if (_mode === 'native' ||
-            (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.substring(0, 2) !== 'zs' && _addressBook[i].pub.length === 64)) {
+        if ((_mode === 'native' && _coin !== 'KMD') ||
+            ((_mode === 'spv' || (_mode === 'native' && _coin === 'KMD')) && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.substring(0, 2) !== 'zs' && _addressBook[i].pub.length === 64)) {
           _items.push(
             <li
               key={ `send-address-book-item-${i}` }
