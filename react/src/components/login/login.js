@@ -657,6 +657,13 @@ class Login extends React.Component {
                       this.setState({
                         selectedPin: res.result,
                         activeLoginSection: 'login',
+                        randomSeed: null,
+                        loginPassphrase: '',
+                        randomSeedConfirm: '',
+                        customWalletSeed: false,
+                        encryptKey: '',
+                        encryptKeyConfirm: '',
+                        decryptKey: '',
                       });
                     }, 500);
                   } else {
@@ -688,6 +695,13 @@ class Login extends React.Component {
                     this.setState({
                       selectedPin: res.result,
                       activeLoginSection: 'login',
+                      randomSeed: null,
+                      loginPassphrase: '',
+                      randomSeedConfirm: '',
+                      customWalletSeed: false,
+                      encryptKey: '',
+                      encryptKeyConfirm: '',
+                      decryptKey: '',
                     });
                   }, 500);
                 } else {
