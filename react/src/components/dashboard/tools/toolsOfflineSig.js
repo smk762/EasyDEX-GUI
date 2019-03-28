@@ -5,6 +5,7 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
+  copyString,
   apiToolsBalance,
   apiToolsBuildUnsigned,
   apiToolsPushTx,
@@ -37,6 +38,11 @@ class ToolsOfflineSig extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.signTx = this.signTx.bind(this);
+    this.copyTx = this.copyTx.bind(this);
+  }
+
+  copyTx() {
+    Store.dispatch(copyString(this.state.txSigResult, 'Raw transaction is copied to clipboard'));
   }
 
   signTx(sign) {
@@ -213,8 +219,16 @@ class ToolsOfflineSig extends React.Component {
         </div>
         { this.state.txSigResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
-            Signed transaction:
-            <div className="word-break--all selectable">{ this.state.txSigResult }</div>
+            <strong>Signed transaction:</strong>
+            <div className="word-break--all selectable">
+              { this.state.txSigResult }
+              <button
+                className="btn btn-default btn-xs clipboard-edexaddr margin-left-20"
+                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                onClick={ this.copyTx }>
+                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+              </button>
+            </div>
           </div>
         }
       </div>

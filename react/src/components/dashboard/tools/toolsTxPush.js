@@ -5,6 +5,7 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
+  copyString,
   apiToolsBalance,
   apiToolsBuildUnsigned,
   apiToolsPushTx,
@@ -37,6 +38,11 @@ class ToolsTxPush extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.sendTx = this.sendTx.bind(this);
+    this.copyTx = this.copyTx.bind(this);
+  }
+
+  copyTx() {
+    Store.dispatch(copyString(this.state.txSigResult, 'Transaction ID is copied to clipboard'));
   }
 
   sendTx() {
@@ -135,7 +141,16 @@ class ToolsTxPush extends React.Component {
                   { this.state.selectedCoin.split('|')[0].toUpperCase() } { translate('TOOLS.TX_PUSHED') }!
                 </div>
                 <div>
-                  TXID: <div className="blur selectable word-break--all">{ this.state.txPushResult }</div>
+                  TXID:
+                  <div className="blur selectable word-break--all margin-left-5">
+                    { this.state.txPushResult }
+                    <button
+                      className="btn btn-default btn-xs clipboard-edexaddr margin-left-20"
+                      title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                      onClick={ this.copyTx }>
+                      <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                    </button>
+                  </div>
                   <div className="margin-top-10">
                     <button
                       type="button"
