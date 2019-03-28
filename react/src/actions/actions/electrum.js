@@ -16,7 +16,6 @@ import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
-import { setTimeout } from 'timers';
 
 // TODO: dev display errors
 
@@ -83,13 +82,14 @@ export const apiGetLocalBTCFees = () => {
   });
 }
 
-export const apiElectrumSetServer = (coin, address, port) => {
+export const apiElectrumSetServer = (coin, address, port, proto) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token,
       coin,
       address,
       port,
+      proto,
     };
     fetch(
       `http://127.0.0.1:${agamaPort}/api/electrum/coins/server/set${urlParams(_urlParams)}`,
