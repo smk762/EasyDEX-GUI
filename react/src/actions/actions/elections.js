@@ -21,7 +21,7 @@ export const apiElectionsBalance = (coin, address) => {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           translate('API.apiElectionsBalance') + ' (code: apiElectionsBalance)',
           translate('TOASTR.ERROR'),
@@ -52,7 +52,7 @@ export const apiElectionsTransactions = (coin, address, type) => {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           translate('API.apiElectionsTransactions') + ' (code: apiElectionsTransactions)',
           translate('TOASTR.ERROR'),
