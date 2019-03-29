@@ -21,6 +21,9 @@
 }
 
 @media only screen and (max-width : 767px) {
+  .navbar-toolbar .open .dropdown-menu {
+    left: inherit;
+  }
   .navbar-brand-logo.hidden-lg {
     display: inherit !important;
   }
