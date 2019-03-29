@@ -544,13 +544,13 @@ class NotaryElectionsModal extends React.Component {
                   onClick={ this.closeModal }>
                   <span>×</span>
                 </button>
-                <h4 className="modal-title white text-left">{ translate('NN_ELECTIONS.NN_ELECTIONS_2018') }</h4>
+                <h4 className="modal-title white text-left">{ `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }</h4>
               </div>
               <div className="modal-body modal-body-container">
                 <div className="modal-resizable">
                   <div className="elections-title-bar padding-top-10 padding-bottom-10">
                     <img src="assets/images/native/kmd_header_title_logo.png" />
-                    <div className="elections-title">{ translate('NN_ELECTIONS.NN_ELECTIONS_2018') }</div>
+                    <div className="elections-title">{ `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }</div>
                   </div>
                   { this.state.isAuth &&
                     <button
@@ -652,7 +652,7 @@ class NotaryElectionsModal extends React.Component {
                   }
                   { this.state.isAuth &&
                     <div className={ 'elections-balance' + (this.state.userType === 'candidate' ? ' margin-top-25' : '') }>
-                      { translate('INDEX.YOU_HAVE') } <strong>{ this.state.balance }</strong> VOTE
+                      { translate('NN_ELECTIONS.YOU_HAVE') } <strong>{ this.state.balance }</strong> VOTE
                     </div>
                   }
                   { this.state.isAuth &&
@@ -661,11 +661,11 @@ class NotaryElectionsModal extends React.Component {
                     <div className={ 'elections-user-type' + (this.state.voteType === 'single' ? ' margin-bottom-30' : '') }>
                       <a
                         className={ this.state.voteType === 'multi' ? 'active' : '' }
-                        onClick={ () => this.setVoteType('multi') }><i className="fa fa-users margin-right-10"></i>{ translate('INDEX.4WAY_VOTE') }</a>
+                        onClick={ () => this.setVoteType('multi') }><i className="fa fa-users margin-right-10"></i>{ translate('NN_ELECTIONS.4WAY_VOTE') }</a>
                       <span className="margin-left-30 margin-right-30">|</span>
                       <a
                         className={ this.state.voteType === 'single' ? 'active' : '' }
-                        onClick={ () => this.setVoteType('single') }><i className="fa fa-user margin-right-10"></i>{ translate('INDEX.1WAY_VOTE') }</a>
+                        onClick={ () => this.setVoteType('single') }><i className="fa fa-user margin-right-10"></i>{ translate('NN_ELECTIONS.1WAY_VOTE') }</a>
                     </div>
                   }
                   { this.state.isAuth &&
@@ -679,7 +679,7 @@ class NotaryElectionsModal extends React.Component {
                         name="address"
                         value={ this.state.address !== 0 ? this.state.address : '' }
                         onChange={ this.updateInput }
-                        placeholder={ translate('INDEX.ENTER_AN_ADDR') }
+                        placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR') }
                         autoComplete="off" />
                       <input
                         type="text"
@@ -687,7 +687,7 @@ class NotaryElectionsModal extends React.Component {
                         name="amount"
                         value={ this.state.amount !== 0 ? this.state.amount : '' }
                         onChange={ this.updateInput }
-                        placeholder={ translate('INDEX.ENTER_AN_AMOUNT') }
+                        placeholder={ translate('NN_ELECTIONS.ENTER_AN_AMOUNT') }
                         autoComplete="off" />
                       <button
                         onClick={ this.send }
@@ -697,7 +697,7 @@ class NotaryElectionsModal extends React.Component {
                           !this.state.address.length
                         }
                         className="btn btn-md btn-primary btn-block ladda-button elections-login-btn">
-                        { translate('INDEX.VOTE') }
+                        { translate('NN_ELECTIONS.VOTE') }
                       </button>
                     </div>
                   }
@@ -706,7 +706,7 @@ class NotaryElectionsModal extends React.Component {
                     this.state.voteType === 'multi' &&
                     this.state.balance > 0 &&
                     <div className="elections-send margin-top-50">
-                      <div className="margin-bottom-30">{ translate('INDEX.25_PERC_SPLIT') }</div>
+                      <div className="margin-bottom-30">{ translate('NN_ELECTIONS.25_PERC_SPLIT') }</div>
                       <div>
                         <label>NA</label>
                         <input
@@ -715,7 +715,7 @@ class NotaryElectionsModal extends React.Component {
                           name="multiOutAddress1"
                           value={ this.state.multiOutAddress1 !== 0 ? this.state.multiOutAddress1 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_NA') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_NA') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
@@ -727,7 +727,7 @@ class NotaryElectionsModal extends React.Component {
                           name="multiOutAddress2"
                           value={ this.state.multiOutAddress2 !== 0 ? this.state.multiOutAddress2 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_EU') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_EU') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
@@ -739,7 +739,7 @@ class NotaryElectionsModal extends React.Component {
                           name="multiOutAddress3"
                           value={ this.state.multiOutAddress3 !== 0 ? this.state.multiOutAddress3 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_AE') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_AE') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
@@ -751,7 +751,7 @@ class NotaryElectionsModal extends React.Component {
                           name="multiOutAddress4"
                           value={ this.state.multiOutAddress4 !== 0 ? this.state.multiOutAddress4 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_SH') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_SH') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
@@ -759,14 +759,14 @@ class NotaryElectionsModal extends React.Component {
                         onClick={ this.sendMulti }
                         disabled={ !this.verifyMultiSendForm() }
                         className="btn btn-md btn-primary btn-block ladda-button elections-login-btn margin-top-20">
-                        { translate('INDEX.VOTE') }
+                        { translate('NN_ELECTIONS.VOTE') }
                       </button>
                     </div>
                   }
                   { this.displayTxHistoryRender() &&
                     <div>
                       <div className={ 'elections-history'  + (this.state.userType === 'voter' ? ' margin-top-20' : '') }>
-                      { translate('INDEX.HISTORY') }
+                      { translate('NN_ELECTIONS.HISTORY') }
                       </div>
                       { this.renderHistory() }
                     </div>
