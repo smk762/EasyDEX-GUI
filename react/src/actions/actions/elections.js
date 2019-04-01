@@ -158,7 +158,7 @@ export const apiElectionsSend = (coin, value, sendToAddress, changeAddress, opre
     const _urlParams = {
       token,
       coin,
-      address,
+      address: sendToAddress,
       value,
       opreturn,
       change: changeAddress,

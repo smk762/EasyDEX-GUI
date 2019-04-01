@@ -21,8 +21,9 @@ import { secondsToString } from 'agama-wallet-lib/src/time';
 import {
   isPositiveNumber,
   toSats,
+  sort,
 } from 'agama-wallet-lib/src/utils';
-import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const SEED_TRIM_TIMEOUT = 5000;
@@ -120,6 +121,17 @@ class NotaryElectionsModal extends React.Component {
       valid = false;
     }
 
+    if (this.state.address === this.state.pub) {
+      Store.dispatch(
+        triggerToaster(
+          translate('NN_ELECTIONS.SEND_TO_SELF_NOT_ALLOWED'),
+          translate('TOASTR.WALLET_NOTIFICATION'),
+          'error'
+        )
+      );
+      valid = false;
+    }
+
     return valid;
   }
 
@@ -128,7 +140,7 @@ class NotaryElectionsModal extends React.Component {
     let _addressValidateMsg = [];
 
     for (let i = 0; i < 4; i++) {
-      const _validateAddress = pubkeyToAddress(this.state[`multiOutAddress${i + 1}`], networks.kmd);
+      const _validateAddress = addressVersionCheck(networks.kmd, this.state[`multiOutAddress${i + 1}`],);
 
       if (!_validateAddress ||
           _validateAddress === 'Invalid pub address') {
@@ -146,81 +158,96 @@ class NotaryElectionsModal extends React.Component {
         )
       );
     } else {
-      apiElectionsSendMany(
-        this.state.coin,
-        [{
-          address: this.state.multiOutAddress1,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }, {
-          address: this.state.multiOutAddress2,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }, {
-          address: this.state.multiOutAddress3,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }, {
-          address: this.state.multiOutAddress4,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }],
-        this.state.pub,
-        [`ne2k1${new Date().getFullYear()[3]}-na-1-eu-2-ar-3-sh-4`]
-      )
-      .then((res) => {
-        if (res.msg === 'success') {
-          Store.dispatch(
-            triggerToaster(
-              translate('NN_ELECTIONS.YOU_SUCCESFULLY_VOTED'),
-              `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
-              'success',
-              false
-            )
-          );
-          const _timestamp = Math.floor(Date.now() / 1000);
-          let _transactions = this.state.transactions;
-          _transactions.unshift({
+      if (this.state.multiOutAddress1 !== this.state.multiOutAddress2 &&
+          this.state.multiOutAddress1 !== this.state.multiOutAddress3 &&
+          this.state.multiOutAddress1 !== this.state.multiOutAddress4 &&
+          this.state.multiOutAddress1 !== this.state.pub &&
+          this.state.multiOutAddress2 !== this.state.pub &&
+          this.state.multiOutAddress3 !== this.state.pub &&
+          this.state.multiOutAddress4 !== this.state.pub) {
+        apiElectionsSendMany(
+          this.state.coin,
+          [{
             address: this.state.multiOutAddress1,
-            amount: this.state.balance / _divisor,
-            region: `ne2k1${new Date().getFullYear()[3]}-na`,
-            timestamp: _timestamp,
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
           }, {
             address: this.state.multiOutAddress2,
-            amount: this.state.balance / _divisor,
-            region: `ne2k1${new Date().getFullYear()[3]}-eu`,
-            timestamp: _timestamp,
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
           }, {
             address: this.state.multiOutAddress3,
-            amount: this.state.balance / _divisor,
-            region: `ne2k1${new Date().getFullYear()[3]}-ar`,
-            timestamp: _timestamp,
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
           }, {
             address: this.state.multiOutAddress4,
-            amount: this.state.balance / _divisor,
-            region: `ne2k1${new Date().getFullYear()[3]}-sh`,
-            timestamp: _timestamp,
-          });
-          this.setState({
-            transactions: _transactions,
-            balance: 0,
-          });
-        } else {
-          Store.dispatch(
-            triggerToaster(
-              res.result.txid || res.result,
-              `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
-              'error'
-            )
-          );
-        }
-      });
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
+          }],
+          this.state.pub,
+          [`ne2k1${new Date().getFullYear().toString().substr(-1)}-na-1-eu-2-ar-3-sh-4`]
+        )
+        .then((res) => {
+          if (res.msg === 'success') {
+            Store.dispatch(
+              triggerToaster(
+                translate('NN_ELECTIONS.YOU_SUCCESFULLY_VOTED'),
+                `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
+                'success',
+                false
+              )
+            );
+            const _timestamp = Math.floor(Date.now() / 1000);
+            let _transactions = this.state.transactions;
+            _transactions.unshift({
+              address: this.state.multiOutAddress1,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-na`,
+              timestamp: _timestamp,
+            }, {
+              address: this.state.multiOutAddress2,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-eu`,
+              timestamp: _timestamp,
+            }, {
+              address: this.state.multiOutAddress3,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-ar`,
+              timestamp: _timestamp,
+            }, {
+              address: this.state.multiOutAddress4,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-sh`,
+              timestamp: _timestamp,
+            });
+            this.setState({
+              transactions: _transactions,
+              balance: 0,
+            });
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                res.result.txid || res.result,
+                `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
+                'error'
+              )
+            );
+          }
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            translate('NN_ELECTIONS.NOT_UNIQUE_ADDRESSES'),
+            `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
+            'error',
+            false
+          )
+        );
+      }
     }
   }
 
   send() {
-    const _validateAddress = pubkeyToAddress(this.state.address, networks.kmd);
-    let _addressValidateMsg = [];
+    const _validateAddress = addressVersionCheck(networks.kmd, this.state.address);
 
     if (!_validateAddress ||
         _validateAddress === 'Invalid pub address') {
-      _addressValidateMsg.push(this.state[`multiOutAddress${i + 1}`]);
       Store.dispatch(
         triggerToaster(
           `${translate('NN_ELECTIONS.ADDRESS')} ${this.state.address} ${translate('NN_ELECTIONS.IS_INVALID')}`,
@@ -236,7 +263,7 @@ class NotaryElectionsModal extends React.Component {
           toSats(this.state.amount) - 10000,
           this.state.address,
           this.state.pub,
-          `ne2k1${new Date().getFullYear()[3]}-${this.state.region}`,
+          `ne2k1${new Date().getFullYear().toString().substr(-1)}-${this.state.region}`,
         )
         .then((res) => {
           if (res.msg === 'success') {
@@ -252,7 +279,7 @@ class NotaryElectionsModal extends React.Component {
             _transactions.unshift({
               address: this.state.address,
               amount: this.state.amount - 0.0001,
-              region: `ne2k1${new Date().getFullYear()[3]}-${this.state.region}`,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-${this.state.region}`,
               timestamp: Math.floor(Date.now() / 1000),
             });
             this.setState({
@@ -292,6 +319,11 @@ class NotaryElectionsModal extends React.Component {
           this.state.userType
         )
         .then((res) => {
+          if (res.result &&
+              res.result.length) {
+            res.result = sort(res.result, 'timestamp', true);
+          }
+
           this.setState({
             transactions: res.result,
           });
@@ -468,16 +500,16 @@ class NotaryElectionsModal extends React.Component {
     let _region;
 
     switch (region) {
-      case `ne2k1${new Date().getFullYear()[3]}-sh`:
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-sh`:
         _region = 'SH';
         break;
-      case `ne2k1${new Date().getFullYear()[3]}-na`:
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-na`:
         _region = 'NA';
         break;
-      case `ne2k1${new Date().getFullYear()[3]}-ar`:
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-ar`:
         _region = 'AR';
         break;
-      case `ne2k1${new Date().getFullYear()[3]}-eu`:
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-eu`:
         _region = 'EU';
         break;
     }
@@ -515,7 +547,7 @@ class NotaryElectionsModal extends React.Component {
         </tbody>
         <tfoot>
           <tr>
-            <th>{ translate('INDEX.' + (this.state.userType === 'voter' ? 'TO' : 'FROM')) }</th>
+            <th>{ translate('NN_ELECTIONS.' + (this.state.userType === 'voter' ? 'TO' : 'FROM')) }</th>
             <th>{ translate('INDEX.AMOUNT') }</th>
             <th>{ translate('NN_ELECTIONS.TIME') }</th>
             <th>{ translate('NN_ELECTIONS.REGION') }</th>
