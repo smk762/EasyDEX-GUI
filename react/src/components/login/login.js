@@ -35,6 +35,7 @@ import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import nnConfig from '../nnConfig';
 
 const SEED_TRIM_TIMEOUT = 5000;
 
@@ -134,6 +135,7 @@ class Login extends React.Component {
         for (let i = 0; i < _spvCoins.length; i++) {
           Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
         }
+
         if (!this.props.Main.coins.native.length) {
           Store.dispatch(dashboardChangeActiveCoin(
             null,
@@ -370,10 +372,9 @@ class Login extends React.Component {
   }
 
   updateLoginPassPhraseInput(e) {
-    const newValue = e.target.value;
-
     clearTimeout(this.state.trimPassphraseTimer);
-
+    
+    const newValue = e.target.value;
     const _trimPassphraseTimer = setTimeout(() => {
       if (newValue[0] === ' ' ||
           newValue[newValue.length - 1] === ' ') {
@@ -781,6 +782,7 @@ class Login extends React.Component {
           }
         });
       } else {
+        console.log(mainWindow);
         mainWindow.startKMDNative(e.value.toUpperCase());
         this.setState({
           selectedShortcutNative: '',
