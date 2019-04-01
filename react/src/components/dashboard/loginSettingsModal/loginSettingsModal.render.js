@@ -4,6 +4,7 @@ import About from '../about/about';
 import Settings from '../settings/settings';
 import Tools from '../tools/tools';
 import ChangeLog from '../changeLog/changeLog';
+import NotaryElectionsModal from '../notaryElectionsModal/notaryElectionsModal';
 
 export const LoginSettingsModalRender = function() {
   return (

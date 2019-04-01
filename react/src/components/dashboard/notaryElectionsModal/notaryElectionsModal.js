@@ -215,7 +215,8 @@ class NotaryElectionsModal extends React.Component {
   }
 
   send() {
-    const _validateAddress = pubkeyToAddress(networks.kmd, this.state.address);
+    const _validateAddress = pubkeyToAddress(this.state.address, networks.kmd);
+    let _addressValidateMsg = [];
 
     if (!_validateAddress ||
         _validateAddress === 'Invalid pub address') {

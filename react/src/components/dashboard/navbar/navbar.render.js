@@ -59,18 +59,18 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
-            { mainWindow.nnVoteChain &&
-              <li className="nav-top-menu">
-                <a onClick={ this._toggleNotaryElectionsModal }>
-                  <i className="site-menu-icon"></i> { translate('NN_ELECTIONS.NN_ELECTIONS_2018') }
-                </a>
-              </li>
-            }
             { Config.experimentalFeatures &&
               (Config.dev || staticVar.argv.indexOf('exchanges') > -1) &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('exchanges') }>
-                  <i className="site-menu-icon"></i> Exchanges
+                  <i className="site-menu-icon"></i> { translate('EXCHANGES.EXCHANGES') }
+                </a>
+              </li>
+            }
+            { mainWindow.nnVoteChain &&
+              <li className="nav-top-menu">
+                <a onClick={ this._toggleNotaryElectionsModal }>
+                  <i className="site-menu-icon"></i> { `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }
                 </a>
               </li>
             }

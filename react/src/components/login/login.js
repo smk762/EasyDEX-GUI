@@ -169,12 +169,16 @@ class Login extends React.Component {
   }
 
   toggleLoginSettingsDropdownSection(sectionName) {
-    Store.dispatch(toggleLoginSettingsModal(true));
+    if (sectionName === 'elections') {
+      this._toggleNotaryElectionsModal();
+    } else {
+      Store.dispatch(toggleLoginSettingsModal(true));
 
-    this.setState({
-      displayLoginSettingsDropdown: false,
-      displayLoginSettingsDropdownSection: sectionName,
-    });
+      this.setState({
+        displayLoginSettingsDropdown: false,
+        displayLoginSettingsDropdownSection: sectionName,
+      });
+    }
   }
 
   setRecieverFromScan(receiver) {
@@ -782,7 +786,6 @@ class Login extends React.Component {
           }
         });
       } else {
-        console.log(mainWindow);
         mainWindow.startKMDNative(e.value.toUpperCase());
         this.setState({
           selectedShortcutNative: '',
