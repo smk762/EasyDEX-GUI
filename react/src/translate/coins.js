@@ -40,7 +40,7 @@ const coins = {
     VRSC: 'VerusCoin',
     MGNX: 'MagnaX',
     CCL: 'CoinCollect',
-    PIRATE: 'Pirate',
+    PIRATE: 'Pirate (ARRR)',
     KOIN: 'Koinon Coin',
     DION: 'DionPay',
     PTX: 'PatentTX',
