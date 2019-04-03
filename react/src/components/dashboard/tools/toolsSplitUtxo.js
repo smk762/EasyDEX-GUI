@@ -173,6 +173,8 @@ class ToolsSplitUTXO extends React.Component {
     devlog(`largest utxo size ${largestUTXO.amount}`);
     devlog(`change ${Number(largestUTXO.amount - totalOutSize) - 0.0001 + (largestUTXO.interest ? largestUTXO.interest : 0)}`);
 
+    largestUTXO.value = largestUTXO.amountSats;
+    
     const payload = {
       wif,
       network: _coin[0],
@@ -483,7 +485,7 @@ class ToolsSplitUTXO extends React.Component {
         </div>
         { this.state.utxoSplitAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            Pub: <span className="blur selectable">{ this.state.utxoSplitAddress }</span>
+            { translate('TOOLS.PUB_ADDR') }: <span className="blur selectable">{ this.state.utxoSplitAddress }</span>
           </div>
         }
         { this.state.utxoSplitAddress &&
@@ -586,7 +588,7 @@ class ToolsSplitUTXO extends React.Component {
         }
         { this.state.utxoSplitPushResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            TXID: <div className="blur selectable word-break--all">{ this.state.utxoSplitPushResult }</div>
+            { translate('KMD_NATIVE.TXID') }: <div className="blur selectable word-break--all">{ this.state.utxoSplitPushResult }</div>
             { isKomodoCoin(this.state.utxoSplitCoin.split('|')[0]) &&
               <div className="margin-top-10">
                 <button
