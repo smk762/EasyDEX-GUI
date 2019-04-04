@@ -176,7 +176,8 @@ export const apiElectionsSend = (coin, value, sendToAddress, changeAddress, opre
         triggerToaster(
           translate('API.apiElectionsSend') + ' (code: apiElectionsSend)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false,
         )
       );
     })
