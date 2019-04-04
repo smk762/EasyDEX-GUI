@@ -21,6 +21,7 @@ import { secondsToString } from 'agama-wallet-lib/src/time';
 import {
   isPositiveNumber,
   toSats,
+  fromSats,
   sort,
 } from 'agama-wallet-lib/src/utils';
 import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
@@ -69,7 +70,16 @@ class NotaryElectionsModal extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.sendValidate = this.sendValidate.bind(this);
     this.verifyMultiSendForm = this.verifyMultiSendForm.bind(this);
+    this.setSendAmountAll = this.setSendAmountAll.bind(this);
     this.electionsDataInterval = null;
+  }
+
+  setSendAmountAll() {
+    const _amount = Number(fromSats((toSats(this.state.balance) - 10000)));
+    
+    this.setState({
+      amount: Number(_amount) > 0 ? _amount : this.state.amount,
+    });
   }
 
   sendValidate() {
@@ -721,6 +731,12 @@ class NotaryElectionsModal extends React.Component {
                         onChange={ this.updateInput }
                         placeholder={ translate('NN_ELECTIONS.ENTER_AN_AMOUNT') }
                         autoComplete="off" />
+                        <button
+                          type="button"
+                          className="btn btn-default btn-nn-send-all"
+                          onClick={ this.setSendAmountAll }>
+                          { translate('NN_ELECTIONS.ALL') }
+                        </button>
                       <button
                         onClick={ this.send }
                         disabled={
