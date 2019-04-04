@@ -524,7 +524,7 @@ class NotaryElectionsModal extends React.Component {
     for (let i = 0; i < _history.length; i++) {
       _items.push(
         <tr key={ `notary-elections-history-${i}` }>
-          <td>{ _history[i].address }</td>
+          <td className="selectable">{ _history[i].address }</td>
           <td>{ _history[i].amount === 'unknown' ? 'unknown' : Number(_history[i].amount) }</td>
           <td>{ secondsToString(_history[i].timestamp) }</td>
           <td>{ this.renderHistoryRegion(_history[i].region) }</td>
@@ -684,7 +684,7 @@ class NotaryElectionsModal extends React.Component {
                   }
                   { this.state.isAuth &&
                     <div className={ 'elections-balance' + (this.state.userType === 'candidate' ? ' margin-top-25' : '') }>
-                      { translate('NN_ELECTIONS.YOU_HAVE') } <strong>{ this.state.balance }</strong> VOTE
+                      { translate('NN_ELECTIONS.YOU_HAVE') } <strong className="selectable">{ this.state.balance }</strong> VOTE
                     </div>
                   }
                   { this.state.isAuth &&
