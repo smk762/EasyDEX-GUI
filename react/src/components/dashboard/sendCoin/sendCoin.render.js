@@ -759,10 +759,12 @@ export const SendRender = function() {
                       type="button"
                       className="btn btn-primary"
                       disabled={
-                        _mode === 'eth' &&
+                        (_mode === 'eth' &&
                         erc20ContractId[_coin] &&
                         this.state.ethPreflightRes &&
-                        ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))
+                        ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))) ||
+                        this.state.noUtxo ||
+                        (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress))
                       }
                       onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>
                       { translate('INDEX.CONFIRM') }
