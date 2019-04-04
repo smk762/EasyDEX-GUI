@@ -294,7 +294,7 @@ class NotaryElectionsModal extends React.Component {
             });
             this.setState({
               transactions: _transactions,
-              balance: this.state.balance - this.state.amount - 0.0001,
+              balance: this.state.balance - this.state.amount - 0.0001 > 0 ? this.state.balance - this.state.amount - 0.0001 : 0,
             });
           } else {
             Store.dispatch(
@@ -317,9 +317,16 @@ class NotaryElectionsModal extends React.Component {
         apiElectionsBalance(this.state.coin, res.result)
         .then((res) => {
           if (res.msg === 'success') {
-            this.setState({
-              balance: res.result.balance,
-            });
+            if (res.result.hasOwnProperty('balance') &&
+                res.result.hasOwnProperty('unconfirmed')) {
+              this.setState({
+                balance: Number(res.result.balance) + Number(res.result.unconfirmed),
+              });
+            } else {
+              this.setState({
+                balance: res.result.balance,
+              });
+            }
           }
         });
 

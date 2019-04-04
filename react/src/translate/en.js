@@ -206,6 +206,7 @@ const LANG_EN = {
     HISTORY: 'History',
     NOT_UNIQUE_ADDRESSES: 'Addresses cannot repeat or be a self address. Please choose one unique address per region.',
     SEND_TO_SELF_NOT_ALLOWED: 'Send to self is not allowed.',
+    ALL: 'All',
   },
   INDEX: {
     THIS_TX_IS_SECURED_WITH_DPOW: 'This transaction is secured with dPoW',
@@ -1122,7 +1123,7 @@ const LANG_EN = {
     AMOUNT_POSITIVE_NUMBER: 'Amount must be a positive number',
     FEE_POSITIVE_NUMBER: 'Fee must be a positive number',
     TOTAL_AMOUNT_POSITIVE_NUMBER: 'Total amount (amount - fee) must be a positive number',
-    INSUFFICIENT_FUNDS: 'You don\'t have the necessary funds to make this transaction',
+    INSUFFICIENT_FUNDS: 'You don\'t have the necessary funds to make this transaction (or your UTXO unconfirmed)',
     SELECT_SOURCE_ADDRESS: 'Select source (from) address',
     QR_COIN_MISMATCH_MESSAGE_IMPORT_COIN: 'QR code had coin ',
     QR_COIN_MISMATCH_MESSAGE_ACTIVE_COIN: '. You have ',

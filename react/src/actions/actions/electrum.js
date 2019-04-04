@@ -424,7 +424,8 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFe
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSend)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -468,7 +469,8 @@ export const apiElectrumSendPromise = (coin, value, sendToAddress, changeAddress
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSendPromise)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -528,7 +530,8 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSendPreflight)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -619,7 +622,8 @@ export const apiElectrumSplitUtxoPromise = (payload) => {
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSplitUtxoPromise)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -695,7 +699,8 @@ export const apiElectrumSweep = (coin, value, sendToAddress, changeAddress, push
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSweep)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -732,7 +737,8 @@ export const apiElectrumPushTx = (coin, rawtx) => {
         triggerToaster(
           translate('API.apiElectrumPushTx') + ' (code: apiElectrumPushTx)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
