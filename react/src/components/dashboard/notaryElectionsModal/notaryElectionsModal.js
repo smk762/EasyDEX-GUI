@@ -88,10 +88,10 @@ class NotaryElectionsModal extends React.Component {
     const _fee = 0.0001;
     let valid = true;
     
-    if (Number(_amount) + _fee > _balance) {
+    if (_amount > _balance) {
       Store.dispatch(
         triggerToaster(
-          `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(_balance - _fee)} ${this.state.coin}`,
+          `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${_balance} ${this.state.coin}`,
           translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
