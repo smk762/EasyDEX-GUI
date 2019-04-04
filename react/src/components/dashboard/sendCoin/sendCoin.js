@@ -1155,7 +1155,8 @@ class SendCoin extends React.Component {
       let _fees = staticVar.spvFees;
       _fees.BTC = 0;
 
-      if (Number(_amountSats) + (_customFee || _fees[_coin]) > _balanceSats) {
+      if (_balanceSats !== _amountSats &&
+          Number(_amountSats) + (_customFee) > _balanceSats) {
         Store.dispatch(
           triggerToaster(
             `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((fromSats(_balanceSats - (_customFee || _fees[_coin]))).toFixed(8))} ${_coin}`,
