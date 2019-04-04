@@ -1223,10 +1223,10 @@ class SendCoin extends React.Component {
       } else {
         const _fee = formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]);
 
-        if (Number(_amount) + Number(_fee) > _balance) {
+        if (Number(_amount) > _balance) {
           Store.dispatch(
             triggerToaster(
-              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance) - Number(_fee)).toFixed(8))} ${_coin}`,
+              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance)).toFixed(8))} ${_coin}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )

@@ -1123,7 +1123,7 @@ const LANG_EN = {
     AMOUNT_POSITIVE_NUMBER: 'Amount must be a positive number',
     FEE_POSITIVE_NUMBER: 'Fee must be a positive number',
     TOTAL_AMOUNT_POSITIVE_NUMBER: 'Total amount (amount - fee) must be a positive number',
-    INSUFFICIENT_FUNDS: 'You don\'t have the necessary funds to make this transaction (or your UTXO unconfirmed)',
+    INSUFFICIENT_FUNDS: 'You don\'t have the necessary funds to make this transaction',
     SELECT_SOURCE_ADDRESS: 'Select source (from) address',
     QR_COIN_MISMATCH_MESSAGE_IMPORT_COIN: 'QR code had coin ',
     QR_COIN_MISMATCH_MESSAGE_ACTIVE_COIN: '. You have ',

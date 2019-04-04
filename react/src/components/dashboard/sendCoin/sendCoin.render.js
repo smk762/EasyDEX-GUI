@@ -745,7 +745,7 @@ export const SendRender = function() {
                   <div className="row">
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
                       <strong>{ translate('SEND.TOTAL_AMOUNT_DESC') }:</strong>&nbsp;
-                      { Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) > this.props.ActiveCoin.balance.balance ? Number(this.state.amount) - Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) : Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) }&nbsp;
+                      { Number(Number(Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) > this.props.ActiveCoin.balance.balance ? Number(this.state.amount) - Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) : Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)) }&nbsp;
                       { _coin }
                     </div>
                   </div>
