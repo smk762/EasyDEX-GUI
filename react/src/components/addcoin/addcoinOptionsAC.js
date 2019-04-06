@@ -14,7 +14,7 @@ const _disabledAC = {
     'ceal',
     'dsec',
     'pirate',
-    'zex',
+    'mtst3',
   ],
   native: [
     'vrsc',
@@ -96,7 +96,7 @@ const addCoinOptionsAC = (activeCoins) => {
         const _placeholder = translate(`ASSETCHAINS.${_customuc}`);
 
         _items.push({
-          label: _placeholder + (_placeholder.indexOf('(') === -1 && _placeholder !== _customuc ? ' (' + _customuc + ')' : ''),
+          label: _placeholder + (_placeholder.indexOf('(') === -1 && _placeholder !== _customuc ? ` (${_customuc})` : ''),
           icon: `btc/${_customlc}`,
           value: `${_customuc}|${key}`,
         });
