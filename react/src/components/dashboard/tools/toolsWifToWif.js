@@ -15,6 +15,7 @@ import {
   apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import devlog from '../../../util/devlog';
 
 class ToolsWifToWif extends React.Component {
   constructor() {
@@ -34,7 +35,7 @@ class ToolsWifToWif extends React.Component {
 
     apiToolsWifToKP(_coin[0], this.state.w2wWif)
     .then((res) => {
-      // console.warn(res);
+      devlog(res);
 
       if (res.msg === 'success') {
         this.setState({
@@ -135,7 +136,7 @@ class ToolsWifToWif extends React.Component {
               <strong>WIF:</strong> <span className="blur selectable">{ this.state.w2wResult.keys.priv }</span>
             </div>
             <div className="margin-top-10">
-              <strong>Pub:</strong> <span className="blur selectable">{ this.state.w2wResult.keys.pub }</span>
+              <strong>{ translate('TOOLS.PUB_ADDR') }:</strong> <span className="blur selectable">{ this.state.w2wResult.keys.pub }</span>
             </div>
           </div>
         }

@@ -33,10 +33,6 @@ class Tools extends React.Component {
     });
   }
 
-  /*renderButtons() {
-    Offline signing scan
-  }*/
-
   render() {
     return (
       <div className="page margin-left-0">
@@ -55,13 +51,13 @@ class Tools extends React.Component {
                   type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('offlinesig-sign') }>
-                  Sign transaction
+                  { translate('TOOLS.SIGN_MULTISIG_TX') }
                 </button>
                 <button
                   type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('offlinesig-push') }>
-                  Push transaction *
+                  { translate('TOOLS.PUSH_TX') } *
                 </button>
                 {/*<button
                   type="button"
@@ -103,7 +99,7 @@ class Tools extends React.Component {
                   type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('balance-multi') }>
-                  KMD { translate('TOOLS.BALANCE') } (multi address) *
+                  KMD { translate('TOOLS.BALANCE') } ({ transcode('TOOLS.MULTI_ADDRESS_SM') }) *
                 </button>
                 <button
                   type="button"
@@ -133,19 +129,19 @@ class Tools extends React.Component {
                   type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('multisig-address') }>
-                  Generate multisig address
+                  { translate('TOOLS.GEN_MULTISIG_ADDRESS') }
                 </button>
                 <button
                   type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('multisig-address-storage') }>
-                  Multisig address storage
+                  { translate('TOOLS.MULTISIG_ADDREESS_STORAGE') }
                 </button>
                 <button
                   type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('multisig-tx') }>
-                  Multi signature transaction
+                  { translate('TOOLS.MULTISIG_TX') }
                 </button>
                 <div className="margin-top-10 margin-left-20">{ translate('TOOLS.SPV_NATIVE') }</div>
               </div>

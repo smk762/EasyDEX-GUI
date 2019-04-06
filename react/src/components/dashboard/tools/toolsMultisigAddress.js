@@ -37,10 +37,10 @@ class ToolsMultisigAddress extends React.Component {
 
   _copyString(type) {
     const _msg = {
-      'redeemScript': 'Redeem script',
-      'scriptPubKey': 'Sript pub key',
-      'address': 'Address',
-      'agama': 'Agama multi signature data',
+      'redeemScript': translate('TOOLS.REDEEM_SCRIPT'),
+      'scriptPubKey': translate('TOOLS.SCRIPT_PUBKEY'),
+      'address': translate('WALLETS_INFO.ADDRESS'),
+      'agama': translate('TOOLS.AGAMA_MULTISIG_DATA'),
     };
     Store.dispatch(copyString(this.state.msigData[type], _msg[type] + ' is copied'));
   }
@@ -53,8 +53,8 @@ class ToolsMultisigAddress extends React.Component {
     if (_pubKeys.length < _requiredSigs[1]) {
       Store.dispatch(
         triggerToaster(
-          'Not enough pub keys provided',
-          'Multi signature address',
+          translate('TOOLS.NOT_ENOUGH_PUB_KEYS_PROVIDED'),
+          translate('TOOLS.MULTISIG_ADDRESS'),
           'error'
         )
       );
@@ -85,8 +85,8 @@ class ToolsMultisigAddress extends React.Component {
         console.warn(e);
         Store.dispatch(
           triggerToaster(
-            'Unable to generate multi signature address. Check if all provided data is correct.',
-            'Multi signature address',
+            translate('TOOLS.UNABLE_TO_GEN_MULTISIG_ADDRESS'),
+            translate('TOOLS.MULTISIG_ADDRESS'),
             'error'
           )
         );
@@ -127,13 +127,13 @@ class ToolsMultisigAddress extends React.Component {
     return (
       <div className="row margin-left-10">
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
-          <h4>Multi signature address generation</h4>
+          <h4>{ translate('TOOLS.MULTISIG_ADDRESS_GEN') }</h4>
         </div>
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-70">
           <label
             className="control-label col-sm-2 no-padding-left"
             htmlFor="kmdWalletSendTo">
-            Number of signatures
+            { translate('TOOLS.NUM_OF_SIGS') }
           </label>
           <select
             name="nOfN"
@@ -168,14 +168,14 @@ class ToolsMultisigAddress extends React.Component {
           <label
             className="control-label col-sm-2 no-padding-left"
             htmlFor="kmdWalletSendTo">
-            Pub keys
+            { translate('TOOLS.PUB_KEYS') }
           </label>
           <textarea
             rows="5"
             cols="20"
             name="pubHex"
             className="col-sm-7 padding-top-10 padding-bottom-10"
-            placeholder={ `Provide ${this.state.nOfN.split('-')[1]} pub keys (hex). Place each key hex on a new line.` }
+            placeholder={ translate('TOOLS.PROVIDE_N_PUBKEYS', this.state.nOfN.split('-')[1]) }
             onChange={ this.updateInput }
             value={ this.state.pubHex }></textarea>
         </div>
@@ -188,16 +188,16 @@ class ToolsMultisigAddress extends React.Component {
               !this.state.coin
             }
             onClick={ this.generateMsigAddress }>
-            Generate multi signature address
+            { translate('TOOLS.GEN_MULTISIG_ADDRESS') }
           </button>
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left margin-top-10 padding-bottom-10">
-          <h4>Warning! Pub keys section is order dependent. Different order will produce different redeem script, script pub key and pub address.</h4>
+          <h4>{ translate('TOOLS.PUBKEYS_ORDER_WARNING') }</h4>
         </div>
         { this.state.msigData &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
             <div>
-              <strong>Address:</strong> <span className="blur selectable">{ this.state.msigData.address }</span>
+              <strong>{ translate('WALLETS_INFO.ADDRESS') }:</strong> <span className="blur selectable">{ this.state.msigData.address }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -206,7 +206,7 @@ class ToolsMultisigAddress extends React.Component {
               </button>
             </div>
             <div className="margin-top-25">
-              <strong>Redeem script:</strong> <span className="blur selectable word-break--all">{ this.state.msigData.redeemScript }</span>
+              <strong>{ translate('TOOLS.REDEEM_SCRIPT') }:</strong> <span className="blur selectable word-break--all">{ this.state.msigData.redeemScript }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -215,7 +215,7 @@ class ToolsMultisigAddress extends React.Component {
               </button>
             </div>
             <div className="margin-top-25">
-              <strong>Script pub key:</strong> <span className="blur selectable">{ this.state.msigData.scriptPubKey }</span>
+              <strong>{ translate('TOOLS.SCRIPT_PUB_KEY') }:</strong> <span className="blur selectable">{ this.state.msigData.scriptPubKey }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
@@ -224,7 +224,7 @@ class ToolsMultisigAddress extends React.Component {
               </button>
             </div>
             <div className="margin-top-25">
-              <strong>Use the following info to create multi signature transactions in Agama:</strong>
+              <strong>{ translate('TOOLS.USE_THE_FOLLOWING_INFO_TO_CREATE_MULTISIG_TX') }:</strong>
               <div className="blur selectable word-break--all">
                 { this.state.msigData.agama }
                 <button

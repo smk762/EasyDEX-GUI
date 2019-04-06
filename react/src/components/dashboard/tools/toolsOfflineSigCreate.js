@@ -159,7 +159,7 @@ class ToolsOfflineSigCreate extends React.Component {
   }
 
   copyTx() {
-    Store.dispatch(copyString(this.state.tx2qr, 'Unsigned transaction is copied to clipboard'));
+    Store.dispatch(copyString(this.state.tx2qr, translate('TOOLS.UNSIGNED_TX_COPIED')));
   }
 
   setSendAmountAll() {
@@ -370,13 +370,13 @@ class ToolsOfflineSigCreate extends React.Component {
               !this.state.selectedCoin ||
               !this.state.amount
             }>
-            Generate unsigned transaction
+            { translate('TOOLS.GENERATE_UNSIGNED_TX') }
           </button>
         </div>
         { this.state.tx2qr &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
             <label className="control-label col-sm-3 no-padding-left">
-            Unsigned transaction
+              { translate('TOOLS.UNSIGNED_TX') }
             </label>
           </div>
         }

@@ -25,7 +25,7 @@ export const TxConfsRender = function(tx) {
           tx.confirmations !== tx.rawconfirmations &&
           <span>
             <span
-              data-tip={ `Raw confirmations: ${tx.rawconfirmations}` }
+              data-tip={ `${translate('INDEX.RAW_CONFS')}: ${tx.rawconfirmations}` }
               data-for="txHistoryDpowRawConf">
               { tx.confirmations }
             </span>
@@ -44,7 +44,7 @@ export const TxConfsRender = function(tx) {
           <span>
             <i
               className="icon fa-shield margin-left-10"
-              data-tip="This transaction is secured with dPoW"
+              data-tip={ translate('INDEX.THIS_TX_IS_SECURED_WITH_DPOW') } 
               data-for="txHistoryDpow"></i>
             <ReactTooltip
               id="txHistoryDpow"
