@@ -58,7 +58,8 @@ export const TxConfsRender = function(tx) {
     this.props.ActiveCoin.mode === 'native' &&
     staticVar.chainParams &&
     staticVar.chainParams[this.props.ActiveCoin.coin] &&
-    staticVar.chainParams[this.props.ActiveCoin.coin].ac_private) {
+    staticVar.chainParams[this.props.ActiveCoin.coin].ac_private
+  ) {
     return (
       <span>{ translate('DASHBOARD.NA') }</span>
     );

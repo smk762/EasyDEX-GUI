@@ -30,7 +30,7 @@ const prepCoinsList = () => {
           _coins.push(coins[i]);
         }
       } catch (e) {
-        console.warn('electron remote error address book' + e);
+        console.warn(`electron remote error address book ${e}`);
       }
     }
   }

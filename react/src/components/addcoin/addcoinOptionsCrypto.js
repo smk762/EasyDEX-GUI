@@ -96,7 +96,7 @@ const prepCoinsList = (options) => {
           });
         }
       } catch (e) {
-        console.warn('electron remote error addcoin' + e);
+        console.warn(`electron remote error addcoin ${e}`);
       }
     }
 

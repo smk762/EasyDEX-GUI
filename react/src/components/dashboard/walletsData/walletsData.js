@@ -37,10 +37,6 @@ import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 
-/*import io from 'socket.io-client';
-
-const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);*/
-
 const BOTTOM_BAR_DISPLAY_THRESHOLD = 15;
 
 class WalletsData extends React.Component {

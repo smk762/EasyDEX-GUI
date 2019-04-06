@@ -177,7 +177,7 @@ class NativeWalletDatKeysPanel extends React.Component {
                     this.state.coin === 'none'
                   }
                   onClick={ this._getWalletDatKeys }>
-                  { this.state.loading ? translate('SETTINGS.FETCHING_KEYS') + '...' : translate('SETTINGS.GET_KEYS') }
+                  { this.state.loading ? `${translate('SETTINGS.FETCHING_KEYS')}...` : translate('SETTINGS.GET_KEYS') }
                 </button>
               </div>
             </div>

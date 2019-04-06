@@ -145,7 +145,7 @@ const NavbarRender = function() {
                 { !this.isSectionActive('changelog') &&
                   <li>
                     <a onClick={ () => this.dashboardChangeSection('changelog') }>
-                      <i className="icon fa-list"></i> Change log
+                      <i className="icon fa-list"></i> { translate('INDEX.CHANGE_LOG') }
                     </a>
                   </li>
                 }

@@ -90,7 +90,9 @@ class SPVServersPanel extends React.Component {
       _items.push(
         <option
           key={ `spv-server-list-${ coin }-${i}` }
-          value={ `${_spvServers[i]}` }>{ `${_spvServers[i]}` }</option>
+          value={ `${_spvServers[i]}` }>
+          { `${_spvServers[i]}` }
+        </option>
       );
     }
 

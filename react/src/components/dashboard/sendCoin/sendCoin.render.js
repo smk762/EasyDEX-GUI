@@ -674,15 +674,15 @@ export const SendRender = function() {
                 }
                 { !this.state.spvDpowVerificationWarning &&
                   <div className="padding-top-20 fs-15">
-                    <strong>Notice:</strong>&nbsp;
-                    One ore more of your UTXO(s) are not dPoW secured.
+                    <strong>{ translate('SEND.NOTICE') }</strong>&nbsp;
+                    { translate('SEND.ONE_OR_MORE_UTXO_NOT_DPOWED') }
                   </div>
                 }
                 { this.state.spvDpowVerificationWarning &&
                   this.state.spvDpowVerificationWarning === true &&
                   <div className="padding-top-20 fs-15">
                     <i className="icon fa-shield col-green"></i>&nbsp;
-                    Your funds are dPoW secured.
+                    { translate('SEND.YOUR_FUNDS_ARE_DPOW_SECURED') }
                   </div>
                 }
                 { _mode === 'eth' &&
@@ -691,8 +691,8 @@ export const SendRender = function() {
                   this.state.ethPreflightRes.msg &&
                   this.state.ethPreflightRes.msg === 'error' &&
                   <div className="padding-top-10">
-                    <div>Error cannot verify ERC20 transaction.</div>
-                    <div className="padding-top-10 padding-bottom-10">Debug info</div>
+                    <div>{ translate('SEND.CANNOT_VERIFY_ERC20_TX') }</div>
+                    <div className="padding-top-10 padding-bottom-10">{ translate('SEND.DEBUG_INFO') }</div>
                     <div className="word-break--all">{ JSON.stringify(this.state.ethPreflightRes.result) }</div>
                   </div>
                 }
@@ -724,18 +724,18 @@ export const SendRender = function() {
                     { this.state.ethPreflightRes.notEnoughBalance &&
                       <div className="row">
                         <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
-                        Not enough ETH to send the transaction
+                          { translate('SEND.NOT_ENOUGH_ETH_TO_SEND') }
                         </div>
                       </div>
                     }
                     <div className="row">
                       <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
-                      <strong>Current balance</strong>: { this.state.ethPreflightRes.maxBalance.balance } ETH
+                      <strong>{ translate('SEND.CURRENT_BALANCE') }</strong>: { this.state.ethPreflightRes.maxBalance.balance } ETH
                       </div>
                     </div>
                     <div className="row">
                       <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
-                      <strong>Balace after the fee</strong>: { this.state.ethPreflightRes.balanceAferFee } ETH
+                      <strong>{ translate('SEND.BALANCE_AFTER_THE_FEE') }</strong>: { this.state.ethPreflightRes.balanceAferFee } ETH
                       </div>
                     </div>
                   </div>
@@ -927,7 +927,7 @@ export const SendRender = function() {
                           <div>{ this.state.lastSendToResponse.result }</div>
                           { typeof this.state.lastSendToResponse.raw.txid === 'object' &&
                             <div className="padding-top-10 word-break--all">
-                              <strong className="text-capitalize">Debug info</strong>: { JSON.stringify(this.state.lastSendToResponse.raw.txid) }
+                              <strong className="text-capitalize">{ translate('SEND.DEBUG_INFO') }</strong>: { JSON.stringify(this.state.lastSendToResponse.raw.txid) }
                             </div>
                           }
                         </div>
@@ -956,8 +956,8 @@ export const SendRender = function() {
                     this.state.lastSendToResponse.msg === 'error' &&
                     _mode === 'eth' &&
                     <div className="padding-left-30 padding-top-10">
-                      <div>Error cannot push ETH transaction.</div>
-                      <div className="padding-top-10 padding-bottom-10">Debug info</div>
+                      <div>{ translate('SEND.CANNOT_PUSH_ETH_TX') }</div>
+                      <div className="padding-top-10 padding-bottom-10">{ translate('SEND.DEBUG_INFO') }</div>
                       <div>{ JSON.stringify(this.state.lastSendToResponse) }</div>
                     </div>
                   }

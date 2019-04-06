@@ -218,7 +218,7 @@ class SendCoin extends React.Component {
           triggerToaster(
             [
               translate('SEND.COINBASE_SHIELD_SUCCESS'),
-              'Transaction OPID: ' + json.result,
+              `${TX_OPID}: ${json.result}`,
             ],
             translate('TOASTR.ERROR'),
             'success',
@@ -844,7 +844,7 @@ class SendCoin extends React.Component {
         } else {
           Store.dispatch(
             triggerToaster(
-              'Unable to get ETH gas price',
+              translate('SEND.UNABLE_TO_GET_ETH_GAS_PRICE'),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )

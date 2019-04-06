@@ -19,7 +19,7 @@ class CoindDownModal extends React.Component {
     this.state = {
       display: false,
       kmdMainPassiveMode: false,
-      coindStdOut: translate('INDEX.LOADING') + '...',
+      coindStdOut: `${translate('INDEX.LOADING')}...`,
       toggleDebugLog: true,
       className: 'hide',
       open: false,
