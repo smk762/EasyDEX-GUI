@@ -32,6 +32,7 @@ import ExchangesRender, {
   RenderNewOrderForm,
 } from './exchanges.render';
 import translate from '../../../translate/translate';
+import devlog from '../../../util/devlog';
 import {
   explorerList,
   isKomodoCoin,
@@ -149,7 +150,7 @@ class Exchanges extends React.Component {
         Store.dispatch(getExchangesCache(this.state.provider));
         Store.dispatch(
           triggerToaster(
-            'Coinswitch orders history is synchronized',
+            translate('EXCHANGES.COINSWITCH_ORDERS_HISTORY_SYNCED'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'success'
           )
@@ -160,7 +161,7 @@ class Exchanges extends React.Component {
         });
         Store.dispatch(
           triggerToaster(
-            'Failed to synchronize Coinswitch orders history',
+            translate('EXCHANGES.COINSWITCH_FAILED_TO_SYNC_HISTORY'),
             translate('TOASTR.WALLET_NOTIFICATION'),
             'error'
           )
@@ -182,14 +183,14 @@ class Exchanges extends React.Component {
   makeDeposit(orderId) {
     const _cache = this.props.Dashboard.exchanges && this.props.Dashboard.exchanges[this.state.provider];
     
-    console.warn(_cache[orderId]);
+    devlog(_cache[orderId]);
     
     let _newState = {};
     _newState.orderStep = 0;
     _newState.step = 1;
     _newState.exchangeOrder = _cache[orderId];
 
-    console.warn(_newState);
+    devlog(_newState);
 
     Store.dispatch(dashboardChangeActiveCoin(_cache[orderId].depositCoin.toUpperCase(), 'spv'));
     Store.dispatch(apiElectrumBalance(_cache[orderId].depositCoin.toUpperCase(), this.props.Dashboard.electrumCoins[_cache[orderId].depositCoin.toUpperCase()].pub));
@@ -229,7 +230,7 @@ class Exchanges extends React.Component {
         this.state.newExchangeOrderDetails &&
         this.state.newExchangeOrderDetails.exchangeOrder &&
         !this.depositsRuntimeCache.coinswitch[this.state.newExchangeOrderDetails.exchangeOrder.orderId]) {
-      console.warn('exchanges update deposit');
+      devlog('exchanges update deposit');
 
       this.depositsRuntimeCache.coinswitch[this.state.newExchangeOrderDetails.exchangeOrder.orderId] = nextProps.ActiveCoin.lastSendToResponse.txid;
       
@@ -245,7 +246,7 @@ class Exchanges extends React.Component {
   }
 
   sendCoinCB(state) {
-    console.warn('sendCoinCB', state);
+    devlog('sendCoinCB', state);
 
     let _newState = JSON.parse(JSON.stringify(this.state.newExchangeOrderDetails));
     _newState.sendCoinState = state;
@@ -299,7 +300,7 @@ class Exchanges extends React.Component {
 
   nextStep() {
     // TODO: move to backend, account for tx fee, amount validation
-    console.warn('state', this.state);
+    devlog('state', this.state);
 
     if (this.state.newExchangeOrderDetails.orderStep === 0) {
       const srcCoinSym = this.state.newExchangeOrderDetails.coinSrc.split('|')[0].toLowerCase();
@@ -315,7 +316,7 @@ class Exchanges extends React.Component {
         destCoinSym
       )
       .then((exchangeRate) => {
-        console.warn('rate', exchangeRate);
+        devlog('rate', exchangeRate);
 
         if (this.state.provider === 'coinswitch') {
           if (exchangeRate.data) {
@@ -331,7 +332,7 @@ class Exchanges extends React.Component {
 
                 Store.dispatch(
                   triggerToaster(
-                    `${translate('SEND.INSUFFICIENT_FUNDS')} you can buy up to ${_maxBuy} ${destCoinSym.toUpperCase()} max.`,
+                    `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('EXCHANGES.YOU_CAN_BUY_UP_TO')} ${_maxBuy} ${destCoinSym.toUpperCase()} ${translate('EXCHANGES.MAX_SM')}.`,
                     translate('TOASTR.WALLET_NOTIFICATION'),
                     'error'
                   )
@@ -357,7 +358,7 @@ class Exchanges extends React.Component {
                   newExchangeOrderDetails: _newState,
                 });
 
-                console.warn('prices', prices);
+                devlog('prices', prices);
               });
             }
           } else {
@@ -366,7 +367,7 @@ class Exchanges extends React.Component {
             });
             Store.dispatch(
               triggerToaster(
-                'This pair is not available for exchange.',
+                translate('EXCHANGES.THIS_PAIR_IS_NOT_AVAILABLE'),
                 translate('TOASTR.ERROR'),
                 'error'
               )
@@ -393,7 +394,7 @@ class Exchanges extends React.Component {
         this.props.Dashboard.electrumCoins[srcCoinSym.toUpperCase()].pub,
       )
       .then((order) => {
-        console.warn('order place', order);
+        devlog('order place', order);
 
         if (order.data) {
           Store.dispatch(dashboardChangeActiveCoin(srcCoinSym.toUpperCase(), 'spv'));
@@ -415,7 +416,7 @@ class Exchanges extends React.Component {
           });
           Store.dispatch(
             triggerToaster(
-              'Something went wrong. Please try again.',
+              translate('EXCHANGES.SOMETHING_WENT_WRONG'),
               translate('TOASTR.ERROR'),
               'error'
             )

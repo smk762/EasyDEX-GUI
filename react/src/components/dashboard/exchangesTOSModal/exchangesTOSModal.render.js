@@ -24,12 +24,12 @@ const ExchangesTOSModalRender = function() {
                 <span>×</span>
               </button>
               <h4 className="modal-title white">
-                Exchange Terms of Service
+                { translate('EXCHANGES.EXCHANGE_TOS') }
               </h4>
             </div>
             <div className="modal-body modal-body-container">
-              <p>If you continue you agee to use a 3rd party service Coinswitch.co. All your actions with the use of Coinswitch.co API are outside of Komodo Platform control and are subject to Coinswitch.co <a onClick={ this.openCoinswitchTOS } className="pointer">terms of service</a>. Komodo Platform will not disclose any private information to Coinswitch.co. All details that you may provide to Coinswitch.co will be subject to Coinswitch.co <a onClick={ this.openCoinswitchTOS } className="pointer">terms for service</a>.</p>
-              <p>KOMODO PLATFORM ACCEPTS NO RESPONSIBILITY AND WILL NOT BE LIABLE FOR ANY LOSS OR DAMAGE WHATSOEVER SUFFERED AS A RESULT OF ACCESSING, USE OF, OR RELIANCE UPON COINSWITCH.CO INFORMATION AND SERVICES.</p>
+              <p>{ translate('EXCHANGES.TOS_P1') } <a onClick={ this.openCoinswitchTOS } className="pointer">{ translate('EXCHANGES.TOS_P2') }</a>. { translate('EXCHANGES.TOS_P3') } <a onClick={ this.openCoinswitchTOS } className="pointer">{ translate('EXCHANGES.TOS_P2') }</a>.</p>
+              <p>{ translate('EXCHANGES.TOS_P4') }</p>
             </div>
           </div>
         </div>

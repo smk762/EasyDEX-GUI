@@ -8,8 +8,11 @@ import {
 
 const statusLookup = {
   coinswitch: {
-    timeout: 'expired',
-    no_deposit: 'awaiting deposit',
+    timeout: translate('EXCHANGES.EXPIRED'),
+    no_deposit: translate('EXCHANGES.AWAITING_DEPOSIT'),
+    confirming: translate('EXCHANGES.CONFIRMING'),
+    exchanging: translate('EXCHANGES.EXCHANGING'),
+    sending: translate('EXCHANGES.SENDING'),
   },
 };
 
@@ -42,7 +45,7 @@ const ExchangesOrderInfoModalRender = function() {
                   <span>×</span>
                 </button>
                 <h4 className="modal-title white">
-                  Exchange Order Details
+                  { translate('EXCHANGES.EXCHANGE_ORDER_DETAILS') }
                 </h4>
               </div>
               <div className="modal-body modal-body-container">
@@ -50,13 +53,13 @@ const ExchangesOrderInfoModalRender = function() {
                   <ul className="nav nav-tabs nav-tabs-line">
                     <li className={ this.state.activeTab === 0 ? 'active' : '' }>
                       <a onClick={ () => this.openTab(0) }>
-                        <i className="icon md-balance-wallet"></i>Order Info
+                        <i className="icon md-balance-wallet"></i>{ translate('EXCHANGES.ORDER_INFO') }
                       </a>
                     </li>
                     { (_cache[_key].inputTransactionHash || this.findDeposits(_cache[_key].orderId).length > 0) &&
                       <li className={ this.state.activeTab === 1 ? 'active' : '' }>
                         <a onClick={ () => this.openTab(1) }>
-                          <i className="icon wb-file"></i>Deposit Info
+                          <i className="icon wb-file"></i>{ translate('EXCHANGES.DEPOSIT_INFO') }
                         </a>
                       </li>
                     }
@@ -69,7 +72,7 @@ const ExchangesOrderInfoModalRender = function() {
                             <tbody>
                               <tr>
                                 <td>
-                                  Date
+                                  { translate('EXCHANGES.DATE') }
                                 </td>
                                 <td>
                                   { secondsToString(_cache[_key].createdAt / 1000) }
@@ -78,7 +81,7 @@ const ExchangesOrderInfoModalRender = function() {
                               { _cache[_key].validTill &&
                                 <tr>
                                   <td>
-                                    Valid until
+                                    { translate('EXCHANGES.VALID_UNTIL') }
                                   </td>
                                   <td>
                                     { secondsToString(_cache[_key].validTill / 1000) }
@@ -87,7 +90,7 @@ const ExchangesOrderInfoModalRender = function() {
                               }
                               <tr>
                                 <td>
-                                  Source
+                                  { translate('EXCHANGES.SOURCE') }
                                 </td>
                                 <td>
                                   <img
@@ -99,7 +102,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Destination
+                                  { translate('EXCHANGES.DESTINATION') }
                                 </td>
                                 <td>
                                   <img
@@ -111,7 +114,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Deposit address
+                                  { translate('EXCHANGES.DEPOSIT_ADDRESS') }
                                 </td>
                                 <td className="blur selectable word-break--all">
                                   { _cache[_key].exchangeAddress.address }
@@ -119,7 +122,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Destination address
+                                  { translate('EXCHANGES.DESTINATION_ADDRESS') }
                                 </td>
                                 <td className="blur selectable word-break--all">
                                   { _cache[_key].destinationAddress.address }
@@ -127,7 +130,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Deposit transaction hash
+                                  { translate('EXCHANGES.DEPOSIT_TX_HASH') }
                                 </td>
                                 <td className="blur selectable word-break--all">
                                   { _cache[_key].inputTransactionHash || this.findDeposits(_cache[_key].orderId)[0] }
@@ -135,7 +138,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td className="blur selectable word-break--all">
-                                  Destination transaction hash
+                                  { translate('EXCHANGES.DESTINATION_TX_HASH') }
                                 </td>
                                 <td className="blur selectable word-break--all">
                                   { _cache[_key].outputTransactionHash }
@@ -143,7 +146,7 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Order ID
+                                  { translate('EXCHANGES.ORDER_ID') }
                                 </td>
                                 <td className="blur selectable word-break--all">
                                   { _cache[_key].orderId }
@@ -151,10 +154,10 @@ const ExchangesOrderInfoModalRender = function() {
                               </tr>
                               <tr>
                                 <td>
-                                  Status
+                                  { translate('EXCHANGES.STATUS') }
                                 </td>
                                 <td>
-                                  { _cache[_key].outputTransactionHash ? 'complete' : statusLookup.coinswitch[_cache[_key].status] ? statusLookup.coinswitch[_cache[_key].status] : _cache[_key].status }
+                                  { _cache[_key].outputTransactionHash ? translate('EXCHANGES.STATUS_COMPLETE') : statusLookup.coinswitch[_cache[_key].status] ? statusLookup.coinswitch[_cache[_key].status] : _cache[_key].status }
                                 </td>
                               </tr>
                             </tbody>
@@ -164,7 +167,7 @@ const ExchangesOrderInfoModalRender = function() {
                               type="button"
                               className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
                               onClick={ () => this.openOrderWindow(_cache[_key].orderId) }>
-                              <i className="icon fa-external-link"></i> Open on Coinswitch.co
+                              <i className="icon fa-external-link"></i> { translate('EXCHANGES.OPEN_ON') } Coinswitch.co
                             </button>
                           </div>
                         </div>
@@ -172,7 +175,7 @@ const ExchangesOrderInfoModalRender = function() {
                       { this.state.activeTab === 1 &&
                         <div className="tab-pane active">
                           { this.state.depositFetching &&
-                            <div className="padding-top-20">Fetching transaction data...</div>
+                            <div className="padding-top-20">{ translate('EXCHANGES.FETCHING_TX_DATA') }...</div>
                           }
                           { !this.state.depositFetching &&
                             this.state.deposit &&
@@ -180,13 +183,13 @@ const ExchangesOrderInfoModalRender = function() {
                               <table className="table table-striped">
                                 <tbody>
                                   <tr>
-                                    <td>From</td>
+                                    <td>{ translate('INDEX.FROM') }</td>
                                     <td className="blur selectable word-break--all">
-                                      { this.state.deposit.inputAddresses ? this.state.deposit.inputAddresses[0] : 'N/A' }
+                                      { this.state.deposit.inputAddresses ? this.state.deposit.inputAddresses[0] : translate('DASHBOARD.NA') }
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td>To</td>
+                                    <td>{ translate('INDEX.TO') }</td>
                                     <td className="blur selectable word-break--all">
                                       { isSpv ? this.state.deposit.address : this.state.deposit.details[0] && this.state.deposit.details[0].address || txInfo.address }
                                     </td>
@@ -213,7 +216,7 @@ const ExchangesOrderInfoModalRender = function() {
                                   </tr>
                                   { this.state.deposit.blockindex &&
                                     <tr>
-                                      <td>{ this.capitalizeFirstLetter('blockindex') }</td>
+                                      <td>{ translate('TX_INFO.BLOCKINDEX') }</td>
                                       <td className="selectable">
                                         { this.state.deposit.blockindex }
                                       </td>
@@ -221,7 +224,7 @@ const ExchangesOrderInfoModalRender = function() {
                                   }
                                   { this.state.deposit.blockhash &&
                                     <tr>
-                                      <td>{ isSpv ? this.capitalizeFirstLetter('blockheight') : this.capitalizeFirstLetter('blockhash') }</td>
+                                      <td>{ translate('TX_INFO.' + (isSpv ? 'BLOCKHEIGHT' : 'BLOCKHASH')) }</td>
                                       <td className="selectable">
                                         { isSpv ? this.state.deposit.height : this.state.deposit.blockhash }
                                       </td>
@@ -229,35 +232,35 @@ const ExchangesOrderInfoModalRender = function() {
                                   }
                                   { (this.state.deposit.blocktime || this.state.deposit.timestamp) &&
                                     <tr>
-                                      <td>{ this.capitalizeFirstLetter('blocktime') }</td>
+                                      <td>{ translate('TX_INFO.BLOCKTIME') }</td>
                                       <td>
                                         { secondsToString(this.state.deposit.blocktime || this.state.deposit.timestamp) }
                                       </td>
                                     </tr>
                                   }
                                   <tr>
-                                    <td>{ this.capitalizeFirstLetter('txid') }</td>
+                                    <td>{ translate('TX_INFO.TXID') }</td>
                                     <td className="blur selectable">
                                       { this.state.deposit.txid }
                                     </td>
                                   </tr>
                                   { this.state.deposit.walletconflicts &&
                                     <tr>
-                                      <td>{ this.capitalizeFirstLetter('walletconflicts') }</td>
+                                      <td>{ translate('TX_INFO.WALLETCONFLICTS') }</td>
                                       <td>
                                         { this.state.deposit.walletconflicts.length }
                                       </td>
                                     </tr>
                                   }
                                   <tr>
-                                    <td>{ this.capitalizeFirstLetter('time') }</td>
+                                    <td>{ translate('TX_INFO.TIME') }</td>
                                     <td>
                                       { secondsToString(isSpv ? this.state.deposit.blocktime || this.state.deposit.timestamp : this.state.deposit.time) }
                                     </td>
                                   </tr>
                                   { !isEth &&
                                     <tr>
-                                      <td>{ this.capitalizeFirstLetter('timereceived') }</td>
+                                      <td>{ translate('TX_INFO.TIMERECEIVED') }</td>
                                       <td>
                                         { secondsToString(isSpv ? this.state.deposit.blocktime : this.state.deposit.timereceived) }
                                       </td>
