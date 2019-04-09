@@ -29,7 +29,7 @@ const coins = {
     BTCH: 'BTCH',
     BEER: 'BEER (Test coin)',
     PIZZA: 'PIZZA (Test coin)',
-    VOTE2019: 'VOTE2019 (Notary Elections)',
+    VOTE2019: 'VOTE2019 (NN Elections)',
     NINJA: 'NINJA',
     GLXT: 'GLXToken',
     BNTN: 'Blocnation',
