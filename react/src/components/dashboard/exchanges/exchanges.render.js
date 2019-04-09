@@ -17,11 +17,11 @@ import ExchangesSupportedCoinsModal from '../exchangesSupportedCoinsModal/exchan
 
 const statusLookup = {
   coinswitch: {
-    timeout: translate('EXCHANGES.EXPIRED'),
-    no_deposit: translate('EXCHANGES.AWAITING_DEPOSIT'),
-    confirming: translate('EXCHANGES.CONFIRMING'),
-    exchanging: translate('EXCHANGES.EXCHANGING'),
-    sending: translate('EXCHANGES.SENDING'),
+    timeout: translate('EXCHANGES.STATUS_EXPIRED'),
+    no_deposit: translate('EXCHANGES.STATUS_AWAITING_DEPOSIT'),
+    confirming: translate('EXCHANGES.STATUS_CONFIRMING'),
+    exchanging: translate('EXCHANGES.STATUS_EXCHANGING'),
+    sending: translate('EXCHANGES.STATUS_SENDING'),
   },
 };
 
