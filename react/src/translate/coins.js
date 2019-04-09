@@ -52,6 +52,7 @@ const coins = {
     RICK: 'Rick',
     MORTY: 'Morty',
     MTST3: 'MTST3',
+    RFOX: 'Red Fox',
   },
   CRYPTO: {
     STRAT: 'Stratis',
