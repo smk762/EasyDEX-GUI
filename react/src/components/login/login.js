@@ -189,7 +189,7 @@ class Login extends React.Component {
     } else {
       Store.dispatch(
         triggerToaster(
-          translate('INDEX.QR_UNABLE_TO_DECODE'),
+          translate('LOGIN.QR_UNABLE_TO_DECODE'),
           translate('INDEX.QR_ERROR'),
           'error'
         )
@@ -662,7 +662,7 @@ class Login extends React.Component {
                       this.setState({
                         selectedPin: res.result,
                         activeLoginSection: 'login',
-                        randomSeed: null,
+                        randomSeed: '',
                         loginPassphrase: '',
                         randomSeedConfirm: '',
                         customWalletSeed: false,
@@ -700,7 +700,7 @@ class Login extends React.Component {
                     this.setState({
                       selectedPin: res.result,
                       activeLoginSection: 'login',
-                      randomSeed: null,
+                      randomSeed: '',
                       loginPassphrase: '',
                       randomSeedConfirm: '',
                       customWalletSeed: false,
