@@ -195,7 +195,7 @@ class DebugLogPanel extends React.Component {
       <div className="row">
         <div className="col-sm-12">
           <div className="padding-bottom-15">
-            <strong>{ translate('SETTINGS.PRIVACY_WARNING_P1') }</strong> { translate('SETTINGS.PRIVACY_WARNING_P2') }<br/>{ translate('SETTINGS.PRIVACY_WARNING_P3') }
+            <strong>{ translate('SETTINGS.DEBUG_PRIVACY_WARNING_P1') }</strong> { translate('SETTINGS.DEBUG_PRIVACY_WARNING_P2') }<br/>{ translate('SETTINGS.DEBUG_PRIVACY_WARNING_P3') }
           </div>
           <a id="debugLogDumpLink">
             <button
