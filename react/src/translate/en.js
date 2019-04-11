@@ -205,6 +205,8 @@ const LANG_EN = {
     ALL: 'All',
   },
   INDEX: {
+    RESPOSE_TOO_LARGE_P1: 'Transactions history is too big.',
+    RESPOSE_TOO_LARGE_P2: 'Please either use native mode or move funds to another address.',
     TRUE_SM: 'true',
     FALSE_SM: 'false',
     THIS_TX_IS_SECURED_WITH_DPOW: 'This transaction is secured with dPoW',

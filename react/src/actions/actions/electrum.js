@@ -328,6 +328,8 @@ export const apiElectrumKVTransactionsPromise = (coin, address) => {
 }
 
 export const apiElectrumTransactionsState = (json) => {
+  const _json = json;
+
   if (json) {
     json = json.result;
   } else {
@@ -344,6 +346,13 @@ export const apiElectrumTransactionsState = (json) => {
     !json.length
   ) {
     json = 'no data';
+  }
+
+  if (_json.msg === 'error' &&
+      _json.result &&
+      _json.result.message &&
+      _json.result.message.indexOf('response too large') > -1) {
+    json = 'response too large';
   }
 
   return {

@@ -517,6 +517,7 @@ class WalletsData extends React.Component {
         _txhistory !== 'no data' &&
         _txhistory !== 'connection error or incomplete data' &&
         _txhistory !== 'cant get current height' &&
+        _txhistory !== 'response too large' &&
         _txhistory.length) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: _txhistory,
@@ -532,6 +533,14 @@ class WalletsData extends React.Component {
         _txhistory === 'no data') {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'no data',
+        reconnectInProgress: false,
+      });
+    } else if (
+      _txhistory &&
+      _txhistory === 'response too large'
+    ) {
+      _stateChange = Object.assign({}, _stateChange, {
+        itemsList: 'response too large',
         reconnectInProgress: false,
       });
     } else if (
@@ -668,6 +677,14 @@ class WalletsData extends React.Component {
     } else if (this.state.itemsList === 'no data') {
       return (
         <div className="padding-left-15">{ translate('INDEX.NO_DATA') }</div>
+      );
+    } else if (this.state.itemsList === 'response too large') {
+      return (
+        <div className="padding-left-15">
+          { translate('INDEX.RESPOSE_TOO_LARGE_P1') }
+          <br />
+          { translate('INDEX.RESPOSE_TOO_LARGE_P2') }
+        </div>
       );
     } else if (this.state.itemsList === 'connection error') {
       return (

@@ -418,6 +418,10 @@ export const WalletsDataRender = function() {
                     { this.props.ActiveCoin.mode === 'spv' &&
                       Config.experimentalFeatures &&
                       kvCoins[this.props.ActiveCoin.coin] &&
+                      this.state.itemsList !== 'response too large' &&
+                      this.state.itemsList !== 'connection error' &&
+                      this.state.itemsList !== 'connection error or incomplete data' &&
+                      this.state.itemsList !== 'cant get current height' &&
                       <button
                         type="button"
                         className="btn btn-default btn-switch-kv"
@@ -427,21 +431,22 @@ export const WalletsDataRender = function() {
                     }
                   </header>
                   <div className="panel-body">
-                    <div className="row padding-bottom-30 padding-top-10">
-                      { _txhistory !== 'loading' &&
-                        _txhistory !== 'no data' &&
-                        _txhistory !== 'connection error' &&
-                        _txhistory !== 'connection error or incomplete data' &&
-                        _txhistory !== 'cant get current height' &&
-                        !this.state.kvView &&
+                    { _txhistory !== 'loading' &&
+                      _txhistory !== 'no data' &&
+                      _txhistory !== 'connection error' &&
+                      _txhistory !== 'connection error or incomplete data' &&
+                      _txhistory !== 'cant get current height' &&
+                      _txhistory !== 'response too large' &&
+                      !this.state.kvView &&
+                      <div className="row padding-bottom-30 padding-top-10">
                         <div className="col-sm-4 search-box">
                           <input
                             className="form-control"
                             onChange={ e => this.onSearchTermChange(e.target.value) }
                             placeholder={ translate('DASHBOARD.SEARCH') } />
                         </div>
-                      }
-                    </div>
+                      </div>
+                    }
                     <div className="row txhistory-table">
                       { this.renderTxHistoryList() }
                     </div>
