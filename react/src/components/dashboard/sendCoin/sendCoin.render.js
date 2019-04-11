@@ -44,7 +44,8 @@ export const AddressListRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
   const _notAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
-
+  const _isAcPublic = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_public;
+  
   return (
     <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
       <button
@@ -60,7 +61,7 @@ export const AddressListRender = function() {
         <ul className="dropdown-menu inner">
           { (_mode === 'spv' ||
              _mode === 'eth' ||
-            (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate)) &&
+            (_mode === 'native' && _notAcPrivate)) &&
             (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs' && this.state.sendTo.length !== 95)) &&
             <li
               className="selected"
@@ -88,7 +89,7 @@ export const AddressListRender = function() {
              ((_mode === 'native' && _coin === 'KMD') || (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate))) &&
             this.renderAddressByType('public')
           }
-          { _coin !== 'KMD' && this.renderAddressByType('private') }
+          { _coin !== 'KMD' && !_isAcPublic && this.renderAddressByType('private') }
         </ul>
       </div>
     </div>
