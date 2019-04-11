@@ -681,9 +681,9 @@ class WalletsData extends React.Component {
     } else if (this.state.itemsList === 'response too large') {
       return (
         <div className="padding-left-15">
-          { translate('INDEX.RESPOSE_TOO_LARGE_P1') }
+          { translate('INDEX.RESPONSE_TOO_LARGE_P1') }
           <br />
-          { translate('INDEX.RESPOSE_TOO_LARGE_P2') }
+          { translate('INDEX.RESPONSE_TOO_LARGE_P2') }
         </div>
       );
     } else if (this.state.itemsList === 'connection error') {

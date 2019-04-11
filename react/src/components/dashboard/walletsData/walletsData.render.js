@@ -418,6 +418,7 @@ export const WalletsDataRender = function() {
                     { this.props.ActiveCoin.mode === 'spv' &&
                       Config.experimentalFeatures &&
                       kvCoins[this.props.ActiveCoin.coin] &&
+                      this.state.itemsList !== 'loading' &&
                       this.state.itemsList !== 'response too large' &&
                       this.state.itemsList !== 'connection error' &&
                       this.state.itemsList !== 'connection error or incomplete data' &&
@@ -437,14 +438,15 @@ export const WalletsDataRender = function() {
                       _txhistory !== 'connection error or incomplete data' &&
                       _txhistory !== 'cant get current height' &&
                       _txhistory !== 'response too large' &&
-                      !this.state.kvView &&
                       <div className="row padding-bottom-30 padding-top-10">
-                        <div className="col-sm-4 search-box">
-                          <input
-                            className="form-control"
-                            onChange={ e => this.onSearchTermChange(e.target.value) }
-                            placeholder={ translate('DASHBOARD.SEARCH') } />
-                        </div>
+                        { !this.state.kvView &&
+                          <div className="col-sm-4 search-box">
+                            <input
+                              className="form-control"
+                              onChange={ e => this.onSearchTermChange(e.target.value) }
+                              placeholder={ translate('DASHBOARD.SEARCH') } />
+                          </div>
+                        }
                       </div>
                     }
                     <div className="row txhistory-table">

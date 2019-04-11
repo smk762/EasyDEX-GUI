@@ -663,6 +663,13 @@ export const SendRender = function() {
                 { this.state.noUtxo &&
                   <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
                 }
+                { this.state.responseTooLarge &&
+                  <div className="padding-top-20">
+                    { translate('INDEX.RESPONSE_TOO_LARGE_P1') }
+                    <br />
+                    { translate('INDEX.RESPONSE_TOO_LARGE_P2') }
+                  </div>
+                }
                 { (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress)) &&
                   <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
                 }
@@ -765,6 +772,7 @@ export const SendRender = function() {
                         this.state.ethPreflightRes &&
                         ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))) ||
                         this.state.noUtxo ||
+                        this.state.responseTooLarge ||
                         (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress))
                       }
                       onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>

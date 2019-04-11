@@ -104,6 +104,7 @@ class SendCoin extends React.Component {
       spvPreflightRes: null,
       pin: '',
       noUtxo: false,
+      responseTooLarge: false,
       addressBookSelectorOpen: false,
       // kv
       kvSend: false,
@@ -876,6 +877,7 @@ class SendCoin extends React.Component {
           ethPreflightSendInProgress: false,
           pin: '',
           noUtxo: false,
+          responseTooLarge: false,
         });
         if (this.props.cb) {
           setTimeout(() => {
@@ -956,6 +958,7 @@ class SendCoin extends React.Component {
                   totalInterest: sendPreflight.result.totalInterest,
                 },
               }));
+              
               if (this.props.cb) {
                 setTimeout(() => {
                   this.props.cb(this.state);
@@ -966,10 +969,12 @@ class SendCoin extends React.Component {
                 spvPreflightSendInProgress: false,
                 spvDpowVerificationWarning: 'n/a',
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
+                responseTooLarge: sendPreflight.result && sendPreflight.result.result && sendPreflight.result.result.message && sendPreflight.result.result.message.indexOf('response too large') > -1 ? true : false,
               }));
+
               if (this.props.cb) {
                 setTimeout(() => {
-                    this.props.cb(this.state);
+                  this.props.cb(this.state);
                 }, 100);
               }
             }
