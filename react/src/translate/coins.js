@@ -3,6 +3,7 @@ const coins = {
     BET: 'BET',
     BOTS: 'BOTS',
     CEAL: 'CEAL NET',
+    K64: 'Komodore64',
     COQUI: 'COQUI',
     KMDICE: 'KMDICE',
     CHAIN: 'Chainmakers',
