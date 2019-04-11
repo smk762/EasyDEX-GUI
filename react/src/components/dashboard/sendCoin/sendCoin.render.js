@@ -120,12 +120,12 @@ export const _SendFormRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
   const _isAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_private;
-
+  const _isAcPublic = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_public;
+  
   return (
     <div className="extcoin-send-form">
-      { (this.state.renderAddressDropdown ||
-        (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate)) &&
-        !this.state.zshieldcoinbaseToggled &&
+      { ((this.state.renderAddressDropdown && _mode !== 'native' && _coin !== 'KMD') ||
+        (_mode === 'native' && _coin !== 'KMD' && (_isAcPrivate || !_isAcPublic) && !this.state.zshieldcoinbaseToggled)) &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             <label className="control-label padding-bottom-10">
