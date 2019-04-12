@@ -1220,6 +1220,7 @@ const LANG_EN = {
     MULTISIG_TX: 'Multi signature transaction',
     MULTISIG_ADDREESS_STORAGE: 'Multi signature address storage',
     MULTI_ADDRESS_SM: 'multi address',
+    FEE: 'Fee',
   },
   KV: {
     TAG: 'Tag',
