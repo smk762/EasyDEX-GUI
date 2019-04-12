@@ -1,13 +1,16 @@
 const changeLogData = [{
   version: '0.3.5',
   changes: [
+    'Enabled Notary Elections UI',
+    'SPV confirmations counter fix',
     'Removed MNZ asset chain',
-    'Added KSB, OUR, ILN, RICK, MORTY, ZEX, VOTE2019, MTST3 asset chains',
+    'Added KSB, OUR, ILN, RICK, MORTY, VOTE2019, MTST3, RFOX, K64 asset chains',
     'Removed ERC20 tokens: AION, BTM, CMT, EOS, ICX, NAS, NET, NULS, TUSD, VEN',
     'Added ERC20 tokens: JST, DEC8, TRET, TILE, OVAL, KEA, CLF',
     'ERC20 contract ID changed: SUB, QBUIT, MLN',
     'Native notifications settings option (thanks to sawlysawly)',
     'Jumbler section removed (deprecated)',
+    'GRS support',
   ],
 }, {
   version: '0.3.4',
