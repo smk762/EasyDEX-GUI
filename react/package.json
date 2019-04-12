@@ -17,7 +17,7 @@
     "e2e": "protractor",
     "e2e-live": "protractor --elementExplorer",
     "update-agamalib": "rm -rf node_modules/agama-wallet-lib/ && npm install",
-    "postinstall": "rm -rf node_modules/bitcoinforksjs-lib/node_modules/create-hash && rm -rf node_modules/bitcoinjs-lib/node_modules/create-hash && rm -rf node_modules/bitcoinjs-lib-pos/node_modules/create-hash && rm -rf node_modules/bitcoinjs-lib-zcash/node_modules/create-hash && rm -rf node_modules/bitgo-utxo-lib/node_modules/create-hash && rm -rf node_modules/bitgo-utxo-lib-groestl/node_modules/create-hash"
+    "postinstall": "node postinstall.js"
   },
   "repository": "https://github.com/KomodoPlatform/EasyDEX-GUI",
   "homepage": "https://komodoplatform.com",
@@ -101,6 +101,7 @@
     "eslint-plugin-react": "^6.9.0",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^0.10.0",
+    "fs-extra": "^7.0.0",
     "html-webpack-plugin": "^2.24.1",
     "jasmine-spec-reporter": "^2.4.0",
     "jest": "^19.0.2",
