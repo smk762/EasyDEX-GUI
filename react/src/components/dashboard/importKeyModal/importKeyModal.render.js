@@ -32,7 +32,7 @@ const ImportKeyModalRender = function() {
                 <div>
                   <div className="padding-bottom-40">
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P1') }&nbsp;
-                    <strong>Iguana Core / ICO</strong>&nbsp;
+                    <strong>Iguana Core / ICO / BarterDEX</strong>&nbsp;
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P2') }&nbsp;
                     <strong>WIF ({ translate('IMPORT_KEY.WIF_DESC') })</strong>&nbsp;
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P3') }.

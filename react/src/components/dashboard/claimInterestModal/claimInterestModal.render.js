@@ -18,7 +18,7 @@ export const _ClaimInterestTableRender = function() {
               className="btn btn-default btn-xs clipboard-edexaddr copy-string-btn"
               title={ translate('INDEX.COPY_TO_CLIPBOARD') }
               onClick={ () => this.copyTxId(_transactionsList[i].txid) }>
-              <i className="icon wb-copy"></i> { translate('INDEX.COPY') + ' TXID' }
+              <i className="icon wb-copy"></i> { `${translate('INDEX.COPY')} TXID` }
             </button>
           </td>
           <td className="blur selectable">{ _transactionsList[i].address }</td>
@@ -57,7 +57,9 @@ export const _ClaimInterestTableRender = function() {
             </td>
           }
           { this.props.ActiveCoin.mode === 'spv' &&
-            <td className="time">{ !_transactionsList[i].timeTill1MonthInterestStopsInSeconds ? translate('CLAIM_INTEREST.NEED_TO_CLAIM') : secondsElapsedToString(_transactionsList[i].timeTill1MonthInterestStopsInSeconds, true) }</td>
+            <td className="time">
+              { !_transactionsList[i].timeTill1MonthInterestStopsInSeconds ? translate('CLAIM_INTEREST.NEED_TO_CLAIM') : secondsElapsedToString(_transactionsList[i].timeTill1MonthInterestStopsInSeconds, true) }
+            </td>
           }
         </tr>
       );
@@ -167,7 +169,7 @@ export const _ClaimInterestTableRender = function() {
               <th>{ translate('INDEX.ADDRESS') }</th>
               <th>{ translate('INDEX.AMOUNT') }</th>
               <th>{ translate('INDEX.INTEREST') }</th>
-              <th>Locktime</th>
+              <th>{ translate('TOOLS.LOCKTIME') }</th>
               { this.props.ActiveCoin.mode === 'spv' &&
                 <th className="time">{ translate('CLAIM_INTEREST.TIME_SINCE_LOCKTIME') }</th>
               }
@@ -185,7 +187,7 @@ export const _ClaimInterestTableRender = function() {
               <th>{ translate('INDEX.ADDRESS') }</th>
               <th>{ translate('INDEX.AMOUNT') }</th>
               <th>{ translate('INDEX.INTEREST') }</th>
-              <th>Locktime</th>
+              <th>{ translate('TOOLS.LOCKTIME') }</th>
               { this.props.ActiveCoin.mode === 'spv' &&
                 <th className="time">{ translate('CLAIM_INTEREST.TIME_SINCE_LOCKTIME') }</th>
               }

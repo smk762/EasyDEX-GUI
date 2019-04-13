@@ -127,7 +127,7 @@ class ReceiveCoin extends React.Component {
     .then((json) => {
       if (json.length &&
           json.length > 10) {
-        Store.dispatch(copyString(json, 'WIF ' + translate('DASHBOARD.RECEIVE_ADDR_COPIED')));
+        Store.dispatch(copyString(json, `WIF ${translate('DASHBOARD.RECEIVE_ADDR_COPIED')}`));
       }
     });
   }
@@ -233,10 +233,10 @@ class ReceiveCoin extends React.Component {
             items.pop();
           }
         } else {
-          if (type === 'private' ||
+          if ((type === 'private' && this.props.coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[this.props.coin] && !staticVar.chainParams[this.props.coin].ac_public) ||
               (type === 'public' &&
                (this.props.coin === 'KMD' ||
-                (staticVar.chainParams &&
+               (staticVar.chainParams &&
                  staticVar.chainParams[this.props.coin] &&
                  !staticVar.chainParams[this.props.coin].ac_private)))) {
             items.push(

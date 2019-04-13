@@ -4,6 +4,7 @@ import About from '../about/about';
 import Settings from '../settings/settings';
 import Tools from '../tools/tools';
 import ChangeLog from '../changeLog/changeLog';
+import NotaryElectionsModal from '../notaryElectionsModal/notaryElectionsModal';
 
 export const LoginSettingsModalRender = function() {
   return (
@@ -26,7 +27,7 @@ export const LoginSettingsModalRender = function() {
               </button>
               <h4 className="modal-title white">
                 { this.props.section === 'about' && translate('ABOUT.ABOUT_AGAMA') }
-                { this.props.section === 'changelog' && 'Change log' }
+                { this.props.section === 'changelog' && translate('INDEX.CHANGE_LOG') }
                 { this.props.section === 'settings' && translate('INDEX.SETTINGS') }
                 { this.props.section === 'tools' && translate('TOOLS.TOOLS') }
               </h4>

@@ -78,13 +78,13 @@ const WalletsInfoRender = function() {
               <tr>
                 <td>{ translate('WALLETS_INFO.WHITELISTED') }</td>
                 <td>
-                  { _netPeers[i].whitelisted ? 'true' : 'false' }
+                  { translate('INDEX' + (_netPeers[i].whitelisted ? 'TRUE_SM' : 'FALSE_SM')) }
                 </td>
               </tr>
               <tr>
                 <td>{ translate('WALLETS_INFO.INBOUND') }</td>
                 <td>
-                  { _netPeers[i].inbound ? 'true' : 'false' }
+                  { translate('INDEX' + (_netPeers[i].inbound ? 'TRUE_SM' : 'FALSE_SM')) }
                 </td>
               </tr>
               <tr>

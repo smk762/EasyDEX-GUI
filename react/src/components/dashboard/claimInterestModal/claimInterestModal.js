@@ -381,7 +381,7 @@ class ClaimInterestModal extends React.Component {
     const _txlist = this.state.transactionsList;
 
     if (_txlist &&
-      _txlist.length) {
+        _txlist.length) {
       return true;
     } else if (
       !_txlist ||

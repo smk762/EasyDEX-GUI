@@ -40,24 +40,6 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
             </li>
-            <li className={
-              (this.isSectionActive('dex') ? 'active nav-top-menu' : 'nav-top-menu') +
-              (staticVar.argv.indexOf('dexonly') > -1 ? '' : ' hide')
-            }>
-              <a onClick={ () => this.dashboardChangeSection('dex') }>
-                <i className="site-menu-icon"></i> BarterDEX
-              </a>
-            </li>
-            { _activeCoin &&
-              (/*this._checkAC() || */
-              _activeCoin.coin === 'KMD' &&
-              _activeCoin.mode === 'native') &&
-              <li className={ 'nav-top-menu' + (this.isSectionActive('jumblr') ? ' active' : '') }>
-                <a onClick={ () => this.dashboardChangeSection('jumblr') }>
-                  <i className="site-menu-icon"></i> Jumblr
-                </a>
-              </li>
-            }
             { _activeCoin.mode === 'native' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
@@ -77,32 +59,18 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
-            { mainWindow.nnVoteChain &&
-              <li className="nav-top-menu">
-                <a onClick={ this._toggleNotaryElectionsModal }>
-                  <i className="site-menu-icon"></i> { translate('NN_ELECTIONS.NN_ELECTIONS_2018') }
-                </a>
-              </li>
-            }
-            { Config.experimentalFeatures &&
-              (Config.dev || staticVar.argv.indexOf('devmode') > -1) &&
-              _activeCoin &&
-              _activeCoin.mode === 'native' &&
-              <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
-                <a onClick={ () => this.dashboardChangeSection('dice') }>
-                  <img
-                    src="assets/images/dice.png"
-                    width="50"
-                    title={ translate('DICE.DICE') } />
-                  { translate('DICE.DICE') }
-                </a>
-              </li>
-            }
             { Config.experimentalFeatures &&
               (Config.dev || staticVar.argv.indexOf('exchanges') > -1) &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('exchanges') }>
-                  <i className="site-menu-icon"></i> Exchanges
+                  <i className="site-menu-icon"></i> { translate('EXCHANGES.EXCHANGES') }
+                </a>
+              </li>
+            }
+            { mainWindow.nnVoteChain &&
+              <li className="nav-top-menu">
+                <a onClick={ this._toggleNotaryElectionsModal }>
+                  <i className="site-menu-icon"></i> { `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }
                 </a>
               </li>
             }
@@ -177,7 +145,7 @@ const NavbarRender = function() {
                 { !this.isSectionActive('changelog') &&
                   <li>
                     <a onClick={ () => this.dashboardChangeSection('changelog') }>
-                      <i className="icon fa-list"></i> Change log
+                      <i className="icon fa-list"></i> { translate('INDEX.CHANGE_LOG') }
                     </a>
                   </li>
                 }

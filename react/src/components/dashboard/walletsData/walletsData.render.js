@@ -25,7 +25,7 @@ export const TxConfsRender = function(tx) {
           tx.confirmations !== tx.rawconfirmations &&
           <span>
             <span
-              data-tip={ `Raw confirmations: ${tx.rawconfirmations}` }
+              data-tip={ `${translate('INDEX.RAW_CONFS')}: ${tx.rawconfirmations}` }
               data-for="txHistoryDpowRawConf">
               { tx.confirmations }
             </span>
@@ -44,7 +44,7 @@ export const TxConfsRender = function(tx) {
           <span>
             <i
               className="icon fa-shield margin-left-10"
-              data-tip="This transaction is secured with dPoW"
+              data-tip={ translate('INDEX.THIS_TX_IS_SECURED_WITH_DPOW') } 
               data-for="txHistoryDpow"></i>
             <ReactTooltip
               id="txHistoryDpow"
@@ -58,7 +58,8 @@ export const TxConfsRender = function(tx) {
     this.props.ActiveCoin.mode === 'native' &&
     staticVar.chainParams &&
     staticVar.chainParams[this.props.ActiveCoin.coin] &&
-    staticVar.chainParams[this.props.ActiveCoin.coin].ac_private) {
+    staticVar.chainParams[this.props.ActiveCoin.coin].ac_private
+  ) {
     return (
       <span>{ translate('DASHBOARD.NA') }</span>
     );
@@ -417,6 +418,11 @@ export const WalletsDataRender = function() {
                     { this.props.ActiveCoin.mode === 'spv' &&
                       Config.experimentalFeatures &&
                       kvCoins[this.props.ActiveCoin.coin] &&
+                      this.state.itemsList !== 'loading' &&
+                      this.state.itemsList !== 'response too large' &&
+                      this.state.itemsList !== 'connection error' &&
+                      this.state.itemsList !== 'connection error or incomplete data' &&
+                      this.state.itemsList !== 'cant get current height' &&
                       <button
                         type="button"
                         className="btn btn-default btn-switch-kv"
@@ -426,21 +432,23 @@ export const WalletsDataRender = function() {
                     }
                   </header>
                   <div className="panel-body">
-                    <div className="row padding-bottom-30 padding-top-10">
-                      { _txhistory !== 'loading' &&
-                        _txhistory !== 'no data' &&
-                        _txhistory !== 'connection error' &&
-                        _txhistory !== 'connection error or incomplete data' &&
-                        _txhistory !== 'cant get current height' &&
-                        !this.state.kvView &&
-                        <div className="col-sm-4 search-box">
-                          <input
-                            className="form-control"
-                            onChange={ e => this.onSearchTermChange(e.target.value) }
-                            placeholder={ translate('DASHBOARD.SEARCH') } />
-                        </div>
-                      }
-                    </div>
+                    { _txhistory !== 'loading' &&
+                      _txhistory !== 'no data' &&
+                      _txhistory !== 'connection error' &&
+                      _txhistory !== 'connection error or incomplete data' &&
+                      _txhistory !== 'cant get current height' &&
+                      _txhistory !== 'response too large' &&
+                      <div className="row padding-bottom-30 padding-top-10">
+                        { !this.state.kvView &&
+                          <div className="col-sm-4 search-box">
+                            <input
+                              className="form-control"
+                              onChange={ e => this.onSearchTermChange(e.target.value) }
+                              placeholder={ translate('DASHBOARD.SEARCH') } />
+                          </div>
+                        }
+                      </div>
+                    }
                     <div className="row txhistory-table">
                       { this.renderTxHistoryList() }
                     </div>

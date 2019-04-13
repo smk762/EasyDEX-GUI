@@ -53,13 +53,13 @@ const WalletsTxInfoRender = function(txInfo) {
                     Config.experimentalFeatures &&
                     <li className={ this.state.activeTab === 4 ? 'active' : '' }>
                       <a onClick={ () => this.openTab(4) }>
-                        <i className="icon fa-file-text-o"></i>KV info
+                        <i className="icon fa-file-text-o"></i>{ translate('INDEX.KV_INFO') }
                       </a>
                     </li>
                   }
                   <li className={ this.state.activeTab === 0 ? 'active' : '' }>
                     <a onClick={ () => this.openTab(0) }>
-                      <i className="icon md-balance-wallet"></i>TxID Info
+                      <i className="icon md-balance-wallet"></i>{ translate('INDEX.TXID_INFO') }
                     </a>
                   </li>
                   <li className={ this.state.activeTab === 1 ? 'hide active' : 'hide' }>
@@ -70,13 +70,13 @@ const WalletsTxInfoRender = function(txInfo) {
                   { !isEth &&
                     <li className={ this.state.activeTab === 2 ? 'active' : '' }>
                       <a onClick={ () => this.openTab(2) }>
-                        <i className="icon wb-briefcase"></i>Hex
+                        <i className="icon wb-briefcase"></i>{ translate('INDEX.HEX') }
                       </a>
                     </li>
                   }
                   <li className={ this.state.activeTab === 3 ? 'active' : '' }>
                     <a onClick={ () => this.openTab(3) }>
-                      <i className="icon wb-file"></i>Raw info
+                      <i className="icon wb-file"></i>{ translate('INDEX.RAW_INFO') }
                     </a>
                   </li>
                 </ul>
@@ -122,7 +122,7 @@ const WalletsTxInfoRender = function(txInfo) {
                               { this.state.txDetails.hasOwnProperty('rawconfirmations') &&
                                 this.state.txDetails.confirmations !== this.state.txDetails.rawconfirmations &&
                                 <tr>
-                                  <td>Raw confirmations</td>
+                                  <td>{ translate('INDEX.RAW_CONFS') }</td>
                                   <td>
                                     { this.state.txDetails.rawconfirmations }
                                   </td>
@@ -183,18 +183,18 @@ const WalletsTxInfoRender = function(txInfo) {
                               { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && this.state.txDetails.dpowSecured) ||
                                 (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations >=2)) &&
                                 <tr>
-                                  <td>dPoW secured</td>
+                                  <td>dPoW { translate('INDEX.SECURED') }</td>
                                   <td>
-                                    Yes
+                                    { translate('SETTINGS.YES') }
                                   </td>
                                 </tr>
                               }
                               { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && !this.state.txDetails.dpowSecured) ||
                                 (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations < 2)) &&
                                 <tr>
-                                  <td>dPoW secured</td>
+                                  <td>dPoW { translate('INDEX.SECURED') }</td>
                                   <td>
-                                    No
+                                    { translate('SETTINGS.NO') }
                                   </td>
                                 </tr>
                               }

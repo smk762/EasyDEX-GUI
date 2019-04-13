@@ -5,7 +5,7 @@ const CoindDownModalRender = function() {
   let _debuglog = this.props.debugLog || '';
 
   if (_debuglog.indexOf('ENOENT') > -1) {
-    _debuglog = 'Error: ' + (this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}`) + translate('INDEX.COIND_DOWN_MODAL_ERROR');
+    _debuglog = `Error: ${(this.props.ActiveCoin.coin === 'KMD' ? 'Komodod' : `Komodod / ${this.props.ActiveCoin.coin}`)}${translate('INDEX.COIND_DOWN_MODAL_ERROR')}`;
   }
 
   return (

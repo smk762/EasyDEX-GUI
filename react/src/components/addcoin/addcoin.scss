@@ -1,6 +1,12 @@
 .add-coin-modal {
   color: #757575;
 
+  .badge {
+    &.badge--erc20 {
+      font-size: 11px;
+      margin-left: 10px;
+    }
+  }
   .modal-body {
     max-height: 590px;
     overflow-y: auto;

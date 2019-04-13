@@ -33,7 +33,7 @@ const addCoinOptionsACFiat = () => {
     'chf',
     'thb',
     'try',
-    'usd'
+    'usd',
   ];
   let _items = [];
 

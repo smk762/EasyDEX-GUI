@@ -49,7 +49,7 @@ class ToolsMultisigAddressStorage extends React.Component {
         !_multisigData.hasOwnProperty('nOfN')) {
       Store.dispatch(
         triggerToaster(
-          'Malformed multi signature data',
+          translate('TOOLS.MALFORMED_MULTISIG_DATA'),
           translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
@@ -100,8 +100,8 @@ class ToolsMultisigAddressStorage extends React.Component {
                   if (res.msg === 'success') {
                     Store.dispatch(
                       triggerToaster(
-                        `Pin file is saved as ${this.state.customPinFilename}.pin`,
-                        'Multi signature',
+                        translate('TOOLS.PIN_FILE_SAVED_AS', this.state.customPinFilename),
+                        translate('TOOLS.MULTISIG'),
                         'success',
                         false
                       )
@@ -138,8 +138,8 @@ class ToolsMultisigAddressStorage extends React.Component {
                 if (res.msg === 'success') {
                   Store.dispatch(
                     triggerToaster(
-                      `Pin file is saved as ${pinFilename}.pin`,
-                      'Multi signature',
+                      translate('TOOLS.PIN_FILE_SAVED_AS', this.state.customPinFilename),
+                      translate('TOOLS.MULTISIG'),
                       'success',
                       false
                     )
@@ -177,13 +177,13 @@ class ToolsMultisigAddressStorage extends React.Component {
     return (
       <div className="row margin-left-10 tools-multisig-storage">
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
-          <h4>Multi signature storage</h4>
+          <h4>{ translate('TOOLS.MULTISIG_STORAGE') }</h4>
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-2 no-padding-left"
             htmlFor="kmdWalletSendTo">
-            Multisig data
+            { translate('TOOLS.MULTISIG_DATA') }
           </label>
           <textarea
             rows="5"
@@ -191,14 +191,14 @@ class ToolsMultisigAddressStorage extends React.Component {
             className="col-sm-7"
             onChange={ this.updateInput }
             name="msigData"
-            placeholder="Provide Agama generated multi signature data here"
+            placeholder={ translate('TOOLS.PROVIDE_AGAMA_MULTISIG_DATA_HERE') }
             value={ this.state.msigData }></textarea>
         </div>
         <div className="col-sm-12 form-group form-material no-padding-left">
           <label
             className="control-label col-sm-2 no-padding-left"
             htmlFor="kmdWalletSendTo">
-            Seed / WIF (optional)
+            { translate('TOOLS.SEED_WIF_OPTIONAL') }
           </label>
           <input
             type="text"
@@ -207,7 +207,7 @@ class ToolsMultisigAddressStorage extends React.Component {
             onChange={ this.updateInput }
             value={ this.state.seed }
             id="kmdWalletSendTo"
-            placeholder={ translate('TOOLS.ENTER_A_SEED') + ' or WIF' }
+            placeholder={ `${translate('TOOLS.ENTER_A_SEED')} ${translate('TOOLS.OR_WIF')}` }
             autoComplete="off"
             required />
         </div>
@@ -297,7 +297,7 @@ class ToolsMultisigAddressStorage extends React.Component {
               !this.state.encryptKey ||
               !this.state.encryptKeyConfirm
             }>
-            Save
+            { translate('SETTINGS.SAVE') }
           </button>
         </div>
       </div>

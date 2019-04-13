@@ -56,7 +56,7 @@ const ExchangesSupportedCoinsModalRender = function() {
                 <span>×</span>
               </button>
               <h4 className="modal-title white">
-                Supported coins to exchange
+                { translate('EXCHANGES.SUPPORTED_COINS_TO_EXCHANGE') }
               </h4>
             </div>
             <div className="modal-body modal-body-container">

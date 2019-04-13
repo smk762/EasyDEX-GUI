@@ -21,7 +21,7 @@ export const apiElectionsBalance = (coin, address) => {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           translate('API.apiElectionsBalance') + ' (code: apiElectionsBalance)',
           translate('TOASTR.ERROR'),
@@ -52,7 +52,7 @@ export const apiElectionsTransactions = (coin, address, type) => {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      Store.dispatch(
         triggerToaster(
           translate('API.apiElectionsTransactions') + ' (code: apiElectionsTransactions)',
           translate('TOASTR.ERROR'),
@@ -158,7 +158,7 @@ export const apiElectionsSend = (coin, value, sendToAddress, changeAddress, opre
     const _urlParams = {
       token,
       coin,
-      address,
+      address: sendToAddress,
       value,
       opreturn,
       change: changeAddress,
@@ -176,7 +176,8 @@ export const apiElectionsSend = (coin, value, sendToAddress, changeAddress, opre
         triggerToaster(
           translate('API.apiElectionsSend') + ' (code: apiElectionsSend)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false,
         )
       );
     })

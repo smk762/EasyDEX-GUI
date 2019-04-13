@@ -44,7 +44,8 @@ export const AddressListRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
   const _notAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
-
+  const _isAcPublic = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_public;
+  
   return (
     <div className={ `btn-group bootstrap-select form-control form-material showkmdwalletaddrs show-tick ${(this.state.addressSelectorOpen ? 'open' : '')}` }>
       <button
@@ -60,7 +61,7 @@ export const AddressListRender = function() {
         <ul className="dropdown-menu inner">
           { (_mode === 'spv' ||
              _mode === 'eth' ||
-            (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate)) &&
+            (_mode === 'native' && _notAcPrivate)) &&
             (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs' && this.state.sendTo.length !== 95)) &&
             <li
               className="selected"
@@ -88,7 +89,7 @@ export const AddressListRender = function() {
              ((_mode === 'native' && _coin === 'KMD') || (_mode === 'native' && _coin !== 'KMD' && _notAcPrivate))) &&
             this.renderAddressByType('public')
           }
-          { this.renderAddressByType('private') }
+          { _coin !== 'KMD' && !_isAcPublic && this.renderAddressByType('private') }
         </ul>
       </div>
     </div>
@@ -120,12 +121,12 @@ export const _SendFormRender = function() {
   const _coin = this.props.ActiveCoin.coin;
   const _mode = this.props.ActiveCoin.mode;
   const _isAcPrivate = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_private;
-
+  const _isAcPublic = staticVar.chainParams && staticVar.chainParams[_coin] && staticVar.chainParams[_coin].ac_public;
+  
   return (
     <div className="extcoin-send-form">
-      { (this.state.renderAddressDropdown ||
-        (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate)) &&
-        !this.state.zshieldcoinbaseToggled &&
+      { ((this.state.renderAddressDropdown && _mode !== 'native' && _coin !== 'KMD') ||
+        (_mode === 'native' && _coin !== 'KMD' && (_isAcPrivate || !_isAcPublic) && !this.state.zshieldcoinbaseToggled)) &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             <label className="control-label padding-bottom-10">
@@ -181,7 +182,7 @@ export const _SendFormRender = function() {
               value={ this.state.sendTo }
               disabled={ this.props.initState }
               id="kmdWalletSendTo"
-              placeholder={ translate('SEND.' + (_mode === 'spv' || _mode === 'eth' ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
+              placeholder={ translate('SEND.' + (_mode === 'spv' || _mode === 'eth' || (_mode === 'native' && _coin === 'KMD') ? 'ENTER_ADDRESS' : (_mode === 'native' && _coin !== 'KMD' && _isAcPrivate) ? 'ENTER_Z_ADDR' : 'ENTER_T_OR_Z_ADDR')) }
               autoComplete="off"
               required />
           </div>
@@ -303,6 +304,13 @@ export const _SendFormRender = function() {
             <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
               <i className="icon fa-warning color-warning margin-right-5"></i>&nbsp;
               <span className="desc">{ translate('SEND.SEND_NATIVE_SYNC_WARNING') }</span>
+            </div>
+          }
+          { _mode === 'native' &&
+            _coin === 'KMD' &&
+            <div className="col-lg-12 padding-top-20 padding-bottom-20 send-coin-sync-warning">
+              <i className="icon fa-warning color-warning margin-right-5"></i>&nbsp;
+              <span className="desc">{ translate('SEND.KMD_Z_ADDRESSES_DEPRECATED') }</span>
             </div>
           }
           <div className="col-lg-12">
@@ -655,6 +663,13 @@ export const SendRender = function() {
                 { this.state.noUtxo &&
                   <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
                 }
+                { this.state.responseTooLarge &&
+                  <div className="padding-top-20">
+                    { translate('INDEX.RESPONSE_TOO_LARGE_P1') }
+                    <br />
+                    { translate('INDEX.RESPONSE_TOO_LARGE_P2') }
+                  </div>
+                }
                 { (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress)) &&
                   <div className="padding-top-20">{ translate('SEND.SPV_VERIFYING') }...</div>
                 }
@@ -667,15 +682,15 @@ export const SendRender = function() {
                 }
                 { !this.state.spvDpowVerificationWarning &&
                   <div className="padding-top-20 fs-15">
-                    <strong>Notice:</strong>&nbsp;
-                    One ore more of your UTXO(s) are not dPoW secured.
+                    <strong>{ translate('SEND.NOTICE') }</strong>&nbsp;
+                    { translate('SEND.ONE_OR_MORE_UTXO_NOT_DPOWED') }
                   </div>
                 }
                 { this.state.spvDpowVerificationWarning &&
                   this.state.spvDpowVerificationWarning === true &&
                   <div className="padding-top-20 fs-15">
                     <i className="icon fa-shield col-green"></i>&nbsp;
-                    Your funds are dPoW secured.
+                    { translate('SEND.YOUR_FUNDS_ARE_DPOW_SECURED') }
                   </div>
                 }
                 { _mode === 'eth' &&
@@ -684,8 +699,8 @@ export const SendRender = function() {
                   this.state.ethPreflightRes.msg &&
                   this.state.ethPreflightRes.msg === 'error' &&
                   <div className="padding-top-10">
-                    <div>Error cannot verify ERC20 transaction.</div>
-                    <div className="padding-top-10 padding-bottom-10">Debug info</div>
+                    <div>{ translate('SEND.CANNOT_VERIFY_ERC20_TX') }</div>
+                    <div className="padding-top-10 padding-bottom-10">{ translate('SEND.DEBUG_INFO') }</div>
                     <div className="word-break--all">{ JSON.stringify(this.state.ethPreflightRes.result) }</div>
                   </div>
                 }
@@ -717,18 +732,18 @@ export const SendRender = function() {
                     { this.state.ethPreflightRes.notEnoughBalance &&
                       <div className="row">
                         <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
-                        Not enough ETH to send the transaction
+                          { translate('SEND.NOT_ENOUGH_ETH_TO_SEND') }
                         </div>
                       </div>
                     }
                     <div className="row">
                       <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
-                      <strong>Current balance</strong>: { this.state.ethPreflightRes.maxBalance.balance } ETH
+                      <strong>{ translate('SEND.CURRENT_BALANCE') }</strong>: { this.state.ethPreflightRes.maxBalance.balance } ETH
                       </div>
                     </div>
                     <div className="row">
                       <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
-                      <strong>Balace after the fee</strong>: { this.state.ethPreflightRes.balanceAferFee } ETH
+                      <strong>{ translate('SEND.BALANCE_AFTER_THE_FEE') }</strong>: { this.state.ethPreflightRes.balanceAferFee } ETH
                       </div>
                     </div>
                   </div>
@@ -738,7 +753,7 @@ export const SendRender = function() {
                   <div className="row">
                     <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
                       <strong>{ translate('SEND.TOTAL_AMOUNT_DESC') }:</strong>&nbsp;
-                      { Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) > this.props.ActiveCoin.balance.balance ? Number(this.state.amount) - Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) : Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) }&nbsp;
+                      { Number(Number(Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) > this.props.ActiveCoin.balance.balance ? Number(this.state.amount) - Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()])) : Number(this.state.amount) + Number(formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]))).toFixed(8)) }&nbsp;
                       { _coin }
                     </div>
                   </div>
@@ -752,10 +767,13 @@ export const SendRender = function() {
                       type="button"
                       className="btn btn-primary"
                       disabled={
-                        _mode === 'eth' &&
+                        (_mode === 'eth' &&
                         erc20ContractId[_coin] &&
                         this.state.ethPreflightRes &&
-                        ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))
+                        ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))) ||
+                        this.state.noUtxo ||
+                        this.state.responseTooLarge ||
+                        (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress))
                       }
                       onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>
                       { translate('INDEX.CONFIRM') }
@@ -918,7 +936,7 @@ export const SendRender = function() {
                           <div>{ this.state.lastSendToResponse.result }</div>
                           { typeof this.state.lastSendToResponse.raw.txid === 'object' &&
                             <div className="padding-top-10 word-break--all">
-                              <strong className="text-capitalize">Debug info</strong>: { JSON.stringify(this.state.lastSendToResponse.raw.txid) }
+                              <strong className="text-capitalize">{ translate('SEND.DEBUG_INFO') }</strong>: { JSON.stringify(this.state.lastSendToResponse.raw.txid) }
                             </div>
                           }
                         </div>
@@ -947,8 +965,8 @@ export const SendRender = function() {
                     this.state.lastSendToResponse.msg === 'error' &&
                     _mode === 'eth' &&
                     <div className="padding-left-30 padding-top-10">
-                      <div>Error cannot push ETH transaction.</div>
-                      <div className="padding-top-10 padding-bottom-10">Debug info</div>
+                      <div>{ translate('SEND.CANNOT_PUSH_ETH_TX') }</div>
+                      <div className="padding-top-10 padding-bottom-10">{ translate('SEND.DEBUG_INFO') }</div>
                       <div>{ JSON.stringify(this.state.lastSendToResponse) }</div>
                     </div>
                   }

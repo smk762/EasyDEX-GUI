@@ -239,6 +239,10 @@ class AddCoin extends React.Component {
           width="30px"
           height="30px" />
           <span className="margin-left-10">{ option.label }</span>
+        { option.value.indexOf('ETH|') > -1 &&
+          option.value !== 'ETH|ropsten' &&
+          <div className="badge badge--erc20">ERC20</div>
+        }
       </div>
     );
   }

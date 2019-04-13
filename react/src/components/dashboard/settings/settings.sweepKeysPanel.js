@@ -17,12 +17,14 @@ import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
 import { stringToWif } from 'agama-wallet-lib/src/keys';
 import electrumJSNetworks from 'agama-wallet-lib/build/bitcoinjs-networks';
-import { isKomodoCoin } from 'agama-wallet-lib/build/coin-helpers';
+import {
+  isKomodoCoin,
+  explorerList,
+} from 'agama-wallet-lib/build/coin-helpers';
 import {
   fromSats,
   toSats,
 } from 'agama-wallet-lib/src/utils';
-import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const { shell } = window.require('electron');
 const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
@@ -430,7 +432,7 @@ class SweepKeysPanel extends React.Component {
           this.state.sweepResult.msg === 'success' &&
           this.state.sweepResult.result.txid &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-50">
-            TXID: <span className="blur selectable word-break--all">{ this.state.sweepResult.result.txid }</span>
+            { translate('KMD_NATIVE.TXID') }: <span className="blur selectable word-break--all">{ this.state.sweepResult.result.txid }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }

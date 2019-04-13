@@ -6,8 +6,48 @@ import QRModal from '../dashboard/qrModal/qrModal';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
 import mainWindow, { staticVar } from '../../util/mainWindow';
+import nnConfig from '../nnConfig';
 
 const LoginRender = function() {
+  let shortcuts = [
+    {
+      value: 'kmd',
+      label: 'kmd',
+    },
+    {
+      value: 'pirate',
+      label: 'pirate',
+    },
+    {
+      value: 'btch',
+      label: 'btch',
+    },
+    {
+      value: 'revs',
+      label: 'revs',
+    },
+    {
+      value: 'jumblr',
+      label: 'jumblr',
+    },
+    {
+      value: 'kmd+revs+jumblr',
+      label: 'kmd+revs+jumblr',
+    },
+  ];
+
+  if (Math.floor(Date.now() / 1000) > nnConfig.activation && 
+      Math.floor(Date.now() / 1000) < nnConfig.deactivation) {
+    shortcuts.shift();
+    shortcuts.unshift({
+      value: 'kmd',
+      label: 'kmd',
+    }, {
+      value: 'vote2019',
+      label: 'vote2019',
+    });
+  }
+
   return (
     <div>
       <ZcparamsFetchModal />
@@ -48,6 +88,11 @@ const LoginRender = function() {
                   <li>
                     <a onClick={ () => this.toggleLoginSettingsDropdownSection('tools') }>
                       <i className="icon fa-wrench"></i> { translate('TOOLS.TOOLS') }
+                    </a>
+                  </li>
+                  <li>
+                    <a onClick={ () => this.toggleLoginSettingsDropdownSection('elections') }>
+                      <i className="icon fa-thumbs-up"></i> { `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }
                     </a>
                   </li>
                   <li>
@@ -237,36 +282,7 @@ const LoginRender = function() {
                       onChange={ (event) => this.updateSelectedShortcut(event, 'native') }
                       optionRenderer={ this.renderShortcutOption }
                       valueRenderer={ this.renderShortcutOption }
-                      options={[
-                        {
-                          value: 'kmd',
-                          label: 'kmd',
-                        },
-                        {
-                          value: 'pirate',
-                          label: 'pirate',
-                        },
-                        {
-                          value: 'mnz',
-                          label: 'mnz',
-                        },
-                        {
-                          value: 'btch',
-                          label: 'btch',
-                        },
-                        {
-                          value: 'revs',
-                          label: 'revs',
-                        },
-                        {
-                          value: 'jumblr',
-                          label: 'jumblr',
-                        },
-                        {
-                          value: 'kmd+revs+jumblr',
-                          label: 'kmd+revs+jumblr',
-                        },
-                      ]} />
+                      options={ shortcuts } />
                   </div>
                 }
                 <div className="addcoin-shortcut">
@@ -295,40 +311,7 @@ const LoginRender = function() {
                     onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
                     optionRenderer={ this.renderShortcutOption }
                     valueRenderer={ this.renderShortcutOption }
-                    options={[
-                      {
-                        value: 'kmd',
-                        label: 'kmd',
-                      },
-                      {
-                        value: 'chips',
-                        label: 'chips',
-                      },
-                      {
-                        value: 'bntn',
-                        label: 'bntn',
-                      },
-                      {
-                        value: 'btch',
-                        label: 'btch',
-                      },
-                      {
-                        value: 'mnz',
-                        label: 'mnz',
-                      },
-                      {
-                        value: 'revs',
-                        label: 'revs',
-                      },
-                      {
-                        value: 'jumblr',
-                        label: 'jumblr',
-                      },
-                      {
-                        value: 'kmd+revs+jumblr',
-                        label: 'kmd+revs+jumblr',
-                      },
-                    ]} />
+                    options={ shortcuts.filter(item => item.value !== 'pirate') } />
                 </div>
               </div>
             </div>

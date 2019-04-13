@@ -6,7 +6,6 @@ import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
 import WalletsData from '../walletsData/walletsData';
-import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
@@ -18,7 +17,6 @@ import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
-import Dice from '../dice/dice';
 import Exchanges from '../exchanges/exchanges';
 import ChangeLog from '../changeLog/changeLog';
 
@@ -39,18 +37,10 @@ const DashboardRender = function() {
           <WalletsMain />
           <ClaimInterestModal />
         </div>
-        { this.isSectionActive('dice') &&
-          <div>
-            <Dice />
-          </div>
-        }
         { this.isSectionActive('exchanges') &&
           <div>
             <Exchanges />
           </div>
-        }
-        { this.isSectionActive('jumblr') &&
-          <Jumblr  />
         }
         { this.isSectionActive('settings') &&
           <Settings disableWalletSpecificUI={ false } />

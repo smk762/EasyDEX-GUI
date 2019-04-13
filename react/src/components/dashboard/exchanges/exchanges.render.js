@@ -17,8 +17,11 @@ import ExchangesSupportedCoinsModal from '../exchangesSupportedCoinsModal/exchan
 
 const statusLookup = {
   coinswitch: {
-    timeout: 'expired',
-    no_deposit: 'awaiting deposit',
+    timeout: translate('EXCHANGES.STATUS_EXPIRED'),
+    no_deposit: translate('EXCHANGES.STATUS_AWAITING_DEPOSIT'),
+    confirming: translate('EXCHANGES.STATUS_CONFIRMING'),
+    exchanging: translate('EXCHANGES.STATUS_EXCHANGING'),
+    sending: translate('EXCHANGES.STATUS_SENDING'),
   },
 };
 
@@ -29,10 +32,10 @@ export const RenderNewOrderForm = function() {
         this.props.Main.coins &&
         this.props.Main.coins.spv.length > 1 &&
         <div className="step1">
-          <h3 className="padding-left-15">Order details</h3>
+          <h3 className="padding-left-15">{ translate('EXCHANGES.EXCHANGE_ORDER_DETAILS') }</h3>
           <a
             className="pointer supported-coins-btn"
-            onClick={ this._toggleExchangesSupportedCoinsModal }>Supported coins</a>
+            onClick={ this._toggleExchangesSupportedCoinsModal }>{ translate('EXCHANGES.SUPPORTED_COINS') }</a>
           <ExchangesSupportedCoinsModal />
           <div className="col-sm-12 padding-top-10 coin-send-form">
             <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
@@ -40,22 +43,22 @@ export const RenderNewOrderForm = function() {
                 <div className="step col-md-4 current">
                   <span className="step-number">1</span>
                   <div className="step-desc">
-                    <span className="step-title">Fill Order Form</span>
-                    <p>Fill exchange order details</p>
+                    <span className="step-title">{ translate('EXCHANGES.FILL_ORDER_FORM') }</span>
+                    <p>{ translate('EXCHANGES.FILL_EXCHANGE_ORDER_DETAILS') }</p>
                   </div>
                 </div>
                 <div className="step col-md-4">
                   <span className="step-number">2</span>
                   <div className="step-desc">
-                    <span className="step-title">Confirming</span>
-                    <p>Confirm if details are correct</p>
+                    <span className="step-title">{ translate('EXCHANGES.CONFIRMING') }</span>
+                    <p>{ translate('EXCHANGES.CONFIRM_IF_DETAILS_ARE_CORRECT') }</p>
                   </div>
                 </div>
                 <div className="step col-md-4">
                   <span className="step-number">3</span>
                   <div className="step-desc">
-                    <span className="step-title">Processing</span>
-                    <p>Processing and showing details</p>
+                    <span className="step-title">{ translate('EXCHANGES.PROCESSING') }</span>
+                    <p>{ translate('EXCHANGES.PROCESSING_AND_SHOWING_DETAILS') }</p>
                   </div>
                 </div>
               </div>
@@ -74,11 +77,11 @@ export const RenderNewOrderForm = function() {
                       <div className="col-lg-12 form-group form-material">
                         <a
                           className="pointer exchange-order-clear"
-                          onClick={ this.clearOrder }>Clear</a>
+                          onClick={ this.clearOrder }>{ translate('EXCHANGES.CLEAR') }</a>
                         <label
                           className="control-label select"
                           htmlFor="newExchangeOrderDetailsCoinSrc">
-                          Source
+                          { translate('EXCHANGES.SOURCE') }
                         </label>
                         <Select
                           id="newExchangeOrderDetailsCoinSrc"
@@ -93,7 +96,7 @@ export const RenderNewOrderForm = function() {
                         <label
                           className="control-label select"
                           htmlFor="newExchangeOrderDetailsCoinDest">
-                          Destination
+                          { translate('EXCHANGES.DESTINATION') }
                         </label>
                         <Select
                           id="newExchangeOrderDetailsCoinDest"
@@ -118,7 +121,7 @@ export const RenderNewOrderForm = function() {
                           <div
                             className="toggle-label"
                             onClick={ () => this.toggleBuyFixedDestCoin() }>
-                            Amount in { this.state.newExchangeOrderDetails.coinSrc ? this.state.newExchangeOrderDetails.coinSrc.split('|')[0] : '...' }
+                            { translate('EXCHANGES.AMOUNT_IN') } { this.state.newExchangeOrderDetails.coinSrc ? this.state.newExchangeOrderDetails.coinSrc.split('|')[0] : '...' }
                           </div>
                         </span>
                       </div>
@@ -139,7 +142,7 @@ export const RenderNewOrderForm = function() {
                         <label
                           className="control-label"
                           htmlFor="kmdWalletAmount">
-                          <span>{ translate('INDEX.AMOUNT') }{ this.state.newExchangeOrderDetails.coinSrc && this.state.newExchangeOrderDetails.coinDest ? ' in ' + (this.state.buyFixedDestCoin ? this.state.newExchangeOrderDetails.coinSrc.split('|')[0] : this.state.newExchangeOrderDetails.coinDest.split('|')[0]) : '' }</span>
+                          <span>{ translate('INDEX.AMOUNT') }{ this.state.newExchangeOrderDetails.coinSrc && this.state.newExchangeOrderDetails.coinDest ? ` ${translate('EXCHANGES.IN_SM')} ${(this.state.buyFixedDestCoin ? this.state.newExchangeOrderDetails.coinSrc.split('|')[0] : this.state.newExchangeOrderDetails.coinDest.split('|')[0])}` : '' }</span>
                           { this.state.newExchangeOrderDetails.currentBalance !== 'none' &&
                             this.state.newExchangeOrderDetails.currentBalance !== 'loading' &&
                             this.state.buyFixedDestCoin &&
@@ -179,7 +182,7 @@ export const RenderNewOrderForm = function() {
                           !this.state.newExchangeOrderDetails.coinDest ||
                           !this.state.newExchangeOrderDetails.amount
                         }>
-                        { this.state.processing ? 'Please wait...' : 'Next' }
+                        { this.state.processing ? `${translate('EXCHANGES.PLEASE_WAIT')}...` : translate('EXCHANGES.NEXT') }
                       </button>
                     </div>
                   </div>
@@ -192,7 +195,7 @@ export const RenderNewOrderForm = function() {
                   <div className="panel-body">
                     <div className="row">
                       <div className="col-xs-12">
-                        <strong>You pay</strong>
+                        <strong>{ translate('EXCHANGES.YOU_PAY') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
                         { this.state.newExchangeOrderDetails.amount } { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }
@@ -203,7 +206,7 @@ export const RenderNewOrderForm = function() {
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>You receive</strong>
+                        <strong>{ translate('EXCHANGES.YOU_RECEIVE') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
                         { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate).toFixed(8) } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] }
@@ -214,36 +217,36 @@ export const RenderNewOrderForm = function() {
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Exchange rate</strong>
+                        <strong>{ translate('EXCHANGES.EXCHANGE_RATE') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                      { this.state.newExchangeOrderDetails.exchangeRate.rate } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] } for 1 { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }
+                        { this.state.newExchangeOrderDetails.exchangeRate.rate } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] } for 1 { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }
                       </div>
                     </div>
                     { this.state.newExchangeOrderDetails.amount > this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin &&
                       <div className="row padding-top-20">
                         <div className="col-xs-12">
-                          <strong>Error</strong>
+                          <strong>{ translate('EXCHANGES.ERROR') }</strong>
                         </div>
                         <div className="col-lg-12 col-sm-12 col-xs-12">
-                          { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } amount exceeds max allowed value { this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin }
+                          { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } { translate('EXCHANGES.AMOUNT_EXCEEDS_MAX_VAL') } { this.state.newExchangeOrderDetails.exchangeRate.limitMaxDepositCoin }
                         </div>
                       </div>
                     }
                     { this.state.newExchangeOrderDetails.amount < this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin &&
                       <div className="row padding-top-20">
                         <div className="col-xs-12">
-                          <strong>Error</strong>
+                          <strong>{ translate('EXCHANGES.ERROR') }</strong>
                         </div>
                         <div className="col-lg-12 col-sm-12 col-xs-12">
-                          { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } amount is too low, min deposit amount is { this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin }
+                          { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] } { translate('EXCHANGES.AMOUNT_IS_TOO_LOW') } { this.state.newExchangeOrderDetails.exchangeRate.limitMinDepositCoin }
                         </div>
                       </div>
                     }
                     <div className="widget-body-footer">
                       <a
                         onClick={ this.prevStep }
-                        className="btn btn-default waves-effect waves-light">Back</a>
+                        className="btn btn-default waves-effect waves-light">{ translate('EXCHANGES.BACK') }</a>
                       <div className="widget-actions pull-right">
                         <button
                           type="button"
@@ -254,7 +257,7 @@ export const RenderNewOrderForm = function() {
                             this.state.processing
                           }
                           onClick={ this.nextStep }>
-                          { this.state.processing ? 'Please wait...' : 'Confirm' }
+                          { this.state.processing ? `${translate('EXCHANGES.PLEASE_WAIT')}...` : translate('EXCHANGES.CONFIRM') }
                         </button>
                       </div>
                     </div>
@@ -268,82 +271,86 @@ export const RenderNewOrderForm = function() {
                   <div className="panel-body">
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Date</strong>
+                        <strong>{ translate('EXCHANGES.DATE') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                      { secondsToString(this.state.newExchangeOrderDetails.exchangeOrder.createdAt / 1000) }
+                        { secondsToString(this.state.newExchangeOrderDetails.exchangeOrder.createdAt / 1000) }
                       </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Valid until</strong>
+                        <strong>{ translate('EXCHANGES.VALID_UNTIL') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                      { secondsToString(this.state.newExchangeOrderDetails.exchangeOrder.validTill / 1000) }
+                        { secondsToString(this.state.newExchangeOrderDetails.exchangeOrder.validTill / 1000) }
                       </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>You pay</strong>
+                        <strong>{ translate('EXCHANGES.YOU_PAY') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                      { Number(this.state.newExchangeOrderDetails.exchangeOrder.expectedDepositCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase() }
+                        { Number(this.state.newExchangeOrderDetails.exchangeOrder.expectedDepositCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase() }
                       </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>You receive</strong>
+                        <strong>{ translate('EXCHANGES.YOU_RECEIVE') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                      { Number(this.state.newExchangeOrderDetails.exchangeOrder.expectedDestinationCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase() }
+                        { Number(this.state.newExchangeOrderDetails.exchangeOrder.expectedDestinationCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase() }
                       </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Exchange rate</strong>
+                        <strong>{ translate('EXCHANGES.EXCHANGE_RATE') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                      { Number((1 / this.state.newExchangeOrderDetails.exchangeOrder.expectedDepositCoinAmount) * this.state.newExchangeOrderDetails.exchangeOrder.expectedDestinationCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase() } for 1 { this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase() }
+                        { Number((1 / this.state.newExchangeOrderDetails.exchangeOrder.expectedDepositCoinAmount) * this.state.newExchangeOrderDetails.exchangeOrder.expectedDestinationCoinAmount).toFixed(8) } { this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase() } for 1 { this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase() }
                       </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Deposit address</strong>
+                        <strong>{ translate('EXCHANGES.DEPOSIT_ADDRESS') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
                         <span
                           onClick={ () => this.openExplorerWindow(this.state.newExchangeOrderDetails.exchangeOrder.exchangeAddress.address, 'pub', this.state.newExchangeOrderDetails.exchangeOrder.depositCoin.toUpperCase()) }
-                          className="pointer">{ this.state.newExchangeOrderDetails.exchangeOrder.exchangeAddress.address }</span>
+                          className="pointer">
+                          { this.state.newExchangeOrderDetails.exchangeOrder.exchangeAddress.address }
+                        </span>
                       </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Receive address</strong>
+                        <strong>{ translate('EXCHANGES.RECEIVE_ADDRESS') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
                         <span
                           onClick={ () => this.openExplorerWindow(this.state.newExchangeOrderDetails.exchangeOrder.destinationAddress.address, 'pub', this.state.newExchangeOrderDetails.exchangeOrder.destinationCoin.toUpperCase()) }
-                          className="pointer">{ this.state.newExchangeOrderDetails.exchangeOrder.destinationAddress.address }</span>
+                          className="pointer">
+                          { this.state.newExchangeOrderDetails.exchangeOrder.destinationAddress.address }
+                        </span>
                       </div>
                     </div>
                     <div className="row padding-top-20">
                       <div className="col-xs-12">
-                        <strong>Order ID</strong>
+                        <strong>{ translate('EXCHANGES.ORDER_ID') }</strong>
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
-                      { this.state.newExchangeOrderDetails.exchangeOrder.orderId }
+                        { this.state.newExchangeOrderDetails.exchangeOrder.orderId }
                       </div>
                     </div>
                     <div className="widget-body-footer">
                       <a
                         onClick={ this.clearOrder }
-                        className="btn btn-default waves-effect waves-light">Back to orders</a>
+                        className="btn btn-default waves-effect waves-light">{ translate('EXCHANGES.BACK_TO_ORDERS') }</a>
                       <div className="widget-actions pull-right">
                         <button
                           type="button"
                           className="btn btn-primary"
                           onClick={ this.nextStep }>
-                          Proceed to deposit
+                          { translate('EXCHANGES.PROCEED_TO_DEPOSIT') }
                         </button>
                       </div>
                     </div>
@@ -366,12 +373,12 @@ export const RenderNewOrderForm = function() {
       }
       { this.props.Main.coins &&
         this.props.Main.coins.spv.length < 2 &&
-        <div>Please activate Lite mode coins that you wish to exchange</div>
+        <div>{ translate('EXCHANGES.PLEASE_ACTIVATE_LITE_MODE_COINS') }</div>
       }
       <div className="text-center padding-bottom-30">
         <a
           onClick={ this.toggleCreateOrder }
-          className="pointer">Back to orders list</a>
+          className="pointer">{ translate('EXCHANGES.BACK_TO_ORDERS') }</a>
         <div className="hide" onClick={ this.testDepositResponse }>test deposit</div>
       </div>
     </section>
@@ -416,7 +423,7 @@ export const RenderExchangeHistory = function() {
             { _cacheFlat[i].outputTransactionHash ? 'complete' : statusLookup.coinswitch[_cacheFlat[i].status] ? statusLookup.coinswitch[_cacheFlat[i].status] : _cacheFlat[i].status }
           </td>
           <td>
-            { this.findDeposits(_cacheFlat[i].orderId).length > 0 || (this.state.provider === 'coinswitch' && _cacheFlat[i].inputTransactionHash) || (this.state.provider === 'coinswitch' && _cacheFlat[i].inputTransactionHash && _cache.deposits && _cache.deposits[`${_cacheFlat[i].depositCoin.toLowerCase()}-${_cacheFlat[i].inputTransactionHash}`]) ? 'Yes' : 'No' }
+            { this.findDeposits(_cacheFlat[i].orderId).length > 0 || (this.state.provider === 'coinswitch' && _cacheFlat[i].inputTransactionHash) || (this.state.provider === 'coinswitch' && _cacheFlat[i].inputTransactionHash && _cache.deposits && _cache.deposits[`${_cacheFlat[i].depositCoin.toLowerCase()}-${_cacheFlat[i].inputTransactionHash}`]) ? translate('EXCHANGES.YES') : translate('EXCHANGES.NO') }
             { ((this.state.provider === 'coinswitch' && this.findDeposits(_cacheFlat[i].orderId).length === 0 && _cacheFlat[i].status === 'no_deposit')/* ||
               (this.state.provider === 'coinswitch' && _cacheFlat[i].status === 'no_deposit' && _cacheFlat[i].inputTransactionHash && _cache.deposits && !_cache.deposits[`${_cacheFlat[i].depositCoin.toLowerCase()}-${_cacheFlat[i].inputTransactionHash}`])*/) &&
               <button
@@ -424,7 +431,7 @@ export const RenderExchangeHistory = function() {
                 className="btn btn-xs white btn-success waves-effect waves-lightm margin-left-10"
                 disabled={ this.state.syncHistoryProgressing }
                 onClick={ () => this.makeDeposit(_cacheFlat[i].orderId) }>
-                Send
+                { translate('EXCHANGES.SEND') }
               </button>
             }
           </td>
@@ -448,12 +455,12 @@ export const RenderExchangeHistory = function() {
         <table className="table table-hover dataTable table-striped">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Source</th>
-              <th>Destination</th>
-              <th>Status</th>
-              <th>Deposit</th>
-              <th>Details</th>
+              <th>{ translate('EXCHANGES.DATE') }</th>
+              <th>{ translate('EXCHANGES.SOURCE') }</th>
+              <th>{ translate('EXCHANGES.DESTINATION') }</th>
+              <th>{ translate('EXCHANGES.STATUS') }</th>
+              <th>{ translate('EXCHANGES.DEPOSIT') }</th>
+              <th>{ translate('EXCHANGES.DETAILS') }</th>
             </tr>
           </thead>
           <tbody>
@@ -461,12 +468,12 @@ export const RenderExchangeHistory = function() {
           </tbody>
           <tfoot>
             <tr>
-              <th>Date</th>
-              <th>Source</th>
-              <th>Destination</th>
-              <th>Status</th>
-              <th>Deposit</th>
-              <th>Details</th>
+              <th>{ translate('EXCHANGES.DATE') }</th>
+              <th>{ translate('EXCHANGES.SOURCE') }</th>
+              <th>{ translate('EXCHANGES.DESTINATION') }</th>
+              <th>{ translate('EXCHANGES.STATUS') }</th>
+              <th>{ translate('EXCHANGES.DEPOSIT') }</th>
+              <th>{ translate('EXCHANGES.DETAILS') }</th>
             </tr>
           </tfoot>
         </table>
@@ -474,7 +481,7 @@ export const RenderExchangeHistory = function() {
     );
   } else {
     return (
-      <div>No history</div>
+      <div>{ translate('EXCHANGES.NO_HISTORY') }</div>
     );
   }
 };
@@ -500,29 +507,29 @@ const ExchangesRender = function() {
               </div>
               { !this.state.newExchangeOrder &&
                 <div className="margin-top-40 exchanges-history">
-                  <h4>My exchange history</h4>
+                  <h4>{ translate('EXCHANGES.MY_EXCHANGE_HISTORY') }</h4>
                   <i
                     className={ 'icon fa-refresh exchanges-refresh-btn' + (this.state.exchangeCacheUpdateProgress ? ' rotate' : '') }
                     onClick={ this.updateCache }></i>
                   <div
                     className="btn-exchange-tos-modal"
                     onClick={ this._toggleExchangesTOSModal }>
-                    Terms of service
+                    { translate('EXCHANGES.TOS') }
                   </div>
                   <div
                     className={ 'btn-exchange-sync' + (this.state.syncHistoryProgressing ? ' rotate' : '') }
                     onClick={ this.syncHistory }>
-                    <i className="icon fa-refresh margin-right-5"></i> Sync history
+                    <i className="icon fa-refresh margin-right-5"></i> { translate('EXCHANGES.SYNC_HISTORY') }
                   </div>
                   <button
                     type="button"
                     className="btn btn-xs white btn-info waves-effect waves-light btn-exchange-new"
                     disabled={ this.state.syncHistoryProgressing }
                     onClick={ this.toggleCreateOrder }>
-                    + New exchange order
+                    + { translate('EXCHANGES.NEW_EXCHANGE_ORDER') }
                   </button>
                   <div>
-                  { this._RenderExchangeHistory() }
+                    { this._RenderExchangeHistory() }
                   </div>
                   <ExchangesOrderInfoModal provider={ this.state.provider } />
                 </div>

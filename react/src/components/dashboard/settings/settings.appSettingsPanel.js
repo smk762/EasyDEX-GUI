@@ -39,7 +39,7 @@ class AppSettingsPanel extends React.Component {
     if (address) {
       Store.dispatch(
         triggerToaster(
-          translate('TOASTR.YOUR_PUBKEY') + pubkey + translate('TOASTR.CORRESPONDS_TO_T_ADDR') + address,
+          `${translate('TOASTR.YOUR_PUBKEY')}${pubkey}${translate('TOASTR.CORRESPONDS_TO_T_ADDR')}${address}`,
           translate('INDEX.SETTINGS'),
           'success toastr-wide',
           false

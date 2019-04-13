@@ -15,6 +15,7 @@ import {
   apiElectrumSplitUtxoPromise,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
+import devlog from '../../../util/devlog';
 
 class ToolsSeedToWif extends React.Component {
   constructor() {
@@ -40,7 +41,7 @@ class ToolsSeedToWif extends React.Component {
       this.state.s2wisIguana
     )
     .then((res) => {
-      // console.warn(res);
+      devlog(res);
 
       if (res.msg === 'success') {
         this.setState({
@@ -163,7 +164,7 @@ class ToolsSeedToWif extends React.Component {
               <strong>WIF:</strong> <span className="blur selectable">{ this.state.s2wResult.keys.priv }</span>
             </div>
             <div className="margin-top-10">
-              <strong>Pub:</strong> <span className="blur selectable">{ this.state.s2wResult.keys.pub }</span>
+              <strong>{ translate('TOOLS.PUB_ADDR') }:</strong> <span className="blur selectable">{ this.state.s2wResult.keys.pub }</span>
             </div>
           </div>
         }

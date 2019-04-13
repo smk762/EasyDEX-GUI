@@ -118,6 +118,7 @@ if (isProduction) {
 }
 
 module.exports = {
+  target: 'electron-renderer',
   devtool: isProduction ? 'eval' : 'source-map',
   context: jsSourcePath,
   entry: {

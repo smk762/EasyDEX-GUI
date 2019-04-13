@@ -21,8 +21,10 @@ import { secondsToString } from 'agama-wallet-lib/src/time';
 import {
   isPositiveNumber,
   toSats,
+  fromSats,
+  sort,
 } from 'agama-wallet-lib/src/utils';
-import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const SEED_TRIM_TIMEOUT = 5000;
@@ -68,20 +70,28 @@ class NotaryElectionsModal extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.sendValidate = this.sendValidate.bind(this);
     this.verifyMultiSendForm = this.verifyMultiSendForm.bind(this);
+    this.setSendAmountAll = this.setSendAmountAll.bind(this);
     this.electionsDataInterval = null;
   }
 
-  sendValidate() {
-    let valid = true;
+  setSendAmountAll() {
+    const _amount = Number(fromSats((toSats(this.state.balance) - 10000)));
+    
+    this.setState({
+      amount: Number(_amount) > 0 ? _amount : this.state.amount,
+    });
+  }
 
+  sendValidate() {
     const _amount = this.state.amount;
     const _balance = this.state.balance;
     const _fee = 0.0001;
-
-    if (Number(_amount) + _fee > _balance) {
+    let valid = true;
+    
+    if (_amount > _balance) {
       Store.dispatch(
         triggerToaster(
-          `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number(_balance - _fee)} ${this.state.coin}`,
+          `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${_balance} ${this.state.coin}`,
           translate('TOASTR.WALLET_NOTIFICATION'),
           'error'
         )
@@ -121,6 +131,17 @@ class NotaryElectionsModal extends React.Component {
       valid = false;
     }
 
+    if (this.state.address === this.state.pub) {
+      Store.dispatch(
+        triggerToaster(
+          translate('NN_ELECTIONS.SEND_TO_SELF_NOT_ALLOWED'),
+          translate('TOASTR.WALLET_NOTIFICATION'),
+          'error'
+        )
+      );
+      valid = false;
+    }
+
     return valid;
   }
 
@@ -129,7 +150,7 @@ class NotaryElectionsModal extends React.Component {
     let _addressValidateMsg = [];
 
     for (let i = 0; i < 4; i++) {
-      const _validateAddress = pubkeyToAddress(networks.kmd, this.state[`multiOutAddress${i + 1}`]);
+      const _validateAddress = addressVersionCheck(networks.kmd, this.state[`multiOutAddress${i + 1}`],);
 
       if (!_validateAddress ||
           _validateAddress === 'Invalid pub address') {
@@ -141,90 +162,106 @@ class NotaryElectionsModal extends React.Component {
       Store.dispatch(
         triggerToaster(
           `${translate('NN_ELECTIONS.ADDRESSES')} ${_addressValidateMsg.join(', ')} ${translate('NN_ELECTIONS.IS_ARE_INVALID')}`,
-          translate('NN_ELECTIONS.NN_ELECTIONS_2018'),
+          `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
           'error',
           false
         )
       );
     } else {
-      apiElectionsSendMany(
-        this.state.coin,
-        [{
-          address: this.state.multiOutAddress1,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }, {
-          address: this.state.multiOutAddress2,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }, {
-          address: this.state.multiOutAddress3,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }, {
-          address: this.state.multiOutAddress4,
-          value: parseInt(toSats(this.state.balance / _divisor)) - 10000,
-        }],
-        this.state.pub,
-        ['ne2k18-na-1-eu-2-ae-3-sh-4']
-      )
-      .then((res) => {
-        if (res.msg === 'success') {
-          Store.dispatch(
-            triggerToaster(
-              translate('NN_ELECTIONS.YOU_SUCCESFULLY_VOTED'),
-              translate('NN_ELECTIONS.NN_ELECTIONS_2018'),
-              'success',
-              false
-            )
-          );
-          const _timestamp = Math.floor(Date.now() / 1000);
-          let _transactions = this.state.transactions;
-          _transactions.unshift({
+      if (this.state.multiOutAddress1 !== this.state.multiOutAddress2 &&
+          this.state.multiOutAddress1 !== this.state.multiOutAddress3 &&
+          this.state.multiOutAddress1 !== this.state.multiOutAddress4 &&
+          this.state.multiOutAddress1 !== this.state.pub &&
+          this.state.multiOutAddress2 !== this.state.pub &&
+          this.state.multiOutAddress3 !== this.state.pub &&
+          this.state.multiOutAddress4 !== this.state.pub) {
+        apiElectionsSendMany(
+          this.state.coin,
+          [{
             address: this.state.multiOutAddress1,
-            amount: this.state.balance / _divisor,
-            region: 'ne2k18-na',
-            timestamp: _timestamp,
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
           }, {
             address: this.state.multiOutAddress2,
-            amount: this.state.balance / _divisor,
-            region: 'ne2k18-eu',
-            timestamp: _timestamp,
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
           }, {
             address: this.state.multiOutAddress3,
-            amount: this.state.balance / _divisor,
-            region: 'ne2k18-ae',
-            timestamp: _timestamp,
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
           }, {
             address: this.state.multiOutAddress4,
-            amount: this.state.balance / _divisor,
-            region: 'ne2k18-sh',
-            timestamp: _timestamp,
-          });
-          this.setState({
-            transactions: _transactions,
-            balance: 0,
-          });
-        } else {
-          Store.dispatch(
-            triggerToaster(
-              res.result.txid || res.result,
-              translate('NN_ELECTIONS.NN_ELECTIONS_2018'),
-              'error'
-            )
-          );
-        }
-      });
+            value: parseInt(toSats(this.state.balance / _divisor)) - 2850,
+          }],
+          this.state.pub,
+          [`ne2k1${new Date().getFullYear().toString().substr(-1)}-na-1-eu-2-ar-3-sh-4`]
+        )
+        .then((res) => {
+          if (res.msg === 'success') {
+            Store.dispatch(
+              triggerToaster(
+                translate('NN_ELECTIONS.YOU_SUCCESFULLY_VOTED'),
+                `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
+                'success',
+                false
+              )
+            );
+            const _timestamp = Math.floor(Date.now() / 1000);
+            let _transactions = this.state.transactions;
+            _transactions.unshift({
+              address: this.state.multiOutAddress1,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-na`,
+              timestamp: _timestamp,
+            }, {
+              address: this.state.multiOutAddress2,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-eu`,
+              timestamp: _timestamp,
+            }, {
+              address: this.state.multiOutAddress3,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-ar`,
+              timestamp: _timestamp,
+            }, {
+              address: this.state.multiOutAddress4,
+              amount: this.state.balance / _divisor,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-sh`,
+              timestamp: _timestamp,
+            });
+            this.setState({
+              transactions: _transactions,
+              balance: 0,
+            });
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                res.result.txid || res.result,
+                `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
+                'error'
+              )
+            );
+          }
+        });
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            translate('NN_ELECTIONS.NOT_UNIQUE_ADDRESSES'),
+            `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
+            'error',
+            false
+          )
+        );
+      }
     }
   }
 
   send() {
-    const _validateAddress = pubkeyToAddress(networks.kmd, this.state.address);
+    const _validateAddress = addressVersionCheck(networks.kmd, this.state.address);
 
     if (!_validateAddress ||
         _validateAddress === 'Invalid pub address') {
-      _addressValidateMsg.push(this.state[`multiOutAddress${i + 1}`]);
       Store.dispatch(
         triggerToaster(
-          `translate('NN_ELECTIONS.ADDRESS') ${this.state.address} ${translate('NN_ELECTIONS.IS_INVALID')}`,
-          translate('NN_ELECTIONS.NN_ELECTIONS_2018'),
+          `${translate('NN_ELECTIONS.ADDRESS')} ${this.state.address} ${translate('NN_ELECTIONS.IS_INVALID')}`,
+          `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
           'error',
           false
         )
@@ -236,14 +273,14 @@ class NotaryElectionsModal extends React.Component {
           toSats(this.state.amount) - 10000,
           this.state.address,
           this.state.pub,
-          'ne2k18-' + this.state.region,
+          `ne2k1${new Date().getFullYear().toString().substr(-1)}-${this.state.region}`,
         )
         .then((res) => {
           if (res.msg === 'success') {
             Store.dispatch(
               triggerToaster(
                 `${translate('NN_ELECTIONS.YOU_SUCCESFULLY_VOTED')} ${this.state.amount} ${translate('NN_ELECTIONS.FOR')} ${this.state.address}`,
-                translate('NN_ELECTIONS.NN_ELECTIONS_2018'),
+                `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
                 'success',
                 false
               )
@@ -252,18 +289,18 @@ class NotaryElectionsModal extends React.Component {
             _transactions.unshift({
               address: this.state.address,
               amount: this.state.amount - 0.0001,
-              region: 'ne2k18-' + this.state.region,
+              region: `ne2k1${new Date().getFullYear().toString().substr(-1)}-${this.state.region}`,
               timestamp: Math.floor(Date.now() / 1000),
             });
             this.setState({
               transactions: _transactions,
-              balance: this.state.balance - this.state.amount - 0.0001,
+              balance: this.state.balance - this.state.amount - 0.0001 > 0 ? this.state.balance - this.state.amount - 0.0001 : 0,
             });
           } else {
             Store.dispatch(
               triggerToaster(
                 res.result.txid || res.result,
-                translate('NN_ELECTIONS.NN_ELECTIONS_2018'),
+                `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}`,
                 'error'
               )
             );
@@ -280,9 +317,16 @@ class NotaryElectionsModal extends React.Component {
         apiElectionsBalance(this.state.coin, res.result)
         .then((res) => {
           if (res.msg === 'success') {
-            this.setState({
-              balance: res.result.balance,
-            });
+            if (res.result.hasOwnProperty('balance') &&
+                res.result.hasOwnProperty('unconfirmed')) {
+              this.setState({
+                balance: Number(res.result.balance) + Number(res.result.unconfirmed),
+              });
+            } else {
+              this.setState({
+                balance: res.result.balance,
+              });
+            }
           }
         });
 
@@ -292,6 +336,11 @@ class NotaryElectionsModal extends React.Component {
           this.state.userType
         )
         .then((res) => {
+          if (res.result &&
+              res.result.length) {
+            res.result = sort(res.result, 'timestamp', true);
+          }
+
           this.setState({
             transactions: res.result,
           });
@@ -468,16 +517,16 @@ class NotaryElectionsModal extends React.Component {
     let _region;
 
     switch (region) {
-      case 'ne2k18-sh':
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-sh`:
         _region = 'SH';
         break;
-      case 'ne2k18-na':
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-na`:
         _region = 'NA';
         break;
-      case 'ne2k18-ae':
-        _region = 'AE';
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-ar`:
+        _region = 'AR';
         break;
-      case 'ne2k18-eu':
+      case `ne2k1${new Date().getFullYear().toString().substr(-1)}-eu`:
         _region = 'EU';
         break;
     }
@@ -492,7 +541,7 @@ class NotaryElectionsModal extends React.Component {
     for (let i = 0; i < _history.length; i++) {
       _items.push(
         <tr key={ `notary-elections-history-${i}` }>
-          <td>{ _history[i].address }</td>
+          <td className="selectable">{ _history[i].address }</td>
           <td>{ _history[i].amount === 'unknown' ? 'unknown' : Number(_history[i].amount) }</td>
           <td>{ secondsToString(_history[i].timestamp) }</td>
           <td>{ this.renderHistoryRegion(_history[i].region) }</td>
@@ -515,7 +564,7 @@ class NotaryElectionsModal extends React.Component {
         </tbody>
         <tfoot>
           <tr>
-            <th>{ translate('INDEX.' + (this.state.userType === 'voter' ? 'TO' : 'FROM')) }</th>
+            <th>{ translate('NN_ELECTIONS.' + (this.state.userType === 'voter' ? 'TO' : 'FROM')) }</th>
             <th>{ translate('INDEX.AMOUNT') }</th>
             <th>{ translate('NN_ELECTIONS.TIME') }</th>
             <th>{ translate('NN_ELECTIONS.REGION') }</th>
@@ -544,13 +593,13 @@ class NotaryElectionsModal extends React.Component {
                   onClick={ this.closeModal }>
                   <span>×</span>
                 </button>
-                <h4 className="modal-title white text-left">{ translate('NN_ELECTIONS.NN_ELECTIONS_2018') }</h4>
+                <h4 className="modal-title white text-left">{ `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }</h4>
               </div>
               <div className="modal-body modal-body-container">
                 <div className="modal-resizable">
                   <div className="elections-title-bar padding-top-10 padding-bottom-10">
                     <img src="assets/images/native/kmd_header_title_logo.png" />
-                    <div className="elections-title">{ translate('NN_ELECTIONS.NN_ELECTIONS_2018') }</div>
+                    <div className="elections-title">{ `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }</div>
                   </div>
                   { this.state.isAuth &&
                     <button
@@ -635,10 +684,10 @@ class NotaryElectionsModal extends React.Component {
                             onClick={ () => this.setRegion('sh') }
                             src="assets/images/cryptologo/btc/kmd.png" />
                         </div>
-                        <div className={ 'elections-map-node elections-map-node--ae' + (this.state.region === 'ae' ? ' active' : '') }>
-                          <label className="notary-elections-node-title">AE</label>
+                        <div className={ 'elections-map-node elections-map-node--ar' + (this.state.region === 'ar' ? ' active' : '') }>
+                          <label className="notary-elections-node-title">AR</label>
                           <img
-                            onClick={ () => this.setRegion('ae') }
+                            onClick={ () => this.setRegion('ar') }
                             src="assets/images/cryptologo/btc/kmd.png" />
                         </div>
                         <div className={ 'elections-map-node elections-map-node--eu' + (this.state.region === 'eu' ? ' active' : '') }>
@@ -652,7 +701,7 @@ class NotaryElectionsModal extends React.Component {
                   }
                   { this.state.isAuth &&
                     <div className={ 'elections-balance' + (this.state.userType === 'candidate' ? ' margin-top-25' : '') }>
-                      { translate('INDEX.YOU_HAVE') } <strong>{ this.state.balance }</strong> VOTE
+                      { translate('NN_ELECTIONS.YOU_HAVE') } <strong className="selectable">{ this.state.balance }</strong> VOTE
                     </div>
                   }
                   { this.state.isAuth &&
@@ -661,11 +710,11 @@ class NotaryElectionsModal extends React.Component {
                     <div className={ 'elections-user-type' + (this.state.voteType === 'single' ? ' margin-bottom-30' : '') }>
                       <a
                         className={ this.state.voteType === 'multi' ? 'active' : '' }
-                        onClick={ () => this.setVoteType('multi') }><i className="fa fa-users margin-right-10"></i>{ translate('INDEX.4WAY_VOTE') }</a>
+                        onClick={ () => this.setVoteType('multi') }><i className="fa fa-users margin-right-10"></i>{ translate('NN_ELECTIONS.4WAY_VOTE') }</a>
                       <span className="margin-left-30 margin-right-30">|</span>
                       <a
                         className={ this.state.voteType === 'single' ? 'active' : '' }
-                        onClick={ () => this.setVoteType('single') }><i className="fa fa-user margin-right-10"></i>{ translate('INDEX.1WAY_VOTE') }</a>
+                        onClick={ () => this.setVoteType('single') }><i className="fa fa-user margin-right-10"></i>{ translate('NN_ELECTIONS.1WAY_VOTE') }</a>
                     </div>
                   }
                   { this.state.isAuth &&
@@ -679,7 +728,7 @@ class NotaryElectionsModal extends React.Component {
                         name="address"
                         value={ this.state.address !== 0 ? this.state.address : '' }
                         onChange={ this.updateInput }
-                        placeholder={ translate('INDEX.ENTER_AN_ADDR') }
+                        placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR') }
                         autoComplete="off" />
                       <input
                         type="text"
@@ -687,8 +736,14 @@ class NotaryElectionsModal extends React.Component {
                         name="amount"
                         value={ this.state.amount !== 0 ? this.state.amount : '' }
                         onChange={ this.updateInput }
-                        placeholder={ translate('INDEX.ENTER_AN_AMOUNT') }
+                        placeholder={ translate('NN_ELECTIONS.ENTER_AN_AMOUNT') }
                         autoComplete="off" />
+                        <button
+                          type="button"
+                          className="btn btn-default btn-nn-send-all"
+                          onClick={ this.setSendAmountAll }>
+                          { translate('NN_ELECTIONS.ALL') }
+                        </button>
                       <button
                         onClick={ this.send }
                         disabled={
@@ -697,7 +752,7 @@ class NotaryElectionsModal extends React.Component {
                           !this.state.address.length
                         }
                         className="btn btn-md btn-primary btn-block ladda-button elections-login-btn">
-                        { translate('INDEX.VOTE') }
+                        { translate('NN_ELECTIONS.VOTE') }
                       </button>
                     </div>
                   }
@@ -706,7 +761,7 @@ class NotaryElectionsModal extends React.Component {
                     this.state.voteType === 'multi' &&
                     this.state.balance > 0 &&
                     <div className="elections-send margin-top-50">
-                      <div className="margin-bottom-30">{ translate('INDEX.25_PERC_SPLIT') }</div>
+                      <div className="margin-bottom-30">{ translate('NN_ELECTIONS.25_PERC_SPLIT') }</div>
                       <div>
                         <label>NA</label>
                         <input
@@ -715,7 +770,7 @@ class NotaryElectionsModal extends React.Component {
                           name="multiOutAddress1"
                           value={ this.state.multiOutAddress1 !== 0 ? this.state.multiOutAddress1 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_NA') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_NA') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
@@ -727,19 +782,19 @@ class NotaryElectionsModal extends React.Component {
                           name="multiOutAddress2"
                           value={ this.state.multiOutAddress2 !== 0 ? this.state.multiOutAddress2 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_EU') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_EU') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
                       <div className="margin-top-10">
-                        <label>AE</label>
+                        <label>AR</label>
                         <input
                           type="text"
                           className="form-control margin-left-15 margin-bottom-10"
                           name="multiOutAddress3"
                           value={ this.state.multiOutAddress3 !== 0 ? this.state.multiOutAddress3 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_AE') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_AR') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
@@ -751,7 +806,7 @@ class NotaryElectionsModal extends React.Component {
                           name="multiOutAddress4"
                           value={ this.state.multiOutAddress4 !== 0 ? this.state.multiOutAddress4 : '' }
                           onChange={ this.updateInput }
-                          placeholder={ translate('INDEX.ENTER_AN_ADDR_SH') }
+                          placeholder={ translate('NN_ELECTIONS.ENTER_AN_ADDR_SH') }
                           autoComplete="off" />
                         <span className="margin-left-25">{ this.state.balance / 4 } VOTE</span>
                       </div>
@@ -759,14 +814,14 @@ class NotaryElectionsModal extends React.Component {
                         onClick={ this.sendMulti }
                         disabled={ !this.verifyMultiSendForm() }
                         className="btn btn-md btn-primary btn-block ladda-button elections-login-btn margin-top-20">
-                        { translate('INDEX.VOTE') }
+                        { translate('NN_ELECTIONS.VOTE') }
                       </button>
                     </div>
                   }
                   { this.displayTxHistoryRender() &&
                     <div>
-                      <div className={ 'elections-history'  + (this.state.userType === 'voter' ? ' margin-top-20' : '') }>
-                      { translate('INDEX.HISTORY') }
+                      <div className={ 'elections-history' + (this.state.userType === 'voter' ? ' margin-top-20' : '') }>
+                      { translate('NN_ELECTIONS.HISTORY') }
                       </div>
                       { this.renderHistory() }
                     </div>

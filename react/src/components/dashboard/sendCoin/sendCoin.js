@@ -104,6 +104,7 @@ class SendCoin extends React.Component {
       spvPreflightRes: null,
       pin: '',
       noUtxo: false,
+      responseTooLarge: false,
       addressBookSelectorOpen: false,
       // kv
       kvSend: false,
@@ -218,7 +219,7 @@ class SendCoin extends React.Component {
           triggerToaster(
             [
               translate('SEND.COINBASE_SHIELD_SUCCESS'),
-              'Transaction OPID: ' + json.result,
+              `${TX_OPID}: ${json.result}`,
             ],
             translate('TOASTR.ERROR'),
             'success',
@@ -844,7 +845,7 @@ class SendCoin extends React.Component {
         } else {
           Store.dispatch(
             triggerToaster(
-              'Unable to get ETH gas price',
+              translate('SEND.UNABLE_TO_GET_ETH_GAS_PRICE'),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -876,6 +877,7 @@ class SendCoin extends React.Component {
           ethPreflightSendInProgress: false,
           pin: '',
           noUtxo: false,
+          responseTooLarge: false,
         });
         if (this.props.cb) {
           setTimeout(() => {
@@ -956,6 +958,7 @@ class SendCoin extends React.Component {
                   totalInterest: sendPreflight.result.totalInterest,
                 },
               }));
+              
               if (this.props.cb) {
                 setTimeout(() => {
                   this.props.cb(this.state);
@@ -966,10 +969,12 @@ class SendCoin extends React.Component {
                 spvPreflightSendInProgress: false,
                 spvDpowVerificationWarning: 'n/a',
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
+                responseTooLarge: sendPreflight.result && sendPreflight.result.result && sendPreflight.result.result.message && sendPreflight.result.result.message.indexOf('response too large') > -1 ? true : false,
               }));
+
               if (this.props.cb) {
                 setTimeout(() => {
-                    this.props.cb(this.state);
+                  this.props.cb(this.state);
                 }, 100);
               }
             }
@@ -1118,14 +1123,14 @@ class SendCoin extends React.Component {
     // temp
     if (_mode === 'native') {
       if (_coin === 'KMD') { // reject t -> z
-        if ((!this.state.sendFrom || (this.state.sendFrom && this.state.sendFrom.substring(0, 2) !== 'zc' && this.state.sendFrom.substring(0, 2) !== 'zs' && this.state.sendFrom.length <= 78)) &&
-            this.state.sendTo &&
-            ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78))) {
+        if ((this.state.sendFrom && ((this.state.sendFrom.substring(0, 2) === 'zc' && this.state.sendFrom.length === 95) || (this.state.sendFrom.substring(0, 2) === 'zs' && this.state.sendFrom.length === 78))) ||
+            (this.state.sendTo && ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78)))) {
           Store.dispatch(
             triggerToaster(
-              'Private transaction are being disabled on 15th February 2019 on KMD chain permanently and will become a public chain where only transparent transactions are possible. Please don\'t send them to private address which can lead to KMD being locked after the deadline 15th February 2019.',
+              translate('SEND.KMD_Z_ADDRESSES_DEPRECATED_NOTICE'),
               translate('TOASTR.WALLET_NOTIFICATION'),
-              'warning toastr-wide'
+              'warning toastr-wide',
+              false
             )
           );
           valid = false;
@@ -1136,9 +1141,10 @@ class SendCoin extends React.Component {
             this.state.sendTo.length === 95) {
           Store.dispatch(
             triggerToaster(
-              'Sprout transactions are being disabled on 15th February 2019. If you keep your funds in a zc address, it will be locked there. Please use Sapling zs address.',
+              translate('SEND.SPROUT_DEPRECATION_NOTICE'),
               translate('TOASTR.WALLET_NOTIFICATION'),
-              'warning toastr-wide'
+              'warning toastr-wide',
+              false
             )
           );
           valid = false;
@@ -1154,7 +1160,8 @@ class SendCoin extends React.Component {
       let _fees = staticVar.spvFees;
       _fees.BTC = 0;
 
-      if (Number(_amountSats) + (_customFee || _fees[_coin]) > _balanceSats) {
+      if (_balanceSats !== _amountSats &&
+          Number(_amountSats) + (_customFee) > _balanceSats) {
         Store.dispatch(
           triggerToaster(
             `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((fromSats(_balanceSats - (_customFee || _fees[_coin]))).toFixed(8))} ${_coin}`,
@@ -1221,10 +1228,10 @@ class SendCoin extends React.Component {
       } else {
         const _fee = formatEther(this.state.ethFees[_feeLookup.eth[this.state.ethFeeType]] * coinFees[this.props.ActiveCoin.coin.toLowerCase()]);
 
-        if (Number(_amount) + Number(_fee) > _balance) {
+        if (Number(_amount) > _balance) {
           Store.dispatch(
             triggerToaster(
-              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance) - Number(_fee)).toFixed(8))} ${_coin}`,
+              `${translate('SEND.INSUFFICIENT_FUNDS')} ${translate('SEND.MAX_AVAIL_BALANCE')} ${Number((Number(_balance)).toFixed(8))} ${_coin}`,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -1551,8 +1558,8 @@ class SendCoin extends React.Component {
     if (_addressBook &&
         _addressBook.length) {
       for (let i = 0; i < _addressBook.length; i++) {
-        if (_mode === 'native' ||
-            (_mode === 'spv' && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.substring(0, 2) !== 'zs' && _addressBook[i].pub.length === 64)) {
+        if ((_mode === 'native' && _coin !== 'KMD') ||
+            ((_mode === 'spv' || (_mode === 'native' && _coin === 'KMD')) && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.substring(0, 2) !== 'zs' && _addressBook[i].pub.length === 64)) {
           _items.push(
             <li
               key={ `send-address-book-item-${i}` }

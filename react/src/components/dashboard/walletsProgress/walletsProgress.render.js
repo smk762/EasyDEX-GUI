@@ -73,7 +73,7 @@ export const LoadingBlocksRender = function() {
   return (
     <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
       <span className="full-width">
-      { translate(this.props.ActiveCoin.rescanInProgress ? 'INDEX.PLEASE_WAIT_UNTIL_RESCAN_FINISHED' : 'INDEX.LOADING_BLOCKS') }
+      { translate('INDEX.' + (this.props.ActiveCoin.rescanInProgress ? 'PLEASE_WAIT_UNTIL_RESCAN_FINISHED' : 'LOADING_BLOCKS')) }
       </span>
     </div>
   );

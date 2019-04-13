@@ -6,7 +6,6 @@ import {
   getSyncInfo,
   startInterval,
   stopInterval,
-  iguanaEdexBalance,
   getKMDAddressesNative,
   changeActiveAddress,
   getKMDOPID,

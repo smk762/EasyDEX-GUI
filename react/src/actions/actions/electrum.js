@@ -16,7 +16,6 @@ import Store from '../../store';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import mainWindow from '../../util/mainWindow';
-import { setTimeout } from 'timers';
 
 // TODO: dev display errors
 
@@ -83,13 +82,14 @@ export const apiGetLocalBTCFees = () => {
   });
 }
 
-export const apiElectrumSetServer = (coin, address, port) => {
+export const apiElectrumSetServer = (coin, address, port, proto) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token,
       coin,
       address,
       port,
+      proto,
     };
     fetch(
       `http://127.0.0.1:${agamaPort}/api/electrum/coins/server/set${urlParams(_urlParams)}`,
@@ -328,6 +328,8 @@ export const apiElectrumKVTransactionsPromise = (coin, address) => {
 }
 
 export const apiElectrumTransactionsState = (json) => {
+  const _json = json;
+
   if (json) {
     json = json.result;
   } else {
@@ -344,6 +346,13 @@ export const apiElectrumTransactionsState = (json) => {
     !json.length
   ) {
     json = 'no data';
+  }
+
+  if (_json.msg === 'error' &&
+      _json.result &&
+      _json.result.message &&
+      _json.result.message.indexOf('response too large') > -1) {
+    json = 'response too large';
   }
 
   return {
@@ -424,7 +433,8 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFe
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSend)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -468,7 +478,8 @@ export const apiElectrumSendPromise = (coin, value, sendToAddress, changeAddress
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSendPromise)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -528,7 +539,8 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSendPreflight)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -619,7 +631,8 @@ export const apiElectrumSplitUtxoPromise = (payload) => {
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSplitUtxoPromise)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -695,7 +708,8 @@ export const apiElectrumSweep = (coin, value, sendToAddress, changeAddress, push
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSweep)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -732,7 +746,8 @@ export const apiElectrumPushTx = (coin, rawtx) => {
         triggerToaster(
           translate('API.apiElectrumPushTx') + ' (code: apiElectrumPushTx)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })

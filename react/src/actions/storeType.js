@@ -56,25 +56,6 @@ export const BLUR_SENSITIVE_DATA = 'BLUR_SENSITIVE_DATA';
 export const NEW_UPDATE_AVAILABLE = 'NEW_UPDATE_AVAILABLE';
 export const ADDRESS_BOOK = 'ADDRESS_BOOK';
 
-/* dex */
-export const DEX_LOGIN = 'DEX_LOGIN';
-export const DEX_LOGOUT = 'DEX_LOGOUT';
-export const DEX_ASKS = 'DEX_ASKS';
-export const DEX_BIDS = 'DEX_BIDS';
-export const DEX_SWAPS = 'DEX_SWAPS';
-export const DEX_ADD_COIN = 'DEX_ADD_COIN';
-export const DEX_REMOVE_COIN = 'DEX_REMOVE_COIN';
-export const DEX_INVENTORY = 'DEX_INVENTORY';
-export const DEX_UTXO = 'DEX_UTXO';
-export const DEX_PRICES = 'DEX_PRICES';
-export const DEX_RESET = 'DEX_RESET';
-export const DEX_STATS = 'DEX_STATS';
-export const DEX_CACHE_PRELOAD = 'DEX_CACHE_PRELOAD';
-export const DEX_ACTIVE_SECTION = 'DEX_ACTIVE_SECTION';
-
-/* dice */
-export const DICE_LIST = 'DICE_LIST';
-
 /* eth */
 export const DASHBOARD_ETHEREUM_BALANCE = 'DASHBOARD_ETHEREUM_BALANCE';
 export const DASHBOARD_ETHEREUM_TRANSACTIONS = 'DASHBOARD_ETHEREUM_TRANSACTIONS';

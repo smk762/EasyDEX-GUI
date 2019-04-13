@@ -11,6 +11,7 @@ let _activeCoins;
 let _disableETH;
 
 // disable non kmd coins
+// TODO: move eth to a separate render
 if (!config.experimentalFeatures) {
   coins = coins.slice(0, 2);
 }
@@ -95,7 +96,7 @@ const prepCoinsList = (options) => {
           });
         }
       } catch (e) {
-        console.warn('electron remote error addcoin' + e);
+        console.warn(`electron remote error addcoin ${e}`);
       }
     }
 
@@ -113,7 +114,7 @@ const prepCoinsList = (options) => {
 
       for (let key in erc20ContractId) {
         _items.push({
-          label: `${translate('CRYPTO.' + key)} (${key} ERC20)`,
+          label: `${translate('CRYPTO.' + key)} (${key})`,
           icon: `eth/${key}`,
           value: `ETH|${key}`,
         });

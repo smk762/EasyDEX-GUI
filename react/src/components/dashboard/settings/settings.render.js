@@ -76,7 +76,7 @@ export const SettingsRender = function() {
             }
             { staticVar.arch === 'x64' &&
               <PanelSection
-                title={ translate('SETTINGS.APP_CONFIG') + ' (config.json)' }
+                title={ `${translate('SETTINGS.APP_CONFIG')} (config.json)` }
                 icon="icon fa-wrench">
                 <AppSettingsPanel />
               </PanelSection>

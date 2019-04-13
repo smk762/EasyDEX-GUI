@@ -107,12 +107,11 @@ class InvoiceModal extends React.Component {
       for (let i = 0; i < _addresses[type].length; i++) {
         let address = _addresses[type][i];
 
-        if (type === 'private' ||
+        if ((type === 'private' && _coin !== 'KMD') ||
             (type === 'public' &&
-            (_coin === 'KMD' ||
-             (staticVar.chainParams &&
+            (staticVar.chainParams &&
               staticVar.chainParams[_coin] &&
-              !staticVar.chainParams[_coin].ac_private)))) {
+              !staticVar.chainParams[_coin].ac_private))) {
           items.push(
             AddressItemRender.call(this, address, type)
           );

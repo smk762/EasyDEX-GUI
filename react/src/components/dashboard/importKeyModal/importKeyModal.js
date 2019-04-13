@@ -92,7 +92,7 @@ class ImportKeyModal extends React.Component {
 
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [ e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
   }
 
@@ -134,13 +134,35 @@ class ImportKeyModal extends React.Component {
         const _keys = this.state.multipleWif.split('\n');
 
         for (let i = 0; i < _keys.length; i++) {
-          setTimeout(() => {
-            this.importWifAddress(_keys[i], i === _keys.length - 1 ? this.state.importWithRescan : false, true);
-          }, i * 1000);
+          if (this.props.ActiveCoin.coin !== 'KMD' ||
+              (this.props.ActiveCoin.coin === 'KMD' && _keys[i] && _keys[i][0] !== 'S' && _keys[i][1] !== 'K' && _keys[i].indexOf('secret-extended-key-main') === -1)) {
+            setTimeout(() => {
+              this.importWifAddress(_keys[i], i === _keys.length - 1 ? this.state.importWithRescan : false, true);
+            }, i * 1000);
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                translate('IMPORT_KEY.KMD_Z_KEY_DEPRECATED'),
+                translate('TOASTR.ERROR'),
+                'error'
+              )
+            );
+          }
         }
       }
     } else {
-      this.importWifAddress(this.state.wif, this.state.importWithRescan);
+      if (this.props.ActiveCoin.coin !== 'KMD' ||
+          (this.props.ActiveCoin.coin === 'KMD' && this.state.wif && this.state.wif[0] !== 'S' && this.state.wif[1] !== 'K' && this.state.wif.indexOf('secret-extended-key-main') === -1)) {
+        this.importWifAddress(this.state.wif, this.state.importWithRescan);
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            translate('IMPORT_KEY.KMD_Z_KEY_DEPRECATED'),
+            translate('TOASTR.ERROR'),
+            'error'
+          )
+        );
+      }
     }
   }
 

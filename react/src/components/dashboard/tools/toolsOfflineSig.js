@@ -5,6 +5,7 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
+  copyString,
   apiToolsBalance,
   apiToolsBuildUnsigned,
   apiToolsPushTx,
@@ -37,6 +38,11 @@ class ToolsOfflineSig extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.signTx = this.signTx.bind(this);
+    this.copyTx = this.copyTx.bind(this);
+  }
+
+  copyTx() {
+    Store.dispatch(copyString(this.state.txSigResult, translate('TOOLS.RAW_TX_COPIED')));
   }
 
   signTx(sign) {
@@ -102,7 +108,7 @@ class ToolsOfflineSig extends React.Component {
     return (
       <div className="row margin-left-10">
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
-          <h4>Sign raw transaction</h4>
+          <h4>{ translate('TOOLS.SIGN_RAW_TX') }</h4>
         </div>
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-50">
           <label
@@ -134,7 +140,7 @@ class ToolsOfflineSig extends React.Component {
             name="seed"
             onChange={ this.updateInput }
             value={ this.state.seed }
-            placeholder={ translate('TOOLS.ENTER_A_SEED') + ' or WIF' }
+            placeholder={ `${translate('TOOLS.ENTER_A_SEED')} ${translate('TOOLS.OR_WIF')}` }
             autoComplete="off"
             required />
         </div>
@@ -155,7 +161,7 @@ class ToolsOfflineSig extends React.Component {
                 <tbody>
                   <tr>
                     <td>
-                      <strong>From</strong>
+                      <strong>{ translate('INDEX.SEND_FROM') }</strong>
                     </td>
                     <td>
                       { this.state.parsedDataToSign.from }
@@ -163,7 +169,7 @@ class ToolsOfflineSig extends React.Component {
                   </tr>
                   <tr>
                     <td>
-                      <strong>To</strong>
+                      <strong>{ translate('INDEX.SEND_TO') }</strong>
                     </td>
                     <td>
                       { this.state.parsedDataToSign.outputAddress }
@@ -171,7 +177,7 @@ class ToolsOfflineSig extends React.Component {
                   </tr>
                   <tr>
                     <td>
-                      <strong>Amount</strong>
+                      <strong>{ translate('TOOLS.AMOUNT') }</strong>
                     </td>
                     <td>
                       { fromSats(this.state.parsedDataToSign.value) }
@@ -179,7 +185,7 @@ class ToolsOfflineSig extends React.Component {
                   </tr>
                   <tr>
                     <td>
-                      <strong>Fee</strong>
+                      <strong>{ translate('TOOLS.FEE') }</strong>
                     </td>
                     <td>
                       { fromSats(this.state.parsedDataToSign.fee) }
@@ -187,10 +193,10 @@ class ToolsOfflineSig extends React.Component {
                   </tr>
                   <tr>
                     <td>
-                      <strong>Change</strong>
+                      <strong>{ translate('TOOLS.CHANGE') }</strong>
                     </td>
                     <td>
-                      { fromSats(this.state.parsedDataToSign.change) } to { this.state.parsedDataToSign.changeAddress }
+                      { fromSats(this.state.parsedDataToSign.change) } { translate('TOOLS.TO_SM') } { this.state.parsedDataToSign.changeAddress }
                     </td>
                   </tr>
                 </tbody>
@@ -208,13 +214,21 @@ class ToolsOfflineSig extends React.Component {
               !this.state.seed ||
               !this.state.selectedCoin
             }>
-            { !this.state.verifyAwait ? 'Verify data' : 'Confirm' }
+            { translate('TOOLS.' +(!this.state.verifyAwait ? 'VERIFY_DATA': 'CONFIRM')) }
           </button>
         </div>
         { this.state.txSigResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-20">
-            Signed transaction:
-            <div className="word-break--all selectable">{ this.state.txSigResult }</div>
+            <strong>{ translate('TOOLS.SIGNED_TX') }:</strong>
+            <div className="word-break--all selectable">
+              { this.state.txSigResult }
+              <button
+                className="btn btn-default btn-xs clipboard-edexaddr margin-left-20"
+                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                onClick={ this.copyTx }>
+                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+              </button>
+            </div>
           </div>
         }
       </div>

@@ -35,6 +35,7 @@ import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import nnConfig from '../nnConfig';
 
 const SEED_TRIM_TIMEOUT = 5000;
 
@@ -134,6 +135,7 @@ class Login extends React.Component {
         for (let i = 0; i < _spvCoins.length; i++) {
           Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
         }
+
         if (!this.props.Main.coins.native.length) {
           Store.dispatch(dashboardChangeActiveCoin(
             null,
@@ -167,12 +169,16 @@ class Login extends React.Component {
   }
 
   toggleLoginSettingsDropdownSection(sectionName) {
-    Store.dispatch(toggleLoginSettingsModal(true));
+    if (sectionName === 'elections') {
+      this._toggleNotaryElectionsModal();
+    } else {
+      Store.dispatch(toggleLoginSettingsModal(true));
 
-    this.setState({
-      displayLoginSettingsDropdown: false,
-      displayLoginSettingsDropdownSection: sectionName,
-    });
+      this.setState({
+        displayLoginSettingsDropdown: false,
+        displayLoginSettingsDropdownSection: sectionName,
+      });
+    }
   }
 
   setRecieverFromScan(receiver) {
@@ -183,7 +189,7 @@ class Login extends React.Component {
     } else {
       Store.dispatch(
         triggerToaster(
-          translate('INDEX.QR_UNABLE_TO_DECODE'),
+          translate('LOGIN.QR_UNABLE_TO_DECODE'),
           translate('INDEX.QR_ERROR'),
           'error'
         )
@@ -370,10 +376,9 @@ class Login extends React.Component {
   }
 
   updateLoginPassPhraseInput(e) {
-    const newValue = e.target.value;
-
     clearTimeout(this.state.trimPassphraseTimer);
-
+    
+    const newValue = e.target.value;
     const _trimPassphraseTimer = setTimeout(() => {
       if (newValue[0] === ' ' ||
           newValue[newValue.length - 1] === ' ') {
@@ -657,6 +662,13 @@ class Login extends React.Component {
                       this.setState({
                         selectedPin: res.result,
                         activeLoginSection: 'login',
+                        randomSeed: '',
+                        loginPassphrase: '',
+                        randomSeedConfirm: '',
+                        customWalletSeed: false,
+                        encryptKey: '',
+                        encryptKeyConfirm: '',
+                        decryptKey: '',
                       });
                     }, 500);
                   } else {
@@ -688,6 +700,13 @@ class Login extends React.Component {
                     this.setState({
                       selectedPin: res.result,
                       activeLoginSection: 'login',
+                      randomSeed: '',
+                      loginPassphrase: '',
+                      randomSeedConfirm: '',
+                      customWalletSeed: false,
+                      encryptKey: '',
+                      encryptKeyConfirm: '',
+                      decryptKey: '',
                     });
                   }, 500);
                 } else {

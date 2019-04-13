@@ -33,17 +33,6 @@ class DebugLogPanel extends React.Component {
     this.getDebugLogDump = this.getDebugLogDump.bind(this);
   }
 
-  /*componentWillMount() {
-    if (this.props.Main.coins &&
-        this.props.Main.coins.native &&
-        Object.keys(this.props.Main.coins.native).length === 0) {
-      this.setState({
-        toggleAppRuntimeLog: true,
-      });
-      this.getAppRuntimeLog();
-    }
-  }*/
-
   getDebugLogDump() {
     this.setState({
       runtimeInProgress: true,
@@ -206,14 +195,14 @@ class DebugLogPanel extends React.Component {
       <div className="row">
         <div className="col-sm-12">
           <div className="padding-bottom-15">
-            <strong>Privacy warning:</strong> log dump is going to contain your lite mode pub address(es).<br/>Think twice before sharing it with anybody.
+            <strong>{ translate('SETTINGS.DEBUG_PRIVACY_WARNING_P1') }</strong> { translate('SETTINGS.DEBUG_PRIVACY_WARNING_P2') }<br/>{ translate('SETTINGS.DEBUG_PRIVACY_WARNING_P3') }
           </div>
           <a id="debugLogDumpLink">
             <button
               type="button"
               className="btn btn-info waves-effect waves-light"
               onClick={ this.getDebugLogDump }>
-              { this.state.runtimeInProgress ? 'Please wait...' : 'Get debug log dump' }
+              { this.state.runtimeInProgress ? `${translate('SETTINGS.PLEASE_WAIT')}` : translate('SETTINGS.GET_DEBUG_DUMP') }
             </button>
           </a>
           { _coins &&

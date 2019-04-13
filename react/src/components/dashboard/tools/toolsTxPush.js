@@ -5,6 +5,7 @@ import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
   triggerToaster,
+  copyString,
   apiToolsBalance,
   apiToolsBuildUnsigned,
   apiToolsPushTx,
@@ -18,6 +19,8 @@ import Store from '../../../store';
 import QRCode from 'qrcode.react';
 import QRModal from '../qrModal/qrModal';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import devlog from '../../../util/devlog';
+
 const { shell } = window.require('electron');
 
 class ToolsTxPush extends React.Component {
@@ -37,12 +40,17 @@ class ToolsTxPush extends React.Component {
     this.updateInput = this.updateInput.bind(this);
     this.updateSelectedCoin = this.updateSelectedCoin.bind(this);
     this.sendTx = this.sendTx.bind(this);
+    this.copyTx = this.copyTx.bind(this);
+  }
+
+  copyTx() {
+    Store.dispatch(copyString(this.state.txSigResult, translate('TOOLS.TXID_COPIED')));
   }
 
   sendTx() {
     apiToolsPushTx(this.state.selectedCoin.split('|')[0].toLowerCase(), this.state.rawTx2Push)
     .then((res) => {
-      // console.warn(res);
+      devlog(res);
 
       this.setState({
         txPushResult: res.result,
@@ -89,7 +97,7 @@ class ToolsTxPush extends React.Component {
     return (
       <div className="row margin-left-10">
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
-          <h4>Push raw transaction</h4>
+          <h4>{ translate('TOOLS.PUSH_RAW_TX') }</h4>
         </div>
         <div className="col-xlg-12 form-group form-material no-padding-left padding-top-20 padding-bottom-50">
           <label
@@ -115,7 +123,7 @@ class ToolsTxPush extends React.Component {
             cols="20"
             name="rawTx2Push"
             className="col-sm-7 no-padding-left"
-            placeholder="Transaction to push"
+            placeholder={ translate('TOOLS.TX_TO_PUSH') }
             onChange={ this.updateInput }
             value={ this.state.rawTx2Push }></textarea>
         </div>
@@ -124,7 +132,7 @@ class ToolsTxPush extends React.Component {
             type="button"
             className="btn btn-info col-sm-2"
             onClick={ this.sendTx }>
-            Push
+            { translate('TOOLS.PUSH') }
           </button>
         </div>
         { this.state.txPushResult &&
@@ -135,7 +143,16 @@ class ToolsTxPush extends React.Component {
                   { this.state.selectedCoin.split('|')[0].toUpperCase() } { translate('TOOLS.TX_PUSHED') }!
                 </div>
                 <div>
-                  TXID: <div className="blur selectable word-break--all">{ this.state.txPushResult }</div>
+                  { translate('KMD_NATIVE.TXID') }:
+                  <div className="blur selectable word-break--all margin-left-5">
+                    { this.state.txPushResult }
+                    <button
+                      className="btn btn-default btn-xs clipboard-edexaddr margin-left-20"
+                      title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                      onClick={ this.copyTx }>
+                      <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                    </button>
+                  </div>
                   <div className="margin-top-10">
                     <button
                       type="button"
