@@ -116,7 +116,7 @@ export const toggleSendReceiveCoinFormsState = () => {
   }
 }
 
-export const triggerToaster = (message, title, _type, className, autoClose = true) => {
+export const triggerToaster = (message, title, _type, autoClose = true, className) => {
   return {
     type: ADD_TOASTER_MESSAGE,
     message,
