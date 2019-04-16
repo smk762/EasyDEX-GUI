@@ -7,6 +7,7 @@ import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import nnConfig from '../nnConfig';
+import Config from '../../config';
 
 const LoginRender = function() {
   let shortcuts = [
@@ -46,6 +47,26 @@ const LoginRender = function() {
       value: 'vote2019',
       label: 'vote2019',
     });
+  }
+
+  const renderCreateSeedWordsConfirm = () => {
+    const words = this.state.randomSeedShuffled;
+    let items = [];
+
+    for (let i = 0; i < words.length; i++) {
+      if (this.state.randomSeedConfirm.indexOf(words[i]) === -1) {
+        items.push(
+          <span
+            key={ `seed-confirm-word-${i}` }
+            className="seed-confirm-word"
+            onClick={ () => this.createSeedConfirmPush(words[i]) }>
+            { words[i] }
+          </span>
+        );
+      }
+    }
+
+    return items;
   }
 
   return (
@@ -319,256 +340,127 @@ const LoginRender = function() {
 
           <div className={ this.state.activeLoginSection === 'signup' ? 'show' : 'hide' }>
             <div className="register-form">
-              <h4 className="hint color-white">
-                { translate('INDEX.SELECT_SEED_TYPE') }:
-              </h4>
-              <div className="row">
-                <div className="col-sm-5 horizontal-padding-0">
-                  <div className="toggle-box vertical-padding-20">
-                    <span className="pointer">
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          readOnly
-                          checked={ this.isCustomWalletSeed() } />
-                        <div
-                          className="slider"
-                          onClick={ () => this.toggleCustomWalletSeed() }></div>
-                      </label>
-                      <div
-                        className="toggle-label white"
-                        onClick={ () => this.toggleCustomWalletSeed() }>
-                        { translate('LOGIN.CUSTOM_WALLET_SEED') }
-                      </div>
-                    </span>
+              { this.state.createWalletStep === 0 &&
+                <section>
+                  <h4 className="hint color-white margin-bottom-20">
+                    This you new seed. Please record it somewhere in a safe place.
+                  </h4>
+                  <div className={ 'form-group form-material create-wallet-seed' + (Config.dev ? ' selectable' : '') }>
+                  { this.state.randomSeed }
                   </div>
-                </div>
-                <div className="col-sm-7 horizontal-padding-0">
-                { !this.isCustomWalletSeed() &&
-                  <div>
-                    <div className="form-group form-material floating">
-                      <div
-                        className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.state.bitsOption !== 256 && this.generateNewSeed(256) }>
-                        <input
-                          type="radio"
-                          name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 256 }
-                          readOnly />
-                        <label htmlFor="PassPhraseOptionsIguana">
-                          { translate('LOGIN.IGUANA_SEED') }
-                        </label>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block"
+                    onClick={ this.nextStep }>
+                    Next
+                  </button>
+                </section>
+              }
+              { this.state.createWalletStep === 1 &&
+                <section>
+                  <h4 className="hint color-white margin-bottom-20">
+                    Confirm your seed by placing all words as they were on the previous step.
+                  </h4>
+                  <div className={ 'form-group form-material create-wallet-seed-confirm-block ' + (this.state.randomSeed !== this.state.randomSeedConfirm.join(' ') ? 'padding-top-30' : 'padding-top-5') }>
+                    { this.state.randomSeedConfirm.length < this.state.randomSeedShuffled.length &&
+                      <div className="seed-words-block margin-bottom-50">
+                        { renderCreateSeedWordsConfirm() }
                       </div>
-                      <div
-                        className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.state.bitsOption !== 160 && this.generateNewSeed(160) }>
-                        <input
-                          type="radio"
-                          name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 160 }
-                          readOnly />
-                        <label htmlFor="PassPhraseOptionsWaves">
-                          { translate('LOGIN.WAVES_SEED') }
-                        </label>
-                      </div>
-                      <div
-                        className="radio-custom radio-default radio-inline"
-                        onClick={ () => this.state.bitsOption !== 128 && this.generateNewSeed(128) }>
-                        <input
-                          type="radio"
-                          name="PassPhraseOptions"
-                          checked={ this.state.bitsOption === 128 }
-                          readOnly />
-                        <label htmlFor="PassPhraseOptionsNXT">
-                          { translate('LOGIN.NXT_SEED') }
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                }
-                </div>
-              </div>
-
-              <div className="form-group form-material floating seed-tooltip">
-                <textarea
-                  className="form-control placeholder-no-fix height-100"
-                  type="text"
-                  id="walletseed"
-                  value={ this.state.randomSeed }
-                  onChange={ (e) => this.updateWalletSeed(e) }
-                  readOnly={ !this.isCustomWalletSeed() }></textarea>
-                <button
-                  className="copy-floating-label"
-                  htmlFor="walletseed"
-                  onClick={ () => this.copyPassPhraseToClipboard() }>
-                  { translate('INDEX.COPY') }
-                </button>
-                <label
-                  className="floating-label"
-                  htmlFor="walletseed">
-                  { translate('INDEX.WALLET_SEED') }
-                </label>
-              </div>
-              <div className="form-group form-material floating">
-                <textarea
-                  className="form-control placeholder-no-fix height-100"
-                  type="text"
-                  name="randomSeedConfirm"
-                  value={ this.state.randomSeedConfirm }
-                  onChange={ this.updateRegisterConfirmPassPhraseInput }
-                  id="rwalletseed"></textarea>
-                { this.state.isSeedBlank &&
-                  <span className="help-block">
-                    { translate('LOGIN.MUST_ENTER_SEED') }.
-                  </span>
-                }
-                { this.state.isSeedConfirmError &&
-                  <span className="help-block">
-                    { translate('LOGIN.ENTER_VALUE_AGAIN') }.
-                  </span>
-                }
-                <label
-                  className="floating-label"
-                  htmlFor="rwalletseed">
-                  { translate('INDEX.CONFIRM_SEED') }
-                </label>
-                { !this.isCustomWalletSeed() &&
-                  <div className="seed-encrypt-block">
-                    <div className="form-group form-material floating text-left">
-                      <div className="toggle-box">
-                        <span className="pointer hide">
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              readOnly
-                              checked={ this.shouldEncryptSeed() } />
-                            <div
-                              className="slider"
-                              onClick={ () => this.toggleShouldEncryptSeed() }></div>
-                          </label>
-                          <div
-                            className="toggle-label white"
-                            onClick={ () => this.toggleShouldEncryptSeed() }>
-                            { translate('LOGIN.ENCRYPT_SEED') }
-                          </div>
-                        </span>
-                        <i
-                          className="icon fa-question-circle login-help first"
-                          data-tip={ 
-                            translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P1') +
-                            '<br />' +
-                            translate('LOGIN.SEED_ENCRYPT_KEY_DESC_P2')
-                          }
-                          data-html={ true }
-                          data-for="login4"></i>
-                        <ReactTooltip
-                          id="login4"
-                          effect="solid"
-                          className="text-left" />
-                      </div>
-                    </div>
-                    { this.state.shouldEncryptSeed &&
-                      <div>
-                        <div className="form-group form-material floating text-left">
-                          <input
-                            type="password"
-                            name="encryptKey"
-                            ref="encryptKey"
-                            className="form-control"
-                            onChange={ this.updateInput }
-                            autoComplete="off"
-                            value={ this.state.encryptKey || '' } />
-                          <label
-                            className="floating-label"
-                            htmlFor="encryptKey">
-                            { translate('LOGIN.SEED_ENCRYPT_KEY') }
-                          </label>
-                        </div>
-                        <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
-                          <input
-                            type="password"
-                            name="encryptKeyConfirm"
-                            ref="encryptKeyConfirm"
-                            className="form-control"
-                            onChange={ this.updateInput }
-                            autoComplete="off"
-                            value={ this.state.encryptKeyConfirm || '' } />
-                          <label
-                            className="floating-label"
-                            htmlFor="encryptKeyConfirm">
-                            { translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }
-                          </label>
-                        </div>
-                        <div className="toggle-box vertical-padding-20 text-left">
-                          <span className="pointer">
-                            <label className="switch">
-                              <input
-                                type="checkbox"
-                                readOnly
-                                checked={ this.state.isCustomPinFilename } />
-                              <div
-                                className="slider"
-                                onClick={ () => this.toggleCustomPinFilename() }></div>
-                            </label>
-                            <div
-                              className="toggle-label white"
-                              onClick={ () => this.toggleCustomPinFilename() }>
-                              { translate('LOGIN.CUSTOM_PIN_FNAME') }
-                            </div>
-                          </span>
-                          <i
-                            className="icon fa-question-circle login-help"
-                            data-tip={ translate('LOGIN.CUSTOM_PIN_FNAME_INFO') }
-                            data-html={ true }
-                            data-for="login5"></i>
-                          <ReactTooltip
-                            id="login5"
-                            effect="solid"
-                            className="text-left" />
-                        </div>
-                        { this.state.isCustomPinFilename &&
-                          <div className="form-group form-material floating text-left margin-top-20 margin-bottom-40">
-                            <input
-                              type="text"
-                              name="customPinFilename"
-                              ref="customPinFilename"
-                              className="form-control"
-                              onChange={ this.updateInput }
-                              autoComplete="off"
-                              value={ this.state.customPinFilename || '' } />
-                            <label
-                              className="floating-label"
-                              htmlFor="customPinFilename">
-                              { translate('LOGIN.CUSTOM_PIN_FNAME') }
-                            </label>
-                          </div>
-                        }
+                    }
+                    { this.state.randomSeed !== this.state.randomSeedConfirm.join(' ') &&
+                      this.state.randomSeedConfirm &&
+                      this.state.randomSeedConfirm.length > 0 &&
+                      <i
+                        onClick={ this.clearCreateSeedConfirm }
+                        className={ 'fa fa-trash seed-confirm-clear' + (this.state.randomSeedConfirm.length === this.state.randomSeedShuffled.length ? ' all-words-used' : '') }></i>
+                    }
+                    { this.state.randomSeedConfirm &&
+                      this.state.randomSeedConfirm.length > 0 &&
+                      <div className="create-wallet-seed">
+                        <div className="seed-gen-box">{ this.state.randomSeedConfirm.join(' ') }</div>
                       </div>
                     }
                   </div>
-                }
-                <div className="btn btn-success btn-block margin-top-20 btn-generate-qr">
-                  <QRModal
-                    qrSize="256"
-                    modalSize="md"
-                    title={ translate('LOGIN.SEED_QR_RECOVERY') }
-                    fileName="agama-seed"
-                    content={ this.state.randomSeed } />
-                </div>
-              </div>
-              <button
-                type="button"
-                className="btn btn-primary btn-block"
-                onClick={ this.handleRegisterWallet }
-                disabled={
-                  !this.state.randomSeedConfirm ||
-                  !this.state.randomSeed ||
-                  !this.state.randomSeedConfirm.length ||
-                  !this.state.randomSeed.length ||
-                  this.state.randomSeedConfirm !== this.state.randomSeed
-                }>
-                { translate('INDEX.REGISTER') }
-              </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block"
+                    onClick={ this.nextStep }
+                    disabled={ this.state.randomSeed !== this.state.randomSeedConfirm.join(' ') }>
+                    Next
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-lg btn-flat btn-block waves-effect btn-back"
+                    onClick={ this.prevStep }>
+                    Start over
+                  </button>
+                </section>
+              }
+              { this.state.createWalletStep === 2 &&
+                <section>
+                  <h4 className="hint color-white margin-bottom-20">
+                    Enter wallet name and a password to encrypt your new wallet.
+                  </h4>
+                  <div className="seed-encrypt-block padding-top-35">
+                    <div className="form-group form-material floating text-left margin-top-20 margin-bottom-60">
+                      <input
+                        type="text"
+                        name="customPinFilename"
+                        ref="customPinFilename"
+                        className="form-control"
+                        onChange={ this.updateInput }
+                        autoComplete="off"
+                        value={ this.state.customPinFilename || '' } />
+                      <label
+                        className="floating-label"
+                        htmlFor="customPinFilename">
+                        Wallet name (file name)
+                      </label>
+                    </div>
+                    <div className="form-group form-material floating text-left">
+                      <input
+                        type="password"
+                        name="encryptKey"
+                        ref="encryptKey"
+                        className="form-control"
+                        onChange={ this.updateInput }
+                        autoComplete="off"
+                        value={ this.state.encryptKey || '' } />
+                      <label
+                        className="floating-label"
+                        htmlFor="encryptKey">
+                        { translate('LOGIN.SEED_ENCRYPT_KEY') }
+                      </label>
+                    </div>
+                    <div className="form-group form-material floating text-left margin-top-60 margin-bottom-60">
+                      <input
+                        type="password"
+                        name="encryptKeyConfirm"
+                        ref="encryptKeyConfirm"
+                        className="form-control"
+                        onChange={ this.updateInput }
+                        autoComplete="off"
+                        value={ this.state.encryptKeyConfirm || '' } />
+                      <label
+                        className="floating-label"
+                        htmlFor="encryptKeyConfirm">
+                        { translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }
+                      </label>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block"
+                    onClick={ this.handleRegisterWallet }
+                    disabled={
+                      !this.state.encryptKey ||
+                      !this.state.encryptKeyConfirm ||
+                      !this.state.customPinFilename
+                    }>
+                    Next
+                  </button>
+                </section>
+              }
               <div className="form-group form-material floating">
                 <button
                   className="btn btn-lg btn-flat btn-block waves-effect"

@@ -249,7 +249,7 @@ const LANG_EN = {
     PRICE_PER_1: 'Price per 1',
     SPV_TX_VIN_COUNT_WARN: 'Transaction vin count exceeds max allowed number.<br/>' +
                            'The amount you are seeing now might be not precise.',
-    PASSPHRASE_SUCCESSFULLY_ENCRYPTED: 'Seed is encrypted. Please try to login with your password now.',
+    PASSPHRASE_SUCCESSFULLY_ENCRYPTED: 'Wallet data is saved. Please try to login with your password now.',
     PASSPHRASE_SUCCESSFULLY_CHANGED_PIN: 'Seed PIN (@template@.pin) is changed.',
     WALLET_OFFLINE: 'Agama is currently unable to connect to the Internet.',
     OFFLINE: 'Offline',

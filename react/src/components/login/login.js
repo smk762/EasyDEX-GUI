@@ -35,9 +35,12 @@ import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import { shuffleArray } from 'agama-wallet-lib/src/crypto/utils';
 import nnConfig from '../nnConfig';
 
 const SEED_TRIM_TIMEOUT = 5000;
+
+// TODO: create/restore wallet msig, offline sig, watch only support
 
 class Login extends React.Component {
   constructor() {
@@ -49,8 +52,9 @@ class Login extends React.Component {
       seedInputVisibility: false,
       loginPassPhraseSeedType: null,
       bitsOption: 256,
-      randomSeed: passphraseGenerator.generatePassPhrase(256),
-      randomSeedConfirm: '',
+      randomSeed: '',
+      randomSeedShuffled: '',
+      randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
@@ -71,6 +75,7 @@ class Login extends React.Component {
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
+      createWalletStep: 0,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
@@ -90,6 +95,26 @@ class Login extends React.Component {
     this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
     this.resetSPVCoins = this.resetSPVCoins.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.createSeedConfirmPush = this.createSeedConfirmPush.bind(this);
+    this.prevStep = this.prevStep.bind(this);
+    this.nextStep = this.nextStep.bind(this);
+    this.clearCreateSeedConfirm = this.clearCreateSeedConfirm.bind(this);
+  }
+
+  clearCreateSeedConfirm() {
+    this.setState({
+      randomSeedConfirm: [],
+    });
+  }
+
+  createSeedConfirmPush(word) {
+    let randomSeedConfirm = JSON.parse(JSON.stringify(this.state.randomSeedConfirm));
+
+    randomSeedConfirm.push(word);    
+
+    this.setState({
+      randomSeedConfirm,
+    });
   }
 
   handleClickOutside(e) {
@@ -217,7 +242,7 @@ class Login extends React.Component {
         // if customWalletSeed is set to true, reset to seed to an empty string
         this.setState({
           randomSeed: '',
-          randomSeedConfirm: '',
+          randomSeedConfirm: [],
         });
       }
     });
@@ -246,8 +271,12 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
+    const newSeed = passphraseGenerator.generatePassPhrase(256);
+
     this.setState({
       isExperimentalOn: mainWindow.experimentalFeatures,
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
     });
 
     this.loadPinList();
@@ -260,8 +289,11 @@ class Login extends React.Component {
   }
 
   generateNewSeed(bits) {
+    const newSeed = passphraseGenerator.generatePassPhrase(bits);
+
     this.setState(Object.assign({}, this.state, {
-      randomSeed: passphraseGenerator.generatePassPhrase(bits),
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
       bitsOption: bits,
       isSeedBlank: false,
     }));
@@ -558,7 +590,7 @@ class Login extends React.Component {
       seedInputVisibility: false,
       bitsOption: 256,
       randomSeed: passphraseGenerator.generatePassPhrase(256),
-      randomSeedConfirm: '',
+      randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
@@ -585,14 +617,29 @@ class Login extends React.Component {
     });
   }
 
+  prevStep() {
+    const newSeed = passphraseGenerator.generatePassPhrase(256);
+
+    this.setState({
+      createWalletStep: this.state.createWalletStep - 1,
+      randomSeedConfirm: [],
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
+    });
+  }
+
+  nextStep() {
+    this.setState({
+      createWalletStep: this.state.createWalletStep + 1,
+    });
+  }
+
   handleRegisterWallet() {
-    const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
+    const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm.join(' ');
     const isSeedBlank = this.isBlank(this.state.randomSeed);
     const stringEntropy = mainWindow.checkStringEntropy(this.state.randomSeed);
-    const _customSeed = this.state.customWalletSeed;
 
-    if (!stringEntropy &&
-        _customSeed) {
+    if (!stringEntropy) {
       Store.dispatch(
         triggerToaster(
           [translate('LOGIN.SEED_ENTROPY_CHECK_P1'),
@@ -606,13 +653,11 @@ class Login extends React.Component {
     }
 
     this.setState({
-      isCustomSeedWeak: _customSeed === null ? true : false,
       isSeedConfirmError: !enteredSeedsMatch ? true : false,
       isSeedBlank: isSeedBlank ? true : false,
     });
 
-    if (this.state.shouldEncryptSeed &&
-        !this.isCustomWalletSeed()) {
+    if (this.state.shouldEncryptSeed) {
       if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
         Store.dispatch(
           triggerToaster(
@@ -664,7 +709,7 @@ class Login extends React.Component {
                         activeLoginSection: 'login',
                         randomSeed: '',
                         loginPassphrase: '',
-                        randomSeedConfirm: '',
+                        randomSeedConfirm: [],
                         customWalletSeed: false,
                         encryptKey: '',
                         encryptKeyConfirm: '',
@@ -702,7 +747,7 @@ class Login extends React.Component {
                       activeLoginSection: 'login',
                       randomSeed: '',
                       loginPassphrase: '',
-                      randomSeedConfirm: '',
+                      randomSeedConfirm: [],
                       customWalletSeed: false,
                       encryptKey: '',
                       encryptKeyConfirm: '',
@@ -722,13 +767,6 @@ class Login extends React.Component {
             }
           }
         }
-      }
-    } else {
-      if (enteredSeedsMatch &&
-          !isSeedBlank &&
-          _customSeed !== null &&
-          ((stringEntropy && this.isCustomWalletSeed()) || !this.isCustomWalletSeed())) {
-        this.toggleSeedBackupModal();
       }
     }
   }
