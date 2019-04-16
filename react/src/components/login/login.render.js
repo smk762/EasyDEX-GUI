@@ -138,10 +138,7 @@ const LoginRender = function() {
               { translate('INDEX.WELCOME_LOGIN') }
             </h4>
             { this.props.Login.pinList.length > 0 &&
-              <div className="margin-top-25 margin-bottom-70">{ translate('LOGIN.PIN_LOGIN_INFO') }</div>
-            }
-            { this.props.Login.pinList.length > 0 &&
-              <div className="pin-login-block">
+              <div className="pin-login-block padding-top-30">
                 <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40 margin-bottom-60">
                   <select
                     className="form-control form-material"
