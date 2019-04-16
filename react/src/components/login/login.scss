@@ -329,3 +329,14 @@ a.login-nn-elections {
     margin-top: 25px;
   }
 }
+
+.restore-wallet {
+  .qr-modal-login-block {
+    position: inherit;
+    top: 0;
+  }
+  .btn-back {
+    border: 1px solid #5d5d5d;
+    margin-top: 25px;
+  }
+}

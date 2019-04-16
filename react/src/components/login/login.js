@@ -75,7 +75,7 @@ class Login extends React.Component {
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
-      createWalletStep: 0,
+      step: 0,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
@@ -621,7 +621,7 @@ class Login extends React.Component {
     const newSeed = passphraseGenerator.generatePassPhrase(256);
 
     this.setState({
-      createWalletStep: this.state.createWalletStep - 1,
+      step: this.state.step - 1,
       randomSeedConfirm: [],
       randomSeed: newSeed,
       randomSeedShuffled: shuffleArray(newSeed.split(' ')),
@@ -630,7 +630,7 @@ class Login extends React.Component {
 
   nextStep() {
     this.setState({
-      createWalletStep: this.state.createWalletStep + 1,
+      step: this.state.step + 1,
     });
   }
 

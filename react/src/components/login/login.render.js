@@ -142,7 +142,7 @@ const LoginRender = function() {
             }
             { this.props.Login.pinList.length > 0 &&
               <div className="pin-login-block">
-                <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40 margin-bottom-80">
+                <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40 margin-bottom-60">
                   <select
                     className="form-control form-material"
                     name="selectedPin"
@@ -164,7 +164,7 @@ const LoginRender = function() {
                     { translate('LOGIN.PIN_PW_ACCESS') }
                   </label>
                 </div>
-                <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40 margin-bottom-80">
+                <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40 margin-bottom-60">
                   <input
                     type="password"
                     className="form-control"
@@ -177,50 +177,54 @@ const LoginRender = function() {
                 </div>
               </div>
             }
-            <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
-              <input
-                type="password"
-                name="loginPassphrase"
-                ref="loginPassphrase"
-                className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                onChange={ this.updateLoginPassPhraseInput }
-                onKeyDown={ (event) => this.handleKeydown(event) }
-                autoComplete="off"
-                value={ this.state.loginPassphrase || '' } />
-              <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
-                { this.state.loginPassphrase || '' }
-              </div>
-              <i
-                className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
-                onClick={ this.toggleSeedInputVisibility }></i>
-              <label
-                className="floating-label"
-                htmlFor="inputPassword">
-                { translate('INDEX.WALLET_SEED') }
-              </label>
-              <div className="qr-modal-login-block">
-                <QRModal
-                  mode="scan"
-                  setRecieverFromScan={ this.setRecieverFromScan } />
-              </div>
-            </div>
-            { this.state.loginPassPhraseSeedType &&
-              <div
-                className={ 'form-group form-material floating horizontal-padding-0 seed-type-block ' + (this.props.Login.pinList.length > 0 ? 'margin-top-130' : 'margin-top-20') }
-                style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
-                <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
+            { staticVar.argv.indexOf('hardcore') > -1 &&
+              <div>
+                <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
+                  <input
+                    type="password"
+                    name="loginPassphrase"
+                    ref="loginPassphrase"
+                    className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                    onChange={ this.updateLoginPassPhraseInput }
+                    onKeyDown={ (event) => this.handleKeydown(event) }
+                    autoComplete="off"
+                    value={ this.state.loginPassphrase || '' } />
+                  <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                    { this.state.loginPassphrase || '' }
+                  </div>
+                  <i
+                    className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
+                    onClick={ this.toggleSeedInputVisibility }></i>
+                  <label
+                    className="floating-label"
+                    htmlFor="inputPassword">
+                    { translate('INDEX.WALLET_SEED') }
+                  </label>
+                  <div className="qr-modal-login-block">
+                    <QRModal
+                      mode="scan"
+                      setRecieverFromScan={ this.setRecieverFromScan } />
+                  </div>
+                </div>
+                { this.state.loginPassPhraseSeedType &&
+                  <div
+                    className={ 'form-group form-material floating horizontal-padding-0 seed-type-block ' + (this.props.Login.pinList.length > 0 ? 'margin-top-130' : 'margin-top-20') }
+                    style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
+                    <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
+                  </div>
+                }
+                { this.state.seedExtraSpaces &&
+                  <i className="icon fa-warning seed-extra-spaces-warning"
+                    data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                    data-html={ true }
+                    data-for="login1"></i>
+                }
+                <ReactTooltip
+                  id="login1"
+                  effect="solid"
+                  className="text-left" />
               </div>
             }
-            { this.state.seedExtraSpaces &&
-              <i className="icon fa-warning seed-extra-spaces-warning"
-                data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                data-html={ true }
-                data-for="login1"></i>
-            }
-            <ReactTooltip
-              id="login1"
-              effect="solid"
-              className="text-left" />
             <button
               type="button"
               className="btn btn-primary btn-block margin-top-20"
@@ -237,6 +241,12 @@ const LoginRender = function() {
                 id="register-btn"
                 onClick={ () => this.updateActiveLoginSection('signup') }>
                 { translate('INDEX.CREATE_WALLET') }
+              </button>
+              <button
+                className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
+                id="register-btn"
+                onClick={ () => this.updateActiveLoginSection('restore') }>
+                Restore wallet
               </button>
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect hide"
@@ -340,7 +350,7 @@ const LoginRender = function() {
 
           <div className={ this.state.activeLoginSection === 'signup' ? 'show' : 'hide' }>
             <div className="register-form">
-              { this.state.createWalletStep === 0 &&
+              { this.state.step === 0 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     This you new seed. Please record it somewhere in a safe place.
@@ -356,7 +366,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.createWalletStep === 1 &&
+              { this.state.step === 1 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     Confirm your seed by placing all words as they were on the previous step.
@@ -396,7 +406,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.createWalletStep === 2 &&
+              { this.state.step === 2 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     Enter wallet name and a password to encrypt your new wallet.
@@ -470,6 +480,101 @@ const LoginRender = function() {
                 </button>
               </div>
             </div>
+          </div>
+
+          <div className={ this.state.activeLoginSection === 'restore' ? 'show' : 'hide' }>
+            { this.state.step === 0 &&
+              <section className="restore-wallet">
+                <h4 className="hint color-white margin-bottom-60">
+                  Provide your private key or seed below.
+                </h4>
+                <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-20">
+                  <input
+                    type="password"
+                    name="loginPassphrase"
+                    ref="loginPassphrase"
+                    className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                    onChange={ this.updateLoginPassPhraseInput }
+                    onKeyDown={ (event) => this.handleKeydown(event) }
+                    autoComplete="off"
+                    value={ this.state.loginPassphrase || '' } />
+                  <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                    { this.state.loginPassphrase || '' }
+                  </div>
+                  <i
+                    className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
+                    onClick={ this.toggleSeedInputVisibility }></i>
+                  <label
+                    className="floating-label"
+                    htmlFor="inputPassword">
+                    { translate('INDEX.WALLET_SEED') }
+                  </label>
+                  <div className="qr-modal-login-block margin-top-30">
+                    <QRModal
+                      mode="scan"
+                      setRecieverFromScan={ this.setRecieverFromScan } />
+                  </div>
+                </div>
+                { this.state.seedExtraSpaces &&
+                  <i className="icon fa-warning seed-extra-spaces-warning"
+                    data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                    data-html={ true }
+                    data-for="login1"></i>
+                }
+                <ReactTooltip
+                  id="login1"
+                  effect="solid"
+                  className="text-left" />
+                <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block margin-top-30"
+                    onClick={ this.nextStep }>
+                    Next
+                  </button>
+                  <div className="form-group form-material floating">
+                    <button
+                      className="btn btn-lg btn-flat btn-block waves-effect"
+                      id="register-back-btn"
+                      onClick={ () => this.updateActiveLoginSection('login') }>
+                      { translate('INDEX.BACK_TO_LOGIN') }
+                    </button>
+                  </div>
+                </div>
+              </section>
+            }
+            { this.state.step === 1 &&
+              <section className="restore-wallet">
+                <h4 className="hint color-white margin-bottom-60">
+                  Verify if information below is correct.
+                </h4>
+                <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-20">
+
+                </div>
+                <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block margin-top-30"
+                    onClick={ this.nextStep }>
+                    Next
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-lg btn-flat btn-block waves-effect btn-back"
+                    onClick={ this.prevStep }>
+                    Start over
+                  </button>
+                  <div className="form-group form-material floating">
+                    <button
+                      className="btn btn-lg btn-flat btn-block waves-effect"
+                      id="register-back-btn"
+                      onClick={ () => this.updateActiveLoginSection('login') }>
+                      { translate('INDEX.BACK_TO_LOGIN') }
+                    </button>
+                  </div>
+                </div>
+              </section>
+            }
           </div>
         </div>
       </div>
