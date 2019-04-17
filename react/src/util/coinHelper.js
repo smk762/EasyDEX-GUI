@@ -368,7 +368,6 @@ export const cryptoCoins = [
   'BLK',
   'DOGE',
   'ZEC',
-  'HUSH',
   'SNG',
   'ZCL',
   'XMY',
