@@ -27,7 +27,6 @@ import {
 import Config from '../../config';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
-import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import translate from '../../translate/translate';
 import mainWindow, { staticVar } from '../../util/mainWindow';
@@ -584,6 +583,7 @@ class Login extends React.Component {
   }
 
   updateActiveLoginSection(name) {
+    const newSeed = passphraseGenerator.generatePassPhrase(256);
     // reset login/create form
     this.setState({
       activeLoginSection: name,
@@ -591,14 +591,16 @@ class Login extends React.Component {
       loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
-      randomSeed: passphraseGenerator.generatePassPhrase(256),
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
       randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
-   });
+      step: 0,
+    });
   }
 
   execWalletCreate() {
@@ -888,14 +890,6 @@ class Login extends React.Component {
     }
 
     return _items;
-  }
-
-  renderSwallModal() {
-    if (this.state.displaySeedBackupModal) {
-      return SwallModalRender.call(this);
-    }
-
-    return null;
   }
 
   renderShortcutOption(option) {

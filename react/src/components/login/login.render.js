@@ -11,6 +11,7 @@ import Config from '../../config';
 import {
   isPrivKey,
   stringToWif,
+  wifToWif,
 } from 'agama-wallet-lib/build/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
@@ -78,7 +79,6 @@ const LoginRender = function() {
     <div>
       <ZcparamsFetchModal />
       <LoginSettingsModal section={ this.state.displayLoginSettingsDropdownSection } />
-      { this.renderSwallModal() }
       <div className="page animsition vertical-align text-center fade-in">
         <div className="page-content vertical-align-middle col-xs-12 col-sm-6 col-sm-offset-3">
           <div className="brand">
@@ -123,7 +123,7 @@ const LoginRender = function() {
                   </li>
                   <li>
                     <a onClick={ () => this.toggleLoginSettingsDropdownSection('changelog') }>
-                      <i className="icon fa-list"></i> Change Log
+                      <i className="icon fa-list"></i> { translate('INDEX.CHANGE_LOG') }
                     </a>
                   </li>
                   { this.renderResetSPVCoinsOption() &&
@@ -364,23 +364,23 @@ const LoginRender = function() {
               { this.state.step === 0 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
-                    This you new seed. Please record it somewhere in a safe place.
+                    { translate('LOGIN.THIS_IS_YOUR_NEW_SEED') }
                   </h4>
                   <div className={ 'form-group form-material create-wallet-seed' + (Config.dev ? ' selectable' : '') }>
-                  { this.state.randomSeed }
+                    { this.state.randomSeed }
                   </div>
                   <button
                     type="button"
                     className="btn btn-primary btn-block"
                     onClick={ this.nextStep }>
-                    Next
+                    { translate('LOGIN.NEXT') }
                   </button>
                 </section>
               }
               { this.state.step === 1 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
-                    Confirm your seed by placing all words as they were on the previous step.
+                    { translate('LOGIN.CONFIRM_YOUR_SEED_BY_PLACING_WORDS') }
                   </h4>
                   <div className={ 'form-group form-material create-wallet-seed-confirm-block ' + (this.state.randomSeed !== this.state.randomSeedConfirm.join(' ') ? 'padding-top-30' : 'padding-top-5') }>
                     { this.state.randomSeedConfirm.length < this.state.randomSeedShuffled.length &&
@@ -407,20 +407,20 @@ const LoginRender = function() {
                     className="btn btn-primary btn-block"
                     onClick={ this.nextStep }
                     disabled={ this.state.randomSeed !== this.state.randomSeedConfirm.join(' ') }>
-                    Next
+                    { translate('LOGIN.NEXT') }
                   </button>
                   <button
                     type="button"
                     className="btn btn-lg btn-flat btn-block waves-effect btn-back"
                     onClick={ this.prevStep }>
-                    Start over
+                    { translate('LOGIN.START_OVER') }
                   </button>
                 </section>
               }
               { this.state.step === 2 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
-                    Enter wallet name and a password to encrypt your new wallet.
+                    { translate('LOGIN.ENTER_WALLET_NAME_AND_PW') }
                   </h4>
                   <div className="seed-encrypt-block padding-top-35">
                     <div className="form-group form-material floating text-left margin-top-20 margin-bottom-60">
@@ -435,7 +435,7 @@ const LoginRender = function() {
                       <label
                         className="floating-label"
                         htmlFor="customPinFilename">
-                        Wallet name (file name)
+                        { translate('LOGIN.WALLET_NAME') }
                       </label>
                     </div>
                     <div className="form-group form-material floating text-left">
@@ -478,7 +478,7 @@ const LoginRender = function() {
                       !this.state.encryptKeyConfirm ||
                       !this.state.customPinFilename
                     }>
-                    Next
+                    { translate('LOGIN.NEXT') }
                   </button>
                 </section>
               }
@@ -497,7 +497,7 @@ const LoginRender = function() {
             { this.state.step === 0 &&
               <section className="restore-wallet">
                 <h4 className="hint color-white margin-bottom-60">
-                  Provide your private key or seed below.
+                  { translate('LOGIN.PROVIDE_YOUR_PRIV_OR_SEED') }
                 </h4>
                 <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-20">
                   <input
@@ -542,7 +542,7 @@ const LoginRender = function() {
                     className="btn btn-primary btn-block margin-top-30"
                     onClick={ this.nextStep }
                     disabled={ !this.state.loginPassphrase }>
-                    Next
+                    { translate('LOGIN.NEXT') }
                   </button>
                   <div className="form-group form-material floating">
                     <button
@@ -558,25 +558,25 @@ const LoginRender = function() {
             { this.state.step === 1 &&
               <section className="restore-wallet">
                 <h4 className="hint color-white margin-bottom-20">
-                  Verify if information below is correct.
+                  { translate('LOGIN.RESTORE_VERIFY_INFO') }
                 </h4>
                 <div className="form-group form-material create-wallet-seed margin-top-40">
-                  <p className="text-center padding-bottom-10">{ isPrivKey(this.state.passphrase) ? 'You provided a private key' : 'You provided a seed' }</p>
-                  <p>Your KMD pub adddress is { stringToWif(this.state.loginPassphrase, networks.kmd, true).pub }</p>
-                  <p>Your BTC pub adddress is { stringToWif(this.state.loginPassphrase, networks.btc, true).pub }</p>
+                  <p className="text-center padding-bottom-10">{ translate('LOGIN.' + (isPrivKey(this.state.loginPassphrase) ? 'YOU_PROVIDED_PRIV_KEY' : 'YOU_PROVIDED_SEED')) }</p>
+                  <p>{ translate('LOGIN.YOUR_PUB_IS', 'KMD') } { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.kmd, true).pub : stringToWif(this.state.loginPassphrase || '', networks.kmd, true).pub }</p>
+                  <p>{ translate('LOGIN.YOUR_PUB_IS', 'BTC') } { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.btc, true).pub : stringToWif(this.state.loginPassphrase || '', networks.btc, true).pub }</p>
                 </div>
                 <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
                   <button
                     type="button"
                     className="btn btn-primary btn-block margin-top-30"
                     onClick={ this.nextStep }>
-                    Confirm
+                    { translate('LOGIN.CONFIRM') }
                   </button>
                   <button
                     type="button"
                     className="btn btn-lg btn-flat btn-block waves-effect btn-back"
                     onClick={ this.prevStep }>
-                    Start over
+                    { translate('LOGIN.START_OVER') }
                   </button>
                   <div className="form-group form-material floating">
                     <button
@@ -592,7 +592,7 @@ const LoginRender = function() {
             { this.state.step === 2 &&
               <section>
                 <h4 className="hint color-white margin-bottom-20">
-                  Enter wallet name and a password to encrypt your new wallet.
+                  { translate('LOGIN.ENTER_WALLET_NAME_AND_PW') }
                 </h4>
                 <div className="seed-encrypt-block padding-top-35">
                   <div className="form-group form-material floating text-left margin-top-20 margin-bottom-60">
@@ -607,7 +607,7 @@ const LoginRender = function() {
                     <label
                       className="floating-label"
                       htmlFor="customPinFilename">
-                      Wallet name (file name)
+                      { translate('LOGIN.WALLET_NAME') }
                     </label>
                   </div>
                   <div className="form-group form-material floating text-left">
@@ -650,7 +650,7 @@ const LoginRender = function() {
                     !this.state.encryptKeyConfirm ||
                     !this.state.customPinFilename
                   }>
-                  Next
+                  { translate('LOGIN.NEXT') }
                 </button>
               </section>
             }
