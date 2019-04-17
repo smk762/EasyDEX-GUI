@@ -144,7 +144,7 @@ const LoginRender = function() {
                 { translate('INDEX.WELCOME_LOGIN') }
               </h4>
             }
-            { this.props.Login.pinList.length === 0 &&
+            { (this.props.Login.pinList.length === 0 && staticVar.argv.indexOf('hardcore') === -1) &&
               <h4 className="color-white padding-bottom-20">
                 { translate('INDEX.WELCOME_LOGIN_NEW') }
               </h4>
@@ -188,7 +188,7 @@ const LoginRender = function() {
             }
             { staticVar.argv.indexOf('hardcore') > -1 &&
               <div>
-                <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
+                <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-80 margin-bottom-60">
                   <input
                     type="password"
                     name="loginPassphrase"
