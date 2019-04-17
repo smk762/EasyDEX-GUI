@@ -477,7 +477,9 @@ class Login extends React.Component {
       });
 
       // reset login input vals
-      this.refs.loginPassphrase.value = '';
+      if (this.refs.loginPassphrase) {
+        this.refs.loginPassphrase.value = '';
+      }
 
       this.setState(this.defaultState);
 
@@ -618,14 +620,21 @@ class Login extends React.Component {
   }
 
   prevStep() {
-    const newSeed = passphraseGenerator.generatePassPhrase(256);
+    if (this.state.activeLoginSection === 'signup') {
+      const newSeed = passphraseGenerator.generatePassPhrase(256);
 
-    this.setState({
-      step: this.state.step - 1,
-      randomSeedConfirm: [],
-      randomSeed: newSeed,
-      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
-    });
+      this.setState({
+        step: this.state.step - 1,
+        randomSeedConfirm: [],
+        randomSeed: newSeed,
+        randomSeedShuffled: shuffleArray(newSeed.split(' ')),
+      });
+    } else {
+      this.setState({
+        step: this.state.step - 1,
+        loginPassphrase: null,
+      });
+    }
   }
 
   nextStep() {
@@ -635,9 +644,10 @@ class Login extends React.Component {
   }
 
   handleRegisterWallet() {
-    const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm.join(' ');
-    const isSeedBlank = this.isBlank(this.state.randomSeed);
-    const stringEntropy = mainWindow.checkStringEntropy(this.state.randomSeed);
+    const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
+    const enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
+    const isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
+    const stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
 
     if (!stringEntropy) {
       Store.dispatch(
@@ -694,7 +704,7 @@ class Login extends React.Component {
               if (this.state.customPinFilename &&
                   _customPinFilenameTest.test(this.state.customPinFilename)) {
                 encryptPassphrase(
-                  this.state.randomSeed,
+                  this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
                   this.state.encryptKey,
                   false,
                   this.state.customPinFilename,
@@ -736,7 +746,10 @@ class Login extends React.Component {
                 );
               }
             } else {
-              encryptPassphrase(this.state.randomSeed, this.state.encryptKey)
+              encryptPassphrase(
+                this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
+                this.state.encryptKey
+              )
               .then((res) => {
                 if (res.msg === 'success') {
                   this.loadPinList();

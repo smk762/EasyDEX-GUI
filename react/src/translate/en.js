@@ -356,6 +356,7 @@ const LANG_EN = {
     OR: 'or',
     TO_USE: 'to use',
     WELCOME_LOGIN: 'Welcome. Please login',
+    WELCOME_LOGIN_NEW: 'Welcome. Please start by creating or restoring a wallet.',
     WALLET_SEED: 'Wallet Seed / WIF',
     SIGN_IN: 'Sign in',
     CREATE_WALLET: 'Create new wallet',

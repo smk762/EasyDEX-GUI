@@ -8,6 +8,11 @@ import ReactTooltip from 'react-tooltip';
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import nnConfig from '../nnConfig';
 import Config from '../../config';
+import {
+  isPrivKey,
+  stringToWif,
+} from 'agama-wallet-lib/build/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const LoginRender = function() {
   let shortcuts = [
@@ -134,9 +139,16 @@ const LoginRender = function() {
           </div>
 
           <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
-            <h4 className="color-white">
-              { translate('INDEX.WELCOME_LOGIN') }
-            </h4>
+            { (this.props.Login.pinList.length > 0 || staticVar.argv.indexOf('hardcore') > -1) &&
+              <h4 className="color-white">
+                { translate('INDEX.WELCOME_LOGIN') }
+              </h4>
+            }
+            { this.props.Login.pinList.length === 0 &&
+              <h4 className="color-white padding-bottom-20">
+                { translate('INDEX.WELCOME_LOGIN_NEW') }
+              </h4>
+            }
             { this.props.Login.pinList.length > 0 &&
               <div className="pin-login-block padding-top-30">
                 <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40 margin-bottom-60">
@@ -222,16 +234,18 @@ const LoginRender = function() {
                   className="text-left" />
               </div>
             }
-            <button
-              type="button"
-              className="btn btn-primary btn-block margin-top-20"
-              onClick={ this.loginSeed }
-              disabled={
-                (this.props.Login.pinList.length === 0 && (!this.state.loginPassphrase || !this.state.loginPassphrase.length)) ||
-                (this.props.Login.pinList.length > 0 && (!this.state.selectedPin || !this.state.decryptKey) && !this.state.loginPassphrase)
-              }>
-              { translate('INDEX.SIGN_IN') }
-            </button>
+            { (this.props.Login.pinList.length > 0 || staticVar.argv.indexOf('hardcore') > -1) &&
+              <button
+                type="button"
+                className="btn btn-primary btn-block margin-top-20"
+                onClick={ this.loginSeed }
+                disabled={
+                  (this.props.Login.pinList.length === 0 && (!this.state.loginPassphrase || !this.state.loginPassphrase.length)) ||
+                  (this.props.Login.pinList.length > 0 && (!this.state.selectedPin || !this.state.decryptKey) && !this.state.loginPassphrase)
+                }>
+                { translate('INDEX.SIGN_IN') }
+              </button>
+            }
             <div className="form-group form-material floating">
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect"
@@ -526,7 +540,8 @@ const LoginRender = function() {
                   <button
                     type="button"
                     className="btn btn-primary btn-block margin-top-30"
-                    onClick={ this.nextStep }>
+                    onClick={ this.nextStep }
+                    disabled={ !this.state.loginPassphrase }>
                     Next
                   </button>
                   <div className="form-group form-material floating">
@@ -542,18 +557,20 @@ const LoginRender = function() {
             }
             { this.state.step === 1 &&
               <section className="restore-wallet">
-                <h4 className="hint color-white margin-bottom-60">
+                <h4 className="hint color-white margin-bottom-20">
                   Verify if information below is correct.
                 </h4>
-                <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-20">
-
+                <div className="form-group form-material create-wallet-seed margin-top-40">
+                  <p className="text-center padding-bottom-10">{ isPrivKey(this.state.passphrase) ? 'You provided a private key' : 'You provided a seed' }</p>
+                  <p>Your KMD pub adddress is { stringToWif(this.state.loginPassphrase, networks.kmd, true).pub }</p>
+                  <p>Your BTC pub adddress is { stringToWif(this.state.loginPassphrase, networks.btc, true).pub }</p>
                 </div>
                 <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
                   <button
                     type="button"
                     className="btn btn-primary btn-block margin-top-30"
                     onClick={ this.nextStep }>
-                    Next
+                    Confirm
                   </button>
                   <button
                     type="button"
@@ -570,6 +587,71 @@ const LoginRender = function() {
                     </button>
                   </div>
                 </div>
+              </section>
+            }
+            { this.state.step === 2 &&
+              <section>
+                <h4 className="hint color-white margin-bottom-20">
+                  Enter wallet name and a password to encrypt your new wallet.
+                </h4>
+                <div className="seed-encrypt-block padding-top-35">
+                  <div className="form-group form-material floating text-left margin-top-20 margin-bottom-60">
+                    <input
+                      type="text"
+                      name="customPinFilename"
+                      ref="customPinFilename"
+                      className="form-control"
+                      onChange={ this.updateInput }
+                      autoComplete="off"
+                      value={ this.state.customPinFilename || '' } />
+                    <label
+                      className="floating-label"
+                      htmlFor="customPinFilename">
+                      Wallet name (file name)
+                    </label>
+                  </div>
+                  <div className="form-group form-material floating text-left">
+                    <input
+                      type="password"
+                      name="encryptKey"
+                      ref="encryptKey"
+                      className="form-control"
+                      onChange={ this.updateInput }
+                      autoComplete="off"
+                      value={ this.state.encryptKey || '' } />
+                    <label
+                      className="floating-label"
+                      htmlFor="encryptKey">
+                      { translate('LOGIN.SEED_ENCRYPT_KEY') }
+                    </label>
+                  </div>
+                  <div className="form-group form-material floating text-left margin-top-60 margin-bottom-60">
+                    <input
+                      type="password"
+                      name="encryptKeyConfirm"
+                      ref="encryptKeyConfirm"
+                      className="form-control"
+                      onChange={ this.updateInput }
+                      autoComplete="off"
+                      value={ this.state.encryptKeyConfirm || '' } />
+                    <label
+                      className="floating-label"
+                      htmlFor="encryptKeyConfirm">
+                      { translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }
+                    </label>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-block"
+                  onClick={ this.handleRegisterWallet }
+                  disabled={
+                    !this.state.encryptKey ||
+                    !this.state.encryptKeyConfirm ||
+                    !this.state.customPinFilename
+                  }>
+                  Next
+                </button>
               </section>
             }
           </div>
