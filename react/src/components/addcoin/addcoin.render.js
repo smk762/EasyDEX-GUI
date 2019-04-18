@@ -152,6 +152,17 @@ const AddCoinRender = function() {
                     placeholder="Quick search (e.g. Komodo)"
                     value={ this.state.quickSearch || '' } />
                 </div>
+                { this.state.coins &&
+                  Object.keys(this.state.coins).length > 0 &&
+                  <div className="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4 style-addcoin-lbl-mdl-login">
+                    <button
+                      type="button"
+                      className="btn btn-primary col-sm-4 float-none"
+                      onClick={ this.activateAllCoins }>
+                      Activate
+                    </button>
+                  </div>
+                }
               </div>
               <div className="col-sm-12 addcoin-tiles-outter-block">
                 <AddCoinTile
@@ -182,17 +193,6 @@ const AddCoinRender = function() {
                     { translate('ADD_COIN.LOAD_SELECTION') }
                   </button>
                 </span>
-              }
-              { this.renderCoinSelectors() }
-              { this.hasMoreThanOneCoin() &&
-                <div className="text-align-center vertical-margin-20 horizontal-margin-0 padding-bottom-20 col-sm-12">
-                  <button
-                    type="button"
-                    className="btn btn-primary col-sm-4 float-none"
-                    onClick={ this.activateAllCoins }>
-                    { translate('ADD_COIN.ACTIVATE_ALL') }
-                  </button>
-                </div>
               }
             </div>
           </div>
