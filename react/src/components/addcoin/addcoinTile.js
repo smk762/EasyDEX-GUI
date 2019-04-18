@@ -182,6 +182,12 @@ class AddCoinTile extends React.Component {
         className += ' activated disabled';
       }
 
+      if (this.props.activeCoins &&
+          this.props.activeCoins[this.props.type] &&
+          ((this.props.type === 'native' && this.props.activeCoins.spv.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1) || (this.props.type === 'spv' && this.props.activeCoins.native.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1))) {
+        className += ' hidden';
+      }
+
       items.push(
         <div
           key={ `addcoin-tile-${i}` }
