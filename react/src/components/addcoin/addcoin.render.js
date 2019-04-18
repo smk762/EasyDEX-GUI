@@ -157,7 +157,9 @@ const AddCoinRender = function() {
                 <AddCoinTile
                   type={ this.state.type }
                   coins={ this.state.coinsList }
-                  tileClickCB={ this.updateCoinSelection } />
+                  tileClickCB={ this.updateCoinSelection }
+                  activatedCoins={ this.state.coins }
+                  activeCoins={ this.props.Main.coins } />
               </div>
               {/*<button
                 className="btn btn-primary btn-add-coin-item"

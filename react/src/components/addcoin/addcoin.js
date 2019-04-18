@@ -86,14 +86,17 @@ class AddCoin extends React.Component {
   }
 
   updateCoinSelection(coin, params) {
+    console.warn(coin);
+    console.warn(params);
     let coins = JSON.parse(JSON.stringify(this.state.coins));
-    coins[coin] = {
-      coin,
-      params,
-    };
 
-    if (coins[coin]) {
-      delete coins[coin];
+    if (coins[coin.value]) {
+      delete coins[coin.value];
+    } else {
+      coins[coin.value] = {
+        coin,
+        params,
+      };
     }
 
     this.setState({
