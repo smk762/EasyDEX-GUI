@@ -20,13 +20,16 @@ import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
 
+import addCoinOptionsCrypto from '../addcoin/addcoinOptionsCrypto';
+import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
+
 const SEED_TRIM_TIMEOUT = 5000;
 
 class AddCoin extends React.Component {
   constructor() {
     super();
     this.state = {
-      coins: [],
+      coins: {},
       defaultCoinState: {
         selectedCoin: null,
         spvMode: {
@@ -59,6 +62,9 @@ class AddCoin extends React.Component {
       seedExtraSpaces: false,
       trimPassphraseTimer: null,
       usePubkey: false,
+      type: 'spv',
+      quickSearch: null,
+      coinsList: null,
     };
     this.existingCoins = null;
     this.defaultState = JSON.parse(JSON.stringify(this.state));
@@ -73,6 +79,68 @@ class AddCoin extends React.Component {
     this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this.toggleUsePubkey = this.toggleUsePubkey.bind(this);
+    this.updateModeType = this.updateModeType.bind(this);
+    this.filterCoins = this.filterCoins.bind(this);
+    this.updateInput = this.updateInput.bind(this);
+    this.updateCoinSelection = this.updateCoinSelection.bind(this);
+  }
+
+  updateCoinSelection(coin, params) {
+    let coins = JSON.parse(JSON.stringify(this.state.coins));
+    coins[coin] = {
+      coin,
+      params,
+    };
+
+    if (coins[coin]) {
+      delete coins[coin];
+    }
+
+    this.setState({
+      coins,
+    });
+
+    setTimeout(() => {
+      console.warn('coins', this.state.coins);
+    }, 10);
+  }
+
+  updateInput(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        coinsList: this.filterCoins(),
+      });
+    }, 10);
+  }
+
+  filterCoins() {
+    const coins = addCoinOptionsCrypto('skip').concat(addCoinOptionsAC('skip'));
+    let items = [];
+
+    for (let i = 0; i < coins.length; i++) {
+      if ((coins[i].value.indexOf(this.state.type === 'eth' ? `ETH|` : `|${this.state.type}`) > -1 || (this.state.type === 'eth' && coins[i].value === 'ETH')) &&
+          (!this.state.quickSearch || (this.state.quickSearch && (coins[i].label.substring(0, this.state.quickSearch.length).toLowerCase() === this.state.quickSearch.toLowerCase() || (this.state.type === 'eth' ? (coins[i].value.split('|')[1] || coins[i].value.split('|')[0]).substring(0, this.state.quickSearch.length).toLowerCase() : coins[i].value.split('|')[0].substring(0, this.state.quickSearch.length).toLowerCase()) === this.state.quickSearch.toLowerCase())))) {
+        items.push(coins[i]);
+      }
+    }
+
+    return items;
+  }
+
+  updateModeType(type) {
+    this.setState({
+      type,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        coinsList: this.filterCoins(),
+      });
+    }, 10);
   }
 
   toggleUsePubkey() {
@@ -196,10 +264,11 @@ class AddCoin extends React.Component {
   }
 
   componentWillMount() {
-    this.addNewItem();
+    // this.addNewItem();
 
     this.setState({
       isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
+      coinsList: this.filterCoins(),
     });
   }
 
@@ -221,13 +290,19 @@ class AddCoin extends React.Component {
         }));
 
         if (!addCoinProps.display) {
-          setTimeout(() => {
+          /*setTimeout(() => {
             this.removeCoin();
             this.addNewItem();
-          }, 100);
+          }, 100);*/
         }
       }, addCoinProps.display ? 50 : 300);
     }
+
+    /*setTimeout(() => {
+      this.setState({
+        coinsList: this.filterCoins(),
+      });
+    }, 10);*/
   }
 
   renderCoinOption(option) {
