@@ -44,7 +44,7 @@
     "bluebird": "^3.5.0",
     "bufferutil": "^4.0.1",
     "create-hash": "git+https://github.com/pbca26/createHash#electron-v4",
-    "electron-native-notify": "^1.1.5",
+    "electron-native-notify": "^1.2.0",
     "ethers": "git+https://github.com/pbca26/ethers.js",
     "express": "^4.14.0",
     "qrcode.react": "^0.7.1",
