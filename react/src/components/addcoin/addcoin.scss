@@ -52,6 +52,10 @@
           margin-left: 196px;
         }
       }
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
       span {
         position: relative;
         top: 2px;

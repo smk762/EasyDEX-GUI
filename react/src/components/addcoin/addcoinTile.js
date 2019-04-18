@@ -16,6 +16,19 @@ class AddCoinTile extends React.Component {
     this.setActiveCoin = this.setActiveCoin.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.toggleUsePubkey = this.toggleUsePubkey.bind(this);
+    this.confirmNativeStartupParams = this.confirmNativeStartupParams.bind(this);
+  }
+
+  confirmNativeStartupParams() {
+    this.props.tileClickCB(
+      this.state.activeCoin,
+      {
+        daemonParam: this.state.daemonParam,
+        genProcLimit: this.state.genProcLimit,
+        usePubkey: this.state.usePubkey,
+      }
+    );
+    this.setActiveCoin();
   }
 
   toggleUsePubkey() {
@@ -135,13 +148,14 @@ class AddCoinTile extends React.Component {
         <div className="col-sm-12 padding-bottom-40 padding-top-15">
           <button
             type="button"
-            className="btn btn-default col-sm-2 float-none">
+            className="btn btn-default col-sm-2 float-none"
+            onClick={ () => this.setActiveCoin() }>
             Cancel
           </button>
           <button
             type="button"
             className="btn btn-primary col-sm-2 float-none margin-left-20"
-            onClick={ () => this.props.tileClickCB(coins[i], { daemonParam: this.state.daemonParam, genProcLimit: this.state.genProcLimit,  }) }>
+            onClick={ this.confirmNativeStartupParams }>
             Confirm
           </button>
         </div>
@@ -155,11 +169,23 @@ class AddCoinTile extends React.Component {
 
     for (let i = 0; i < coins.length; i++) {
       console.log(coins[i]);
+      let className = 'addcoin-tile';
+
+      if (this.props.activatedCoins &&
+          this.props.activatedCoins[coins[i].value]) {
+        className += ' activated';
+      }
+
+      if (this.props.activeCoins &&
+          this.props.activeCoins[this.props.type] &&
+          this.props.activeCoins[this.props.type].indexOf(this.props.type === 'eth' ? coins[i].value === 'ETH' ? coins[i].value : coins[i].value.split('|')[1].toUpperCase() : coins[i].value.split('|')[0].toUpperCase()) > -1) {
+        className += ' activated disabled';
+      }
 
       items.push(
         <div
           key={ `addcoin-tile-${i}` }
-          className="addcoin-tile">
+          className={ className }>
           { coins[i].value.indexOf('ETH|') > -1 &&
             coins[i].value !== 'ETH|ropsten' &&
             <div className="badge badge--erc20">ERC20</div>
