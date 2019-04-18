@@ -44,8 +44,24 @@ class AddCoinTile extends React.Component {
   }
 
   setActiveCoin(activeCoin) {
+    let daemonParam,
+        genProcLimit,
+        usePubkey;
+
+    if (activeCoin &&
+        this.props.activatedCoins &&
+        this.props.activatedCoins[activeCoin.value] &&
+        this.props.activatedCoins[activeCoin.value].params) {
+      daemonParam = this.props.activatedCoins[activeCoin.value].params.daemonParam;
+      genProcLimit = this.props.activatedCoins[activeCoin.value].params.genProcLimit;
+      usePubkey = this.props.activatedCoins[activeCoin.value].params.usePubkey;
+    }
+
     this.setState({
       activeCoin,
+      daemonParam,
+      genProcLimit,
+      usePubkey,
     });
   }
 
@@ -88,6 +104,7 @@ class AddCoinTile extends React.Component {
               className="form-control form-material"
               name="daemonParam"
               onChange={ (event) => this.updateInput(event) }
+              value={ this.state.daemonParam }
               autoFocus>
               <option>{ translate('INDEX.DAEMON_PARAM') }: { translate('ADD_COIN.NONE') }</option>
               <option value="silent">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.BACKGROUND_PROCESS') }</option>
@@ -105,6 +122,7 @@ class AddCoinTile extends React.Component {
                   className="form-control form-material"
                   name="genProcLimit"
                   onChange={ (event) => this.updateInput(event) }
+                  value={ this.state.genProcLimit }
                   autoFocus>
                   { this.renderGenproclimitOptions() }
                 </select>
@@ -168,7 +186,6 @@ class AddCoinTile extends React.Component {
     let items = [];
 
     for (let i = 0; i < coins.length; i++) {
-      console.log(coins[i]);
       let className = 'addcoin-tile';
 
       if (this.props.activatedCoins &&
@@ -233,7 +250,8 @@ class AddCoinTile extends React.Component {
     return (
       <div className="addcoin-tiles">
         { !this.state.activeCoin &&
-          this.renderTiles() }
+          this.renderTiles()
+        }
         {
           this.props.type === 'native' &&
           this.state.activeCoin &&
