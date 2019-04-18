@@ -40,6 +40,11 @@
         }
         &.badge--native {
           margin-left: 200px;
+
+          &.badge--native--active {
+            background: #66bb6a;
+            color: #fff;
+          }
         }
       }
       &.activated {

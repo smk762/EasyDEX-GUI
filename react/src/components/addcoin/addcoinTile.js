@@ -201,7 +201,7 @@ class AddCoinTile extends React.Component {
             this.props.type === 'native' &&
             <div
               onClick={ () => this.setActiveCoin(coins[i]) }
-              className="badge badge--native">Params</div>
+              className={ 'badge badge--native' + (this.props.activatedCoins && this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].params ? ' badge--native--active' : '') }>Params</div>
           }
           <div
             className="addcoin-tile-inner"
