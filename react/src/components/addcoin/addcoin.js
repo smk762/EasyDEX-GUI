@@ -62,7 +62,7 @@ class AddCoin extends React.Component {
       seedExtraSpaces: false,
       trimPassphraseTimer: null,
       usePubkey: false,
-      type: 'spv',
+      type: 'native',
       quickSearch: null,
       coinsList: null,
     };
@@ -617,23 +617,6 @@ class AddCoin extends React.Component {
     }
 
     return items;
-  }
-
-  renderGenproclimitOptions() {
-    const _max = 32;
-    let _items = [];
-
-    for (let i = 0; i < _max; i++) {
-      _items.push(
-        <option
-          key={ `addcoin-genproclimit-${i}` }
-          value={ i + 1 }>
-          { translate('ADD_COIN.MINING_THREADS') }: { i + 1 }
-        </option>
-      );
-    }
-
-    return _items;
   }
 
   render() {

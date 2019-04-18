@@ -5,11 +5,15 @@
 .add-coin-modal {
   color: #757575;
 
+  .padding-right-none {
+    padding-right: 0;
+  }
   .addcoin-tiles-outter-block {
     padding-right: 0;
   }
   .addcoin-tiles {
     padding-top: 10px;
+    min-height: 300px;
 
     .addcoin-tile {
       text-align: left;
@@ -164,4 +168,16 @@
   color: #FF6600;
   background-color: #fff;
   border-color: #FF6600;
+}
+
+.native-params-modal {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+
+  > div {
+    padding-left: 0;
+  }
 }
