@@ -416,7 +416,7 @@ export const WalletsDataRender = function() {
                     }
                     <h4 className="panel-title">{ !this.state.kvView ? translate('INDEX.TRANSACTION_HISTORY') : translate('KV.KV_HISTORY') }</h4>
                     { this.props.ActiveCoin.mode === 'spv' &&
-                      Config.experimentalFeatures &&
+                      Config.userAgreement &&
                       kvCoins[this.props.ActiveCoin.coin] &&
                       this.state.itemsList !== 'loading' &&
                       this.state.itemsList !== 'response too large' &&

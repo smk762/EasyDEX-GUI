@@ -50,7 +50,7 @@ const WalletsTxInfoRender = function(txInfo) {
                   { this.state.txDetails &&
                     this.state.txDetails.opreturn &&
                     this.state.txDetails.opreturn.kvDecoded &&
-                    Config.experimentalFeatures &&
+                    Config.userAgreement &&
                     <li className={ this.state.activeTab === 4 ? 'active' : '' }>
                       <a onClick={ () => this.openTab(4) }>
                         <i className="icon fa-file-text-o"></i>{ translate('INDEX.KV_INFO') }
@@ -255,7 +255,7 @@ const WalletsTxInfoRender = function(txInfo) {
                         </div>
                       }
                       { this.state.activeTab === 4 &&
-                        Config.experimentalFeatures &&
+                        Config.userAgreement &&
                         <div className="tab-pane active">
                           <table className="table table-striped">
                             <tbody>

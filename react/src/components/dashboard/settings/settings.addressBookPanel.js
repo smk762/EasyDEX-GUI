@@ -21,8 +21,8 @@ const prepCoinsList = () => {
   let _coins = [];
 
   for (let i = 0; i < coins.length; i++) {
-    if (Config.experimentalFeatures ||
-        (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
+    if (Config.userAgreement ||
+        (!Config.userAgreement && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
       try {
         if (staticVar.electrumServers &&
             staticVar.electrumServers[coins[i].toLowerCase()] &&
@@ -35,7 +35,7 @@ const prepCoinsList = () => {
     }
   }
 
-  if (Config.experimentalFeatures) {
+  if (Config.userAgreement) {
     _coins.push('ETH');
   }
 

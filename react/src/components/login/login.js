@@ -273,7 +273,7 @@ class Login extends React.Component {
     const newSeed = passphraseGenerator.generatePassPhrase(256);
 
     this.setState({
-      isExperimentalOn: mainWindow.experimentalFeatures,
+      isExperimentalOn: mainWindow.userAgreement,
       randomSeed: newSeed,
       randomSeedShuffled: shuffleArray(newSeed.split(' ')),
     });
