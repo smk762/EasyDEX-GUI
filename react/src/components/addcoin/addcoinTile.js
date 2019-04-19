@@ -114,7 +114,7 @@ class AddCoinTile extends React.Component {
               onChange={ (event) => this.updateInput(event) }
               value={ this.state.daemonParam }
               autoFocus>
-              <option>{ translate('INDEX.DAEMON_PARAM') }: { translate('ADD_COIN.NONE') }</option>
+              <option value="">{ translate('INDEX.DAEMON_PARAM') }: { translate('ADD_COIN.NONE') }</option>
               <option value="silent">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.BACKGROUND_PROCESS') }</option>
               <option value="reindex">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.REINDEX') }</option>
               <option value="rescan">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.RESCAN') }</option>

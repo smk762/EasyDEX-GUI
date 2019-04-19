@@ -24,9 +24,13 @@ import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 const modeToValue = {
   spv: 0,
   native: -1,
-  staking: 1,
-  mining: 2,
   eth: 3,
+};
+
+const modeToValueReversed = {
+  '0': 'spv',
+  '-1': 'native',
+  '3': 'eth',
 };
 
 class AddCoin extends React.Component {
@@ -74,10 +78,6 @@ class AddCoin extends React.Component {
     this.setState({
       coins,
     });
-
-    setTimeout(() => {
-      console.warn('coins', this.state.coins);
-    }, 10);
   }
 
   updateInput(e) {
@@ -174,8 +174,37 @@ class AddCoin extends React.Component {
     apiGetCoinList()
     .then((json) => {
       if (json.msg !== 'error') {
+        let coins = {};
+
+        if (json.result[0] &&
+            json.result[0].hasOwnProperty('selectedCoin')) { // convert old version to new version
+          for (let i = 0; i < json.result.length; i++) {
+            let params = {};
+
+            if (Number(json.result[i].mode) === -1 &&
+                json.result[i].daemonParam) {
+              params.daemonParam = json.result[i].daemonParam;
+            }
+
+            if (Number(json.result[i].mode) === -1 &&
+                json.result[i].genProcLimit) {
+              params.genProcLimit = json.result[i].genProcLimit;
+            }            
+
+            coins[json.result[i].selectedCoin] = {
+              coin: {
+                value: json.result[i].selectedCoin,
+              },
+              params: Object.keys(params).length ? params : null,
+              mode: modeToValueReversed[json.result[i].mode],
+            };
+          }
+        } else {
+          coins = json.result;
+        }
+
         this.setState(Object.assign({}, this.state, {
-          coins: json.result,
+          coins,
           actionsMenu: false,
         }));
       } else {
