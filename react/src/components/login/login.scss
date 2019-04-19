@@ -352,3 +352,33 @@ a.login-nn-elections {
     }
   }
 }
+
+.pin-login-block {
+  input[type="password"] {
+    width: 100%;
+  }
+  input[disabled] {
+    border-bottom: 1px solid #bdbdbd !important;
+  }
+  
+  .pin-list {
+    margin-top: 15px;
+    border: solid 1px rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    text-align: left;
+
+
+    .pin-list-inner {
+      overflow-y: auto;
+      max-height: 200px;
+    }
+    .pin-list-item {
+      padding: 5px;
+      cursor: pointer;
+
+      &.active {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+  }
+}

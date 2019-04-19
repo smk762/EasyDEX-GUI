@@ -804,6 +804,8 @@ const LANG_EN = {
     PROVIDE_YOUR_PRIV_OR_SEED: 'Provide your private key or seed below.',
     CONFIRM_YOUR_SEED_BY_PLACING_WORDS: 'Confirm your seed by placing all words as they were on the previous step.',
     THIS_IS_YOUR_NEW_SEED: 'This you new seed. Please record it somewhere in a safe place.',
+    SELECT_A_WALLET: 'Select a wallet from the list below and enter a password to unlock it',
+    ENTER_A_PW_TO_UNLOCK_WALLET: 'Enter a password to unlock wallet',
   },
   SIDEBAR: {
     EDEX_MOTTO: 'Most Secure, Easy and Native Decentralised Exchange',

@@ -150,30 +150,12 @@ const LoginRender = function() {
               </h4>
             }
             { this.props.Login.pinList.length > 0 &&
-              <div className="pin-login-block padding-top-30">
-                <div className="form-group form-material col-sm-8 horizontal-padding-0 margin-top-40 margin-bottom-60">
-                  <select
-                    className="form-control form-material"
-                    name="selectedPin"
-                    id="selectedPin"
-                    ref="selectedPin"
-                    value={ this.state.selectedPin }
-                    onChange={ (event) => this.updateSelectedPin(event) }
-                    autoFocus>
-                    <option
-                      className="login-option"
-                      value="">
-                      { translate('INDEX.SELECT_PIN_NAME') }
-                    </option>
-                    { this.renderPinsList() }
-                  </select>
-                  <label
-                    className="floating-label margin-bottom-20"
-                    htmlFor="selectedPin">
-                    { translate('LOGIN.PIN_PW_ACCESS') }
-                  </label>
+              <div className="pin-login-block">
+                <div className={ 'form-group form-material col-sm-12 horizontal-padding-0 margin-top-30 ' + (this.props.Login.pinList.length === 1 ? 'margin-bottom-10' : 'margin-bottom-30') }>
+                  { translate('LOGIN.' + (this.props.Login.pinList.length === 1 ? 'ENTER_A_PW_TO_UNLOCK_WALLET' : 'SELECT_A_WALLET')) }
+                  { this.props.Login.pinList.length > 1 && this.renderPinList() }
                 </div>
-                <div className="form-group form-material col-sm-4 padding-left-10 margin-top-40 margin-bottom-60">
+                <div className="form-group form-material col-sm-12 margin-bottom-50 horizontal-padding-0">
                   <input
                     type="password"
                     className="form-control"
@@ -182,7 +164,8 @@ const LoginRender = function() {
                     placeholder={ translate('LOGIN.DECRYPT_KEY') }
                     onChange={ this.updateInput }
                     onKeyDown={ (event) => this.handleKeydown(event) }
-                    value={ this.state.decryptKey } />
+                    value={ this.state.decryptKey }
+                    disabled={ !this.state.selectedPin } />
                 </div>
               </div>
             }

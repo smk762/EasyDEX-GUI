@@ -531,7 +531,6 @@ class Login extends React.Component {
           // reset login input vals
           this.refs.loginPassphrase.value = '';
           this.refs.decryptKey.value = '';
-          this.refs.selectedPin.value = '';
 
           this.setState(this.defaultState);
 
@@ -550,9 +549,9 @@ class Login extends React.Component {
     Store.dispatch(loadPinList());
   }
 
-  updateSelectedPin(e) {
+  updateSelectedPin(selectedPin) {
     this.setState({
-      selectedPin: e.target.value,
+      selectedPin,
     });
   }
 
@@ -925,6 +924,30 @@ class Login extends React.Component {
         </div>
       );
     }
+  }
+
+  renderPinList() {
+    const pins = this.props.Login.pinList;
+    let items = [];
+
+    for (let i = 0; i < pins.length; i++) {
+      items.push(
+        <div
+          onClick={ () => this.updateSelectedPin(pins[i]) }
+          key={ `login-pin-list-items-${i}` }
+          className={ 'pin-list-item' + (this.state.selectedPin === pins[i] ? ' active' : '') }>
+          { pins[i] }
+        </div>
+      );
+    }
+    
+    return (
+      <div className="pin-list">
+        <div className="pin-list-inner">
+          { items }
+        </div>
+      </div>
+    );
   }
 
   render() {
