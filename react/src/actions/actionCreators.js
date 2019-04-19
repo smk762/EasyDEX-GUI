@@ -36,6 +36,7 @@ import {
   DASHBOARD_ACTIVE_EXCHANGES_ORDER_MODAL,
   DASHBOARD_EXCHANGES_TOS_MODAL,
   DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
+  DASHBOARD_USER_AGREEMENT_MODAL,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -63,6 +64,7 @@ export * from './actions/csv';
 export * from './actions/addressBook';
 export * from './actions/eth';
 export * from './actions/exchanges';
+export * from './actions/userAgreement';
 
 export const changeActiveAddress = (address) => {
   return {
@@ -352,6 +354,13 @@ export const toggleExchangesTOSModal = (display) => {
 export const toggleExchangesSupportedCoinsModal = (display) => {
   return {
     type: DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
+    display,
+  }
+};
+
+export const toggleUserAgreementModal = (display) => {
+  return {
+    type: DASHBOARD_USER_AGREEMENT_MODAL,
     display,
   }
 };

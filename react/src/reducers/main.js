@@ -6,12 +6,14 @@ import {
   DISPLAY_NOTARY_ELECTIONS_MODAL,
   BLUR_SENSITIVE_DATA,
   NEW_UPDATE_AVAILABLE,
+  DASHBOARD_USER_AGREEMENT_MODAL,
 } from '../actions/storeType';
 
 export const Main = (state = {
   isLoggedIn: false,
   displayLoginSettingsModal: false,
   displayNotaryElectionsModal: false,
+  displayUserAgreementModal: false,
   blurSensitiveData: false,
   newUpdateAvailable: false,
   total: 0,
@@ -55,6 +57,11 @@ export const Main = (state = {
       return {
         ...state,
         newUpdateAvailable: action.newUpdateAvailable,
+      };
+    case DASHBOARD_USER_AGREEMENT_MODAL:
+      return {
+        ...state,
+        displayUserAgreementModal: action.display,
       };
     default:
       return state;
