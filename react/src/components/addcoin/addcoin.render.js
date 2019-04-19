@@ -173,9 +173,6 @@ const AddCoinRender = function() {
                   activeCoins={ this.props.Main.coins }
                   display={ this.state.display } />
               </div>
-              {/*<button
-                className="btn btn-primary btn-add-coin-item"
-              onClick={ this.addNewItem }>+</button>*/}
               <button
                 className="btn btn-outline-primary btn-add-coin-item-options"
                 onClick={ this.toggleActionsMenu }>
