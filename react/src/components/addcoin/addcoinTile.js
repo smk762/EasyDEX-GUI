@@ -19,14 +19,22 @@ class AddCoinTile extends React.Component {
     this.confirmNativeStartupParams = this.confirmNativeStartupParams.bind(this);
   }
 
+  componentWillReceiveProps(props) {
+    if (!props.display) {
+      this.setState({
+        activeCoin: null,
+      });
+    }
+  }
+
   confirmNativeStartupParams() {
     this.props.tileClickCB(
       this.state.activeCoin,
-      {
+      this.state.daemonParam || this.state.genProcLimit || this.state.usePubkey ? {
         daemonParam: this.state.daemonParam,
         genProcLimit: this.state.genProcLimit,
         usePubkey: this.state.usePubkey,
-      }
+      } : null
     );
     this.setActiveCoin();
   }
@@ -146,8 +154,9 @@ class AddCoinTile extends React.Component {
                       onClick={ this.toggleUsePubkey }></div>
                   </label>
                   <div
-                    className="toggle-label margin-right-15 pointer"
+                    className="toggle-label pointer"
                     onClick={ this.toggleUsePubkey }>
+                    <span className="padding-right-15"></span>
                     { translate('INDEX.USE_PUBKEY') }
                   </div>
                 </span>
@@ -189,7 +198,8 @@ class AddCoinTile extends React.Component {
       let className = 'addcoin-tile';
 
       if (this.props.activatedCoins &&
-          this.props.activatedCoins[coins[i].value]) {
+          this.props.activatedCoins[coins[i].value] &&
+          this.props.activatedCoins[coins[i].value].mode === this.props.type) {
         className += ' activated';
       }
 
@@ -200,8 +210,7 @@ class AddCoinTile extends React.Component {
       }
 
       if (this.props.activeCoins &&
-          this.props.activeCoins[this.props.type] &&
-          ((this.props.type === 'native' && this.props.activeCoins.spv.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1) || (this.props.type === 'spv' && this.props.activeCoins.native.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1))) {
+          ((this.props.type === 'native' && this.props.activeCoins.spv && (this.props.activeCoins.spv.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1 || (this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].mode === 'spv'))) || (this.props.type === 'spv' && this.props.activeCoins.native && (this.props.activeCoins.native.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1 || (this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].mode === 'native'))))) {
         className += ' hidden';
       }
 

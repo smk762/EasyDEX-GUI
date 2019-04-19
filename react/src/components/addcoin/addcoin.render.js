@@ -124,21 +124,21 @@ const AddCoinRender = function() {
               </div>
               <div className="col-sm-12">
                 { this.state.type === 'spv' &&
-                  <p>
+                  <div>
                     <strong>{ translate('INDEX.SPV_MODE') }:</strong> { translate('ADD_COIN.LITE_MODE_DESC') }.
-                  </p>
+                  </div>
                 }
                 { this.state.type === 'native' &&
-                  <p>
+                  <div>
                     <strong>{ translate('INDEX.NATIVE_MODE') }:</strong> { translate('INDEX.NATIVE_MODE_DESC1') }&nbsp;
                     <strong>Komodo Daemon</strong> { translate('INDEX.NATIVE_MODE_DESC2') }
-                    <p className="alert alert-icon alert-primary margin-top-20">
+                    <div className="alert alert-icon alert-primary margin-top-20">
                       <i className="icon md-info-outline"></i>
                       <strong>{ translate('INDEX.NATIVE_MODE') }</strong> { translate('INDEX.NATIVE_MODE_DESC3') }&nbsp;
                       <strong>{ translate('INDEX.NATIVE_MODE_DESC4') }</strong>,&nbsp;
                       <i>{ translate('INDEX.NATIVE_MODE_DESC5') }</i>.
-                    </p>
-                  </p>
+                    </div>
+                  </div>
                 }
               </div>
               <div className="col-sm-12 padding-left-none padding-top-20">
@@ -170,7 +170,8 @@ const AddCoinRender = function() {
                   coins={ this.state.coinsList }
                   tileClickCB={ this.updateCoinSelection }
                   activatedCoins={ this.state.coins }
-                  activeCoins={ this.props.Main.coins } />
+                  activeCoins={ this.props.Main.coins }
+                  display={ this.state.display } />
               </div>
               {/*<button
                 className="btn btn-primary btn-add-coin-item"
