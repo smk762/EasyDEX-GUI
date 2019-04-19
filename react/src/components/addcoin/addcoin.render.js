@@ -108,7 +108,7 @@ const AddCoinRender = function() {
                     { this.state.type !== 'eth' &&
                       <span
                         className="labelauty-unchecked">
-                        ETH and ERC20 tokens
+                        { translate('ADD_COIN.ETH_AND_ERC20_TOKENS') }
                       </span>
                     }
                     { this.state.type === 'eth' &&
@@ -116,7 +116,7 @@ const AddCoinRender = function() {
                     }
                     { this.state.type === 'eth' &&
                       <span className="labelauty-checked">
-                        ETH and ERC20 tokens
+                        { translate('ADD_COIN.ETH_AND_ERC20_TOKENS') }
                       </span>
                     }
                   </label>
@@ -159,7 +159,7 @@ const AddCoinRender = function() {
                       type="button"
                       className="btn btn-primary col-sm-4 float-none"
                       onClick={ this.activateAllCoins }>
-                      Activate
+                      { translate('ADD_COIN.ACTIVATE') }
                     </button>
                   </div>
                 }

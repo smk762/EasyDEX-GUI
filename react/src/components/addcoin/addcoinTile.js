@@ -104,7 +104,7 @@ class AddCoinTile extends React.Component {
       <div className="native-params-modal">
         <hr />
         <div className="col-sm-12 padding-top-10 padding-bottom-30">
-          Select startup parameters for { this.state.activeCoin.label }
+          { translate('ADD_COIN.SELECT_STARTUP_PARAMS_FOR') } { this.state.activeCoin.label }
         </div>
         <div className="col-sm-6">
           <div className={ 'toggle-box ' + (this.state.daemonParam === 'gen' ? 'padding-bottom-20' : 'padding-bottom-35') }>
@@ -177,13 +177,13 @@ class AddCoinTile extends React.Component {
             type="button"
             className="btn btn-default col-sm-2 float-none"
             onClick={ () => this.setActiveCoin() }>
-            Cancel
+            { translate('ADD_COIN.CANCEL') }
           </button>
           <button
             type="button"
             className="btn btn-primary col-sm-2 float-none margin-left-20"
             onClick={ this.confirmNativeStartupParams }>
-            Confirm
+            { translate('ADD_COIN.CONFIRM') }
           </button>
         </div>
       </div>
@@ -227,7 +227,9 @@ class AddCoinTile extends React.Component {
             this.props.type === 'native' &&
             <div
               onClick={ () => this.setActiveCoin(coins[i]) }
-              className={ 'badge badge--native' + (this.props.activatedCoins && this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].params ? ' badge--native--active' : '') }>Params</div>
+              className={ 'badge badge--native' + (this.props.activatedCoins && this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].params ? ' badge--native--active' : '') }>
+              { translate('ADD_COIN.PARAMS') }
+            </div>
           }
           <div
             className="addcoin-tile-inner"
@@ -247,7 +249,7 @@ class AddCoinTile extends React.Component {
       items.push(
         <div
           key="addcoin-tile-empty">
-          No matching results found
+          { translate('ADD_COIN.NO_RESULTS') }
         </div>
       );
     }

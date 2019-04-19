@@ -530,6 +530,13 @@ const LANG_EN = {
     STAKING_PUB_P1: 'Provide your seed / WIF key in order to stake.',
     STAKING_PUB_P2: 'If you only want to access funds without staking leave this field blank.',
     MINING_THREADS: 'Mining threads',
+    ETH_AND_ERC20_TOKENS: 'ETH and ERC20 tokens',
+    ACTIVATE: 'Activate',
+    SELECT_STARTUP_PARAMS_FOR: 'Select startup parameters for',
+    CANCEL: 'Cancel',
+    CONFIRM: 'Confirm',
+    PARAMS: 'Params',
+    NO_RESULTS: 'No matching results found',
   },
   RECEIVE: {
     TOOGLE_ADDRESS: 'Toggle address context menu',
