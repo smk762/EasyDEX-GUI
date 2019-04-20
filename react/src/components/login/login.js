@@ -370,7 +370,7 @@ class Login extends React.Component {
 
       this.setState({
         display: true,
-        activeLoginSection: this.state.activeLoginSection !== 'signup' ? 'login' : 'signup',
+        activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
       });
     }
 
@@ -392,6 +392,7 @@ class Login extends React.Component {
     }
 
     if (this.state.activeLoginSection !== 'signup' &&
+        this.state.activeLoginSection !== 'restore' &&
         props &&
         props.Main &&
         props.Main.isLoggedIn) {
@@ -639,9 +640,31 @@ class Login extends React.Component {
   }
 
   nextStep() {
-    this.setState({
-      step: this.state.step + 1,
-    });
+    if (this.state.activeLoginSection === 'restore' &&
+        this.state.step === 0) {
+      const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
+      
+      if (!stringEntropy) {
+        Store.dispatch(
+          triggerToaster(
+            [translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P1'),
+              '',
+              translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P2')],
+            translate('LOGIN.SEED_ENTROPY_CHECK_TITLE'),
+            'warning toastr-wide',
+            false
+          )
+        );
+      } else {
+        this.setState({
+          step: this.state.step + 1,
+        });
+      }
+    } else {
+      this.setState({
+        step: this.state.step + 1,
+      });
+    }
   }
 
   handleRegisterWallet() {
