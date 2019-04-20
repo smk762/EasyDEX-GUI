@@ -25,8 +25,9 @@ export const TxConfsRender = function(tx) {
           tx.confirmations !== tx.rawconfirmations &&
           <span>
             <span
-              data-tip={ `${translate('INDEX.RAW_CONFS')}: ${tx.rawconfirmations}` }
-              data-for="txHistoryDpowRawConf">
+              data-tip={ `${translate('INDEX.DPOW_CONFS')}: ${tx.confirmations}<br/>${translate('INDEX.RAW_CONFS_ALT')}: ${tx.rawconfirmations}` }
+              data-for="txHistoryDpowRawConf"
+              data-html={ true }>
               { tx.confirmations }
             </span>
             <ReactTooltip

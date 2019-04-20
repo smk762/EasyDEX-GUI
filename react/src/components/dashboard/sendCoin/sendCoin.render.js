@@ -494,11 +494,11 @@ export const SendRender = function() {
                     </button>
                   </div>
                 }
-                { ((_mode === 'spv' && Config.experimentalFeatures && kvCoins[_coin]) ||
+                { ((_mode === 'spv' && Config.userAgreement && kvCoins[_coin]) ||
                   (_mode === 'spv' && Config.coinControl)) &&
                   <div className="kv-select-block">
                     { _mode === 'spv' &&
-                      Config.experimentalFeatures &&
+                      Config.userAgreement &&
                       kvCoins[_coin] &&
                       <span>
                         <button
