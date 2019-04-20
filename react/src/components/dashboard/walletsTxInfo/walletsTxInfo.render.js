@@ -128,7 +128,7 @@ const WalletsTxInfoRender = function(txInfo) {
                                   </td>
                                 </tr>
                               }
-                              { this.state.txDetails.blockindex &&
+                              { this.state.txDetails.hasOwnProperty('blockindex') &&
                                 <tr>
                                   <td>{ this.capitalizeFirstLetter('blockindex') }</td>
                                   <td className="selectable">
@@ -136,7 +136,7 @@ const WalletsTxInfoRender = function(txInfo) {
                                   </td>
                                 </tr>
                               }
-                              { this.state.txDetails.blockhash &&
+                              { this.state.txDetails.hasOwnProperty('blockhash') &&
                                 <tr>
                                   <td>{ isSpv ? this.capitalizeFirstLetter('blockheight') : this.capitalizeFirstLetter('blockhash') }</td>
                                   <td className="selectable">
