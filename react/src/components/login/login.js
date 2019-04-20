@@ -530,7 +530,9 @@ class Login extends React.Component {
             }
           }
           // reset login input vals
-          this.refs.loginPassphrase.value = '';
+          if (staticVar.argv.indexOf('hardcore') > -1) {
+            this.refs.loginPassphrase.value = '';
+          }
           this.refs.decryptKey.value = '';
 
           this.setState(this.defaultState);
