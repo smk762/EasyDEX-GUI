@@ -346,8 +346,17 @@ const LoginRender = function() {
             <div className="register-form">
               { this.state.step === 0 &&
                 <section>
-                  <h4 className="hint color-white margin-bottom-20">
-                    { translate('LOGIN.THIS_IS_YOUR_NEW_SEED') }
+                  <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
+                    { translate('LOGIN.THIS_IS_YOUR_NEW_SEED_P1') }
+                  </h4>
+                  <h4 className="hint color-white margin-bottom-20 text-left">
+                    { translate('LOGIN.THIS_IS_YOUR_NEW_SEED_P2') }
+                  </h4>
+                  <h4 className="hint color-white margin-bottom-20 text-left">
+                    { translate('LOGIN.THIS_IS_YOUR_NEW_SEED_P3') }
+                  </h4>
+                  <h4 className="hint color-white margin-bottom-40 text-left">
+                    { translate('LOGIN.THIS_IS_YOUR_NEW_SEED_P4') }
                   </h4>
                   <div className={ 'form-group form-material create-wallet-seed' + (Config.dev ? ' selectable' : '') }>
                     { this.state.randomSeed }
