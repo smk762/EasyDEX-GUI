@@ -59,6 +59,7 @@ class CoinTileItem extends React.Component {
     this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.stopAllCoind = this.stopAllCoind.bind(this);
+    this.openCoindDownModal = this.openCoindDownModal.bind(this);
   }
 
   componentWillMount() {
@@ -103,20 +104,26 @@ class CoinTileItem extends React.Component {
 
   openCoindDownModal() {
     Store.dispatch(toggleCoindDownModal(true));
+
+    if (this.props.ActiveCoin.coin === 'KMD') {
+      Store.dispatch(getDebugLog('komodo', 50));
+    } else {
+      Store.dispatch(getDebugLog('komodo', 50, this.props.ActiveCoin.coin));
+    }
   }
 
   renderCoinConError(item) {
     const _coins = this.props.ActiveCoin.coins;
 
     if (this.props.ActiveCoin.getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD &&
-        (this.props.ActiveCoin.mode === 'native' &&
+        ((this.props.ActiveCoin.mode === 'native' &&
         this.props.ActiveCoin.coin === this.state.activeCoin &&
         this.props.ActiveCoin.coin === item.coin &&
         this.state.activeCoin === item.coin &&
         this.state.activeCoinMode === 'native' &&
         this.props.ActiveCoin.mode === this.state.activeCoinMode &&
         this.state.propsUpdatedCounter > 1) ||
-        (_coins && _coins[item.coin]) && _coins[item.coin].getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) {
+        (_coins && _coins[item.coin]) && _coins[item.coin].getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD)) {
       return true;
     }
   }
@@ -357,10 +364,18 @@ class CoinTileItem extends React.Component {
             Store.dispatch(getDashboardUpdate(coin, _coin));
           }
         } else {
+          const _coinuc = _coin.coin.toUpperCase();
+          const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';    
+          const _progress = this.props.ActiveCoin.progress;
+      
+          if (_coindStartParamsString &&
+              _coindStartParamsString.indexOf('-regtest') > -1) {
+            Store.dispatch(getDashboardUpdate(coin, _coin));
+          }
           Store.dispatch(
             getSyncInfoNative(
               coin,
-              null,
+               null,
               _dashboard.skipFullDashboardUpdate,
               _coin.rescanInProgress
             )
