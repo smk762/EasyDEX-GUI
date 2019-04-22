@@ -268,7 +268,7 @@ class SendCoin extends React.Component {
     this.setState({
       sendTo: pub,
       addressBookSelectorOpen: false,
-      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && (pub.substring(0, 2) === 'zc' || pub.substring(0, 2) === 'zs') && (pub.length === 95 || pub.length === 78) ? true : this.state.renderAddressDropdown,      
+      renderAddressDropdown: this.props.ActiveCoin.mode === 'native' && (pub.substring(0, 2) === 'zc' || pub.substring(0, 2) === 'zs' || pub.substring(0, 15) !== 'zregtestsapling') && (pub.length === 91 || pub.length === 95 || pub.length === 78) ? true : this.state.renderAddressDropdown,      
     });
   }
 
@@ -324,7 +324,7 @@ class SendCoin extends React.Component {
     _fees.BTC = 0;
 
     if (_mode === 'native') {
-      const isZtx = this.state.addressType === 'private' || (this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs')) || (this.state.sendFrom && (this.state.sendFrom.substring(0, 2) === 'zc' || this.state.sendFrom.substring(0, 2) === 'zs'));
+      const isZtx = this.state.addressType === 'private' || (this.state.sendTo && (this.state.sendTo.substring(0, 15) !== 'zregtestsapling' || this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs')) || (this.state.sendFrom && (this.state.sendFrom.substring(0, 15) !== 'zregtestsapling' || this.state.sendFrom.substring(0, 2) === 'zc' || this.state.sendFrom.substring(0, 2) === 'zs'));
       
       if (this.state.sendFrom &&
           Number(this.state.sendFromAmount) > 0) {
@@ -547,7 +547,7 @@ class SendCoin extends React.Component {
       };
 
       if ( this.props.ActiveCoin.mode === 'native') {
-        updatedState.renderAddressDropdown = this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && (this.state.sendTo.length === 95 || this.state.sendTo.length === 78) ? true : this.state.renderAddressDropdown;
+        updatedState.renderAddressDropdown = this.state.sendTo && (this.state.sendTo.substring(0, 15) !== 'zregtestsapling' || this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && (this.state.sendTo.length === 91 || this.state.sendTo.length === 95 || this.state.sendTo.length === 78) ? true : this.state.renderAddressDropdown;
       }
     } else {
       updatedState = {
@@ -792,7 +792,7 @@ class SendCoin extends React.Component {
     if (this.props.ActiveCoin.mode === 'native') {
       setTimeout(() => {
         this.setState({
-          renderAddressDropdown: this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && (this.state.sendTo.length === 95 || this.state.sendTo.length === 78) ? true : this.state.renderAddressDropdown,
+          renderAddressDropdown: this.state.sendTo && (this.state.sendTo.substring(0, 15) !== 'zregtestsapling' || this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') && (this.state.sendTo.length === 91 || this.state.sendTo.length === 95 || this.state.sendTo.length === 78) ? true : this.state.renderAddressDropdown,
         });
       }, 100);
     }
@@ -1123,8 +1123,8 @@ class SendCoin extends React.Component {
     // temp
     if (_mode === 'native') {
       if (_coin === 'KMD') { // reject t -> z
-        if ((this.state.sendFrom && ((this.state.sendFrom.substring(0, 2) === 'zc' && this.state.sendFrom.length === 95) || (this.state.sendFrom.substring(0, 2) === 'zs' && this.state.sendFrom.length === 78))) ||
-            (this.state.sendTo && ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78)))) {
+        if ((this.state.sendFrom && ((this.state.sendFrom.substring(0, 2) === 'zc' && this.state.sendFrom.length === 95) || (this.state.sendFrom.substring(0, 2) === 'zs' && this.state.sendFrom.length === 78) || (this.state.sendFrom.substring(0, 15) !== 'zregtestsapling' && this.state.sendFrom.length === 91))) ||
+            (this.state.sendTo && ((this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.length === 95) || (this.state.sendTo.substring(0, 2) === 'zs' && this.state.sendTo.length === 78) || (this.state.sendTo.substring(0, 15) !== 'zregtestsapling' && this.state.sendTo.length === 91)))) {
           Store.dispatch(
             triggerToaster(
               translate('SEND.KMD_Z_ADDRESSES_DEPRECATED_NOTICE'),
@@ -1242,7 +1242,7 @@ class SendCoin extends React.Component {
     }
 
     if (!this.state.sendTo ||
-        (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs')) {
+        (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs' && this.state.sendTo.substring(0, 15) !== 'zregtestsapling')) {
       let _validateAddress;
       let _msg;
 
@@ -1316,7 +1316,7 @@ class SendCoin extends React.Component {
       }
 
       if (this.state.sendTo.length > 34 &&
-          (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') &&
+          (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs' || this.state.sendTo.substring(0, 15) === 'zregtestsapling') &&
           !this.state.sendFrom) {
         Store.dispatch(
           triggerToaster(
@@ -1332,7 +1332,7 @@ class SendCoin extends React.Component {
     // validate z address, ac_private mandatory
     if ((_mode === 'native' && isAcPrivate) ||
         (this.state.sendTo &&
-        (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs') &&
+        (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs' || this.state.sendTo.substring(0, 15) === 'zregtestsapling') &&
         this.state.sendTo.length > 64)) {
       validateAddress(
         _coin,
@@ -1367,7 +1367,14 @@ class SendCoin extends React.Component {
   }
 
   isFullySynced() {
+    const _coinuc = this.props.ActiveCoin.coin.toUpperCase();
+    const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';    
     const _progress = this.props.ActiveCoin.progress;
+
+    if (_coindStartParamsString &&
+        _coindStartParamsString.indexOf('-regtest') > -1) {
+      return true;
+    }
 
     if (_progress &&
         _progress.longestchain &&
@@ -1559,7 +1566,7 @@ class SendCoin extends React.Component {
         _addressBook.length) {
       for (let i = 0; i < _addressBook.length; i++) {
         if ((_mode === 'native' && _coin !== 'KMD') ||
-            ((_mode === 'spv' || (_mode === 'native' && _coin === 'KMD')) && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.substring(0, 2) !== 'zs' && _addressBook[i].pub.length === 64)) {
+            ((_mode === 'spv' || (_mode === 'native' && _coin === 'KMD')) && _addressBook[i].pub && _addressBook[i].pub.substring(0, 2) !== 'zc' && _addressBook[i].pub.substring(0, 2) !== 'zs' && _addressBook[i].pub.substring(0, 2) !== 'zregtestsapling' && _addressBook[i].pub.length === 64)) {
           _items.push(
             <li
               key={ `send-address-book-item-${i}` }
@@ -1635,6 +1642,7 @@ const mapStateToProps = (state, props) => {
     },
     Dashboard: state.Dashboard,
     AddressBook: state.Settings.addressBook,
+    Main: state.Main,
   };
 
   if (props) {

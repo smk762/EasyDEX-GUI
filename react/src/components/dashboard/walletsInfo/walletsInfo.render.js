@@ -207,9 +207,9 @@ const WalletsInfoRender = function() {
             </div>
             <div className="table-responsive">
               { _netTotals &&
-                _netTotals.timemillis &&
-                _netTotals.totalbytesrecv &&
-                _netTotals.totalbytessent &&
+                _netTotals.hasOwnProperty('timemillis') &&
+                _netTotals.hasOwnProperty('totalbytesrecv') &&
+                _netTotals.hasOwnProperty('totalbytessent') &&
                 <table className="table table-striped">
                   <tbody>
                     <tr>

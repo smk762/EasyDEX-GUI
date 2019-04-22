@@ -149,7 +149,7 @@ const AddCoinRender = function() {
                     className="form-control normal-font"
                     onChange={ this.updateInput }
                     autoComplete="off"
-                    placeholder="Quick search (e.g. Komodo)"
+                    placeholder={ translate('ADD_COIN.QUICK_SEARCH') } 
                     value={ this.state.quickSearch || '' } />
                 </div>
                 { this.state.coins &&

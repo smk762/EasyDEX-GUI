@@ -326,8 +326,8 @@ export const TxHistoryListRender = function() {
 
   return (
     <ReactTable
-      data={ _data }
-      columns={ this.state.itemsListColumns }
+      data={ _data || [] }
+      columns={ this.state.itemsListColumns || [] }
       minRows="0"
       sortable={ true }
       className="-striped -highlight"
@@ -348,7 +348,8 @@ export const TxHistoryListRender = function() {
 export const WalletsDataRender = function() {
   const _balance = this.props.ActiveCoin.balance;
   const _txhistory = this.props.ActiveCoin.txhistory;
-
+  const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[this.props.ActiveCoin.coin] ? this.props.Main.coins.params[this.props.ActiveCoin.coin].join(' ') : '';
+  
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
@@ -429,6 +430,15 @@ export const WalletsDataRender = function() {
                         className="btn btn-default btn-switch-kv"
                         onClick={ this.toggleKvView }>
                         { translate('KV.' + (!this.state.kvView ? 'KV_VIEW' : 'TX_VIEW')) }
+                      </button>
+                    }
+                    { _coindStartParamsString &&
+                      _coindStartParamsString.indexOf('-regtest') > -1 &&
+                      <button
+                        type="button"
+                        className="btn btn-default btn-gen-block"
+                        onClick={ this._regtestGenBlock }>
+                        { translate('INDEX.REGTEST_GEN_BLOCK') }
                       </button>
                     }
                   </header>

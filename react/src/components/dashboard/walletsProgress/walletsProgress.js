@@ -405,6 +405,7 @@ const mapStateToProps = (state) => {
       progress: state.ActiveCoin.progress,
       rescanInProgress: state.ActiveCoin.rescanInProgress,
     },
+    Main: state.Main,
   };
 };
 

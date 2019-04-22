@@ -205,6 +205,8 @@ const LANG_EN = {
     ALL: 'All',
   },
   INDEX: {
+    REGTEST_GEN_BLOCK: 'Generate block',
+    REGTEST_GEN_BLOCK_SUCCESS: 'Block generated',
     RESPONSE_TOO_LARGE_P1: 'Transactions history is too big.',
     RESPONSE_TOO_LARGE_P2: 'Please either use native mode or move funds to another address.',
     TRUE_SM: 'true',

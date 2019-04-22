@@ -119,6 +119,7 @@ class AddCoinTile extends React.Component {
               <option value="reindex">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.REINDEX') }</option>
               <option value="rescan">{ translate('INDEX.DAEMON_PARAM') }: { translate('INDEX.RESCAN') }</option>
               <option value="gen">{ translate('INDEX.DAEMON_PARAM') }: gen</option>
+              <option value="regtest">{ translate('INDEX.DAEMON_PARAM') }: regtest</option>
             </select>
           </div>
         </div>

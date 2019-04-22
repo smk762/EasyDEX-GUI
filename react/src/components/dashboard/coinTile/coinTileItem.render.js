@@ -59,6 +59,14 @@ const CoinTileItemRender = function() {
           data-for="coinTile2"
           className="icon fa-gavel custom-ac-icon"></i>
       }
+      { item.mode === 'native' &&
+        _coindStartParamsString &&
+        _coindStartParamsString.indexOf('-regtest') > -1 &&
+        <i
+          data-tip={ translate('INDEX.MINING_IS_ENABLED') }
+          data-for="coinTile"
+          className="icon custom-ac-icon">RT</i>
+      }
       {/*<ReactTooltip
         id="coinTile2"
         effect="solid"
