@@ -5,6 +5,7 @@ import AddCoin from '../addcoin/addcoin';
 import Login from '../login/login';
 import Dashboard from '../dashboard/main/dashboard';
 import NotaryElectionsModal from '../dashboard/notaryElectionsModal/notaryElectionsModal';
+import UserAgreementModal from '../dashboard/userAgreementModal/userAgreementModal';
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import Store from '../../store';
 import {
@@ -15,10 +16,16 @@ import {
   toggleCoindDownModal,
   displayImportKeyModal,
   toggleNotaryElectionsModal,
+  toggleUserAgreementModal,
 } from '../../actions/actionCreators';
+import Config from '../../config';
 
 class WalletMain extends React.Component {
   componentDidMount() {
+    if (!Config.userAgreement) {
+      Store.dispatch(toggleUserAgreementModal(true));
+    }
+
     // handle esc key globally
     document.onkeydown = (evt) => {
       let isEscape = false;
@@ -64,6 +71,7 @@ class WalletMain extends React.Component {
         <AddCoin />
         <Login />
         <NotaryElectionsModal />
+        <UserAgreementModal />
         <Toaster { ...this.props.toaster } />
       </div>
     );

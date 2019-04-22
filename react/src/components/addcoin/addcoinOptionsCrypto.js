@@ -12,7 +12,7 @@ let _disableETH;
 
 // disable non kmd coins
 // TODO: move eth to a separate render
-if (!config.experimentalFeatures) {
+if (!config.userAgreement) {
   coins = coins.slice(0, 2);
 }
 
@@ -27,8 +27,8 @@ for (let i = 0; i < cryptoCoins.length; i++) {
 _coins = sortObject(_coins);
 
 for (let key in _coins) {
-  if (config.experimentalFeatures ||
-      (!config.experimentalFeatures && (_coins[key] === 'KMD' || _coins[key] === 'CHIPS'))) {
+  if (config.userAgreement ||
+      (!config.userAgreement && (_coins[key] === 'KMD' || _coins[key] === 'CHIPS'))) {
     coinsList.push(_coins[key]);
   }
 }
@@ -51,7 +51,7 @@ const prepCoinsList = (options) => {
       }
     }
 
-    if (config.experimentalFeatures) {
+    if (config.userAgreement) {
       if (_activeCoins.eth.indexOf('eth') > -1) {
         _items.push({
           label: `${translate('CRYPTO.ETH')} (ETH)`,
@@ -100,7 +100,7 @@ const prepCoinsList = (options) => {
       }
     }
 
-    if (config.experimentalFeatures &&
+    if (config.userAgreement &&
         !_disableETH) {
       _items.push({
         label: `${translate('CRYPTO.ETH')} (ETH)`,

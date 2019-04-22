@@ -52,14 +52,14 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> Explorer
               </a>
             </li>*/ }
-            { Config.experimentalFeatures &&
+            { Config.userAgreement &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('tools') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('tools') }>
                   <i className="site-menu-icon"></i> { translate('TOOLS.TOOLS') }
                 </a>
               </li>
             }
-            { Config.experimentalFeatures &&
+            { Config.userAgreement &&
               (Config.dev || staticVar.argv.indexOf('exchanges') > -1) &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('exchanges') }>

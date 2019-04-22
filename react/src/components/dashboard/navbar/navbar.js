@@ -113,7 +113,7 @@ class Navbar extends React.Component {
     );
 
     this.setState({
-      isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
+      isExperimentalOn: mainWindow.appConfig.userAgreement,
     });
 
     if (staticVar.argv.indexOf('dexonly') > -1) {

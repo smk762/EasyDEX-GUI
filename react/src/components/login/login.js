@@ -27,7 +27,6 @@ import {
 import Config from '../../config';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
-import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import translate from '../../translate/translate';
 import mainWindow, { staticVar } from '../../util/mainWindow';
@@ -35,9 +34,12 @@ import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 import { msigPubAddress } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import { shuffleArray } from 'agama-wallet-lib/src/crypto/utils';
 import nnConfig from '../nnConfig';
 
 const SEED_TRIM_TIMEOUT = 5000;
+
+// TODO: create/restore wallet msig, offline sig, watch only support
 
 class Login extends React.Component {
   constructor() {
@@ -49,8 +51,9 @@ class Login extends React.Component {
       seedInputVisibility: false,
       loginPassPhraseSeedType: null,
       bitsOption: 256,
-      randomSeed: passphraseGenerator.generatePassPhrase(256),
-      randomSeedConfirm: '',
+      randomSeed: '',
+      randomSeedShuffled: '',
+      randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
@@ -71,6 +74,7 @@ class Login extends React.Component {
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
+      step: 0,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
@@ -90,6 +94,26 @@ class Login extends React.Component {
     this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
     this.resetSPVCoins = this.resetSPVCoins.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.createSeedConfirmPush = this.createSeedConfirmPush.bind(this);
+    this.prevStep = this.prevStep.bind(this);
+    this.nextStep = this.nextStep.bind(this);
+    this.clearCreateSeedConfirm = this.clearCreateSeedConfirm.bind(this);
+  }
+
+  clearCreateSeedConfirm() {
+    this.setState({
+      randomSeedConfirm: [],
+    });
+  }
+
+  createSeedConfirmPush(word) {
+    let randomSeedConfirm = JSON.parse(JSON.stringify(this.state.randomSeedConfirm));
+
+    randomSeedConfirm.push(word);    
+
+    this.setState({
+      randomSeedConfirm,
+    });
   }
 
   handleClickOutside(e) {
@@ -217,7 +241,7 @@ class Login extends React.Component {
         // if customWalletSeed is set to true, reset to seed to an empty string
         this.setState({
           randomSeed: '',
-          randomSeedConfirm: '',
+          randomSeedConfirm: [],
         });
       }
     });
@@ -246,8 +270,12 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
+    const newSeed = passphraseGenerator.generatePassPhrase(256);
+
     this.setState({
-      isExperimentalOn: mainWindow.experimentalFeatures,
+      isExperimentalOn: mainWindow.userAgreement,
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
     });
 
     this.loadPinList();
@@ -260,8 +288,11 @@ class Login extends React.Component {
   }
 
   generateNewSeed(bits) {
+    const newSeed = passphraseGenerator.generatePassPhrase(bits);
+
     this.setState(Object.assign({}, this.state, {
-      randomSeed: passphraseGenerator.generatePassPhrase(bits),
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
       bitsOption: bits,
       isSeedBlank: false,
     }));
@@ -339,7 +370,7 @@ class Login extends React.Component {
 
       this.setState({
         display: true,
-        activeLoginSection: this.state.activeLoginSection !== 'signup' ? 'login' : 'signup',
+        activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
       });
     }
 
@@ -361,6 +392,7 @@ class Login extends React.Component {
     }
 
     if (this.state.activeLoginSection !== 'signup' &&
+        this.state.activeLoginSection !== 'restore' &&
         props &&
         props.Main &&
         props.Main.isLoggedIn) {
@@ -445,7 +477,9 @@ class Login extends React.Component {
       });
 
       // reset login input vals
-      this.refs.loginPassphrase.value = '';
+      if (this.refs.loginPassphrase) {
+        this.refs.loginPassphrase.value = '';
+      }
 
       this.setState(this.defaultState);
 
@@ -496,9 +530,10 @@ class Login extends React.Component {
             }
           }
           // reset login input vals
-          this.refs.loginPassphrase.value = '';
+          if (staticVar.argv.indexOf('hardcore') > -1) {
+            this.refs.loginPassphrase.value = '';
+          }
           this.refs.decryptKey.value = '';
-          this.refs.selectedPin.value = '';
 
           this.setState(this.defaultState);
 
@@ -517,9 +552,9 @@ class Login extends React.Component {
     Store.dispatch(loadPinList());
   }
 
-  updateSelectedPin(e) {
+  updateSelectedPin(selectedPin) {
     this.setState({
-      selectedPin: e.target.value,
+      selectedPin,
     });
   }
 
@@ -550,6 +585,7 @@ class Login extends React.Component {
   }
 
   updateActiveLoginSection(name) {
+    const newSeed = passphraseGenerator.generatePassPhrase(256);
     // reset login/create form
     this.setState({
       activeLoginSection: name,
@@ -557,14 +593,16 @@ class Login extends React.Component {
       loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
-      randomSeed: passphraseGenerator.generatePassPhrase(256),
-      randomSeedConfirm: '',
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
+      randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
       displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
-   });
+      step: 0,
+    });
   }
 
   execWalletCreate() {
@@ -585,14 +623,59 @@ class Login extends React.Component {
     });
   }
 
-  handleRegisterWallet() {
-    const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
-    const isSeedBlank = this.isBlank(this.state.randomSeed);
-    const stringEntropy = mainWindow.checkStringEntropy(this.state.randomSeed);
-    const _customSeed = this.state.customWalletSeed;
+  prevStep() {
+    if (this.state.activeLoginSection === 'signup') {
+      const newSeed = passphraseGenerator.generatePassPhrase(256);
 
-    if (!stringEntropy &&
-        _customSeed) {
+      this.setState({
+        step: this.state.step - 1,
+        randomSeedConfirm: [],
+        randomSeed: newSeed,
+        randomSeedShuffled: shuffleArray(newSeed.split(' ')),
+      });
+    } else {
+      this.setState({
+        step: this.state.step - 1,
+        loginPassphrase: null,
+      });
+    }
+  }
+
+  nextStep() {
+    if (this.state.activeLoginSection === 'restore' &&
+        this.state.step === 0) {
+      const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
+      
+      if (!stringEntropy) {
+        Store.dispatch(
+          triggerToaster(
+            [translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P1'),
+              '',
+              translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P2')],
+            translate('LOGIN.SEED_ENTROPY_CHECK_TITLE'),
+            'warning toastr-wide',
+            false
+          )
+        );
+      } else {
+        this.setState({
+          step: this.state.step + 1,
+        });
+      }
+    } else {
+      this.setState({
+        step: this.state.step + 1,
+      });
+    }
+  }
+
+  handleRegisterWallet() {
+    const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
+    const enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
+    const isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
+    const stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
+
+    if (!stringEntropy) {
       Store.dispatch(
         triggerToaster(
           [translate('LOGIN.SEED_ENTROPY_CHECK_P1'),
@@ -606,13 +689,11 @@ class Login extends React.Component {
     }
 
     this.setState({
-      isCustomSeedWeak: _customSeed === null ? true : false,
       isSeedConfirmError: !enteredSeedsMatch ? true : false,
       isSeedBlank: isSeedBlank ? true : false,
     });
 
-    if (this.state.shouldEncryptSeed &&
-        !this.isCustomWalletSeed()) {
+    if (this.state.shouldEncryptSeed) {
       if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
         Store.dispatch(
           triggerToaster(
@@ -649,7 +730,7 @@ class Login extends React.Component {
               if (this.state.customPinFilename &&
                   _customPinFilenameTest.test(this.state.customPinFilename)) {
                 encryptPassphrase(
-                  this.state.randomSeed,
+                  this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
                   this.state.encryptKey,
                   false,
                   this.state.customPinFilename,
@@ -664,7 +745,7 @@ class Login extends React.Component {
                         activeLoginSection: 'login',
                         randomSeed: '',
                         loginPassphrase: '',
-                        randomSeedConfirm: '',
+                        randomSeedConfirm: [],
                         customWalletSeed: false,
                         encryptKey: '',
                         encryptKeyConfirm: '',
@@ -691,7 +772,10 @@ class Login extends React.Component {
                 );
               }
             } else {
-              encryptPassphrase(this.state.randomSeed, this.state.encryptKey)
+              encryptPassphrase(
+                this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
+                this.state.encryptKey
+              )
               .then((res) => {
                 if (res.msg === 'success') {
                   this.loadPinList();
@@ -702,7 +786,7 @@ class Login extends React.Component {
                       activeLoginSection: 'login',
                       randomSeed: '',
                       loginPassphrase: '',
-                      randomSeedConfirm: '',
+                      randomSeedConfirm: [],
                       customWalletSeed: false,
                       encryptKey: '',
                       encryptKeyConfirm: '',
@@ -722,13 +806,6 @@ class Login extends React.Component {
             }
           }
         }
-      }
-    } else {
-      if (enteredSeedsMatch &&
-          !isSeedBlank &&
-          _customSeed !== null &&
-          ((stringEntropy && this.isCustomWalletSeed()) || !this.isCustomWalletSeed())) {
-        this.toggleSeedBackupModal();
       }
     }
   }
@@ -839,14 +916,6 @@ class Login extends React.Component {
     return _items;
   }
 
-  renderSwallModal() {
-    if (this.state.displaySeedBackupModal) {
-      return SwallModalRender.call(this);
-    }
-
-    return null;
-  }
-
   renderShortcutOption(option) {
     if (option.value.indexOf('+') > -1) {
       const _comps = option.value.split('+');
@@ -880,6 +949,30 @@ class Login extends React.Component {
         </div>
       );
     }
+  }
+
+  renderPinList() {
+    const pins = this.props.Login.pinList;
+    let items = [];
+
+    for (let i = 0; i < pins.length; i++) {
+      items.push(
+        <div
+          onClick={ () => this.updateSelectedPin(pins[i]) }
+          key={ `login-pin-list-items-${i}` }
+          className={ 'pin-list-item' + (this.state.selectedPin === pins[i] ? ' active' : '') }>
+          { pins[i] }
+        </div>
+      );
+    }
+    
+    return (
+      <div className="pin-list">
+        <div className="pin-list-inner">
+          { items }
+        </div>
+      </div>
+    );
   }
 
   render() {

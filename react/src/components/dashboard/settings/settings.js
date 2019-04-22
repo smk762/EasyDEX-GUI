@@ -46,7 +46,7 @@ class Settings extends React.Component {
 
   componentWillMount() {
     this.setState({
-      isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
+      isExperimentalOn: mainWindow.appConfig.userAgreement,
     });
   }
 

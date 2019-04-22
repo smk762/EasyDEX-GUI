@@ -208,30 +208,9 @@ class DebugLogPanel extends React.Component {
           { _coins &&
             _coins.native &&
             Object.keys(_coins.native).length > 0 &&
-            <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
+            <p className="padding-top-30">{ translate('INDEX.DEBUG_LOG_DESC') }</p>
           }
-          <div className="margin-top-30">
-            <span className="pointer toggle hide">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  name="settings-app-debug-toggle"
-                  value={ this.state.toggleAppRuntimeLog }
-                  checked={ this.state.toggleAppRuntimeLog }
-                  readOnly />
-                <div
-                  className="slider"
-                  onClick={ this.toggleAppRuntimeLog }></div>
-              </label>
-              <span
-                className="title"
-                onClick={ this.toggleAppRuntimeLog }>
-                { translate('SETTINGS.SHOW_APP_RUNTIME_LOG') }
-              </span>
-            </span>
-          </div>
-          { !this.state.toggleAppRuntimeLog &&
-            _coins &&
+          { _coins &&
             _coins.native &&
             Object.keys(_coins.native).length > 0 &&
             <div className="read-debug-log-import-form">

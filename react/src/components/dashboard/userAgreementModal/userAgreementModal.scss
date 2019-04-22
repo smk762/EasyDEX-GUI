@@ -1,0 +1,22 @@
+.user-agreement-modal {
+  min-height: 560px;
+
+  .panel {
+    box-shadow: none;
+  }
+  .panel-body {
+    padding: 0;
+  }
+  .modal-body {
+    padding: 20px 20px 0 20px;
+    min-height: 160px;
+  }
+  .modal-footer {
+    padding: 0 20px 20px;
+  }
+  button {
+    max-width: 300px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+}

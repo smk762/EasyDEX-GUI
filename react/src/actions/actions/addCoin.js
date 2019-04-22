@@ -456,7 +456,7 @@ export const _apiGetConfig = (coin, mode, startupParams) => {
 
 export const apiGetConfig = (coin, mode, startupParams, genproclimit, pubkey) => {
   if (coin === 'KMD' &&
-      mode === '-1') {
+      Number(mode) === -1) {
     return dispatch => {
       return fetch(
         `http://127.0.0.1:${agamaPort}/api/getconf`,

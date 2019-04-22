@@ -19,6 +19,7 @@ const _disabledAC = {
   native: [
     'vrsc',
     'spltest',
+    'hush',
   ],
   all: [
     'mvp',
@@ -81,7 +82,7 @@ const addCoinOptionsAC = (activeCoins) => {
     }
   }
 
-  if (config.experimentalFeatures) {
+  if (config.userAgreement) {
     const _customAssetChains = {
       mining: [
       ],

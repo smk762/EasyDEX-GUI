@@ -25,8 +25,9 @@ export const TxConfsRender = function(tx) {
           tx.confirmations !== tx.rawconfirmations &&
           <span>
             <span
-              data-tip={ `${translate('INDEX.RAW_CONFS')}: ${tx.rawconfirmations}` }
-              data-for="txHistoryDpowRawConf">
+              data-tip={ `${translate('INDEX.DPOW_CONFS')}: ${tx.confirmations}<br/>${translate('INDEX.RAW_CONFS_ALT')}: ${tx.rawconfirmations}` }
+              data-for="txHistoryDpowRawConf"
+              data-html={ true }>
               { tx.confirmations }
             </span>
             <ReactTooltip
@@ -416,7 +417,7 @@ export const WalletsDataRender = function() {
                     }
                     <h4 className="panel-title">{ !this.state.kvView ? translate('INDEX.TRANSACTION_HISTORY') : translate('KV.KV_HISTORY') }</h4>
                     { this.props.ActiveCoin.mode === 'spv' &&
-                      Config.experimentalFeatures &&
+                      Config.userAgreement &&
                       kvCoins[this.props.ActiveCoin.coin] &&
                       this.state.itemsList !== 'loading' &&
                       this.state.itemsList !== 'response too large' &&

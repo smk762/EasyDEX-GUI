@@ -109,7 +109,7 @@ export const SettingsRender = function() {
                 <NativeWalletDatKeysPanel />
               </PanelSection>
             }
-            { Config.experimentalFeatures &&
+            { Config.userAgreement &&
               _coins.spv &&
               Object.keys(_coins.spv).length &&
               <PanelSection
