@@ -18,6 +18,8 @@ export const SyncErrorBlocksRender = function() {
 };
 
 export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHeight) {
+  const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[this.props.ActiveCoin.coin] ? this.props.Main.coins.params[this.props.ActiveCoin.coin].join(' ') : '';
+  
   if (this.props.ActiveCoin.rescanInProgress) {
     return (
       <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
@@ -29,12 +31,18 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
       return (
         <div
           className="progress-bar progress-bar-info progress-bar-striped active"
-          style={{ width: syncPercentage }}>
-          <span style={{ width: syncPercentage }}>
+          style={{ width: _coindStartParamsString && _coindStartParamsString.indexOf('-regtest') === -1 ? syncPercentage : '100%' }}>
+          <span style={{ width: _coindStartParamsString && _coindStartParamsString.indexOf('-regtest') === -1 ? syncPercentage : '100%' }}>
             { translate('INDEX.BLOCKS') }:&nbsp;
-            { this.props.ActiveCoin.progress.blocks }&nbsp;|&nbsp;
-            { translate('INDEX.CONNECTIONS') }:&nbsp;
-            { this.props.ActiveCoin.progress.connections }
+            { this.props.ActiveCoin.progress.blocks }
+            { _coindStartParamsString &&
+              _coindStartParamsString.indexOf('-regtest') === -1 &&
+              <span>
+                &nbsp;|&nbsp;
+                { translate('INDEX.CONNECTIONS') }:&nbsp;
+                { this.props.ActiveCoin.progress.connections }
+              </span>
+            }
           </span>
         </div>
       );
@@ -57,6 +65,8 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
               </span>
             }
             { this.props.ActiveCoin.progress.connections &&
+              _coindStartParamsString &&
+              _coindStartParamsString.indexOf('-regtest') === -1 &&
               <span>|&nbsp;
                 { translate('INDEX.CONNECTIONS') }:&nbsp;
                 { this.props.ActiveCoin.progress.connections }

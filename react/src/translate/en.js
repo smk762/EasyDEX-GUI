@@ -205,6 +205,8 @@ const LANG_EN = {
     ALL: 'All',
   },
   INDEX: {
+    REGTEST_GEN_BLOCK: 'Generate block',
+    REGTEST_GEN_BLOCK_SUCCESS: 'Block generated',
     RESPONSE_TOO_LARGE_P1: 'Transactions history is too big.',
     RESPONSE_TOO_LARGE_P2: 'Please either use native mode or move funds to another address.',
     TRUE_SM: 'true',
@@ -539,6 +541,7 @@ const LANG_EN = {
     CONFIRM: 'Confirm',
     PARAMS: 'Params',
     NO_RESULTS: 'No matching results found',
+    QUICK_SEARCH: 'Quick search (e.g. Komodo)',
   },
   RECEIVE: {
     TOOGLE_ADDRESS: 'Toggle address context menu',
@@ -805,7 +808,10 @@ const LANG_EN = {
     YOU_PROVIDED_SEED: 'You provided a seed',
     PROVIDE_YOUR_PRIV_OR_SEED: 'Provide your private key or seed below.',
     CONFIRM_YOUR_SEED_BY_PLACING_WORDS: 'Confirm your seed by placing all words as they were on the previous step.',
-    THIS_IS_YOUR_NEW_SEED: 'This you new seed. Please record it somewhere in a safe place.',
+    THIS_IS_YOUR_NEW_SEED_P1: 'This is your new seed, which will always generate the same address for you and provide access to the funds stored in that address.',
+    THIS_IS_YOUR_NEW_SEED_P2: 'Please write down all 24 words in the exact same order that they appear.',
+    THIS_IS_YOUR_NEW_SEED_P3: 'Do not save any screenshots or take picture of your seed using a mobile phone connected to internet.',
+    THIS_IS_YOUR_NEW_SEED_P4: 'Remember to safeguard this seed carefully. Never share it with anyone.',
     SELECT_A_WALLET: 'Select a wallet from the list below and enter a password to unlock it',
     ENTER_A_PW_TO_UNLOCK_WALLET: 'Enter a password to unlock wallet',
   },

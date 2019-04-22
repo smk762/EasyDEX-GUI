@@ -388,7 +388,7 @@ class ToolsMultisigTx extends React.Component {
 
         _sigs.push(_kp.pubHex);
 
-        dev(`sigs ${_sigs.length}`);
+        devlog(`sigs ${_sigs.length}`);
         
         if (_sigs.length === Number(_multisigData.nOfN.split('-')[0])) {
           devlog('all sigs are here, complete tx');
@@ -781,7 +781,7 @@ class ToolsMultisigTx extends React.Component {
                 !this.state.amount)) ||
                 (!this.state.creator && (!this.state.agamaMultisigData || !this.state.agamaMultisigIncompleteTx))
               }>
-              { translate('TOOLS' + (this.state.creator ? 'GENERATE_MULTISIG_TX' : 'SIGN_MULTISIG_TX')) }
+              { translate('TOOLS.' + (this.state.creator ? 'GENERATE_MULTISIG_TX' : 'SIGN_MULTISIG_TX')) }
             </button>
             { this.state.agamaMultisigTxOut &&
               this.state.agamaMultisigTxOut.sigs &&

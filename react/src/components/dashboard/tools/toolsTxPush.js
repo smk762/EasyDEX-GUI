@@ -44,11 +44,14 @@ class ToolsTxPush extends React.Component {
   }
 
   copyTx() {
-    Store.dispatch(copyString(this.state.txSigResult, translate('TOOLS.TXID_COPIED')));
+    Store.dispatch(copyString(this.state.txPushResult, translate('TOOLS.TXID_COPIED')));
   }
 
   sendTx() {
-    apiToolsPushTx(this.state.selectedCoin.split('|')[0].toLowerCase(), this.state.rawTx2Push)
+    apiToolsPushTx(
+      this.state.selectedCoin.split('|')[0].toLowerCase(),
+      this.state.rawTx2Push
+    )
     .then((res) => {
       devlog(res);
 

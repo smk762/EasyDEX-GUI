@@ -129,7 +129,8 @@ class AddressBookPanel extends React.Component {
     if (_coin === 'KMD' &&
         _address.substring(0, 2) === 'zc' &&
         _address.substring(0, 2) === 'zs' &&
-        (_address.length === 95 || _address.length === 78)) {
+        _address.substring(0, 15) === 'zregtestsapling' &&
+        (_address.length === 91 || _address.length === 95 || _address.length === 78)) {
       _validationMsg = null;
     }
 
