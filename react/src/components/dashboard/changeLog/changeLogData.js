@@ -1,4 +1,15 @@
 const changeLogData = [{
+  version: '0.3.6',
+  changes: [
+    'HUSH switched to HUSH3 asset chain',
+    'OUR asset chain wrong ac_perc param fix',
+    'Create wallet refactor',
+    'Restore wallet',
+    'Add coin refactor',
+    'Pin login refactor',
+    'User agreement',
+  ],
+}, {
   version: '0.3.5',
   changes: [
     'Enabled Notary Elections UI',
