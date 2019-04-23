@@ -75,6 +75,24 @@ const LoginRender = function() {
     return items;
   }
 
+  const renderCreateSeedWordsConfirmStack = () => {
+    const words = this.state.randomSeedConfirm;
+    let items = [];
+
+    for (let i = 0; i < words.length; i++) {
+      items.push(
+        <span
+          key={ `seed-confirm-word-${i}-stack` }
+          className="seed-confirm-word-stack"
+          onClick={ this.popCreateSeedConfirm }>
+          { words[i] }
+        </span>
+      );
+    }
+
+    return items;
+  }
+
   return (
     <div>
       <ZcparamsFetchModal />
@@ -390,7 +408,9 @@ const LoginRender = function() {
                     { this.state.randomSeedConfirm &&
                       this.state.randomSeedConfirm.length > 0 &&
                       <div className="create-wallet-seed">
-                        <div className="seed-gen-box">{ this.state.randomSeedConfirm.join(' ') }</div>
+                        <div className="seed-gen-box">
+                          { renderCreateSeedWordsConfirmStack() }
+                        </div>
                       </div>
                     }
                   </div>

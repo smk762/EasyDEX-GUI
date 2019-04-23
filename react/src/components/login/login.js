@@ -98,6 +98,16 @@ class Login extends React.Component {
     this.prevStep = this.prevStep.bind(this);
     this.nextStep = this.nextStep.bind(this);
     this.clearCreateSeedConfirm = this.clearCreateSeedConfirm.bind(this);
+    this.popCreateSeedConfirm = this.popCreateSeedConfirm.bind(this);
+  }
+
+  popCreateSeedConfirm() {
+    let randomSeedConfirm = JSON.parse(JSON.stringify(this.state.randomSeedConfirm));
+    randomSeedConfirm.pop();
+
+    this.setState({
+      randomSeedConfirm,
+    });
   }
 
   clearCreateSeedConfirm() {

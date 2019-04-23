@@ -315,6 +315,15 @@ a.login-nn-elections {
       display: inline-block;
     }
   }
+  .seed-confirm-word-stack {
+    padding-right: 5px;
+    display: inline-block;
+
+    &:last-child {
+      padding-right: 0;
+      cursor: pointer;
+    }
+  }
   .seed-confirm-clear {
     position: absolute;
     font-size: 20px;
