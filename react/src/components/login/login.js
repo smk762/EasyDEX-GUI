@@ -46,7 +46,7 @@ class Login extends React.Component {
     super();
     this.state = {
       display: false,
-      activeLoginSection: 'activateCoin',
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       loginPassphrase: '',
       seedInputVisibility: false,
       loginPassPhraseSeedType: null,
@@ -349,7 +349,7 @@ class Login extends React.Component {
         props.Main.isLoggedIn) {
       if (props.Main.total === 0) {
         this.setState({
-          activeLoginSection: 'activateCoin',
+          activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
           loginPassphrase: '',
           display: true,
         });
@@ -408,7 +408,7 @@ class Login extends React.Component {
         props.Main.isLoggedIn) {
       this.setState({
         loginPassphrase: '',
-        activeLoginSection: 'activateCoin',
+        activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       });
     }
   }
@@ -627,7 +627,7 @@ class Login extends React.Component {
     );
 
     this.setState({
-      activeLoginSection: 'activateCoin',
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       displaySeedBackupModal: false,
       isSeedConfirmError: false,
     });
