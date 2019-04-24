@@ -314,7 +314,7 @@ export const TxHistoryListRender = function() {
   if (_activeCoin &&
       _activeCoin.txhistory &&
       !this.state.searchTerm) {
-    _data = this.props.ActiveCoin.txhistory || _activeCoin;
+    _data = this.props.ActiveCoin.txhistory || _activeCoin.txhistory || 'loading';
   }
 
   _data = _data || this.state.filteredItemsList;
@@ -326,8 +326,8 @@ export const TxHistoryListRender = function() {
 
   return (
     <ReactTable
-      data={ _data || [] }
-      columns={ this.state.itemsListColumns || [] }
+      data={ _data }
+      columns={ this.state.itemsListColumns }
       minRows="0"
       sortable={ true }
       className="-striped -highlight"
