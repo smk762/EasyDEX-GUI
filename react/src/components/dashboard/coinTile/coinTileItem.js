@@ -178,31 +178,32 @@ class CoinTileItem extends React.Component {
     let _coin;
 
     if (allCoins) {
-      modes.map((mode) => {
-        allCoins[mode].map((coin) => {
+      for (let i = 0; i < modes.length; i++) {
+        for (let j = 0; j < allCoins[modes[i]].length; j++) {
           if (!_coinSelected &&
-              coin !== skipCoin) {
+              allCoins[modes[i]][j] !== skipCoin) {
             _coinSelected = true;
-            _coin = coin;
-            _mode = mode;
+            _coin = allCoins[modes[i]][j];
+            _mode = modes[i];
           }
-          _coinMode[coin] = mode;
-        });
 
-        if (_coinMode.KMD &&
-            _coinMode.KMD === 'native' &&
-            skipCoin !== 'KMD') {
-          _coin = 'KMD';
-          _mode = 'native';
-        } else if (
-          _coinMode.KMD &&
-          _coinMode.KMD === 'spv' &&
-          skipCoin !== 'KMD'
-        ) {
-          _coin = 'KMD';
-          _mode = 'spv';
+          _coinMode[allCoins[modes[i]][j]] = modes[i];
+
+          if (_coinMode.KMD &&
+              _coinMode.KMD === 'native' &&
+              skipCoin !== 'KMD') {
+            _coin = 'KMD';
+            _mode = 'native';
+          } else if (
+            _coinMode.KMD &&
+            _coinMode.KMD === 'spv' &&
+            skipCoin !== 'KMD'
+          ) {
+            _coin = 'KMD';
+            _mode = 'spv';
+          }
         }
-      });
+      }
 
       setTimeout(() => {
         this._dashboardChangeActiveCoin(_coin, _mode, true);
