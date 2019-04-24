@@ -151,20 +151,6 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  renderRemoveCoinButton() {
-    const _main = this.props.Main;
-
-    if (_main &&
-        _main.coins &&
-        ((_main.coins.native &&
-          _main.coins.native.length &&
-        !Config.native.stopNativeDaemonsOnQuit) ||
-        (_main.coins.spv && _main.coins.spv.length) ||
-        (_main.coins.eth && _main.coins.eth.length))) {
-      return true;
-    }
-  }
-
   autoSetActiveCoin(skipCoin) {
     const modes = [
       'native',
