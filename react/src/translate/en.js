@@ -122,7 +122,6 @@ const LANG_EN = {
     'apiElectrumAuth': 'Unable to get auth data',
     'apiElectrumAddCoin': 'Unable to add a coin',
     'apiHerd': 'Unable to add a coin',
-    '_apiGetConfig': 'Unable to get daemon config',
     'apiGetConfig': 'Unable to get daemon config',
     'modifyAddressBook': 'Unable to save address book data',
     'getAddressBook': 'Unable to get address book data',
@@ -542,6 +541,8 @@ const LANG_EN = {
     PARAMS: 'Params',
     NO_RESULTS: 'No matching results found',
     QUICK_SEARCH: 'Quick search (e.g. Komodo)',
+    ADDED_SM: 'added',
+    TOKEN_ADDED_SM: 'token added',
   },
   RECEIVE: {
     TOOGLE_ADDRESS: 'Toggle address context menu',
@@ -814,6 +815,7 @@ const LANG_EN = {
     THIS_IS_YOUR_NEW_SEED_P4: 'Remember to safeguard this seed carefully. Never share it with anyone.',
     SELECT_A_WALLET: 'Select a wallet from the list below and enter a password to unlock it',
     ENTER_A_PW_TO_UNLOCK_WALLET: 'Enter a password to unlock wallet',
+    RESTORE_WALLET: 'Restore wallet',
   },
   SIDEBAR: {
     EDEX_MOTTO: 'Most Secure, Easy and Native Decentralised Exchange',

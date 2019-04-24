@@ -258,14 +258,14 @@ const LoginRender = function() {
                 className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
                 id="register-btn"
                 onClick={ () => this.updateActiveLoginSection('restore') }>
-                Restore wallet
+                { translate('LOGIN.RESTORE_WALLET') }
               </button>
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect hide"
                 id="logint-another-wallet">
                 { translate('INDEX.LOGIN_ANOTHER_WALLET') }
               </button>
-              <button
+              {/*<button
                 className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
                 id="register-btn"
                 onClick={ this.toggleActivateCoinForm }
@@ -273,7 +273,7 @@ const LoginRender = function() {
                 <span className="ladda-label">
                   { translate('ADD_COIN.ADD_ANOTHER_COIN') }
                 </span>
-              </button>
+              </button>*/}
             </div>
           </div>
 
