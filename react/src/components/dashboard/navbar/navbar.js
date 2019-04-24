@@ -7,7 +7,7 @@ import {
   startInterval,
   displayImportKeyModal,
   apiElectrumLock,
-  apiElectrumLogout,
+  apiLogout,
   getDexCoins,
   activeHandle,
   dashboardRemoveCoin,
@@ -34,8 +34,7 @@ class Navbar extends React.Component {
     this._toggleNotaryElectionsModal = this._toggleNotaryElectionsModal.bind(this);
     this._checkAC = this._checkAC.bind(this);
     this._toggleBlurSensitiveData = this._toggleBlurSensitiveData.bind(this);
-    this.spvLock = this.spvLock.bind(this);
-    this.spvLogout = this.spvLogout.bind(this);
+    this.logout = this.logout.bind(this);
     this.openKomodoPlatformLink = this.openKomodoPlatformLink.bind(this);
   }
 
@@ -47,29 +46,17 @@ class Navbar extends React.Component {
     Store.dispatch(toggleBlurSensitiveData(!this.props.Main.blurSensitiveData));
   }
 
-  isRenderSpvLockLogout() {
+  isRenderLogout() {
     const _main = this.props.Main;
 
     if (_main &&
-        _main.isLoggedIn &&
-        _main.coins &&
-        (_main.coins.spv && _main.coins.spv.length) ||
-        (_main.coins.eth && _main.coins.eth.length)) {
+        _main.isLoggedIn) {
       return true;
     }
   }
 
-  spvLock() {
-    apiElectrumLock()
-    .then((res) => {
-      mainWindow.pinAccess = false;
-      Store.dispatch(getDexCoins());
-      Store.dispatch(activeHandle());
-    });
-  }
-
-  spvLogout() {
-    apiElectrumLogout()
+  logout() {
+    apiLogout()
     .then((res) => {
       const _coins = this.props.Main.coins;
       const _spvCoins = _coins.spv;

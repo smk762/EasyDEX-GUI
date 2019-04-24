@@ -18,7 +18,7 @@ import {
   encryptPassphrase,
   loadPinList,
   loginWithPin,
-  apiElectrumLogout,
+  apiLogout,
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
@@ -104,7 +104,7 @@ class Login extends React.Component {
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
     this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
-    this.resetSPVCoins = this.resetSPVCoins.bind(this);
+    this.logout = this.logout.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.createSeedConfirmPush = this.createSeedConfirmPush.bind(this);
     this.prevStep = this.prevStep.bind(this);
@@ -260,21 +260,19 @@ class Login extends React.Component {
     }
   }
 
-  renderResetSPVCoinsOption() {
+  renderLogoutOption() {
     if (this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.spv &&
-        this.props.Main.coins.spv.length) {
+        this.props.Main.isLoggedIn) {
       return true;
     }
   }
 
-  resetSPVCoins() {
+  logout() {
     this.setState({
       displayLoginSettingsDropdown: false,
     });
 
-    apiElectrumLogout()
+    apiLogout()
     .then((res) => {
       const _spvCoins = this.props.Main.coins.spv;
 

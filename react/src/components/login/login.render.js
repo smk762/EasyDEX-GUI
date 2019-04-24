@@ -144,10 +144,10 @@ const LoginRender = function() {
                       <i className="icon fa-list"></i> { translate('INDEX.CHANGE_LOG') }
                     </a>
                   </li>
-                  { this.renderResetSPVCoinsOption() &&
+                  { this.renderLogoutOption() &&
                     <li>
-                      <a onClick={ this.resetSPVCoins }>
-                        <i className="icon fa-trash"></i> { translate('LOGIN.QMENU_REMOVE_SPV') }
+                      <a onClick={ this.logout }>
+                        <i className="icon fa-trash"></i> { translate('LOGIN.QMENU_LOGOUT') }
                       </a>
                     </li>
                   }

@@ -127,7 +127,7 @@ const LANG_EN = {
     'getAddressBook': 'Unable to get address book data',
     'apiCli': 'Unable to get CLI data',
     'apiElectrumLock': 'Unable to flush SPV auth data',
-    'apiElectrumLogout': 'Unable to end SPV session',
+    'apiLogout': 'Unable to end current session',
     'apiElectionsLogout': 'Unable to end elections session',
     'apiStopCoind': 'Unable to stop daemon',
     'apiRemoveCoin': 'Unable to remove coin',
@@ -724,7 +724,7 @@ const LANG_EN = {
     ZCASH_PARAMS_MISSING_GROTH16_PARAMS_SIZE: '- groth16 params size is incorrect',
   },
   LOGIN: {
-    QMENU_REMOVE_SPV: 'Remove all SPV coins',
+    QMENU_LOGOUT: 'Logout',
     ERR_SEED_STORAGE: 'Seed storage error',
     CUSTOM_PIN_FNAME: 'Custom pin file name',
     CUSTOM_PIN_FNAME_INFO: 'Pin file name can only contain alphanumeric characters, dash "-" and underscore "_"',
