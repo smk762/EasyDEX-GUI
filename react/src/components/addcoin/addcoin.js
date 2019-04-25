@@ -59,6 +59,29 @@ class AddCoin extends React.Component {
     this.filterCoins = this.filterCoins.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.updateCoinSelection = this.updateCoinSelection.bind(this);
+    this.isNativeCoinsSelected = this.isNativeCoinsSelected.bind(this);
+    this.isLiteCoinsSelected = this.isLiteCoinsSelected.bind(this);
+  }
+
+  isNativeCoinsSelected() {
+    if (this.state.coins) {
+      for (let key in this.state.coins) {
+        if (this.state.coins[key].mode === 'native') {
+          return true;
+        }
+      }
+    }
+  }
+
+  isLiteCoinsSelected() {
+    if (this.state.coins) {
+      for (let key in this.state.coins) {
+        if (this.state.coins[key].mode === 'spv' ||
+            this.state.coins[key].mode === 'eth') {
+          return true;
+        }
+      }
+    }
   }
 
   updateCoinSelection(coin, params) {
@@ -253,7 +276,7 @@ class AddCoin extends React.Component {
           setTimeout(() => {
             this.setState({
               coins: {},
-              type: 'spv',
+              type: this.props.Main.coins.native.length ? 'native' : 'spv',
               quickSearch: null,
             });
           }, 100);
