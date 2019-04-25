@@ -19,6 +19,7 @@ import {
   loadPinList,
   loginWithPin,
   apiLogout,
+  clearActiveCoinStore,
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
@@ -310,6 +311,7 @@ class Login extends React.Component {
       Store.dispatch(getDexCoins());
       Store.dispatch(activeHandle());
       Store.dispatch(dashboardChangeActiveCoin());
+      Store.dispatch(clearActiveCoinStore());
     });
   }
 

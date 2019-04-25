@@ -23,6 +23,7 @@ import {
   KV_HISTORY,
   DASHBOARD_ETHEREUM_BALANCE,
   DASHBOARD_ETHEREUM_TRANSACTIONS,
+  DASHBOARD_CLEAR_ACTIVECOIN,
 } from '../actions/storeType';
 
 // TODO: refactor current coin props copy on change
@@ -321,6 +322,26 @@ export const ActiveCoin = (state = {
       return {
         ...state,
         txhistory: action.txhistory,
+      };
+    case DASHBOARD_CLEAR_ACTIVECOIN:
+      return {
+        coins: {},
+        coin: null,
+        mode: null,
+        balance: 0,
+        addresses: null,
+        txhistory: 'loading',
+        send: false,
+        receive: false,
+        showTransactionInfo: false,
+        showTransactionInfoTxIndex: null,
+        activeSection: 'default',
+        progress: null,
+        rescanInProgress: false,
+        net: {
+          peers: null,
+          totals: null,
+        },
       };
     default:
       return state;
