@@ -81,15 +81,6 @@ export const apiRemoveCoin = (coin, mode) => {
     .then(response => response.json())
     .then(json => {
       resolve(json);
-      if (mode === 'native') {
-        Store.dispatch(
-          triggerToaster(
-            `${coin} ${translate('API.DAEMON_IS_STILL_RUNNING')}`,
-            translate('API.WARNING'),
-            'warning'
-          )
-        );
-      }
     });
   });
 }

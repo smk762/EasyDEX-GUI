@@ -202,26 +202,30 @@ class CoinTileItem extends React.Component {
       toggledCoinMenu: null,
     });
 
-    apiRemoveCoin(coin, mode)
-    .then((res) => {
-      Store.dispatch(
-        triggerToaster(
-          `${coin} ${translate('TOASTR.COIN_IS_REMOVED')}`,
-          translate('TOASTR.COIN_NOTIFICATION'),
-          'success'
-        )
-      );
+    if (mode === 'native') {
+      this.stopCoind(coin, 'true', null, mode);
+    } else {
+      apiRemoveCoin(coin, mode)
+      .then((res) => {
+        Store.dispatch(
+          triggerToaster(
+            `${coin} ${translate('TOASTR.COIN_IS_REMOVED')}`,
+            translate('TOASTR.COIN_NOTIFICATION'),
+            'success'
+          )
+        );
 
-      Store.dispatch(dashboardRemoveCoin(coin));
-      this.autoSetActiveCoin(coin);
-      setTimeout(() => {
-        Store.dispatch(getDexCoins());
-        Store.dispatch(activeHandle());
-      }, 500);
-    });
+        Store.dispatch(dashboardRemoveCoin(coin));
+        this.autoSetActiveCoin(coin);
+        setTimeout(() => {
+          Store.dispatch(getDexCoins());
+          Store.dispatch(activeHandle());
+        }, 500);
+      });
+    }
   }
 
-  stopCoind(coin, i, _coins) {
+  stopCoind(coin, i, _coins, remove) {
     this.setState({
       toggledCoinMenu: null,
       coindStopRetries: {
@@ -251,7 +255,11 @@ class CoinTileItem extends React.Component {
               },
             });
             setTimeout(() => {
-              this.stopCoind(coin);
+              if (remove) {
+                this.stopCoind(coin, 'true', null, remove);
+              } else {
+                this.stopCoind(coin);
+              }
             }, 10);
           }, 1500);
         } else {
@@ -264,13 +272,33 @@ class CoinTileItem extends React.Component {
           );
         }
       } else {
-        Store.dispatch(
-          triggerToaster(
-            `${coin} ${translate('TOASTR.COIN_IS_STOPPED')}`,
-            translate('TOASTR.COIN_NOTIFICATION'),
-            'success'
-          )
-        );
+        if (!remove) {
+          Store.dispatch(
+            triggerToaster(
+              `${coin} ${translate('TOASTR.COIN_IS_STOPPED')}`,
+              translate('TOASTR.COIN_NOTIFICATION'),
+              'success'
+            )
+          );
+        } else {
+          apiRemoveCoin(coin, remove)
+          .then((res) => {
+            Store.dispatch(
+              triggerToaster(
+                `${coin} ${translate('TOASTR.COIN_IS_REMOVED')}`,
+                translate('TOASTR.COIN_NOTIFICATION'),
+                'success'
+              )
+            );
+    
+            Store.dispatch(dashboardRemoveCoin(coin));
+            this.autoSetActiveCoin(coin);
+            setTimeout(() => {
+              Store.dispatch(getDexCoins());
+              Store.dispatch(activeHandle());
+            }, 500);
+          });
+        }
 
         if (!_coins) {
           this.autoSetActiveCoin(coin);
