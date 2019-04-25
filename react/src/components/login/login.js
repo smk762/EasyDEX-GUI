@@ -157,10 +157,6 @@ class Login extends React.Component {
               true
             ));
           }
-
-          if (_i === Object.keys(this.coins).length - 1) {
-            this.coins = {};
-          }
         }, (_coin.mode === 'native' ? 2000 : 0) * (_i - 1));
       }
     };
@@ -581,6 +577,8 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    this.coins = {};
+
     if (!this.state.selectedPin ||
         !this.state.decryptKey) {
       const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
@@ -675,16 +673,16 @@ class Login extends React.Component {
           Store.dispatch(dashboardChangeSectionState('wallets'));
           Store.dispatch(toggleDashboardActiveSection('default'));
           Store.dispatch(apiElectrumAuth(res.result.seed));
-          /*Store.dispatch(apiElectrumCoins());
-          Store.dispatch(apiEthereumAuth(res.result.seed));
-          Store.dispatch(apiEthereumCoins());*/
 
           if (Object.keys(res.result.coins).length) {
-            const modes = [
-              'spv',
-              'eth',
-              'native',
-            ];
+            const modes = []
+
+            // an extra check to make sure native/lite mode coins are not running together
+            if (!res.result.coins.native.length) {
+              modes.push('spv', 'eth');
+            } else {
+              modes.push('native');
+            }
 
             for (let i = 0; i < modes.length; i++) {
               if (res.result.coins.hasOwnProperty(modes[i])) {
