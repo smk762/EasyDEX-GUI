@@ -629,7 +629,7 @@ class Login extends React.Component {
       )
       .then((res) => {
         if (res.msg === 'success') {
-          if (res.result.seed.indexOf('msig:') > -1) {
+          /*if (res.result.seed.indexOf('msig:') > -1) {
             const _data = res.result.split('msig:');
 
             try {
@@ -661,7 +661,7 @@ class Login extends React.Component {
             } catch (e) {
               console.warn('unable to parse multisig data from pin');
             }
-          }
+          }*/
           // reset login input vals
           if (staticVar.argv.indexOf('hardcore') > -1) {
             this.refs.loginPassphrase.value = '';
@@ -672,37 +672,41 @@ class Login extends React.Component {
 
           Store.dispatch(dashboardChangeSectionState('wallets'));
           Store.dispatch(toggleDashboardActiveSection('default'));
-          Store.dispatch(apiElectrumAuth(res.result.seed));
+          
+          if (res.result.type === 'default') {
+            Store.dispatch(apiElectrumAuth(res.result.data.keys.seed));
+          }
 
-          if (Object.keys(res.result.coins).length) {
+          const _coinsFromStorage = res.result.data.coins;
+          if (Object.keys(_coinsFromStorage).length) {
             const modes = []
 
             // an extra check to make sure native/lite mode coins are not running together
-            if (!res.result.coins.native.length) {
+            if (!_coinsFromStorage.native.length) {
               modes.push('spv', 'eth');
             } else {
               modes.push('native');
             }
 
             for (let i = 0; i < modes.length; i++) {
-              if (res.result.coins.hasOwnProperty(modes[i])) {
-                for (let j = 0; j < res.result.coins[modes[i]].length; j++) {
+              if (_coinsFromStorage.hasOwnProperty(modes[i])) {
+                for (let j = 0; j < _coinsFromStorage[modes[i]].length; j++) {
                   let _params = {};
 
-                  if (res.result.coins.params &&
-                      res.result.coins.params[res.result.coins[modes[i]][j]]) {
-                    if (res.result.coins.params[res.result.coins[modes[i]][j]].indexOf('-genproclimit') > -1) {
+                  if (_coinsFromStorage.params &&
+                      _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]]) {
+                    if (_coinsFromStorages.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit') > -1) {
                       _params.daemonParam = 'gen';
-                      _params.genProcLimit = res.result.coins.params[res.result.coins[modes[i]][j]][res.result.coins.params[res.result.coins[modes[i]][j]].indexOf('-genproclimit')].replace('-genproclimit=', '');
-                    } else if (res.result.coins.params[res.result.coins[modes[i]][j]].indexOf('-regtest') > -1) {
+                      _params.genProcLimit = _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]][_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit')].replace('-genproclimit=', '');
+                    } else if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-regtest') > -1) {
                       _params.daemonParam = 'regtest';
-                    } else if (res.result.coins.params[res.result.coins[modes[i]][j]].indexOf('-pubkey') > -1) {
+                    } else if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-pubkey') > -1) {
                       _params.usePubkey = true;
                     }
                   }
 
-                  this.coins[res.result.coins[modes[i]][j]] = {
-                    value: modes[i] === 'eth' ? `ETH|${res.result.coins[modes[i]][j]}`: res.result.coins[modes[i]][j],
+                  this.coins[_coinsFromStorage[modes[i]][j]] = {
+                    value: modes[i] === 'eth' ? `ETH|${_coinsFromStorage[modes[i]][j]}`: _coinsFromStorage[modes[i]][j],
                     mode: modes[i],
                     params: Object.keys(_params).length ? _params : null,
                   }
