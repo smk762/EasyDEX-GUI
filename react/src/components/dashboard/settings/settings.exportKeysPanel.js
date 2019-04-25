@@ -54,9 +54,9 @@ class ExportKeysPanel extends React.Component {
       .then((res) => {
         if (res.msg === 'success') {
           this.setState({
-            decryptedPassphrase: res.result,
+            decryptedPassphrase: res.result.seed,
           });
-          this._exportWifKeys(res.result);
+          this._exportWifKeys(res.result.seed);
         }
       });
     } else {
