@@ -55,7 +55,7 @@ class CoinTileItem extends React.Component {
       toggledCoinMenu: null,
       coindStopRetries: {},
     };
-    this.nativeCoinsDelete = null;
+    this.nativeCoinsDelete = {};
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
     this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -227,6 +227,14 @@ class CoinTileItem extends React.Component {
   }
 
   stopCoind(coin, i, _coins, remove) {
+    if (!this.nativeCoinsDelete) {
+      const _coins = this.props.Main.coins.native;
+      
+      for (let i = 0; i < _coins.length; i++) {
+        this.nativeCoinsDelete[_coins[i]] = true;
+      }
+    }
+
     this.setState({
       toggledCoinMenu: null,
       coindStopRetries: {
@@ -273,9 +281,13 @@ class CoinTileItem extends React.Component {
           );
         }
       } else {
-        delete this.nativeCoinsDelete[coin];
+        if (this.nativeCoinsDelete &&
+            this.nativeCoinsDelete[coin]) {
+          delete this.nativeCoinsDelete[coin];
+        }
 
-        if (!Object.keys(this.nativeCoinsDelete).length) {
+        if (this.props.Main.isPin &&
+            !Object.keys(this.nativeCoinsDelete).length) {
           apiLogout()
           .then((res) => {
             Store.dispatch(getDexCoins());
@@ -347,7 +359,10 @@ class CoinTileItem extends React.Component {
 
   stopAllCoind() {
     const _coins = this.props.Main.coins.native;
-    this.nativeCoinsDelete = _coins;
+
+    for (let i = 0; i < _coins.length; i++) {
+      this.nativeCoinsDelete[_coins[i]] = true;
+    }
 
     this.setState({
       toggledCoinMenu: null,

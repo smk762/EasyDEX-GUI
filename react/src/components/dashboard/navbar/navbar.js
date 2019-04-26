@@ -133,7 +133,10 @@ class Navbar extends React.Component {
 
   stopAllCoind() {
     const _coins = this.props.Main.coins.native;
-    this.nativeCoinsDelete = _coins;
+    
+    for (let i = 0; i < _coins.length; i++) {
+      this.nativeCoinsDelete[_coins[i]] = true;
+    }
 
     this.setState({
       toggledCoinMenu: null,

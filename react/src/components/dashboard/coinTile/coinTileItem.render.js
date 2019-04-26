@@ -115,9 +115,11 @@ const CoinTileItemRender = function() {
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP_ALL') }
               </li>
             }
-            <li onClick={ () => this.removeCoin(item.coin, item.mode) }>
-              <i className="icon fa-trash-o margin-right-5"></i> { translate('DASHBOARD.REMOVE') }
-            </li>
+            { this.props.Main.isPin &&
+              <li onClick={ () => this.removeCoin(item.coin, item.mode) }>
+                <i className="icon fa-trash-o margin-right-5"></i> { translate('DASHBOARD.REMOVE') }
+              </li>
+            }
           </ul>
         </div>
       }
