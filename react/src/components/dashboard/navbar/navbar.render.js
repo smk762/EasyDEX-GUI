@@ -157,7 +157,7 @@ const NavbarRender = function() {
                 </li>
                 { this.isRenderLogout() &&
                   <li>
-                    <a onClick={ this.spvLogout }>
+                    <a onClick={ this.logout }>
                       <i className="icon fa-power-off"></i> { translate('DASHBOARD.COMPLETE_LOGOUT') }
                     </a>
                   </li>
