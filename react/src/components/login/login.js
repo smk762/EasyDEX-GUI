@@ -260,7 +260,7 @@ class Login extends React.Component {
 
   renderLogoutOption() {
     if (this.props.Main &&
-        this.props.Main.isLoggedIn) {
+        (this.props.Main.isLoggedIn || this.props.Main.isPin)) {
       return true;
     }
   }
@@ -467,7 +467,7 @@ class Login extends React.Component {
 
     if (props &&
         props.Main &&
-        props.Main.isLoggedIn) {
+        (props.Main.isLoggedIn || props.Main.isPin)) {
       if (props.Main.total === 0) {
         this.setState({
           activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
@@ -526,7 +526,7 @@ class Login extends React.Component {
         this.state.activeLoginSection !== 'restore' &&
         props &&
         props.Main &&
-        props.Main.isLoggedIn) {
+        (props.Main.isLoggedIn || props.Main.isPin)) {
       this.setState({
         loginPassphrase: '',
         activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
@@ -632,6 +632,7 @@ class Login extends React.Component {
       )
       .then((res) => {
         if (res.msg === 'success') {
+          Store.dispatch(activeHandle());
           /*if (res.result.seed.indexOf('msig:') > -1) {
             const _data = res.result.split('msig:');
 
@@ -936,6 +937,7 @@ class Login extends React.Component {
                 .then((res) => {
                   if (res.msg === 'success') {
                     this.loadPinList();
+                    Store.dispatch(activeHandle());
 
                     setTimeout(() => {
                       this.setState({
@@ -978,6 +980,7 @@ class Login extends React.Component {
               .then((res) => {
                 if (res.msg === 'success') {
                   this.loadPinList();
+                  Store.dispatch(activeHandle());
 
                   setTimeout(() => {
                     this.setState({

@@ -297,6 +297,7 @@ const LoginRender = function() {
                 </button>
                 <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
                 { staticVar.arch === 'x64' &&
+                  this.props.Main.walletType === 'native' &&
                   <div className="addcoin-shortcut">
                     <div>
                       <i className="icon fa-cube margin-right-5"></i>
@@ -332,34 +333,36 @@ const LoginRender = function() {
                       options={ shortcuts } />
                   </div>
                 }
-                <div className="addcoin-shortcut">
-                  <div>
-                    <i className="icon fa-flash margin-right-5"></i>
-                    { translate('INDEX.SPV_MODE') }
-                    <i
-                      className="icon fa-question-circle login-help"
-                      data-tip={ 
-                        translate('LOGIN.SPV_MODE_DESC_P1') +
-                        ` <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ` +
-                        translate('LOGIN.SPV_MODE_DESC_P3') +
-                        '<br/>' +
-                        translate('LOGIN.SPV_MODE_DESC_P4')
-                      }
-                      data-html={ true }
-                      data-for="login3"></i>
-                    <ReactTooltip
-                      id="login3"
-                      effect="solid"
-                      className="text-left" />
+                { this.props.Main.walletType === 'default' &&
+                  <div className="addcoin-shortcut">
+                    <div>
+                      <i className="icon fa-flash margin-right-5"></i>
+                      { translate('INDEX.SPV_MODE') }
+                      <i
+                        className="icon fa-question-circle login-help"
+                        data-tip={ 
+                          translate('LOGIN.SPV_MODE_DESC_P1') +
+                          ` <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ` +
+                          translate('LOGIN.SPV_MODE_DESC_P3') +
+                          '<br/>' +
+                          translate('LOGIN.SPV_MODE_DESC_P4')
+                        }
+                        data-html={ true }
+                        data-for="login3"></i>
+                      <ReactTooltip
+                        id="login3"
+                        effect="solid"
+                        className="text-left" />
+                    </div>
+                    <Select
+                      name="selectedShortcutSPV"
+                      value={ this.state.selectedShortcutSPV }
+                      onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
+                      optionRenderer={ this.renderShortcutOption }
+                      valueRenderer={ this.renderShortcutOption }
+                      options={ shortcuts.filter(item => item.value !== 'pirate') } />
                   </div>
-                  <Select
-                    name="selectedShortcutSPV"
-                    value={ this.state.selectedShortcutSPV }
-                    onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
-                    optionRenderer={ this.renderShortcutOption }
-                    valueRenderer={ this.renderShortcutOption }
-                    options={ shortcuts.filter(item => item.value !== 'pirate') } />
-                </div>
+                }
               </div>
             </div>
           }
