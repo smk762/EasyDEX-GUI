@@ -87,6 +87,7 @@ class Login extends React.Component {
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
       step: 0,
+      walletType: 'default',
     };
     this.coins = {};
     this.defaultState = JSON.parse(JSON.stringify(this.state));
@@ -843,6 +844,14 @@ class Login extends React.Component {
           step: this.state.step + 1,
         });
       }
+    } else if (
+      this.state.activeLoginSection === 'signup' &&
+      this.state.walletType === 'native' &&
+      this.state.step === 0
+    ) {
+      this.setState({
+        step: 3,
+      });
     } else {
       this.setState({
         step: this.state.step + 1,
@@ -852,9 +861,16 @@ class Login extends React.Component {
 
   handleRegisterWallet() {
     const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
-    const enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
-    const isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
-    const stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
+    const walletType = this.state.activeLoginSection === 'signup' ? this.state.walletType : 'default';
+    let enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
+    let isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
+    let stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
+
+    if (walletType === 'native') { // skip lite mode checks
+      enteredSeedsMatch = true;
+      isSeedBlank = false;
+      stringEntropy = true;
+    }
 
     if (!stringEntropy) {
       Store.dispatch(
@@ -913,7 +929,7 @@ class Login extends React.Component {
                 encryptPassphrase(
                   this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
                   this.state.encryptKey,
-                  'default',
+                  walletType,
                   false,
                   this.state.customPinFilename,
                 )

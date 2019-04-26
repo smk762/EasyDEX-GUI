@@ -368,6 +368,73 @@ const LoginRender = function() {
             <div className="register-form">
               { this.state.step === 0 &&
                 <section>
+                  <h4 className="hint color-white padding-top-10 margin-bottom-20 text-center">
+                    { translate('LOGIN.CHOOSE_WALLET_TYPE') }
+                  </h4>
+                  <select
+                    className="form-control form-material margin-bottom-20"
+                    name="walletType"
+                    value={ this.state.walletType }
+                    onChange={ (event) => this.updateInput(event) }
+                    autoFocus>
+                    <option value="default">
+                      { translate('LOGIN.LITE_MODE_ONLY') }
+                    </option>
+                    <option value="native">
+                      { translate('LOGIN.NATIVE_MODE_ONLY') }
+                    </option>
+                  </select>
+                  { this.state.walletType === 'default' &&
+                    <div>
+                      <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P1') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P2') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P3') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P4') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left bw-inverted">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P5') }
+                      </h4>
+                    </div>
+                  }
+                  { this.state.walletType === 'native' &&
+                    <div>
+                      <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P1') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P2') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P3') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P4') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P5') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left bw-inverted">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P6') }
+                      </h4>
+                    </div>
+                  }
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block"
+                    onClick={ this.nextStep }>
+                    { translate('LOGIN.NEXT') }
+                  </button>
+                </section>
+              }
+              { this.state.step === 1 &&
+                <section>
                   <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
                     { translate('LOGIN.THIS_IS_YOUR_NEW_SEED_P1') }
                   </h4>
@@ -391,7 +458,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.step === 1 &&
+              { this.state.step === 2 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     { translate('LOGIN.CONFIRM_YOUR_SEED_BY_PLACING_WORDS') }
@@ -433,7 +500,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.step === 2 &&
+              { this.state.step === 3 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     { translate('LOGIN.ENTER_WALLET_NAME_AND_PW') }
