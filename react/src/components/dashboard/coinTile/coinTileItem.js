@@ -55,6 +55,7 @@ class CoinTileItem extends React.Component {
       toggledCoinMenu: null,
       coindStopRetries: {},
     };
+    this.nativeCoinsDelete = null;
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
     this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -272,6 +273,17 @@ class CoinTileItem extends React.Component {
           );
         }
       } else {
+        delete this.nativeCoinsDelete[coin];
+
+        if (!Object.keys(this.nativeCoinsDelete).length) {
+          apiLogout()
+          .then((res) => {
+            Store.dispatch(getDexCoins());
+            Store.dispatch(activeHandle());
+            Store.dispatch(clearActiveCoinStore());
+          });
+        }
+
         if (!remove) {
           Store.dispatch(
             triggerToaster(
@@ -323,11 +335,19 @@ class CoinTileItem extends React.Component {
           Store.dispatch(activeHandle());
         }, 500);
       }
+
+      Store.dispatch(
+        stopInterval(
+          'prices',
+          this.props.Interval.interval
+        )
+      );
     });
   }
 
   stopAllCoind() {
     const _coins = this.props.Main.coins.native;
+    this.nativeCoinsDelete = _coins;
 
     this.setState({
       toggledCoinMenu: null,

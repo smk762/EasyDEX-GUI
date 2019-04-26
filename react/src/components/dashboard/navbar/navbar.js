@@ -94,8 +94,7 @@ class Navbar extends React.Component {
       } else {
         delete this.nativeCoinsDelete[coin];
 
-        if (Object.keys(this.nativeCoinsDelete).length) {
-          console.warn('post native logout');
+        if (!Object.keys(this.nativeCoinsDelete).length) {
           apiLogout()
           .then((res) => {
             Store.dispatch(getDexCoins());
@@ -167,6 +166,13 @@ class Navbar extends React.Component {
   }
 
   logout() {
+    Store.dispatch(
+      stopInterval(
+        'prices',
+        this.props.Interval.interval
+      )
+    );
+
     if (this.props.Main.coins.native &&
         this.props.Main.coins.native.length) {
       this.stopAllCoind();
