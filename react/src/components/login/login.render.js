@@ -265,15 +265,19 @@ const LoginRender = function() {
                 id="logint-another-wallet">
                 { translate('INDEX.LOGIN_ANOTHER_WALLET') }
               </button>
-              {/*<button
-                className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
-                id="register-btn"
-                onClick={ this.toggleActivateCoinForm }
-                disabled={ !this.props.Main }>
-                <span className="ladda-label">
-                  { translate('ADD_COIN.ADD_ANOTHER_COIN') }
-                </span>
-              </button>*/}
+              { this.props.Main.coins &&
+                !this.props.Main.coins.spv.length &&
+                !this.props.Main.coins.eth.length &&
+                <button
+                  className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
+                  id="register-btn"
+                  onClick={ this.toggleActivateCoinForm }
+                  disabled={ !this.props.Main }>
+                  <span className="ladda-label">
+                    { translate('ADD_COIN.ADD_ANOTHER_COIN') }
+                  </span>
+                </button>
+              }
             </div>
           </div>
 

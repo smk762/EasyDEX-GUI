@@ -31,6 +31,7 @@ const AddCoinRender = function() {
                 { this.props.Main.coins &&
                   !this.props.Main.coins.native.length &&
                   !this.isNativeCoinsSelected() &&
+                  this.props.Main.isLoggedIn &&
                   <div className="form-group col-lg-3 col-md-3 col-sm-3 col-xs-3 style-addcoin-lbl-mdl-login">
                     <input
                       type="radio"
@@ -102,6 +103,7 @@ const AddCoinRender = function() {
                 { this.props.Main.coins &&
                   !this.props.Main.coins.native.length &&
                   !this.isNativeCoinsSelected() &&
+                  this.props.Main.isLoggedIn &&
                   <div className="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4 style-addcoin-lbl-mdl-login">
                     <input
                       type="radio"

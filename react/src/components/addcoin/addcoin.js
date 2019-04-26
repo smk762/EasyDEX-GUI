@@ -276,7 +276,7 @@ class AddCoin extends React.Component {
           setTimeout(() => {
             this.setState({
               coins: {},
-              type: this.props.Main.coins.native.length ? 'native' : 'spv',
+              type: this.props.Main.coins.native.length || !this.props.Main.isLoggedIn ? 'native' : 'spv',
               quickSearch: null,
             });
           }, 100);
