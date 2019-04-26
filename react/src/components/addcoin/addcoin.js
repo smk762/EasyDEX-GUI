@@ -212,7 +212,7 @@ class AddCoin extends React.Component {
             if (Number(json.result[i].mode) === -1 &&
                 json.result[i].genProcLimit) {
               params.genProcLimit = json.result[i].genProcLimit;
-            }            
+            }
 
             coins[json.result[i].selectedCoin] = {
               coin: {
@@ -226,6 +226,15 @@ class AddCoin extends React.Component {
           coins = json.result;
         }
 
+        // filter out lite mode coins
+        if (!this.props.Main.isPin) {
+          for (let key in coins) {
+            if (coins[key].mode !== 'native') {
+              delete coins[key];
+            }
+          }
+        }
+        
         this.setState(Object.assign({}, this.state, {
           coins,
           actionsMenu: false,
