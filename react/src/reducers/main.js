@@ -11,6 +11,7 @@ import {
 
 export const Main = (state = {
   isLoggedIn: false,
+  isPin: false,
   displayLoginSettingsModal: false,
   displayNotaryElectionsModal: false,
   displayUserAgreementModal: false,
@@ -31,11 +32,13 @@ export const Main = (state = {
       return {
         ...state,
         isLoggedIn: action.isLoggedIn,
+        isPin: action.isPin,
       };
     case ACTIVE_HANDLE:
       return {
         ...state,
         isLoggedIn: action.isLoggedIn,
+        isPin: action.isPin,
         activeHandle: action.handle,
       };
     case DISPLAY_LOGIN_SETTINGS_MODAL:

@@ -160,7 +160,8 @@ class Navbar extends React.Component {
     const _main = this.props.Main;
 
     if (_main &&
-        _main.isLoggedIn) {
+        _main.isLoggedIn &&
+        _main.isPin) {
       return true;
     }
   }

@@ -26,6 +26,7 @@ export const iguanaActiveHandleState = (json) => {
   return {
     type: ACTIVE_HANDLE,
     isLoggedIn: json.status === 'unlocked' ? true : false,
+    isPin: json.isPin,
     handle: json,
   }
 }
