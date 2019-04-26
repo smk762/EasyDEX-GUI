@@ -133,7 +133,7 @@ class Navbar extends React.Component {
 
   stopAllCoind() {
     const _coins = this.props.Main.coins.native;
-    
+
     for (let i = 0; i < _coins.length; i++) {
       this.nativeCoinsDelete[_coins[i]] = true;
     }
@@ -310,6 +310,7 @@ const mapStateToProps = (state) => {
     },
     Main: {
       isLoggedIn: state.Main.isLoggedIn,
+      isPin: state.Main.isPin,
       coins: state.Main.coins,
       blurSensitiveData: state.Main.blurSensitiveData,
       newUpdateAvailable: state.Main.newUpdateAvailable,

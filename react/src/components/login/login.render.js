@@ -491,8 +491,7 @@ const LoginRender = function() {
                   <button
                     type="button"
                     className="btn btn-primary btn-block"
-                    onClick={ this.nextStep }
-                    disabled={ this.state.randomSeed !== this.state.randomSeedConfirm.join(' ') }>
+                    onClick={ this.nextStep }>
                     { translate('LOGIN.NEXT') }
                   </button>
                   <button

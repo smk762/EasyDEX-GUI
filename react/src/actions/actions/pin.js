@@ -212,6 +212,7 @@ export const changePin = (oldKey, newKey, pubkey) => {
         const payload = {
           string,
           key: newKey,
+          changepin: true,
           token,
           pubkey,
         };
