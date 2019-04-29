@@ -35,7 +35,6 @@ class ImportKeyModal extends React.Component {
       seedExtraSpaces: false,
       multipleWif: '',
       className: 'hide',
-      open: false,
     };
     this.generateKeysFromPassphrase = this.generateKeysFromPassphrase.bind(this);
     this.toggleImportWithRescan = this.toggleImportWithRescan.bind(this);
@@ -137,7 +136,26 @@ class ImportKeyModal extends React.Component {
           if (this.props.ActiveCoin.coin !== 'KMD' ||
               (this.props.ActiveCoin.coin === 'KMD' && _keys[i] && _keys[i][0] !== 'S' && _keys[i][1] !== 'K' && _keys[i].indexOf('secret-extended-key-main') === -1)) {
             setTimeout(() => {
-              this.importWifAddress(_keys[i], i === _keys.length - 1 ? this.state.importWithRescan : false, true);
+              this.importWifAddress(_keys[i], i === _keys.length - 1 ? this.state.importWithRescan : false, true, true);
+
+              if (i === _keys.length - 1) {
+                this.setState({
+                  wif: null,
+                  passphraseWif: null,
+                  passphraseAddress: null,
+                  wifkeysPassphrase: null,
+                  importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
+                  multipleWif: '',
+                  importMulti: false,
+                });
+
+                // reset input vals
+                try {
+                  this.refs.multipleWif.value = '';
+                  this.refs.wif.value = '';
+                  this.refs.wifkeysPassphrase.value = '';  
+                } catch (e) {}
+              }
             }, i * 1000);
           } else {
             Store.dispatch(
@@ -166,7 +184,7 @@ class ImportKeyModal extends React.Component {
     }
   }
 
-  importWifAddress(wif, rescan, multi) {
+  importWifAddress(wif, rescan, multi, skipStateUpdate) {
     const _coin = this.props.ActiveCoin.coin;
     let _rescanInProgress = true;
 
@@ -190,7 +208,9 @@ class ImportKeyModal extends React.Component {
               false
             )
           );
-          this.closeModal();
+          if (this.state.open) {
+            this.closeModal();
+          }
         }
       }, 2000);
     }
@@ -207,7 +227,9 @@ class ImportKeyModal extends React.Component {
 
       if (rescan) {
         setTimeout(() => {
-          this.closeModal();
+          if (this.state.open) {
+            this.closeModal();
+          }
         }, 2000);
       }
 
@@ -233,21 +255,24 @@ class ImportKeyModal extends React.Component {
       }
     });
 
-    this.setState({
-      wif: null,
-      passphraseWif: null,
-      passphraseAddress: null,
-      wifkeysPassphrase: null,
-      importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
-      multipleWif: '',
-    });
+    if (!skipStateUpdate) {
+      this.setState({
+        wif: null,
+        passphraseWif: null,
+        passphraseAddress: null,
+        wifkeysPassphrase: null,
+        importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
+        multipleWif: '',
+        importMulti: false,
+      });
 
-    // reset input vals
-    try {
-      this.refs.multipleWif.value = '';
-      this.refs.wif.value = '';
-      this.refs.wifkeysPassphrase.value = '';  
-    } catch (e) {}
+      // reset input vals
+      try {
+        this.refs.multipleWif.value = '';
+        this.refs.wif.value = '';
+        this.refs.wifkeysPassphrase.value = '';  
+      } catch (e) {}
+    }
   }
 
   generateKeysFromPassphrase() {
