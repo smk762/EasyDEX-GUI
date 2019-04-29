@@ -46,6 +46,7 @@ class AddCoin extends React.Component {
       type: 'spv',
       quickSearch: null,
       coinsList: null,
+      kmdAcOnly: false,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.dismiss = this.dismiss.bind(this);
@@ -61,6 +62,13 @@ class AddCoin extends React.Component {
     this.updateCoinSelection = this.updateCoinSelection.bind(this);
     this.isNativeCoinsSelected = this.isNativeCoinsSelected.bind(this);
     this.isLiteCoinsSelected = this.isLiteCoinsSelected.bind(this);
+    this.toggleKmdAcOnly = this.toggleKmdAcOnly.bind(this);
+  }
+
+  toggleKmdAcOnly () {
+    this.setState({
+      kmdAcOnly: !this.state.kmdAcOnly,
+    });
   }
 
   isNativeCoinsSelected() {
@@ -287,6 +295,7 @@ class AddCoin extends React.Component {
             this.setState({
               coins: {},
               quickSearch: null,
+              kmdAcOnly: false,
             });
           }, 100);
         } else {
@@ -370,15 +379,6 @@ class AddCoin extends React.Component {
             }));
   
             Store.dispatch(toggleAddcoinModal(false, false));
-  
-            setTimeout(() => {
-              this.setState({
-                loginPassphrase: '',
-                seedInputVisibility: false,
-                seedExtraSpaces: false,
-                trimPassphraseTimer: null,
-              });
-            }, 100);
           }
         }, (_coin.mode === 'native' ? 2000 : 0) * (_i - 1));
       }

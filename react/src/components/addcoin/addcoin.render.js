@@ -137,6 +137,24 @@ const AddCoinRender = function() {
                   </div>
                 }
               </div>
+              { this.state.type === 'spv' &&
+                <div className="col-sm-12 form-group form-material margin-top-10">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={ this.state.kmdAcOnly }
+                      readOnly />
+                    <div
+                      className="slider"
+                      onClick={ this.toggleKmdAcOnly }></div>
+                  </label>
+                  <div
+                    className="toggle-label margin-right-15 pointer iguana-core-toggle"
+                    onClick={ this.toggleKmdAcOnly }>
+                    { translate('ADD_COIN.SHOW_KMD_AC_ONLY') }
+                  </div>
+                </div>
+              }
               <div className="col-sm-12">
                 { this.state.type === 'spv' &&
                   <div>
@@ -186,7 +204,8 @@ const AddCoinRender = function() {
                   tileClickCB={ this.updateCoinSelection }
                   activatedCoins={ this.state.coins }
                   activeCoins={ this.props.Main.coins }
-                  display={ this.state.display } />
+                  display={ this.state.display }
+                  kmdAcOnly={ this.state.kmdAcOnly } />
               </div>
               { !this.props.Main.isLoggedIn &&
                 <button

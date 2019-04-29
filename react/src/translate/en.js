@@ -543,6 +543,7 @@ const LANG_EN = {
     QUICK_SEARCH: 'Quick search (e.g. Komodo)',
     ADDED_SM: 'added',
     TOKEN_ADDED_SM: 'token added',
+    SHOW_KMD_AC_ONLY: 'Show only Komodo asset chains',
   },
   RECEIVE: {
     TOOGLE_ADDRESS: 'Toggle address context menu',
