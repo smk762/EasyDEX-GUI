@@ -699,7 +699,7 @@ class Login extends React.Component {
 
                   if (_coinsFromStorage.params &&
                       _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]]) {
-                    if (_coinsFromStorages.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit') > -1) {
+                    if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit') > -1) {
                       _params.daemonParam = 'gen';
                       _params.genProcLimit = _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]][_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit')].replace('-genproclimit=', '');
                     } else if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-regtest') > -1) {
