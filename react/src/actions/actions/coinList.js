@@ -8,38 +8,17 @@ import translate from '../../translate/translate';
 import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 
-export const apiElectrumLock = () => {
+export const apiLogout = () => {
   return new Promise((resolve, reject) => {
     fetch(
-      `http://127.0.0.1:${agamaPort}/api/electrum/lock`,
+      `http://127.0.0.1:${agamaPort}/api/logout`,
       fetchType(JSON.stringify({ token })).post
     )
     .catch((error) => {
       console.log(error);
       Store.dispatch(
         triggerToaster(
-          translate('API.apiElectrumLock') + ' (code: apiElectrumLock)',
-          translate('TOASTR.ERROR'),
-          'error'
-        )
-      );
-    })
-    .then(response => response.json())
-    .then(json => resolve(json));
-  });
-}
-
-export const apiElectrumLogout = () => {
-  return new Promise((resolve, reject) => {
-    fetch(
-      `http://127.0.0.1:${agamaPort}/api/electrum/logout`,
-      fetchType(JSON.stringify({ token })).post
-    )
-    .catch((error) => {
-      console.log(error);
-      Store.dispatch(
-        triggerToaster(
-          translate('API.apiElectrumLogout') + ' (code: apiElectrumLogout)',
+          translate('API.apiLogout') + ' (code: apiLogout)',
           translate('TOASTR.ERROR'),
           'error'
         )
@@ -102,15 +81,6 @@ export const apiRemoveCoin = (coin, mode) => {
     .then(response => response.json())
     .then(json => {
       resolve(json);
-      if (mode === 'native') {
-        Store.dispatch(
-          triggerToaster(
-            `${coin} ${translate('API.DAEMON_IS_STILL_RUNNING')}`,
-            translate('API.WARNING'),
-            'warning'
-          )
-        );
-      }
     });
   });
 }

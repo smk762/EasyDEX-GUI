@@ -8,6 +8,7 @@ const changeLogData = [{
     'Add coin refactor',
     'Pin login refactor',
     'User agreement',
+    'Store active coins list in pin file',
   ],
 }, {
   version: '0.3.5',

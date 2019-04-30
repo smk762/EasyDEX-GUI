@@ -144,10 +144,10 @@ const LoginRender = function() {
                       <i className="icon fa-list"></i> { translate('INDEX.CHANGE_LOG') }
                     </a>
                   </li>
-                  { this.renderResetSPVCoinsOption() &&
+                  { this.renderLogoutOption() &&
                     <li>
-                      <a onClick={ this.resetSPVCoins }>
-                        <i className="icon fa-trash"></i> { translate('LOGIN.QMENU_REMOVE_SPV') }
+                      <a onClick={ this.logout }>
+                        <i className="icon fa-trash"></i> { translate('LOGIN.QMENU_LOGOUT') }
                       </a>
                     </li>
                   }
@@ -188,6 +188,8 @@ const LoginRender = function() {
               </div>
             }
             { staticVar.argv.indexOf('hardcore') > -1 &&
+              !this.props.Main.isLoggedIn &&
+              !this.props.Main.isPin &&
               <div>
                 <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-80 margin-bottom-60">
                   <input
@@ -258,22 +260,25 @@ const LoginRender = function() {
                 className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
                 id="register-btn"
                 onClick={ () => this.updateActiveLoginSection('restore') }>
-                Restore wallet
+                { translate('LOGIN.RESTORE_WALLET') }
               </button>
               <button
                 className="btn btn-lg btn-flat btn-block waves-effect hide"
                 id="logint-another-wallet">
                 { translate('INDEX.LOGIN_ANOTHER_WALLET') }
               </button>
-              <button
-                className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
-                id="register-btn"
-                onClick={ this.toggleActivateCoinForm }
-                disabled={ !this.props.Main }>
-                <span className="ladda-label">
-                  { translate('ADD_COIN.ADD_ANOTHER_COIN') }
-                </span>
-              </button>
+              { this.props.Main.coins &&
+                (staticVar.argv.indexOf('hardcore') > -1 || (!this.props.Main.coins.spv.length && !this.props.Main.coins.eth.length)) &&
+                <button
+                  className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
+                  id="register-btn"
+                  onClick={ this.toggleActivateCoinForm }
+                  disabled={ !this.props.Main }>
+                  <span className="ladda-label">
+                    { translate('ADD_COIN.' + (staticVar.argv.indexOf('hardcore') > -1 ? 'ADD_ANOTHER_COIN' : 'ADD_NATIVE_COIN')) }
+                  </span>
+                </button>
+              }
             </div>
           </div>
 
@@ -293,6 +298,7 @@ const LoginRender = function() {
                 </button>
                 <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
                 { staticVar.arch === 'x64' &&
+                  (staticVar.argv.indexOf('hardcore') > -1 || this.props.Main.walletType === 'native') &&
                   <div className="addcoin-shortcut">
                     <div>
                       <i className="icon fa-cube margin-right-5"></i>
@@ -328,34 +334,36 @@ const LoginRender = function() {
                       options={ shortcuts } />
                   </div>
                 }
-                <div className="addcoin-shortcut">
-                  <div>
-                    <i className="icon fa-flash margin-right-5"></i>
-                    { translate('INDEX.SPV_MODE') }
-                    <i
-                      className="icon fa-question-circle login-help"
-                      data-tip={ 
-                        translate('LOGIN.SPV_MODE_DESC_P1') +
-                        ` <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ` +
-                        translate('LOGIN.SPV_MODE_DESC_P3') +
-                        '<br/>' +
-                        translate('LOGIN.SPV_MODE_DESC_P4')
-                      }
-                      data-html={ true }
-                      data-for="login3"></i>
-                    <ReactTooltip
-                      id="login3"
-                      effect="solid"
-                      className="text-left" />
+                { (staticVar.argv.indexOf('hardcore') > -1 || this.props.Main.walletType === 'default') &&
+                  <div className={ 'addcoin-shortcut' + (staticVar.arch === 'x64' ? '' : ' full--width') }>
+                    <div>
+                      <i className="icon fa-flash margin-right-5"></i>
+                      { translate('INDEX.SPV_MODE') }
+                      <i
+                        className="icon fa-question-circle login-help"
+                        data-tip={ 
+                          translate('LOGIN.SPV_MODE_DESC_P1') +
+                          ` <u>${ translate('LOGIN.SPV_MODE_DESC_P2') }</u> ` +
+                          translate('LOGIN.SPV_MODE_DESC_P3') +
+                          '<br/>' +
+                          translate('LOGIN.SPV_MODE_DESC_P4')
+                        }
+                        data-html={ true }
+                        data-for="login3"></i>
+                      <ReactTooltip
+                        id="login3"
+                        effect="solid"
+                        className="text-left" />
+                    </div>
+                    <Select
+                      name="selectedShortcutSPV"
+                      value={ this.state.selectedShortcutSPV }
+                      onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
+                      optionRenderer={ this.renderShortcutOption }
+                      valueRenderer={ this.renderShortcutOption }
+                      options={ shortcuts.filter(item => item.value !== 'pirate') } />
                   </div>
-                  <Select
-                    name="selectedShortcutSPV"
-                    value={ this.state.selectedShortcutSPV }
-                    onChange={ (event) => this.updateSelectedShortcut(event, 'spv') }
-                    optionRenderer={ this.renderShortcutOption }
-                    valueRenderer={ this.renderShortcutOption }
-                    options={ shortcuts.filter(item => item.value !== 'pirate') } />
-                </div>
+                }
               </div>
             </div>
           }
@@ -363,6 +371,73 @@ const LoginRender = function() {
           <div className={ this.state.activeLoginSection === 'signup' ? 'show' : 'hide' }>
             <div className="register-form">
               { this.state.step === 0 &&
+                <section>
+                  <h4 className="hint color-white padding-top-10 margin-bottom-20 text-center">
+                    { translate('LOGIN.CHOOSE_WALLET_TYPE') }
+                  </h4>
+                  <select
+                    className="form-control form-material margin-bottom-20"
+                    name="walletType"
+                    value={ this.state.walletType }
+                    onChange={ (event) => this.updateInput(event) }
+                    autoFocus>
+                    <option value="default">
+                      { translate('LOGIN.LITE_MODE_ONLY') }
+                    </option>
+                    <option value="native">
+                      { translate('LOGIN.NATIVE_MODE_ONLY') }
+                    </option>
+                  </select>
+                  { this.state.walletType === 'default' &&
+                    <div>
+                      <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P1') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P2') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P3') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P4') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left bw-inverted">
+                        { translate('LOGIN.LITE_MODE_ONLY_DESC_P5') }
+                      </h4>
+                    </div>
+                  }
+                  { this.state.walletType === 'native' &&
+                    <div>
+                      <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P1') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P2') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P3') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P4') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P5') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-40 text-left bw-inverted">
+                        { translate('LOGIN.NATIVE_MODE_ONLY_DESC_P6') }
+                      </h4>
+                    </div>
+                  }
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block"
+                    onClick={ this.nextStep }>
+                    { translate('LOGIN.NEXT') }
+                  </button>
+                </section>
+              }
+              { this.state.step === 1 &&
                 <section>
                   <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
                     { translate('LOGIN.THIS_IS_YOUR_NEW_SEED_P1') }
@@ -387,7 +462,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.step === 1 &&
+              { this.state.step === 2 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     { translate('LOGIN.CONFIRM_YOUR_SEED_BY_PLACING_WORDS') }
@@ -417,8 +492,7 @@ const LoginRender = function() {
                   <button
                     type="button"
                     className="btn btn-primary btn-block"
-                    onClick={ this.nextStep }
-                    disabled={ this.state.randomSeed !== this.state.randomSeedConfirm.join(' ') }>
+                    onClick={ this.nextStep }>
                     { translate('LOGIN.NEXT') }
                   </button>
                   <button
@@ -429,7 +503,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.step === 2 &&
+              { this.state.step === 3 &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     { translate('LOGIN.ENTER_WALLET_NAME_AND_PW') }

@@ -33,6 +33,9 @@ class Bip39KeysPanel extends React.Component {
   componentWillReceiveProps(props) {
     if (props.Dashboard &&
         props.Dashboard.activeSection !== 'settings') {
+      if (this.state.trimPassphraseTimer) {
+        clearTimeout(this.state.trimPassphraseTimer);
+      }
       // reset input vals
       this.refs.passphrase.value = '';
 
@@ -59,16 +62,18 @@ class Bip39KeysPanel extends React.Component {
     clearTimeout(this.state.trimPassphraseTimer);
 
     const _trimPassphraseTimer = setTimeout(() => {
-      if (newValue[0] === ' ' ||
-          newValue[newValue.length - 1] === ' ') {
-        this.setState({
-          seedExtraSpaces: true,
-        });
-      } else {
-        this.setState({
-          seedExtraSpaces: false,
-        });
-      }
+      try {
+        if (newValue[0] === ' ' ||
+            newValue[newValue.length - 1] === ' ') {
+          this.setState({
+            seedExtraSpaces: true,
+          });
+        } else {
+          this.setState({
+            seedExtraSpaces: false,
+          });
+        }
+      } catch(e) {}
     }, SEED_TRIM_TIMEOUT);
 
     this.setState({

@@ -61,7 +61,7 @@ class CoinTile extends React.Component {
           items.push(
             <CoinTileItem
               key={ `coin-tile-${modes[i]}-${allCoins[modes[i]][j]}` }
-              i={ i }
+              i={ i * (j + 1) }
               item={ data } />
           );
         }
