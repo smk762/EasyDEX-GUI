@@ -29,9 +29,7 @@ const AddCoinRender = function() {
             <div className="modal-body">
               <div className="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 addcoin-modes-block">
                 { this.props.Main.coins &&
-                  !this.props.Main.coins.native.length &&
-                  !this.isNativeCoinsSelected() &&
-                  this.props.Main.isLoggedIn &&
+                  (staticVar.argv.indexOf('hardcore') > -1 || (!this.props.Main.coins.native.length && !this.isNativeCoinsSelected() && this.props.Main.isLoggedIn)) &&
                   <div className="form-group col-lg-3 col-md-3 col-sm-3 col-xs-3 style-addcoin-lbl-mdl-login">
                     <input
                       type="radio"
@@ -65,9 +63,7 @@ const AddCoinRender = function() {
                   </div>
                 }
                 { this.props.Main.coins &&
-                  !this.props.Main.coins.spv.length &&
-                  !this.props.Main.coins.eth.length &&
-                  !this.isLiteCoinsSelected() &&
+                  (staticVar.argv.indexOf('hardcore') > -1 || (!this.props.Main.coins.spv.length && !this.props.Main.coins.eth.length && !this.isLiteCoinsSelected())) &&
                   <div className="form-group col-lg-3 col-md-3 col-sm-3 col-xs-3 style-addcoin-lbl-mdl-login">
                     <input
                       type="radio"
@@ -101,9 +97,7 @@ const AddCoinRender = function() {
                   </div>
                 }
                 { this.props.Main.coins &&
-                  !this.props.Main.coins.native.length &&
-                  !this.isNativeCoinsSelected() &&
-                  this.props.Main.isLoggedIn &&
+                  (staticVar.argv.indexOf('hardcore') > -1 || (!this.props.Main.coins.native.length && !this.isNativeCoinsSelected() && this.props.Main.isLoggedIn)) &&
                   <div className="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4 style-addcoin-lbl-mdl-login">
                     <input
                       type="radio"

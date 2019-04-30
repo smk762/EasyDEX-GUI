@@ -164,7 +164,7 @@ class Navbar extends React.Component {
 
     if (_main &&
         _main.isLoggedIn &&
-        _main.isPin) {
+        (_main.isPin || staticVar.argv.indexOf('hardcore') > -1)) {
       return true;
     }
   }

@@ -470,7 +470,7 @@ class Login extends React.Component {
         (props.Main.isLoggedIn || props.Main.isPin)) {
       if (props.Main.total === 0) {
         this.setState({
-          activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
+          activeLoginSection: 'activateCoin',
           loginPassphrase: '',
           display: true,
         });
@@ -499,10 +499,17 @@ class Login extends React.Component {
         );
       }
 
-      this.setState({
-        display: true,
-        activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
-      });
+      if (staticVar.argv.indexOf('hardcore') > -1) {
+        this.setState({
+          display: true,
+          activeLoginSection: 'login',
+        });
+      } else {
+        this.setState({
+          display: true,
+          activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
+        });
+      }
     }
 
     if (props.Main &&
@@ -529,7 +536,7 @@ class Login extends React.Component {
         (props.Main.isLoggedIn || props.Main.isPin)) {
       this.setState({
         loginPassphrase: '',
-        activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
+        activeLoginSection: 'activateCoin',
       });
     }
   }
@@ -582,6 +589,7 @@ class Login extends React.Component {
   loginSeed() {
     this.coins = {};
 
+    // ol' good seed/wif type in access
     if (!this.state.selectedPin ||
         !this.state.decryptKey) {
       const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
@@ -603,11 +611,6 @@ class Login extends React.Component {
       }
 
       mainWindow.createSeed.secondaryLoginPH = md5(this.state.loginPassphrase);
-      // reset the login pass phrase values so that when the user logs out, the values are clear
-      this.setState({
-        loginPassphrase: '',
-        loginPassPhraseSeedType: null,
-      });
 
       // reset login input vals
       if (this.refs.loginPassphrase) {
@@ -615,6 +618,11 @@ class Login extends React.Component {
       }
 
       this.setState(this.defaultState);
+      setTimeout(() => {
+        this.setState({
+          activeLoginSection: 'activateCoin',
+        });
+      }, 50);
 
       // TODO: trigger based on ETH/electrum
       Store.dispatch(dashboardChangeSectionState('wallets'));

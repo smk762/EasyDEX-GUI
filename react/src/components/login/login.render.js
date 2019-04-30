@@ -188,6 +188,8 @@ const LoginRender = function() {
               </div>
             }
             { staticVar.argv.indexOf('hardcore') > -1 &&
+              !this.props.Main.isLoggedIn &&
+              !this.props.Main.isPin &&
               <div>
                 <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-80 margin-bottom-60">
                   <input
@@ -266,15 +268,14 @@ const LoginRender = function() {
                 { translate('INDEX.LOGIN_ANOTHER_WALLET') }
               </button>
               { this.props.Main.coins &&
-                !this.props.Main.coins.spv.length &&
-                !this.props.Main.coins.eth.length &&
+                (staticVar.argv.indexOf('hardcore') > -1 || (!this.props.Main.coins.spv.length && !this.props.Main.coins.eth.length)) &&
                 <button
                   className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
                   id="register-btn"
                   onClick={ this.toggleActivateCoinForm }
                   disabled={ !this.props.Main }>
                   <span className="ladda-label">
-                    { translate('ADD_COIN.ADD_ANOTHER_COIN') }
+                    { translate('ADD_COIN.' + (staticVar.argv.indexOf('hardcore') > -1 ? 'ADD_ANOTHER_COIN' : 'ADD_NATIVE_COIN')) }
                   </span>
                 </button>
               }
@@ -297,7 +298,7 @@ const LoginRender = function() {
                 </button>
                 <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
                 { staticVar.arch === 'x64' &&
-                  this.props.Main.walletType === 'native' &&
+                  (staticVar.argv.indexOf('hardcore') > -1 || this.props.Main.walletType === 'native') &&
                   <div className="addcoin-shortcut">
                     <div>
                       <i className="icon fa-cube margin-right-5"></i>
@@ -333,8 +334,8 @@ const LoginRender = function() {
                       options={ shortcuts } />
                   </div>
                 }
-                { this.props.Main.walletType === 'default' &&
-                  <div className="addcoin-shortcut">
+                { (staticVar.argv.indexOf('hardcore') > -1 || this.props.Main.walletType === 'default') &&
+                  <div className={ 'addcoin-shortcut' + (staticVar.arch === 'x64' ? '' : ' full--width') }>
                     <div>
                       <i className="icon fa-flash margin-right-5"></i>
                       { translate('INDEX.SPV_MODE') }
