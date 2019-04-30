@@ -2,6 +2,7 @@ import React from 'react';
 import translate from '../../translate/translate';
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import AddCoinTile from './addcoinTile';
+import Config from '../../config';
 
 const AddCoinRender = function() {
   return (
@@ -179,15 +180,26 @@ const AddCoinRender = function() {
                     placeholder={ translate('ADD_COIN.QUICK_SEARCH') } 
                     value={ this.state.quickSearch || '' } />
                 </div>
-                { this.state.coins &&
-                  Object.keys(this.state.coins).length > 0 &&
-                  <div className="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4 style-addcoin-lbl-mdl-login">
-                    <button
-                      type="button"
-                      className="btn btn-primary col-sm-4 float-none"
-                      onClick={ this.activateAllCoins }>
-                      { translate('ADD_COIN.ACTIVATE') }
-                    </button>
+                { ((this.state.type === 'native' && Config.native.detectDaemons) || (this.state.coins && Object.keys(this.state.coins).length > 0)) &&
+                  <div className="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6 style-addcoin-lbl-mdl-login">
+                    { this.state.coins &&
+                      Object.keys(this.state.coins).length > 0 &&
+                      <button
+                        type="button"
+                        className="btn btn-primary col-sm-3 float-none"
+                        onClick={ this.activateAllCoins }>
+                        { translate('ADD_COIN.ACTIVATE') }
+                      </button>
+                    }
+                    { this.state.type === 'native' &&
+                      Config.native.detectDaemons &&
+                      <button
+                        type="button"
+                        className={ 'btn btn-info col-sm-6 float-none' + (this.state.coins && Object.keys(this.state.coins).length > 0 ? ' margin-left-20' : '') }
+                        onClick={ this.detectDaemons }>
+                        { translate('ADD_COIN.' + (this.state.detectingDaemons ? 'DETECTING_ACTIVE_DAEMONS' : 'DETECT_ACTIVE_DAEMONS')) }
+                      </button>
+                    }
                   </div>
                 }
               </div>

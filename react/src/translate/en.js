@@ -545,6 +545,8 @@ const LANG_EN = {
     ADDED_SM: 'added',
     TOKEN_ADDED_SM: 'token added',
     SHOW_KMD_AC_ONLY: 'Show only Komodo asset chains',
+    DETECT_ACTIVE_DAEMONS: 'Detect active daemons',
+    DETECTING_ACTIVE_DAEMONS: 'Detecting active daemons...'
   },
   RECEIVE: {
     TOOGLE_ADDRESS: 'Toggle address context menu',
@@ -565,7 +567,7 @@ const LANG_EN = {
     STOP: 'Stop',
     STOP_ALL: 'Stop all',
     SOFT_LOGOUT: 'Soft logout',
-    COMPLETE_LOGOUT: 'Complete logout',
+    COMPLETE_LOGOUT: 'Logout',
     GENERATE_SM: 'generate',
     RECEIVE_ADDR_COPIED: 'address copied to clipboard',
     SERVER_SM: 'server',

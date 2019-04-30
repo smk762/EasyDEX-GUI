@@ -10,6 +10,7 @@ import {
   apiGetCoinList,
   apiPostCoinList,
   toggleZcparamsFetchModal,
+  getSyncInfoNativePromise,
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
@@ -63,6 +64,38 @@ class AddCoin extends React.Component {
     this.isNativeCoinsSelected = this.isNativeCoinsSelected.bind(this);
     this.isLiteCoinsSelected = this.isLiteCoinsSelected.bind(this);
     this.toggleKmdAcOnly = this.toggleKmdAcOnly.bind(this);
+    this.detectDaemons = this.detectDaemons.bind(this);
+  }
+
+  detectDaemons() {
+    for (let key in staticVar.assetChainPorts) {
+      if (key !== 'marketmaker') {
+        const coin = key === 'komodod' ? 'KMD' : key;
+
+        getSyncInfoNativePromise(coin)
+        .then((res) => {        
+          if (res &&
+              res.hasOwnProperty('error') &&
+              res.hasOwnProperty('id') &&
+              res.hasOwnProperty('result') &&
+              res.result.hasOwnProperty('KMDversion') &&
+              res.result.hasOwnProperty('KMDnotarized_height') &&
+              res.result.hasOwnProperty('p2pport')) {                
+            let coins = JSON.parse(JSON.stringify(this.state.coins));
+            coins[coin] = {
+              coin: {
+                value: `${coin}|native`,
+              },
+              mode: 'native',
+            };
+
+            this.setState(Object.assign({}, this.state, {
+              coins,
+            }));
+          }
+        });
+      }
+    }
   }
 
   toggleKmdAcOnly () {
@@ -95,8 +128,8 @@ class AddCoin extends React.Component {
   updateCoinSelection(coin, params) {
     let coins = JSON.parse(JSON.stringify(this.state.coins));
 
-    if (coins[coin.value] && 
-        !params) {
+    if ((coins[coin.value.split('|')[0]] && !params) || (coins[coin.value] && !params)) {
+      delete coins[coin.value.split('|')[0]];
       delete coins[coin.value];
     } else {
       coins[coin.value] = {
@@ -270,6 +303,7 @@ class AddCoin extends React.Component {
               coins: {},
               quickSearch: null,
               kmdAcOnly: false,
+              detectingDaemons: false,
             });
           }, 100);
         } else {

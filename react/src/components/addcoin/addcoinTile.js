@@ -200,8 +200,8 @@ class AddCoinTile extends React.Component {
       let className = 'addcoin-tile';
 
       if (this.props.activatedCoins &&
-          this.props.activatedCoins[coins[i].value] &&
-          this.props.activatedCoins[coins[i].value].mode === this.props.type) {
+          ((this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].mode === this.props.type) ||
+           (this.props.activatedCoins[coins[i].value === 'ETH' ? coins[i].value : coins[i].value.split('|')[coins[i].value.indexOf('ETH|') > -1 ? 1 : 0]] && this.props.activatedCoins[coins[i].value === 'ETH' ? coins[i].value : coins[i].value.split('|')[coins[i].value.indexOf('ETH|') > -1 ? 1 : 0]].mode === this.props.type))) {
         className += ' activated';
       }
 
