@@ -23,7 +23,6 @@ import {
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
-  copyString,
   // addcoin logic
   addCoin,
   addCoinEth,
@@ -68,7 +67,6 @@ class Login extends React.Component {
       randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
-      displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
       trimPassphraseTimer: null,
@@ -97,15 +95,12 @@ class Login extends React.Component {
     this.loginSeed = this.loginSeed.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this.handleRegisterWallet = this.handleRegisterWallet.bind(this);
-    this.toggleSeedBackupModal = this.toggleSeedBackupModal.bind(this);
-    this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
     this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
-    this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
     this.logout = this.logout.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.createSeedConfirmPush = this.createSeedConfirmPush.bind(this);
@@ -350,48 +345,6 @@ class Login extends React.Component {
         )
       );
     }
-  }
-
-  isCustomWalletSeed() {
-    return this.state.customWalletSeed;
-  }
-
-  toggleCustomWalletSeed() {
-    this.setState({
-      customWalletSeed: !this.state.customWalletSeed,
-    }, () => {
-      // if customWalletSeed is set to false, regenerate the seed
-      if (!this.state.customWalletSeed) {
-        this.setState({
-          randomSeed: passphraseGenerator.generatePassPhrase(this.state.bitsOption),
-          isSeedConfirmError: false,
-          isSeedBlank: false,
-          isCustomSeedWeak: false,
-        });
-      } else {
-        // if customWalletSeed is set to true, reset to seed to an empty string
-        this.setState({
-          randomSeed: '',
-          randomSeedConfirm: [],
-        });
-      }
-    });
-  }
-
-  shouldEncryptSeed() {
-    return this.state.shouldEncryptSeed;
-  }
-
-  toggleShouldEncryptSeed() {
-    this.setState({
-      shouldEncryptSeed: !this.state.shouldEncryptSeed,
-    });
-  }
-
-  toggleCustomPinFilename() {
-    this.setState({
-      isCustomPinFilename: !this.state.isCustomPinFilename,
-    });
   }
 
   updateInput(e) {
@@ -1031,16 +984,6 @@ class Login extends React.Component {
         (this.state.loginPassphrase || (this.state.selectedPin && this.state.decryptKey))) {
       this.loginSeed();
     }
-  }
-
-  toggleSeedBackupModal() {
-    this.setState(Object.assign({}, this.state, {
-      displaySeedBackupModal: !this.state.displaySeedBackupModal,
-    }));
-  }
-
-  copyPassPhraseToClipboard() {
-    Store.dispatch(copyString(this.state.randomSeed, translate('LOGIN.SEED_SUCCESSFULLY_COPIED')));
   }
 
   updateSelectedShortcut(e, type) {
