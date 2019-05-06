@@ -164,6 +164,12 @@ option.login-option {
 }
 
 .page-login {
+  .bw-inverted {
+    background: #fff;
+    color: #000 !important;
+    text-align: center !important;
+    padding: 5px;
+  }
   .pin-login-block {
     .form-material {
       .form-control.focus~.floating-label,
@@ -200,13 +206,17 @@ option.login-option {
   }
   .addcoin-shortcut {
     display: inline-block;
-    width: 46%;
+    width: 48%;
 
-    &:last-child {
-      margin-left: 8%;
-    }
     > div {
       margin-bottom: 10px;
+    }
+    &:last-child {
+      margin-left: 20px;
+    }
+    &.full--width {
+      width: 50%;
+      margin-left: 0;
     }
   }
   .line {

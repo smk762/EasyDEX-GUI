@@ -37,6 +37,7 @@ import {
   DASHBOARD_EXCHANGES_TOS_MODAL,
   DASHBOARD_EXCHANGES_SUPPORTED_COINS_MODAL,
   DASHBOARD_USER_AGREEMENT_MODAL,
+  DASHBOARD_CLEAR_ACTIVECOIN,
 } from './storeType';
 
 export * from './actions/nativeSyncInfo';
@@ -364,3 +365,9 @@ export const toggleUserAgreementModal = (display) => {
     display,
   }
 };
+
+export const clearActiveCoinStore = () => {
+  return {
+    type: DASHBOARD_CLEAR_ACTIVECOIN,
+  }
+}

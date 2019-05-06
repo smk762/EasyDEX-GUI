@@ -155,16 +155,9 @@ const NavbarRender = function() {
                     { translate('INDEX.' + (this.props.Main.blurSensitiveData ? 'SHOW_SENSITIVE_DATA' : 'HIDE_SENSITIVE_DATA')) }
                   </a>
                 </li>
-                { this.isRenderSpvLockLogout() &&
+                { this.isRenderLogout() &&
                   <li>
-                    <a onClick={ this.spvLock }>
-                      <i className="icon fa-lock"></i> { translate('DASHBOARD.SOFT_LOGOUT') }
-                    </a>
-                  </li>
-                }
-                { this.isRenderSpvLockLogout() &&
-                  <li>
-                    <a onClick={ this.spvLogout }>
+                    <a onClick={ this.logout }>
                       <i className="icon fa-power-off"></i> { translate('DASHBOARD.COMPLETE_LOGOUT') }
                     </a>
                   </li>

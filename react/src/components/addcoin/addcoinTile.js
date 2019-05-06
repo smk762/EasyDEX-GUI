@@ -3,6 +3,7 @@ import translate from '../../translate/translate';
 import config from '../../config';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 
 class AddCoinTile extends React.Component {
   constructor() {
@@ -199,8 +200,8 @@ class AddCoinTile extends React.Component {
       let className = 'addcoin-tile';
 
       if (this.props.activatedCoins &&
-          this.props.activatedCoins[coins[i].value] &&
-          this.props.activatedCoins[coins[i].value].mode === this.props.type) {
+          ((this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].mode === this.props.type) ||
+           (this.props.activatedCoins[coins[i].value === 'ETH' ? coins[i].value : coins[i].value.split('|')[coins[i].value.indexOf('ETH|') > -1 ? 1 : 0]] && this.props.activatedCoins[coins[i].value === 'ETH' ? coins[i].value : coins[i].value.split('|')[coins[i].value.indexOf('ETH|') > -1 ? 1 : 0]].mode === this.props.type))) {
         className += ' activated';
       }
 
@@ -212,6 +213,13 @@ class AddCoinTile extends React.Component {
 
       if (this.props.activeCoins &&
           ((this.props.type === 'native' && this.props.activeCoins.spv && (this.props.activeCoins.spv.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1 || (this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].mode === 'spv'))) || (this.props.type === 'spv' && this.props.activeCoins.native && (this.props.activeCoins.native.indexOf(coins[i].value.split('|')[0].toUpperCase()) > -1 || (this.props.activatedCoins[coins[i].value] && this.props.activatedCoins[coins[i].value].mode === 'native'))))) {
+        className += ' hidden';
+      }
+
+      if (this.props.type === 'spv' &&
+          this.props.kmdAcOnly &&
+          kmdAssetChains.indexOf(coins[i].value.split('|')[0].toUpperCase()) === -1 &&
+          className.indexOf('hidden') === -1) {
         className += ' hidden';
       }
 

@@ -18,10 +18,10 @@ const _disabledAC = {
   ],
   native: [
     'vrsc',
-    'spltest',
     'hush',
   ],
   all: [
+    'spltest',
     'mvp',
   ],
 };

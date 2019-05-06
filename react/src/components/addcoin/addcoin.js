@@ -10,6 +10,7 @@ import {
   apiGetCoinList,
   apiPostCoinList,
   toggleZcparamsFetchModal,
+  getSyncInfoNativePromise,
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
@@ -46,6 +47,7 @@ class AddCoin extends React.Component {
       type: 'spv',
       quickSearch: null,
       coinsList: null,
+      kmdAcOnly: false,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.dismiss = this.dismiss.bind(this);
@@ -59,13 +61,75 @@ class AddCoin extends React.Component {
     this.filterCoins = this.filterCoins.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.updateCoinSelection = this.updateCoinSelection.bind(this);
+    this.isNativeCoinsSelected = this.isNativeCoinsSelected.bind(this);
+    this.isLiteCoinsSelected = this.isLiteCoinsSelected.bind(this);
+    this.toggleKmdAcOnly = this.toggleKmdAcOnly.bind(this);
+    this.detectDaemons = this.detectDaemons.bind(this);
+  }
+
+  detectDaemons() {
+    for (let key in staticVar.assetChainPorts) {
+      if (key !== 'marketmaker') {
+        const coin = key === 'komodod' ? 'KMD' : key;
+
+        getSyncInfoNativePromise(coin)
+        .then((res) => {        
+          if (res &&
+              res.hasOwnProperty('error') &&
+              res.hasOwnProperty('id') &&
+              res.hasOwnProperty('result') &&
+              res.result.hasOwnProperty('KMDversion') &&
+              res.result.hasOwnProperty('KMDnotarized_height') &&
+              res.result.hasOwnProperty('p2pport')) {                
+            let coins = JSON.parse(JSON.stringify(this.state.coins));
+            coins[coin] = {
+              coin: {
+                value: `${coin}|native`,
+              },
+              mode: 'native',
+            };
+
+            this.setState(Object.assign({}, this.state, {
+              coins,
+            }));
+          }
+        });
+      }
+    }
+  }
+
+  toggleKmdAcOnly () {
+    this.setState({
+      kmdAcOnly: !this.state.kmdAcOnly,
+    });
+  }
+
+  isNativeCoinsSelected() {
+    if (this.state.coins) {
+      for (let key in this.state.coins) {
+        if (this.state.coins[key].mode === 'native') {
+          return true;
+        }
+      }
+    }
+  }
+
+  isLiteCoinsSelected() {
+    if (this.state.coins) {
+      for (let key in this.state.coins) {
+        if (this.state.coins[key].mode === 'spv' ||
+            this.state.coins[key].mode === 'eth') {
+          return true;
+        }
+      }
+    }
   }
 
   updateCoinSelection(coin, params) {
     let coins = JSON.parse(JSON.stringify(this.state.coins));
 
-    if (coins[coin.value] && 
-        !params) {
+    if ((coins[coin.value.split('|')[0]] && !params) || (coins[coin.value] && !params)) {
+      delete coins[coin.value.split('|')[0]];
       delete coins[coin.value];
     } else {
       coins[coin.value] = {
@@ -174,35 +238,18 @@ class AddCoin extends React.Component {
     apiGetCoinList()
     .then((json) => {
       if (json.msg !== 'error') {
-        let coins = {};
+        let coins = json.result;
 
-        if (json.result[0] &&
-            json.result[0].hasOwnProperty('selectedCoin')) { // convert old version to new version
-          for (let i = 0; i < json.result.length; i++) {
-            let params = {};
-
-            if (Number(json.result[i].mode) === -1 &&
-                json.result[i].daemonParam) {
-              params.daemonParam = json.result[i].daemonParam;
+        // filter out lite mode coins
+        if (!this.props.Main.isPin &&
+            staticVar.argv.indexOf('hardcore') === -1) {
+          for (let key in coins) {
+            if (coins[key].mode !== 'native') {
+              delete coins[key];
             }
-
-            if (Number(json.result[i].mode) === -1 &&
-                json.result[i].genProcLimit) {
-              params.genProcLimit = json.result[i].genProcLimit;
-            }            
-
-            coins[json.result[i].selectedCoin] = {
-              coin: {
-                value: json.result[i].selectedCoin,
-              },
-              params: Object.keys(params).length ? params : null,
-              mode: modeToValueReversed[json.result[i].mode],
-            };
           }
-        } else {
-          coins = json.result;
         }
-
+        
         this.setState(Object.assign({}, this.state, {
           coins,
           actionsMenu: false,
@@ -241,6 +288,7 @@ class AddCoin extends React.Component {
         addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
         className: addCoinProps.display ? 'show fade' : 'show out',
+        type: (this.props.Main.coins.native.length || !this.props.Main.isLoggedIn) && staticVar.argv.indexOf('hardcore') === -1 ? 'native' : 'spv',
       }));
 
       setTimeout(() => {
@@ -253,8 +301,9 @@ class AddCoin extends React.Component {
           setTimeout(() => {
             this.setState({
               coins: {},
-              type: 'spv',
               quickSearch: null,
+              kmdAcOnly: false,
+              detectingDaemons: false,
             });
           }, 100);
         } else {
@@ -338,15 +387,6 @@ class AddCoin extends React.Component {
             }));
   
             Store.dispatch(toggleAddcoinModal(false, false));
-  
-            setTimeout(() => {
-              this.setState({
-                loginPassphrase: '',
-                seedInputVisibility: false,
-                seedExtraSpaces: false,
-                trimPassphraseTimer: null,
-              });
-            }, 100);
           }
         }, (_coin.mode === 'native' ? 2000 : 0) * (_i - 1));
       }

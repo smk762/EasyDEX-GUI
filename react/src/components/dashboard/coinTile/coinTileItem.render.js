@@ -11,7 +11,7 @@ const testChains = [
 ];
 
 const CoinTileItemRender = function() {
-  const { item } = this.props;
+  const { item, i } = this.props;
   const _coinuc = item.coin.toUpperCase();
   const _coinlc = item.coin.toLowerCase();
   const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';
@@ -24,7 +24,8 @@ const CoinTileItemRender = function() {
       <div className={ 'widget widget-shadow' + (this.props.ActiveCoin.coin === item.coin ? ' active' : '') }>
         <div
           className="widget-content text-center bg-white padding-20"
-          onClick={ () => this._dashboardChangeActiveCoin(item.coin, item.mode) }>
+          onClick={ () => this._dashboardChangeActiveCoin(item.coin, item.mode) }
+          id={ `coin-tile-${i}` }>
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"
@@ -114,7 +115,7 @@ const CoinTileItemRender = function() {
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP_ALL') }
               </li>
             }
-            { this.renderRemoveCoinButton() &&
+            { (this.props.Main.isPin || staticVar.argv.indexOf('hardcore') > -1) &&
               <li onClick={ () => this.removeCoin(item.coin, item.mode) }>
                 <i className="icon fa-trash-o margin-right-5"></i> { translate('DASHBOARD.REMOVE') }
               </li>

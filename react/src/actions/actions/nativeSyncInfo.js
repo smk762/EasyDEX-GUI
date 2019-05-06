@@ -376,3 +376,38 @@ export const regtestGenBlock = (coin) => {
     });
   });
 }
+
+export const getSyncInfoNativePromise = (coin) => {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'getinfo',
+      rpc2cli,
+      token,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      resolve();
+    })
+    .then((response) => {
+      const _response = response.text().then((text) => { return text; });
+      return _response;
+    })
+    .then(json => {
+      if (json) {
+        try {
+          json = JSON.parse(json);
+          resolve(json);
+        } catch (e) {
+          resolve();
+        }
+      }
+    });
+  });
+}

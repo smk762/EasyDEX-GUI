@@ -18,26 +18,37 @@ import {
   encryptPassphrase,
   loadPinList,
   loginWithPin,
-  apiElectrumLogout,
+  apiLogout,
+  clearActiveCoinStore,
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
-  copyString,
+  // addcoin logic
+  addCoin,
+  addCoinEth,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
-import zcashParamsCheckErrors from '../../util/zcashParams';
 import LoginRender from './login.render';
 import translate from '../../translate/translate';
 import mainWindow, { staticVar } from '../../util/mainWindow';
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
 import md5 from 'agama-wallet-lib/src/crypto/md5';
-import { msigPubAddress } from 'agama-wallet-lib/src/keys';
+import {
+  msigPubAddress,
+  pubkeyToAddress,
+} from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { shuffleArray } from 'agama-wallet-lib/src/crypto/utils';
 import nnConfig from '../nnConfig';
+import zcashParamsCheckErrors from '../../util/zcashParams';
 
 const SEED_TRIM_TIMEOUT = 5000;
+const modeToValue = {
+  spv: 0,
+  native: -1,
+  eth: 3,
+};
 
 // TODO: create/restore wallet msig, offline sig, watch only support
 
@@ -46,7 +57,7 @@ class Login extends React.Component {
     super();
     this.state = {
       display: false,
-      activeLoginSection: 'activateCoin',
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       loginPassphrase: '',
       seedInputVisibility: false,
       loginPassPhraseSeedType: null,
@@ -56,7 +67,6 @@ class Login extends React.Component {
       randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
-      displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
       trimPassphraseTimer: null,
@@ -75,7 +85,9 @@ class Login extends React.Component {
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
       step: 0,
+      walletType: 'default',
     };
+    this.coins = {};
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -83,22 +95,127 @@ class Login extends React.Component {
     this.loginSeed = this.loginSeed.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this.handleRegisterWallet = this.handleRegisterWallet.bind(this);
-    this.toggleSeedBackupModal = this.toggleSeedBackupModal.bind(this);
-    this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
     this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
-    this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
-    this.resetSPVCoins = this.resetSPVCoins.bind(this);
+    this.logout = this.logout.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.createSeedConfirmPush = this.createSeedConfirmPush.bind(this);
     this.prevStep = this.prevStep.bind(this);
     this.nextStep = this.nextStep.bind(this);
     this.clearCreateSeedConfirm = this.clearCreateSeedConfirm.bind(this);
     this.popCreateSeedConfirm = this.popCreateSeedConfirm.bind(this);
+    this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
+  }
+
+  activateAllCoins() {
+    const _activateAllCoins = () => {
+      let _i = 0;
+      
+      for (let key in this.coins) {
+        _i++;
+        let _coin = this.coins[key];
+        let coin = _coin.value;
+        let coinuc = coin.toUpperCase();
+  
+        setTimeout(() => {
+          if (!_coin.params) {
+            if (_coin.value.indexOf('ETH') > -1 ||
+                _coin.value === 'ETH') {
+              const _ethNet = _coin.coin.value.split('|');
+  
+              Store.dispatch(addCoinEth(
+                _ethNet[0],
+                _ethNet[1],
+                true
+              ));
+            } else {
+              Store.dispatch(addCoin(
+                coin,
+                modeToValue[_coin.mode],
+                null,
+                null,
+                null,
+                true
+              ));
+            }
+          } else {
+            Store.dispatch(addCoin(
+              coin,
+              modeToValue[_coin.mode],
+              { type: _coin.params.daemonParam },
+              _coin.params.daemonParam === 'gen' &&
+              staticVar.chainParams[coinuc] &&
+              staticVar.chainParams[coinuc].genproclimit ? Number(_coin.params.genProcLimit || 1) : 0,
+              _coin.params.usePubkey && pubkeyToAddress(Config.pubkey, networks.kmd) ? Config.pubkey : null,
+              true
+            ));
+          }
+        }, (_coin.mode === 'native' ? 2000 : 0) * (_i - 1));
+      }
+    };
+
+    let isNativeModeCoin;
+
+    for (let key in this.coins) {
+      if (this.coins[key].mode === 'native') {
+        isNativeModeCoin = true;
+        break;
+      }
+    }
+
+    if (isNativeModeCoin) {
+      this.verifyZcashParamsExist(-1)
+      .then((res) => {
+        if (res) {
+          _activateAllCoins();
+        }
+      });
+    } else {
+      _activateAllCoins();
+    }
+  }
+
+  verifyZcashParamsExist(mode) {
+    return new Promise((resolve, reject) => {
+      if (Number(mode) === -1 ||
+          Number(mode) === 1 ||
+          Number(mode) === 2) {
+        const _res = mainWindow.zcashParamsExist;
+        const __errors = zcashParamsCheckErrors(_res);
+
+        if (__errors) {
+          mainWindow.zcashParamsExistPromise()
+          .then((res) => {
+            const _errors = zcashParamsCheckErrors(res);
+            mainWindow.zcashParamsExist = res;
+
+            if (_errors) {
+              Store.dispatch(
+                triggerToaster(
+                  _errors,
+                  'Komodod',
+                  'error',
+                  false
+                )
+              );
+              Store.dispatch(toggleZcparamsFetchModal(true));
+              Store.dispatch(toggleZcparamsFetchModal(true));
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          });
+        } else {
+          resolve(true);
+        }
+      } else {
+        resolve(true);
+      }
+    });
   }
 
   popCreateSeedConfirm() {
@@ -136,21 +253,19 @@ class Login extends React.Component {
     }
   }
 
-  renderResetSPVCoinsOption() {
+  renderLogoutOption() {
     if (this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.spv &&
-        this.props.Main.coins.spv.length) {
+        (this.props.Main.isLoggedIn || this.props.Main.isPin)) {
       return true;
     }
   }
 
-  resetSPVCoins() {
+  logout() {
     this.setState({
       displayLoginSettingsDropdown: false,
     });
 
-    apiElectrumLogout()
+    apiLogout()
     .then((res) => {
       const _spvCoins = this.props.Main.coins.spv;
 
@@ -192,6 +307,7 @@ class Login extends React.Component {
       Store.dispatch(getDexCoins());
       Store.dispatch(activeHandle());
       Store.dispatch(dashboardChangeActiveCoin());
+      Store.dispatch(clearActiveCoinStore());
     });
   }
 
@@ -229,48 +345,6 @@ class Login extends React.Component {
         )
       );
     }
-  }
-
-  isCustomWalletSeed() {
-    return this.state.customWalletSeed;
-  }
-
-  toggleCustomWalletSeed() {
-    this.setState({
-      customWalletSeed: !this.state.customWalletSeed,
-    }, () => {
-      // if customWalletSeed is set to false, regenerate the seed
-      if (!this.state.customWalletSeed) {
-        this.setState({
-          randomSeed: passphraseGenerator.generatePassPhrase(this.state.bitsOption),
-          isSeedConfirmError: false,
-          isSeedBlank: false,
-          isCustomSeedWeak: false,
-        });
-      } else {
-        // if customWalletSeed is set to true, reset to seed to an empty string
-        this.setState({
-          randomSeed: '',
-          randomSeedConfirm: [],
-        });
-      }
-    });
-  }
-
-  shouldEncryptSeed() {
-    return this.state.shouldEncryptSeed;
-  }
-
-  toggleShouldEncryptSeed() {
-    this.setState({
-      shouldEncryptSeed: !this.state.shouldEncryptSeed,
-    });
-  }
-
-  toggleCustomPinFilename() {
-    this.setState({
-      isCustomPinFilename: !this.state.isCustomPinFilename,
-    });
   }
 
   updateInput(e) {
@@ -346,7 +420,7 @@ class Login extends React.Component {
 
     if (props &&
         props.Main &&
-        props.Main.isLoggedIn) {
+        (props.Main.isLoggedIn || props.Main.isPin)) {
       if (props.Main.total === 0) {
         this.setState({
           activeLoginSection: 'activateCoin',
@@ -378,10 +452,17 @@ class Login extends React.Component {
         );
       }
 
-      this.setState({
-        display: true,
-        activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
-      });
+      if (staticVar.argv.indexOf('hardcore') > -1) {
+        this.setState({
+          display: true,
+          activeLoginSection: 'login',
+        });
+      } else {
+        this.setState({
+          display: true,
+          activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
+        });
+      }
     }
 
     if (props.Main &&
@@ -405,7 +486,7 @@ class Login extends React.Component {
         this.state.activeLoginSection !== 'restore' &&
         props &&
         props.Main &&
-        props.Main.isLoggedIn) {
+        (props.Main.isLoggedIn || props.Main.isPin)) {
       this.setState({
         loginPassphrase: '',
         activeLoginSection: 'activateCoin',
@@ -459,6 +540,9 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    this.coins = {};
+
+    // ol' good seed/wif type in access
     if (!this.state.selectedPin ||
         !this.state.decryptKey) {
       const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
@@ -480,11 +564,6 @@ class Login extends React.Component {
       }
 
       mainWindow.createSeed.secondaryLoginPH = md5(this.state.loginPassphrase);
-      // reset the login pass phrase values so that when the user logs out, the values are clear
-      this.setState({
-        loginPassphrase: '',
-        loginPassPhraseSeedType: null,
-      });
 
       // reset login input vals
       if (this.refs.loginPassphrase) {
@@ -492,6 +571,11 @@ class Login extends React.Component {
       }
 
       this.setState(this.defaultState);
+      setTimeout(() => {
+        this.setState({
+          activeLoginSection: 'activateCoin',
+        });
+      }, 50);
 
       // TODO: trigger based on ETH/electrum
       Store.dispatch(dashboardChangeSectionState('wallets'));
@@ -503,10 +587,14 @@ class Login extends React.Component {
     } else {
       mainWindow.pinAccess = this.state.selectedPin;
 
-      loginWithPin(this.state.decryptKey, this.state.selectedPin)
+      loginWithPin(
+        this.state.decryptKey,
+        this.state.selectedPin
+      )
       .then((res) => {
         if (res.msg === 'success') {
-          if (res.result.indexOf('msig:') > -1) {
+          Store.dispatch(activeHandle());
+          /*if (res.result.seed.indexOf('msig:') > -1) {
             const _data = res.result.split('msig:');
 
             try {
@@ -538,7 +626,7 @@ class Login extends React.Component {
             } catch (e) {
               console.warn('unable to parse multisig data from pin');
             }
-          }
+          }*/
           // reset login input vals
           if (staticVar.argv.indexOf('hardcore') > -1) {
             this.refs.loginPassphrase.value = '';
@@ -549,10 +637,56 @@ class Login extends React.Component {
 
           Store.dispatch(dashboardChangeSectionState('wallets'));
           Store.dispatch(toggleDashboardActiveSection('default'));
-          Store.dispatch(apiElectrumAuth(res.result));
-          Store.dispatch(apiElectrumCoins());
-          Store.dispatch(apiEthereumAuth(res.result));
-          Store.dispatch(apiEthereumCoins());
+          
+          if (res.result.type === 'default') {
+            Store.dispatch(apiElectrumAuth(res.result.data.keys.seed));
+          }
+
+          const _coinsFromStorage = res.result.data.coins;
+          if (Object.keys(_coinsFromStorage).length) {
+            const modes = []
+
+            // an extra check to make sure native/lite mode coins are not running together
+            if (!_coinsFromStorage.native.length) {
+              modes.push('spv', 'eth');
+            } else {
+              modes.push('native');
+            }
+
+            for (let i = 0; i < modes.length; i++) {
+              if (_coinsFromStorage.hasOwnProperty(modes[i])) {
+                for (let j = 0; j < _coinsFromStorage[modes[i]].length; j++) {
+                  let _params = {};
+
+                  if (_coinsFromStorage.params &&
+                      _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]]) {
+                    if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit') > -1) {
+                      _params.daemonParam = 'gen';
+                      _params.genProcLimit = _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]][_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit')].replace('-genproclimit=', '');
+                    } else if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-regtest') > -1) {
+                      _params.daemonParam = 'regtest';
+                    } else if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-pubkey') > -1) {
+                      _params.usePubkey = true;
+                    }
+                  }
+
+                  this.coins[_coinsFromStorage[modes[i]][j]] = {
+                    value: modes[i] === 'eth' ? `ETH|${_coinsFromStorage[modes[i]][j]}`: _coinsFromStorage[modes[i]][j],
+                    mode: modes[i],
+                    params: Object.keys(_params).length ? _params : null,
+                  }
+                }
+              }
+            }
+
+            this.activateAllCoins();
+          } else {
+            setTimeout(() => {
+              this.setState({
+                activeLoginSection: 'activateCoin',
+              });
+            }, 100);
+          }
         }
       });
     }
@@ -627,7 +761,7 @@ class Login extends React.Component {
     );
 
     this.setState({
-      activeLoginSection: 'activateCoin',
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       displaySeedBackupModal: false,
       isSeedConfirmError: false,
     });
@@ -672,6 +806,14 @@ class Login extends React.Component {
           step: this.state.step + 1,
         });
       }
+    } else if (
+      this.state.activeLoginSection === 'signup' &&
+      this.state.walletType === 'native' &&
+      this.state.step === 0
+    ) {
+      this.setState({
+        step: 3,
+      });
     } else {
       this.setState({
         step: this.state.step + 1,
@@ -681,9 +823,16 @@ class Login extends React.Component {
 
   handleRegisterWallet() {
     const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
-    const enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
-    const isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
-    const stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
+    const walletType = this.state.activeLoginSection === 'signup' ? this.state.walletType : 'default';
+    let enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
+    let isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
+    let stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
+
+    if (walletType === 'native') { // skip lite mode checks
+      enteredSeedsMatch = true;
+      isSeedBlank = false;
+      stringEntropy = true;
+    }
 
     if (!stringEntropy) {
       Store.dispatch(
@@ -742,12 +891,14 @@ class Login extends React.Component {
                 encryptPassphrase(
                   this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
                   this.state.encryptKey,
+                  walletType,
                   false,
                   this.state.customPinFilename,
                 )
                 .then((res) => {
                   if (res.msg === 'success') {
                     this.loadPinList();
+                    Store.dispatch(activeHandle());
 
                     setTimeout(() => {
                       this.setState({
@@ -784,11 +935,13 @@ class Login extends React.Component {
             } else {
               encryptPassphrase(
                 this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
-                this.state.encryptKey
+                this.state.encryptKey,
+                'default'
               )
               .then((res) => {
                 if (res.msg === 'success') {
                   this.loadPinList();
+                  Store.dispatch(activeHandle());
 
                   setTimeout(() => {
                     this.setState({
@@ -831,16 +984,6 @@ class Login extends React.Component {
         (this.state.loginPassphrase || (this.state.selectedPin && this.state.decryptKey))) {
       this.loginSeed();
     }
-  }
-
-  toggleSeedBackupModal() {
-    this.setState(Object.assign({}, this.state, {
-      displaySeedBackupModal: !this.state.displaySeedBackupModal,
-    }));
-  }
-
-  copyPassPhraseToClipboard() {
-    Store.dispatch(copyString(this.state.randomSeed, translate('LOGIN.SEED_SUCCESSFULLY_COPIED')));
   }
 
   updateSelectedShortcut(e, type) {
