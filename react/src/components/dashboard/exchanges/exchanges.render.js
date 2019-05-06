@@ -8,6 +8,7 @@ import {
   sort,
 } from 'agama-wallet-lib/src/utils';
 import { secondsToString } from 'agama-wallet-lib/src/time';
+import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 import ExchangesOrderInfoModal from '../exchangesOrderInfoModal/exchangesOrderInfoModal';
 import Select from 'react-select';
 import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
@@ -25,7 +26,18 @@ const statusLookup = {
   },
 };
 
-export const RenderNewOrderForm = function() {  
+export const RenderNewOrderForm = function() {
+  const getPrice = (coin, fiat) => {
+    if (isKomodoCoin(coin) &&
+        this.state.newExchangeOrderDetails.prices[coin] &&
+        this.state.newExchangeOrderDetails.prices[coin][fiat] &&
+        this.state.newExchangeOrderDetails.prices[coin].hasOwnProperty('KIC')) {
+      return 0;
+    } else {
+      return this.state.newExchangeOrderDetails.prices[coin][fiat];
+    }
+  };
+
   return (
     <section className="exchanges-new-order-form">
       { this.state.newExchangeOrderDetails.step === 0 &&
@@ -199,9 +211,11 @@ export const RenderNewOrderForm = function() {
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
                         { this.state.newExchangeOrderDetails.amount } { this.state.newExchangeOrderDetails.coinSrc.split('|')[0] }
-                        <span className="padding-left-30">
-                          { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.prices[this.state.newExchangeOrderDetails.coinSrc.split('|')[0]][Config.defaultFiatCurrency.toUpperCase()]).toFixed(8) } { Config.defaultFiatCurrency.toUpperCase() }
-                        </span>
+                        { getPrice(this.state.newExchangeOrderDetails.coinSrc.split('|')[0], Config.defaultFiatCurrency.toUpperCase()) &&
+                          <span className="padding-left-30">
+                            { Number(this.state.newExchangeOrderDetails.amount * getPrice(this.state.newExchangeOrderDetails.coinSrc.split('|')[0], Config.defaultFiatCurrency.toUpperCase())).toFixed(8) } { Config.defaultFiatCurrency.toUpperCase() }
+                          </span>
+                        }
                       </div>
                     </div>
                     <div className="row padding-top-20">
@@ -210,9 +224,11 @@ export const RenderNewOrderForm = function() {
                       </div>
                       <div className="col-lg-12 col-sm-12 col-xs-12">
                         { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate).toFixed(8) } { this.state.newExchangeOrderDetails.coinDest.split('|')[0] }
-                        <span className="padding-left-30">
-                          { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate * this.state.newExchangeOrderDetails.prices[this.state.newExchangeOrderDetails.coinDest.split('|')[0]][Config.defaultFiatCurrency.toUpperCase()]).toFixed(8) } { Config.defaultFiatCurrency.toUpperCase() }
-                        </span>
+                        { getPrice(this.state.newExchangeOrderDetails.coinDest.split('|')[0], Config.defaultFiatCurrency.toUpperCase()) &&
+                          <span className="padding-left-30">
+                            { Number(this.state.newExchangeOrderDetails.amount * this.state.newExchangeOrderDetails.exchangeRate.rate * getPrice(this.state.newExchangeOrderDetails.coinDest.split('|')[0], Config.defaultFiatCurrency.toUpperCase())).toFixed(8) } { Config.defaultFiatCurrency.toUpperCase() }
+                          </span>
+                        }
                       </div>
                     </div>
                     <div className="row padding-top-20">

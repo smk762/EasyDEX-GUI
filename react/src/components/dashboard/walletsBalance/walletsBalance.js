@@ -11,6 +11,7 @@ import Config from '../../../config';
 import ReactTooltip from 'react-tooltip';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import { formatValue } from 'agama-wallet-lib/src/utils';
+import { isKomodoCoin } from 'agama-wallet-lib/src/coin-helpers';
 import Store from '../../../store';
 import FiatSymbol from '../fiat/fiatSymbol';
 
@@ -142,9 +143,15 @@ class WalletsBalance extends React.Component {
       const _prices = this.props.Dashboard.prices;
       const _defaultFiat = Config.defaultFiatCurrency.toUpperCase();
       const _coin = this.props.ActiveCoin.coin;
-      const _fiatPriceTotal = _balance * _prices[_coin][_defaultFiat];
-      const _fiatPricePerCoin = _prices[_coin][_defaultFiat];
+      let _fiatPriceTotal = _balance * _prices[_coin][_defaultFiat];
+      let _fiatPricePerCoin = _prices[_coin][_defaultFiat];
       let _priceChangeColor = 'green';
+
+      if (isKomodoCoin(_coin.toUpperCase()) &&
+          _prices[_coin.toUpperCase()].hasOwnProperty('KIC')) {
+        _fiatPricePerCoin = 0;
+        _fiatPricePerCoin = 0;
+      }
 
       if (_prices[_coin].priceChange &&
           _prices[_coin].priceChange.data &&
