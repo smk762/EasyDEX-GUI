@@ -17,9 +17,9 @@ import DaemonStdoutPanel from './settings.daemonStdoutPanel';
 import NativeWalletDatKeysPanel from './settings.nativeWalletDatKeysPanel';
 import CoindClearDataDirPanel from './settings.coindClearDataDirPanel';
 import Bip39KeysPanel from './settings.bip39KeysPanel';
-import SeedEncryptPanel from './settings.seedEncryptPanel';
 import AddressBookPanel from './settings.addressBookPanel';
 import SweepKeysPanel from './settings.sweepKeysPanel';
+import SeedEncryptPanel from './settings.seedEncryptPanel';
 
 // import WalletBackupPanel from './settings.walletBackupPanel';
 
@@ -86,11 +86,13 @@ export const SettingsRender = function() {
               icon="icon md-info">
               <AppInfoPanel />
             </PanelSection>
-            <PanelSection
-              title={ translate('SETTINGS.ENCRYPT_SEED') }
-              icon="icon fa-shield">
-              <SeedEncryptPanel />
-            </PanelSection>
+            { this.props.Login.pinList.length > 0 &&
+              <PanelSection
+                title={ translate('SETTINGS.ENCRYPT_SEED') }
+                icon="icon fa-shield">
+                <SeedEncryptPanel />
+              </PanelSection>
+            }
             { _coins &&
               ((_coins.spv && Object.keys(_coins.spv).length) ||
               (_coins.eth && Object.keys(_coins.eth).length)) &&
@@ -109,7 +111,7 @@ export const SettingsRender = function() {
                 <NativeWalletDatKeysPanel />
               </PanelSection>
             }
-            { Config.experimentalFeatures &&
+            { Config.userAgreement &&
               _coins.spv &&
               Object.keys(_coins.spv).length &&
               <PanelSection

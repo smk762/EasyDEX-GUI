@@ -52,14 +52,14 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> Explorer
               </a>
             </li>*/ }
-            { Config.experimentalFeatures &&
+            { Config.userAgreement &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('tools') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('tools') }>
                   <i className="site-menu-icon"></i> { translate('TOOLS.TOOLS') }
                 </a>
               </li>
             }
-            { Config.experimentalFeatures &&
+            { Config.userAgreement &&
               (Config.dev || staticVar.argv.indexOf('exchanges') > -1) &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('exchanges') }>
@@ -155,16 +155,9 @@ const NavbarRender = function() {
                     { translate('INDEX.' + (this.props.Main.blurSensitiveData ? 'SHOW_SENSITIVE_DATA' : 'HIDE_SENSITIVE_DATA')) }
                   </a>
                 </li>
-                { this.isRenderSpvLockLogout() &&
+                { this.isRenderLogout() &&
                   <li>
-                    <a onClick={ this.spvLock }>
-                      <i className="icon fa-lock"></i> { translate('DASHBOARD.SOFT_LOGOUT') }
-                    </a>
-                  </li>
-                }
-                { this.isRenderSpvLockLogout() &&
-                  <li>
-                    <a onClick={ this.spvLogout }>
+                    <a onClick={ this.logout }>
                       <i className="icon fa-power-off"></i> { translate('DASHBOARD.COMPLETE_LOGOUT') }
                     </a>
                   </li>

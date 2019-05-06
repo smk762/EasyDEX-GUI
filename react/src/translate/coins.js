@@ -54,6 +54,7 @@ const coins = {
     MORTY: 'Morty',
     MTST3: 'MTST3',
     RFOX: 'Red Fox',
+    HUSH: 'Hush',
   },
   CRYPTO: {
     STRAT: 'Stratis',
@@ -124,7 +125,6 @@ const coins = {
     BLK: 'Blackcoin',
     DOGE: 'Dogecoin',
     ZEC: 'Zcash',
-    HUSH: 'Hush',
     SNG: 'SnowGem',
     ZCL: 'Zclassic',
     XMY: 'Myriad',
@@ -354,6 +354,7 @@ const coins = {
     DEC8: 'DEC8 (TESTCOIN)',
     ETH: 'Ethereum',
     ZIL: 'Zilliqa',
+    TUSD: 'TrueUSD',
   },
 };
 

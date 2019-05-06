@@ -62,7 +62,7 @@ export const AddressListRender = function() {
           { (_mode === 'spv' ||
              _mode === 'eth' ||
             (_mode === 'native' && _notAcPrivate)) &&
-            (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs' && this.state.sendTo.length !== 95)) &&
+            (!this.state.sendTo || (this.state.sendTo && this.state.sendTo.substring(0, 2) !== 'zc' && this.state.sendTo.substring(0, 2) !== 'zs' && this.state.sendTo.substring(0, 15) !== 'zregtestsapling' && this.state.sendTo.length !== 95)) &&
             <li
               className="selected"
               onClick={ () => this.updateAddressSelection(null, 'public', null) }>
@@ -263,8 +263,8 @@ export const _SendFormRender = function() {
           }
           { _mode === 'native' &&
             (this.state.addressType === 'private' ||
-             (this.state.sendTo && this.state.sendTo.substring(0, 2) === 'zc' && this.state.sendTo.substring(0, 2) === 'zs') ||
-             (this.state.sendFrom && this.state.sendFrom.substring(0, 2) === 'zc' && this.state.sendFrom.substring(0, 2) === 'zs')) &&
+             (this.state.sendTo && (this.state.sendTo.substring(0, 2) === 'zc' || this.state.sendTo.substring(0, 2) === 'zs' || this.state.sendTo.substring(0, 15) === 'zregtestsapling')) ||
+             (this.state.sendFrom && (this.state.sendFrom.substring(0, 2) === 'zc' || this.state.sendFrom.substring(0, 2) === 'zs' || this.state.sendFrom.substring(0, 15) === 'zregtestsapling'))) &&
             <div className="row">
               <div className="col-lg-12 form-group form-material">
                 <button
@@ -494,11 +494,11 @@ export const SendRender = function() {
                     </button>
                   </div>
                 }
-                { ((_mode === 'spv' && Config.experimentalFeatures && kvCoins[_coin]) ||
+                { ((_mode === 'spv' && Config.userAgreement && kvCoins[_coin]) ||
                   (_mode === 'spv' && Config.coinControl)) &&
                   <div className="kv-select-block">
                     { _mode === 'spv' &&
-                      Config.experimentalFeatures &&
+                      Config.userAgreement &&
                       kvCoins[_coin] &&
                       <span>
                         <button

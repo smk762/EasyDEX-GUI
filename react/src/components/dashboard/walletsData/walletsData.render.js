@@ -25,8 +25,9 @@ export const TxConfsRender = function(tx) {
           tx.confirmations !== tx.rawconfirmations &&
           <span>
             <span
-              data-tip={ `${translate('INDEX.RAW_CONFS')}: ${tx.rawconfirmations}` }
-              data-for="txHistoryDpowRawConf">
+              data-tip={ `${translate('INDEX.DPOW_CONFS')}: ${tx.confirmations}<br/>${translate('INDEX.RAW_CONFS_ALT')}: ${tx.rawconfirmations}` }
+              data-for="txHistoryDpowRawConf"
+              data-html={ true }>
               { tx.confirmations }
             </span>
             <ReactTooltip
@@ -313,7 +314,7 @@ export const TxHistoryListRender = function() {
   if (_activeCoin &&
       _activeCoin.txhistory &&
       !this.state.searchTerm) {
-    _data = this.props.ActiveCoin.txhistory || _activeCoin;
+    _data = this.props.ActiveCoin.txhistory || _activeCoin.txhistory || 'loading';
   }
 
   _data = _data || this.state.filteredItemsList;
@@ -347,7 +348,8 @@ export const TxHistoryListRender = function() {
 export const WalletsDataRender = function() {
   const _balance = this.props.ActiveCoin.balance;
   const _txhistory = this.props.ActiveCoin.txhistory;
-
+  const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[this.props.ActiveCoin.coin] ? this.props.Main.coins.params[this.props.ActiveCoin.coin].join(' ') : '';
+  
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
@@ -416,7 +418,7 @@ export const WalletsDataRender = function() {
                     }
                     <h4 className="panel-title">{ !this.state.kvView ? translate('INDEX.TRANSACTION_HISTORY') : translate('KV.KV_HISTORY') }</h4>
                     { this.props.ActiveCoin.mode === 'spv' &&
-                      Config.experimentalFeatures &&
+                      Config.userAgreement &&
                       kvCoins[this.props.ActiveCoin.coin] &&
                       this.state.itemsList !== 'loading' &&
                       this.state.itemsList !== 'response too large' &&
@@ -428,6 +430,15 @@ export const WalletsDataRender = function() {
                         className="btn btn-default btn-switch-kv"
                         onClick={ this.toggleKvView }>
                         { translate('KV.' + (!this.state.kvView ? 'KV_VIEW' : 'TX_VIEW')) }
+                      </button>
+                    }
+                    { _coindStartParamsString &&
+                      _coindStartParamsString.indexOf('-regtest') > -1 &&
+                      <button
+                        type="button"
+                        className="btn btn-default btn-gen-block"
+                        onClick={ this._regtestGenBlock }>
+                        { translate('INDEX.REGTEST_GEN_BLOCK') }
                       </button>
                     }
                   </header>

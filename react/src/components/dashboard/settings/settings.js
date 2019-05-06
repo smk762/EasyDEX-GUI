@@ -46,7 +46,7 @@ class Settings extends React.Component {
 
   componentWillMount() {
     this.setState({
-      isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
+      isExperimentalOn: mainWindow.appConfig.userAgreement,
     });
   }
 
@@ -59,6 +59,7 @@ const mapStateToProps = (state) => {
   return {
     Main: state.Main,
     Dashboard: state.Dashboard,
+    Login: state.Login,
   };
 };
 

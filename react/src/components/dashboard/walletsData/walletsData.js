@@ -18,6 +18,7 @@ import {
   apiNativeTransactionsCSV,
   triggerToaster,
   apiEthereumTransactions,
+  regtestGenBlock,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -74,6 +75,7 @@ class WalletsData extends React.Component {
     this.toggleKvView = this.toggleKvView.bind(this);
     this._setTxHistory = this._setTxHistory.bind(this);
     this.exportToCSV = this.exportToCSV.bind(this);
+    this._regtestGenBlock = this._regtestGenBlock.bind(this);
   }
 
   componentWillMount() {
@@ -90,6 +92,10 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  _regtestGenBlock() {
+    regtestGenBlock(this.props.ActiveCoin.coin);
   }
 
   isOutValue(tx) {

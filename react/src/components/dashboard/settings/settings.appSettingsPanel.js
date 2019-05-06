@@ -232,7 +232,7 @@ class AppSettingsPanel extends React.Component {
       if (_configSchema[key] &&
           typeof _appConfig[key] === 'object') {
         if ((_configSchema[key].display && _configSchema[key].type !== 'select') ||
-            (_configSchema[key].display && _configSchema[key].type === 'select' && Config.experimentalFeatures)) {
+            (_configSchema[key].display && _configSchema[key].type === 'select' && Config.experuserAgreementimentalFeatures)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
@@ -353,7 +353,7 @@ class AppSettingsPanel extends React.Component {
         }
       } else {
         if ((_configSchema[key] && _configSchema[key].display && _configSchema[key].type !== 'select') ||
-            (_configSchema[key] && _configSchema[key].display && _configSchema[key].type === 'select' && Config.experimentalFeatures)) {
+            (_configSchema[key] && _configSchema[key].display && _configSchema[key].type === 'select' && Config.userAgreement)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
@@ -415,7 +415,7 @@ class AppSettingsPanel extends React.Component {
                   </span>
                 }
                 { _configSchema[key].type === 'select' &&
-                  Config.experimentalFeatures &&
+                  Config.userAgreement &&
                   <select
                     className="form-control select-settings"
                     name={ `${key}` }

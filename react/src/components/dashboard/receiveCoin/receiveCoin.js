@@ -247,7 +247,8 @@ class ReceiveCoin extends React.Component {
           if (!this.state.toggleIsMine &&
               !address.canspend &&
               address.address.substring(0, 2) !== 'zc' &&
-              address.address.substring(0, 2) !== 'zs') {
+              address.address.substring(0, 2) !== 'zs' &&
+              address.address.substring(0, 15) !== 'zregtestsapling') {
             items.pop();
           }
         }

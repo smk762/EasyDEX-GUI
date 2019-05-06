@@ -21,8 +21,8 @@ const prepCoinsList = () => {
   let _coins = [];
 
   for (let i = 0; i < coins.length; i++) {
-    if (Config.experimentalFeatures ||
-        (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
+    if (Config.userAgreement ||
+        (!Config.userAgreement && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
       try {
         if (staticVar.electrumServers &&
             staticVar.electrumServers[coins[i].toLowerCase()] &&
@@ -35,7 +35,7 @@ const prepCoinsList = () => {
     }
   }
 
-  if (Config.experimentalFeatures) {
+  if (Config.userAgreement) {
     _coins.push('ETH');
   }
 
@@ -127,9 +127,7 @@ class AddressBookPanel extends React.Component {
 
     // allow zc addresses
     if (_coin === 'KMD' &&
-        _address.substring(0, 2) === 'zc' &&
-        _address.substring(0, 2) === 'zs' &&
-        (_address.length === 95 || _address.length === 78)) {
+        ((_address.substring(0, 2) === 'zs' && _address.length === 78) || (_address.substring(0, 15) === 'zregtestsapling' && _address.length === 91))) {
       _validationMsg = null;
     }
 
@@ -231,7 +229,7 @@ class AddressBookPanel extends React.Component {
           key={ `coind-stdout-coins-${i}` }
           value={ `${_coins[i]}` }>
           { translate('CRYPTO.' + _coins[i]) }
-          { _coins[i].toLowerCase() === 'kmd' && ' (Chips/Asset chains)' }
+          { _coins[i].toLowerCase() === 'kmd' && ' (Chips/Pirate/Asset chains)' }
           { _coins[i].toLowerCase() === 'eth' && ' (ERC20)' }
         </option>
       );
@@ -261,7 +259,7 @@ class AddressBookPanel extends React.Component {
             <td className="seletable word-break--all">{ key }</td>
             <td>
             { translate('CRYPTO.' + _addressBookItems[key].coin) }
-            { _addressBookItems[key].coin.toLowerCase() === 'kmd' && ' (Chips/Asset chains)' }
+            { _addressBookItems[key].coin.toLowerCase() === 'kmd' && ' (Chips/Pirate/Asset chains)' }
             { _addressBookItems[key].coin.toLowerCase() === 'eth' && ' (ERC20)' }
             </td>
             <td className="seletable">{ _addressBookItems[key].title }</td>

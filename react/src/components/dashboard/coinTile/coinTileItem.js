@@ -55,10 +55,12 @@ class CoinTileItem extends React.Component {
       toggledCoinMenu: null,
       coindStopRetries: {},
     };
+    this.nativeCoinsDelete = {};
     this.autoSetActiveCoin = this.autoSetActiveCoin.bind(this);
     this.toggleCoinMenu = this.toggleCoinMenu.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.stopAllCoind = this.stopAllCoind.bind(this);
+    this.openCoindDownModal = this.openCoindDownModal.bind(this);
   }
 
   componentWillMount() {
@@ -103,20 +105,26 @@ class CoinTileItem extends React.Component {
 
   openCoindDownModal() {
     Store.dispatch(toggleCoindDownModal(true));
+
+    if (this.props.ActiveCoin.coin === 'KMD') {
+      Store.dispatch(getDebugLog('komodo', 50));
+    } else {
+      Store.dispatch(getDebugLog('komodo', 50, this.props.ActiveCoin.coin));
+    }
   }
 
   renderCoinConError(item) {
     const _coins = this.props.ActiveCoin.coins;
 
     if (this.props.ActiveCoin.getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD &&
-        (this.props.ActiveCoin.mode === 'native' &&
+        ((this.props.ActiveCoin.mode === 'native' &&
         this.props.ActiveCoin.coin === this.state.activeCoin &&
         this.props.ActiveCoin.coin === item.coin &&
         this.state.activeCoin === item.coin &&
         this.state.activeCoinMode === 'native' &&
         this.props.ActiveCoin.mode === this.state.activeCoinMode &&
         this.state.propsUpdatedCounter > 1) ||
-        (_coins && _coins[item.coin]) && _coins[item.coin].getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD) {
+        (_coins && _coins[item.coin]) && _coins[item.coin].getinfoFetchFailures >= COIND_DOWN_MODAL_FETCH_FAILURES_THRESHOLD)) {
       return true;
     }
   }
@@ -144,20 +152,6 @@ class CoinTileItem extends React.Component {
     }
   }
 
-  renderRemoveCoinButton() {
-    const _main = this.props.Main;
-
-    if (_main &&
-        _main.coins &&
-        ((_main.coins.native &&
-          _main.coins.native.length &&
-        !Config.native.stopNativeDaemonsOnQuit) ||
-        (_main.coins.spv && _main.coins.spv.length) ||
-        (_main.coins.eth && _main.coins.eth.length))) {
-      return true;
-    }
-  }
-
   autoSetActiveCoin(skipCoin) {
     const modes = [
       'native',
@@ -171,31 +165,32 @@ class CoinTileItem extends React.Component {
     let _coin;
 
     if (allCoins) {
-      modes.map((mode) => {
-        allCoins[mode].map((coin) => {
+      for (let i = 0; i < modes.length; i++) {
+        for (let j = 0; j < allCoins[modes[i]].length; j++) {
           if (!_coinSelected &&
-              coin !== skipCoin) {
+              allCoins[modes[i]][j] !== skipCoin) {
             _coinSelected = true;
-            _coin = coin;
-            _mode = mode;
+            _coin = allCoins[modes[i]][j];
+            _mode = modes[i];
           }
-          _coinMode[coin] = mode;
-        });
 
-        if (_coinMode.KMD &&
-            _coinMode.KMD === 'native' &&
-            skipCoin !== 'KMD') {
-          _coin = 'KMD';
-          _mode = 'native';
-        } else if (
-          _coinMode.KMD &&
-          _coinMode.KMD === 'spv' &&
-          skipCoin !== 'KMD'
-        ) {
-          _coin = 'KMD';
-          _mode = 'spv';
+          _coinMode[allCoins[modes[i]][j]] = modes[i];
+
+          if (_coinMode.KMD &&
+              _coinMode.KMD === 'native' &&
+              skipCoin !== 'KMD') {
+            _coin = 'KMD';
+            _mode = 'native';
+          } else if (
+            _coinMode.KMD &&
+            _coinMode.KMD === 'spv' &&
+            skipCoin !== 'KMD'
+          ) {
+            _coin = 'KMD';
+            _mode = 'spv';
+          }
         }
-      });
+      }
 
       setTimeout(() => {
         this._dashboardChangeActiveCoin(_coin, _mode, true);
@@ -208,26 +203,38 @@ class CoinTileItem extends React.Component {
       toggledCoinMenu: null,
     });
 
-    apiRemoveCoin(coin, mode)
-    .then((res) => {
-      Store.dispatch(
-        triggerToaster(
-          `${coin} ${translate('TOASTR.COIN_IS_REMOVED')}`,
-          translate('TOASTR.COIN_NOTIFICATION'),
-          'success'
-        )
-      );
+    if (mode === 'native') {
+      this.stopCoind(coin, 'true', null, mode);
+    } else {
+      apiRemoveCoin(coin, mode)
+      .then((res) => {
+        Store.dispatch(
+          triggerToaster(
+            `${coin} ${translate('TOASTR.COIN_IS_REMOVED')}`,
+            translate('TOASTR.COIN_NOTIFICATION'),
+            'success'
+          )
+        );
 
-      Store.dispatch(dashboardRemoveCoin(coin));
-      this.autoSetActiveCoin(coin);
-      setTimeout(() => {
-        Store.dispatch(getDexCoins());
-        Store.dispatch(activeHandle());
-      }, 500);
-    });
+        Store.dispatch(dashboardRemoveCoin(coin));
+        this.autoSetActiveCoin(coin);
+        setTimeout(() => {
+          Store.dispatch(getDexCoins());
+          Store.dispatch(activeHandle());
+        }, 500);
+      });
+    }
   }
 
-  stopCoind(coin, i, _coins) {
+  stopCoind(coin, i, _coins, remove) {
+    if (!this.nativeCoinsDelete) {
+      const _coins = this.props.Main.coins.native;
+      
+      for (let i = 0; i < _coins.length; i++) {
+        this.nativeCoinsDelete[_coins[i]] = true;
+      }
+    }
+
     this.setState({
       toggledCoinMenu: null,
       coindStopRetries: {
@@ -257,7 +264,11 @@ class CoinTileItem extends React.Component {
               },
             });
             setTimeout(() => {
-              this.stopCoind(coin);
+              if (remove) {
+                this.stopCoind(coin, 'true', null, remove);
+              } else {
+                this.stopCoind(coin);
+              }
             }, 10);
           }, 1500);
         } else {
@@ -270,13 +281,48 @@ class CoinTileItem extends React.Component {
           );
         }
       } else {
-        Store.dispatch(
-          triggerToaster(
-            `${coin} ${translate('TOASTR.COIN_IS_STOPPED')}`,
-            translate('TOASTR.COIN_NOTIFICATION'),
-            'success'
-          )
-        );
+        if (this.nativeCoinsDelete &&
+            this.nativeCoinsDelete[coin]) {
+          delete this.nativeCoinsDelete[coin];
+        }
+
+        if (this.props.Main.isPin &&
+            !Object.keys(this.nativeCoinsDelete).length) {
+          apiLogout()
+          .then((res) => {
+            Store.dispatch(getDexCoins());
+            Store.dispatch(activeHandle());
+            Store.dispatch(clearActiveCoinStore());
+          });
+        }
+
+        if (!remove) {
+          Store.dispatch(
+            triggerToaster(
+              `${coin} ${translate('TOASTR.COIN_IS_STOPPED')}`,
+              translate('TOASTR.COIN_NOTIFICATION'),
+              'success'
+            )
+          );
+        } else {
+          apiRemoveCoin(coin, remove)
+          .then((res) => {
+            Store.dispatch(
+              triggerToaster(
+                `${coin} ${translate('TOASTR.COIN_IS_REMOVED')}`,
+                translate('TOASTR.COIN_NOTIFICATION'),
+                'success'
+              )
+            );
+    
+            Store.dispatch(dashboardRemoveCoin(coin));
+            this.autoSetActiveCoin(coin);
+            setTimeout(() => {
+              Store.dispatch(getDexCoins());
+              Store.dispatch(activeHandle());
+            }, 500);
+          });
+        }
 
         if (!_coins) {
           this.autoSetActiveCoin(coin);
@@ -301,11 +347,22 @@ class CoinTileItem extends React.Component {
           Store.dispatch(activeHandle());
         }, 500);
       }
+
+      Store.dispatch(
+        stopInterval(
+          'prices',
+          this.props.Interval.interval
+        )
+      );
     });
   }
 
   stopAllCoind() {
     const _coins = this.props.Main.coins.native;
+
+    for (let i = 0; i < _coins.length; i++) {
+      this.nativeCoinsDelete[_coins[i]] = true;
+    }
 
     this.setState({
       toggledCoinMenu: null,
@@ -357,10 +414,18 @@ class CoinTileItem extends React.Component {
             Store.dispatch(getDashboardUpdate(coin, _coin));
           }
         } else {
+          const _coinuc = _coin.coin.toUpperCase();
+          const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';    
+          const _progress = this.props.ActiveCoin.progress;
+      
+          if (_coindStartParamsString &&
+              _coindStartParamsString.indexOf('-regtest') > -1) {
+            Store.dispatch(getDashboardUpdate(coin, _coin));
+          }
           Store.dispatch(
             getSyncInfoNative(
               coin,
-              null,
+               null,
               _dashboard.skipFullDashboardUpdate,
               _coin.rescanInProgress
             )
