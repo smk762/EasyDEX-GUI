@@ -60,7 +60,6 @@ class Login extends React.Component {
       activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       loginPassphrase: '',
       seedInputVisibility: false,
-      loginPassPhraseSeedType: null,
       bitsOption: 256,
       randomSeed: '',
       randomSeedShuffled: '',
@@ -519,7 +518,6 @@ class Login extends React.Component {
       seedExtraSpaces: false,
       trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name]: newValue,
-      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
     });
   }
 
@@ -702,39 +700,12 @@ class Login extends React.Component {
     });
   }
 
-  getLoginPassPhraseSeedType(passPhrase) {
-    if (!passPhrase) {
-      return null;
-    }
-
-    const passPhraseWords = passPhrase.split(' ');
-
-    if (!passphraseGenerator.arePassPhraseWordsValid(passPhrase)) {
-      return null;
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
-      return translate('LOGIN.IGUANA_SEED');
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 160)) {
-      return translate('LOGIN.WAVES_SEED');
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 128)) {
-      return translate('LOGIN.NXT_SEED');
-    }
-
-    return null;
-  }
-
   updateActiveLoginSection(name) {
     const newSeed = passphraseGenerator.generatePassPhrase(256);
     // reset login/create form
     this.setState({
       activeLoginSection: name,
       loginPassphrase: null,
-      loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
       randomSeed: newSeed,
@@ -742,7 +713,6 @@ class Login extends React.Component {
       randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
-      displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
       step: 0,
@@ -762,7 +732,6 @@ class Login extends React.Component {
 
     this.setState({
       activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
-      displaySeedBackupModal: false,
       isSeedConfirmError: false,
     });
   }
