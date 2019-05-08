@@ -437,79 +437,71 @@ class Login extends React.Component {
       }, 100);
     }
 
-    if (props &&
-        props.Main &&
-        (props.Main.isLoggedIn || props.Main.isPin)) {
-      if (props.Main.total === 0) {
-        this.setState({
-          activeLoginSection: 'activateCoin',
-          loginPassphrase: '',
-          display: true,
-        });
-      } else {
-        this.setState({
-          loginPassphrase: '',
-          display: false,
-        });
-      }
-    }
-
-    if (props &&
-        props.Main &&
-        !props.Main.isLoggedIn) {
-      document.body.className = 'page-login layout-full page-dark';
-
-      if (props.Interval &&
-          props.Interval.interval &&
-          props.Interval.interval.sync) {
-        Store.dispatch(dashboardChangeActiveCoin());
-        Store.dispatch(
-          stopInterval(
-            'sync',
-            props.Interval.interval
-          )
-        );
-      }
-
-      if (staticVar.argv.indexOf('hardcore') > -1) {
-        this.setState({
-          display: true,
-          activeLoginSection: 'login',
-        });
-      } else {
-        this.setState({
-          display: true,
-          activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
-        });
-      }
-    }
-
-    if (props.Main &&
-        props.Main.total === 0) {
-      document.body.className = 'page-login layout-full page-dark';
-
-      if (props.Interval &&
-          props.Interval.interval &&
-          props.Interval.interval.sync) {
-        Store.dispatch(dashboardChangeActiveCoin());
-        Store.dispatch(
-          stopInterval(
-            'sync',
-            props.Interval.interval
-          )
-        );
-      }
-    }
-
     if (this.state.activeLoginSection !== 'signup' &&
-        this.state.activeLoginSection !== 'restore' &&
-        props &&
-        props.Main &&
-        (props.Main.isLoggedIn || props.Main.isPin)) {
-      this.setState({
-        loginPassphrase: '',
-        activeLoginSection: 'activateCoin',
-      });
+        this.state.activeLoginSection !== 'restore') {
+      if (props &&
+          props.Main &&
+          (props.Main.isLoggedIn || props.Main.isPin)) {
+        if (props.Main.total === 0) {
+          this.setState({
+            activeLoginSection: 'activateCoin',
+            loginPassphrase: '',
+            display: true,
+          });
+        } else {
+          this.setState({
+            loginPassphrase: '',
+            display: false,
+          });
+        }
+      }
+
+      if (props &&
+          props.Main &&
+          !props.Main.isLoggedIn) {
+        document.body.className = 'page-login layout-full page-dark';
+
+        if (props.Interval &&
+            props.Interval.interval &&
+            props.Interval.interval.sync) {
+          Store.dispatch(dashboardChangeActiveCoin());
+          Store.dispatch(
+            stopInterval(
+              'sync',
+              props.Interval.interval
+            )
+          );
+        }
+
+        if (staticVar.argv.indexOf('hardcore') > -1) {
+          this.setState({
+            display: true,
+            activeLoginSection: 'login',
+          });
+        } else {
+          this.setState({
+            display: true,
+            activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
+          });
+        }
+      }
+
+      if (props.Main &&
+          props.Main.total === 0) {
+        document.body.className = 'page-login layout-full page-dark';
+
+        if (props.Interval &&
+            props.Interval.interval &&
+            props.Interval.interval.sync) {
+          Store.dispatch(dashboardChangeActiveCoin());
+          Store.dispatch(
+            stopInterval(
+              'sync',
+              props.Interval.interval
+            )
+          );
+        }
+      }
     }
   }
 
