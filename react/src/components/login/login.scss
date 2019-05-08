@@ -351,6 +351,19 @@ a.login-nn-elections {
 }
 
 .restore-wallet {
+  .fa-copy {
+    margin-left: 15px;
+  }
+  .fa-external-link {
+    margin-left: 6px;
+    cursor: pointer;
+  }
+  .external-link {
+    margin-left: 4px;
+  }
+  .external-link:hover {
+    text-decoration: underline;
+  }
   .qr-modal-login-block {
     position: inherit;
     top: 0;

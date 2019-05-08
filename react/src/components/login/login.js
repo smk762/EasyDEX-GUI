@@ -23,6 +23,7 @@ import {
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
+  copyString,
   // addcoin logic
   addCoin,
   addCoinEth,
@@ -37,11 +38,17 @@ import md5 from 'agama-wallet-lib/src/crypto/md5';
 import {
   msigPubAddress,
   pubkeyToAddress,
+  isPrivKey,
+  stringToWif,
+  wifToWif,
 } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { shuffleArray } from 'agama-wallet-lib/src/crypto/utils';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import nnConfig from '../nnConfig';
 import zcashParamsCheckErrors from '../../util/zcashParams';
+
+const { shell } = window.require('electron');
 
 const SEED_TRIM_TIMEOUT = 5000;
 const modeToValue = {
@@ -108,6 +115,19 @@ class Login extends React.Component {
     this.clearCreateSeedConfirm = this.clearCreateSeedConfirm.bind(this);
     this.popCreateSeedConfirm = this.popCreateSeedConfirm.bind(this);
     this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
+    this.openExplorerWindow = this.openExplorerWindow.bind(this);
+    this.copyPubAddress = this.copyPubAddress.bind(this);
+  }
+
+  copyPubAddress(coin) {
+    const address = isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks[coin], true).pub : stringToWif(this.state.loginPassphrase || '', networks[coin], true).pub;
+    Store.dispatch(copyString(address, translate('DASHBOARD.ADDR_COPIED')));
+  }
+
+  openExplorerWindow(coin) {
+    const address = isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks[coin], true).pub : stringToWif(this.state.loginPassphrase || '', networks[coin], true).pub;
+    const url = `${explorerList[coin.toUpperCase()]}/address/${address}`;
+    return shell.openExternal(url);
   }
 
   activateAllCoins() {
