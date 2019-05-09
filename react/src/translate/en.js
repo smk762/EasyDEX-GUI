@@ -834,6 +834,11 @@ const LANG_EN = {
     NATIVE_MODE_ONLY_DESC_P4: 'Completely decentralized with the exception for certain 3rd party centralized services (e.g. coin prices).',
     NATIVE_MODE_ONLY_DESC_P5: 'Your private keys are backed up by wallet.dat file (randomly generated one time use keys).',
     NATIVE_MODE_ONLY_DESC_P6: 'Lost wallet.dat = lost funds!',
+    MULTISIG: 'Multi signature',
+    MULTISIG_DESC_P1: 'Multi signature wallet allows using only lite mode coins.',
+    MULTISIG_DESC_P2: 'Your proposal data is encrypted end-to-end. 3rd party server acts as a relay node and keeps track of all proposals.',
+    MULTISIG_DESC_P3: 'Your private keys are backed up by seed words (deterministic keys, reusable).',
+    MULTISIG_DESC_P4: 'Lost seed words = lost funds!',
   },
   SIDEBAR: {
     EDEX_MOTTO: 'Most Secure, Easy and Native Decentralised Exchange',

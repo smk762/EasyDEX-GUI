@@ -380,6 +380,9 @@ const LoginRender = function() {
                     <option value="native">
                       { translate('LOGIN.NATIVE_MODE_ONLY') }
                     </option>
+                    <option value="multisig">
+                      { translate('LOGIN.MULTISIG') }
+                    </option>
                   </select>
                   { this.state.walletType === 'default' &&
                     <div>
@@ -422,6 +425,22 @@ const LoginRender = function() {
                       </h4>
                     </div>
                   }
+                  { this.state.walletType === 'multisig' &&
+                    <div>
+                      <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
+                        { translate('LOGIN.MULTISIG_DESC_P1') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.MULTISIG_DESC_P2') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.MULTISIG_DESC_P3') }
+                      </h4>
+                      <h4 className="hint color-white margin-bottom-20 text-left">
+                        { translate('LOGIN.MULTISIG_DESC_P4') }
+                      </h4>
+                    </div>
+                  }
                   <button
                     type="button"
                     className="btn btn-primary btn-block"
@@ -431,6 +450,7 @@ const LoginRender = function() {
                 </section>
               }
               { this.state.step === 1 &&
+                this.state.walletType !== 'multisig' &&
                 <section>
                   <h4 className="hint color-white padding-top-10 margin-bottom-20 text-left">
                     { translate('LOGIN.THIS_IS_YOUR_NEW_SEED_P1') }
@@ -456,6 +476,7 @@ const LoginRender = function() {
                 </section>
               }
               { this.state.step === 2 &&
+                this.state.walletType !== 'multisig' &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     { translate('LOGIN.CONFIRM_YOUR_SEED_BY_PLACING_WORDS') }
@@ -497,6 +518,7 @@ const LoginRender = function() {
                 </section>
               }
               { this.state.step === 3 &&
+                this.state.walletType !== 'multisig' &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     { translate('LOGIN.ENTER_WALLET_NAME_AND_PW') }
@@ -559,6 +581,168 @@ const LoginRender = function() {
                     }>
                     { translate('LOGIN.NEXT') }
                   </button>
+                </section>
+              }
+              { this.state.step === 0 && // multisig
+                this.state.walletType === 'multisig' &&
+                <section className="restore-wallet">
+                  <h4 className="hint color-white margin-bottom-60">
+                    { translate('LOGIN.PROVIDE_YOUR_PRIV_OR_SEED') }
+                  </h4>
+                  <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-20">
+                    <input
+                      type="password"
+                      name="loginPassphrase"
+                      ref="loginPassphrase"
+                      className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
+                      onChange={ this.updateLoginPassPhraseInput }
+                      onKeyDown={ (event) => this.handleKeydown(event) }
+                      autoComplete="off"
+                      value={ this.state.loginPassphrase || '' } />
+                    <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                      { this.state.loginPassphrase || '' }
+                    </div>
+                    <i
+                      className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
+                      onClick={ this.toggleSeedInputVisibility }></i>
+                    <label
+                      className="floating-label"
+                      htmlFor="inputPassword">
+                      { translate('INDEX.WALLET_SEED') }
+                    </label>
+                    <div className="qr-modal-login-block margin-top-30">
+                      <QRModal
+                        mode="scan"
+                        setRecieverFromScan={ this.setRecieverFromScan } />
+                    </div>
+                  </div>
+                  { this.state.seedExtraSpaces &&
+                    <i className="icon fa-warning seed-extra-spaces-warning"
+                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
+                      data-html={ true }
+                      data-for="login1"></i>
+                  }
+                  <ReactTooltip
+                    id="login1"
+                    effect="solid"
+                    className="text-left" />
+                  <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block margin-top-30"
+                      onClick={ this.nextStep }
+                      disabled={ !this.state.loginPassphrase }>
+                      { translate('LOGIN.NEXT') }
+                    </button>
+                    <div className="form-group form-material floating">
+                      <button
+                        className="btn btn-lg btn-flat btn-block waves-effect"
+                        id="register-back-btn"
+                        onClick={ () => this.updateActiveLoginSection('login') }>
+                        { translate('INDEX.BACK_TO_LOGIN') }
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              }
+              { this.state.step === 1 &&
+                this.state.walletType === 'multisig' &&
+                <section className="restore-wallet">
+                  <h4 className="hint color-white margin-bottom-20">
+                    { translate('LOGIN.RESTORE_VERIFY_INFO') }
+                  </h4>
+                  <div className="form-group form-material create-wallet-seed margin-top-40">
+                    <p className="text-center padding-bottom-10">{ translate('LOGIN.' + (isPrivKey(this.state.loginPassphrase) ? 'YOU_PROVIDED_PRIV_KEY' : 'YOU_PROVIDED_SEED')) }</p>
+                    <p>
+                      { translate('LOGIN.YOUR_PUB_IS', 'KMD') }
+                      <span
+                        className="pointer external-link"
+                        onClick={ () => this.openExplorerWindow('kmd') }>
+                        { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.kmd, true).pub : stringToWif(this.state.loginPassphrase || '', networks.kmd, true).pub }
+                      </span>
+                      <i
+                        className="icon fa-copy"
+                        onClick={ () => this.copyPubAddress('kmd') }></i>
+                    </p>
+                    <p>
+                      { translate('LOGIN.YOUR_PUB_IS', 'BTC') }
+                      <span
+                        className="pointer external-link"
+                        onClick={ () => this.openExplorerWindow('btc') }>
+                        { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.btc, true).pub : stringToWif(this.state.loginPassphrase || '', networks.btc, true).pub }
+                      </span>
+                      <i
+                        className="icon fa-copy"
+                        onClick={ () => this.copyPubAddress('btc') }></i>
+                    </p>
+                  </div>
+                  <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block margin-top-30"
+                      onClick={ this.nextStep }>
+                      { translate('LOGIN.CONFIRM') }
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-lg btn-flat btn-block waves-effect btn-back"
+                      onClick={ this.prevStep }>
+                      { translate('LOGIN.START_OVER') }
+                    </button>
+                    <div className="form-group form-material floating">
+                      <button
+                        className="btn btn-lg btn-flat btn-block waves-effect"
+                        id="register-back-btn"
+                        onClick={ () => this.updateActiveLoginSection('login') }>
+                        { translate('INDEX.BACK_TO_LOGIN') }
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              }
+              { this.state.step === 2 && // multisig
+                this.state.walletType === 'multisig' &&
+                <section className="restore-wallet">
+                  <h4 className="hint color-white margin-bottom-40">
+                    Choose number of required signatures and provide all pub keys below.
+                  </h4>
+                  <div className="form-group form-material floating col-sm-12 horizontal-padding-0 sigs-selector">
+                    <select
+                      name="nOfN"
+                      className="col-sm-3"
+                      value={ this.state.multisigCreateNofN }
+                      onChange={ this.updateMultisigCreateNofN }>
+                      <option value="1-2">1 of 2</option>
+                      <option value="2-2">2 of 2</option>
+                      <option value="2-3">2 of 3</option>
+                      <option value="3-5">3 of 5</option>
+                    </select>
+                    <label
+                      className="floating-label"
+                      htmlFor="inputPassword">
+                      { translate('TOOLS.NUM_OF_SIGS') }
+                    </label>
+                  </div>
+                  <div className="form-group form-material floating col-sm-12 horizontal-padding-0 pubkeys">
+                    { this.renderPubKeysForm() }
+                  </div>
+                  <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block margin-top-30"
+                      onClick={ this.nextStep }
+                      disabled={ !this.state.loginPassphrase }>
+                      { translate('LOGIN.NEXT') }
+                    </button>
+                    <div className="form-group form-material floating">
+                      <button
+                        className="btn btn-lg btn-flat btn-block waves-effect"
+                        id="register-back-btn"
+                        onClick={ () => this.updateActiveLoginSection('login') }>
+                        { translate('INDEX.BACK_TO_LOGIN') }
+                      </button>
+                    </div>
+                  </div>
                 </section>
               }
               <div className="form-group form-material floating">

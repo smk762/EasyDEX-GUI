@@ -304,6 +304,29 @@ a.login-nn-elections {
 }
 
 .register-form {
+  .sigs-selector {
+    text-align: left;
+
+    select {
+      margin-top: 30px;
+      width: 100px;
+      color: #000;
+    }
+  }
+  .pubkeys {
+    margin-top: 48px;
+
+    .form-group {
+      margin-bottom: 50px;
+
+      &:last-child {
+        margin-bottom: 20px;
+      }
+    }
+    .form-material .floating-label {
+      left: 0 !important;
+    }
+  }
   .create-wallet-seed {
     text-align: left;
     padding: 20px;
