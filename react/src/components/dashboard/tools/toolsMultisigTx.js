@@ -138,14 +138,6 @@ class ToolsMultisigTx extends React.Component {
 
   componentWillMount() {
     this.setState(this.defaultState);
-
-    setTimeout(() => {
-      if (mainWindow.multisig) {
-        this.setState({
-          agamaMultisigData: JSON.stringify(mainWindow.multisig),
-        });
-      }
-    }, 100);
   }
 
   copyTxData() {
@@ -608,10 +600,6 @@ class ToolsMultisigTx extends React.Component {
             value={ this.state.seed }
             id="kmdWalletSendTo"
             placeholder={ `${translate('TOOLS.ENTER_A_SEED')} ${translate('TOOLS.OR_WIF')}` }
-            disabled={
-              mainWindow.multisig &&
-              mainWindow.multisig.signKey
-            }
             autoComplete="off"
             required />
         </div>

@@ -20,13 +20,10 @@ const WalletsNavWithWalletRender = function() {
             <strong>{ translate('INDEX.MY') } { this.props && this.props.ActiveCoin ? _coin : '-' } { translate('INDEX.ADDRESS') }: </strong>
             <span className="blur selectable">
               {
-                (mainWindow.multisig &&
-                mainWindow.multisig.addresses &&
-                mainWindow.multisig.addresses[_coin.toUpperCase()]) || 
-                (this.props &&
+                this.props &&
                 this.props.Dashboard &&
                 _electrumCoin &&
-                _electrumCoin.pub ? _electrumCoin.pub : '-')
+                _electrumCoin.pub ? _electrumCoin.pub : '-'
               }
             </span>
             <button
