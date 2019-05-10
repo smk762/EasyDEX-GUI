@@ -23,6 +23,7 @@ import {
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
+  copyString,
   // addcoin logic
   addCoin,
   addCoinEth,
@@ -37,11 +38,17 @@ import md5 from 'agama-wallet-lib/src/crypto/md5';
 import {
   msigPubAddress,
   pubkeyToAddress,
+  isPrivKey,
+  stringToWif,
+  wifToWif,
 } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { shuffleArray } from 'agama-wallet-lib/src/crypto/utils';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 import nnConfig from '../nnConfig';
 import zcashParamsCheckErrors from '../../util/zcashParams';
+
+const { shell } = window.require('electron');
 
 const SEED_TRIM_TIMEOUT = 5000;
 const modeToValue = {
@@ -60,7 +67,6 @@ class Login extends React.Component {
       activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       loginPassphrase: '',
       seedInputVisibility: false,
-      loginPassPhraseSeedType: null,
       bitsOption: 256,
       randomSeed: '',
       randomSeedShuffled: '',
@@ -109,6 +115,19 @@ class Login extends React.Component {
     this.clearCreateSeedConfirm = this.clearCreateSeedConfirm.bind(this);
     this.popCreateSeedConfirm = this.popCreateSeedConfirm.bind(this);
     this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
+    this.openExplorerWindow = this.openExplorerWindow.bind(this);
+    this.copyPubAddress = this.copyPubAddress.bind(this);
+  }
+
+  copyPubAddress(coin) {
+    const address = isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks[coin], true).pub : stringToWif(this.state.loginPassphrase || '', networks[coin], true).pub;
+    Store.dispatch(copyString(address, translate('DASHBOARD.ADDR_COPIED')));
+  }
+
+  openExplorerWindow(coin) {
+    const address = isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks[coin], true).pub : stringToWif(this.state.loginPassphrase || '', networks[coin], true).pub;
+    const url = `${explorerList[coin.toUpperCase()]}/address/${address}`;
+    return shell.openExternal(url);
   }
 
   activateAllCoins() {
@@ -418,79 +437,71 @@ class Login extends React.Component {
       }, 100);
     }
 
-    if (props &&
-        props.Main &&
-        (props.Main.isLoggedIn || props.Main.isPin)) {
-      if (props.Main.total === 0) {
-        this.setState({
-          activeLoginSection: 'activateCoin',
-          loginPassphrase: '',
-          display: true,
-        });
-      } else {
-        this.setState({
-          loginPassphrase: '',
-          display: false,
-        });
-      }
-    }
-
-    if (props &&
-        props.Main &&
-        !props.Main.isLoggedIn) {
-      document.body.className = 'page-login layout-full page-dark';
-
-      if (props.Interval &&
-          props.Interval.interval &&
-          props.Interval.interval.sync) {
-        Store.dispatch(dashboardChangeActiveCoin());
-        Store.dispatch(
-          stopInterval(
-            'sync',
-            props.Interval.interval
-          )
-        );
-      }
-
-      if (staticVar.argv.indexOf('hardcore') > -1) {
-        this.setState({
-          display: true,
-          activeLoginSection: 'login',
-        });
-      } else {
-        this.setState({
-          display: true,
-          activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
-        });
-      }
-    }
-
-    if (props.Main &&
-        props.Main.total === 0) {
-      document.body.className = 'page-login layout-full page-dark';
-
-      if (props.Interval &&
-          props.Interval.interval &&
-          props.Interval.interval.sync) {
-        Store.dispatch(dashboardChangeActiveCoin());
-        Store.dispatch(
-          stopInterval(
-            'sync',
-            props.Interval.interval
-          )
-        );
-      }
-    }
-
     if (this.state.activeLoginSection !== 'signup' &&
-        this.state.activeLoginSection !== 'restore' &&
-        props &&
-        props.Main &&
-        (props.Main.isLoggedIn || props.Main.isPin)) {
-      this.setState({
-        loginPassphrase: '',
-        activeLoginSection: 'activateCoin',
-      });
+        this.state.activeLoginSection !== 'restore') {
+      if (props &&
+          props.Main &&
+          (props.Main.isLoggedIn || props.Main.isPin)) {
+        if (props.Main.total === 0) {
+          this.setState({
+            activeLoginSection: 'activateCoin',
+            loginPassphrase: '',
+            display: true,
+          });
+        } else {
+          this.setState({
+            loginPassphrase: '',
+            display: false,
+          });
+        }
+      }
+
+      if (props &&
+          props.Main &&
+          !props.Main.isLoggedIn) {
+        document.body.className = 'page-login layout-full page-dark';
+
+        if (props.Interval &&
+            props.Interval.interval &&
+            props.Interval.interval.sync) {
+          Store.dispatch(dashboardChangeActiveCoin());
+          Store.dispatch(
+            stopInterval(
+              'sync',
+              props.Interval.interval
+            )
+          );
+        }
+
+        if (staticVar.argv.indexOf('hardcore') > -1) {
+          this.setState({
+            display: true,
+            activeLoginSection: 'login',
+          });
+        } else {
+          this.setState({
+            display: true,
+            activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
+          });
+        }
+      }
+
+      if (props.Main &&
+          props.Main.total === 0) {
+        document.body.className = 'page-login layout-full page-dark';
+
+        if (props.Interval &&
+            props.Interval.interval &&
+            props.Interval.interval.sync) {
+          Store.dispatch(dashboardChangeActiveCoin());
+          Store.dispatch(
+            stopInterval(
+              'sync',
+              props.Interval.interval
+            )
+          );
+        }
+      }
     }
   }
 
@@ -519,7 +530,6 @@ class Login extends React.Component {
       seedExtraSpaces: false,
       trimPassphraseTimer: _trimPassphraseTimer,
       [e.target.name]: newValue,
-      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
     });
   }
 
@@ -702,39 +712,12 @@ class Login extends React.Component {
     });
   }
 
-  getLoginPassPhraseSeedType(passPhrase) {
-    if (!passPhrase) {
-      return null;
-    }
-
-    const passPhraseWords = passPhrase.split(' ');
-
-    if (!passphraseGenerator.arePassPhraseWordsValid(passPhrase)) {
-      return null;
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
-      return translate('LOGIN.IGUANA_SEED');
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 160)) {
-      return translate('LOGIN.WAVES_SEED');
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 128)) {
-      return translate('LOGIN.NXT_SEED');
-    }
-
-    return null;
-  }
-
   updateActiveLoginSection(name) {
     const newSeed = passphraseGenerator.generatePassPhrase(256);
     // reset login/create form
     this.setState({
       activeLoginSection: name,
       loginPassphrase: null,
-      loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
       randomSeed: newSeed,
@@ -742,7 +725,6 @@ class Login extends React.Component {
       randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
-      displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
       step: 0,
@@ -762,7 +744,6 @@ class Login extends React.Component {
 
     this.setState({
       activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
-      displaySeedBackupModal: false,
       isSeedConfirmError: false,
     });
   }

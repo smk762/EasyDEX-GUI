@@ -232,7 +232,7 @@ class AppSettingsPanel extends React.Component {
       if (_configSchema[key] &&
           typeof _appConfig[key] === 'object') {
         if ((_configSchema[key].display && _configSchema[key].type !== 'select') ||
-            (_configSchema[key].display && _configSchema[key].type === 'select' && Config.experuserAgreementimentalFeatures)) {
+            (_configSchema[key].display && _configSchema[key].type === 'select' && Config.userAgreement)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">

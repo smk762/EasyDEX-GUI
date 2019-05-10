@@ -218,13 +218,6 @@ const LoginRender = function() {
                       setRecieverFromScan={ this.setRecieverFromScan } />
                   </div>
                 </div>
-                { this.state.loginPassPhraseSeedType &&
-                  <div
-                    className={ 'form-group form-material floating horizontal-padding-0 seed-type-block ' + (this.props.Login.pinList.length > 0 ? 'margin-top-130' : 'margin-top-20') }
-                    style={{ width: `${this.state.loginPassPhraseSeedType.length * 8}px` }}>
-                    <div className="placeholder-label">{ this.state.loginPassPhraseSeedType }</div>
-                  </div>
-                }
                 { this.state.seedExtraSpaces &&
                   <i className="icon fa-warning seed-extra-spaces-warning"
                     data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
@@ -648,8 +641,28 @@ const LoginRender = function() {
                 </h4>
                 <div className="form-group form-material create-wallet-seed margin-top-40">
                   <p className="text-center padding-bottom-10">{ translate('LOGIN.' + (isPrivKey(this.state.loginPassphrase) ? 'YOU_PROVIDED_PRIV_KEY' : 'YOU_PROVIDED_SEED')) }</p>
-                  <p>{ translate('LOGIN.YOUR_PUB_IS', 'KMD') } { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.kmd, true).pub : stringToWif(this.state.loginPassphrase || '', networks.kmd, true).pub }</p>
-                  <p>{ translate('LOGIN.YOUR_PUB_IS', 'BTC') } { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.btc, true).pub : stringToWif(this.state.loginPassphrase || '', networks.btc, true).pub }</p>
+                  <p>
+                    { translate('LOGIN.YOUR_PUB_IS', 'KMD') }
+                    <span
+                      className="pointer external-link"
+                      onClick={ () => this.openExplorerWindow('kmd') }>
+                      { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.kmd, true).pub : stringToWif(this.state.loginPassphrase || '', networks.kmd, true).pub }
+                    </span>
+                    <i
+                      className="icon fa-copy"
+                      onClick={ () => this.copyPubAddress('kmd') }></i>
+                  </p>
+                  <p>
+                    { translate('LOGIN.YOUR_PUB_IS', 'BTC') }
+                    <span
+                      className="pointer external-link"
+                      onClick={ () => this.openExplorerWindow('btc') }>
+                      { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.btc, true).pub : stringToWif(this.state.loginPassphrase || '', networks.btc, true).pub }
+                    </span>
+                    <i
+                      className="icon fa-copy"
+                      onClick={ () => this.copyPubAddress('btc') }></i>
+                  </p>
                 </div>
                 <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
                   <button
