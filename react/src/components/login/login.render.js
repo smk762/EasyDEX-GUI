@@ -782,6 +782,15 @@ const LoginRender = function() {
                         onClick={ this.copyMultisigBackup }>
                         <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
                       </button>
+                      <a
+                        id="multisig-backup-link"
+                        onClick={ this.dumpMultisigBackup }>
+                        <button
+                          className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                          title="Download as a file">
+                          <i className="icon fa-download"></i>
+                        </button>
+                      </a>
                       <div className="padding-top-10 word-break--all selectable">
                         { this.state.multisigCreateData.backupHex }
                       </div>

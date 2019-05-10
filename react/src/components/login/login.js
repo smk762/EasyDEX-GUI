@@ -126,8 +126,16 @@ class Login extends React.Component {
     this.updateMultisigCreateNofN = this.updateMultisigCreateNofN.bind(this);
     this.multisigCreateValidatePubkeys = this.multisigCreateValidatePubkeys.bind(this);
     this.copyMultisigBackup = this.copyMultisigBackup.bind(this);
+    this.dumpMultisigBackup = this.dumpMultisigBackup.bind(this);
     //
     this.multisigTest = this.multisigTest.bind(this);
+  }
+
+  dumpMultisigBackup() {
+    const a = document.getElementById('multisig-backup-link');
+    
+    a.download = 'multi-signature-wallet-backup.txt';
+    a.href = 'data:text/plain;charset=UTF-8,' + this.state.multisigCreateData.backupHex;
   }
 
   copyMultisigBackup() {
