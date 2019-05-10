@@ -416,22 +416,24 @@ export const WalletsDataRender = function() {
                         className="icon fa-refresh manual-txhistory-refresh pointer"
                         onClick={ this.refreshTxHistory }></i>
                     }
-                    <h4 className="panel-title">{ !this.state.kvView ? translate('INDEX.TRANSACTION_HISTORY') : translate('KV.KV_HISTORY') }</h4>
-                    { this.props.ActiveCoin.mode === 'spv' &&
-                      Config.userAgreement &&
-                      kvCoins[this.props.ActiveCoin.coin] &&
-                      this.state.itemsList !== 'loading' &&
-                      this.state.itemsList !== 'response too large' &&
-                      this.state.itemsList !== 'connection error' &&
-                      this.state.itemsList !== 'connection error or incomplete data' &&
-                      this.state.itemsList !== 'cant get current height' &&
-                      <button
-                        type="button"
-                        className="btn btn-default btn-switch-kv"
-                        onClick={ this.toggleKvView }>
-                        { translate('KV.' + (!this.state.kvView ? 'KV_VIEW' : 'TX_VIEW')) }
-                      </button>
-                    }
+                    <h4 className="panel-title">
+                      { !this.state.kvView ? translate('INDEX.TRANSACTION_HISTORY') : translate('KV.KV_HISTORY') }
+                      { this.props.ActiveCoin.mode === 'spv' &&
+                        Config.userAgreement &&
+                        kvCoins[this.props.ActiveCoin.coin] &&
+                        this.state.itemsList !== 'loading' &&
+                        this.state.itemsList !== 'response too large' &&
+                        this.state.itemsList !== 'connection error' &&
+                        this.state.itemsList !== 'connection error or incomplete data' &&
+                        this.state.itemsList !== 'cant get current height' &&
+                        <button
+                          type="button"
+                          className="btn btn-default btn-switch-kv"
+                          onClick={ this.toggleKvView }>
+                          { translate('KV.' + (!this.state.kvView ? 'KV_VIEW' : 'TX_VIEW')) }
+                        </button>
+                      }
+                    </h4>
                     { _coindStartParamsString &&
                       _coindStartParamsString.indexOf('-regtest') > -1 &&
                       <button
