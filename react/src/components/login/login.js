@@ -36,11 +36,11 @@ import mainWindow, { staticVar } from '../../util/mainWindow';
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
 import md5 from 'agama-wallet-lib/src/crypto/md5';
 import {
-  msigPubAddress,
   pubkeyToAddress,
   isPrivKey,
   stringToWif,
   wifToWif,
+  multisig,
 } from 'agama-wallet-lib/src/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 import { shuffleArray } from 'agama-wallet-lib/src/crypto/utils';
@@ -97,6 +97,7 @@ class Login extends React.Component {
       multisigCreateNofN: '1-2',
       multisigCreatePubkeys: [],
       multisigCreateSecret: mainWindow.sha256(mainWindow.randomBytes()).toString('hex'),
+      multisigCreateData: {},
     };
     this.coins = {};
     this.defaultState = JSON.parse(JSON.stringify(this.state));
@@ -121,8 +122,42 @@ class Login extends React.Component {
     this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
     this.openExplorerWindow = this.openExplorerWindow.bind(this);
     this.copyPubAddress = this.copyPubAddress.bind(this);
-    //this.updateMultisigCreatePubkeys = this.updateMultisigCreatePubkeys.bind(this);
+    this.updateMultisigCreatePubkeys = this.updateMultisigCreatePubkeys.bind(this);
     this.updateMultisigCreateNofN = this.updateMultisigCreateNofN.bind(this);
+    this.multisigCreateValidatePubkeys = this.multisigCreateValidatePubkeys.bind(this);
+    this.copyMultisigBackup = this.copyMultisigBackup.bind(this);
+    //
+    this.multisigTest = this.multisigTest.bind(this);
+  }
+
+  copyMultisigBackup() {
+    Store.dispatch(copyString(this.state.multisigCreateData.backupHex, 'Multi signature backup is copied'));
+  }
+
+  multisigCreateValidatePubkeys() {
+    const nOfN = this.state.multisigCreateNofN.split('-')[1];
+    let items = [];
+    let isValid = true;
+
+    for (let i = 0; i < nOfN; i++) {
+      if (!this.state.multisigCreatePubkeys[i] ||
+          (this.state.multisigCreatePubkeys[i] && this.state.multisigCreatePubkeys[i].length !== 66)) {
+        isValid = false;
+      }
+    }
+
+    return isValid;
+  }
+
+  multisigTest() {
+    this.setState({
+      multisigCreateSeed: '123',
+      multisigCreateNofN: '1-2',
+      multisigCreatePubkeys: [
+        '02af2030e333ec4cbb88024b066064c81564c712e656bf615571c7a59d57c3abae',
+        '0215924cf28630a26f534514a77dcf00dcc5d7ffee1fd3dd543fe63693d408fe73',
+      ],
+    });
   }
 
   updateMultisigCreateNofN(e) {
@@ -144,10 +179,13 @@ class Login extends React.Component {
     }, 100);
   }
   
-  updateMultisigCreate(pubkey) {
-    const multisigCreatePubkeys = JSON.parse(JSON.stringify(multisigCreatePubkeys));
+  updateMultisigCreatePubkeys(e, i) {
+    let multisigCreatePubkeys = JSON.parse(JSON.stringify(this.state.multisigCreatePubkeys));
+    multisigCreatePubkeys[i] = e.target.value;
 
-    multisigCreatePubkeys[pubkey] = true;
+    this.setState({
+      multisigCreatePubkeys,
+    });
   }
 
   copyPubAddress(coin) {
@@ -759,6 +797,8 @@ class Login extends React.Component {
       isSeedBlank: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
+      walletType: 'multisig',
+      step: 0,
     });
   }
 
@@ -810,9 +850,34 @@ class Login extends React.Component {
         step: 3,
       });
     } else {
-      this.setState({
-        step: this.state.step + 1,
-      });
+      if (this.state.walletType === 'multisig' &&
+          this.state.step === 2) {
+        let multisigData = multisig.generate(
+          Number(this.state.multisigCreateNofN.split('-')[0]),
+          this.state.multisigCreatePubkeys,
+          networks.kmd
+        );
+        multisigData.decoded = multisig.decodeRedeemScript(multisigData.redeemScript, { toHex: true });
+        multisigData.backup = JSON.stringify({
+          redeemScript: multisigData.redeemScript,
+          secretKey: this.state.multisigCreateSecret,
+        });
+
+        let buf = Buffer.alloc(multisigData.backup.length);
+        buf.write(multisigData.backup);
+        multisigData.backupHex = buf.toString('hex');
+
+        console.warn('multisigData', multisigData);
+
+        this.setState({
+          step: this.state.step + 1,
+          multisigCreateData: multisigData,
+        });
+      } else {
+        this.setState({
+          step: this.state.step + 1,
+        });
+      }
     }
   }
 
@@ -1135,7 +1200,9 @@ class Login extends React.Component {
 
     for (let i = 0; i < nOfN; i++) {
       items.push(
-        <div className="form-group form-material floating col-sm-12 horizontal-padding-0">
+        <div
+          key={ `multisig-pubkeys-${i}` } 
+          className="form-group form-material floating col-sm-12 horizontal-padding-0">
           <input
             type="text"
             name={ `loginPassphrase` }
@@ -1149,6 +1216,23 @@ class Login extends React.Component {
             htmlFor="inputPassword">
             Pubkey { nOfN > 1 ? i + 1 : '' }
           </label>
+        </div>
+      );
+    }
+
+    return items;
+  }
+
+  renderPubkeysList() {
+    const nOfN = this.state.multisigCreateNofN.split('-')[1];
+    let items = [];
+    
+    for (let i = 0; i < nOfN; i++) {
+      items.push(
+        <div
+          key={ `multisig-pubkeys-${i}-step3` } 
+          className="pubkeys-list-item selectable">
+          [{ i + 1 }] { this.state.multisigCreatePubkeys[i] }
         </div>
       );
     }

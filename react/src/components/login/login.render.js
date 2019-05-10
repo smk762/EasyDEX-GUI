@@ -12,6 +12,7 @@ import {
   isPrivKey,
   stringToWif,
   wifToWif,
+  multisig,
 } from 'agama-wallet-lib/build/keys';
 import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
@@ -583,7 +584,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.step === 0 && // multisig
+              { this.state.step === 1 && // multisig
                 this.state.walletType === 'multisig' &&
                 <section className="restore-wallet">
                   <h4 className="hint color-white margin-bottom-60">
@@ -645,7 +646,7 @@ const LoginRender = function() {
                   </div>
                 </section>
               }
-              { this.state.step === 1 &&
+              { this.state.step === 2 &&
                 this.state.walletType === 'multisig' &&
                 <section className="restore-wallet">
                   <h4 className="hint color-white margin-bottom-20">
@@ -700,12 +701,14 @@ const LoginRender = function() {
                   </div>
                 </section>
               }
-              { this.state.step === 2 && // multisig
+              { this.state.step === 3 && // multisig
                 this.state.walletType === 'multisig' &&
                 <section className="restore-wallet">
                   <h4 className="hint color-white margin-bottom-40">
                     Choose number of required signatures and provide all pub keys below.
                   </h4>
+                  <h4 className="hint color-white margin-bottom-40">Warning! Pubkeys order matters. Different order will produce different multi signature address.</h4>
+                  <button onClick={ this.multisigTest }>test</button>
                   <div className="form-group form-material floating col-sm-12 horizontal-padding-0 sigs-selector">
                     <select
                       name="nOfN"
@@ -731,7 +734,7 @@ const LoginRender = function() {
                       type="button"
                       className="btn btn-primary btn-block margin-top-30"
                       onClick={ this.nextStep }
-                      disabled={ !this.state.loginPassphrase }>
+                      disabled={ !this.multisigCreateValidatePubkeys() }>
                       { translate('LOGIN.NEXT') }
                     </button>
                     <div className="form-group form-material floating">
@@ -745,14 +748,67 @@ const LoginRender = function() {
                   </div>
                 </section>
               }
-              <div className="form-group form-material floating">
-                <button
-                  className="btn btn-lg btn-flat btn-block waves-effect"
-                  id="register-back-btn"
-                  onClick={ () => this.updateActiveLoginSection('login') }>
-                  { translate('INDEX.BACK_TO_LOGIN') }
-                </button>
-              </div>
+              { this.state.step === 4 && // multisig
+                this.state.walletType === 'multisig' &&
+                <section className="restore-wallet">
+                  <h4 className="hint color-white margin-bottom-40">
+                    Please verify information below and share between co-signers.
+                  </h4>
+                  <div className="form-group form-material floating col-sm-12 horizontal-padding-0 sigs-selector">
+                    <div>
+                      <strong>Numer of required signatures: { this.state.multisigCreateNofN.replace('-', ' of ') }</strong>
+                    </div>
+                    <div className="padding-top-25">
+                      <strong>Pubkeys list</strong>
+                      <div>
+                        { this.renderPubkeysList() } 
+                      </div>
+                    </div>
+                    <div className="padding-top-30">
+                      <strong>Redeem Script</strong>
+                      <div className="padding-top-5 word-break--all selectable">{ this.state.multisigCreateData.redeemScript }</div>
+                    </div>
+                    <div className="padding-top-30">
+                      <strong>KMD address:</strong> <span className="selectable">{ this.state.multisigCreateData.address }</span>
+                    </div>
+                    <div className="padding-top-30">
+                      <strong>Secret key (3rd party service):</strong> <span className="selectable">{ this.state.multisigCreateSecret }</span>
+                    </div>
+                    <div className="padding-top-30">
+                    <strong> Backup (share between co-signers)</strong>
+                      <button
+                        className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                        title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                        onClick={ this.copyMultisigBackup }>
+                        <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                      </button>
+                      <div className="padding-top-10 word-break--all selectable">
+                        { this.state.multisigCreateData.backupHex }
+                      </div>
+                    </div>
+                    <div className="padding-top-30">
+                      <strong>Make sure to pass backup information to all co-signers! Otherwise they won't be able to join multi signature wallet.</strong>
+                    </div>
+                  </div>
+                  <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block margin-top-30"
+                      onClick={ this.nextStep }
+                      disabled={ !this.multisigCreateValidatePubkeys() }>
+                      { translate('LOGIN.NEXT') }
+                    </button>
+                    <div className="form-group form-material floating">
+                      <button
+                        className="btn btn-lg btn-flat btn-block waves-effect"
+                        id="register-back-btn"
+                        onClick={ () => this.updateActiveLoginSection('login') }>
+                        { translate('INDEX.BACK_TO_LOGIN') }
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              }
             </div>
           </div>
 
