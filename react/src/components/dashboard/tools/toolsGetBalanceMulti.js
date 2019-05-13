@@ -180,20 +180,26 @@ class ToolsGetBalanceMulti extends React.Component {
           </tfoot>
         </table>
       );
+    } else {
+      if (_balances) {
+        return (
+          <div className="padding-bottom-20">{ translate('TOOLS.ALL_BALANCES_ARE_EMPTY') }</div>
+        );
+      }
     }
   }
 
   getOptions() {
     let _items = [{
       label: 'Komodo (KMD)',
-      icon: 'KMD',
+      icon: 'btc/KMD',
       value: 'KMD',
     }];
 
     for (let key in kmdexplorer) {
       _items.push({
         label: `${translate('ASSETCHAINS.' + key)} (${key})`,
-        icon: key,
+        icon: `btc/${key}`,
         value: key,
       });
     }
@@ -205,7 +211,7 @@ class ToolsGetBalanceMulti extends React.Component {
     return (
       <div className="row margin-left-10">
         <div className="col-xlg-12 form-group form-material no-padding-left padding-bottom-10">
-          <h4>{ translate('TOOLS.GET_BALANCE') } multi</h4>
+          <h4>{ translate('TOOLS.GET_BALANCE') } { translate('TOOLS.MULTI') }</h4>
           { this.state.balanceCoin === 'KMD' &&
             <div className="margin-top-20">{ translate('TOOLS.GET_BALANCE_MULTI_KMD') }</div>
           }

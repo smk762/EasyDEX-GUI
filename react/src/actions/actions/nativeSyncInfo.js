@@ -5,6 +5,7 @@ import {
 import {
   triggerToaster,
   getDebugLog,
+  getDashboardUpdate,
 } from '../actionCreators';
 import Config, {
   token,
@@ -14,6 +15,7 @@ import Config, {
 import translate from '../../translate/translate';
 import mainWindow from '../../util/mainWindow';
 import fetchType from '../../util/fetchType';
+import Store from '../../store';
 
 export const nativeGetinfoFailureState = () => {
   return {
@@ -333,4 +335,79 @@ export const getDebugLogProgress = (_json, coin) => {
       }
     });
   }
+}
+
+export const regtestGenBlock = (coin) => {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'generate',
+      rpc2cli,
+      token,
+      params: [1],
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.regtestGenBlock') + ' (code: regtestGenBlock)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+      Store.dispatch(
+        triggerToaster(
+          translate('INDEX.REGTEST_GEN_BLOCK_SUCCESS'),
+          translate('TOASTR.WALLET_NOTIFICATION'),
+          'success'
+        )
+      );
+      Store.dispatch(getDashboardUpdate(coin));
+    });
+  });
+}
+
+export const getSyncInfoNativePromise = (coin) => {
+  return new Promise((resolve, reject) => {
+    const payload = {
+      mode: null,
+      chain: coin,
+      cmd: 'getinfo',
+      rpc2cli,
+      token,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/cli`,
+      fetchType(JSON.stringify({ payload })).post
+    )
+    .catch((error) => {
+      console.log(error);
+      resolve();
+    })
+    .then((response) => {
+      const _response = response.text().then((text) => { return text; });
+      return _response;
+    })
+    .then(json => {
+      if (json) {
+        try {
+          json = JSON.parse(json);
+          resolve(json);
+        } catch (e) {
+          resolve();
+        }
+      }
+    });
+  });
 }

@@ -9,7 +9,7 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 
 const SEED_TRIM_TIMEOUT = 5000;
@@ -18,20 +18,13 @@ class SeedEncryptPanel extends React.Component {
   constructor() {
     super();
     this.state = {
-      seedInputVisibility: false,
-      trimPassphraseTimer: null,
-      seedExtraSpaces: false,
-      wifkeysPassphrase: '',
       encryptKey: '',
       encryptKeyConfirm: '',
-      createNewPin: false,
       action: null,
       actionRenameFname: '',
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.encryptSeed = this.encryptSeed.bind(this);
-    this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
-    this.toggleCreateNewPin = this.toggleCreateNewPin.bind(this);
     this.triggerAction = this.triggerAction.bind(this);
     this.cancelAction = this.cancelAction.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -191,28 +184,10 @@ class SeedEncryptPanel extends React.Component {
     }
   }
 
-  toggleCreateNewPin() {
-    this.setState({
-      createNewPin: !this.state.createNewPin,
-      seedInputVisibility: false,
-      trimPassphraseTimer: null,
-      seedExtraSpaces: false,
-      wifkeysPassphrase: '',
-      encryptKey: '',
-      encryptKeyConfirm: '',
-    });
-  }
-
   componentWillReceiveProps(props) {
     if (props.Dashboard &&
         props.Dashboard.activeSection !== 'settings') {
       this.setState(this.defaultState);
-
-      // reset input vals
-      this.refs.wifkeysPassphrase.value = '';
-      this.refs.wifkeysPassphraseTextarea.value = '';
-      this.refs.encryptKey.value = '';
-      this.refs.encryptKeyConfirm.value = '';
     }
   }
 
@@ -261,48 +236,10 @@ class SeedEncryptPanel extends React.Component {
     }
   }
 
-  toggleSeedInputVisibility() {
-    this.setState({
-      seedInputVisibility: !this.state.seedInputVisibility,
-    });
-  }
-
   updateInput(e) {
-    const newValue = e.target.value;
-
-    clearTimeout(this.state.trimPassphraseTimer);
-
-    const _trimPassphraseTimer = setTimeout(() => {
-      if (newValue[0] === ' ' ||
-          newValue[newValue.length - 1] === ' ') {
-        this.setState({
-          seedExtraSpaces: true,
-        });
-      } else {
-        this.setState({
-          seedExtraSpaces: false,
-        });
-      }
-    }, SEED_TRIM_TIMEOUT);
-
-    if (e.target.name === 'wifkeysPassphrase') {
-      this.resizeLoginTextarea();
-    }
-
     this.setState({
-      trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+      [e.target.name]: e.target.value,
     });
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   renderPinsList() {
@@ -454,111 +391,15 @@ class SeedEncryptPanel extends React.Component {
       <div>
         <div className="row">
           <div className="col-sm-12">
-            <div className="padding-bottom-20">{ translate('SETTINGS.THIS_SECTION_ALLOWS_YOU_TO_ENCRYPT') }</div>
+            <div className="padding-bottom-20">
+              { translate('SETTINGS.THIS_SECTION_ALLOWS_YOU_TO_ENCRYPT') }
+            </div>
           </div>
         </div>
         { this.props.Login.pinList.length > 0 &&
           <div className="row">
             <div className="col-sm-12">
-            <div className="col-sm-12 col-xs-12 no-padding margin-bottom-20 text-right">
-              <button
-                type="button"
-                className="btn btn-info waves-effect waves-light margin-bottom-5"
-                onClick={ this.toggleCreateNewPin }>
-                { !this.state.createNewPin ? translate('SETTINGS.ENCRYPT_SEED') : translate('LOGIN.CANCEL') }
-              </button>
-            </div>
-            { !this.state.createNewPin ? this.renderPinsList() : null }
-            </div>
-          </div>
-        }
-        { (this.state.createNewPin || this.props.Login.pinList.length === 0) &&
-          <div className="row">
-            <div className="col-sm-12">
-              <div
-                className="wifkeys-form"
-                autoComplete="off">
-                <div className="form-group form-material floating">
-                  <input
-                    type="password"
-                    className={ !this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                    autoComplete="off"
-                    name="wifkeysPassphrase"
-                    ref="wifkeysPassphrase"
-                    id="wifkeysPassphrase"
-                    onChange={ this.updateInput }
-                    value={ this.state.wifkeysPassphrase } />
-                  <textarea
-                    className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
-                    autoComplete="off"
-                    id="wifkeysPassphraseTextarea"
-                    ref="wifkeysPassphraseTextarea"
-                    name="wifkeysPassphraseTextarea"
-                    onChange={ this.updateInput }
-                    value={ this.state.wifkeysPassphrase }></textarea>
-                  <i
-                    className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
-                    onClick={ this.toggleSeedInputVisibility }></i>
-                  <label
-                    className="floating-label"
-                    htmlFor="wifkeysPassphrase">
-                    { translate('INDEX.PASSPHRASE') } / WIF
-                  </label>
-                  <div className="form-group form-material floating text-left margin-top-60">
-                    <input
-                      type="password"
-                      name="encryptKey"
-                      ref="encryptKey"
-                      className="form-control blur"
-                      onChange={ this.updateInput }
-                      autoComplete="off"
-                      value={ this.state.encryptKey || '' } />
-                    <label
-                      className="floating-label"
-                      htmlFor="encryptKey">
-                      { translate('LOGIN.SEED_ENCRYPT_KEY') }
-                    </label>
-                  </div>
-                  <div className="form-group form-material floating text-left margin-top-60 margin-bottom-40">
-                    <input
-                      type="password"
-                      name="encryptKeyConfirm"
-                      ref="encryptKeyConfirm"
-                      className="form-control blur"
-                      onChange={ this.updateInput }
-                      autoComplete="off"
-                      value={ this.state.encryptKeyConfirm || '' } />
-                    <label
-                      className="floating-label"
-                      htmlFor="encryptKeyConfirm">
-                      { translate('LOGIN.SEED_ENCRYPT_KEY_CONF') }
-                    </label>
-                  </div>
-                  { this.state.seedExtraSpaces &&
-                    <i className="icon fa-warning seed-extra-spaces-warning"
-                      data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
-                      data-html={ true }
-                      data-for="seedEncrypt"></i>
-                  }
-                  <ReactTooltip
-                    id="seedEncrypt"
-                    effect="solid"
-                    className="text-left" />
-                </div>
-                <div className="col-sm-12 col-xs-12 text-align-center">
-                  <button
-                    type="button"
-                    className="btn btn-primary waves-effect waves-light margin-bottom-5"
-                    disabled={
-                      !this.state.wifkeysPassphrase ||
-                      !this.state.encryptKey ||
-                      !this.state.encryptKeyConfirm
-                    }
-                    onClick={ this.encryptSeed }>
-                    { translate('SETTINGS.ENCRYPT') }
-                  </button>
-                </div>
-              </div>
+              { this.renderPinsList() }
             </div>
           </div>
         }

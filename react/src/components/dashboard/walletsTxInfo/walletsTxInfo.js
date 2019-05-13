@@ -51,7 +51,7 @@ class WalletsTxInfo extends React.Component {
     if (this.props.ActiveCoin.mode === 'spv' &&
         _activeCoin &&
         this.props.ActiveCoin.showTransactionInfoTxIndex !== _activeCoin.showTransactionInfoTxIndex) {
-      const _activeTab = Config.experimentalFeatures &&
+      const _activeTab = Config.userAgreement &&
         _activeCoin.showTransactionInfoTxIndex &&
         _activeCoin.showTransactionInfoTxIndex.opreturn &&
         _activeCoin.showTransactionInfoTxIndex.opreturn.kvDecoded ? 4 : 0;
@@ -90,7 +90,6 @@ class WalletsTxInfo extends React.Component {
           _activeCoin.showTransactionInfoTxIndex &&
           _activeCoin.showTransactionInfoTxIndex > -1 &&
           _activeCoin.showTransactionInfoTxIndex !== false) {
-            console.warn('load tx', _activeCoin.showTransactionInfoTxIndex);
         const txInfo = _activeCoin.txhistory[_activeCoin.showTransactionInfoTxIndex];
 
         if (txInfo &&

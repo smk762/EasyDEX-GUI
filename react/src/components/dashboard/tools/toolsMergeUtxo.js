@@ -1,6 +1,5 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import {
@@ -257,7 +256,7 @@ class ToolsMergeUTXO extends React.Component {
             <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
-            <th>TxID</th>
+            <th>{ translate('KMD_NATIVE.TXID') }</th>
           </tr>
         </thead>
         <tbody>
@@ -269,7 +268,7 @@ class ToolsMergeUTXO extends React.Component {
             <th>{ translate('TOOLS.ADDR') }</th>
             <th>{ translate('TOOLS.CONFS') }</th>
             <th>{ translate('TOOLS.VOUT') }</th>
-            <th>TxID</th>
+            <th>{ translate('KMD_NATIVE.TXID') }</th>
           </tr>
         </tfoot>
       </table>
@@ -298,7 +297,7 @@ class ToolsMergeUTXO extends React.Component {
             options={
               [{
                 label: 'Komodo (KMD)',
-                icon: 'KMD',
+                icon: 'btc/KMD',
                 value: 'KMD|native',
               }]
               .concat(addCoinOptionsAC('skip'))
@@ -322,7 +321,7 @@ class ToolsMergeUTXO extends React.Component {
         </div>
         { this.state.utxoMergeAddress &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            Pub: <span className="selectable">{ this.state.utxoMergeAddress }</span>
+            { translate('TOOLS.PUB_ADDR') }: <span className="selectable">{ this.state.utxoMergeAddress }</span>
           </div>
         }
         { this.state.utxoMergeAddress &&
@@ -395,7 +394,7 @@ class ToolsMergeUTXO extends React.Component {
         }
         { this.state.utxoMergePushResult &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-10">
-            TXID: <div className="blur selectable word-break--all">{ this.state.utxoMergePushResult }</div>
+            { translate('KMD_NATIVE.TXID') }: <div className="blur selectable word-break--all">{ this.state.utxoMergePushResult }</div>
             { isKomodoCoin(this.state.utxoMergeCoin.split('|')[0]) &&
               <div className="margin-top-10">
                 <button

@@ -20,7 +20,7 @@ export const sendNativeTx = (coin, _payload) => {
   let _apiMethod;
 
   if ((_payload.addressType === 'public' && // transparent
-      _payload.sendTo.length !== 95) || !_payload.sendFrom) {
+      _payload.sendTo.length !== 95 && _payload.sendTo.length !== 78) || !_payload.sendFrom) {
     _apiMethod = 'sendtoaddress';
   } else { // private
     _apiMethod = 'z_sendmany';
@@ -34,7 +34,7 @@ export const sendNativeTx = (coin, _payload) => {
       rpc2cli,
       token,
       params:
-        (_payload.addressType === 'public' && _payload.sendTo.length !== 95) || !_payload.sendFrom ?
+        (_payload.addressType === 'public' && _payload.sendTo.length !== 95 && _payload.sendTo.length !== 78) || !_payload.sendFrom ?
         (_payload.subtractFee ?
           [
             _payload.sendTo,
@@ -81,15 +81,10 @@ export const sendNativeTx = (coin, _payload) => {
     })
     .then((json) => {
       if (json.indexOf('"code":') > -1) {
-        let _message = json.substring(
-          `${json.indexOf('"message":"') + 11}`,
-          json.indexOf('"},"id":"jl777"')
-        );
-
         if (json.indexOf('"code":-4') > -1) {
           dispatch(
             triggerToaster(
-              translate('API.' + (JSON.parse(json).error.message.indexOf('too large') > -1 ? 'TX_TOO_LARGE' : 'WALLETDAT_MISMATCH')),
+              translate('API.' + (JSON.parse(json).error.message.indexOf('too large') > -1 ? 'TX_TOO_LARGE' : 'WALLETDAT_MISMATCH')) + (' (debug info: ' + json),
               translate('TOASTR.WALLET_NOTIFICATION'),
               'info',
               false
@@ -104,13 +99,9 @@ export const sendNativeTx = (coin, _payload) => {
             )
           );
         } else {
-          if (rpc2cli) {
-            _message = JSON.parse(json).error.message;
-          }
-
           dispatch(
             triggerToaster(
-              _message,
+              JSON.parse(json).error.message,
               translate('TOASTR.WALLET_NOTIFICATION'),
               'error'
             )
@@ -125,6 +116,7 @@ export const sendNativeTx = (coin, _payload) => {
             'success'
           )
         );
+        Store.dispatch(getDashboardUpdate(coin));
       }
     });
   }
@@ -204,6 +196,7 @@ export const sendToAddressPromise = (coin, address, amount) => {
     .then(response => response.json())
     .then(json => {
       resolve(json);
+      Store.dispatch(getDashboardUpdate(coin));
     });
   });
 }
@@ -331,6 +324,7 @@ export const zmergeToAddressPromise = (coin, src, dest, fee = 0.0001, transparen
     .then(response => response.json())
     .then(json => {
       resolve(json);
+      Store.dispatch(getDashboardUpdate(coin));
     });
   });
 }
@@ -368,6 +362,7 @@ export const shieldCoinbase = (coin, src, dest, fee = 0.0001, limit = 50) => {
     .then(response => response.json())
     .then(json => {
       resolve(json);
+      Store.dispatch(getDashboardUpdate(coin));
     });
   });
 }

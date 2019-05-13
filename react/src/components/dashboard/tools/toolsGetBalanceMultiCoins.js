@@ -7,8 +7,10 @@ import {
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import kmdexplorer from './kmdexplorer';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
 const { shell } = window.require('electron');
 
@@ -31,7 +33,7 @@ class ToolsGetBalanceMultiCoins extends React.Component {
   }
 
   getBalance() {
-    const _validateAddress = mainWindow.addressVersionCheck('KMD', this.state.address);
+    const _validateAddress = addressVersionCheck(networks.kmd, this.state.address);
     let _msg;
 
     if (_validateAddress === 'Invalid pub address') {
@@ -108,7 +110,7 @@ class ToolsGetBalanceMultiCoins extends React.Component {
                   className="pointer">
                   <img
                     alt={ balances[i].coin.toLowerCase() }
-                    src={ `assets/images/cryptologo/${balances[i].coin.toLowerCase()}.png` } />
+                    src={ `assets/images/cryptologo/btc/${balances[i].coin.toLowerCase()}.png` } />
                   { balances[i].coin }
                 </a>
               </td>
@@ -149,14 +151,14 @@ class ToolsGetBalanceMultiCoins extends React.Component {
   getOptions() {
     let _items = [{
       label: 'Komodo (KMD)',
-      icon: 'KMD',
+      icon: 'btc/KMD',
       value: 'KMD',
     }];
 
     for (let key in kmdexplorer) {
       _items.push({
         label: `${translate('ASSETCHAINS.' + key)} (${key})`,
-        icon: key,
+        icon: `btc/${key}`,
         value: key,
       });
     }
@@ -197,7 +199,7 @@ class ToolsGetBalanceMultiCoins extends React.Component {
           </button>
         </div>
         { this.state.reqInProgress &&
-          <div className="text-center">{ translate('TOOLS.SEARCHING') }...</div>
+          <div className="text-left">{ translate('TOOLS.SEARCHING') }...</div>
         }
         { !this.state.reqInProgress && this.renderBalances() }
       </div>

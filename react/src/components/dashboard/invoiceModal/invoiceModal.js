@@ -9,7 +9,7 @@ import {
   InvoiceModalButtonRender,
   AddressItemRender,
 } from './invoiceModal.render';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 class InvoiceModal extends React.Component {
   constructor() {
@@ -107,12 +107,11 @@ class InvoiceModal extends React.Component {
       for (let i = 0; i < _addresses[type].length; i++) {
         let address = _addresses[type][i];
 
-        if (type === 'private' ||
+        if ((type === 'private' && _coin !== 'KMD') ||
             (type === 'public' &&
-            (_coin === 'KMD' ||
-             (mainWindow.chainParams &&
-              mainWindow.chainParams[_coin] &&
-              !mainWindow.chainParams[_coin].ac_private)))) {
+            (staticVar.chainParams &&
+              staticVar.chainParams[_coin] &&
+              !staticVar.chainParams[_coin].ac_private))) {
           items.push(
             AddressItemRender.call(this, address, type)
           );

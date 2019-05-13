@@ -82,9 +82,9 @@ class ToolsGetUtxos extends React.Component {
               <th>{ translate('TOOLS.CONFS') }</th>
               <th>{ translate('TOOLS.VOUT') }</th>
               { _coin[0] === 'KMD' &&
-                <th>Locktime</th>
+                <th>{ translate('TOOLS.LOCKTIME') }</th>
               }
-              <th>TxID</th>
+              <th>{ translate('KMD_NATIVE.TXID') }</th>
             </tr>
           </thead>
           <tbody>
@@ -96,9 +96,9 @@ class ToolsGetUtxos extends React.Component {
               <th>{ translate('TOOLS.CONFS') }</th>
               <th>{ translate('TOOLS.VOUT') }</th>
               { _coin[0] === 'KMD' &&
-                <th>Locktime</th>
+                <th>{ translate('TOOLS.LOCKTIME') }</th>
               }
-              <th>TxID</th>
+              <th>{ translate('KMD_NATIVE.TXID') }</th>
             </tr>
           </tfoot>
         </table>
@@ -159,7 +159,7 @@ class ToolsGetUtxos extends React.Component {
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
             options={
-              addCoinOptionsCrypto('skip')
+              addCoinOptionsCrypto('skip', true, false)
               .concat(addCoinOptionsAC('skip'))
             } />
         </div>

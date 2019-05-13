@@ -1,8 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
-import { acConfig } from '../../addcoin/payload';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
 
 const testChains = [
@@ -12,25 +11,25 @@ const testChains = [
 ];
 
 const CoinTileItemRender = function() {
-  const { item } = this.props;
+  const { item, i } = this.props;
   const _coinuc = item.coin.toUpperCase();
   const _coinlc = item.coin.toLowerCase();
-  const _pubkey = mainWindow.getPubkeys()[_coinlc];
   const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[_coinuc] ? this.props.Main.coins.params[_coinuc].join(' ') : '';
   
   return (
     <div className="list-group-item col-xlg-6 col-lg-12 wallet-widgets-info pointer">
-      <span className={ `badge up badge-${!erc20ContractId[item.coin] ? item.modecolor : 'success'}` }>
-        { erc20ContractId[item.coin] ? 'ERC20' : item.modecode }
+      <span className={ `badge up badge-${item.mode === 'eth' && erc20ContractId[item.coin] ? 'success' : item.modecolor}` }>
+        { item.mode === 'eth' && erc20ContractId[item.coin] ? 'ERC20' : item.modecode }
       </span>
       <div className={ 'widget widget-shadow' + (this.props.ActiveCoin.coin === item.coin ? ' active' : '') }>
         <div
           className="widget-content text-center bg-white padding-20"
-          onClick={ () => this._dashboardChangeActiveCoin(item.coin, item.mode) }>
+          onClick={ () => this._dashboardChangeActiveCoin(item.coin, item.mode) }
+          id={ `coin-tile-${i}` }>
           <a className="avatar margin-bottom-5">
             <img
               className="img-responsive"
-              src={ `assets/images/cryptologo/${item.coinlogo.toLowerCase()}.png` }
+              src={ `assets/images/cryptologo/${item.mode === 'spv' || item.mode === 'native' ? 'btc' : 'eth'}/${item.coinlogo.toLowerCase()}.png` }
               alt={ item.coinname }/>
           </a>
           <div className="coin-name">
@@ -51,9 +50,9 @@ const CoinTileItemRender = function() {
           className="text-left" />
       </button>
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_reward &&
-        !acConfig[_coinuc].ac_stake &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_reward &&
+        !staticVar.chainParams[_coinuc].ac_stake &&
         _coindStartParamsString &&
         (_coindStartParamsString.indexOf('-genproclimit=') > -1 && _coindStartParamsString.indexOf('-genproclimit=0') === -1) &&
         <i
@@ -61,14 +60,21 @@ const CoinTileItemRender = function() {
           data-for="coinTile2"
           className="icon fa-gavel custom-ac-icon"></i>
       }
-      <ReactTooltip
+      { item.mode === 'native' &&
+        _coindStartParamsString &&
+        _coindStartParamsString.indexOf('-regtest') > -1 &&
+        <i
+          data-tip={ translate('INDEX.MINING_IS_ENABLED') }
+          data-for="coinTile"
+          className="icon custom-ac-icon">RT</i>
+      }
+      {/*<ReactTooltip
         id="coinTile2"
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_stake &&
-        (!_pubkey || !_pubkey.pub) &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_stake &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_DISABLED') }
           data-for="coinTile3"
@@ -79,14 +85,13 @@ const CoinTileItemRender = function() {
         effect="solid"
         className="text-left" />
       { item.mode === 'native' &&
-        acConfig[_coinuc] &&
-        acConfig[_coinuc].ac_stake &&
-        (_pubkey && _pubkey.pub) &&
+        staticVar.chainParams[_coinuc] &&
+        staticVar.chainParams[_coinuc].ac_stake &&
         <i
           data-tip={ translate('INDEX.STAKING_IS_ENABLED') }
           data-for="coinTile4"
           className="icon staking custom-ac-icon">S</i>
-      }
+      }*/}
       <ReactTooltip
         id="coinTile4"
         effect="solid"
@@ -110,7 +115,7 @@ const CoinTileItemRender = function() {
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP_ALL') }
               </li>
             }
-            { this.renderRemoveCoinButton() &&
+            { (this.props.Main.isPin || staticVar.argv.indexOf('hardcore') > -1) &&
               <li onClick={ () => this.removeCoin(item.coin, item.mode) }>
                 <i className="icon fa-trash-o margin-right-5"></i> { translate('DASHBOARD.REMOVE') }
               </li>
@@ -118,9 +123,9 @@ const CoinTileItemRender = function() {
           </ul>
         </div>
       }
-      { mainWindow.chainParams &&
-        mainWindow.chainParams[item.coin] &&
-        mainWindow.chainParams[item.coin].ac_private &&
+      { staticVar.chainParams &&
+        staticVar.chainParams[item.coin] &&
+        staticVar.chainParams[item.coin].ac_private &&
         <i
           data-tip={ translate('INDEX.Z_ADDR_ONLY') }
           data-html={ true }

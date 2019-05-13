@@ -23,13 +23,13 @@ export const getDashboardUpdate = (coin, activeCoinProps) => {
     )
     .catch((error) => {
       console.log(error);
-      dispatch(
+      /*dispatch(
         triggerToaster(
           translate('API.apiElectrumBip39Keys') + ' (code: getDashboardUpdate)',
           translate('TOASTR.ERROR'),
           'error'
         )
-      );
+      );*/
     })
     .then(response => response.json())
     .then(json => {

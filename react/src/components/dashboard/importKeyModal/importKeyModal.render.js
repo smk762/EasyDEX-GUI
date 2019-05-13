@@ -1,7 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 const ImportKeyModalRender = function() {
   return (
@@ -26,13 +26,13 @@ const ImportKeyModalRender = function() {
             </div>
             <div className="modal-body">
               { (this.props.ActiveCoin.coin === 'KMD' ||
-                (mainWindow.chainParams &&
-                 mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-                 !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
+                (staticVar.chainParams &&
+                  staticVar.chainParams[this.props.ActiveCoin.coin] &&
+                 !staticVar.chainParams[this.props.ActiveCoin.coin].ac_private)) &&
                 <div>
                   <div className="padding-bottom-40">
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P1') }&nbsp;
-                    <strong>Iguana Core / ICO</strong>&nbsp;
+                    <strong>Iguana Core / ICO / BarterDEX</strong>&nbsp;
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P2') }&nbsp;
                     <strong>WIF ({ translate('IMPORT_KEY.WIF_DESC') })</strong>&nbsp;
                     { translate('IMPORT_KEY.TWO_FORMS_BELOW_P3') }.
@@ -59,14 +59,9 @@ const ImportKeyModalRender = function() {
                           ref="wifkeysPassphrase"
                           onChange={ this.updateInput }
                           value={ this.state.wifkeysPassphrase } />
-                        <textarea
-                          autoComplete="off"
-                          className={ this.state.seedInputVisibility ? 'form-control' : 'hide' }
-                          id="wifkeysPassphraseTextarea"
-                          name="wifkeysPassphraseTextarea"
-                          ref="wifkeysPassphraseTextarea"
-                          onChange={ this.updateInput }
-                          value={ this.state.wifkeysPassphrase }></textarea>
+                        <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                          { this.state.wifkeysPassphrase || '' }
+                        </div>
                         <i
                           className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                           onClick={ this.toggleSeedInputVisibility }></i>

@@ -160,6 +160,10 @@ body {
   color: #f96868;
 }
 
+.col-green {
+  color: #66bb6a;
+}
+
 .inline {
   display: inline-block;
 }
@@ -267,4 +271,11 @@ span[disabled] {
 button[disabled],
 button.disabled {
   pointer-events: none;  
+}
+
+.seed-reveal {
+  padding: 10px 50px 15px 0 !important;
+  line-height: 1.8 !important;
+  height: auto !important;
+  text-align: justify;
 }

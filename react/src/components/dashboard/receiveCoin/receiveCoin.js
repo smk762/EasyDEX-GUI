@@ -16,7 +16,7 @@ import {
   _ReceiveCoinTableRender,
 } from './receiveCoin.render';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 // TODO: implement balance/interest sorting
 
@@ -127,7 +127,7 @@ class ReceiveCoin extends React.Component {
     .then((json) => {
       if (json.length &&
           json.length > 10) {
-        Store.dispatch(copyString(json, 'WIF ' + translate('DASHBOARD.RECEIVE_ADDR_COPIED')));
+        Store.dispatch(copyString(json, `WIF ${translate('DASHBOARD.RECEIVE_ADDR_COPIED')}`));
       }
     });
   }
@@ -228,24 +228,27 @@ class ReceiveCoin extends React.Component {
 
           if (!this.state.toggleIsMine &&
               !address.canspend &&
-              address.address.substring(0, 2) !== 'zc') {
+              address.address.substring(0, 2) !== 'zc' &&
+              address.address.substring(0, 2) !== 'zs') {
             items.pop();
           }
         } else {
-          if (type === 'private' ||
+          if ((type === 'private' && this.props.coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[this.props.coin] && !staticVar.chainParams[this.props.coin].ac_public) ||
               (type === 'public' &&
                (this.props.coin === 'KMD' ||
-                (mainWindow.chainParams &&
-                 mainWindow.chainParams[this.props.coin] &&
-                 !mainWindow.chainParams[this.props.coin].ac_private)))) {
+               (staticVar.chainParams &&
+                 staticVar.chainParams[this.props.coin] &&
+                 !staticVar.chainParams[this.props.coin].ac_private)))) {
             items.push(
               AddressItemRender.call(this, address, type)
             );
           }
 
           if (!this.state.toggleIsMine &&
-            !address.canspend &&
-            address.address.substring(0, 2) !== 'zc') {
+              !address.canspend &&
+              address.address.substring(0, 2) !== 'zc' &&
+              address.address.substring(0, 2) !== 'zs' &&
+              address.address.substring(0, 15) !== 'zregtestsapling') {
             items.pop();
           }
         }
@@ -258,16 +261,31 @@ class ReceiveCoin extends React.Component {
           type === 'public') {
         let items = [];
 
-        items.push(
-          AddressItemRender.call(
-            this,
-            {
-              address: this.props.electrumCoins[this.props.coin].pub,
-              amount: this.props.balance.balance
-            },
-            'public'
-          )
-        );
+        if (mainWindow.multisig &&
+            mainWindow.multisig.addresses &&
+            mainWindow.multisig.addresses[this.props.coin.toUpperCase()]) {
+          items.push(
+            AddressItemRender.call(
+              this,
+              {
+                address: mainWindow.multisig.addresses[this.props.coin.toUpperCase()],
+                amount: this.props.balance.balance
+              },
+              'public'
+            )
+          );
+        } else {
+          items.push(
+            AddressItemRender.call(
+              this,
+              {
+                address: this.props.electrumCoins[this.props.coin].pub,
+                amount: this.props.balance.balance
+              },
+              'public'
+            )
+          );
+        }
 
         return items;
       } else if (

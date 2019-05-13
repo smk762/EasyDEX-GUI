@@ -3,7 +3,7 @@ import translate from '../../../translate/translate';
 
 export const VerifyingBlocksRender = function() {
   return (
-    <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">
+    <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
       <span className="full-width">{ translate('INDEX.VERIFYING_BLOCKS') }...</span>
     </div>
   );
@@ -11,16 +11,18 @@ export const VerifyingBlocksRender = function() {
 
 export const SyncErrorBlocksRender = function() {
   return (
-    <div className="progress-bar progress-bar-info progress-bar-striped active full-width font-size-80-percent">
+    <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
       <span className="full-width">{ translate('INDEX.SYNC_ERR_BLOCKS') }</span>
     </div>
   );
 };
 
 export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHeight) {
+  const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[this.props.ActiveCoin.coin] ? this.props.Main.coins.params[this.props.ActiveCoin.coin].join(' ') : '';
+  
   if (this.props.ActiveCoin.rescanInProgress) {
     return (
-      <div className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent full-width">
+      <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
         <span className="full-width">{ translate('INDEX.PLEASE_WAIT_UNTIL_RESCAN_FINISHED') }</span>
       </div>
     );
@@ -28,20 +30,26 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
     if (syncPercentage === 'Infinity%') {
       return (
         <div
-          className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
-          style={{ width: syncPercentage }}>
-          <span style={{ width: syncPercentage }}>
+          className="progress-bar progress-bar-info progress-bar-striped active"
+          style={{ width: _coindStartParamsString && _coindStartParamsString.indexOf('-regtest') === -1 ? syncPercentage : '100%' }}>
+          <span style={{ width: _coindStartParamsString && _coindStartParamsString.indexOf('-regtest') === -1 ? syncPercentage : '100%' }}>
             { translate('INDEX.BLOCKS') }:&nbsp;
-            { this.props.ActiveCoin.progress.blocks }&nbsp;|&nbsp;
-            { translate('INDEX.CONNECTIONS') }:&nbsp;
-            { this.props.ActiveCoin.progress.connections }
+            { this.props.ActiveCoin.progress.blocks }
+            { _coindStartParamsString &&
+              _coindStartParamsString.indexOf('-regtest') === -1 &&
+              <span>
+                &nbsp;|&nbsp;
+                { translate('INDEX.CONNECTIONS') }:&nbsp;
+                { this.props.ActiveCoin.progress.connections }
+              </span>
+            }
           </span>
         </div>
       );
     } else {
       return (
         <div
-          className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent"
+          className="progress-bar progress-bar-info progress-bar-striped active"
           style={{ width: syncPercentage }}>
           <span style={{ width: syncPercentage }}>
             { syncPercentage === '100.00%' ? '100%' : syncPercentage }&nbsp;
@@ -57,6 +65,8 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
               </span>
             }
             { this.props.ActiveCoin.progress.connections &&
+              _coindStartParamsString &&
+              _coindStartParamsString.indexOf('-regtest') === -1 &&
               <span>|&nbsp;
                 { translate('INDEX.CONNECTIONS') }:&nbsp;
                 { this.props.ActiveCoin.progress.connections }
@@ -71,9 +81,9 @@ export const SyncPercentageRender = function(syncPercentage, currentBlock, maxHe
 
 export const LoadingBlocksRender = function() {
   return (
-    <div className="progress-bar progress-bar-info progress-bar-striped active font-size-80-percent full-width">
+    <div className="progress-bar progress-bar-info progress-bar-striped active full-width">
       <span className="full-width">
-      { translate(this.props.ActiveCoin.rescanInProgress ? 'INDEX.PLEASE_WAIT_UNTIL_RESCAN_FINISHED' : 'INDEX.LOADING_BLOCKS') }
+      { translate('INDEX.' + (this.props.ActiveCoin.rescanInProgress ? 'PLEASE_WAIT_UNTIL_RESCAN_FINISHED' : 'LOADING_BLOCKS')) }
       </span>
     </div>
   );
@@ -81,13 +91,18 @@ export const LoadingBlocksRender = function() {
 
 export const TranslationComponentsRender = function(translationID) {
   const translationComponents = translate(translationID).split('<br>');
+  let _items = [];
 
-  return translationComponents.map((translation, idx) =>
-    <span key={ idx }>
-      { translation }
-      <br />
-    </span>
-  );
+  for (let i = 0; i < translationComponents.length; i++) {
+    _items.push(
+      <span key={ `wallets-progress-translate-${Math.random(0, 9) * 10}` }>
+        { translationComponents[i] }
+        <br />
+      </span>
+    );
+  }
+
+  return _items;
 };
 
 export const ChainActivationNotificationRender = function() {

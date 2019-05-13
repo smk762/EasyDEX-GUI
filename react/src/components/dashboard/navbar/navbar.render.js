@@ -1,6 +1,6 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
 
@@ -40,24 +40,6 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> { translate('INDEX.WALLETS') }
               </a>
             </li>
-            <li className={
-              (this.isSectionActive('dex') ? 'active nav-top-menu' : 'nav-top-menu') +
-              (mainWindow.argv.indexOf('dexonly') > -1 ? '' : ' hide')
-            }>
-              <a onClick={ () => this.dashboardChangeSection('dex') }>
-                <i className="site-menu-icon"></i> BarterDEX
-              </a>
-            </li>
-            { _activeCoin &&
-              (/*this._checkAC() || */
-              _activeCoin.coin === 'KMD' &&
-              _activeCoin.mode === 'native') &&
-              <li className={ 'nav-top-menu' + (this.isSectionActive('jumblr') ? ' active' : '') }>
-                <a onClick={ () => this.dashboardChangeSection('jumblr') }>
-                  <i className="site-menu-icon"></i> Jumblr
-                </a>
-              </li>
-            }
             { _activeCoin.mode === 'native' &&
               <li className="nav-top-menu">
                 <a onClick={ this.openImportKeyModal }>
@@ -70,31 +52,25 @@ const NavbarRender = function() {
                 <i className="site-menu-icon"></i> Explorer
               </a>
             </li>*/ }
-            { Config.experimentalFeatures &&
+            { Config.userAgreement &&
               <li className={ 'nav-top-menu' + (this.isSectionActive('tools') ? ' active' : '') }>
                 <a onClick={ () => this.dashboardChangeSection('tools') }>
                   <i className="site-menu-icon"></i> { translate('TOOLS.TOOLS') }
                 </a>
               </li>
             }
-            { mainWindow.nnVoteChain &&
-              <li className="nav-top-menu">
-                <a onClick={ this._toggleNotaryElectionsModal }>
-                  <i className="site-menu-icon"></i> { translate('NN_ELECTIONS.NN_ELECTIONS_2018') }
+            { Config.userAgreement &&
+              (Config.dev || staticVar.argv.indexOf('exchanges') > -1) &&
+              <li className={ 'nav-top-menu' + (this.isSectionActive('exchanges') ? ' active' : '') }>
+                <a onClick={ () => this.dashboardChangeSection('exchanges') }>
+                  <i className="site-menu-icon"></i> { translate('EXCHANGES.EXCHANGES') }
                 </a>
               </li>
             }
-            { Config.experimentalFeatures &&
-              Config.dev &&
-              _activeCoin &&
-              _activeCoin.mode === 'native' &&
-              <li className={ 'nav-top-menu' + (this.isSectionActive('dice') ? ' active' : '') }>
-                <a onClick={ () => this.dashboardChangeSection('dice') }>
-                  <img
-                    src="assets/images/dice.png"
-                    width="50"
-                    title={ translate('DICE.DICE') } />
-                  { translate('DICE.DICE') }
+            { mainWindow.nnVoteChain &&
+              <li className="nav-top-menu">
+                <a onClick={ this._toggleNotaryElectionsModal }>
+                  <i className="site-menu-icon"></i> { `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }
                 </a>
               </li>
             }
@@ -166,22 +142,22 @@ const NavbarRender = function() {
                     </a>
                   </li>
                 }
+                { !this.isSectionActive('changelog') &&
+                  <li>
+                    <a onClick={ () => this.dashboardChangeSection('changelog') }>
+                      <i className="icon fa-list"></i> { translate('INDEX.CHANGE_LOG') }
+                    </a>
+                  </li>
+                }
                 <li>
                   <a onClick={ this._toggleBlurSensitiveData }>
                     <i className={ 'nbps icon fa-eye' + (!this.props.Main.blurSensitiveData ? '-slash' : '') }></i>
                     { translate('INDEX.' + (this.props.Main.blurSensitiveData ? 'SHOW_SENSITIVE_DATA' : 'HIDE_SENSITIVE_DATA')) }
                   </a>
                 </li>
-                { this.isRenderSpvLockLogout() &&
+                { this.isRenderLogout() &&
                   <li>
-                    <a onClick={ this.spvLock }>
-                      <i className="icon fa-lock"></i> { translate('DASHBOARD.SOFT_LOGOUT') }
-                    </a>
-                  </li>
-                }
-                { this.isRenderSpvLockLogout() &&
-                  <li>
-                    <a onClick={ this.spvLogout }>
+                    <a onClick={ this.logout }>
                       <i className="icon fa-power-off"></i> { translate('DASHBOARD.COMPLETE_LOGOUT') }
                     </a>
                   </li>

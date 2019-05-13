@@ -7,9 +7,12 @@ import {
   triggerToaster,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow, { electrumServers } from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { cryptoCoins } from '../../../util/coinHelper';
 import Config from '../../../config';
+import { addressVersionCheck } from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import { getAddress } from 'ethers/utils/address';
 
 let _prepCoinsList;
 let coins = cryptoCoins;
@@ -18,18 +21,22 @@ const prepCoinsList = () => {
   let _coins = [];
 
   for (let i = 0; i < coins.length; i++) {
-    if (Config.experimentalFeatures ||
-        (!Config.experimentalFeatures && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
+    if (Config.userAgreement ||
+        (!Config.userAgreement && (_coins[i] === 'KMD' || _coins[i] === 'CHIPS'))) {
       try {
-        if (electrumServers &&
-            electrumServers[coins[i].toLowerCase()] &&
+        if (staticVar.electrumServers &&
+            staticVar.electrumServers[coins[i].toLowerCase()] &&
             coins[i] !== 'CHIPS') {
           _coins.push(coins[i]);
         }
       } catch (e) {
-        console.warn('electron remote error' + e);
+        console.warn(`electron remote error address book ${e}`);
       }
     }
+  }
+
+  if (Config.userAgreement) {
+    _coins.push('ETH');
   }
 
   _prepCoinsList = _coins;
@@ -100,7 +107,17 @@ class AddressBookPanel extends React.Component {
     };
 
     let _validationMsg;
-    const _validateAddress = mainWindow.addressVersionCheck(_coin, _address);
+    let _validateAddress;
+
+    if (_coin.toLowerCase() === 'eth') {
+      try {
+        _validateAddress = getAddress(_address);
+      } catch (e) {
+        _validateAddress = 'Invalid pub address';
+      }
+    } else {
+      _validateAddress = addressVersionCheck(networks[_coin.toLowerCase()] || networks.kmd, _address);
+    }
 
     if (_validateAddress === 'Invalid pub address') {
       _validationMsg = _validateAddress;
@@ -110,8 +127,7 @@ class AddressBookPanel extends React.Component {
 
     // allow zc addresses
     if (_coin === 'KMD' &&
-        _address.substring(0, 2) === 'zc' &&
-        _address.length === 95) {
+        ((_address.substring(0, 2) === 'zs' && _address.length === 78) || (_address.substring(0, 15) === 'zregtestsapling' && _address.length === 91))) {
       _validationMsg = null;
     }
 
@@ -212,7 +228,9 @@ class AddressBookPanel extends React.Component {
         <option
           key={ `coind-stdout-coins-${i}` }
           value={ `${_coins[i]}` }>
-          { translate('CRYPTO.' + _coins[i]) + (_coins[i].toLowerCase() === 'kmd' ? ' (Chips/Asset chains)' : '') }
+          { translate('CRYPTO.' + _coins[i]) }
+          { _coins[i].toLowerCase() === 'kmd' && ' (Chips/Pirate/Asset chains)' }
+          { _coins[i].toLowerCase() === 'eth' && ' (ERC20)' }
         </option>
       );
     }
@@ -240,7 +258,9 @@ class AddressBookPanel extends React.Component {
             </td>
             <td className="seletable word-break--all">{ key }</td>
             <td>
-            { translate('CRYPTO.' + _addressBookItems[key].coin) + (_addressBookItems[key].coin.toLowerCase() === 'kmd' ? ' (Chips/Asset chains)' : '') }
+            { translate('CRYPTO.' + _addressBookItems[key].coin) }
+            { _addressBookItems[key].coin.toLowerCase() === 'kmd' && ' (Chips/Pirate/Asset chains)' }
+            { _addressBookItems[key].coin.toLowerCase() === 'eth' && ' (ERC20)' }
             </td>
             <td className="seletable">{ _addressBookItems[key].title }</td>
           </tr>

@@ -24,9 +24,9 @@ class ImportKeyModal extends React.Component {
       open: false,
       wif: '',
       wifkeysPassphrase: '',
-      passphraseWif: null,
-      passphraseAddress: null,
-      keyImportResult: null,
+      passphraseWif: '',
+      passphraseAddress: '',
+      keyImportResult: '',
       importWithRescan: false,
       importMulti: false,
       seedInputVisibility: false,
@@ -35,7 +35,6 @@ class ImportKeyModal extends React.Component {
       seedExtraSpaces: false,
       multipleWif: '',
       className: 'hide',
-      open: false,
     };
     this.generateKeysFromPassphrase = this.generateKeysFromPassphrase.bind(this);
     this.toggleImportWithRescan = this.toggleImportWithRescan.bind(this);
@@ -90,25 +89,10 @@ class ImportKeyModal extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    if (e.target.name === 'wifkeysPassphrase') {
-      this.resizeLoginTextarea();
-    }
-
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        const _ta = document.querySelector('#wifkeysPassphraseTextarea');
-        _ta.style.height = '1px';
-        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   toggleSeedInputVisibility() {
@@ -149,17 +133,58 @@ class ImportKeyModal extends React.Component {
         const _keys = this.state.multipleWif.split('\n');
 
         for (let i = 0; i < _keys.length; i++) {
-          setTimeout(() => {
-            this.importWifAddress(_keys[i], i === _keys.length - 1 ? this.state.importWithRescan : false, true);
-          }, i * 1000);
+          if (this.props.ActiveCoin.coin !== 'KMD' ||
+              (this.props.ActiveCoin.coin === 'KMD' && _keys[i] && _keys[i][0] !== 'S' && _keys[i][1] !== 'K' && _keys[i].indexOf('secret-extended-key-main') === -1)) {
+            setTimeout(() => {
+              this.importWifAddress(_keys[i], i === _keys.length - 1 ? this.state.importWithRescan : false, true, true);
+
+              if (i === _keys.length - 1) {
+                this.setState({
+                  wif: null,
+                  passphraseWif: null,
+                  passphraseAddress: null,
+                  wifkeysPassphrase: null,
+                  importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
+                  multipleWif: '',
+                  importMulti: false,
+                });
+
+                // reset input vals
+                try {
+                  this.refs.multipleWif.value = '';
+                  this.refs.wif.value = '';
+                  this.refs.wifkeysPassphrase.value = '';  
+                } catch (e) {}
+              }
+            }, i * 1000);
+          } else {
+            Store.dispatch(
+              triggerToaster(
+                translate('IMPORT_KEY.KMD_Z_KEY_DEPRECATED'),
+                translate('TOASTR.ERROR'),
+                'error'
+              )
+            );
+          }
         }
       }
     } else {
-      this.importWifAddress(this.state.wif, this.state.importWithRescan);
+      if (this.props.ActiveCoin.coin !== 'KMD' ||
+          (this.props.ActiveCoin.coin === 'KMD' && this.state.wif && this.state.wif[0] !== 'S' && this.state.wif[1] !== 'K' && this.state.wif.indexOf('secret-extended-key-main') === -1)) {
+        this.importWifAddress(this.state.wif, this.state.importWithRescan);
+      } else {
+        Store.dispatch(
+          triggerToaster(
+            translate('IMPORT_KEY.KMD_Z_KEY_DEPRECATED'),
+            translate('TOASTR.ERROR'),
+            'error'
+          )
+        );
+      }
     }
   }
 
-  importWifAddress(wif, rescan, multi) {
+  importWifAddress(wif, rescan, multi, skipStateUpdate) {
     const _coin = this.props.ActiveCoin.coin;
     let _rescanInProgress = true;
 
@@ -183,7 +208,9 @@ class ImportKeyModal extends React.Component {
               false
             )
           );
-          this.closeModal();
+          if (this.state.open) {
+            this.closeModal();
+          }
         }
       }, 2000);
     }
@@ -193,14 +220,16 @@ class ImportKeyModal extends React.Component {
       wif,
       rescan,
       // https://github.com/zcash/zcash/blob/master/src/chainparams.cpp#L152
-      wif[0] === 'S' && wif[1] === 'K'
+      (wif[0] === 'S' && wif[1] === 'K') || wif.indexOf('secret-extended-key-main') > -1
     )
     .then((json) => {
       _rescanInProgress = false;
 
       if (rescan) {
         setTimeout(() => {
-          this.closeModal();
+          if (this.state.open) {
+            this.closeModal();
+          }
         }, 2000);
       }
 
@@ -226,21 +255,24 @@ class ImportKeyModal extends React.Component {
       }
     });
 
-    this.setState({
-      wif: null,
-      passphraseWif: null,
-      passphraseAddress: null,
-      wifkeysPassphrase: null,
-      wifkeysPassphraseTextarea: null,
-      importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
-      multipleWif: '',
-    });
+    if (!skipStateUpdate) {
+      this.setState({
+        wif: null,
+        passphraseWif: null,
+        passphraseAddress: null,
+        wifkeysPassphrase: null,
+        importWithRescan: this.state.importWithRescan ? false : this.state.importWithRescan,
+        multipleWif: '',
+        importMulti: false,
+      });
 
-    // reset input vals
-    this.refs.multipleWif.value = '';
-    this.refs.wif.value = '';
-    this.refs.wifkeysPassphrase.value = '';
-    this.refs.wifkeysPassphraseTextarea.value = '';
+      // reset input vals
+      try {
+        this.refs.multipleWif.value = '';
+        this.refs.wif.value = '';
+        this.refs.wifkeysPassphrase.value = '';  
+      } catch (e) {}
+    }
   }
 
   generateKeysFromPassphrase() {

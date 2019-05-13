@@ -12,21 +12,23 @@ import addCoinOptionsCrypto from '../../addcoin/addcoinOptionsCrypto';
 import addCoinOptionsAC from '../../addcoin/addcoinOptionsAC';
 import Select from 'react-select';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
 import Config from '../../../config';
-const SEED_TRIM_TIMEOUT = 5000;
-import { seedToWif } from 'agama-wallet-lib/src/keys';
+import { stringToWif } from 'agama-wallet-lib/src/keys';
 import electrumJSNetworks from 'agama-wallet-lib/build/bitcoinjs-networks';
-import { isKomodoCoin } from 'agama-wallet-lib/build/coin-helpers';
+import {
+  isKomodoCoin,
+  explorerList,
+} from 'agama-wallet-lib/build/coin-helpers';
 import {
   fromSats,
   toSats,
 } from 'agama-wallet-lib/src/utils';
-import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
 
 const { shell } = window.require('electron');
-const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
+const SEED_TRIM_TIMEOUT = 5000;
 
 class SweepKeysPanel extends React.Component {
   constructor() {
@@ -56,11 +58,13 @@ class SweepKeysPanel extends React.Component {
   componentWillReceiveProps(props) {
     if (props.Dashboard &&
         props.Dashboard.activeSection !== 'settings') {
+      if (this.state.trimPassphraseTimer) {
+        clearTimeout(this.state.trimPassphraseTimer);
+      }
       this.setState(this.defaultState);
 
       // reset input vals
       this.refs.wifkeysPassphrase.value = '';
-      this.refs.wifkeysPassphraseTextarea.value = '';
     }
   }
 
@@ -79,10 +83,10 @@ class SweepKeysPanel extends React.Component {
   confirmSweep() {
     const _coin = this.state.coin.split('|')[0];
     const _balance = this.state.sweepPreflight.balance;
-    let _fees = mainWindow.spvFees;
+    let _fees = staticVar.spvFees;
     
     if (Number(_balance) - fromSats(_fees[this.props.ActiveCoin.coin]) >= 0) {
-      const _kp = seedToWif(
+      const _kp = stringToWif(
         this.state.wifkeysPassphrase,
         electrumJSNetworks[isKomodoCoin(_coin.toLowerCase()) ? 'kmd' : _coin.toLowerCase()],
         true
@@ -125,7 +129,6 @@ class SweepKeysPanel extends React.Component {
           });
 
           this.refs.wifkeysPassphrase.value = '';
-          this.refs.wifkeysPassphraseTextarea.value = '';
         }
 
         this.setState({
@@ -147,7 +150,7 @@ class SweepKeysPanel extends React.Component {
     const _coin = this.state.coin.split('|')[0];
     const _coinlc = _coin.toLowerCase();
     
-    const _kp = seedToWif(
+    const _kp = stringToWif(
       this.state.wifkeysPassphrase,
       electrumJSNetworks[isKomodoCoin(_coinlc) ? 'kmd' : _coinlc],
       true
@@ -224,36 +227,24 @@ class SweepKeysPanel extends React.Component {
     clearTimeout(this.state.trimPassphraseTimer);
 
     const _trimPassphraseTimer = setTimeout(() => {
-      if (newValue[0] === ' ' ||
-          newValue[newValue.length - 1] === ' ') {
-        this.setState({
-          seedExtraSpaces: true,
-        });
-      } else {
-        this.setState({
-          seedExtraSpaces: false,
-        });
-      }
+      try {
+        if (newValue[0] === ' ' ||
+            newValue[newValue.length - 1] === ' ') {
+          this.setState({
+            seedExtraSpaces: true,
+          });
+        } else {
+          this.setState({
+            seedExtraSpaces: false,
+          });
+        }
+      } catch(e) {}
     }, SEED_TRIM_TIMEOUT);
-
-    if (e.target.name === 'wifkeysPassphrase') {
-      this.resizeLoginTextarea();
-    }
 
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = '1px';
-        document.querySelector('#wifkeysPassphraseTextarea').style.height = `${(15 + document.querySelector('#wifkeysPassphraseTextarea').scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   updateSelectedCoin(e, propName) {
@@ -299,13 +290,13 @@ class SweepKeysPanel extends React.Component {
 
   renderCoinsList() {
     const _activeCoins = this.props.Dashboard.electrumCoins;
-    const allCoins = addCoinOptionsCrypto('skip')
+    const allCoins = addCoinOptionsCrypto('skip', true)
                     .concat(addCoinOptionsAC('skip'));
     let _items = [];
 
     for (let i = 0; i < allCoins.length; i++) {
-      if (_activeCoins[allCoins[i].icon.toUpperCase()] &&
-          allCoins[i].icon.toUpperCase() !== 'BTC') {
+      if (_activeCoins[allCoins[i].icon.split('/')[1].toUpperCase()] &&
+          allCoins[i].icon.split('/')[1].toUpperCase() !== 'BTC') {
         _items.push(allCoins[i]);
       }
     }
@@ -351,14 +342,9 @@ class SweepKeysPanel extends React.Component {
                   id="wifkeysPassphrase"
                   onChange={ this.updateInput }
                   value={ this.state.wifkeysPassphrase } />
-                <textarea
-                  className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
-                  autoComplete="off"
-                  id="wifkeysPassphraseTextarea"
-                  ref="wifkeysPassphraseTextarea"
-                  name="wifkeysPassphraseTextarea"
-                  onChange={ this.updateInput }
-                  value={ this.state.wifkeysPassphrase }></textarea>
+                <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                  { this.state.wifkeysPassphrase || '' }
+                </div>
                 <i
                   className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                   onClick={ this.toggleSeedInputVisibility }></i>
@@ -451,7 +437,7 @@ class SweepKeysPanel extends React.Component {
           this.state.sweepResult.msg === 'success' &&
           this.state.sweepResult.result.txid &&
           <div className="col-sm-12 form-group form-material no-padding-left margin-top-50">
-            TXID: <span className="blur selectable word-break--all">{ this.state.sweepResult.result.txid }</span>
+            { translate('KMD_NATIVE.TXID') }: <span className="blur selectable word-break--all">{ this.state.sweepResult.result.txid }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }

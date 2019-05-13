@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
-import { sortByDate } from 'agama-wallet-lib/src/utils';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import {
@@ -19,6 +18,7 @@ import {
   apiNativeTransactionsCSV,
   triggerToaster,
   apiEthereumTransactions,
+  regtestGenBlock,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -36,12 +36,7 @@ import {
 import { secondsToString } from 'agama-wallet-lib/src/time';
 import { getRandomElectrumServer } from 'agama-wallet-lib/src/utils';
 import DoubleScrollbar from 'react-double-scrollbar';
-import mainWindow from '../../../util/mainWindow';
-import { setTimeout } from 'timers';
-
-/*import io from 'socket.io-client';
-
-const socket = io.connect(`http://127.0.0.1:${Config.agamaPort}`);*/
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 const BOTTOM_BAR_DISPLAY_THRESHOLD = 15;
 
@@ -80,6 +75,7 @@ class WalletsData extends React.Component {
     this.toggleKvView = this.toggleKvView.bind(this);
     this._setTxHistory = this._setTxHistory.bind(this);
     this.exportToCSV = this.exportToCSV.bind(this);
+    this._regtestGenBlock = this._regtestGenBlock.bind(this);
   }
 
   componentWillMount() {
@@ -96,6 +92,10 @@ class WalletsData extends React.Component {
       this.handleClickOutside,
       false
     );
+  }
+
+  _regtestGenBlock() {
+    regtestGenBlock(this.props.ActiveCoin.coin);
   }
 
   isOutValue(tx) {
@@ -218,7 +218,7 @@ class WalletsData extends React.Component {
         this.props.ActiveCoin.coin === 'KMD' &&
         _balance) {
       if (_balance.interest &&
-        _balance.interest > 0) {
+          _balance.interest > 0) {
         return this.props.ActiveCoin.mode === 'spv' && mainWindow.isWatchOnly() ? -888 : 777;
       } else if (
         (_balance.transparent && _balance.transparent >= 10) ||
@@ -234,7 +234,7 @@ class WalletsData extends React.Component {
   }
 
   generateItemsListColumns(itemsCount) {
-    const _isAcPrivate = this.props.ActiveCoin.mode === 'native' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
+    const _isAcPrivate = this.props.ActiveCoin.mode === 'native' && staticVar.chainParams && staticVar.chainParams[this.props.ActiveCoin.coin] && staticVar.chainParams[this.props.ActiveCoin.coin].ac_private;
     let columns = [];
     let _col;
 
@@ -274,7 +274,16 @@ class WalletsData extends React.Component {
       footerClassName: 'hidden-xs hidden-sm',
       className: 'hidden-xs hidden-sm',
       Cell: row => TxConfsRender.call(this, row.value),
-      accessor: (tx) => tx.confirmations,
+      accessor: (tx) => tx,
+      sortMethod: (a, b) => {
+        if (a.confirmations > b.confirmations) {
+          return 1;
+        }
+        if (a.confirmations < b.confirmations) {
+          return -1;
+        }
+        return 0;
+      },
       maxWidth: '180',
     },
     {
@@ -507,13 +516,14 @@ class WalletsData extends React.Component {
   _setTxHistory(oldTxHistory) {
     const _txhistory = this.state.kvView ? this.state.kvHistory : (oldTxHistory ? oldTxHistory : this.props.ActiveCoin.txhistory);
     let _stateChange = {};
-
+        
     // TODO: figure out why changing ActiveCoin props doesn't trigger comp update
     if (_txhistory &&
         _txhistory !== 'loading' &&
         _txhistory !== 'no data' &&
         _txhistory !== 'connection error or incomplete data' &&
         _txhistory !== 'cant get current height' &&
+        _txhistory !== 'response too large' &&
         _txhistory.length) {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: _txhistory,
@@ -529,6 +539,14 @@ class WalletsData extends React.Component {
         _txhistory === 'no data') {
       _stateChange = Object.assign({}, _stateChange, {
         itemsList: 'no data',
+        reconnectInProgress: false,
+      });
+    } else if (
+      _txhistory &&
+      _txhistory === 'response too large'
+    ) {
+      _stateChange = Object.assign({}, _stateChange, {
+        itemsList: 'response too large',
         reconnectInProgress: false,
       });
     } else if (
@@ -552,8 +570,8 @@ class WalletsData extends React.Component {
         this.spvAutoReconnect();
       }
     }
-
-    this.setState(Object.assign({}, _stateChange));
+    
+    this.setState(_stateChange);
   }
 
   componentWillReceiveProps(props) {
@@ -572,7 +590,8 @@ class WalletsData extends React.Component {
     const _coin = this.props.ActiveCoin.coin;
     const _electrumCoin = this.props.Dashboard.electrumCoins[_coin];
 
-    if (_electrumCoin.serverList !== 'none') {
+    if (_electrumCoin.serverList !== 'none' &&
+        _electrumCoin.serverList.length > 1) {
       const _spvServers = _electrumCoin.serverList;
       const _server = [
         _electrumCoin.server.ip,
@@ -649,6 +668,8 @@ class WalletsData extends React.Component {
   }
 
   renderTxHistoryList() {
+    const _coin = this.props.ActiveCoin.coin;
+
     if (this.state.itemsList === 'loading') {
       if (this.isFullySynced()) {
         return (
@@ -663,13 +684,21 @@ class WalletsData extends React.Component {
       return (
         <div className="padding-left-15">{ translate('INDEX.NO_DATA') }</div>
       );
+    } else if (this.state.itemsList === 'response too large') {
+      return (
+        <div className="padding-left-15">
+          { translate('INDEX.RESPONSE_TOO_LARGE_P1') }
+          <br />
+          { translate('INDEX.RESPONSE_TOO_LARGE_P2') }
+        </div>
+      );
     } else if (this.state.itemsList === 'connection error') {
       return (
         <div className="padding-left-15">
           <div className="color-warning">
             { translate('DASHBOARD.SPV_CONN_ERROR') }
           </div>
-          <div className={ this.props.Dashboard.electrumCoins[this.props.ActiveCoin.coin].serverList !== 'none' ? '' : 'hide' }>
+          <div className={ this.props.Dashboard.electrumCoins[_coin].serverList !== 'none' ? '' : 'hide' }>
             <div className="color-warning padding-bottom-20">{ translate('DASHBOARD.SPV_AUTO_SWITCH') }...</div>
             <strong>{ translate('DASHBOARD.HOW_TO_SWITCH_MANUALLY') }:</strong>
             <div className="padding-top-10">{ translate('DASHBOARD.SPV_CONN_ERROR_P1') }</div>
@@ -680,19 +709,19 @@ class WalletsData extends React.Component {
       this.state.itemsList &&
       this.state.itemsList.length
     ) {
-      const _isAcPrivate = this.props.ActiveCoin.coin !== 'KMD' && mainWindow.chainParams && mainWindow.chainParams[this.props.ActiveCoin.coin] && !mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private;
+      const _isAcPrivate = _coin !== 'KMD' && staticVar.chainParams && staticVar.chainParams[_coin] && !staticVar.chainParams[_coin].ac_private;
       
       return (
         <DoubleScrollbar>
           { TxHistoryListRender.call(this) }
           { !this.state.kvView &&
             (this.props.ActiveCoin.mode === 'spv' ||
-             (this.props.ActiveCoin.mode === 'native' && (this.props.ActiveCoin.coin === 'KMD' || _isAcPrivate))) &&
+             (this.props.ActiveCoin.mode === 'native' && (_coin === 'KMD' || _isAcPrivate))) &&
             <div className="margin-left-5 margin-top-30">
               <span
                 className="pointer"
                 onClick={ this.exportToCSV }>
-                <i className="icon fa-file-excel-o margin-right-10"></i>{ translate('INDEX.' + (this.state.generatingCSV ? 'GENERATING_CSV' + '...' : 'EXPORT_TO_CSV')) }
+                <i className="icon fa-file-excel-o margin-right-10"></i>{ translate('INDEX.' + (this.state.generatingCSV ? 'GENERATING_CSV' : 'EXPORT_TO_CSV')) }
               </span>
             </div>
           }
@@ -881,6 +910,7 @@ const mapStateToProps = (state) => {
       showTransactionInfo: state.ActiveCoin.showTransactionInfo,
       progress: state.ActiveCoin.progress,
     },
+    AddressBook: state.Settings.addressBook,
     Main: state.Main,
     Dashboard: state.Dashboard,
   };

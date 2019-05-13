@@ -1,5 +1,5 @@
 import translate from '../../translate/translate';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 import { sortObject } from 'agama-wallet-lib/src/utils';
@@ -14,13 +14,14 @@ const _disabledAC = {
     'ceal',
     'dsec',
     'pirate',
-    'koin',
-    'zex',
+    'mtst3',
   ],
   native: [
     'vrsc',
+    'hush',
   ],
   all: [
+    'spltest',
     'mvp',
   ],
 };
@@ -60,7 +61,7 @@ const addCoinOptionsAC = (activeCoins) => {
       availableModes = 'spv';
     }
 
-    if (mainWindow.arch !== 'x64') {
+    if (staticVar.arch !== 'x64') {
       availableModes = 'spv';
     }
 
@@ -75,13 +76,13 @@ const addCoinOptionsAC = (activeCoins) => {
 
       _items.push({
         label: `${_placeholder}${_placeholder.indexOf('(') === -1 && _placeholder !== _coinuc ? ' (' + _coinuc + ')' : ''}`,
-        icon: _coinlc,
+        icon: `btc/${_coinlc}`,
         value: `${_coinuc}|${availableModes}`,
       });
     }
   }
 
-  if (config.experimentalFeatures) {
+  if (config.userAgreement) {
     const _customAssetChains = {
       mining: [
       ],
@@ -96,8 +97,8 @@ const addCoinOptionsAC = (activeCoins) => {
         const _placeholder = translate(`ASSETCHAINS.${_customuc}`);
 
         _items.push({
-          label: _placeholder + (_placeholder.indexOf('(') === -1 && _placeholder !== _customuc ? ' (' + _customuc + ')' : ''),
-          icon: _customlc,
+          label: _placeholder + (_placeholder.indexOf('(') === -1 && _placeholder !== _customuc ? ` (${_customuc})` : ''),
+          icon: `btc/${_customlc}`,
           value: `${_customuc}|${key}`,
         });
       }

@@ -120,7 +120,7 @@
         margin-left: 38px;
       }
     }
-    &.elections-map-node--ae {
+    &.elections-map-node--ar {
       left: 114px;
       top: -236px;
 
@@ -182,9 +182,20 @@
       }
       .form-control {
         width: 250px;
+
+        &.inline {
+          padding-right: 58px;
+        }
       }
       .block {
         width: 365px;
+      }
+      .btn-nn-send-all {
+        position: absolute;
+        top: inherit;
+        margin-left: 207px;
+        margin-top: 3px;
+        padding-bottom: 7px;
       }
     }
   }

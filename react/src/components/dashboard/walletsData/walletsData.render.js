@@ -6,8 +6,9 @@ import TablePaginationRenderer from '../pagination/pagination';
 import { formatValue } from 'agama-wallet-lib/src/utils';
 import Config from '../../../config';
 import Spinner from '../spinner/spinner';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { tableSorting } from '../pagination/utils';
+import dpowCoins from 'agama-wallet-lib/src/electrum-servers-dpow';
 
 const kvCoins = {
   'KV': true,
@@ -15,16 +16,51 @@ const kvCoins = {
   'PIZZA': true,
 };
 
-export const TxConfsRender = function(confs) {
-  if (Number(confs) > -1) {
+export const TxConfsRender = function(tx) {
+  if (Number(tx.confirmations) > -1) {
     return (
-      <span>{ confs }</span>
+      <span>
+        { dpowCoins.indexOf(this.props.ActiveCoin.coin) > -1 &&
+          tx.hasOwnProperty('rawconfirmations') &&
+          tx.confirmations !== tx.rawconfirmations &&
+          <span>
+            <span
+              data-tip={ `${translate('INDEX.DPOW_CONFS')}: ${tx.confirmations}<br/>${translate('INDEX.RAW_CONFS_ALT')}: ${tx.rawconfirmations}` }
+              data-for="txHistoryDpowRawConf"
+              data-html={ true }>
+              { tx.confirmations }
+            </span>
+            <ReactTooltip
+              id="txHistoryDpowRawConf"
+              effect="solid"
+              className="text-left" />
+          </span>
+        }
+        { (dpowCoins.indexOf(this.props.ActiveCoin.coin) === -1 || !tx.hasOwnProperty('rawconfirmations') || (tx.hasOwnProperty('rawconfirmations') && tx.confirmations === tx.rawconfirmations)) &&
+          <span>{ tx.confirmations }</span>
+        }
+        { dpowCoins.indexOf(this.props.ActiveCoin.coin) > -1 &&
+          ((this.props.ActiveCoin.mode === 'spv' && tx.hasOwnProperty('dpowSecured') && tx.dpowSecured) ||
+           (this.props.ActiveCoin.mode === 'native' && tx.hasOwnProperty('rawconfirmations') && tx.confirmations >=2)) &&
+          <span>
+            <i
+              className="icon fa-shield margin-left-10"
+              data-tip={ translate('INDEX.THIS_TX_IS_SECURED_WITH_DPOW') } 
+              data-for="txHistoryDpow"></i>
+            <ReactTooltip
+              id="txHistoryDpow"
+              effect="solid"
+              className="text-left" />
+          </span>
+        }
+      </span>
     );
   } else if (
     this.props.ActiveCoin.mode === 'native' &&
-    mainWindow.chainParams &&
-    mainWindow.chainParams[this.props.ActiveCoin.coin] &&
-    mainWindow.chainParams[this.props.ActiveCoin.coin].ac_private) {
+    staticVar.chainParams &&
+    staticVar.chainParams[this.props.ActiveCoin.coin] &&
+    staticVar.chainParams[this.props.ActiveCoin.coin].ac_private
+  ) {
     return (
       <span>{ translate('DASHBOARD.NA') }</span>
     );
@@ -77,12 +113,26 @@ export const AddressRender = function(address) {
     );
   }
 
+  if (this.props.AddressBook &&
+      this.props.AddressBook.obj &&
+      this.props.AddressBook.obj[address]) {
+    address = this.props.AddressBook.obj[address].title;
+  }
+
   return (
     <span className="blur">{ address }</span>
   );
 };
 
 export const AddressItemRender = function(address, type, amount, coin) {
+  let _address = address;
+  
+  if (this.props.AddressBook &&
+      this.props.AddressBook.obj &&
+      this.props.AddressBook.obj[address]) {
+    _address = this.props.AddressBook.obj[address].title;
+  }
+
   return (
     <li
       key={ address }
@@ -90,7 +140,7 @@ export const AddressItemRender = function(address, type, amount, coin) {
       <a onClick={ () => this.updateAddressSelection(address) }>
         <i className={ 'icon fa-eye' + (type === 'public' ? '' : '-slash') }></i>&nbsp;&nbsp;
         <span className="text">
-          [ { amount } { coin } ]  <span className="selectable">{ address }</span>
+          [ { amount } { coin } ]  <span className="selectable">{ _address }</span>
         </span>
         <span className="glyphicon glyphicon-ok check-mark"></span>
       </a>
@@ -264,7 +314,7 @@ export const TxHistoryListRender = function() {
   if (_activeCoin &&
       _activeCoin.txhistory &&
       !this.state.searchTerm) {
-    _data = _activeCoin.txhistory;
+    _data = this.props.ActiveCoin.txhistory || _activeCoin.txhistory || 'loading';
   }
 
   _data = _data || this.state.filteredItemsList;
@@ -298,7 +348,8 @@ export const TxHistoryListRender = function() {
 export const WalletsDataRender = function() {
   const _balance = this.props.ActiveCoin.balance;
   const _txhistory = this.props.ActiveCoin.txhistory;
-
+  const _coindStartParamsString = this.props.Main.coins.params && this.props.Main.coins.params[this.props.ActiveCoin.coin] ? this.props.Main.coins.params[this.props.ActiveCoin.coin].join(' ') : '';
+  
   return (
     <span>
       <div id="edexcoin_dashboardinfo">
@@ -367,8 +418,13 @@ export const WalletsDataRender = function() {
                     }
                     <h4 className="panel-title">{ !this.state.kvView ? translate('INDEX.TRANSACTION_HISTORY') : translate('KV.KV_HISTORY') }</h4>
                     { this.props.ActiveCoin.mode === 'spv' &&
-                      Config.experimentalFeatures &&
+                      Config.userAgreement &&
                       kvCoins[this.props.ActiveCoin.coin] &&
+                      this.state.itemsList !== 'loading' &&
+                      this.state.itemsList !== 'response too large' &&
+                      this.state.itemsList !== 'connection error' &&
+                      this.state.itemsList !== 'connection error or incomplete data' &&
+                      this.state.itemsList !== 'cant get current height' &&
                       <button
                         type="button"
                         className="btn btn-default btn-switch-kv"
@@ -376,23 +432,34 @@ export const WalletsDataRender = function() {
                         { translate('KV.' + (!this.state.kvView ? 'KV_VIEW' : 'TX_VIEW')) }
                       </button>
                     }
+                    { _coindStartParamsString &&
+                      _coindStartParamsString.indexOf('-regtest') > -1 &&
+                      <button
+                        type="button"
+                        className="btn btn-default btn-gen-block"
+                        onClick={ this._regtestGenBlock }>
+                        { translate('INDEX.REGTEST_GEN_BLOCK') }
+                      </button>
+                    }
                   </header>
                   <div className="panel-body">
-                    <div className="row padding-bottom-30 padding-top-10">
-                      { _txhistory !== 'loading' &&
-                        _txhistory !== 'no data' &&
-                        _txhistory !== 'connection error' &&
-                        _txhistory !== 'connection error or incomplete data' &&
-                        _txhistory !== 'cant get current height' &&
-                        !this.state.kvView &&
-                        <div className="col-sm-4 search-box">
-                          <input
-                            className="form-control"
-                            onChange={ e => this.onSearchTermChange(e.target.value) }
-                            placeholder={ translate('DASHBOARD.SEARCH') } />
-                        </div>
-                      }
-                    </div>
+                    { _txhistory !== 'loading' &&
+                      _txhistory !== 'no data' &&
+                      _txhistory !== 'connection error' &&
+                      _txhistory !== 'connection error or incomplete data' &&
+                      _txhistory !== 'cant get current height' &&
+                      _txhistory !== 'response too large' &&
+                      <div className="row padding-bottom-30 padding-top-10">
+                        { !this.state.kvView &&
+                          <div className="col-sm-4 search-box">
+                            <input
+                              className="form-control"
+                              onChange={ e => this.onSearchTermChange(e.target.value) }
+                              placeholder={ translate('DASHBOARD.SEARCH') } />
+                          </div>
+                        }
+                      </div>
+                    }
                     <div className="row txhistory-table">
                       { this.renderTxHistoryList() }
                     </div>

@@ -10,121 +10,181 @@ import {
   apiGetCoinList,
   apiPostCoinList,
   toggleZcparamsFetchModal,
+  getSyncInfoNativePromise,
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
-import mainWindow from '../../util/mainWindow';
-import { acConfig } from '../addcoin/payload';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
-import CoinSelectorsRender from './coin-selectors.render';
 import AddCoinRender from './addcoin.render';
+import addCoinOptionsCrypto from '../addcoin/addcoinOptionsCrypto';
+import addCoinOptionsAC from '../addcoin/addcoinOptionsAC';
 
-const SEED_TRIM_TIMEOUT = 5000;
+const modeToValue = {
+  spv: 0,
+  native: -1,
+  eth: 3,
+};
+
+const modeToValueReversed = {
+  '0': 'spv',
+  '-1': 'native',
+  '3': 'eth',
+};
 
 class AddCoin extends React.Component {
   constructor() {
     super();
     this.state = {
-      coins: [],
-      defaultCoinState: {
-        selectedCoin: null,
-        spvMode: {
-          disabled: true,
-          checked: false,
-        },
-        nativeMode: {
-          disabled: true,
-          checked: false,
-        },
-        miningMode: {
-          disabled: true,
-          checked: false,
-        },
-        stakingMode: {
-          disabled: true,
-          checked: false,
-        },
-        mode: -2,
-        daemonParam: null,
-        genProcLimit: 1,
-      },
+      coins: {},
       display: false,
       actionsMenu: false,
       className: 'hide',
       isExperimentalOn: false,
-      // staking ac
-      loginPassphrase: '',
-      seedInputVisibility: false,
-      seedExtraSpaces: false,
-      trimPassphraseTimer: null,
       usePubkey: false,
+      type: 'spv',
+      quickSearch: null,
+      coinsList: null,
+      kmdAcOnly: false,
     };
-    this.existingCoins = null;
     this.defaultState = JSON.parse(JSON.stringify(this.state));
-    this.activateCoin = this.activateCoin.bind(this);
     this.dismiss = this.dismiss.bind(this);
-    this.addNewItem = this.addNewItem.bind(this);
     this.activateAllCoins = this.activateAllCoins.bind(this);
     this.toggleActionsMenu = this.toggleActionsMenu.bind(this);
     this.saveCoinSelection = this.saveCoinSelection.bind(this);
     this.loadCoinSelection = this.loadCoinSelection.bind(this);
     this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
-    this.updateLoginPassPhraseInput = this.updateLoginPassPhraseInput.bind(this);
-    this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
-    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.toggleUsePubkey = this.toggleUsePubkey.bind(this);
+    this.updateModeType = this.updateModeType.bind(this);
+    this.filterCoins = this.filterCoins.bind(this);
+    this.updateInput = this.updateInput.bind(this);
+    this.updateCoinSelection = this.updateCoinSelection.bind(this);
+    this.isNativeCoinsSelected = this.isNativeCoinsSelected.bind(this);
+    this.isLiteCoinsSelected = this.isLiteCoinsSelected.bind(this);
+    this.toggleKmdAcOnly = this.toggleKmdAcOnly.bind(this);
+    this.detectDaemons = this.detectDaemons.bind(this);
+  }
+
+  detectDaemons() {
+    for (let key in staticVar.assetChainPorts) {
+      if (key !== 'marketmaker') {
+        const coin = key === 'komodod' ? 'KMD' : key;
+
+        getSyncInfoNativePromise(coin)
+        .then((res) => {        
+          if (res &&
+              res.hasOwnProperty('error') &&
+              res.hasOwnProperty('id') &&
+              res.hasOwnProperty('result') &&
+              res.result.hasOwnProperty('KMDversion') &&
+              res.result.hasOwnProperty('KMDnotarized_height') &&
+              res.result.hasOwnProperty('p2pport')) {                
+            let coins = JSON.parse(JSON.stringify(this.state.coins));
+            coins[coin] = {
+              coin: {
+                value: `${coin}|native`,
+              },
+              mode: 'native',
+            };
+
+            this.setState(Object.assign({}, this.state, {
+              coins,
+            }));
+          }
+        });
+      }
+    }
+  }
+
+  toggleKmdAcOnly () {
+    this.setState({
+      kmdAcOnly: !this.state.kmdAcOnly,
+    });
+  }
+
+  isNativeCoinsSelected() {
+    if (this.state.coins) {
+      for (let key in this.state.coins) {
+        if (this.state.coins[key].mode === 'native') {
+          return true;
+        }
+      }
+    }
+  }
+
+  isLiteCoinsSelected() {
+    if (this.state.coins) {
+      for (let key in this.state.coins) {
+        if (this.state.coins[key].mode === 'spv' ||
+            this.state.coins[key].mode === 'eth') {
+          return true;
+        }
+      }
+    }
+  }
+
+  updateCoinSelection(coin, params) {
+    let coins = JSON.parse(JSON.stringify(this.state.coins));
+
+    if ((coins[coin.value.split('|')[0]] && !params) || (coins[coin.value] && !params)) {
+      delete coins[coin.value.split('|')[0]];
+      delete coins[coin.value];
+    } else {
+      coins[coin.value] = {
+        coin,
+        params,
+        mode: this.state.type,
+      };
+    }
+
+    this.setState({
+      coins,
+    });
+  }
+
+  updateInput(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        coinsList: this.filterCoins(),
+      });
+    }, 10);
+  }
+
+  filterCoins() {
+    const coins = addCoinOptionsCrypto('skip').concat(addCoinOptionsAC('skip'));
+    let items = [];
+
+    for (let i = 0; i < coins.length; i++) {
+      if ((coins[i].value.indexOf(this.state.type === 'eth' ? `ETH|` : `|${this.state.type}`) > -1 || (this.state.type === 'eth' && coins[i].value === 'ETH')) &&
+          (!this.state.quickSearch || (this.state.quickSearch && (coins[i].label.substring(0, this.state.quickSearch.length).toLowerCase() === this.state.quickSearch.toLowerCase() || (this.state.type === 'eth' ? (coins[i].value.split('|')[1] || coins[i].value.split('|')[0]).substring(0, this.state.quickSearch.length).toLowerCase() : coins[i].value.split('|')[0].substring(0, this.state.quickSearch.length).toLowerCase()) === this.state.quickSearch.toLowerCase())))) {
+        items.push(coins[i]);
+      }
+    }
+
+    return items;
+  }
+
+  updateModeType(type) {
+    this.setState({
+      type,
+    });
+
+    setTimeout(() => {
+      this.setState({
+        coinsList: this.filterCoins(),
+      });
+    }, 10);
   }
 
   toggleUsePubkey() {
     this.setState({
       usePubkey: !this.state.usePubkey,
-    });
-  }
-
-  toggleSeedInputVisibility() {
-    this.setState({
-      seedInputVisibility: !this.state.seedInputVisibility,
-    });
-
-    this.resizeLoginTextarea();
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        const _login = document.querySelector('#loginPassphrase');
-        _login.style.height = '1px';
-        _login.style.height = `${(15 + _login.scrollHeight)}px`;
-      }
-    }, 100);
-  }
-
-  updateLoginPassPhraseInput(e) {
-    const newValue = e.target.value;
-
-    clearTimeout(this.state.trimPassphraseTimer);
-
-    const _trimPassphraseTimer = setTimeout(() => {
-      if (newValue[0] === ' ' ||
-          newValue[newValue.length - 1] === ' ') {
-        this.setState({
-          seedExtraSpaces: true,
-        });
-      } else {
-        this.setState({
-          seedExtraSpaces: false,
-        });
-      }
-    }, SEED_TRIM_TIMEOUT);
-
-    this.resizeLoginTextarea();
-
-    this.setState({
-      trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
     });
   }
 
@@ -178,8 +238,20 @@ class AddCoin extends React.Component {
     apiGetCoinList()
     .then((json) => {
       if (json.msg !== 'error') {
+        let coins = json.result;
+
+        // filter out lite mode coins
+        if (!this.props.Main.isPin &&
+            staticVar.argv.indexOf('hardcore') === -1) {
+          for (let key in coins) {
+            if (coins[key].mode !== 'native') {
+              delete coins[key];
+            }
+          }
+        }
+        
         this.setState(Object.assign({}, this.state, {
-          coins: json.result,
+          coins,
           actionsMenu: false,
         }));
       } else {
@@ -194,18 +266,6 @@ class AddCoin extends React.Component {
     });
   }
 
-  updateDaemonParam(e, index) {
-    let _coins = this.state.coins;
-
-    _coins[index] = Object.assign({}, _coins[index], {
-      [e.target.name]: e.target.value,
-    });
-
-    this.setState(Object.assign({}, this.state, {
-      coins: _coins,
-    }));
-  }
-
   toggleActionsMenu() {
     this.setState(Object.assign({}, this.state, {
       actionsMenu: !this.state.actionsMenu,
@@ -213,10 +273,9 @@ class AddCoin extends React.Component {
   }
 
   componentWillMount() {
-    this.addNewItem();
-
     this.setState({
-      isExperimentalOn: mainWindow.appConfig.experimentalFeatures,
+      isExperimentalOn: mainWindow.appConfig.userAgreement,
+      coinsList: this.filterCoins(),
     });
   }
 
@@ -229,6 +288,7 @@ class AddCoin extends React.Component {
         addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
         className: addCoinProps.display ? 'show fade' : 'show out',
+        type: (this.props.Main.coins.native.length || !this.props.Main.isLoggedIn) && staticVar.argv.indexOf('hardcore') === -1 ? 'native' : 'spv',
       }));
 
       setTimeout(() => {
@@ -239,98 +299,22 @@ class AddCoin extends React.Component {
 
         if (!addCoinProps.display) {
           setTimeout(() => {
-            this.removeCoin();
-            this.addNewItem();
+            this.setState({
+              coins: {},
+              quickSearch: null,
+              kmdAcOnly: false,
+              detectingDaemons: false,
+            });
           }, 100);
+        } else {
+          setTimeout(() => {
+            this.setState({
+              coinsList: this.filterCoins(),
+            });
+          }, 10);
         }
       }, addCoinProps.display ? 50 : 300);
     }
-  }
-
-  renderCoinOption(option) {
-    return (
-      <div>
-        <img
-          src={ `assets/images/cryptologo/${option.icon.toLowerCase()}.png` }
-          alt={ option.label }
-          width="30px"
-          height="30px" />
-          <span className="margin-left-10">{ option.label }</span>
-      </div>
-    );
-  }
-
-  updateSelectedCoin(e, index) {
-    if (e &&
-        e.value &&
-        e.value.indexOf('|')) {
-      const coin = e.value.split('|');
-      const defaultMode = coin[1];
-      const modeToValue = { // TODO: move to utils
-        spv: 0,
-        native: -1,
-        staking: 1,
-        mining: 2,
-      };
-      const _value = e.value;
-      let _coins = this.state.coins;
-
-      _coins[index] = {
-        selectedCoin: _value,
-        spvMode: {
-          disabled: _value.indexOf('spv') > -1 ? false : true,
-          checked: defaultMode === 'spv' ? true : false,
-        },
-        nativeMode: {
-          disabled: _value.indexOf('native') > -1 ? false : true,
-          checked: defaultMode === 'native' ? true : false,
-        },
-        stakingMode: {
-          disabled: _value.indexOf('staking') > -1 ? false : true,
-          checked: defaultMode === 'staking' ? true : false,
-        },
-        miningMode: {
-          disabled: _value.indexOf('mining') > -1 ? false : true,
-          checked: defaultMode === 'mining' ? true : false,
-        },
-        mode: modeToValue[defaultMode] !== undefined ? modeToValue[defaultMode] : -2,
-        genProcLimit: 1,
-      };
-
-      this.setState(Object.assign({}, this.state, {
-        coins: _coins,
-      }));
-    }
-  }
-
-  updateSelectedMode(_value, index) {
-    let _coins = this.state.coins;
-    const _selectedCoin = _coins[index].selectedCoin;
-
-    _coins[index] = {
-      selectedCoin: _selectedCoin,
-      spvMode: {
-        disabled: _selectedCoin.indexOf('spv') > -1 ? false : true,
-        checked: _value === '0' ? true : false,
-      },
-      nativeMode: {
-        disabled: _selectedCoin.indexOf('native') > -1 ? false : true,
-        checked: _value === '-1' ? true : false,
-      },
-      stakingMode: {
-        disabled: _selectedCoin.indexOf('staking') > -1 ? false : true,
-        checked: _value === '1' ? true : false,
-      },
-      miningMode: {
-        disabled: _selectedCoin.indexOf('mining') > -1 ? false : true,
-        checked: _value === '2' ? true : false,
-      },
-      mode: _value,
-    };
-
-    this.setState(Object.assign({}, this.state, {
-      coins: _coins,
-    }));
   }
 
   updateGenproclimitParam(e, index) {
@@ -349,235 +333,84 @@ class AddCoin extends React.Component {
     }
   }
 
-  activateCoin() {
-    const _coin = this.state.coins[0];
-    const coin = _coin.selectedCoin.split('|')[0];
-    const coinuc = coin.toUpperCase();
-
-    if (_coin.selectedCoin.indexOf('ETH') > -1) {
-      const _ethNet = _coin.selectedCoin.split('|');
-
-      Store.dispatch(addCoinEth(
-        _ethNet[0],
-        _ethNet[1],
-      ));
-
-      this.removeCoin();
-      this.addNewItem();
-
-      Store.dispatch(toggleAddcoinModal(false, false));
-
-      setTimeout(() => {
-        this.setState({
-          loginPassphrase: '',
-          seedInputVisibility: false,
-          seedExtraSpaces: false,
-          trimPassphraseTimer: null,
-        });
-      }, 100);
-    } else {
-      this.verifyZcashParamsExist(_coin.mode)
-      .then((res) => {
-        if (res) {
-          const seed = this.state.loginPassphrase;
-
-          if (seed) {
-            mainWindow.setPubkey(seed, coin.toLowerCase());
-          }
-
-          if (!_coin.daemonParam) {
-            if (this.state.usePubkey &&
-                pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd)) {
-              Store.dispatch(addCoin(
-                coin,
-                _coin.mode,
-                null,
-                null,
-                Config.pubkey,
-              ));
-            } else {
-              Store.dispatch(addCoin(
-                coin,
-                _coin.mode,
-              ));
-            }
-          } else {
-            Store.dispatch(addCoin(
-              coin,
-              _coin.mode,
-              { type: _coin.daemonParam },
-              _coin.daemonParam === 'gen' &&
-              acConfig[coinuc] &&
-              acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
-              this.state.usePubkey && pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd) ? Config.pubkey : null,
-            ));
-          }
-
-          this.removeCoin();
-          this.addNewItem();
-
-          Store.dispatch(toggleAddcoinModal(false, false));
-
-          setTimeout(() => {
-            this.setState({
-              loginPassphrase: '',
-              seedInputVisibility: false,
-              seedExtraSpaces: false,
-              trimPassphraseTimer: null,
-            });
-          }, 100);
-        }
-      });
-    }
-  }
-
   dismiss() {
     this.setState(this.defaultState);
     Store.dispatch(toggleAddcoinModal(false, false));
   }
 
-  addNewItem() {
-    let _coins = this.state.coins;
-    _coins.push(this.state.defaultCoinState);
-
-    this.setState(Object.assign({}, this.state, {
-      coins: _coins,
-    }));
-  }
-
-  removeCoin(index) {
-    let _coins = this.state.coins;
-    _coins.splice(index, 1);
-
-    this.setState(Object.assign({}, this.state, {
-      coins: _coins,
-    }));
-  }
-
-  hasMoreThanOneCoin() {
-    return this.state.coins.length > 1;
-  }
-
   activateAllCoins() {
-    let _coin = this.state.coins[0];
-    let coin = this.state.coins[0].selectedCoin.split('|')[0];
-    let coinuc = coin.toUpperCase();
-
-    if (_coin.selectedCoin.indexOf('ETH') > -1) {
-      const _ethNet = _coin.selectedCoin.split('|');
-
-      Store.dispatch(addCoinEth(
-        _ethNet[0],
-        _ethNet[1],
-      ));
-    } else {
-      if (!_coin.daemonParam) {
-        Store.dispatch(addCoin(
-          coin,
-          _coin.mode,
-        ));
-      } else {
-        Store.dispatch(addCoin(
-          coin,
-          _coin.mode,
-          { type: _coin.daemonParam },
-          _coin.daemonParam === 'gen' &&
-          acConfig[coinuc] &&
-          acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
-        ));
-      }
-    }
-
-    for (let i = 1; i < this.state.coins.length; i++) {
-      let _coin = this.state.coins[i];
-      let coin = _coin.selectedCoin.split('|')[0];
+    const _activateAllCoins = () => {
+      let _coin = this.state.coins[Object.keys(this.state.coins)[0]];
+      let coin = this.state.coins[Object.keys(this.state.coins)[0]].coin.value.split('|')[0];
       let coinuc = coin.toUpperCase();
-
-      setTimeout(() => {
-        if (!_coin.daemonParam) {
-          if (_coin.selectedCoin.indexOf('ETH') > -1) {
-            const _ethNet = _coin.selectedCoin.split('|');
-
-            Store.dispatch(addCoinEth(
-              _ethNet[0],
-              _ethNet[1],
-            ));
+      let _i = 0;
+      
+      for (let key in this.state.coins) {
+        _i++;
+        let _coin = this.state.coins[key];
+        let coin = _coin.coin.value.split('|')[0];
+        let coinuc = coin.toUpperCase();
+  
+        setTimeout(() => {
+          if (!_coin.params) {
+            if (_coin.coin.value.indexOf('ETH') > -1) {
+              const _ethNet = _coin.coin.value.split('|');
+  
+              Store.dispatch(addCoinEth(
+                _ethNet[0],
+                _ethNet[1],
+              ));
+            } else {
+              Store.dispatch(addCoin(
+                coin,
+                modeToValue[_coin.mode],
+              ));
+            }
           } else {
             Store.dispatch(addCoin(
               coin,
-              _coin.mode,
+              modeToValue[_coin.mode],
+              { type: _coin.params.daemonParam },
+              _coin.params.daemonParam === 'gen' &&
+              staticVar.chainParams[coinuc] &&
+              staticVar.chainParams[coinuc].genproclimit ? Number(_coin.params.genProcLimit || 1) : 0,
+              _coin.params.usePubkey && pubkeyToAddress(Config.pubkey, bitcoinjsNetworks.kmd) ? Config.pubkey : null,
             ));
           }
-        } else {
-          Store.dispatch(addCoin(
-            coin,
-            _coin.mode,
-            { type: _coin.daemonParam },
-            _coin.daemonParam === 'gen' &&
-            acConfig[coinuc] &&
-            acConfig[coinuc].genproclimit ? Number(_coin.genProcLimit || 1) : 0,
-          ));
+  
+          if (_i === Object.keys(this.state.coins).length - 1) {
+            let _coins = [];
+            _coins.push(this.state.defaultCoinState);
+  
+            this.setState(Object.assign({}, this.state, {
+              coins: _coins,
+            }));
+  
+            Store.dispatch(toggleAddcoinModal(false, false));
+          }
+        }, (_coin.mode === 'native' ? 2000 : 0) * (_i - 1));
+      }
+    };
+
+    let isNativeModeCoin;
+
+    for (let key in this.state.coins) {
+      if (this.state.coins[key].mode === 'native') {
+        isNativeModeCoin = true;
+        break;
+      }
+    }
+
+    if (isNativeModeCoin) {
+      this.verifyZcashParamsExist(-1)
+      .then((res) => {
+        if (res) {
+          _activateAllCoins();
         }
-
-        if (i === this.state.coins.length - 1) {
-          let _coins = [];
-          _coins.push(this.state.defaultCoinState);
-
-          this.setState(Object.assign({}, this.state, {
-            coins: _coins,
-          }));
-
-          Store.dispatch(toggleAddcoinModal(false, false));
-
-          setTimeout(() => {
-            this.setState({
-              loginPassphrase: '',
-              seedInputVisibility: false,
-              seedExtraSpaces: false,
-              trimPassphraseTimer: null,
-            });
-          }, 100);
-        }
-      }, 2000 * i);
+      });
+    } else {
+      _activateAllCoins();
     }
-  }
-
-  renderCoinSelectors() {
-    const _coins = this.state.coins;
-    let items = [];
-
-    for (let i = 0; i < _coins.length; i++) {
-      const _item = _coins[i];
-      const _coin = _item.selectedCoin || '';
-
-      items.push(
-        CoinSelectorsRender.call(
-          this,
-          _item,
-          _coin,
-          i
-        )
-      );
-    }
-
-    return items;
-  }
-
-  renderGenproclimitOptions() {
-    const _max = 32;
-    let _items = [];
-
-    for (let i = 0; i < _max; i++) {
-      _items.push(
-        <option
-          key={ `addcoin-genproclimit-${i}` }
-          value={ i + 1 }>
-          { translate('ADD_COIN.MINING_THREADS') }: { i + 1 }
-        </option>
-      );
-    }
-
-    return _items;
   }
 
   render() {

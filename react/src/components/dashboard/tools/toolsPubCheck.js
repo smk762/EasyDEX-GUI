@@ -1,6 +1,7 @@
 import React from 'react';
 import translate from '../../../translate/translate';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
+import { getAddressVersion } from 'agama-wallet-lib/src/keys';
 
 class ToolsPubCheck extends React.Component {
   constructor() {
@@ -15,7 +16,7 @@ class ToolsPubCheck extends React.Component {
 
   pubCheck() {
     this.setState({
-      pubResult: mainWindow.getAddressVersion(this.state.pub),
+      pubResult: getAddressVersion(this.state.pub),
     });
   }
 

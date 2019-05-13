@@ -18,38 +18,61 @@ import {
   encryptPassphrase,
   loadPinList,
   loginWithPin,
-  apiElectrumLogout,
+  apiLogout,
+  clearActiveCoinStore,
   dashboardRemoveCoin,
   dashboardChangeSectionState,
   toggleDashboardActiveSection,
+  copyString,
+  // addcoin logic
+  addCoin,
+  addCoinEth,
 } from '../../actions/actionCreators';
 import Config from '../../config';
 import Store from '../../store';
-import zcashParamsCheckErrors from '../../util/zcashParams';
-import SwallModalRender from './swall-modal.render';
 import LoginRender from './login.render';
 import translate from '../../translate/translate';
-import mainWindow from '../../util/mainWindow';
+import mainWindow, { staticVar } from '../../util/mainWindow';
 import passphraseGenerator from 'agama-wallet-lib/src/crypto/passphrasegenerator';
 import md5 from 'agama-wallet-lib/src/crypto/md5';
+import {
+  msigPubAddress,
+  pubkeyToAddress,
+  isPrivKey,
+  stringToWif,
+  wifToWif,
+} from 'agama-wallet-lib/src/keys';
+import networks from 'agama-wallet-lib/src/bitcoinjs-networks';
+import { shuffleArray } from 'agama-wallet-lib/src/crypto/utils';
+import { explorerList } from 'agama-wallet-lib/src/coin-helpers';
+import nnConfig from '../nnConfig';
+import zcashParamsCheckErrors from '../../util/zcashParams';
+
+const { shell } = window.require('electron');
 
 const SEED_TRIM_TIMEOUT = 5000;
+const modeToValue = {
+  spv: 0,
+  native: -1,
+  eth: 3,
+};
+
+// TODO: create/restore wallet msig, offline sig, watch only support
 
 class Login extends React.Component {
   constructor() {
     super();
     this.state = {
       display: false,
-      activeLoginSection: 'activateCoin',
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       loginPassphrase: '',
       seedInputVisibility: false,
-      loginPassPhraseSeedType: null,
       bitsOption: 256,
-      randomSeed: passphraseGenerator.generatePassPhrase(256),
-      randomSeedConfirm: '',
+      randomSeed: '',
+      randomSeedShuffled: '',
+      randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
-      displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
       trimPassphraseTimer: null,
@@ -67,7 +90,10 @@ class Login extends React.Component {
       selectedShortcutNative: '',
       selectedShortcutSPV: '',
       seedExtraSpaces: false,
+      step: 0,
+      walletType: 'default',
     };
+    this.coins = {};
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.toggleActivateCoinForm = this.toggleActivateCoinForm.bind(this);
     this.updateRegisterConfirmPassPhraseInput = this.updateRegisterConfirmPassPhraseInput.bind(this);
@@ -75,18 +101,165 @@ class Login extends React.Component {
     this.loginSeed = this.loginSeed.bind(this);
     this.toggleSeedInputVisibility = this.toggleSeedInputVisibility.bind(this);
     this.handleRegisterWallet = this.handleRegisterWallet.bind(this);
-    this.toggleSeedBackupModal = this.toggleSeedBackupModal.bind(this);
-    this.copyPassPhraseToClipboard = this.copyPassPhraseToClipboard.bind(this);
     this.execWalletCreate = this.execWalletCreate.bind(this);
-    this.resizeLoginTextarea = this.resizeLoginTextarea.bind(this);
     this.toggleLoginSettingsDropdown = this.toggleLoginSettingsDropdown.bind(this);
     this.updateInput = this.updateInput.bind(this);
     this.loadPinList = this.loadPinList.bind(this);
     this.updateSelectedShortcut = this.updateSelectedShortcut.bind(this);
     this.setRecieverFromScan = this.setRecieverFromScan.bind(this);
-    this.toggleCustomPinFilename = this.toggleCustomPinFilename.bind(this);
-    this.resetSPVCoins = this.resetSPVCoins.bind(this);
+    this.logout = this.logout.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.createSeedConfirmPush = this.createSeedConfirmPush.bind(this);
+    this.prevStep = this.prevStep.bind(this);
+    this.nextStep = this.nextStep.bind(this);
+    this.clearCreateSeedConfirm = this.clearCreateSeedConfirm.bind(this);
+    this.popCreateSeedConfirm = this.popCreateSeedConfirm.bind(this);
+    this.verifyZcashParamsExist = this.verifyZcashParamsExist.bind(this);
+    this.openExplorerWindow = this.openExplorerWindow.bind(this);
+    this.copyPubAddress = this.copyPubAddress.bind(this);
+  }
+
+  copyPubAddress(coin) {
+    const address = isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks[coin], true).pub : stringToWif(this.state.loginPassphrase || '', networks[coin], true).pub;
+    Store.dispatch(copyString(address, translate('DASHBOARD.ADDR_COPIED')));
+  }
+
+  openExplorerWindow(coin) {
+    const address = isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks[coin], true).pub : stringToWif(this.state.loginPassphrase || '', networks[coin], true).pub;
+    const url = `${explorerList[coin.toUpperCase()]}/address/${address}`;
+    return shell.openExternal(url);
+  }
+
+  activateAllCoins() {
+    const _activateAllCoins = () => {
+      let _i = 0;
+      
+      for (let key in this.coins) {
+        _i++;
+        let _coin = this.coins[key];
+        let coin = _coin.value;
+        let coinuc = coin.toUpperCase();
+  
+        setTimeout(() => {
+          if (!_coin.params) {
+            if (_coin.value.indexOf('ETH') > -1 ||
+                _coin.value === 'ETH') {
+              const _ethNet = _coin.coin.value.split('|');
+  
+              Store.dispatch(addCoinEth(
+                _ethNet[0],
+                _ethNet[1],
+                true
+              ));
+            } else {
+              Store.dispatch(addCoin(
+                coin,
+                modeToValue[_coin.mode],
+                null,
+                null,
+                null,
+                true
+              ));
+            }
+          } else {
+            Store.dispatch(addCoin(
+              coin,
+              modeToValue[_coin.mode],
+              { type: _coin.params.daemonParam },
+              _coin.params.daemonParam === 'gen' &&
+              staticVar.chainParams[coinuc] &&
+              staticVar.chainParams[coinuc].genproclimit ? Number(_coin.params.genProcLimit || 1) : 0,
+              _coin.params.usePubkey && pubkeyToAddress(Config.pubkey, networks.kmd) ? Config.pubkey : null,
+              true
+            ));
+          }
+        }, (_coin.mode === 'native' ? 2000 : 0) * (_i - 1));
+      }
+    };
+
+    let isNativeModeCoin;
+
+    for (let key in this.coins) {
+      if (this.coins[key].mode === 'native') {
+        isNativeModeCoin = true;
+        break;
+      }
+    }
+
+    if (isNativeModeCoin) {
+      this.verifyZcashParamsExist(-1)
+      .then((res) => {
+        if (res) {
+          _activateAllCoins();
+        }
+      });
+    } else {
+      _activateAllCoins();
+    }
+  }
+
+  verifyZcashParamsExist(mode) {
+    return new Promise((resolve, reject) => {
+      if (Number(mode) === -1 ||
+          Number(mode) === 1 ||
+          Number(mode) === 2) {
+        const _res = mainWindow.zcashParamsExist;
+        const __errors = zcashParamsCheckErrors(_res);
+
+        if (__errors) {
+          mainWindow.zcashParamsExistPromise()
+          .then((res) => {
+            const _errors = zcashParamsCheckErrors(res);
+            mainWindow.zcashParamsExist = res;
+
+            if (_errors) {
+              Store.dispatch(
+                triggerToaster(
+                  _errors,
+                  'Komodod',
+                  'error',
+                  false
+                )
+              );
+              Store.dispatch(toggleZcparamsFetchModal(true));
+              Store.dispatch(toggleZcparamsFetchModal(true));
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          });
+        } else {
+          resolve(true);
+        }
+      } else {
+        resolve(true);
+      }
+    });
+  }
+
+  popCreateSeedConfirm() {
+    let randomSeedConfirm = JSON.parse(JSON.stringify(this.state.randomSeedConfirm));
+    randomSeedConfirm.pop();
+
+    this.setState({
+      randomSeedConfirm,
+    });
+  }
+
+  clearCreateSeedConfirm() {
+    this.setState({
+      randomSeedConfirm: [],
+    });
+  }
+
+  createSeedConfirmPush(word) {
+    let randomSeedConfirm = JSON.parse(JSON.stringify(this.state.randomSeedConfirm));
+
+    randomSeedConfirm.push(word);    
+
+    this.setState({
+      randomSeedConfirm,
+    });
   }
 
   handleClickOutside(e) {
@@ -99,25 +272,24 @@ class Login extends React.Component {
     }
   }
 
-  renderResetSPVCoinsOption() {
+  renderLogoutOption() {
     if (this.props.Main &&
-        this.props.Main.coins &&
-        this.props.Main.coins.spv &&
-        this.props.Main.coins.spv.length) {
+        (this.props.Main.isLoggedIn || this.props.Main.isPin)) {
       return true;
     }
   }
 
-  resetSPVCoins() {
+  logout() {
     this.setState({
       displayLoginSettingsDropdown: false,
     });
 
-    apiElectrumLogout()
+    apiLogout()
     .then((res) => {
       const _spvCoins = this.props.Main.coins.spv;
 
       mainWindow.pinAccess = false;
+      mainWindow.multisig = null;
 
       if (!this.props.Main.coins.native.length) {
         Store.dispatch(dashboardChangeActiveCoin(
@@ -131,6 +303,7 @@ class Login extends React.Component {
         for (let i = 0; i < _spvCoins.length; i++) {
           Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
         }
+
         if (!this.props.Main.coins.native.length) {
           Store.dispatch(dashboardChangeActiveCoin(
             null,
@@ -153,6 +326,7 @@ class Login extends React.Component {
       Store.dispatch(getDexCoins());
       Store.dispatch(activeHandle());
       Store.dispatch(dashboardChangeActiveCoin());
+      Store.dispatch(clearActiveCoinStore());
     });
   }
 
@@ -164,12 +338,16 @@ class Login extends React.Component {
   }
 
   toggleLoginSettingsDropdownSection(sectionName) {
-    Store.dispatch(toggleLoginSettingsModal(true));
+    if (sectionName === 'elections') {
+      this._toggleNotaryElectionsModal();
+    } else {
+      Store.dispatch(toggleLoginSettingsModal(true));
 
-    this.setState({
-      displayLoginSettingsDropdown: false,
-      displayLoginSettingsDropdownSection: sectionName,
-    });
+      this.setState({
+        displayLoginSettingsDropdown: false,
+        displayLoginSettingsDropdownSection: sectionName,
+      });
+    }
   }
 
   setRecieverFromScan(receiver) {
@@ -180,54 +358,12 @@ class Login extends React.Component {
     } else {
       Store.dispatch(
         triggerToaster(
-          translate('INDEX.QR_UNABLE_TO_DECODE'),
+          translate('LOGIN.QR_UNABLE_TO_DECODE'),
           translate('INDEX.QR_ERROR'),
           'error'
         )
       );
     }
-  }
-
-  isCustomWalletSeed() {
-    return this.state.customWalletSeed;
-  }
-
-  toggleCustomWalletSeed() {
-    this.setState({
-      customWalletSeed: !this.state.customWalletSeed,
-    }, () => {
-      // if customWalletSeed is set to false, regenerate the seed
-      if (!this.state.customWalletSeed) {
-        this.setState({
-          randomSeed: passphraseGenerator.generatePassPhrase(this.state.bitsOption),
-          isSeedConfirmError: false,
-          isSeedBlank: false,
-          isCustomSeedWeak: false,
-        });
-      } else {
-        // if customWalletSeed is set to true, reset to seed to an empty string
-        this.setState({
-          randomSeed: '',
-          randomSeedConfirm: '',
-        });
-      }
-    });
-  }
-
-  shouldEncryptSeed() {
-    return this.state.shouldEncryptSeed;
-  }
-
-  toggleShouldEncryptSeed() {
-    this.setState({
-      shouldEncryptSeed: !this.state.shouldEncryptSeed,
-    });
-  }
-
-  toggleCustomPinFilename() {
-    this.setState({
-      isCustomPinFilename: !this.state.isCustomPinFilename,
-    });
   }
 
   updateInput(e) {
@@ -237,8 +373,12 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
+    const newSeed = passphraseGenerator.generatePassPhrase(256);
+
     this.setState({
-      isExperimentalOn: mainWindow.experimentalFeatures,
+      isExperimentalOn: mainWindow.userAgreement,
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
     });
 
     this.loadPinList();
@@ -248,13 +388,14 @@ class Login extends React.Component {
     this.setState({
       seedInputVisibility: !this.state.seedInputVisibility,
     });
-
-    this.resizeLoginTextarea();
   }
 
   generateNewSeed(bits) {
+    const newSeed = passphraseGenerator.generatePassPhrase(bits);
+
     this.setState(Object.assign({}, this.state, {
-      randomSeed: passphraseGenerator.generatePassPhrase(bits),
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
       bitsOption: bits,
       isSeedBlank: false,
     }));
@@ -296,71 +437,71 @@ class Login extends React.Component {
       }, 100);
     }
 
-    if (props &&
-        props.Main &&
-        props.Main.isLoggedIn) {
-      if (props.Main.total === 0) {
-        this.setState({
-          activeLoginSection: 'activateCoin',
-          loginPassphrase: '',
-          display: true,
-        });
-      } else {
-        this.setState({
-          loginPassphrase: '',
-          display: false,
-        });
-      }
-    }
-
-    if (props &&
-        props.Main &&
-        !props.Main.isLoggedIn) {
-      document.body.className = 'page-login layout-full page-dark';
-
-      if (props.Interval &&
-          props.Interval.interval &&
-          props.Interval.interval.sync) {
-        Store.dispatch(dashboardChangeActiveCoin());
-        Store.dispatch(
-          stopInterval(
-            'sync',
-            props.Interval.interval
-          )
-        );
-      }
-
-      this.setState({
-        display: true,
-        activeLoginSection: this.state.activeLoginSection !== 'signup' ? 'login' : 'signup',
-      });
-    }
-
-    if (props.Main &&
-        props.Main.total === 0) {
-      document.body.className = 'page-login layout-full page-dark';
-
-      if (props.Interval &&
-          props.Interval.interval &&
-          props.Interval.interval.sync) {
-        Store.dispatch(dashboardChangeActiveCoin());
-        Store.dispatch(
-          stopInterval(
-            'sync',
-            props.Interval.interval
-          )
-        );
-      }
-    }
-
     if (this.state.activeLoginSection !== 'signup' &&
-        props &&
-        props.Main &&
-        props.Main.isLoggedIn) {
-      this.setState({
-        loginPassphrase: '',
-        activeLoginSection: 'activateCoin',
-      });
+        this.state.activeLoginSection !== 'restore') {
+      if (props &&
+          props.Main &&
+          (props.Main.isLoggedIn || props.Main.isPin)) {
+        if (props.Main.total === 0) {
+          this.setState({
+            activeLoginSection: 'activateCoin',
+            loginPassphrase: '',
+            display: true,
+          });
+        } else {
+          this.setState({
+            loginPassphrase: '',
+            display: false,
+          });
+        }
+      }
+
+      if (props &&
+          props.Main &&
+          !props.Main.isLoggedIn) {
+        document.body.className = 'page-login layout-full page-dark';
+
+        if (props.Interval &&
+            props.Interval.interval &&
+            props.Interval.interval.sync) {
+          Store.dispatch(dashboardChangeActiveCoin());
+          Store.dispatch(
+            stopInterval(
+              'sync',
+              props.Interval.interval
+            )
+          );
+        }
+
+        if (staticVar.argv.indexOf('hardcore') > -1) {
+          this.setState({
+            display: true,
+            activeLoginSection: 'login',
+          });
+        } else {
+          this.setState({
+            display: true,
+            activeLoginSection: this.state.activeLoginSection !== 'signup' && this.state.activeLoginSection !== 'restore' ? 'login' : this.state.activeLoginSection,
+          });
+        }
+      }
+
+      if (props.Main &&
+          props.Main.total === 0) {
+        document.body.className = 'page-login layout-full page-dark';
+
+        if (props.Interval &&
+            props.Interval.interval &&
+            props.Interval.interval.sync) {
+          Store.dispatch(dashboardChangeActiveCoin());
+          Store.dispatch(
+            stopInterval(
+              'sync',
+              props.Interval.interval
+            )
+          );
+        }
+      }
     }
   }
 
@@ -368,21 +509,10 @@ class Login extends React.Component {
     Store.dispatch(toggleAddcoinModal(true, false));
   }
 
-  resizeLoginTextarea() {
-    // auto-size textarea
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        document.querySelector('#loginPassphrase').style.height = '1px';
-        document.querySelector('#loginPassphrase').style.height = `${(15 + document.querySelector('#loginPassphrase').scrollHeight)}px`;
-      }
-    }, 100);
-  }
-
   updateLoginPassPhraseInput(e) {
-    const newValue = e.target.value;
-
     clearTimeout(this.state.trimPassphraseTimer);
-
+    
+    const newValue = e.target.value;
     const _trimPassphraseTimer = setTimeout(() => {
       if (newValue[0] === ' ' ||
           newValue[newValue.length - 1] === ' ') {
@@ -396,13 +526,10 @@ class Login extends React.Component {
       }
     }, SEED_TRIM_TIMEOUT);
 
-    this.resizeLoginTextarea();
-
     this.setState({
       seedExtraSpaces: false,
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'loginPassphraseTextarea' ? 'loginPassphrase' : e.target.name]: newValue,
-      loginPassPhraseSeedType: this.getLoginPassPhraseSeedType(newValue),
+      [e.target.name]: newValue,
     });
   }
 
@@ -423,11 +550,15 @@ class Login extends React.Component {
   }
 
   loginSeed() {
+    this.coins = {};
+
+    // ol' good seed/wif type in access
     if (!this.state.selectedPin ||
         !this.state.decryptKey) {
       const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
 
       mainWindow.pinAccess = false;
+      mainWindow.multisig = null;
 
       if (!stringEntropy) {
         Store.dispatch(
@@ -443,17 +574,18 @@ class Login extends React.Component {
       }
 
       mainWindow.createSeed.secondaryLoginPH = md5(this.state.loginPassphrase);
-      // reset the login pass phrase values so that when the user logs out, the values are clear
-      this.setState({
-        loginPassphrase: '',
-        loginPassPhraseSeedType: null,
-      });
 
       // reset login input vals
-      this.refs.loginPassphrase.value = '';
-      this.refs.loginPassphraseTextarea.value = '';
+      if (this.refs.loginPassphrase) {
+        this.refs.loginPassphrase.value = '';
+      }
 
       this.setState(this.defaultState);
+      setTimeout(() => {
+        this.setState({
+          activeLoginSection: 'activateCoin',
+        });
+      }, 50);
 
       // TODO: trigger based on ETH/electrum
       Store.dispatch(dashboardChangeSectionState('wallets'));
@@ -465,23 +597,106 @@ class Login extends React.Component {
     } else {
       mainWindow.pinAccess = this.state.selectedPin;
 
-      loginWithPin(this.state.decryptKey, this.state.selectedPin)
+      loginWithPin(
+        this.state.decryptKey,
+        this.state.selectedPin
+      )
       .then((res) => {
         if (res.msg === 'success') {
+          Store.dispatch(activeHandle());
+          /*if (res.result.seed.indexOf('msig:') > -1) {
+            const _data = res.result.split('msig:');
+
+            try {
+              mainWindow.multisig = JSON.parse(_data[1]);
+              
+              const _coins = this.props.Main.coins.spv;
+
+              if (_coins.length) {
+                let _addressSet = false;
+                mainWindow.multisig.addresses = {};
+
+                if (_coins.indexOf('KMD') > -1) {
+                  res.result = msigPubAddress(mainWindow.multisig.scriptPubKey, networks.kmd);
+                  _addressSet = true;
+                }
+
+                for (let i = 0; i < _coins.length; i++) {
+                  mainWindow.multisig.addresses[_coins[i]] = msigPubAddress(mainWindow.multisig.scriptPubKey, networks[_coins[i].toLowerCase()] || networks.kmd);
+                  
+                  if (!_addressSet &&
+                      i === 0) {
+                    res.result = mainWindow.multisig.addresses[_coins[i]];
+                    _addressSet = true;
+                  }
+                }
+
+                res.result = msigPubAddress(mainWindow.multisig.scriptPubKey, networks.kmd);
+              }
+            } catch (e) {
+              console.warn('unable to parse multisig data from pin');
+            }
+          }*/
           // reset login input vals
-          this.refs.loginPassphrase.value = '';
-          this.refs.loginPassphraseTextarea.value = '';
+          if (staticVar.argv.indexOf('hardcore') > -1) {
+            this.refs.loginPassphrase.value = '';
+          }
           this.refs.decryptKey.value = '';
-          this.refs.selectedPin.value = '';
 
           this.setState(this.defaultState);
 
           Store.dispatch(dashboardChangeSectionState('wallets'));
           Store.dispatch(toggleDashboardActiveSection('default'));
-          Store.dispatch(apiElectrumAuth(res.result));
-          Store.dispatch(apiElectrumCoins());
-          Store.dispatch(apiEthereumAuth(res.result));
-          Store.dispatch(apiEthereumCoins());
+          
+          if (res.result.type === 'default') {
+            Store.dispatch(apiElectrumAuth(res.result.data.keys.seed));
+          }
+
+          const _coinsFromStorage = res.result.data.coins;
+          if (Object.keys(_coinsFromStorage).length) {
+            const modes = []
+
+            // an extra check to make sure native/lite mode coins are not running together
+            if (!_coinsFromStorage.native.length) {
+              modes.push('spv', 'eth');
+            } else {
+              modes.push('native');
+            }
+
+            for (let i = 0; i < modes.length; i++) {
+              if (_coinsFromStorage.hasOwnProperty(modes[i])) {
+                for (let j = 0; j < _coinsFromStorage[modes[i]].length; j++) {
+                  let _params = {};
+
+                  if (_coinsFromStorage.params &&
+                      _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]]) {
+                    if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit') > -1) {
+                      _params.daemonParam = 'gen';
+                      _params.genProcLimit = _coinsFromStorage.params[_coinsFromStorage[modes[i]][j]][_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-genproclimit')].replace('-genproclimit=', '');
+                    } else if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-regtest') > -1) {
+                      _params.daemonParam = 'regtest';
+                    } else if (_coinsFromStorage.params[_coinsFromStorage[modes[i]][j]].indexOf('-pubkey') > -1) {
+                      _params.usePubkey = true;
+                    }
+                  }
+
+                  this.coins[_coinsFromStorage[modes[i]][j]] = {
+                    value: modes[i] === 'eth' ? `ETH|${_coinsFromStorage[modes[i]][j]}`: _coinsFromStorage[modes[i]][j],
+                    mode: modes[i],
+                    params: Object.keys(_params).length ? _params : null,
+                  }
+                }
+              }
+            }
+
+            this.activateAllCoins();
+          } else {
+            setTimeout(() => {
+              this.setState({
+                activeLoginSection: 'activateCoin',
+              });
+            }, 100);
+          }
         }
       });
     }
@@ -491,54 +706,29 @@ class Login extends React.Component {
     Store.dispatch(loadPinList());
   }
 
-  updateSelectedPin(e) {
+  updateSelectedPin(selectedPin) {
     this.setState({
-      selectedPin: e.target.value,
+      selectedPin,
     });
   }
 
-  getLoginPassPhraseSeedType(passPhrase) {
-    if (!passPhrase) {
-      return null;
-    }
-
-    const passPhraseWords = passPhrase.split(' ');
-
-    if (!passphraseGenerator.arePassPhraseWordsValid(passPhrase)) {
-      return null;
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 256)) {
-      return translate('LOGIN.IGUANA_SEED');
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 160)) {
-      return translate('LOGIN.WAVES_SEED');
-    }
-
-    if (passphraseGenerator.isPassPhraseValid(passPhraseWords, 128)) {
-      return translate('LOGIN.NXT_SEED');
-    }
-
-    return null;
-  }
-
   updateActiveLoginSection(name) {
+    const newSeed = passphraseGenerator.generatePassPhrase(256);
     // reset login/create form
     this.setState({
       activeLoginSection: name,
       loginPassphrase: null,
-      loginPassPhraseSeedType: null,
       seedInputVisibility: false,
       bitsOption: 256,
-      randomSeed: passphraseGenerator.generatePassPhrase(256),
-      randomSeedConfirm: '',
+      randomSeed: newSeed,
+      randomSeedShuffled: shuffleArray(newSeed.split(' ')),
+      randomSeedConfirm: [],
       isSeedConfirmError: false,
       isSeedBlank: false,
-      displaySeedBackupModal: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
-   });
+      step: 0,
+    });
   }
 
   execWalletCreate() {
@@ -553,20 +743,79 @@ class Login extends React.Component {
     );
 
     this.setState({
-      activeLoginSection: 'activateCoin',
-      displaySeedBackupModal: false,
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
       isSeedConfirmError: false,
     });
   }
 
-  handleRegisterWallet() {
-    const enteredSeedsMatch = this.state.randomSeed === this.state.randomSeedConfirm;
-    const isSeedBlank = this.isBlank(this.state.randomSeed);
-    const stringEntropy = mainWindow.checkStringEntropy(this.state.randomSeed);
-    const _customSeed = this.state.customWalletSeed;
+  prevStep() {
+    if (this.state.activeLoginSection === 'signup') {
+      const newSeed = passphraseGenerator.generatePassPhrase(256);
 
-    if (!stringEntropy &&
-        _customSeed) {
+      this.setState({
+        step: this.state.step - 1,
+        randomSeedConfirm: [],
+        randomSeed: newSeed,
+        randomSeedShuffled: shuffleArray(newSeed.split(' ')),
+      });
+    } else {
+      this.setState({
+        step: this.state.step - 1,
+        loginPassphrase: null,
+      });
+    }
+  }
+
+  nextStep() {
+    if (this.state.activeLoginSection === 'restore' &&
+        this.state.step === 0) {
+      const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
+      
+      if (!stringEntropy) {
+        Store.dispatch(
+          triggerToaster(
+            [translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P1'),
+              '',
+              translate('LOGIN.SEED_ENTROPY_CHECK_LOGIN_P2')],
+            translate('LOGIN.SEED_ENTROPY_CHECK_TITLE'),
+            'warning toastr-wide',
+            false
+          )
+        );
+      } else {
+        this.setState({
+          step: this.state.step + 1,
+        });
+      }
+    } else if (
+      this.state.activeLoginSection === 'signup' &&
+      this.state.walletType === 'native' &&
+      this.state.step === 0
+    ) {
+      this.setState({
+        step: 3,
+      });
+    } else {
+      this.setState({
+        step: this.state.step + 1,
+      });
+    }
+  }
+
+  handleRegisterWallet() {
+    const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
+    const walletType = this.state.activeLoginSection === 'signup' ? this.state.walletType : 'default';
+    let enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
+    let isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
+    let stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
+
+    if (walletType === 'native') { // skip lite mode checks
+      enteredSeedsMatch = true;
+      isSeedBlank = false;
+      stringEntropy = true;
+    }
+
+    if (!stringEntropy) {
       Store.dispatch(
         triggerToaster(
           [translate('LOGIN.SEED_ENTROPY_CHECK_P1'),
@@ -580,13 +829,11 @@ class Login extends React.Component {
     }
 
     this.setState({
-      isCustomSeedWeak: _customSeed === null ? true : false,
       isSeedConfirmError: !enteredSeedsMatch ? true : false,
       isSeedBlank: isSeedBlank ? true : false,
     });
 
-    if (this.state.shouldEncryptSeed &&
-        !this.isCustomWalletSeed()) {
+    if (this.state.shouldEncryptSeed) {
       if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
         Store.dispatch(
           triggerToaster(
@@ -623,19 +870,28 @@ class Login extends React.Component {
               if (this.state.customPinFilename &&
                   _customPinFilenameTest.test(this.state.customPinFilename)) {
                 encryptPassphrase(
-                  this.state.randomSeed,
+                  this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
                   this.state.encryptKey,
+                  walletType,
                   false,
                   this.state.customPinFilename,
                 )
                 .then((res) => {
                   if (res.msg === 'success') {
                     this.loadPinList();
+                    Store.dispatch(activeHandle());
 
                     setTimeout(() => {
                       this.setState({
                         selectedPin: res.result,
                         activeLoginSection: 'login',
+                        randomSeed: '',
+                        loginPassphrase: '',
+                        randomSeedConfirm: [],
+                        customWalletSeed: false,
+                        encryptKey: '',
+                        encryptKeyConfirm: '',
+                        decryptKey: '',
                       });
                     }, 500);
                   } else {
@@ -658,15 +914,27 @@ class Login extends React.Component {
                 );
               }
             } else {
-              encryptPassphrase(this.state.randomSeed, this.state.encryptKey)
+              encryptPassphrase(
+                this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
+                this.state.encryptKey,
+                'default'
+              )
               .then((res) => {
                 if (res.msg === 'success') {
                   this.loadPinList();
+                  Store.dispatch(activeHandle());
 
                   setTimeout(() => {
                     this.setState({
                       selectedPin: res.result,
                       activeLoginSection: 'login',
+                      randomSeed: '',
+                      loginPassphrase: '',
+                      randomSeedConfirm: [],
+                      customWalletSeed: false,
+                      encryptKey: '',
+                      encryptKeyConfirm: '',
+                      decryptKey: '',
                     });
                   }, 500);
                 } else {
@@ -683,13 +951,6 @@ class Login extends React.Component {
           }
         }
       }
-    } else {
-      if (enteredSeedsMatch &&
-          !isSeedBlank &&
-          _customSeed !== null &&
-          ((stringEntropy && this.isCustomWalletSeed()) || !this.isCustomWalletSeed())) {
-        this.toggleSeedBackupModal();
-      }
     }
   }
 
@@ -704,31 +965,6 @@ class Login extends React.Component {
         (this.state.loginPassphrase || (this.state.selectedPin && this.state.decryptKey))) {
       this.loginSeed();
     }
-  }
-
-  toggleSeedBackupModal() {
-    this.setState(Object.assign({}, this.state, {
-      displaySeedBackupModal: !this.state.displaySeedBackupModal,
-    }));
-  }
-
-  copyPassPhraseToClipboard() {
-    const passPhrase = this.state.randomSeed;
-    const textField = document.createElement('textarea');
-
-    textField.innerText = passPhrase;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand('copy');
-    textField.remove();
-
-    Store.dispatch(
-      triggerToaster(
-        translate('LOGIN.SEED_SUCCESSFULLY_COPIED'),
-        translate('LOGIN.SEED_COPIED'),
-        'success'
-      )
-    );
   }
 
   updateSelectedShortcut(e, type) {
@@ -814,14 +1050,6 @@ class Login extends React.Component {
     return _items;
   }
 
-  renderSwallModal() {
-    if (this.state.displaySeedBackupModal) {
-      return SwallModalRender.call(this);
-    }
-
-    return null;
-  }
-
   renderShortcutOption(option) {
     if (option.value.indexOf('+') > -1) {
       const _comps = option.value.split('+');
@@ -831,7 +1059,7 @@ class Login extends React.Component {
         _items.push(
           <span key={ `addcoin-shortcut-icons-${i}` }>
             <img
-              src={ `assets/images/cryptologo/${_comps[i].toLowerCase()}.png` }
+              src={ `assets/images/cryptologo/btc/${_comps[i].toLowerCase()}.png` }
               alt={ _comps[i].toUpperCase() }
               width="30px"
               height="30px" />
@@ -847,7 +1075,7 @@ class Login extends React.Component {
       return (
         <div>
           <img
-            src={ `assets/images/cryptologo/${option.value.toLowerCase()}.png` }
+            src={ `assets/images/cryptologo/btc/${option.value.toLowerCase()}.png` }
             alt={ option.value.toUpperCase() }
             width="30px"
             height="30px" />
@@ -855,6 +1083,30 @@ class Login extends React.Component {
         </div>
       );
     }
+  }
+
+  renderPinList() {
+    const pins = this.props.Login.pinList;
+    let items = [];
+
+    for (let i = 0; i < pins.length; i++) {
+      items.push(
+        <div
+          onClick={ () => this.updateSelectedPin(pins[i]) }
+          key={ `login-pin-list-items-${i}` }
+          className={ 'pin-list-item' + (this.state.selectedPin === pins[i] ? ' active' : '') }>
+          { pins[i] }
+        </div>
+      );
+    }
+    
+    return (
+      <div className="pin-list">
+        <div className="pin-list-inner">
+          { items }
+        </div>
+      </div>
+    );
   }
 
   render() {

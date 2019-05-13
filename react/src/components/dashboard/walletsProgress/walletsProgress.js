@@ -12,7 +12,7 @@ import {
   VerifyingBlocksRender,
   WalletsProgressRender,
 } from './walletsProgress.render';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 class WalletsProgress extends React.Component {
   constructor() {
@@ -68,7 +68,7 @@ class WalletsProgress extends React.Component {
         );
 
         setTimeout(() => {
-          _mainWindow.appExit();
+          mainWindow.appExit();
         }, 2000);
       } else {
         Store.dispatch(
@@ -405,6 +405,7 @@ const mapStateToProps = (state) => {
       progress: state.ActiveCoin.progress,
       rescanInProgress: state.ActiveCoin.rescanInProgress,
     },
+    Main: state.Main,
   };
 };
 

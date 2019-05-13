@@ -23,7 +23,7 @@ const ZcparamsFetchModalRender = function() {
               <h4 className="modal-title white">{ translate('ZCPARAMS_FETCH.ZCPARAMS_FETCH') }</h4>
             </div>
             <div className="modal-body">
-              <div className="vertical-align text-center">
+              <div className="text-center">
                 <div className="page-content vertical-align-middle">
                   <div>{ translate('ZCPARAMS_FETCH.SELECT_ZCPARAMS_SOURCE') }</div>
                   <div className="form-group floating padding-top-15 padding-bottom-15">

@@ -3,7 +3,7 @@ import translate from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import InvoiceModal from '../invoiceModal/invoiceModal';
 import ReactTooltip from 'react-tooltip';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 export const AddressActionsNonBasiliskModeRender = function(address, type) {
   return (
@@ -222,9 +222,9 @@ export const ReceiveCoinRender = function() {
                           </a>
                           <ul className="dropdown-menu dropdown-menu-right">
                            { (this.props.coin === 'KMD' ||
-                              (mainWindow.chainParams &&
-                               mainWindow.chainParams[this.props.coin] &&
-                               !mainWindow.chainParams[this.props.coin].ac_private)) &&
+                              (staticVar.chainParams &&
+                                staticVar.chainParams[this.props.coin] &&
+                               !staticVar.chainParams[this.props.coin].ac_private)) &&
                               <li>
                                 <a onClick={ () => this.getNewAddress('public') }>
                                   <i className="icon fa-eye"></i> { translate('INDEX.TRANSPARENT_ADDRESS') }
@@ -232,6 +232,7 @@ export const ReceiveCoinRender = function() {
                               </li>
                             }
                             { this.props.coin !== 'CHIPS' &&
+                              this.props.coin !== 'KMD' &&
                               <li>
                                 <a onClick={ () => this.getNewAddress('private') }>
                                   <i className="icon fa-eye-slash"></i> { translate('INDEX.PRIVATE_Z_ADDRESS') }

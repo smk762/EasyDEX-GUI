@@ -6,12 +6,16 @@ import {
   DISPLAY_NOTARY_ELECTIONS_MODAL,
   BLUR_SENSITIVE_DATA,
   NEW_UPDATE_AVAILABLE,
+  DASHBOARD_USER_AGREEMENT_MODAL,
 } from '../actions/storeType';
 
 export const Main = (state = {
   isLoggedIn: false,
+  isPin: false,
+  walletType: null,
   displayLoginSettingsModal: false,
   displayNotaryElectionsModal: false,
+  displayUserAgreementModal: false,
   blurSensitiveData: false,
   newUpdateAvailable: false,
   total: 0,
@@ -29,12 +33,15 @@ export const Main = (state = {
       return {
         ...state,
         isLoggedIn: action.isLoggedIn,
+        isPin: action.isPin,
       };
     case ACTIVE_HANDLE:
       return {
         ...state,
         isLoggedIn: action.isLoggedIn,
+        isPin: action.isPin,
         activeHandle: action.handle,
+        walletType: action.walletType,
       };
     case DISPLAY_LOGIN_SETTINGS_MODAL:
       return {
@@ -55,6 +62,11 @@ export const Main = (state = {
       return {
         ...state,
         newUpdateAvailable: action.newUpdateAvailable,
+      };
+    case DASHBOARD_USER_AGREEMENT_MODAL:
+      return {
+        ...state,
+        displayUserAgreementModal: action.display,
       };
     default:
       return state;

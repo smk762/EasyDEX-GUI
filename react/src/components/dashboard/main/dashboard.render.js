@@ -5,9 +5,7 @@ import CoinTile from '../coinTile/coinTile';
 import WalletsBalance from '../walletsBalance/walletsBalance';
 import WalletsProgress from '../walletsProgress/walletsProgress';
 import WalletsNav from '../walletsNav/walletsNav';
-import SendCoin from '../sendCoin/sendCoin';
 import WalletsData from '../walletsData/walletsData';
-import Jumblr from '../jumblr/jumblr';
 import Settings from '../settings/settings';
 import ReceiveCoin from '../receiveCoin/receiveCoin';
 import About from '../about/about';
@@ -19,7 +17,8 @@ import CoindDownModal from '../coindDownModal/coindDownModal';
 import ImportKeyModal from '../importKeyModal/importKeyModal';
 import ZcparamsFetchModal from '../zcparamsFetchModal/zcparamsFetchModal';
 import ClaimInterestModal from '../claimInterestModal/claimInterestModal';
-import Dice from '../dice/dice';
+import Exchanges from '../exchanges/exchanges';
+import ChangeLog from '../changeLog/changeLog';
 
 const DashboardRender = function() {
   return (
@@ -31,31 +30,26 @@ const DashboardRender = function() {
         <CoindDownModal />
         <ImportKeyModal />
         <ZcparamsFetchModal />
-        { this.isSectionActive('wallets') &&
+        <div className={ this.isSectionActive('wallets') ? '' : 'hide' }>
+          <CoinTile />
+          <WalletsNav />
+          <WalletsTxInfo />
+          <WalletsMain />
+          <ClaimInterestModal />
+        </div>
+        { this.isSectionActive('exchanges') &&
           <div>
-            <CoinTile />
-            <WalletsNav />
-            <WalletsTxInfo />
-            <WalletsMain />
-            <ClaimInterestModal />
+            <Exchanges />
           </div>
-        }
-        { this.isSectionActive('dice') &&
-          <div>
-            <Dice />
-          </div>
-        }
-        { this.isSectionActive('edex') &&
-          <EDEX />
-        }
-        { this.isSectionActive('jumblr') &&
-          <Jumblr  />
         }
         { this.isSectionActive('settings') &&
           <Settings disableWalletSpecificUI={ false } />
         }
         { this.isSectionActive('about') &&
           <About />
+        }
+        { this.isSectionActive('changelog') &&
+          <ChangeLog />
         }
         { this.isSectionActive('support') &&
           <Support />

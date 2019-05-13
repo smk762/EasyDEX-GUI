@@ -22,6 +22,7 @@ class ExportKeysPanel extends React.Component {
       trimPassphraseTimer: null,
       wifkeysPassphrase: '',
       keys: null,
+      seed: null,
       seedExtraSpaces: false,
       decryptedPassphrase: null,
     };
@@ -37,11 +38,13 @@ class ExportKeysPanel extends React.Component {
   componentWillReceiveProps(props) {
     if (props.Dashboard &&
         props.Dashboard.activeSection !== 'settings') {
+      if (this.state.trimPassphraseTimer) {
+        clearTimeout(this.state.trimPassphraseTimer);
+      }
       this.setState(this.defaultState);
 
       // reset input vals
       this.refs.wifkeysPassphrase.value = '';
-      this.refs.wifkeysPassphraseTextarea.value = '';
     }
   }
 
@@ -54,9 +57,9 @@ class ExportKeysPanel extends React.Component {
       .then((res) => {
         if (res.msg === 'success') {
           this.setState({
-            decryptedPassphrase: res.result,
+            decryptedPassphrase: res.result.data.keys.seed,
           });
-          this._exportWifKeys(res.result);
+          this._exportWifKeys(res.result.data.keys.seed);
         }
       });
     } else {
@@ -77,13 +80,13 @@ class ExportKeysPanel extends React.Component {
         );
       } else {
         this.setState(Object.assign({}, this.state, {
-          keys: keys.result,
+          keys: keys.result.keys,
+          seed: keys.result.seed,
           wifkeysPassphrase: '',
         }));
 
         // reset input vals
         this.refs.wifkeysPassphrase.value = '';
-        this.refs.wifkeysPassphraseTextarea.value = '';
       }
     })
   }
@@ -145,49 +148,40 @@ class ExportKeysPanel extends React.Component {
     clearTimeout(this.state.trimPassphraseTimer);
 
     const _trimPassphraseTimer = setTimeout(() => {
-      if (newValue[0] === ' ' ||
-          newValue[newValue.length - 1] === ' ') {
-        this.setState({
-          seedExtraSpaces: true,
-        });
-      } else {
-        this.setState({
-          seedExtraSpaces: false,
-        });
-      }
+      try {
+        if (newValue[0] === ' ' ||
+            newValue[newValue.length - 1] === ' ') {
+          this.setState({
+            seedExtraSpaces: true,
+          });
+        } else {
+          this.setState({
+            seedExtraSpaces: false,
+          });
+        }
+      } catch (e) {}
     }, SEED_TRIM_TIMEOUT);
-
-    if (e.target.name === 'wifkeysPassphrase') {
-      this.resizeLoginTextarea();
-    }
 
     this.setState({
       trimPassphraseTimer: _trimPassphraseTimer,
-      [e.target.name === 'wifkeysPassphraseTextarea' ? 'wifkeysPassphrase' : e.target.name]: newValue,
+      [e.target.name]: newValue,
     });
-  }
-
-  resizeLoginTextarea() {
-    // auto-size textarea
-    const _ta = document.querySelector('#wifkeysPassphraseTextarea');
-
-    setTimeout(() => {
-      if (this.state.seedInputVisibility) {
-        _ta.style.height = '1px';
-        _ta.style.height = `${(15 + _ta.scrollHeight)}px`;
-      }
-    }, 100);
   }
 
   renderLB(_translationID) {
     const _translationComponents = translate(_translationID).split('<br>');
-
-    return _translationComponents.map((_translation) =>
-      <span key={ `settings-label-${Math.random(0, 9) * 10}` }>
-        { _translation }
-        <br />
-      </span>
-    );
+    let _items = [];
+  
+    for (let i = 0; i < _translationComponents.length; i++) {
+      _items.push(
+        <span key={ `jumblr-label-${Math.random(0, 9) * 10}` }>
+          { _translationComponents[i] }
+          <br />
+        </span>
+      );
+    }
+  
+    return _items;
   }
 
   render() {
@@ -219,14 +213,9 @@ class ExportKeysPanel extends React.Component {
                   id="wifkeysPassphrase"
                   onChange={ this.updateInput }
                   value={ this.state.wifkeysPassphrase } />
-                <textarea
-                  className={ this.state.seedInputVisibility ? 'form-control blur' : 'hide' }
-                  autoComplete="off"
-                  id="wifkeysPassphraseTextarea"
-                  ref="wifkeysPassphraseTextarea"
-                  name="wifkeysPassphraseTextarea"
-                  onChange={ this.updateInput }
-                  value={ this.state.wifkeysPassphrase }></textarea>
+                <div className={ this.state.seedInputVisibility ? 'form-control seed-reveal selectable blur' : 'hide' }>
+                  { this.state.wifkeysPassphrase || '' }
+                </div>
                 <i
                   className={ 'seed-toggle fa fa-eye' + (!this.state.seedInputVisibility ? '-slash' : '') }
                   onClick={ this.toggleSeedInputVisibility }></i>
@@ -267,14 +256,14 @@ class ExportKeysPanel extends React.Component {
             </div>
           </div>
         </div>
-        { this.state.decryptedPassphrase &&
+        { this.state.seed &&
           <div className="row">
             <div className="col-sm-12 padding-top-15 margin-left-10">
-              <strong>{ translate('TOOLS.SEED') }:</strong> <span className="selectable">{ this.state.decryptedPassphrase }</span>
+              <strong>{ translate('TOOLS.SEED') } / WIF:</strong> <span className="selectable">{ this.state.seed }</span>
               <button
                 className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
                 title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                onClick={ () => this._copyString(this.state.decryptedPassphrase, translate('SETTINGS.SEED_IS_COPIED')) }>
+                onClick={ () => this._copyString(this.state.seed, translate('SETTINGS.SEED_IS_COPIED')) }>
                 <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
               </button>
             </div>

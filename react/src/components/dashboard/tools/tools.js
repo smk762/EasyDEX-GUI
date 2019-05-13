@@ -13,6 +13,11 @@ import ToolsStringToQr from './toolsStringToQr';
 import ToolsMergeUTXO from './toolsMergeUtxo';
 import ToolsSplitUTXO from './toolsSplitUtxo';
 import ToolsGetBalanceMultiCoins from './toolsGetBalanceMultiCoins';
+import ToolsTxPush from './toolsTxPush';
+import ToolsOfflineSig from './toolsOfflineSig';
+import ToolsMultisigAddress from './toolsMultisigAddress';
+import ToolsMultisigAddressStorage from './toolsMultisigAddressStorage';
+import ToolsMultisigTx from './toolsMultisigTx';
 
 class Tools extends React.Component {
   constructor() {
@@ -27,10 +32,6 @@ class Tools extends React.Component {
       activeSection: section,
     });
   }
-
-  /*renderButtons() {
-    Offline signing scan
-  }*/
 
   render() {
     return (
@@ -49,9 +50,21 @@ class Tools extends React.Component {
                 <button
                   type="button"
                   className="btn btn-default"
+                  onClick={ () => this.setActiveSection('offlinesig-sign') }>
+                  { translate('TOOLS.SIGN_MULTISIG_TX') }
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('offlinesig-push') }>
+                  { translate('TOOLS.PUSH_TX') } *
+                </button>
+                {/*<button
+                  type="button"
+                  className="btn btn-default"
                   onClick={ () => this.setActiveSection('offlinesig-scan') }>
                   { translate('TOOLS.OFFLINE_SIG_SCAN') }
-                </button>
+                </button>*/}
                 <button
                   type="button"
                   className="btn btn-default"
@@ -86,7 +99,7 @@ class Tools extends React.Component {
                   type="button"
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('balance-multi') }>
-                  KMD { translate('TOOLS.BALANCE') } (multi address) *
+                  KMD { translate('TOOLS.BALANCE') } ({ translate('TOOLS.MULTI_ADDRESS_SM') }) *
                 </button>
                 <button
                   type="button"
@@ -111,6 +124,24 @@ class Tools extends React.Component {
                   className="btn btn-default"
                   onClick={ () => this.setActiveSection('utxo-merge') }>
                   { translate('TOOLS.MERGE') } UTXO **
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('multisig-address') }>
+                  { translate('TOOLS.GEN_MULTISIG_ADDRESS') }
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('multisig-address-storage') }>
+                  { translate('TOOLS.MULTISIG_ADDREESS_STORAGE') }
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={ () => this.setActiveSection('multisig-tx') }>
+                  { translate('TOOLS.MULTISIG_TX') }
                 </button>
                 <div className="margin-top-10 margin-left-20">{ translate('TOOLS.SPV_NATIVE') }</div>
               </div>
@@ -150,6 +181,21 @@ class Tools extends React.Component {
               }
               { this.state.activeSection === 'balance-multi-coins' &&
                 <ToolsGetBalanceMultiCoins />
+              }
+              { this.state.activeSection === 'offlinesig-push' &&
+                <ToolsTxPush />
+              }
+              { this.state.activeSection === 'offlinesig-sign' &&
+                <ToolsOfflineSig />
+              }
+              { this.state.activeSection === 'multisig-address' &&
+                <ToolsMultisigAddress />
+              }
+              { this.state.activeSection === 'multisig-address-storage' &&
+                <ToolsMultisigAddressStorage />
+              }
+              { this.state.activeSection === 'multisig-tx' &&
+                <ToolsMultisigTx />
               }
             </div>
           </div>

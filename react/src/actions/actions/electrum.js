@@ -82,13 +82,14 @@ export const apiGetLocalBTCFees = () => {
   });
 }
 
-export const apiElectrumSetServer = (coin, address, port) => {
+export const apiElectrumSetServer = (coin, address, port, proto) => {
   return new Promise((resolve, reject) => {
     const _urlParams = {
       token,
       coin,
       address,
       port,
+      proto,
     };
     fetch(
       `http://127.0.0.1:${agamaPort}/api/electrum/coins/server/set${urlParams(_urlParams)}`,
@@ -171,6 +172,12 @@ export const apiElectrumKeys = (seed) => {
 }
 
 export const apiElectrumBalance = (coin, address) => {
+  if (mainWindow.multisig &&
+      mainWindow.multisig.addresses &&
+      mainWindow.multisig.addresses[coin.toUpperCase()]) {
+    address = mainWindow.multisig.addresses[coin.toUpperCase()];
+  }
+
   return dispatch => {
     const _urlParams = {
       token,
@@ -219,6 +226,12 @@ export const apiElectrumBalanceState = (json) => {
 }
 
 export const apiElectrumTransactions = (coin, address) => {
+  if (mainWindow.multisig &&
+      mainWindow.multisig.addresses &&
+      mainWindow.multisig.addresses[coin.toUpperCase()]) {
+    address = mainWindow.multisig.addresses[coin.toUpperCase()];
+  }
+
   return dispatch => {
     const _urlParams = {
       token,
@@ -248,6 +261,38 @@ export const apiElectrumTransactions = (coin, address) => {
       }
     });
   }
+}
+
+export const apiElectrumTransaction = (coin, address, txid) => {
+  return new Promise((resolve, reject) => {
+    let _urlParams = {
+      token,
+      address,
+      coin,
+      full: true,
+      maxlength: 20,
+      txid,
+    };
+
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/listtransactions${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.apiElectrumTransaction') + ' (code: apiElectrumTransaction)',
+          translate('TOASTR.ERROR'),
+          'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json.msg === 'success' ? json.result : 'error');
+    });
+  });
 }
 
 export const apiElectrumKVTransactionsPromise = (coin, address) => {
@@ -283,6 +328,8 @@ export const apiElectrumKVTransactionsPromise = (coin, address) => {
 }
 
 export const apiElectrumTransactionsState = (json) => {
+  const _json = json;
+
   if (json) {
     json = json.result;
   } else {
@@ -299,6 +346,13 @@ export const apiElectrumTransactionsState = (json) => {
     !json.length
   ) {
     json = 'no data';
+  }
+
+  if (_json.msg === 'error' &&
+      _json.result &&
+      _json.result.message &&
+      _json.result.message.indexOf('response too large') > -1) {
+    json = 'response too large';
   }
 
   return {
@@ -379,13 +433,22 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFe
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSend)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
     .then(response => response.json())
     .then(json => {
       dispatch(sendToAddressState(json.msg === 'error' ? json : json.result));
+
+      if (json.msg === 'success') {
+        Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+
+        setTimeout(() => {
+          Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+        }, 2000);
+      }
     });
   }
 }
@@ -415,13 +478,22 @@ export const apiElectrumSendPromise = (coin, value, sendToAddress, changeAddress
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSendPromise)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
     .then(response => response.json())
     .then(json => {
       resolve(json);
+
+      if (json.msg === 'success') {
+        Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+
+        setTimeout(() => {
+          Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+        }, 2000);
+      }
     });
   });
 }
@@ -467,7 +539,8 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSendPreflight)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -558,7 +631,8 @@ export const apiElectrumSplitUtxoPromise = (payload) => {
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSplitUtxoPromise)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
@@ -634,13 +708,22 @@ export const apiElectrumSweep = (coin, value, sendToAddress, changeAddress, push
         triggerToaster(
           translate('API.apiElectrumSend') + ' (code: apiElectrumSweep)',
           translate('TOASTR.ERROR'),
-          'error'
+          'error',
+          false
         )
       );
     })
     .then(response => response.json())
     .then(json => {
       resolve(json);
+
+      if (json.msg === 'success') {
+        Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+
+        setTimeout(() => {
+          Store.dispatch(apiElectrumTransactions(coin, changeAddress));
+        }, 2000);
+      }
     });
   });
 }
@@ -662,6 +745,35 @@ export const apiElectrumPushTx = (coin, rawtx) => {
       Store.dispatch(
         triggerToaster(
           translate('API.apiElectrumPushTx') + ' (code: apiElectrumPushTx)',
+          translate('TOASTR.ERROR'),
+          'error',
+          false
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export const apiElectrumBalancePromise = (coin, address) => {
+  return new Promise((resolve, reject) => {
+    const _urlParams = {
+      token,
+      address,
+      coin,
+    };
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/getbalance${urlParams(_urlParams)}`,
+      fetchType.get
+    )
+    .catch((error) => {
+      console.log(error);
+      dispatch(
+        triggerToaster(
+          translate('API.apiElectrumBalancePromise') + ' (code: apiElectrumBalancePromise)',
           translate('TOASTR.ERROR'),
           'error'
         )

@@ -25,7 +25,7 @@ import {
   checkTimestamp,
 } from 'agama-wallet-lib/src/time';
 
-const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 60; // seconds
+const SPV_MAX_LOCAL_TIMESTAMP_DEVIATION = 300; // 5 min
 
 // TODO: promises
 
@@ -381,7 +381,7 @@ class ClaimInterestModal extends React.Component {
     const _txlist = this.state.transactionsList;
 
     if (_txlist &&
-      _txlist.length) {
+        _txlist.length) {
       return true;
     } else if (
       !_txlist ||

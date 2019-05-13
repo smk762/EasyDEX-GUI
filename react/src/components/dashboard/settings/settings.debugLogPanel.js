@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 import translate from '../../../translate/translate';
 import Config from '../../../config';
 import { coindList } from '../../../util/coinHelper';
-import { getDebugLog } from '../../../actions/actionCreators';
+import {
+  getDebugLog,
+  getRuntimeLog,
+} from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { secondsToString } from 'agama-wallet-lib/src/time';
 
 // TODO: figure out a way to show app debug, url?
@@ -19,6 +22,7 @@ class DebugLogPanel extends React.Component {
       debugTarget: 'none',
       toggleAppRuntimeLog: false,
       pristine: true,
+      runtimeInProgress: false,
     };
     this.readDebugLog = this.readDebugLog.bind(this);
     this.updateInput = this.updateInput.bind(this);
@@ -26,18 +30,26 @@ class DebugLogPanel extends React.Component {
     this.toggleAppRuntimeLog = this.toggleAppRuntimeLog.bind(this);
     this.renderAppRuntimeLog = this.renderAppRuntimeLog.bind(this);
     this.checkInputVals = this.checkInputVals.bind(this);
+    this.getDebugLogDump = this.getDebugLogDump.bind(this);
   }
 
-  /*componentWillMount() {
-    if (this.props.Main.coins &&
-        this.props.Main.coins.native &&
-        Object.keys(this.props.Main.coins.native).length === 0) {
+  getDebugLogDump() {
+    this.setState({
+      runtimeInProgress: true,
+    });
+
+    getRuntimeLog()
+    .then((res) => {
+      const a = document.getElementById('debugLogDumpLink');
+      
+      a.download = 'agama-debug.log';
+      a.href = 'data:text/plain;charset=UTF-8,' + res;
+
       this.setState({
-        toggleAppRuntimeLog: true,
+        runtimeInProgress: false,
       });
-      this.getAppRuntimeLog();
-    }
-  }*/
+    });
+  }
 
   readDebugLog() {
     let _target = this.state.debugTarget;
@@ -102,15 +114,22 @@ class DebugLogPanel extends React.Component {
     if (_debugLog &&
         !this.state.pristine) {
       const _debugLogDataRows = _debugLog.split('\n');
+      let _items = [];
 
       if (_debugLogDataRows &&
           _debugLogDataRows.length &&
           _debugLog.indexOf('ENOENT') === -1) {
-        return _debugLogDataRows.map((_row) =>
-          <div
-            key={ `settings-debuglog-${Math.random(0, 9) * 10}` }
-            className="padding-bottom-5">{ _row }</div>
-        );
+        for (let i = 0; i < _debugLogDataRows.length; i++) {
+          _items.push(
+            <div
+              key={ `settings-debuglog-${Math.random(0, 9) * 10}` }
+              className="padding-bottom-5">
+              { _debugLogDataRows[i] }
+            </div>
+          );
+        }
+        
+        return _items;
       } else {
         return (
           <span>{ translate('INDEX.EMPTY_DEBUG_LOG') }</span>
@@ -135,7 +154,7 @@ class DebugLogPanel extends React.Component {
 
     _items.push(
       <option
-        key={ `coind-walletdat-coins-none` }
+        key="coind-walletdat-coins-none"
         value="none">
         { translate('SETTINGS.PICK_A_COIN') }
       </option>
@@ -175,33 +194,23 @@ class DebugLogPanel extends React.Component {
     return (
       <div className="row">
         <div className="col-sm-12">
+          <div className="padding-bottom-15">
+            <strong>{ translate('SETTINGS.DEBUG_PRIVACY_WARNING_P1') }</strong> { translate('SETTINGS.DEBUG_PRIVACY_WARNING_P2') }<br/>{ translate('SETTINGS.DEBUG_PRIVACY_WARNING_P3') }
+          </div>
+          <a id="debugLogDumpLink">
+            <button
+              type="button"
+              className="btn btn-info waves-effect waves-light"
+              onClick={ this.getDebugLogDump }>
+              { this.state.runtimeInProgress ? `${translate('SETTINGS.PLEASE_WAIT')}` : translate('SETTINGS.GET_DEBUG_DUMP') }
+            </button>
+          </a>
           { _coins &&
             _coins.native &&
             Object.keys(_coins.native).length > 0 &&
-            <p>{ translate('INDEX.DEBUG_LOG_DESC') }</p>
+            <p className="padding-top-30">{ translate('INDEX.DEBUG_LOG_DESC') }</p>
           }
-          <div className="margin-top-30">
-            <span className="pointer toggle hide">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  name="settings-app-debug-toggle"
-                  value={ this.state.toggleAppRuntimeLog }
-                  checked={ this.state.toggleAppRuntimeLog }
-                  readOnly />
-                <div
-                  className="slider"
-                  onClick={ this.toggleAppRuntimeLog }></div>
-              </label>
-              <span
-                className="title"
-                onClick={ this.toggleAppRuntimeLog }>
-                { translate('SETTINGS.SHOW_APP_RUNTIME_LOG') }
-              </span>
-            </span>
-          </div>
-          { !this.state.toggleAppRuntimeLog &&
-            _coins &&
+          { _coins &&
             _coins.native &&
             Object.keys(_coins.native).length > 0 &&
             <div className="read-debug-log-import-form">

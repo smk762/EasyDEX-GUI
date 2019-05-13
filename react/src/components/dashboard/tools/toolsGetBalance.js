@@ -99,7 +99,7 @@ class ToolsGetBalance extends React.Component {
             optionRenderer={ this.renderCoinOption }
             valueRenderer={ this.renderCoinOption }
             options={
-              addCoinOptionsCrypto('skip')
+              addCoinOptionsCrypto('skip', true, false)
               .concat(addCoinOptionsAC('skip'))
             } />
         </div>
@@ -115,7 +115,7 @@ class ToolsGetBalance extends React.Component {
             name="balanceAddr"
             onChange={ this.updateInput }
             value={ this.state.balanceAddr }
-            placeholder={ translate('SEND.ENTER_ADDR') }
+            placeholder={ translate('SEND.ENTER_ADDRESS') }
             autoComplete="off"
             required />
         </div>

@@ -14,7 +14,7 @@ import {
   apiElectrumKvServersList,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
-import mainWindow from '../../../util/mainWindow';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 import { pubkeyToAddress } from 'agama-wallet-lib/src/keys';
 import bitcoinjsNetworks from 'agama-wallet-lib/src/bitcoinjs-networks';
 
@@ -39,7 +39,7 @@ class AppSettingsPanel extends React.Component {
     if (address) {
       Store.dispatch(
         triggerToaster(
-          translate('TOASTR.YOUR_PUBKEY') + pubkey + translate('TOASTR.CORRESPONDS_TO_T_ADDR') + address,
+          `${translate('TOASTR.YOUR_PUBKEY')}${pubkey}${translate('TOASTR.CORRESPONDS_TO_T_ADDR')}${address}`,
           translate('INDEX.SETTINGS'),
           'success toastr-wide',
           false
@@ -61,7 +61,7 @@ class AppSettingsPanel extends React.Component {
     .then((res) => {
       Store.dispatch(
         triggerToaster(
-          translate('SETTINGS.' (res.msg === 'success' ? 'DOWNLOAD_KV_ELECTRUMS_DONE' : 'DOWNLOAD_KV_ELECTRUMS_ERR')),
+          translate('SETTINGS.' + (res.msg === 'success' ? 'DOWNLOAD_KV_ELECTRUMS_DONE' : 'DOWNLOAD_KV_ELECTRUMS_ERR')),
           translate('INDEX.SETTINGS'),
           res.msg === 'success' ? 'success' : 'error',
         )
@@ -74,7 +74,7 @@ class AppSettingsPanel extends React.Component {
   }
 
   componentWillMount() {
-    const _appConfigSchema = mainWindow.appConfigSchema;
+    const _appConfigSchema = staticVar.appConfigSchema;
     const _appSettings = this.props.Settings.appSettings ? this.props.Settings.appSettings : Object.assign({}, mainWindow.appConfig);
 
     this.setState(Object.assign({}, this.state, {
@@ -193,13 +193,18 @@ class AppSettingsPanel extends React.Component {
 
   renderLB(_translationID) {
     const _translationComponents = translate(_translationID).split('<br>');
-
-    return _translationComponents.map((_translation) =>
-      <span key={ `translate-${Math.random(0, 9) * 10}` }>
-        {_translation}
-        <br />
-      </span>
-    );
+    let _items = [];
+  
+    for (let i = 0; i < _translationComponents.length; i++) {
+      _items.push(
+        <span key={ `jumblr-label-${Math.random(0, 9) * 10}` }>
+          { _translationComponents[i] }
+          <br />
+        </span>
+      );
+    }
+  
+    return _items;
   }
 
   renderSelectOptions(data, translateSelector, name) {
@@ -227,7 +232,7 @@ class AppSettingsPanel extends React.Component {
       if (_configSchema[key] &&
           typeof _appConfig[key] === 'object') {
         if ((_configSchema[key].display && _configSchema[key].type !== 'select') ||
-            (_configSchema[key].display && _configSchema[key].type === 'select' && Config.experimentalFeatures)) {
+            (_configSchema[key].display && _configSchema[key].type === 'select' && Config.userAgreement)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
@@ -348,7 +353,7 @@ class AppSettingsPanel extends React.Component {
         }
       } else {
         if ((_configSchema[key] && _configSchema[key].display && _configSchema[key].type !== 'select') ||
-            (_configSchema[key] && _configSchema[key].display && _configSchema[key].type === 'select' && Config.experimentalFeatures)) {
+            (_configSchema[key] && _configSchema[key].display && _configSchema[key].type === 'select' && Config.userAgreement)) {
           items.push(
             <tr key={ `app-settings-${key}` }>
               <td className="padding-15">
@@ -410,7 +415,7 @@ class AppSettingsPanel extends React.Component {
                   </span>
                 }
                 { _configSchema[key].type === 'select' &&
-                  Config.experimentalFeatures &&
+                  Config.userAgreement &&
                   <select
                     className="form-control select-settings"
                     name={ `${key}` }

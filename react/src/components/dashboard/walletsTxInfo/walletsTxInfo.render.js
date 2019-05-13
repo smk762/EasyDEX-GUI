@@ -50,16 +50,16 @@ const WalletsTxInfoRender = function(txInfo) {
                   { this.state.txDetails &&
                     this.state.txDetails.opreturn &&
                     this.state.txDetails.opreturn.kvDecoded &&
-                    Config.experimentalFeatures &&
+                    Config.userAgreement &&
                     <li className={ this.state.activeTab === 4 ? 'active' : '' }>
                       <a onClick={ () => this.openTab(4) }>
-                        <i className="icon fa-file-text-o"></i>KV info
+                        <i className="icon fa-file-text-o"></i>{ translate('INDEX.KV_INFO') }
                       </a>
                     </li>
                   }
                   <li className={ this.state.activeTab === 0 ? 'active' : '' }>
                     <a onClick={ () => this.openTab(0) }>
-                      <i className="icon md-balance-wallet"></i>TxID Info
+                      <i className="icon md-balance-wallet"></i>{ translate('INDEX.TXID_INFO') }
                     </a>
                   </li>
                   <li className={ this.state.activeTab === 1 ? 'hide active' : 'hide' }>
@@ -70,13 +70,13 @@ const WalletsTxInfoRender = function(txInfo) {
                   { !isEth &&
                     <li className={ this.state.activeTab === 2 ? 'active' : '' }>
                       <a onClick={ () => this.openTab(2) }>
-                        <i className="icon wb-briefcase"></i>Hex
+                        <i className="icon wb-briefcase"></i>{ translate('INDEX.HEX') }
                       </a>
                     </li>
                   }
                   <li className={ this.state.activeTab === 3 ? 'active' : '' }>
                     <a onClick={ () => this.openTab(3) }>
-                      <i className="icon wb-file"></i>Raw info
+                      <i className="icon wb-file"></i>{ translate('INDEX.RAW_INFO') }
                     </a>
                   </li>
                 </ul>
@@ -99,11 +99,11 @@ const WalletsTxInfoRender = function(txInfo) {
                                   { isSpv ? (Number(this.state.txDetails.amount) === 0 ? translate('DASHBOARD.UNKNOWN') : Number(this.state.txDetails.amount)) : txInfo.amount }
                                 </td>
                               </tr>
-                              { isEth &&
+                              { (isEth || (isSpv && this.state.txDetails.amount !== this.state.txDetails.fee)) &&
                                 <tr>
                                   <td>{ this.capitalizeFirstLetter(translate('SEND.FEE')) }</td>
                                   <td>
-                                    { this.state.txDetails.fee }
+                                    { Number(this.state.txDetails.fee) }
                                   </td>
                                 </tr>
                               }
@@ -119,7 +119,16 @@ const WalletsTxInfoRender = function(txInfo) {
                                   { this.state.txDetails.confirmations }
                                 </td>
                               </tr>
-                              { this.state.txDetails.blockindex &&
+                              { this.state.txDetails.hasOwnProperty('rawconfirmations') &&
+                                this.state.txDetails.confirmations !== this.state.txDetails.rawconfirmations &&
+                                <tr>
+                                  <td>{ translate('INDEX.RAW_CONFS') }</td>
+                                  <td>
+                                    { this.state.txDetails.rawconfirmations }
+                                  </td>
+                                </tr>
+                              }
+                              { this.state.txDetails.hasOwnProperty('blockindex') &&
                                 <tr>
                                   <td>{ this.capitalizeFirstLetter('blockindex') }</td>
                                   <td className="selectable">
@@ -127,7 +136,7 @@ const WalletsTxInfoRender = function(txInfo) {
                                   </td>
                                 </tr>
                               }
-                              { this.state.txDetails.blockhash &&
+                              { this.state.txDetails.hasOwnProperty('blockhash') &&
                                 <tr>
                                   <td>{ isSpv ? this.capitalizeFirstLetter('blockheight') : this.capitalizeFirstLetter('blockhash') }</td>
                                   <td className="selectable">
@@ -168,6 +177,24 @@ const WalletsTxInfoRender = function(txInfo) {
                                   <td>{ this.capitalizeFirstLetter('timereceived') }</td>
                                   <td>
                                     { secondsToString(isSpv ? this.state.txDetails.blocktime : this.state.txDetails.timereceived) }
+                                  </td>
+                                </tr>
+                              }
+                              { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && this.state.txDetails.dpowSecured) ||
+                                (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations >=2)) &&
+                                <tr>
+                                  <td>dPoW { translate('INDEX.SECURED') }</td>
+                                  <td>
+                                    { translate('SETTINGS.YES') }
+                                  </td>
+                                </tr>
+                              }
+                              { ((this.props.ActiveCoin.mode === 'spv' && this.state.txDetails.hasOwnProperty('dpowSecured') && !this.state.txDetails.dpowSecured) ||
+                                (this.props.ActiveCoin.mode === 'native' && this.state.txDetails.hasOwnProperty('rawconfirmations') && this.state.txDetails.confirmations < 2)) &&
+                                <tr>
+                                  <td>dPoW { translate('INDEX.SECURED') }</td>
+                                  <td>
+                                    { translate('SETTINGS.NO') }
                                   </td>
                                 </tr>
                               }
@@ -228,7 +255,7 @@ const WalletsTxInfoRender = function(txInfo) {
                         </div>
                       }
                       { this.state.activeTab === 4 &&
-                        Config.experimentalFeatures &&
+                        Config.userAgreement &&
                         <div className="tab-pane active">
                           <table className="table table-striped">
                             <tbody>

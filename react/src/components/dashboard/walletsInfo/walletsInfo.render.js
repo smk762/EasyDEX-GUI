@@ -78,13 +78,13 @@ const WalletsInfoRender = function() {
               <tr>
                 <td>{ translate('WALLETS_INFO.WHITELISTED') }</td>
                 <td>
-                  { _netPeers[i].whitelisted ? 'true' : 'false' }
+                  { translate('INDEX' + (_netPeers[i].whitelisted ? 'TRUE_SM' : 'FALSE_SM')) }
                 </td>
               </tr>
               <tr>
                 <td>{ translate('WALLETS_INFO.INBOUND') }</td>
                 <td>
-                  { _netPeers[i].inbound ? 'true' : 'false' }
+                  { translate('INDEX' + (_netPeers[i].inbound ? 'TRUE_SM' : 'FALSE_SM')) }
                 </td>
               </tr>
               <tr>
@@ -201,26 +201,15 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { _coin === 'KMD' &&
-            this.displayClaimInterestUI() &&
-            <div>
-              <button
-                type="button"
-                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>
-                <i className="icon fa-dollar"></i> { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
-              </button>
-            </div>
-          }
           <div className="panel">
             <div className="panel-heading">
               <h3 className="panel-title">{ translate('WALLETS_INFO.NETWORK_TOTALS') }</h3>
             </div>
             <div className="table-responsive">
               { _netTotals &&
-                _netTotals.timemillis &&
-                _netTotals.totalbytesrecv &&
-                _netTotals.totalbytessent &&
+                _netTotals.hasOwnProperty('timemillis') &&
+                _netTotals.hasOwnProperty('totalbytesrecv') &&
+                _netTotals.hasOwnProperty('totalbytessent') &&
                 <table className="table table-striped">
                   <tbody>
                     <tr>
@@ -436,18 +425,6 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { _coin === 'KMD' &&
-            _mode !== 'spv' &&
-            <div>
-              <button
-                type="button"
-                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>
-                { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
-              </button>
-              <ClaimInterestModal />
-            </div>
-          }
         </div>
       </div>
     );
@@ -495,18 +472,6 @@ const WalletsInfoRender = function() {
               </table>
             </div>
           </div>
-          { _coin === 'KMD' &&
-            _mode !== 'spv' &&
-            <div>
-              <button
-                type="button"
-                className="btn btn-success waves-effect waves-light margin-top-20 btn-next"
-                onClick={ () => this.openClaimInterestModal() }>
-                { translate('CLAIM_INTEREST.CLAIM_INTEREST', ' ') }
-              </button>
-              <ClaimInterestModal />
-            </div>
-          }
         </div>
       </div>
     );
