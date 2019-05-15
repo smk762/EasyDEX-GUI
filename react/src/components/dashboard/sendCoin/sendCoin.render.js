@@ -844,7 +844,7 @@ export const SendRender = function() {
                           { translate('INDEX.AMOUNT') }
                           </td>
                           <td className="padding-left-30 selectable">
-                            { this.state.amount }
+                            { this.state.amount } { _coin.toUpperCase() }
                           </td>
                         </tr>
                         <tr>
