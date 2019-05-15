@@ -22,6 +22,7 @@ import {
   apiEthereumTransactions,
   apiEthereumCoins,
   apiStopCoind,
+  apiLogout,
   getDexCoins,
   activeHandle,
   triggerToaster,

@@ -79,9 +79,12 @@ const defaults = {
 };
 
 const checkCoinObjectKeys = (obj, mode) => {
-  for (let key in obj) {
-    if (!defaults[mode].hasOwnProperty(key)) {
-      delete obj[key];
+  if (Object.keys(obj).length &&
+      mode) {
+    for (let key in obj) {
+      if (!defaults[mode].hasOwnProperty(key)) {
+        delete obj[key];
+      }
     }
   }
 
@@ -130,7 +133,8 @@ export const ActiveCoin = (state = {
         };
       }
     case DASHBOARD_ACTIVE_COIN_CHANGE:
-      if (state.coins[action.mode][action.coin]) {
+      if (state.coins[action.mode] &&
+          state.coins[action.mode][action.coin]) {
         let _coins = state.coins;
         
         if (action.mode === state.mode) {
@@ -232,7 +236,8 @@ export const ActiveCoin = (state = {
           }, state.mode);
           let _coins = state.coins;
 
-          if (!action.skip) {
+          if (!action.skip &&
+              _coins[action.mode]) {
             _coins[action.mode][state.coin] = _coinData;
           }
 
