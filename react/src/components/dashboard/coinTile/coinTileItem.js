@@ -216,7 +216,7 @@ class CoinTileItem extends React.Component {
           )
         );
 
-        Store.dispatch(dashboardRemoveCoin(coin));
+        Store.dispatch(dashboardRemoveCoin(coin, mode));
         this.autoSetActiveCoin(coin);
         setTimeout(() => {
           Store.dispatch(getDexCoins());
@@ -315,7 +315,7 @@ class CoinTileItem extends React.Component {
               )
             );
     
-            Store.dispatch(dashboardRemoveCoin(coin));
+            Store.dispatch(dashboardRemoveCoin(coin, mode));
             this.autoSetActiveCoin(coin);
             setTimeout(() => {
               Store.dispatch(getDexCoins());
