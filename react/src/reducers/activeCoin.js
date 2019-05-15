@@ -29,7 +29,6 @@ import {
 // TODO: refactor current coin props copy on change
 
 export const ActiveCoin = (state = {
-  coins: {},
   coin: null,
   mode: null,
   send: false,
@@ -75,6 +74,7 @@ export const ActiveCoin = (state = {
             peers: null,
             totals: null,
           },
+          getinfoFetchFailures: 0,
         };
       } else {
         return {
@@ -303,7 +303,7 @@ export const ActiveCoin = (state = {
     case SYNCING_NATIVE_MODE:
       return {
         ...state,
-        progress: action.progress,
+        progress: state.mode === 'native' ? action.progress : null,
         getinfoFetchFailures: typeof action.progress === 'string' && action.progress.indexOf('"code":-777') ? state.getinfoFetchFailures + 1 : 0,
       };
     case DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE:
@@ -368,6 +368,7 @@ export const ActiveCoin = (state = {
           peers: null,
           totals: null,
         },
+        getinfoFetchFailures: 0,
       };
     default:
       return state;
