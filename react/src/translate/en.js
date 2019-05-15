@@ -731,7 +731,7 @@ const LANG_EN = {
     QMENU_LOGOUT: 'Logout',
     ERR_SEED_STORAGE: 'Seed storage error',
     CUSTOM_PIN_FNAME: 'Custom pin file name',
-    CUSTOM_PIN_FNAME_INFO: 'Pin file name can only contain alphanumeric characters, dash "-" and underscore "_"',
+    CUSTOM_PIN_FNAME_INFO: 'Wallet file name can only contain alphanumeric characters, dash "-" and underscore "_". No space character or any special character is allowed.',
     FIRST_TIME_SEED_USE: 'First time seed use',
     PLEASE_WRITE_DOWN_YOUR_PUB: 'Please write down your public address, logout and login into Agama again to verify that your seed is correct.',
     YOUR_ADDR_APPEARS_CORRECT: 'Your seed appears to be correct. As a final check up please double check that the public address you wrote down earlier is matching the one you see right now.',
