@@ -173,6 +173,7 @@ class AddCoin extends React.Component {
   updateModeType(type) {
     this.setState({
       type,
+      quickSearch: null,
     });
 
     setTimeout(() => {
