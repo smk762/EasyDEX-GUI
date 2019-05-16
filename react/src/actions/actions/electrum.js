@@ -383,27 +383,24 @@ export const apiElectrumCoinsState = (json) => {
 }
 
 // value in sats
-export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
+export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, options) => {
   value = Math.floor(value);
 
   return dispatch => {
-    const payload = {
+    let payload = {
       token,
       coin,
       value,
-      customFee,
       address: changeAddress,
       change: changeAddress,
-      opreturn,
       gui: true,
       verify: true,
       push: true,
     };
-    const _urlParams = {
+    let _urlParams = {
       token,
       coin,
       value,
-      customFee,
       address: sendToAddress,
       change: changeAddress,
       gui: true,
@@ -411,9 +408,27 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, btcFe
       push: true,
     };
 
+    if (options &&
+        options.opreturn) {
+      payload.opreturn = options.opreturn;
+      _urlParams.opreturn = options.opreturn;
+    }
+
+    if (options &&
+        options.msigcreator) {
+      payload.msigcreator = options.msigcreator;
+      _urlParams.msigcreator = options.msigcreator;
+    }
+
+    if (options &&
+        options.customFee) {
+      payload.customFee = options.customFee;
+      _urlParams.customFee = options.customFee;
+    }
+
     return fetch(
-      isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
+      options && options.isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${options && options.btcFee ? '&btcfee=' + options.btcFee : ''}`,
+      options && options.isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);
@@ -486,7 +501,7 @@ export const apiElectrumSendPromise = (coin, value, sendToAddress, changeAddress
   });
 }
 
-export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, btcFee, customFee, isKv, opreturn) => {
+export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddress, options) => {
   value = Math.floor(value);
 
   return new Promise((resolve, reject) => {
@@ -496,7 +511,6 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
       value,
       address: changeAddress,
       change: changeAddress,
-      opreturn,
       gui: true,
       verify: true,
       push: false,
@@ -512,14 +526,27 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
       push: false,
     };
 
-    if (customFee) {
-      payload.customFee = customFee;
-      _urlParams.customFee = customFee;
+    if (options &&
+        options.opreturn) {
+      payload.opreturn = options.opreturn;
+      _urlParams.opreturn = options.opreturn;
+    }
+
+    if (options &&
+        options.msigcreator) {
+      payload.msigcreator = options.msigcreator;
+      _urlParams.msigcreator = options.msigcreator;
+    }
+
+    if (options &&
+        options.customFee) {
+      payload.customFee = options.customFee;
+      _urlParams.customFee = options.customFee;
     }
 
     fetch(
-      isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${btcFee ? '&btcfee=' + btcFee : ''}`,
-      isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
+      options && options.isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${options && options.btcFee ? '&btcfee=' + options.btcFee : ''}`,
+      options && options.isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);
