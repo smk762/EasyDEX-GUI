@@ -415,9 +415,9 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, optio
     }
 
     if (options &&
-        options.msigcreator) {
-      payload.msigcreator = options.msigcreator;
-      _urlParams.msigcreator = options.msigcreator;
+        options.multisig) {
+      payload.multisig = options.multisig;
+      _urlParams.multisig = options.multisig;
     }
 
     if (options &&
@@ -533,9 +533,9 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
     }
 
     if (options &&
-        options.msigcreator) {
-      payload.msigcreator = options.msigcreator;
-      _urlParams.msigcreator = options.msigcreator;
+        options.multisig) {
+      payload.multisig = options.multisig;
+      _urlParams.multisig = options.multisig;
     }
 
     if (options &&
@@ -545,8 +545,8 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
     }
 
     fetch(
-      options && options.isKv ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${options && options.btcFee ? '&btcfee=' + options.btcFee : ''}`,
-      options && options.isKv ? fetchType(JSON.stringify(payload)).post : fetchType.get
+      options && (options.isKv || options.multisig) ? `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx` : `http://127.0.0.1:${agamaPort}/api/electrum/createrawtx${urlParams(_urlParams)}${options && options.btcFee ? '&btcfee=' + options.btcFee : ''}`,
+      options && (options.isKv || options.multisig) ? fetchType(JSON.stringify(payload)).post : fetchType.get
     )
     .catch((error) => {
       console.log(error);
