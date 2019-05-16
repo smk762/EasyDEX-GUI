@@ -11,6 +11,7 @@ import {
 import Store from '../../../store';
 import mainWindow from '../../../util/mainWindow';
 import ReactTooltip from 'react-tooltip';
+import { multisig } from 'agama-wallet-lib/src/keys';
 
 const SEED_TRIM_TIMEOUT = 5000;
 
@@ -25,6 +26,8 @@ class ExportKeysPanel extends React.Component {
       seed: null,
       seedExtraSpaces: false,
       decryptedPassphrase: null,
+      multisigData: null,
+      multisigDataHex: null,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.exportWifKeys = this.exportWifKeys.bind(this);
@@ -33,6 +36,7 @@ class ExportKeysPanel extends React.Component {
     this._copyCoinAddress = this._copyCoinAddress.bind(this);
     this._copyString = this._copyString.bind(this);
     this.updateInput = this.updateInput.bind(this);
+    this.dumpMultisigBackup = this.dumpMultisigBackup.bind(this);
   }
 
   componentWillReceiveProps(props) {
@@ -48,6 +52,13 @@ class ExportKeysPanel extends React.Component {
     }
   }
 
+  dumpMultisigBackup() {
+    const a = document.getElementById('multisig-backup-link');
+    
+    a.download = 'multi-signature-wallet-backup.txt';
+    a.href = 'data:text/plain;charset=UTF-8,' + this.state.multisigData.hex;
+  }
+
   exportWifKeys() {
     if (mainWindow.pinAccess) {
       loginWithPin(
@@ -56,9 +67,23 @@ class ExportKeysPanel extends React.Component {
       )
       .then((res) => {
         if (res.msg === 'success') {
-          this.setState({
-            decryptedPassphrase: res.result.data.keys.seed,
-          });
+          if (res.result.type === 'multisig') {
+            let buf = Buffer.alloc(JSON.stringify(res.result.data.sigData).length);
+            buf.write(JSON.stringify(res.result.data.sigData));
+        
+            this.setState({
+              decryptedPassphrase: res.result.data.keys.seed,
+              multisigData: { 
+                raw: res.result.data.sigData,
+                decoded: multisig.decodeRedeemScript(res.result.data.sigData.redeemScript, { toHex: true }),
+                hex: buf.toString('hex'),
+              },
+            });
+          } else {
+            this.setState({
+              decryptedPassphrase: res.result.data.keys.seed,
+            });
+          }
           this._exportWifKeys(res.result.data.keys.seed);
         }
       });
@@ -88,7 +113,7 @@ class ExportKeysPanel extends React.Component {
         // reset input vals
         this.refs.wifkeysPassphrase.value = '';
       }
-    })
+    });
   }
 
   toggleSeedInputVisibility() {
@@ -250,7 +275,7 @@ class ExportKeysPanel extends React.Component {
                   type="button"
                   className="btn btn-primary waves-effect waves-light margin-bottom-5"
                   onClick={ this.exportWifKeys }>
-                  { mainWindow.pinAccess ? translate('SETTINGS.GET_SEED_AND_WIF') : translate('INDEX.GET_WIF_KEYS') }
+                  { translate('SETTINGS.GET_BACKUP_DATA') }
                 </button>
               </div>
             </div>
@@ -270,21 +295,54 @@ class ExportKeysPanel extends React.Component {
           </div>
         }
         { this.state.keys &&
-          <div className="row">
-            <div className="col-sm-12 padding-top-15 overflow-x">
-              <table className="table no-borders">
-                <tbody>
-                  <tr key="wif-export-table-header-pub">
-                    <td className="padding-bottom-20 padding-top-20">
-                      <strong>{ translate('SETTINGS.ADDRESS_LIST') }</strong>
-                    </td>
-                    <td className="padding-bottom-20 padding-top-20">
-                      <strong>{ translate('SETTINGS.WIF_KEY_LIST') }</strong>
-                    </td>
-                  </tr>
-                  { this.renderWifKeys() }
-                </tbody>
-              </table>
+          <div>
+            <div className="row">
+              <div className="col-sm-12 padding-top-15 overflow-x">
+                <table className="table no-borders">
+                  <tbody>
+                    <tr key="wif-export-table-header-pub">
+                      <td className="padding-bottom-20 padding-top-20">
+                        <strong>{ translate('SETTINGS.ADDRESS_LIST') }</strong>
+                      </td>
+                      <td className="padding-bottom-20 padding-top-20">
+                        <strong>{ translate('SETTINGS.WIF_KEY_LIST') }</strong>
+                      </td>
+                    </tr>
+                    { this.renderWifKeys() }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-sm-12 margin-left-10">
+                <strong>{ translate('SETTINGS.MULTISIG_DATA') }</strong>
+              </div>
+              <div className="col-sm-12 padding-top-20 margin-left-10">
+                <strong>{ translate('SETTINGS.N_OF_N') }: </strong> { this.state.multisigData.decoded.m } { translate('SETTINGS.OF_SM') } { this.state.multisigData.decoded.pubKeys.length } 
+              </div>
+              <div className="col-sm-6 padding-top-20 margin-left-10">
+                <strong>Redeem Script</strong>
+                <div className="padding-top-5 word-break--all selectable">{ this.state.multisigData.raw.redeemScript }</div>
+              </div>
+              <div className="col-sm-6 padding-top-30 margin-left-10 padding-bottom-20">
+                <strong>Backup</strong>
+                <button
+                  className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                  title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                  onClick={ () => this._copyString(this.state.multisigData.hex, 'Multi signature backup is copied') }>
+                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                </button>
+                <a
+                  id="multisig-backup-link"
+                  onClick={ this.dumpMultisigBackup }>
+                  <button
+                    className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                    title="Download as a file">
+                    <i className="icon fa-download"></i>
+                  </button>
+                </a>
+                <div className="padding-top-10 word-break--all selectable">{ this.state.multisigData.hex }</div>
+              </div>
             </div>
           </div>
         }
@@ -299,6 +357,7 @@ const mapStateToProps = (state) => {
       coin: state.ActiveCoin.coin,
     },
     Settings: state.Settings,
+    WalletType: state.Main.walletType,
   };
 };
 
