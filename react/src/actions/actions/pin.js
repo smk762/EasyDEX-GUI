@@ -13,13 +13,14 @@ import urlParams from '../../util/url';
 import fetchType from '../../util/fetchType';
 import Store from '../../store';
 
-export const encryptPassphrase = (string, key, type = 'default', suppressToastr, customPinName) => {
+export const encryptPassphrase = (string, key, type = 'default', suppressToastr, customPinName, multisig) => {
   const payload = {
     string,
     key,
     type,
     token,
     pubkey: customPinName,
+    multisig,
   };
 
   return new Promise((resolve, reject) => {

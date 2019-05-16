@@ -437,7 +437,7 @@ const LoginRender = function() {
                       <h4 className="hint color-white margin-bottom-20 text-left">
                         { translate('LOGIN.MULTISIG_DESC_P3') }
                       </h4>
-                      <h4 className="hint color-white margin-bottom-20 text-left">
+                      <h4 className="hint color-white margin-bottom-20 text-left bw-inverted">
                         { translate('LOGIN.MULTISIG_DESC_P4') }
                       </h4>
                     </div>
@@ -518,8 +518,7 @@ const LoginRender = function() {
                   </button>
                 </section>
               }
-              { this.state.step === 3 &&
-                this.state.walletType !== 'multisig' &&
+              { ((this.state.step === 3 && this.state.walletType !== 'multisig') || (this.state.step === 5 && this.state.walletType === 'multisig')) &&
                 <section>
                   <h4 className="hint color-white margin-bottom-20">
                     { translate('LOGIN.ENTER_WALLET_NAME_AND_PW') }
@@ -582,6 +581,16 @@ const LoginRender = function() {
                     }>
                     { translate('LOGIN.NEXT') }
                   </button>
+                  { this.state.walletType === 'multisig' &&
+                    <div className="form-group form-material floating">
+                      <button
+                        className="btn btn-lg btn-flat btn-block waves-effect"
+                        id="register-back-btn"
+                        onClick={ () => this.updateActiveLoginSection('login') }>
+                        { translate('INDEX.BACK_TO_LOGIN') }
+                      </button>
+                    </div>
+                  }
                 </section>
               }
               { this.state.step === 1 && // multisig
@@ -590,6 +599,7 @@ const LoginRender = function() {
                   <h4 className="hint color-white margin-bottom-60">
                     { translate('LOGIN.PROVIDE_YOUR_PRIV_OR_SEED') }
                   </h4>
+                  <button onClick={ this.multisigTest }>test</button>
                   <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-20">
                     <input
                       type="password"
@@ -676,6 +686,13 @@ const LoginRender = function() {
                         className="icon fa-copy"
                         onClick={ () => this.copyPubAddress('btc') }></i>
                     </p>
+                    <p>
+                      Your pubkey is
+                      <br/>
+                      <span className="selectable">
+                        { isPrivKey(this.state.loginPassphrase) ? wifToWif(this.state.loginPassphrase || '', networks.btc, true).pubHex : stringToWif(this.state.loginPassphrase || '', networks.btc, true).pubHex }
+                      </span>
+                    </p>
                   </div>
                   <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
                     <button
@@ -708,7 +725,6 @@ const LoginRender = function() {
                     Choose number of required signatures and provide all pub keys below.
                   </h4>
                   <h4 className="hint color-white margin-bottom-40">Warning! Pubkeys order matters. Different order will produce different multi signature address.</h4>
-                  <button onClick={ this.multisigTest }>test</button>
                   <div className="form-group form-material floating col-sm-12 horizontal-padding-0 sigs-selector">
                     <select
                       name="nOfN"
@@ -824,9 +840,22 @@ const LoginRender = function() {
           <div className={ this.state.activeLoginSection === 'restore' ? 'show' : 'hide' }>
             { this.state.step === 0 &&
               <section className="restore-wallet">
-                <h4 className="hint color-white margin-bottom-60">
-                  { translate('LOGIN.PROVIDE_YOUR_PRIV_OR_SEED') }
+                <h4 className="hint color-white margin-bottom-40">
+                  Choose a wallet type and provide a seed or a priv key.
                 </h4>
+                <select
+                  className="form-control form-material margin-bottom-60"
+                  name="walletType"
+                  value={ this.state.walletType }
+                  onChange={ (event) => this.updateInput(event) }
+                  autoFocus>
+                  <option value="default">
+                    { translate('LOGIN.LITE_MODE_ONLY') }
+                  </option>
+                  <option value="multisig">
+                    { translate('LOGIN.MULTISIG') }
+                  </option>
+                </select>
                 <div className="form-group form-material floating col-sm-12 horizontal-padding-0 margin-top-20">
                   <input
                     type="password"
@@ -855,7 +884,8 @@ const LoginRender = function() {
                   </div>
                 </div>
                 { this.state.seedExtraSpaces &&
-                  <i className="icon fa-warning seed-extra-spaces-warning"
+                  <i
+                    className="icon fa-warning seed-extra-spaces-warning"
                     data-tip={ translate('LOGIN.SEED_TRAILING_CHARS') }
                     data-html={ true }
                     data-for="login1"></i>

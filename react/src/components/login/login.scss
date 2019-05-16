@@ -313,11 +313,11 @@ a.login-nn-elections {
       color: #000;
     }
   }
-  .pubkeys {
-    margin-top: 48px;
+  .form-material.floating+.form-material.floating.pubkeys {
+    margin-top: 20px;
 
     .form-group {
-      margin-bottom: 50px;
+      margin-bottom: 30px;
 
       &:last-child {
         margin-bottom: 20px;
