@@ -167,8 +167,8 @@ module.exports = {
       new UglifyJSPlugin({
         sourceMap: true,
         uglifyOptions: {
+          warnings: false,
           compress: {
-            warnings: false,
             ie8: false,
             conditionals: true,
             unused: true,

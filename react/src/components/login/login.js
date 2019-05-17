@@ -301,7 +301,7 @@ class Login extends React.Component {
 
       setTimeout(() => {
         for (let i = 0; i < _spvCoins.length; i++) {
-          Store.dispatch(dashboardRemoveCoin(_spvCoins[i]));
+          Store.dispatch(dashboardRemoveCoin(_spvCoins[i], 'spv'));
         }
 
         if (!this.props.Main.coins.native.length) {

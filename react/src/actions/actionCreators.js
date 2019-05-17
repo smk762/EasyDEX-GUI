@@ -317,10 +317,11 @@ export const toggleZcparamsFetchModal = (display) => {
   }
 }
 
-export const dashboardRemoveCoin = (coin) => {
+export const dashboardRemoveCoin = (coin, mode) => {
   return {
     type: DASHBOARD_REMOVE_COIN,
     coin,
+    mode,
   }
 }
 
