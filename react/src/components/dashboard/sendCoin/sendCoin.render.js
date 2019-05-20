@@ -125,8 +125,27 @@ export const _SendFormRender = function() {
   
   return (
     <div className="extcoin-send-form">
-      { ((this.state.renderAddressDropdown && _mode !== 'native' && _coin !== 'KMD') ||
+      { this.props.Main.walletType === 'multisig' &&
+        !this.state.kvSend &&
+        <div className="row">
+          <div className={ 'col-xlg-12 form-group' + (this.state.multisigType === 'create' ? ' padding-bottom-20' : '') }>
+            <label className="control-label padding-bottom-10">
+              Multi signature transaction type
+            </label>
+            <select
+              className="form-control select-settings"
+              name="multisigType"
+              value={ this.state.multisigType }
+              onChange={ this.updateMultisigInput }>
+              <option value="cosign">Co-sign transaction</option>
+              <option value="create">Create new transaction</option>
+            </select>
+          </div>
+        </div>
+      }
+      { ((this.state.renderAddressDropdown && _mode !== 'native') ||
         (_mode === 'native' && _coin !== 'KMD' && (_isAcPrivate || !_isAcPublic) && !this.state.zshieldcoinbaseToggled)) &&
+        (this.props.Main.walletType !== 'multisig' || (this.props.Main.walletType === 'multisig' && this.state.multisigType === 'create')) &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             <label className="control-label padding-bottom-10">
@@ -138,6 +157,7 @@ export const _SendFormRender = function() {
       }
       { !this.state.kvSend &&
         !this.state.zshieldcoinbaseToggled &&
+        (this.props.Main.walletType !== 'multisig' || (this.props.Main.walletType === 'multisig' && this.state.multisigType === 'create')) &&
         <div className="row">
           <div className="col-xlg-12 form-group form-material">
             { ((_mode === 'spv' && this.renderAddressBookDropdown(true) < 1) ||
@@ -844,7 +864,7 @@ export const SendRender = function() {
                           { translate('INDEX.AMOUNT') }
                           </td>
                           <td className="padding-left-30 selectable">
-                            { this.state.amount }
+                            { this.state.amount } { _coin.toUpperCase() } 
                           </td>
                         </tr>
                         <tr>

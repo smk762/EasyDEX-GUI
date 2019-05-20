@@ -130,6 +130,8 @@ class SendCoin extends React.Component {
       // ztx fee
       ztxSelectorOpen: false,
       ztxFee: DEFAULT_ZTX_FEE,
+      // multisig
+      multisigType: 'cosign',
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -163,7 +165,14 @@ class SendCoin extends React.Component {
     this.zshieldcoinbaseToggle = this.zshieldcoinbaseToggle.bind(this);
     this.toggleZtxDropdown = this.toggleZtxDropdown.bind(this);
     this.setZtxFee = this.setZtxFee.bind(this);
+    this.updateMultisigInput = this.updateMultisigInput.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  updateMultisigInput(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   }
 
   setZtxFee(val) {
@@ -933,15 +942,32 @@ class SendCoin extends React.Component {
         }
         // spv pre tx push request
         if (_mode === 'spv') {
+          let options = {
+            customFee: Number((toSats(this.state.fee)).toFixed(8)),
+          };
+          
+          if (_coin === 'BTC') {
+            options.btcFee = this.state.btcFeesSize;
+          }
+        
+          if (this.state.kvSend) {
+            options.isKv = true;
+            options.opreturn = kvHex;
+          }
+
+          if (this.props.Main.walletType === 'multisig' &&
+              this.state.multisigType === 'create') {
+            options.multisig = {
+              creator: true,
+            }
+          }
+
           apiElectrumSendPreflight(
             this.props.ActiveCoin.coin,
             toSats(this.state.amount),
             this.state.sendTo,
             this.props.Dashboard.electrumCoins[_coin].pub,
-            _coin === 'BTC' ? this.state.btcFeesSize : null,
-            Number((toSats(this.state.fee)).toFixed(8)),
-            this.state.kvSend,
-            kvHex,
+            options,
           )
           .then((sendPreflight) => {
             if (sendPreflight &&
@@ -1068,16 +1094,26 @@ class SendCoin extends React.Component {
       const _pub = this.props.Dashboard.electrumCoins[_coin].pub;
       
       if (_pub) {
+        let options = {
+          customFee: Number((toSats(this.state.fee)).toFixed(8)),
+        };
+        
+        if (_coin === 'BTC') {
+          options.btcFee = this.state.btcFeesSize;
+        }
+      
+        if (this.state.kvSend) {
+          options.isKv = true;
+          options.opreturn = kvHex;
+        }
+
         Store.dispatch(
           apiElectrumSend(
             _coin,
             toSats(this.state.amount),
             this.state.sendTo,
             _pub,
-            _coin === 'BTC' ? this.state.btcFeesSize : null,
-            Number((toSats(this.state.fee)).toFixed(8)),
-            this.state.kvSend,
-            this.state.kvHex,
+            options
           )
         );
       }
