@@ -132,6 +132,7 @@ class SendCoin extends React.Component {
       ztxFee: DEFAULT_ZTX_FEE,
       // multisig
       multisigType: 'cosign',
+      multisigWrongKey: false,
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -996,6 +997,7 @@ class SendCoin extends React.Component {
                 spvDpowVerificationWarning: 'n/a',
                 noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
                 responseTooLarge: sendPreflight.result && sendPreflight.result.result && sendPreflight.result.result.message && sendPreflight.result.result.message.indexOf('response too large') > -1 ? true : false,
+                multisigWrongKey: typeof sendPreflight.result === 'string' && sendPreflight.result.indexOf('Multisig: you can\'t sign this transaction') > -1 ? true : false,
               }));
 
               if (this.props.cb) {

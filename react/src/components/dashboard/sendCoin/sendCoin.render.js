@@ -683,6 +683,9 @@ export const SendRender = function() {
                 { this.state.noUtxo &&
                   <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
                 }
+                { this.state.multisigWrongKey &&
+                  <div className="padding-top-20">{ translate('SEND.MULTISIG_WRONG_KEY') }</div>
+                }
                 { this.state.responseTooLarge &&
                   <div className="padding-top-20">
                     { translate('INDEX.RESPONSE_TOO_LARGE_P1') }
@@ -793,6 +796,7 @@ export const SendRender = function() {
                         ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))) ||
                         this.state.noUtxo ||
                         this.state.responseTooLarge ||
+                        this.state.multisigWrongKey ||
                         (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress))
                       }
                       onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>

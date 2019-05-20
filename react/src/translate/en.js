@@ -1105,6 +1105,7 @@ const LANG_EN = {
     CANNOT_PUSH_ETH_TX: 'Error cannot push ETH transaction.',
     UNABLE_TO_GET_ETH_GAS_PRICE: 'Unable to get ETH gas price',
     TX_OPID: 'Transaction OPID',
+    MULTISIG_WRONG_KEY: 'You cannot sign this transaction!',
   },
   TOOLS: {
     NO_UTXO: 'No UTXO found',
