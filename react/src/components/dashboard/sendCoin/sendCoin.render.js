@@ -681,7 +681,11 @@ export const SendRender = function() {
                   </div>
                 }
                 { this.state.noUtxo &&
-                  <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
+                  <div className="padding-top-20">
+                    { translate('SEND.NO_VALID_UTXO_ERR_P1') }<br />
+                    { translate('SEND.NO_VALID_UTXO_ERR_P2') }<br />
+                    { translate('SEND.NO_VALID_UTXO_ERR_P3') }
+                  </div>
                 }
                 { this.state.multisigWrongKey &&
                   <div className="padding-top-20">{ translate('SEND.MULTISIG_WRONG_KEY') }</div>
@@ -868,7 +872,7 @@ export const SendRender = function() {
                           { translate('INDEX.AMOUNT') }
                           </td>
                           <td className="padding-left-30 selectable">
-                            { this.state.amount } { _coin.toUpperCase() } 
+                            { this.state.amount } { _coin.toUpperCase() }
                           </td>
                         </tr>
                         <tr>

@@ -385,7 +385,8 @@ class WalletsProgress extends React.Component {
 
   render() {
     if (this.props &&
-        this.props.ActiveCoin) {
+        this.props.ActiveCoin &&
+        this.props.ActiveCoin.mode === 'native') {
       return WalletsProgressRender.call(this);
     }
 

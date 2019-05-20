@@ -995,7 +995,7 @@ class SendCoin extends React.Component {
               this.setState(Object.assign({}, this.state, {
                 spvPreflightSendInProgress: false,
                 spvDpowVerificationWarning: 'n/a',
-                noUtxo: sendPreflight.result === 'no valid utxo' ? true : false,
+                noUtxo: sendPreflight.result === 'no valid utxo' || typeof sendPreflight.result === 'string' && sendPreflight.result.indexOf('Spend value is too large') > -1 ? true : false,
                 responseTooLarge: sendPreflight.result && sendPreflight.result.result && sendPreflight.result.result.message && sendPreflight.result.result.message.indexOf('response too large') > -1 ? true : false,
                 multisigWrongKey: typeof sendPreflight.result === 'string' && sendPreflight.result.indexOf('Multisig: you can\'t sign this transaction') > -1 ? true : false,
               }));
