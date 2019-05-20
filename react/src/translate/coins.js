@@ -45,7 +45,7 @@ const coins = {
     KOIN: 'Koinon Coin',
     DION: 'DionPay',
     PTX: 'PatentTX',
-    ZEX: 'Zaddex',
+    ZEX: 'Zaddex (deprecated)',
     SPLTEST: 'Sapling Test Chain',
     LUMBER: 'Lumberscout',
     KSB: 'KSB',
@@ -55,6 +55,7 @@ const coins = {
     MTST3: 'MTST3',
     RFOX: 'Red Fox',
     HUSH: 'Hush',
+    ZEXO: 'Zaddex',
   },
   CRYPTO: {
     STRAT: 'Stratis',
