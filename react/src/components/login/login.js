@@ -727,6 +727,9 @@ class Login extends React.Component {
       isSeedBlank: false,
       customWalletSeed: false,
       isCustomSeedWeak: false,
+      customPinFilename: '',
+      encryptKey: '',
+      encryptKeyConfirm: '',
       step: 0,
     });
   }
@@ -766,7 +769,7 @@ class Login extends React.Component {
     }
   }
 
-  nextStep() {
+  nextStep() {    
     if (this.state.activeLoginSection === 'restore' &&
         this.state.step === 0) {
       const stringEntropy = mainWindow.checkStringEntropy(this.state.loginPassphrase);
