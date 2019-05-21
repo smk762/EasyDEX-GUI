@@ -977,6 +977,7 @@ class Login extends React.Component {
     this.updateLoginPassPhraseInput(e);
 
     if (e.key === 'Enter' &&
+        this.state.activeLoginSection === 'login' &&
         (this.state.loginPassphrase || (this.state.selectedPin && this.state.decryptKey))) {
       this.loginSeed();
     }
