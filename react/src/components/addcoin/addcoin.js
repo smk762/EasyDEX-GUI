@@ -289,7 +289,7 @@ class AddCoin extends React.Component {
         addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
         className: addCoinProps.display ? 'show fade' : 'show out',
-        type: (this.props.Main.coins.native.length || !this.props.Main.isLoggedIn) && staticVar.argv.indexOf('hardcore') === -1 ? 'native' : 'spv',
+        type: (this.props.Main.coins.native.length || !this.props.Main.isLoggedIn) && staticVar.argv.indexOf('hardcore') === -1 && this.props.Main.walletType !== 'multisig' ? 'native' : 'spv',
       }));
 
       setTimeout(() => {

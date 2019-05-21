@@ -223,6 +223,12 @@ class AddCoinTile extends React.Component {
         className += ' hidden';
       }
 
+      if (this.props.walletType === 'multisig' &&
+          kmdAssetChains.indexOf(coins[i].value.split('|')[0].toUpperCase()) === -1 &&
+          className.indexOf('hidden') === -1) {
+        className += ' hidden';
+      }
+
       items.push(
         <div
           key={ `addcoin-tile-${i}` }
