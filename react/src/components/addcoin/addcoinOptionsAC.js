@@ -4,18 +4,8 @@ import config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 import { sortObject } from 'agama-wallet-lib/src/utils';
 
-// TODO: detect if ac has electrums or not
-
+// TODO: move to backend
 const _disabledAC = {
-  spv: [
-    'axo',
-    'etomic',
-    'mesh',
-    'ceal',
-    'dsec',
-    'pirate',
-    'mtst3',
-  ],
   native: [
     'vrsc',
     'hush',
@@ -49,13 +39,7 @@ const addCoinOptionsAC = (activeCoins) => {
   for (let i = 0; i < _assetChains.length; i++) {
     const _coinlc = _assetChains[i].toLowerCase();
     const _coinuc = _assetChains[i].toUpperCase();
-    let availableModes;
-
-    if (_disabledAC.spv.indexOf(_coinlc) === -1) {
-      availableModes = 'spv|native';
-    } else {
-      availableModes = 'native'
-    }
+    let availableModes = 'spv|native';
 
     if (_disabledAC.native.indexOf(_coinlc) > -1) {
       availableModes = 'spv';
@@ -65,11 +49,15 @@ const addCoinOptionsAC = (activeCoins) => {
       availableModes = 'spv';
     }
 
+    if (staticVar.electrumServers &&
+        !staticVar.electrumServers[_coinlc]) {
+      availableModes = availableModes.indexOf('native') > -1 ? 'native' : 'spv';
+    }
+
     if (_disabledAC.all.indexOf(_coinlc) === -1 &&
         (activeCoins === 'skip' || (activeCoins !== 'skip' &&
          activeCoins &&
          activeCoins.spv &&
-         activeCoins.native &&
          activeCoins.spv.indexOf(_coinuc) === -1 &&
          activeCoins.native.indexOf(_coinuc) === -1))) {
       const _placeholder = translate(`ASSETCHAINS.${_coinuc}`);
@@ -83,6 +71,7 @@ const addCoinOptionsAC = (activeCoins) => {
   }
 
   if (config.userAgreement) {
+    // remove(?)
     const _customAssetChains = {
       mining: [
       ],
