@@ -448,6 +448,16 @@ const LoginRender = function() {
                     onClick={ this.nextStep }>
                     { translate('LOGIN.NEXT') }
                   </button>
+                  { this.state.walletType !== 'multisig' &&
+                    <div className="form-group form-material floating">
+                      <button
+                        className="btn btn-lg btn-flat btn-block waves-effect"
+                        id="register-back-btn"
+                        onClick={ () => this.updateActiveLoginSection('login') }>
+                        { translate('INDEX.BACK_TO_LOGIN') }
+                      </button>
+                    </div>
+                  }
                 </section>
               }
               { this.state.step === 1 &&
