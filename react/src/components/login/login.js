@@ -806,78 +806,132 @@ class Login extends React.Component {
   }
 
   handleRegisterWallet() {
-    const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
-    const walletType = this.state.activeLoginSection === 'signup' ? this.state.walletType : 'default';
-    let enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
-    let isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
-    let stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
-
-    if (walletType === 'native') { // skip lite mode checks
-      enteredSeedsMatch = true;
-      isSeedBlank = false;
-      stringEntropy = true;
-    }
-
-    if (!stringEntropy) {
+    if (this.props.Login.pinList &&
+        this.props.Login.pinList.length &&
+        this.props.Login.pinList.indexOf(this.state.customPinFilename) > -1) {
       Store.dispatch(
         triggerToaster(
-          [translate('LOGIN.SEED_ENTROPY_CHECK_P1'),
-            '',
-            translate('LOGIN.SEED_ENTROPY_CHECK_P3')],
-            translate('LOGIN.SEED_ENTROPY_CHECK_TITLE'),
-          'warning toastr-wide',
-          false
+          translate('LOGIN.PIN_NAME_TAKEN_ERR', this.state.customPinFilename),
+          translate('LOGIN.SEED_ENCRYPT'),
+          'error'
         )
       );
-    }
+    } else {
+      const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
+      const walletType = this.state.activeLoginSection === 'signup' ? this.state.walletType : 'default';
+      let enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
+      let isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
+      let stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
 
-    this.setState({
-      isSeedConfirmError: !enteredSeedsMatch ? true : false,
-      isSeedBlank: isSeedBlank ? true : false,
-    });
+      if (walletType === 'native') { // skip lite mode checks
+        enteredSeedsMatch = true;
+        isSeedBlank = false;
+        stringEntropy = true;
+      }
 
-    if (this.state.shouldEncryptSeed) {
-      if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
+      if (!stringEntropy) {
         Store.dispatch(
           triggerToaster(
-            translate('LOGIN.ENCRYPTION_KEYS_DONT_MATCH'),
-            translate('LOGIN.SEED_ENCRYPT'),
-            'error'
+            [translate('LOGIN.SEED_ENTROPY_CHECK_P1'),
+              '',
+              translate('LOGIN.SEED_ENTROPY_CHECK_P3')],
+              translate('LOGIN.SEED_ENTROPY_CHECK_TITLE'),
+            'warning toastr-wide',
+            false
           )
         );
-      } else {
-        if (!this.state.encryptKey ||
-            !this.state.encryptKeyConfirm) {
+      }
+
+      this.setState({
+        isSeedConfirmError: !enteredSeedsMatch ? true : false,
+        isSeedBlank: isSeedBlank ? true : false,
+      });
+
+      if (this.state.shouldEncryptSeed) {
+        if (this.state.encryptKey !== this.state.encryptKeyConfirm) {
           Store.dispatch(
             triggerToaster(
-              translate('LOGIN.ENCRYPTION_KEY_EMPTY'),
+              translate('LOGIN.ENCRYPTION_KEYS_DONT_MATCH'),
               translate('LOGIN.SEED_ENCRYPT'),
               'error'
             )
           );
-        } else if (this.state.encryptKey === this.state.encryptKeyConfirm) {
-          const seedEncryptionKeyEntropy = mainWindow.checkStringEntropy(this.state.encryptKey);
-
-          if (!seedEncryptionKeyEntropy) {
+        } else {
+          if (!this.state.encryptKey ||
+              !this.state.encryptKeyConfirm) {
             Store.dispatch(
               triggerToaster(
-                translate('LOGIN.SEED_ENCRYPTION_WEAK_PW'),
-                translate('LOGIN.WEAK_PW'),
+                translate('LOGIN.ENCRYPTION_KEY_EMPTY'),
+                translate('LOGIN.SEED_ENCRYPT'),
                 'error'
               )
             );
-          } else {
-            if (this.state.isCustomPinFilename) {
-              const _customPinFilenameTest = /^[0-9a-zA-Z-_]+$/g;
+          } else if (this.state.encryptKey === this.state.encryptKeyConfirm) {
+            const seedEncryptionKeyEntropy = mainWindow.checkStringEntropy(this.state.encryptKey);
 
-              if (this.state.customPinFilename &&
-                  _customPinFilenameTest.test(this.state.customPinFilename)) {
+            if (!seedEncryptionKeyEntropy) {
+              Store.dispatch(
+                triggerToaster(
+                  translate('LOGIN.SEED_ENCRYPTION_WEAK_PW'),
+                  translate('LOGIN.WEAK_PW'),
+                  'error'
+                )
+              );
+            } else {
+              if (this.state.isCustomPinFilename) {
+                const _customPinFilenameTest = /^[0-9a-zA-Z-_]+$/g;
+
+                if (this.state.customPinFilename &&
+                    _customPinFilenameTest.test(this.state.customPinFilename)) {
+                  encryptPassphrase(
+                    this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
+                    this.state.encryptKey,
+                    walletType,
+                    false,
+                    this.state.customPinFilename,
+                  )
+                  .then((res) => {
+                    if (res.msg === 'success') {
+                      this.loadPinList();
+                      Store.dispatch(activeHandle());
+
+                      setTimeout(() => {
+                        this.setState({
+                          selectedPin: res.result,
+                          activeLoginSection: 'login',
+                          randomSeed: '',
+                          loginPassphrase: '',
+                          randomSeedConfirm: [],
+                          customWalletSeed: false,
+                          encryptKey: '',
+                          encryptKeyConfirm: '',
+                          decryptKey: '',
+                        });
+                      }, 500);
+                    } else {
+                      Store.dispatch(
+                        triggerToaster(
+                          res.result,
+                          translate('LOGIN.ERR_SEED_STORAGE'),
+                          'error'
+                        )
+                      );
+                    }
+                  });
+                } else {
+                  Store.dispatch(
+                    triggerToaster(
+                      translate('LOGIN.CUSTOM_PIN_FNAME_INFO'),
+                      translate('LOGIN.ERR_SEED_STORAGE'),
+                      'error'
+                    )
+                  );
+                }
+              } else {
                 encryptPassphrase(
                   this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
                   this.state.encryptKey,
-                  walletType,
-                  false,
-                  this.state.customPinFilename,
+                  'default'
                 )
                 .then((res) => {
                   if (res.msg === 'success') {
@@ -907,49 +961,7 @@ class Login extends React.Component {
                     );
                   }
                 });
-              } else {
-                Store.dispatch(
-                  triggerToaster(
-                    translate('LOGIN.CUSTOM_PIN_FNAME_INFO'),
-                    translate('LOGIN.ERR_SEED_STORAGE'),
-                    'error'
-                  )
-                );
               }
-            } else {
-              encryptPassphrase(
-                this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase,
-                this.state.encryptKey,
-                'default'
-              )
-              .then((res) => {
-                if (res.msg === 'success') {
-                  this.loadPinList();
-                  Store.dispatch(activeHandle());
-
-                  setTimeout(() => {
-                    this.setState({
-                      selectedPin: res.result,
-                      activeLoginSection: 'login',
-                      randomSeed: '',
-                      loginPassphrase: '',
-                      randomSeedConfirm: [],
-                      customWalletSeed: false,
-                      encryptKey: '',
-                      encryptKeyConfirm: '',
-                      decryptKey: '',
-                    });
-                  }, 500);
-                } else {
-                  Store.dispatch(
-                    triggerToaster(
-                      res.result,
-                      translate('LOGIN.ERR_SEED_STORAGE'),
-                      'error'
-                    )
-                  );
-                }
-              });
             }
           }
         }
