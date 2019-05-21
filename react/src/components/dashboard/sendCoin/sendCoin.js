@@ -167,7 +167,20 @@ class SendCoin extends React.Component {
     this.toggleZtxDropdown = this.toggleZtxDropdown.bind(this);
     this.setZtxFee = this.setZtxFee.bind(this);
     this.updateMultisigInput = this.updateMultisigInput.bind(this);
+    this.copyMultisigRawtx = this.copyMultisigRawtx.bind(this);
+    this.dumpMultisigRawtx = this.dumpMultisigRawtx.bind(this);
     //this.loadTestData = this.loadTestData.bind(this);
+  }
+
+  copyMultisigRawtx() {
+    Store.dispatch(copyString(this.state.spvPreflightRes.multisig.rawtx, 'Multi signature raw transaction is copied'));
+  }
+
+  dumpMultisigRawtx() {
+    const a = document.getElementById('multisig-rawtx-link');
+    
+    a.download = 'multi-signature-raw-transaction.txt';
+    a.href = 'data:text/plain;charset=UTF-8,' + this.state.spvPreflightRes.multisig.rawtx;
   }
 
   updateMultisigInput(e) {
@@ -983,6 +996,7 @@ class SendCoin extends React.Component {
                   change: sendPreflight.result.change,
                   estimatedFee: sendPreflight.result.estimatedFee,
                   totalInterest: sendPreflight.result.totalInterest,
+                  multisig: sendPreflight.result.multisigData ? { data: sendPreflight.result.multisigData, rawtx: sendPreflight.result.rawtx } : null,
                 },
               }));
               
@@ -1056,12 +1070,16 @@ class SendCoin extends React.Component {
       this.setState(Object.assign({}, this.state, {
         currentStep: step,
       }));
+      
       if (this.props.cb) {
         setTimeout(() => {
           this.props.cb(this.state);
         }, 100);
       }
-      this.handleSubmit();
+
+      if (this.props.Main.walletType !== 'multisig') {
+        this.handleSubmit();
+      }
     }
   }
 

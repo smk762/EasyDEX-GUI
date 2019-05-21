@@ -656,6 +656,12 @@ export const SendRender = function() {
                         { formatValue((fromSats(this.state.spvPreflightRes.value)) + fromSats((this.state.spvPreflightRes.fee))) }
                       </div>
                     }
+                    { this.state.spvPreflightRes.multisig &&
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                        <strong>Signatures required:</strong>&nbsp;
+                        { this.state.spvPreflightRes.multisig.data.signatures.required }
+                      </div>
+                    }
                   </div>
                 }
                 { Config.requirePinToConfirmTx &&
@@ -816,202 +822,249 @@ export const SendRender = function() {
         { this.state.currentStep === 2 &&
           <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
             <div className="panel">
-              <div className="panel-heading">
-                <h4 className="panel-title">
-                  { translate('INDEX.TRANSACTION_RESULT') }
-                </h4>
-                <div>
-                  { this.state.lastSendToResponse &&
-                    !this.state.lastSendToResponse.msg &&
-                    <table className="table table-hover table-striped">
-                      <thead>
-                        <tr>
-                          <th className="padding-left-30">{ translate('INDEX.KEY') }</th>
-                          <th className="padding-left-30">{ translate('INDEX.INFO') }</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="padding-left-30">
-                          { translate('SEND.RESULT') }
-                          </td>
-                          <td className="padding-left-30">
-                            <span className="label label-success">{ translate('SEND.SUCCESS_SM') }</span>
-                          </td>
-                        </tr>
-                        { ((this.state.sendFrom && _mode === 'native') ||
-                          _mode === 'spv' ||
-                          _mode === 'eth') &&
+              { this.props.Main.walletType !== 'multisig' &&
+                <div className="panel-heading">
+                  <h4 className="panel-title">
+                    { translate('INDEX.TRANSACTION_RESULT') }
+                  </h4>
+                  <div>
+                    { this.state.lastSendToResponse &&
+                      !this.state.lastSendToResponse.msg &&
+                      <table className="table table-hover table-striped">
+                        <thead>
+                          <tr>
+                            <th className="padding-left-30">{ translate('INDEX.KEY') }</th>
+                            <th className="padding-left-30">{ translate('INDEX.INFO') }</th>
+                          </tr>
+                        </thead>
+                        <tbody>
                           <tr>
                             <td className="padding-left-30">
-                            { translate('INDEX.SEND_FROM') }
+                            { translate('SEND.RESULT') }
+                            </td>
+                            <td className="padding-left-30">
+                              <span className="label label-success">{ translate('SEND.SUCCESS_SM') }</span>
+                            </td>
+                          </tr>
+                          { ((this.state.sendFrom && _mode === 'native') ||
+                            _mode === 'spv' ||
+                            _mode === 'eth') &&
+                            <tr>
+                              <td className="padding-left-30">
+                              { translate('INDEX.SEND_FROM') }
+                              </td>
+                              <td className="padding-left-30 selectable word-break--all">
+                                { _mode === 'spv' &&
+                                  <span>{ this.props.Dashboard.electrumCoins[_coin].pub }</span>
+                                }
+                                { _mode === 'eth' &&
+                                  <span>{ this.props.Dashboard.ethereumCoins[_coin].pub }</span>
+                                }
+                                { _mode === 'native' &&
+                                  <span>{ this.state.sendFrom }</span>
+                                }
+                              </td>
+                            </tr>
+                          }
+                          <tr>
+                            <td className="padding-left-30">
+                            { translate('INDEX.SEND_TO') }
                             </td>
                             <td className="padding-left-30 selectable word-break--all">
+                              { this.state.sendTo }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="padding-left-30">
+                            { translate('INDEX.AMOUNT') }
+                            </td>
+                            <td className="padding-left-30 selectable">
+                              { this.state.amount } { _coin.toUpperCase() }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
+                            <td className="padding-left-30">
+                              <span className="selectable">
                               { _mode === 'spv' &&
-                                <span>{ this.props.Dashboard.electrumCoins[_coin].pub }</span>
-                              }
-                              { _mode === 'eth' &&
-                                <span>{ this.props.Dashboard.ethereumCoins[_coin].pub }</span>
+                                <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>
                               }
                               { _mode === 'native' &&
-                                <span>{ this.state.sendFrom }</span>
+                                <span>{ this.state.lastSendToResponse }</span>
+                              }
+                              { _mode === 'eth' &&
+                                <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>                              
+                              }
+                              </span>
+                              { ((_mode === 'spv' &&
+                                this.state.lastSendToResponse &&
+                                this.state.lastSendToResponse.txid) ||
+                                (_mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
+                                <button
+                                  className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                                  title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                                  onClick={ () => this.copyTXID(_mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse) }>
+                                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                                </button>
+                              }
+                              { ((_mode === 'spv' &&
+                                this.state.lastSendToResponse &&
+                                this.state.lastSendToResponse.txid) ||
+                                (_mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
+                                explorerList[_coin] &&
+                                <div className="margin-top-10">
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                                    onClick={ () => this.openExplorerWindow(_mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse) }>
+                                    <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', _coin) }
+                                  </button>
+                                </div>
+                              }
+                              { _mode === 'eth' &&
+                                this.state.lastSendToResponse &&
+                                this.state.lastSendToResponse.txid &&
+                                <button
+                                  className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                                  title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                                  onClick={ () => this.copyTXID(this.state.lastSendToResponse.txid) }>
+                                  <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                                </button>
+                              }
+                              { _mode === 'eth' &&
+                                this.state.lastSendToResponse &&
+                                this.state.lastSendToResponse.txid &&
+                                (explorerList[_coin] || erc20ContractId[_coin]) &&
+                                <div className="margin-top-10">
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
+                                    onClick={ () => this.openExplorerWindow(this.state.lastSendToResponse.txid) }>
+                                    <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', 'Etherscan') }
+                                  </button>
+                                </div>
                               }
                             </td>
                           </tr>
+                        </tbody>
+                      </table>
+                    }
+                    { !this.state.lastSendToResponse &&
+                      <div className="padding-left-30 padding-top-10">{ translate('SEND.PROCESSING_TX') }...</div>
+                    }
+                    { this.state.lastSendToResponse &&
+                      this.state.lastSendToResponse.msg &&
+                      this.state.lastSendToResponse.msg === 'error' &&
+                      _mode !== 'eth' &&
+                      <div className="padding-left-30 padding-top-10">
+                        <div>
+                          <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
+                        </div>
+                        { (this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') > -1) &&
+                          <div>
+                            { translate('SEND.YOUR_TXHISTORY_CONTAINS_ZTX_P1') }<br />
+                            { translate('SEND.YOUR_TXHISTORY_CONTAINS_ZTX_P2') }
+                          </div>
                         }
-                        <tr>
-                          <td className="padding-left-30">
-                          { translate('INDEX.SEND_TO') }
-                          </td>
-                          <td className="padding-left-30 selectable word-break--all">
-                            { this.state.sendTo }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="padding-left-30">
-                          { translate('INDEX.AMOUNT') }
-                          </td>
-                          <td className="padding-left-30 selectable">
-                            { this.state.amount } { _coin.toUpperCase() }
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="padding-left-30">{ translate('SEND.TRANSACTION_ID') }</td>
-                          <td className="padding-left-30">
-                            <span className="selectable">
-                            { _mode === 'spv' &&
-                              <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>
-                            }
-                            { _mode === 'native' &&
-                              <span>{ this.state.lastSendToResponse }</span>
-                            }
-                            { _mode === 'eth' &&
-                              <span>{ (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') }</span>                              
-                            }
-                            </span>
-                            { ((_mode === 'spv' &&
-                              this.state.lastSendToResponse &&
-                              this.state.lastSendToResponse.txid) ||
-                              (_mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
-                              <button
-                                className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
-                                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                                onClick={ () => this.copyTXID(_mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse) }>
-                                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
-                              </button>
-                            }
-                            { ((_mode === 'spv' &&
-                              this.state.lastSendToResponse &&
-                              this.state.lastSendToResponse.txid) ||
-                              (_mode === 'native' && this.state.lastSendToResponse && this.state.lastSendToResponse.length === 64)) &&
-                              explorerList[_coin] &&
-                              <div className="margin-top-10">
-                                <button
-                                  type="button"
-                                  className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
-                                  onClick={ () => this.openExplorerWindow(_mode === 'spv' ? (this.state.lastSendToResponse && this.state.lastSendToResponse.txid ? this.state.lastSendToResponse.txid : '') : this.state.lastSendToResponse) }>
-                                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', _coin) }
-                                </button>
+                        { this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') === -1 &&
+                          <div>
+                            <div>{ this.state.lastSendToResponse.result }</div>
+                            { typeof this.state.lastSendToResponse.raw.txid === 'object' &&
+                              <div className="padding-top-10 word-break--all">
+                                <strong className="text-capitalize">{ translate('SEND.DEBUG_INFO') }</strong>: { JSON.stringify(this.state.lastSendToResponse.raw.txid) }
                               </div>
                             }
-                            { _mode === 'eth' &&
-                              this.state.lastSendToResponse &&
-                              this.state.lastSendToResponse.txid &&
-                              <button
-                                className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
-                                title={ translate('INDEX.COPY_TO_CLIPBOARD') }
-                                onClick={ () => this.copyTXID(this.state.lastSendToResponse.txid) }>
-                                <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
-                              </button>
-                            }
-                            { _mode === 'eth' &&
-                              this.state.lastSendToResponse &&
-                              this.state.lastSendToResponse.txid &&
-                              (explorerList[_coin] || erc20ContractId[_coin]) &&
-                              <div className="margin-top-10">
-                                <button
-                                  type="button"
-                                  className="btn btn-sm white btn-dark waves-effect waves-light pull-left"
-                                  onClick={ () => this.openExplorerWindow(this.state.lastSendToResponse.txid) }>
-                                  <i className="icon fa-external-link"></i> { translate('INDEX.OPEN_TRANSACTION_IN_EPLORER', 'Etherscan') }
-                                </button>
-                              </div>
-                            }
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  }
-                  { !this.state.lastSendToResponse &&
-                    <div className="padding-left-30 padding-top-10">{ translate('SEND.PROCESSING_TX') }...</div>
-                  }
-                  { this.state.lastSendToResponse &&
-                    this.state.lastSendToResponse.msg &&
-                    this.state.lastSendToResponse.msg === 'error' &&
-                    _mode !== 'eth' &&
-                    <div className="padding-left-30 padding-top-10">
-                      <div>
-                        <strong className="text-capitalize">{ translate('API.ERROR_SM') }</strong>
+                          </div>
+                        }
+                        { _mode === 'spv' &&
+                          this.state.lastSendToResponse.raw &&
+                          this.state.lastSendToResponse.raw.txid &&
+                          <div>{ typeof this.state.lastSendToResponse.raw.txid !== 'object' ? this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') : '' }</div>
+                        }
+                        { this.state.lastSendToResponse.raw &&
+                          this.state.lastSendToResponse.raw.txid &&
+                          JSON.stringify(this.state.lastSendToResponse.raw.txid).indexOf('bad-txns-inputs-spent') > -1 &&
+                          <div className="margin-top-10">
+                            { translate('SEND.BAD_TXN_SPENT_ERR1') }
+                            <ul>
+                              <li>{ translate('SEND.BAD_TXN_SPENT_ERR2') }</li>
+                              <li>{ translate('SEND.BAD_TXN_SPENT_ERR3') }</li>
+                              <li>{ translate('SEND.BAD_TXN_SPENT_ERR4') }</li>
+                            </ul>
+                          </div>
+                        }
                       </div>
-                      { (this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') > -1) &&
-                        <div>
-                          { translate('SEND.YOUR_TXHISTORY_CONTAINS_ZTX_P1') }<br />
-                          { translate('SEND.YOUR_TXHISTORY_CONTAINS_ZTX_P2') }
-                        </div>
-                      }
-                      { this.state.lastSendToResponse.result.toLowerCase().indexOf('decode error') === -1 &&
-                        <div>
-                          <div>{ this.state.lastSendToResponse.result }</div>
-                          { typeof this.state.lastSendToResponse.raw.txid === 'object' &&
-                            <div className="padding-top-10 word-break--all">
-                              <strong className="text-capitalize">{ translate('SEND.DEBUG_INFO') }</strong>: { JSON.stringify(this.state.lastSendToResponse.raw.txid) }
-                            </div>
-                          }
-                        </div>
-                      }
-                      { _mode === 'spv' &&
-                        this.state.lastSendToResponse.raw &&
-                        this.state.lastSendToResponse.raw.txid &&
-                        <div>{ typeof this.state.lastSendToResponse.raw.txid !== 'object' ? this.state.lastSendToResponse.raw.txid.replace(/\[.*\]/, '') : '' }</div>
-                      }
-                      { this.state.lastSendToResponse.raw &&
-                        this.state.lastSendToResponse.raw.txid &&
-                        JSON.stringify(this.state.lastSendToResponse.raw.txid).indexOf('bad-txns-inputs-spent') > -1 &&
-                        <div className="margin-top-10">
-                          { translate('SEND.BAD_TXN_SPENT_ERR1') }
-                          <ul>
-                            <li>{ translate('SEND.BAD_TXN_SPENT_ERR2') }</li>
-                            <li>{ translate('SEND.BAD_TXN_SPENT_ERR3') }</li>
-                            <li>{ translate('SEND.BAD_TXN_SPENT_ERR4') }</li>
-                          </ul>
-                        </div>
-                      }
-                    </div>
-                  }
-                  { this.state.lastSendToResponse &&
-                    this.state.lastSendToResponse.msg &&
-                    this.state.lastSendToResponse.msg === 'error' &&
-                    _mode === 'eth' &&
-                    <div className="padding-left-30 padding-top-10">
-                      <div>{ translate('SEND.CANNOT_PUSH_ETH_TX') }</div>
-                      <div className="padding-top-10 padding-bottom-10">{ translate('SEND.DEBUG_INFO') }</div>
-                      <div>{ JSON.stringify(this.state.lastSendToResponse) }</div>
+                    }
+                    { this.state.lastSendToResponse &&
+                      this.state.lastSendToResponse.msg &&
+                      this.state.lastSendToResponse.msg === 'error' &&
+                      _mode === 'eth' &&
+                      <div className="padding-left-30 padding-top-10">
+                        <div>{ translate('SEND.CANNOT_PUSH_ETH_TX') }</div>
+                        <div className="padding-top-10 padding-bottom-10">{ translate('SEND.DEBUG_INFO') }</div>
+                        <div>{ JSON.stringify(this.state.lastSendToResponse) }</div>
+                      </div>
+                    }
+                  </div>
+                  { !this.props.initState &&
+                    <div className="widget-body-footer">
+                      <div className="widget-actions margin-bottom-15 margin-right-15">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={ () => this.changeSendCoinStep(0) }>
+                          { translate('INDEX.MAKE_ANOTHER_TX') }
+                        </button>
+                      </div>
                     </div>
                   }
                 </div>
-                { !this.props.initState &&
-                  <div className="widget-body-footer">
-                    <div className="widget-actions margin-bottom-15 margin-right-15">
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={ () => this.changeSendCoinStep(0) }>
-                        { translate('INDEX.MAKE_ANOTHER_TX') }
-                      </button>
+              }
+              { this.props.Main.walletType === 'multisig' &&
+                <div className="panel-heading">
+                  <h4 className="panel-title">
+                    Multi signature transaction result
+                  </h4>
+                  <div>
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20 padding-left-45">
+                        <strong>Signatures required</strong>: { this.state.spvPreflightRes.multisig.data.signatures.required }
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20 padding-left-45">
+                        <strong>Signatures verified</strong>: { this.state.spvPreflightRes.multisig.data.signatures.verified }
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20 padding-left-45 padding-bottom-20">
+                        <strong>Raw transaction</strong>
+                        <button
+                          className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                          title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                          onClick={ this.copyMultisigRawtx }>
+                          <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                        </button>
+                        <a
+                          id="multisig-rawtx-link"
+                          onClick={ this.dumpMultisigRawtx }>
+                          <button
+                            className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                            title="Download as a file">
+                            <i className="icon fa-download"></i>
+                          </button>
+                        </a>
+                        {/*<div className="selectable word-break--all padding-top-15">{ this.state.spvPreflightRes.multisig.rawtx }</div>*/}
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-left-45 padding-bottom-20">
+                        Pass raw transaction to other co-signers in order to finalize it.
+                      </div>
                     </div>
                   </div>
-                }
-              </div>
+                </div>
+              }
             </div>
           </div>
         }
