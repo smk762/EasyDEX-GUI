@@ -1025,6 +1025,147 @@ const LoginRender = function() {
                 </div>
               </section>
             }
+            { this.state.step === 3 && // multisig
+              this.state.walletType === 'multisig' &&
+              <section className="restore-wallet">
+                <h4 className="hint color-white margin-bottom-40">
+                  Please verify if information below is correct.
+                </h4>
+                <div className="form-group form-material floating col-sm-12 horizontal-padding-0 text-left">
+                  <div>
+                    <strong>Numer of required signatures: { this.state.multisigRestoreNofN.replace('-', ' of ') }</strong>
+                  </div>
+                  <div className="padding-top-25">
+                    <strong>Pubkeys list</strong>
+                    <div>
+                      { this.renderPubkeysList() } 
+                    </div>
+                  </div>
+                  <div className="padding-top-30">
+                    <strong>Redeem Script</strong>
+                    <div className="padding-top-5 word-break--all selectable">{ this.state.multisigRestoreData.redeemScript }</div>
+                  </div>
+                  <div className="padding-top-30">
+                    <strong>KMD address:</strong> <span className="selectable">{ this.state.multisigRestoreData.address }</span>
+                  </div>
+                  <div className="padding-top-30">
+                    <strong>Secret key (3rd party service):</strong> <span className="selectable">{ this.state.multisigRestoreSecret }</span>
+                  </div>
+                  <div className="padding-top-30">
+                  <strong>Backup (share between co-signers)</strong>
+                    <button
+                      className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                      title={ translate('INDEX.COPY_TO_CLIPBOARD') }
+                      onClick={ this.copyMultisigBackup }>
+                      <i className="icon wb-copy"></i> { translate('INDEX.COPY') }
+                    </button>
+                    <a
+                      id="multisig-backup-link"
+                      onClick={ this.dumpMultisigBackup }>
+                      <button
+                        className="btn btn-default btn-xs clipboard-edexaddr margin-left-10"
+                        title="Download as a file">
+                        <i className="icon fa-download"></i>
+                      </button>
+                    </a>
+                    {/*<div className="padding-top-10 word-break--all selectable">
+                      { this.state.multisigRestoreData.backupHex }
+                    </div>*/}
+                  </div>
+                </div>
+                <div className="form-group form-material col-sm-12 horizontal-padding-0 padding-top-10">
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block margin-top-30"
+                    onClick={ this.nextStep }
+                    disabled={ !this.state.multisigRestoreNofN }>
+                    { translate('LOGIN.NEXT') }
+                  </button>
+                  <div className="form-group form-material floating">
+                    <button
+                      className="btn btn-lg btn-flat btn-block waves-effect"
+                      id="register-back-btn"
+                      onClick={ () => this.updateActiveLoginSection('login') }>
+                      { translate('INDEX.BACK_TO_LOGIN') }
+                    </button>
+                  </div>
+                </div>
+              </section>
+            }
+            { this.state.step === 4 && // multisig
+              this.state.walletType === 'multisig' &&
+              <section>
+                <h4 className="hint color-white margin-bottom-20">
+                  { translate('LOGIN.ENTER_WALLET_NAME_AND_PW') }
+                </h4>
+                <div className="seed-encrypt-block padding-top-35">
+                  <div className="form-group form-material floating text-left margin-top-20 margin-bottom-60">
+                    <input
+                      type="text"
+                      name="customPinFilename"
+                      ref="customPinFilename"
+                      className="form-control"
+                      onChange={ this.updateInput }
+                      autoComplete="off"
+                      value={ this.state.customPinFilename || '' } />
+                    <label
+                      className="floating-label"
+                      htmlFor="customPinFilename">
+                      { translate('LOGIN.WALLET_NAME') }
+                    </label>
+                  </div>
+                  <div className="form-group form-material floating text-left">
+                    <input
+                      type="password"
+                      name="encryptKey"
+                      ref="encryptKey"
+                      className="form-control"
+                      onChange={ this.updateInput }
+                      autoComplete="off"
+                      value={ this.state.encryptKey || '' } />
+                    <label
+                      className="floating-label"
+                      htmlFor="encryptKey">
+                      { translate('LOGIN.SEED_ENCRYPT_KEY') }
+                    </label>
+                  </div>
+                  <div className="form-group form-material floating text-left margin-top-60 margin-bottom-60">
+                    <input
+                      type="password"
+                      name="encryptKeyConfirm"
+                      ref="encryptKeyConfirm"
+                      className="form-control"
+                      onChange={ this.updateInput }
+                      autoComplete="off"
+                      value={ this.state.encryptKeyConfirm || '' } />
+                    <label
+                      className="floating-label"
+                      htmlFor="encryptKeyConfirm">
+                      { translate('LOGIN.SEED_ENCRYPT_KEY_CONFIRM') }
+                    </label>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-block"
+                  onClick={ this.handleRegisterWallet }
+                  disabled={
+                    !this.state.encryptKey ||
+                    !this.state.encryptKeyConfirm ||
+                    !this.state.customPinFilename
+                  }>
+                  { translate('LOGIN.NEXT') }
+                </button>
+                <div className="form-group form-material floating">
+                  <button
+                    className="btn btn-lg btn-flat btn-block waves-effect"
+                    id="register-back-btn"
+                    onClick={ () => this.updateActiveLoginSection('login') }>
+                    { translate('INDEX.BACK_TO_LOGIN') }
+                  </button>
+                </div>
+              </section>
+            }
             { this.state.step === 2 &&
               this.state.walletType !== 'multisig' &&
               <section>

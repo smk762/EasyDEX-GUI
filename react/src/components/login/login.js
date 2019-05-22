@@ -132,8 +132,54 @@ class Login extends React.Component {
     this.multisigCreateValidatePubkeys = this.multisigCreateValidatePubkeys.bind(this);
     this.copyMultisigBackup = this.copyMultisigBackup.bind(this);
     this.dumpMultisigBackup = this.dumpMultisigBackup.bind(this);
+    this.processMultisigBackup = this.processMultisigBackup.bind(this);
     //
     this.multisigTest = this.multisigTest.bind(this);
+  }
+
+  processMultisigBackup(acceptedFiles) {
+    this.setState({
+      multisigRestoreNofN: null,
+      multisigRestorePubkeys: [],
+      multisigRestoreSecret: '',
+      multisigRestoreData: {},
+    });
+
+    const reader = new FileReader();
+
+    reader.onabort = () => console.log('file reading was aborted');
+    reader.onerror = () => console.log('file reading has failed');
+    reader.onload = () => {
+      const binaryStr = reader.result;
+      let contents;
+      console.log(binaryStr);
+      try {
+        contents = JSON.parse(new Buffer.from(binaryStr, 'hex').toString());
+      } catch (e) {
+        console.warn('dnd error', e);
+        // throw toastr
+      }
+
+      const redeemScriptDecoded = multisig.decodeRedeemScript(contents.redeemScript, { toHex: true });
+
+      this.setState({
+        multisigRestoreNofN: `${redeemScriptDecoded.m}-${redeemScriptDecoded.pubKeys.length}`,
+        multisigRestorePubkeys: redeemScriptDecoded.pubKeys,
+        multisigRestoreSecret: contents.secretKey,
+        multisigRestoreData: {
+          redeemScript: contents.redeemScript,
+          decoded: redeemScriptDecoded,
+          backupHex: binaryStr,
+          address: multisig.redeemScriptToPubAddress(contents.redeemScript, networks.kmd),
+        },
+        step: 3,
+      });
+
+      console.log(redeemScriptDecoded);
+    };
+
+    // throw error if multiple files uploaded
+    acceptedFiles.forEach(file => reader.readAsBinaryString(file));
   }
 
   dumpMultisigBackup() {
