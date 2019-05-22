@@ -28,8 +28,75 @@ import {
 
 // TODO: refactor current coin props copy on change
 
+const defaults = {
+  native: {
+    coin: null,
+    mode: null,
+    send: false,
+    receive: false,
+    balance: 0,
+    addresses: null,
+    activeSection: 'default',
+    showTransactionInfo: false,
+    showTransactionInfoTxIndex: null,
+    txhistory: [],
+    opids: null,
+    lastSendToResponse: null,
+    progress: null,
+    rescanInProgress: false,
+    getinfoFetchFailures: 0,
+    net: {
+      peers: null,
+      totals: null,
+    },
+  },
+  spv: {
+    coin: null,
+    mode: null,
+    send: false,
+    receive: false,
+    balance: 0,
+    addresses: null,
+    activeSection: 'default',
+    showTransactionInfo: false,
+    showTransactionInfoTxIndex: null,
+    txhistory: [],
+    lastSendToResponse: null,
+  },
+  eth: {
+    coin: null,
+    mode: null,
+    send: false,
+    receive: false,
+    balance: 0,
+    addresses: null,
+    activeSection: 'default',
+    showTransactionInfo: false,
+    showTransactionInfoTxIndex: null,
+    txhistory: [],
+    lastSendToResponse: null,
+  },
+};
+
+const checkCoinObjectKeys = (obj, mode) => {
+  if (Object.keys(obj).length &&
+      mode) {
+    for (let key in obj) {
+      if (!defaults[mode].hasOwnProperty(key)) {
+        delete obj[key];
+      }
+    }
+  }
+
+  return obj;
+};
+
 export const ActiveCoin = (state = {
-  coins: {},
+  coins: {
+    native: {},
+    spv: {},
+    eth: {},
+  },
   coin: null,
   mode: null,
   send: false,
@@ -53,28 +120,12 @@ export const ActiveCoin = (state = {
 }, action) => {
   switch (action.type) {
     case DASHBOARD_REMOVE_COIN:
-      delete state.coins[action.coin];
+      delete state.coins[action.mode][action.coin];
 
       if (state.coin === action.coin) {
         return {
           ...state,
-          coins: state.coins,
-          coin: null,
-          mode: null,
-          balance: 0,
-          addresses: null,
-          txhistory: 'loading',
-          send: false,
-          receive: false,
-          showTransactionInfo: false,
-          showTransactionInfoTxIndex: null,
-          activeSection: 'default',
-          progress: null,
-          rescanInProgress: false,
-          net: {
-            peers: null,
-            totals: null,
-          },
+          ...defaults[action.mode],
         };
       } else {
         return {
@@ -82,12 +133,13 @@ export const ActiveCoin = (state = {
         };
       }
     case DASHBOARD_ACTIVE_COIN_CHANGE:
-      if (state.coins[action.coin]) {
+      if (state.coins[action.mode] &&
+          state.coins[action.mode][action.coin]) {
         let _coins = state.coins;
         
         if (action.mode === state.mode) {
-          const _coinData = state.coins[action.coin];
-          const _coinDataToStore = {
+          const _coinData = state.coins[action.mode][action.coin];
+          const _coinDataToStore = checkCoinObjectKeys({
             addresses: state.addresses,
             coin: state.coin,
             mode: state.mode,
@@ -100,38 +152,40 @@ export const ActiveCoin = (state = {
             activeSection: state.activeSection,
             lastSendToResponse: state.lastSendToResponse,
             opids: state.mode === 'native' ? state.opids : null,
-            activeBasiliskAddress: state.activeBasiliskAddress,
+            activeAddress: state.activeAddress,
             progress: state.mode === 'native' ? state.progress : null,
             rescanInProgress: state.mode === 'native' ? state.rescanInProgress : false,
             getinfoFetchFailures: state.mode === 'native' ? state.getinfoFetchFailures : 0,
             net: state.mode === 'native' ? state.net : {},
-          };
+          }, action.mode);
 
           if (!action.skip) {
-            _coins[state.coin] = _coinDataToStore;
+            _coins[action.mode][state.coin] = _coinDataToStore;
           }
           delete _coins.undefined;
           
           return {
             ...state,
             coins: _coins,
-            addresses: _coinData.addresses,
-            coin: _coinData.coin,
-            mode: _coinData.mode,
-            balance: _coinData.balance,
-            txhistory: _coinData.txhistory,
-            send: _coinData.send,
-            receive: _coinData.receive,
-            showTransactionInfo: _coinData.showTransactionInfo,
-            showTransactionInfoTxIndex: _coinData.showTransactionInfoTxIndex,
-            activeSection: _coinData.activeSection,
-            lastSendToResponse: _coinData.lastSendToResponse,
-            opids: _coinData.mode === 'native' ? _coinData.opids : null,
-            activeBasiliskAddress: _coinData.activeBasiliskAddress,
-            progress: _coinData.mode === 'native' ? _coinData.progress : null,
-            rescanInProgress: _coinData.mode === 'native' ? _coinData.rescanInProgress : false,
-            getinfoFetchFailures: _coinData.mode === 'native' ? _coinData.getinfoFetchFailures : 0,
-            net: _coinData.mode === 'native' ? _coinData.net : {},
+            ...checkCoinObjectKeys({
+              addresses: _coinData.addresses,
+              coin: _coinData.coin,
+              mode: _coinData.mode,
+              balance: _coinData.balance,
+              txhistory: _coinData.txhistory,
+              send: _coinData.send,
+              receive: _coinData.receive,
+              showTransactionInfo: _coinData.showTransactionInfo,
+              showTransactionInfoTxIndex: _coinData.showTransactionInfoTxIndex,
+              activeSection: _coinData.activeSection,
+              lastSendToResponse: _coinData.lastSendToResponse,
+              opids: _coinData.mode === 'native' ? _coinData.opids : null,
+              activeAddress: _coinData.activeAddress,
+              progress: _coinData.mode === 'native' ? _coinData.progress : null,
+              rescanInProgress: _coinData.mode === 'native' ? _coinData.rescanInProgress : false,
+              getinfoFetchFailures: _coinData.mode === 'native' ? _coinData.getinfoFetchFailures : 0,
+              net: _coinData.mode === 'native' ? _coinData.net : {},
+            }, _coinData.mode),
           };
         } else {
           delete _coins.undefined;
@@ -139,27 +193,29 @@ export const ActiveCoin = (state = {
           return {
             ...state,
             coins: state.coins,
-            coin: action.coin,
-            mode: action.mode,
-            balance: 0,
-            addresses: null,
-            txhistory: 'loading',
-            send: false,
-            receive: false,
-            showTransactionInfo: false,
-            showTransactionInfoTxIndex: null,
-            activeSection: 'default',
-            progress: null,
-            rescanInProgress: false,
-            net: {
-              peers: null,
-              totals: null,
-            },
+            ...checkCoinObjectKeys({
+              coin: action.coin,
+              mode: action.mode,
+              balance: 0,
+              addresses: null,
+              txhistory: 'loading',
+              send: false,
+              receive: false,
+              showTransactionInfo: false,
+              showTransactionInfoTxIndex: null,
+              activeSection: 'default',
+              progress: null,
+              rescanInProgress: false,
+              net: {
+                peers: null,
+                totals: null,
+              },
+            }, action.mode),
           };
         }
       } else {
         if (state.coin) {
-          const _coinData = {
+          const _coinData = checkCoinObjectKeys({
             addresses: state.addresses,
             coin: state.coin,
             mode: state.mode,
@@ -172,57 +228,62 @@ export const ActiveCoin = (state = {
             activeSection: state.activeSection,
             lastSendToResponse: state.lastSendToResponse,
             opids: state.mode === 'native' ? state.opids : null,
-            activeBasiliskAddress: state.activeBasiliskAddress,
+            activeAddress: state.activeAddress,
             progress: state.mode === 'native' ? state.progress : null,
             rescanInProgress: state.mode === 'native' ? state.rescanInProgress : false,
             getinfoFetchFailures: state.mode === 'native' ? state.getinfoFetchFailures : 0,
             net: state.mode === 'native' ? state.net : {},
-          };
+          }, state.mode);
           let _coins = state.coins;
 
-          if (!action.skip) {
-            _coins[state.coin] = _coinData;
+          if (!action.skip &&
+              _coins[action.mode]) {
+            _coins[action.mode][state.coin] = _coinData;
           }
 
           return {
             ...state,
             coins: _coins,
-            coin: action.coin,
-            mode: action.mode,
-            balance: 0,
-            addresses: null,
-            txhistory: 'loading',
-            send: false,
-            receive: false,
-            showTransactionInfo: false,
-            showTransactionInfoTxIndex: null,
-            activeSection: 'default',
-            progress: null,
-            rescanInProgress: false,
-            net: {
-              peers: null,
-              totals: null,
-            },
+            ...checkCoinObjectKeys({
+              coin: action.coin,
+              mode: action.mode,
+              balance: 0,
+              addresses: null,
+              txhistory: 'loading',
+              send: false,
+              receive: false,
+              showTransactionInfo: false,
+              showTransactionInfoTxIndex: null,
+              activeSection: 'default',
+              progress: null,
+              rescanInProgress: false,
+              net: {
+                peers: null,
+                totals: null,
+              },
+            }, action.mode),
           };
         } else {
           return {
             ...state,
-            coin: action.coin,
-            mode: action.mode,
-            balance: 0,
-            addresses: null,
-            txhistory: 'loading',
-            send: false,
-            receive: false,
-            showTransactionInfo: false,
-            showTransactionInfoTxIndex: null,
-            activeSection: 'default',
-            progress: null,
-            rescanInProgress: false,
-            net: {
-              peers: null,
-              totals: null,
-            },
+            ...checkCoinObjectKeys({
+              coin: action.coin,
+              mode: action.mode,
+              balance: 0,
+              addresses: null,
+              txhistory: 'loading',
+              send: false,
+              receive: false,
+              showTransactionInfo: false,
+              showTransactionInfoTxIndex: null,
+              activeSection: 'default',
+              progress: null,
+              rescanInProgress: false,
+              net: {
+                peers: null,
+                totals: null,
+              },
+            }, action.mode),
           };
         }
       }
@@ -303,7 +364,7 @@ export const ActiveCoin = (state = {
     case SYNCING_NATIVE_MODE:
       return {
         ...state,
-        progress: action.progress,
+        progress: state.mode === 'native' ? action.progress : null,
         getinfoFetchFailures: typeof action.progress === 'string' && action.progress.indexOf('"code":-777') ? state.getinfoFetchFailures + 1 : 0,
       };
     case DASHBOARD_ACTIVE_COIN_GETINFO_FAILURE:
@@ -315,7 +376,6 @@ export const ActiveCoin = (state = {
       if (state.coin === action.coin) {
         return {
           ...state,
-          // progress: action.progress,
           opids: action.opids,
           txhistory: action.txhistory,
           balance: action.balance,
@@ -351,7 +411,11 @@ export const ActiveCoin = (state = {
       };
     case DASHBOARD_CLEAR_ACTIVECOIN:
       return {
-        coins: {},
+        coins: {
+          native: {},
+          spv: {},
+          eth: {},
+        },
         coin: null,
         mode: null,
         balance: 0,
@@ -368,6 +432,7 @@ export const ActiveCoin = (state = {
           peers: null,
           totals: null,
         },
+        getinfoFetchFailures: 0,
       };
     default:
       return state;
