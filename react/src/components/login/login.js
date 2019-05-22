@@ -93,11 +93,16 @@ class Login extends React.Component {
       seedExtraSpaces: false,
       step: 0,
       walletType: 'default',
+      // multisig
       multisigCreateSeed: '',
       multisigCreateNofN: '1-2',
       multisigCreatePubkeys: [],
       multisigCreateSecret: mainWindow.sha256(mainWindow.randomBytes()).toString('hex'),
       multisigCreateData: {},
+      multisigRestoreNofN: null,
+      multisigRestorePubkeys: [],
+      multisigRestoreSecret: '',
+      multisigRestoreData: {},
     };
     this.coins = {};
     this.defaultState = JSON.parse(JSON.stringify(this.state));
@@ -159,7 +164,8 @@ class Login extends React.Component {
 
   multisigTest() {
     this.setState({
-      loginPassphrase: '123',
+      walletType: 'multisig',
+      loginPassphrase: 'lime lime2',
       encryptKey: 'qwerty777',
       encryptKeyConfirm: 'qwerty777',
       customPinFilename: 'multisig-test',
@@ -168,6 +174,7 @@ class Login extends React.Component {
         '02af2030e333ec4cbb88024b066064c81564c712e656bf615571c7a59d57c3abae',
         '0215924cf28630a26f534514a77dcf00dcc5d7ffee1fd3dd543fe63693d408fe73',
       ],
+      step: 2,
     });
   }
 
@@ -877,7 +884,7 @@ class Login extends React.Component {
 
   handleRegisterWallet() {
     const _seed = this.state.activeLoginSection === 'signup' ? this.state.randomSeed : this.state.loginPassphrase;
-    const walletType = this.state.activeLoginSection === 'signup' ? this.state.walletType : 'default';
+    let walletType = this.state.activeLoginSection === 'signup' ? this.state.walletType : 'default';
     let enteredSeedsMatch = this.state.activeLoginSection === 'signup' ? this.state.randomSeed === this.state.randomSeedConfirm.join(' ') : true;
     let isSeedBlank = this.state.activeLoginSection === 'signup' ? this.isBlank(this.state.randomSeed) : false;
     let stringEntropy = this.state.activeLoginSection === 'signup' ? mainWindow.checkStringEntropy(this.state.randomSeed) : true;
@@ -886,6 +893,10 @@ class Login extends React.Component {
       enteredSeedsMatch = true;
       isSeedBlank = false;
       stringEntropy = true;
+    }
+
+    if (this.state.walletType === 'multisig') {
+      walletType = 'multisig';
     }
 
     if (!stringEntropy) {
@@ -944,15 +955,24 @@ class Login extends React.Component {
                   _customPinFilenameTest.test(this.state.customPinFilename)) {
                 let multisig;
 
-                if (walletType === 'multisig') {
+                if (walletType === 'multisig' &&
+                    this.state.activeLoginSection === 'create') {
                   multisig = {
                     redeemScript: this.state.multisigCreateData.redeemScript,
                     secretKey: this.state.multisigCreateSecret,
                   }
+                } else if (
+                  walletType === 'multisig' &&
+                  this.state.activeLoginSection === 'restore'
+                ) {
+                  multisig = {
+                    redeemScript: this.state.multisigRestoreData.redeemScript,
+                    secretKey: this.state.multisigRestoreSecret,
+                  }
                 }
 
                 encryptPassphrase(
-                  this.state.activeLoginSection === 'signup' && this.state.walletType !== 'multisig' ? this.state.randomSeed : this.state.loginPassphrase,
+                  this.state.activeLoginSection === 'signup' && walletType !== 'multisig' ? this.state.randomSeed : this.state.loginPassphrase,
                   this.state.encryptKey,
                   walletType,
                   false,
@@ -962,7 +982,7 @@ class Login extends React.Component {
                 .then((res) => {
                   if (res.msg === 'success') {
                     mainWindow.createSeed.triggered = true;
-                    mainWindow.createSeed.firstLoginPH = md5(this.state.activeLoginSection === 'signup' && this.state.walletType !== 'multisig' ? this.state.randomSeed : this.state.loginPassphrase);
+                    mainWindow.createSeed.firstLoginPH = md5(this.state.activeLoginSection === 'signup' && walletType !== 'multisig' ? this.state.randomSeed : this.state.loginPassphrase);
                 
                     this.loadPinList();
                     Store.dispatch(activeHandle());
@@ -1231,7 +1251,7 @@ class Login extends React.Component {
   }
 
   renderPubkeysList() {
-    const nOfN = this.state.multisigCreateNofN.split('-')[1];
+    const nOfN = this.state.activeLoginSection === 'create' ? this.state.multisigCreateNofN.split('-')[1] : this.state.multisigRestoreNofN.split('-')[1];
     let items = [];
     
     for (let i = 0; i < nOfN; i++) {
@@ -1239,7 +1259,7 @@ class Login extends React.Component {
         <div
           key={ `multisig-pubkeys-${i}-step3` } 
           className="pubkeys-list-item selectable">
-          [{ i + 1 }] { this.state.multisigCreatePubkeys[i] }
+          [{ i + 1 }] { this.state.activeLoginSection === 'create' ? this.state.multisigCreatePubkeys[i] : this.state.multisigRestorePubkeys[i] }
         </div>
       );
     }

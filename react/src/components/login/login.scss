@@ -377,6 +377,13 @@ a.login-nn-elections {
 }
 
 .restore-wallet {
+  .pubkeys-list-item {
+    padding-top: 10px;
+  }
+  .multisig-dnd-block {
+    padding: 20px;
+    border: dashed 1px #fff;
+  }
   .fa-copy {
     margin-left: 10px;
   }
