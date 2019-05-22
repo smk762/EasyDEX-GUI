@@ -32,8 +32,12 @@ class Main extends React.Component {
     }
 
     // prevent drag n drop external files
-    document.addEventListener('dragover', event => event.preventDefault());
-    document.addEventListener('drop', event => event.preventDefault());
+    document.addEventListener('dragover', event => {
+      if (!event.dataTransfer.files.length) event.preventDefault();
+    });
+    document.addEventListener('drop', event => {
+      if (!event.dataTransfer.files.length) event.preventDefault();
+    });
 
     // apply dark theme
     if (Config.darkmode) {
