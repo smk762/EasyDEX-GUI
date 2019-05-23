@@ -263,7 +263,8 @@ class Navbar extends React.Component {
     
     if (e &&
         _srcElement &&
-        _srcElement.className !== 'dropdown-menu' &&
+        _srcElement.className.indexOf('dropdown-menu') === -1 &&
+        _srcElement.className.indexOf('new-update-icon') === -1 &&
         _srcElement.className !== 'icon fa-bars' &&
         _srcElement.title !== 'top menu' &&
         (_srcElement.offsetParent && _srcElement.offsetParent.className !== 'navbar-avatar-inner') &&
