@@ -158,7 +158,7 @@ const NavbarRender = function() {
                 { this.isRenderLogout() &&
                   <li>
                     <a onClick={ this.logout }>
-                      <i className="icon fa-power-off"></i> { translate('DASHBOARD.COMPLETE_LOGOUT') }
+                      <i className="icon fa-power-off"></i> { translate('DASHBOARD.' + (this.isNativeOnly() ? (this.isNativeOnly() > 1 ? 'STOP_ALL' : 'STOP_ALT') : 'COMPLETE_LOGOUT'), this.props.ActiveCoin.coin) }
                     </a>
                   </li>
                 }

@@ -47,6 +47,7 @@ class Navbar extends React.Component {
     this.stopCoind = this.stopCoind.bind(this);
     this.stopAllCoind = this.stopAllCoind.bind(this);
     this.openKomodoPlatformLink = this.openKomodoPlatformLink.bind(this);
+    this.isNativeOnly = this.isNativeOnly.bind(this);
   }
 
   stopCoind(coin, i, _coins) {
@@ -163,9 +164,23 @@ class Navbar extends React.Component {
     const _main = this.props.Main;
 
     if (_main &&
-        _main.isLoggedIn &&
-        (_main.isPin || staticVar.argv.indexOf('hardcore') > -1)) {
+        _main.isLoggedIn) {
       return true;
+    }
+  }
+
+  isNativeOnly() {
+    const _main = this.props.Main;
+    
+    if (_main &&
+        !_main.isPin &&
+        _main.coins.native &&
+        _main.coins.native.length &&
+        _main.coins.spv &&
+        !_main.coins.spv.length &&
+        _main.coins.eth &&
+        !_main.coins.eth.length) {
+      return _main.coins.native.length;
     }
   }
 
@@ -245,7 +260,7 @@ class Navbar extends React.Component {
 
   handleClickOutside(e) {
     const _srcElement = e ? e.srcElement : null;
-
+    
     if (e &&
         _srcElement &&
         _srcElement.className !== 'dropdown-menu' &&

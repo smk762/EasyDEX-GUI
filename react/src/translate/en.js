@@ -565,6 +565,7 @@ const LANG_EN = {
     RPC_CONN_FAILURE: 'Unable to establish RPC connection!<br>Retries count',
     REMOVE: 'Remove',
     STOP: 'Stop',
+    STOP_ALT: 'Stop @template@',
     STOP_ALL: 'Stop all',
     SOFT_LOGOUT: 'Soft logout',
     COMPLETE_LOGOUT: 'Logout',
