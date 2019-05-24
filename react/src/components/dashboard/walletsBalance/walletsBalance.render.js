@@ -49,7 +49,7 @@ const WalletsBalanceRender = function() {
                         }
                         { translate('INDEX.' + (_coin === 'CHIPS' || _mode === 'spv' || _mode === 'eth' ? 'BALANCE' : 'TRANSPARENT_BALANCE')) }
                         { _mode === 'spv' &&
-                          _balanceUnconf &&
+                          (_balanceUnconf > 0 || _balanceUnconf < 0) &&
                           <i
                             className="icon fa-info-circle margin-left-5 icon-unconf-balance"
                             data-tip={ `${translate('INDEX.UNCONFIRMED_BALANCE')} ${_balanceUnconf}` }
