@@ -34,7 +34,6 @@ class Navbar extends React.Component {
     super();
     this.state = {
       openDropMenu: false,
-      isExperimentalOn: false,
       coindStopRetries: 0,
     };
     this.nativeCoinsDelete = {};
@@ -240,10 +239,6 @@ class Navbar extends React.Component {
       this.handleClickOutside,
       false
     );
-
-    this.setState({
-      isExperimentalOn: mainWindow.appConfig.userAgreement,
-    });
 
     if (staticVar.argv.indexOf('dexonly') > -1) {
       Store.dispatch(dashboardChangeSection(mainWindow.activeSection));

@@ -10,32 +10,32 @@ let coins = cryptoCoins;
 let _activeCoins;
 let _disableETH;
 
-// disable non kmd coins
-// TODO: move eth to a separate render
-if (!config.userAgreement) {
-  coins = coins.slice(0, 2);
-}
-
-// sort coins by their title
-let _coins = [];
-let coinsList = [];
-
-for (let i = 0; i < cryptoCoins.length; i++) {
-  _coins[translate('CRYPTO.' + cryptoCoins[i].toUpperCase())] = cryptoCoins[i];
-}
-
-_coins = sortObject(_coins);
-
-for (let key in _coins) {
-  if (config.userAgreement ||
-      (!config.userAgreement && (_coins[key] === 'KMD' || _coins[key] === 'CHIPS'))) {
-    coinsList.push(_coins[key]);
-  }
-}
-
-coins = coinsList;
-
 const prepCoinsList = (options) => {
+  // disable non kmd coins
+  // TODO: move eth to a separate render
+  if (!config.userAgreement) {
+    coins = coins.slice(0, 2);
+  }
+
+  // sort coins by their title
+  let _coins = [];
+  let coinsList = [];
+
+  for (let i = 0; i < cryptoCoins.length; i++) {
+    _coins[translate('CRYPTO.' + cryptoCoins[i].toUpperCase())] = cryptoCoins[i];
+  }
+
+  _coins = sortObject(_coins);
+
+  for (let key in _coins) {
+    if (config.userAgreement ||
+        (!config.userAgreement && (_coins[key] === 'KMD' || _coins[key] === 'CHIPS'))) {
+      coinsList.push(_coins[key]);
+    }
+  }
+
+  coins = coinsList;
+
   const availableKMDModes = staticVar.arch === 'x64' ? 'spv|native' : 'spv';
   let _items = [];
   

@@ -11,7 +11,6 @@ import {
   apiPostCoinList,
   toggleZcparamsFetchModal,
   getSyncInfoNativePromise,
-  toggleUserAgreementModal,
 } from '../../actions/actionCreators';
 import Store from '../../store';
 import zcashParamsCheckErrors from '../../util/zcashParams';
@@ -307,10 +306,6 @@ class AddCoin extends React.Component {
             });
           }, 100);
         } else {
-          if (!Config.userAgreement) {
-            Store.dispatch(toggleUserAgreementModal(true));
-          }
-
           setTimeout(() => {
             this.setState({
               coinsList: this.filterCoins(),

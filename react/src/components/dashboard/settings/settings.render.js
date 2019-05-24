@@ -99,7 +99,7 @@ export const SettingsRender = function() {
               this.props.Main.isLoggedIn &&
               !mainWindow.isWatchOnly() &&
               <PanelSection
-                title={ translate('INDEX.EXPORT_KEYS') }
+                title={ translate('INDEX.WALLET_BACKUP') }
                 icon="icon md-key">
                 <ExportKeysPanel />
               </PanelSection>

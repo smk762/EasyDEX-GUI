@@ -1,5 +1,5 @@
 const mainWindow = window.require('electron').remote.getGlobal('app');
-let Config = mainWindow.appConfig;
+const Config = mainWindow.appConfig;
 Config.token = mainWindow.appSessionHash;
 
 export const agamaPort = Config.agamaPort;

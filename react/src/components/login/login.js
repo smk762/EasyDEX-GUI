@@ -83,7 +83,6 @@ class Login extends React.Component {
       encryptKeyConfirm: '',
       decryptKey: '',
       selectedPin: '',
-      isExperimentalOn: false,
       enableEncryptSeed: true,
       isCustomPinFilename: true,
       customPinFilename: '',
@@ -376,7 +375,6 @@ class Login extends React.Component {
     const newSeed = passphraseGenerator.generatePassPhrase(256);
 
     this.setState({
-      isExperimentalOn: mainWindow.userAgreement,
       randomSeed: newSeed,
       randomSeedShuffled: shuffleArray(newSeed.split(' ')),
     });
