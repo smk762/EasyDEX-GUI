@@ -8,6 +8,7 @@ import {
 import Store from '../../../store';
 import UserAgreementModalRender from './userAgreementModal.render';
 import Config from '../../../config';
+import mainWindow, { staticVar } from '../../../util/mainWindow';
 
 class UserAgreementModal extends React.Component {
   constructor() {
@@ -24,6 +25,7 @@ class UserAgreementModal extends React.Component {
       className: 'show out',
     }));
     Store.dispatch(acceptUserAgreement());
+    mainWindow.appConfig.userAgreement = true;
     Config.userAgreement = true;
 
     setTimeout(() => {

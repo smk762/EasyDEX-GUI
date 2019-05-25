@@ -16,7 +16,6 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isExperimentalOn: false,
     };
     this.displaySPVServerListTab = this.displaySPVServerListTab.bind(this);
   }
@@ -42,12 +41,6 @@ class Settings extends React.Component {
     Store.dispatch(getAppInfo());
 
     document.getElementById('section-iguana-wallet-settings').setAttribute('style', 'height:auto; min-height: 100%');
-  }
-
-  componentWillMount() {
-    this.setState({
-      isExperimentalOn: mainWindow.appConfig.userAgreement,
-    });
   }
 
   render() {

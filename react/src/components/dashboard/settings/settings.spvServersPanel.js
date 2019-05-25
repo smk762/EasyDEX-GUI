@@ -16,15 +16,6 @@ class SPVServersPanel extends React.Component {
     this.updateInput = this.updateInput.bind(this);
   }
 
-  componentWillReceiveProps(props) {
-    if (props.Dashboard &&
-        props.Dashboard.activeSection !== 'settings') {
-      this.setState(Object.assign({}, this.state, {
-        keys: null,
-      }));
-    }
-  }
-
   setElectrumServer(coin) {
     const _propsServer = this.props.Dashboard.electrumCoins[coin].server;
     let _server = [
@@ -62,7 +53,6 @@ class SPVServersPanel extends React.Component {
             )
           );
           Store.dispatch(electrumServerChanged(true));
-          Store.dispatch(apiElectrumCoins());
         });
       } else {
         Store.dispatch(

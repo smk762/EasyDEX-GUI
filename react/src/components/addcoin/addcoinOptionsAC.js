@@ -13,6 +13,7 @@ const _disabledAC = {
   all: [
     'spltest',
     'mvp',
+    'vote2019',
   ],
 };
 

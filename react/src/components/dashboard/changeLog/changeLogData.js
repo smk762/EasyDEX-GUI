@@ -1,4 +1,10 @@
 const changeLogData = [{
+  version: '0.3.7',
+  changes: [
+    'Electrum server connection issue hot fix',
+    'Various fixes related to PIN access',
+  ],
+}, {
   version: '0.3.6',
   changes: [
     'Latest KMD binaries based on beta branch',

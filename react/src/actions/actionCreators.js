@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import 'bluebird';
 import mainWindow from '../util/mainWindow';
+import Store from '../store';
 
 import translate from '../translate/translate';
 import {
@@ -66,6 +67,7 @@ export * from './actions/addressBook';
 export * from './actions/eth';
 export * from './actions/exchanges';
 export * from './actions/userAgreement';
+import { apiElectrumCoins } from './actions/electrum';
 
 export const changeActiveAddress = (address) => {
   return {
@@ -304,6 +306,10 @@ export const displayImportKeyModal = (display) => {
 }
 
 export const electrumServerChanged = (isChanged) => {
+  if (isChanged) {
+    Store.dispatch(apiElectrumCoins());
+  }
+
   return {
     type: ELECTRUM_SERVER_CHANGED,
     eletrumServerChanged: isChanged,
