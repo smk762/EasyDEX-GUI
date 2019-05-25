@@ -134,11 +134,11 @@ const LoginRender = function() {
                       <i className="icon fa-wrench"></i> { translate('TOOLS.TOOLS') }
                     </a>
                   </li>
-                  <li>
+                  {/*<li>
                     <a onClick={ () => this.toggleLoginSettingsDropdownSection('elections') }>
                       <i className="icon fa-thumbs-up"></i> { `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }
                     </a>
-                  </li>
+                  </li>*/}
                   <li>
                     <a onClick={ () => this.toggleLoginSettingsDropdownSection('changelog') }>
                       <i className="icon fa-list"></i> { translate('INDEX.CHANGE_LOG') }

@@ -67,12 +67,12 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
-            { mainWindow.nnVoteChain &&
+            { /*mainWindow.nnVoteChain &&
               <li className="nav-top-menu">
                 <a onClick={ this._toggleNotaryElectionsModal }>
                   <i className="site-menu-icon"></i> { `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }
                 </a>
-              </li>
+              </li>*/
             }
             { !navigator.onLine &&
               <li
