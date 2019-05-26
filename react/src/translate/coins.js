@@ -56,6 +56,7 @@ const coins = {
     RFOX: 'Red Fox',
     HUSH: 'Hush',
     ZEXO: 'Zaddex',
+    LABS: 'KMDLabs',
   },
   CRYPTO: {
     STRAT: 'Stratis',
