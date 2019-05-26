@@ -34,7 +34,6 @@ class Navbar extends React.Component {
     super();
     this.state = {
       openDropMenu: false,
-      isExperimentalOn: false,
       coindStopRetries: 0,
     };
     this.nativeCoinsDelete = {};
@@ -47,6 +46,7 @@ class Navbar extends React.Component {
     this.stopCoind = this.stopCoind.bind(this);
     this.stopAllCoind = this.stopAllCoind.bind(this);
     this.openKomodoPlatformLink = this.openKomodoPlatformLink.bind(this);
+    this.isNativeOnly = this.isNativeOnly.bind(this);
   }
 
   stopCoind(coin, i, _coins) {
@@ -163,9 +163,23 @@ class Navbar extends React.Component {
     const _main = this.props.Main;
 
     if (_main &&
-        _main.isLoggedIn &&
-        (_main.isPin || staticVar.argv.indexOf('hardcore') > -1)) {
+        _main.isLoggedIn) {
       return true;
+    }
+  }
+
+  isNativeOnly() {
+    const _main = this.props.Main;
+    
+    if (_main &&
+        !_main.isPin &&
+        _main.coins.native &&
+        _main.coins.native.length &&
+        _main.coins.spv &&
+        !_main.coins.spv.length &&
+        _main.coins.eth &&
+        !_main.coins.eth.length) {
+      return _main.coins.native.length;
     }
   }
 
@@ -226,10 +240,6 @@ class Navbar extends React.Component {
       false
     );
 
-    this.setState({
-      isExperimentalOn: mainWindow.appConfig.userAgreement,
-    });
-
     if (staticVar.argv.indexOf('dexonly') > -1) {
       Store.dispatch(dashboardChangeSection(mainWindow.activeSection));
     }
@@ -245,10 +255,11 @@ class Navbar extends React.Component {
 
   handleClickOutside(e) {
     const _srcElement = e ? e.srcElement : null;
-
+    
     if (e &&
         _srcElement &&
-        _srcElement.className !== 'dropdown-menu' &&
+        _srcElement.className.indexOf('dropdown-menu') === -1 &&
+        _srcElement.className.indexOf('new-update-icon') === -1 &&
         _srcElement.className !== 'icon fa-bars' &&
         _srcElement.title !== 'top menu' &&
         (_srcElement.offsetParent && _srcElement.offsetParent.className !== 'navbar-avatar-inner') &&

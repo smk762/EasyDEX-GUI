@@ -67,12 +67,12 @@ const NavbarRender = function() {
                 </a>
               </li>
             }
-            { mainWindow.nnVoteChain &&
+            { /*mainWindow.nnVoteChain &&
               <li className="nav-top-menu">
                 <a onClick={ this._toggleNotaryElectionsModal }>
                   <i className="site-menu-icon"></i> { `${translate('NN_ELECTIONS.NN_ELECTIONS')} ${new Date().getFullYear()}` }
                 </a>
-              </li>
+              </li>*/
             }
             { !navigator.onLine &&
               <li
@@ -158,7 +158,7 @@ const NavbarRender = function() {
                 { this.isRenderLogout() &&
                   <li>
                     <a onClick={ this.logout }>
-                      <i className="icon fa-power-off"></i> { translate('DASHBOARD.COMPLETE_LOGOUT') }
+                      <i className="icon fa-power-off"></i> { translate('DASHBOARD.' + (this.isNativeOnly() ? (this.isNativeOnly() > 1 ? 'STOP_ALL' : 'STOP_ALT') : 'COMPLETE_LOGOUT'), this.props.ActiveCoin.coin) }
                     </a>
                   </li>
                 }

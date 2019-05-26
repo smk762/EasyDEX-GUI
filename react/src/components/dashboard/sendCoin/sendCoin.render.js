@@ -661,7 +661,11 @@ export const SendRender = function() {
                   </div>
                 }
                 { this.state.noUtxo &&
-                  <div className="padding-top-20">{ translate('SEND.NO_VALID_UTXO_ERR') }</div>
+                  <div className="padding-top-20">
+                    { translate('SEND.NO_VALID_UTXO_ERR_P1') }<br />
+                    { translate('SEND.NO_VALID_UTXO_ERR_P2') }<br />
+                    { translate('SEND.NO_VALID_UTXO_ERR_P3') }
+                  </div>
                 }
                 { this.state.responseTooLarge &&
                   <div className="padding-top-20">

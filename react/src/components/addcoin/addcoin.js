@@ -42,7 +42,6 @@ class AddCoin extends React.Component {
       display: false,
       actionsMenu: false,
       className: 'hide',
-      isExperimentalOn: false,
       usePubkey: false,
       type: 'spv',
       quickSearch: null,
@@ -275,7 +274,6 @@ class AddCoin extends React.Component {
 
   componentWillMount() {
     this.setState({
-      isExperimentalOn: mainWindow.appConfig.userAgreement,
       coinsList: this.filterCoins(),
     });
   }
