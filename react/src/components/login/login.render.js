@@ -157,12 +157,12 @@ const LoginRender = function() {
           </div>
 
           <div className={ this.state.activeLoginSection === 'login' ? 'show' : 'hide' }>
-            { (this.props.Login.pinList.length > 0 || staticVar.argv.indexOf('hardcore') > -1) &&
+            { (this.props.Login.pinList.length > 0 || staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod) &&
               <h4 className="color-white">
                 { translate('INDEX.WELCOME_LOGIN') }
               </h4>
             }
-            { (this.props.Login.pinList.length === 0 && staticVar.argv.indexOf('hardcore') === -1) &&
+            { (this.props.Login.pinList.length === 0 && (staticVar.argv.indexOf('hardcore') === -1 || !Config.oldLoginMethod)) &&
               <h4 className="color-white padding-bottom-20">
                 { translate('INDEX.WELCOME_LOGIN_NEW') }
               </h4>
@@ -187,7 +187,7 @@ const LoginRender = function() {
                 </div>
               </div>
             }
-            { staticVar.argv.indexOf('hardcore') > -1 &&
+            { (staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod) &&
               !this.props.Main.isLoggedIn &&
               !this.props.Main.isPin &&
               <div>
@@ -230,7 +230,7 @@ const LoginRender = function() {
                   className="text-left" />
               </div>
             }
-            { (this.props.Login.pinList.length > 0 || staticVar.argv.indexOf('hardcore') > -1) &&
+            { (this.props.Login.pinList.length > 0 || staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod) &&
               <button
                 type="button"
                 className="btn btn-primary btn-block margin-top-20"
@@ -261,14 +261,14 @@ const LoginRender = function() {
                 { translate('INDEX.LOGIN_ANOTHER_WALLET') }
               </button>
               { this.props.Main.coins &&
-                (staticVar.argv.indexOf('hardcore') > -1 || (!this.props.Main.coins.spv.length && !this.props.Main.coins.eth.length)) &&
+                (staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod || (!this.props.Main.coins.spv.length && !this.props.Main.coins.eth.length)) &&
                 <button
                   className="btn btn-lg btn-flat btn-block waves-effect margin-top-20"
                   id="register-btn"
                   onClick={ this.toggleActivateCoinForm }
                   disabled={ !this.props.Main }>
                   <span className="ladda-label">
-                    { translate('ADD_COIN.' + (staticVar.argv.indexOf('hardcore') > -1 ? 'ADD_ANOTHER_COIN' : 'ADD_NATIVE_COIN')) }
+                    { translate('ADD_COIN.' + (staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod ? 'ADD_ANOTHER_COIN' : 'ADD_NATIVE_COIN')) }
                   </span>
                 </button>
               }
@@ -291,7 +291,7 @@ const LoginRender = function() {
                 </button>
                 <div className="line">{ translate('LOGIN.OR_USE_A_SHORTCUT') }</div>
                 { staticVar.arch === 'x64' &&
-                  (staticVar.argv.indexOf('hardcore') > -1 || this.props.Main.walletType === 'native') &&
+                  (staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod || this.props.Main.walletType === 'native') &&
                   <div className="addcoin-shortcut">
                     <div>
                       <i className="icon fa-cube margin-right-5"></i>
@@ -327,7 +327,7 @@ const LoginRender = function() {
                       options={ shortcuts } />
                   </div>
                 }
-                { (staticVar.argv.indexOf('hardcore') > -1 || this.props.Main.walletType === 'default') &&
+                { (staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod || this.props.Main.walletType === 'default') &&
                   <div className={ 'addcoin-shortcut' + (staticVar.arch === 'x64' ? '' : ' full--width') }>
                     <div>
                       <i className="icon fa-flash margin-right-5"></i>
