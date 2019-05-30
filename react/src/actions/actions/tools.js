@@ -161,7 +161,7 @@ export const apiToolsListunspent = (coin, address) => {
   });
 }
 
-export const apiToolsPushTx = (network, rawtx) => {
+export const apiToolsPushTx = (network, rawtx, returnError) => {
   return new Promise((resolve, reject) => {
     fetch(
       `http://127.0.0.1:${agamaPort}/api/electrum/pushtx`,
@@ -185,8 +185,8 @@ export const apiToolsPushTx = (network, rawtx) => {
     })
     .then(response => response.json())
     .then(json => {
-      resolve(!json.result ? 'error' : json);
-    });
+      resolve(!json.result && !returnError ? 'error' : json);
+    });    
   });
 }
 

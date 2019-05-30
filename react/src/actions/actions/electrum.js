@@ -391,7 +391,7 @@ export const apiElectrumSend = (coin, value, sendToAddress, changeAddress, optio
       token,
       coin,
       value,
-      address: changeAddress,
+      address: options && options.isKv ? changeAddress : sendToAddress,
       change: changeAddress,
       gui: true,
       verify: true,
@@ -509,7 +509,7 @@ export const apiElectrumSendPreflight = (coin, value, sendToAddress, changeAddre
       token,
       coin,
       value,
-      address: changeAddress,
+      address: options && options.isKv ? changeAddress : sendToAddress,
       change: changeAddress,
       gui: true,
       verify: true,
@@ -791,6 +791,36 @@ export const apiElectrumBalancePromise = (coin, address) => {
           translate('API.apiElectrumBalancePromise') + ' (code: apiElectrumBalancePromise)',
           translate('TOASTR.ERROR'),
           'error'
+        )
+      );
+    })
+    .then(response => response.json())
+    .then(json => {
+      resolve(json);
+    });
+  });
+}
+
+export const apiElectrumDecodeRawTx = (coin, rawtx) => {
+  return new Promise((resolve, reject) => {
+    fetch(
+      `http://127.0.0.1:${agamaPort}/api/electrum/decoderawtx`,
+      fetchType(
+        JSON.stringify({
+          network: coin,
+          rawtx,
+          token,
+        })
+      ).post
+    )
+    .catch((error) => {
+      console.log(error);
+      Store.dispatch(
+        triggerToaster(
+          translate('API.apiElectrumDecodeRawTx') + ' (code: apiElectrumDecodeRawTx)',
+          translate('TOASTR.ERROR'),
+          'error',
+          false
         )
       );
     })
