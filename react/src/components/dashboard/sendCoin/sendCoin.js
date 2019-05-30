@@ -21,6 +21,9 @@ import {
   apiEthereumSend,
   apiEthereumSendERC20Preflight,
   shieldCoinbase,
+  apiElectrumDecodeRawTx,
+  apiToolsPushTx,
+  sendToAddressState,
 } from '../../../actions/actionCreators';
 import Store from '../../../store';
 import {
@@ -133,6 +136,9 @@ class SendCoin extends React.Component {
       // multisig
       multisigType: 'cosign',
       multisigWrongKey: false,
+      multisigCosignWrongRedeemScript: false,
+      multisigCosignError: false,
+      multisigCosignTxData: {},
     };
     this.defaultState = JSON.parse(JSON.stringify(this.state));
     this.updateInput = this.updateInput.bind(this);
@@ -973,6 +979,7 @@ class SendCoin extends React.Component {
               this.state.multisigType === 'create') {
             options.multisig = {
               creator: true,
+              incomplete: true,
             }
           }
 
@@ -996,7 +1003,7 @@ class SendCoin extends React.Component {
                   change: sendPreflight.result.change,
                   estimatedFee: sendPreflight.result.estimatedFee,
                   totalInterest: sendPreflight.result.totalInterest,
-                  multisig: sendPreflight.result.multisigData ? { data: sendPreflight.result.multisigData, rawtx: sendPreflight.result.rawtx } : null,
+                  multisig: sendPreflight.result.multisigData ? { data: sendPreflight.result.multisigData.signaturesData, rawtx: typeof sendPreflight.result.rawtx === 'object' && sendPreflight.result.rawtx.hasOwnProperty('incomplete') ? sendPreflight.result.rawtx.incomplete : sendPreflight.result.rawtx, rawTxComplete: typeof sendPreflight.result.rawtx === 'object' && sendPreflight.result.rawtx.hasOwnProperty('complete') ? sendPreflight.result.rawtx.complete : null } : null,
                 },
               }));
               
@@ -1011,7 +1018,6 @@ class SendCoin extends React.Component {
                 spvDpowVerificationWarning: 'n/a',
                 noUtxo: sendPreflight.result === 'no valid utxo' || typeof sendPreflight.result === 'string' && sendPreflight.result.indexOf('Spend value is too large') > -1 ? true : false,
                 responseTooLarge: sendPreflight.result && sendPreflight.result.result && sendPreflight.result.result.message && sendPreflight.result.result.message.indexOf('response too large') > -1 ? true : false,
-                multisigWrongKey: typeof sendPreflight.result === 'string' && sendPreflight.result.indexOf('Multisig: you can\'t sign this transaction') > -1 ? true : false,
               }));
 
               if (this.props.cb) {
@@ -1079,6 +1085,35 @@ class SendCoin extends React.Component {
 
       if (this.props.Main.walletType !== 'multisig') {
         this.handleSubmit();
+      } else if (
+        this.props.Main.walletType === 'multisig' &&
+        this.state.multisigType === 'create' &&
+        this.state.spvPreflightRes.multisig.rawTxComplete
+      ) {
+        apiToolsPushTx(
+          this.props.ActiveCoin.coin.toLowerCase(),
+          this.state.spvPreflightRes.multisig.rawTxComplete,
+          true
+        )
+        .then((pushTxRes) => {
+          console.warn('pushTxRes', pushTxRes);
+
+          if (pushTxRes.msg === 'error') {
+            Store.dispatch(sendToAddressState({
+              msg: 'error',
+              raw: {
+                txid: '',
+              },
+              result: pushTxRes.result,
+            }));
+          } else {
+            Store.dispatch(sendToAddressState({ txid: pushTxRes.result }));
+          }
+
+          this.setState(Object.assign({}, this.state, {
+            currentStep: 2,
+          }));
+        });
       }
     }
   }
@@ -1614,7 +1649,9 @@ class SendCoin extends React.Component {
       _items.push(
         <li
           key="send-address-book-item-self"
-          onClick={ () => this.setToAddress(this.props.Dashboard.electrumCoins[_coin].pub) }>{ translate('SEND.SELF') }</li>
+          onClick={ () => this.setToAddress(this.props.Dashboard.electrumCoins[_coin].pub) }>
+          { translate('SEND.SELF') }
+        </li>
       );
     }
 
@@ -1626,7 +1663,9 @@ class SendCoin extends React.Component {
           _items.push(
             <li
               key={ `send-address-book-item-${i}` }
-              onClick={ () => this.setToAddress(_addressBook[i].pub) }>{ _addressBook[i].title || _addressBook[i].pub }</li>
+              onClick={ () => this.setToAddress(_addressBook[i].pub) }>
+              { _addressBook[i].title || _addressBook[i].pub }
+            </li>
           );
         }
       }
@@ -1662,7 +1701,9 @@ class SendCoin extends React.Component {
       _items.push(
         <li
           key={ `send-ztx-fee-${i}` }
-          onClick={ () => this.setZtxFee(_options[i].val) }>{ _options[i].title }</li>
+          onClick={ () => this.setZtxFee(_options[i].val) }>
+          { _options[i].title }
+        </li>
       );
     }
 

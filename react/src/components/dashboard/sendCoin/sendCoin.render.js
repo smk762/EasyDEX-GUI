@@ -2,6 +2,7 @@ import React from 'react';
 import translate from '../../../translate/translate';
 import QRModal from '../qrModal/qrModal';
 import ReactTooltip from 'react-tooltip';
+import Dropzone from 'react-dropzone';
 import {
   formatValue,
   isPositiveNumber,
@@ -606,9 +607,11 @@ export const SendRender = function() {
                       <strong>{ translate('INDEX.FROM') }</strong>
                     </div>
                     <div className="col-lg-6 col-sm-6 col-xs-12 word-break--all">{ this.state.sendFrom }</div>
-                    <div className="col-lg-6 col-sm-6 col-xs-6 confirm-currency-send-container">
-                      { Number(this.state.amount) } { _coin }
-                    </div>
+                    { (this.props.Main.walletType !== 'multisig' || this.props.Main.walletType === 'multisig' && this.state.multisigType === 'create') &&
+                      <div className="col-lg-6 col-sm-6 col-xs-6 confirm-currency-send-container">
+                        { Number(this.state.amount) } { _coin }
+                      </div>
+                    }
                   </div>
                 }
                 { this.state.spvPreflightRes &&
@@ -657,9 +660,20 @@ export const SendRender = function() {
                       </div>
                     }
                     { this.state.spvPreflightRes.multisig &&
+                      this.state.spvPreflightRes.multisig.data &&
+                      this.state.spvPreflightRes.multisig.data.signatures &&
                       <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
                         <strong>Signatures required:</strong>&nbsp;
                         { this.state.spvPreflightRes.multisig.data.signatures.required }
+                      </div>
+                    }
+                    { this.state.spvPreflightRes.multisig &&
+                      this.state.spvPreflightRes.multisig.data &&
+                      this.state.spvPreflightRes.multisig.data.signatures &&
+                      this.state.spvPreflightRes.multisig.data.signatures.verified &&
+                      <div className="col-lg-12 col-sm-12 col-xs-12 padding-top-20">
+                        <strong>Signatures verified:</strong>&nbsp;
+                        { this.state.spvPreflightRes.multisig.data.signatures.verified }
                       </div>
                     }
                   </div>
@@ -692,9 +706,6 @@ export const SendRender = function() {
                     { translate('SEND.NO_VALID_UTXO_ERR_P2') }<br />
                     { translate('SEND.NO_VALID_UTXO_ERR_P3') }
                   </div>
-                }
-                { this.state.multisigWrongKey &&
-                  <div className="padding-top-20">{ translate('SEND.MULTISIG_WRONG_KEY') }</div>
                 }
                 { this.state.responseTooLarge &&
                   <div className="padding-top-20">
@@ -806,7 +817,6 @@ export const SendRender = function() {
                         ((this.state.ethPreflightRes.msg && this.state.ethPreflightRes.msg === 'error') || (!this.state.ethPreflightRes.msg && this.state.ethPreflightRes.notEnoughBalance))) ||
                         this.state.noUtxo ||
                         this.state.responseTooLarge ||
-                        this.state.multisigWrongKey ||
                         (this.state.spvPreflightSendInProgress || (erc20ContractId[_coin] && this.state.ethPreflightSendInProgress))
                       }
                       onClick={ Config.requirePinToConfirmTx && mainWindow.pinAccess ? this.verifyPin : () => this.changeSendCoinStep(2) }>
@@ -822,7 +832,8 @@ export const SendRender = function() {
         { this.state.currentStep === 2 &&
           <div className="col-xlg-12 col-md-12 col-sm-12 col-xs-12">
             <div className="panel">
-              { this.props.Main.walletType !== 'multisig' &&
+              { (this.props.Main.walletType !== 'multisig' ||
+                 (this.props.Main.walletType === 'multisig' && this.state.lastSendToResponse)) &&
                 <div className="panel-heading">
                   <h4 className="panel-title">
                     { translate('INDEX.TRANSACTION_RESULT') }
@@ -1021,6 +1032,7 @@ export const SendRender = function() {
                 </div>
               }
               { this.props.Main.walletType === 'multisig' &&
+                !this.state.lastSendToResponse &&
                 <div className="panel-heading">
                   <h4 className="panel-title">
                     Multi signature transaction result
@@ -1060,6 +1072,16 @@ export const SendRender = function() {
                     <div className="row">
                       <div className="col-lg-12 col-sm-12 col-xs-12 padding-left-45 padding-bottom-20">
                         Pass raw transaction to other co-signers in order to finalize it.
+                      </div>
+                    </div>
+                    <div className="widget-body-footer">
+                      <div className="widget-actions margin-bottom-15 margin-right-15">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={ () => this.changeSendCoinStep(0) }>
+                          { translate('INDEX.MAKE_ANOTHER_TX') }
+                        </button>
                       </div>
                     </div>
                   </div>

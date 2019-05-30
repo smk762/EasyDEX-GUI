@@ -16,11 +16,14 @@
 }
 
 .extcoin-send-form {
+  .multisig-dnd-block {
+    padding: 20px;
+    border: dashed 1px #ccc;
+  }
   .send-target-block {
     margin-bottom: 14px;
     margin-top: 10px;
   }
-
   .rc-slider {
     left: 4px;
 
@@ -79,10 +82,6 @@
   left: inherit !important;
   right: 17px;
   min-width: 125px;
-}
-
-.confirm-currency-send-container {
-  color: #f44336;
 }
 
 .form-control.send-to-padding-right {
