@@ -64,7 +64,7 @@ class Login extends React.Component {
     super();
     this.state = {
       display: false,
-      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod ? 'login' : 'activateCoin',
       loginPassphrase: '',
       seedInputVisibility: false,
       bitsOption: 256,
@@ -471,7 +471,8 @@ class Login extends React.Component {
           );
         }
 
-        if (staticVar.argv.indexOf('hardcore') > -1) {
+        if (staticVar.argv.indexOf('hardcore') > -1 ||
+            Config.oldLoginMethod) {
           this.setState({
             display: true,
             activeLoginSection: 'login',
@@ -636,7 +637,8 @@ class Login extends React.Component {
             }
           }*/
           // reset login input vals
-          if (staticVar.argv.indexOf('hardcore') > -1) {
+          if (staticVar.argv.indexOf('hardcore') > -1 ||
+              Config.oldLoginMethod) {
             this.refs.loginPassphrase.value = '';
           }
           this.refs.decryptKey.value = '';
@@ -744,7 +746,7 @@ class Login extends React.Component {
     );
 
     this.setState({
-      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 ? 'login' : 'activateCoin',
+      activeLoginSection: staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod ? 'login' : 'activateCoin',
       isSeedConfirmError: false,
     });
   }

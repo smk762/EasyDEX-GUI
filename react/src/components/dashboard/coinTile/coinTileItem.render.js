@@ -115,7 +115,7 @@ const CoinTileItemRender = function() {
                 <i className="icon fa-stop-circle margin-right-5"></i> { translate('DASHBOARD.STOP_ALL') }
               </li>
             }
-            { (this.props.Main.isPin || staticVar.argv.indexOf('hardcore') > -1) &&
+            { (this.props.Main.isPin || staticVar.argv.indexOf('hardcore') > -1 || Config.oldLoginMethod) &&
               <li onClick={ () => this.removeCoin(item.coin, item.mode) }>
                 <i className="icon fa-trash-o margin-right-5"></i> { translate('DASHBOARD.REMOVE') }
               </li>

@@ -242,7 +242,7 @@ class AddCoin extends React.Component {
 
         // filter out lite mode coins
         if (!this.props.Main.isPin &&
-            staticVar.argv.indexOf('hardcore') === -1) {
+            (staticVar.argv.indexOf('hardcore') === -1 && Config.oldLoginMethod)) {
           for (let key in coins) {
             if (coins[key].mode !== 'native') {
               delete coins[key];
@@ -287,7 +287,7 @@ class AddCoin extends React.Component {
         addCoinProps.display !== this.state.display) {
       this.setState(Object.assign({}, this.state, {
         className: addCoinProps.display ? 'show fade' : 'show out',
-        type: (this.props.Main.coins.native.length || !this.props.Main.isLoggedIn) && staticVar.argv.indexOf('hardcore') === -1 ? 'native' : 'spv',
+        type: (this.props.Main.coins.native.length || !this.props.Main.isLoggedIn) && (staticVar.argv.indexOf('hardcore') === -1 || !Config.oldLoginMethod) ? 'native' : 'spv',
       }));
 
       setTimeout(() => {
