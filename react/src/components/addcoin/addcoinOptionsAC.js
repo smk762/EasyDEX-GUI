@@ -1,11 +1,11 @@
 import translate from '../../translate/translate';
 import mainWindow, { staticVar } from '../../util/mainWindow';
-import config from '../../config';
+import Config from '../../config';
 import { kmdAssetChains } from 'agama-wallet-lib/src/coin-helpers';
 import { sortObject } from 'agama-wallet-lib/src/utils';
 
 // TODO: move to backend
-const _disabledAC = {
+let _disabledAC = {
   native: [
     'vrsc',
     'hush',
@@ -34,6 +34,15 @@ for (let key in _coins) {
 const addCoinOptionsAC = (activeCoins) => {
   let _assetChains;
   let _items = [];
+
+  if (!Config.dev &&
+      (!staticVar.argv ||
+      (staticVar.argv && staticVar.argv.indexOf('devmode') === -1))) {
+    _disabledAC.all.push([
+      'beer',
+      'pizza',
+    ]);
+  }
 
   _assetChains = coinsList;
 
@@ -71,7 +80,7 @@ const addCoinOptionsAC = (activeCoins) => {
     }
   }
 
-  if (config.userAgreement) {
+  if (Config.userAgreement) {
     // remove(?)
     const _customAssetChains = {
       mining: [
