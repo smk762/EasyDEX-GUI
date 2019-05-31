@@ -38,10 +38,13 @@ const addCoinOptionsAC = (activeCoins) => {
   if (!Config.dev &&
       (!staticVar.argv ||
       (staticVar.argv && staticVar.argv.indexOf('devmode') === -1))) {
-    _disabledAC.all.push([
-      'beer',
-      'pizza',
-    ]);
+    if (_disabledAC.all.indexOf('beer') === -1) {
+      _disabledAC.all.push('beer');
+    }
+
+    if (_disabledAC.all.indexOf('pizza') === -1) {
+      _disabledAC.all.push('pizza');
+    }
   }
 
   _assetChains = coinsList;
