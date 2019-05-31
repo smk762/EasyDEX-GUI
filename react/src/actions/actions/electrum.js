@@ -351,7 +351,7 @@ export const apiElectrumTransactionsState = (json) => {
   if (_json.msg === 'error' &&
       _json.result &&
       _json.result.message &&
-      _json.result.message.indexOf('response too large') > -1) {
+      (_json.result.message.indexOf('response too large') > -1 || _json.result.message.indexOf('history too large') > -1)) {
     json = 'response too large';
   }
 
