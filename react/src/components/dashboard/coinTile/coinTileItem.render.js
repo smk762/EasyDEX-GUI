@@ -3,6 +3,7 @@ import translate from '../../../translate/translate';
 import ReactTooltip from 'react-tooltip';
 import mainWindow, { staticVar } from '../../../util/mainWindow';
 import erc20ContractId from 'agama-wallet-lib/src/eth-erc20-contract-id';
+import Config from '../../../config';
 
 const testChains = [
   'BEER',
